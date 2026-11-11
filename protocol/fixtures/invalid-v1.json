@@ -1,0 +1,725 @@
+[
+  {
+    "name": "客户端冒充主体",
+    "contract": "ClientAction",
+    "value": {
+      "schemaVersion": 1,
+      "sessionId": "S1",
+      "actorId": "C3",
+      "clientActionId": "A-7b8d",
+      "controlEpoch": "4",
+      "baseSeq": "1008",
+      "action": {
+        "kind": "transfer_item",
+        "itemId": "I7",
+        "targetId": "C4",
+        "expectedItemRevision": "2"
+      },
+      "principalId": "system"
+    }
+  },
+  {
+    "name": "未知版本",
+    "contract": "ClientAction",
+    "value": {
+      "schemaVersion": 2,
+      "sessionId": "S1",
+      "actorId": "C3",
+      "clientActionId": "A-7b8d",
+      "controlEpoch": "4",
+      "baseSeq": "1008",
+      "action": {
+        "kind": "transfer_item",
+        "itemId": "I7",
+        "targetId": "C4",
+        "expectedItemRevision": "2"
+      }
+    }
+  },
+  {
+    "name": "非规范序号",
+    "contract": "ClientAction",
+    "value": {
+      "schemaVersion": 1,
+      "sessionId": "S1",
+      "actorId": "C3",
+      "clientActionId": "A-7b8d",
+      "controlEpoch": "4",
+      "baseSeq": "01",
+      "action": {
+        "kind": "transfer_item",
+        "itemId": "I7",
+        "targetId": "C4",
+        "expectedItemRevision": "2"
+      }
+    }
+  },
+  {
+    "name": "动作夹带可见性",
+    "contract": "ClientAction",
+    "value": {
+      "schemaVersion": 1,
+      "sessionId": "S1",
+      "actorId": "C3",
+      "clientActionId": "A-7b8d",
+      "controlEpoch": "4",
+      "baseSeq": "1008",
+      "action": {
+        "kind": "transfer_item",
+        "itemId": "I7",
+        "targetId": "C4",
+        "expectedItemRevision": "2",
+        "visibility": "all"
+      }
+    }
+  },
+  {
+    "name": "客户端事件泄露内部受众",
+    "contract": "WorldBatch",
+    "value": {
+      "schemaVersion": 1,
+      "type": "world.batch",
+      "sessionId": "S1",
+      "viewId": "C3-human-v1",
+      "fromExclusive": "1008",
+      "throughSeq": "1011",
+      "events": [
+        {
+          "sessionSeq": "1010",
+          "eventId": "S1:E1010",
+          "kind": "projection.replace",
+          "payload": {
+            "projection": {
+              "phase": "Running",
+              "contentVersion": "trust-repair-fixture-v1",
+              "reducerVersion": "v1",
+              "self": {
+                "characterId": "C3",
+                "name": "勘查者",
+                "regionId": "entry",
+                "roles": [
+                  "A",
+                  "D"
+                ],
+                "mode": "HumanControlled",
+                "controlEpoch": "4",
+                "canControl": true,
+                "capabilities": [
+                  "inspect",
+                  "repair"
+                ]
+              },
+              "characters": [
+                {
+                  "characterId": "C3",
+                  "name": "勘查者",
+                  "regionId": "entry",
+                  "roles": [
+                    "A",
+                    "D"
+                  ],
+                  "mode": "HumanControlled",
+                  "online": true
+                },
+                {
+                  "characterId": "C4",
+                  "name": "保管者",
+                  "regionId": "entry",
+                  "roles": [
+                    "B",
+                    "C",
+                    "E"
+                  ],
+                  "mode": "HumanControlled",
+                  "online": true
+                },
+                {
+                  "characterId": "tang",
+                  "name": "唐僧",
+                  "regionId": "entry",
+                  "roles": [],
+                  "mode": "CoreNPCControlled",
+                  "online": true
+                },
+                {
+                  "characterId": "wukong",
+                  "name": "孙悟空",
+                  "regionId": "side",
+                  "roles": [],
+                  "mode": "CoreNPCControlled",
+                  "online": true
+                }
+              ],
+              "regions": [
+                {
+                  "regionId": "entry",
+                  "name": "通路口",
+                  "description": "待修复的通路。",
+                  "exits": [
+                    "store",
+                    "side"
+                  ]
+                },
+                {
+                  "regionId": "store",
+                  "name": "材料间",
+                  "description": "登记与保管地点。",
+                  "exits": [
+                    "entry"
+                  ]
+                },
+                {
+                  "regionId": "side",
+                  "name": "侧路",
+                  "description": "可供查证的现场。",
+                  "exits": [
+                    "entry"
+                  ]
+                }
+              ],
+              "items": [
+                {
+                  "itemId": "I7",
+                  "name": "原材料",
+                  "location": {
+                    "kind": "character",
+                    "characterId": "C4"
+                  },
+                  "resourceRevision": "3",
+                  "transferable": true,
+                  "fields": []
+                }
+              ],
+              "targets": [
+                {
+                  "targetId": "gate",
+                  "name": "受损通路",
+                  "regionId": "entry",
+                  "resourceRevision": "1",
+                  "availableOperations": [
+                    "repair"
+                  ],
+                  "fields": [
+                    {
+                      "key": "safe",
+                      "label": "是否安全",
+                      "value": false
+                    }
+                  ]
+                }
+              ],
+              "observations": [
+                {
+                  "observationId": "O1",
+                  "observerId": "C3",
+                  "category": "Evidence",
+                  "source": {
+                    "kind": "inspection",
+                    "sourceIds": [
+                      "structure-record"
+                    ],
+                    "sourceSeq": "1000"
+                  },
+                  "statement": "结构记录形成于师徒到达前。",
+                  "subjectId": "gate",
+                  "fields": [
+                    {
+                      "key": "recordedBeforeArrival",
+                      "label": "记录时点早于到达",
+                      "value": true
+                    }
+                  ],
+                  "shareable": true
+                }
+              ],
+              "claims": [],
+              "objectives": [
+                {
+                  "objectiveId": "repair",
+                  "label": "修复通路并办理通行",
+                  "status": "active"
+                }
+              ],
+              "ending": null,
+              "deadlineAt": "2026-11-11T04:20:00.000Z"
+            }
+          },
+          "audience": {
+            "humanCharacterIds": [
+              "C3",
+              "C4"
+            ],
+            "coreNpcCharacterIds": [
+              "tang"
+            ],
+            "proxyCharacterIds": []
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "快照混入他人信念",
+    "contract": "AuthorizedSnapshot",
+    "value": {
+      "schemaVersion": 1,
+      "type": "world.snapshot",
+      "sessionId": "S1",
+      "viewId": "C3-human-v1",
+      "snapshotSeq": "1008",
+      "projection": {
+        "phase": "Running",
+        "contentVersion": "trust-repair-fixture-v1",
+        "reducerVersion": "v1",
+        "self": {
+          "characterId": "C3",
+          "name": "勘查者",
+          "regionId": "entry",
+          "roles": [
+            "A",
+            "D"
+          ],
+          "mode": "HumanControlled",
+          "controlEpoch": "4",
+          "canControl": true,
+          "capabilities": [
+            "inspect",
+            "repair"
+          ]
+        },
+        "characters": [
+          {
+            "characterId": "C3",
+            "name": "勘查者",
+            "regionId": "entry",
+            "roles": [
+              "A",
+              "D"
+            ],
+            "mode": "HumanControlled",
+            "online": true
+          },
+          {
+            "characterId": "C4",
+            "name": "保管者",
+            "regionId": "entry",
+            "roles": [
+              "B",
+              "C",
+              "E"
+            ],
+            "mode": "HumanControlled",
+            "online": true
+          },
+          {
+            "characterId": "tang",
+            "name": "唐僧",
+            "regionId": "entry",
+            "roles": [],
+            "mode": "CoreNPCControlled",
+            "online": true
+          },
+          {
+            "characterId": "wukong",
+            "name": "孙悟空",
+            "regionId": "side",
+            "roles": [],
+            "mode": "CoreNPCControlled",
+            "online": true
+          }
+        ],
+        "regions": [
+          {
+            "regionId": "entry",
+            "name": "通路口",
+            "description": "待修复的通路。",
+            "exits": [
+              "store",
+              "side"
+            ]
+          },
+          {
+            "regionId": "store",
+            "name": "材料间",
+            "description": "登记与保管地点。",
+            "exits": [
+              "entry"
+            ]
+          },
+          {
+            "regionId": "side",
+            "name": "侧路",
+            "description": "可供查证的现场。",
+            "exits": [
+              "entry"
+            ]
+          }
+        ],
+        "items": [
+          {
+            "itemId": "I7",
+            "name": "原材料",
+            "location": {
+              "kind": "character",
+              "characterId": "C3"
+            },
+            "resourceRevision": "2",
+            "transferable": true,
+            "fields": []
+          }
+        ],
+        "targets": [
+          {
+            "targetId": "gate",
+            "name": "受损通路",
+            "regionId": "entry",
+            "resourceRevision": "1",
+            "availableOperations": [
+              "repair"
+            ],
+            "fields": [
+              {
+                "key": "safe",
+                "label": "是否安全",
+                "value": false
+              }
+            ]
+          }
+        ],
+        "observations": [
+          {
+            "observationId": "O1",
+            "observerId": "C3",
+            "category": "Evidence",
+            "source": {
+              "kind": "inspection",
+              "sourceIds": [
+                "structure-record"
+              ],
+              "sourceSeq": "1000"
+            },
+            "statement": "结构记录形成于师徒到达前。",
+            "subjectId": "gate",
+            "fields": [
+              {
+                "key": "recordedBeforeArrival",
+                "label": "记录时点早于到达",
+                "value": true
+              }
+            ],
+            "shareable": true
+          }
+        ],
+        "claims": [],
+        "objectives": [
+          {
+            "objectiveId": "repair",
+            "label": "修复通路并办理通行",
+            "status": "active"
+          }
+        ],
+        "ending": null,
+        "deadlineAt": "2026-11-11T04:20:00.000Z",
+        "beliefs": [
+          {
+            "holderId": "wukong"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "陈述与物品事实结构混同",
+    "contract": "WorldEvent",
+    "value": {
+      "schemaVersion": 1,
+      "sessionId": "S1",
+      "sessionSeq": "1009",
+      "eventId": "S1:E1009",
+      "causedBy": {
+        "principalId": "human:U1",
+        "actionId": "A-7b8d",
+        "actorId": "C3"
+      },
+      "serverTime": "2026-11-11T04:00:00.000Z",
+      "kind": "ClaimRecorded",
+      "payload": {
+        "itemId": "I7",
+        "from": "C3",
+        "to": "C4",
+        "resourceRevision": "3"
+      },
+      "audience": {
+        "humanCharacterIds": [
+          "C3",
+          "C4"
+        ],
+        "coreNpcCharacterIds": [
+          "tang"
+        ],
+        "proxyCharacterIds": []
+      }
+    }
+  },
+  {
+    "name": "模型覆盖服务器读取版本",
+    "contract": "ProposedIntent",
+    "value": {
+      "decisionId": "D1",
+      "toolCalls": [
+        {
+          "kind": "move",
+          "regionId": "side"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "trace"
+        }
+      ],
+      "dialogue": {
+        "text": "我去核对现场。",
+        "channel": "public",
+        "recipientIds": []
+      },
+      "beliefUpdates": [
+        {
+          "beliefId": "material-location",
+          "statement": "材料可能被暂放于侧路。",
+          "confidence": "likely",
+          "basedOnObservationIds": [
+            "O2"
+          ]
+        }
+      ],
+      "readVersions": {
+        "trace": "999"
+      }
+    }
+  },
+  {
+    "name": "信念候选写世界事实",
+    "contract": "ProposedIntent",
+    "value": {
+      "decisionId": "D1",
+      "toolCalls": [
+        {
+          "kind": "move",
+          "regionId": "side"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "trace"
+        }
+      ],
+      "dialogue": {
+        "text": "我去核对现场。",
+        "channel": "public",
+        "recipientIds": []
+      },
+      "beliefUpdates": [
+        {
+          "beliefId": "material-location",
+          "statement": "材料可能被暂放于侧路。",
+          "confidence": "likely",
+          "basedOnObservationIds": [
+            "O2"
+          ],
+          "worldFact": true
+        }
+      ]
+    }
+  },
+  {
+    "name": "客户端收据夹带服务主体",
+    "contract": "ClientReceipt",
+    "value": {
+      "schemaVersion": 1,
+      "semanticDigest": "cc520129c4a56e590d9ab6ede27f442465a0ee23a9bb0a3a35558a9930f2139a",
+      "actorId": "C3",
+      "status": "Accepted",
+      "code": "OK",
+      "observedSeq": "1009",
+      "actionEventRange": {
+        "first": "1009",
+        "last": "1009"
+      },
+      "result": {
+        "changedEntityIds": [
+          "I7"
+        ]
+      },
+      "sessionId": "S1",
+      "clientActionId": "A-7b8d",
+      "principalId": "human:U1"
+    }
+  },
+  {
+    "name": "R-vs001-p01-REQ-002：baseSeq 不得有换行后缀",
+    "contract": "ClientAction",
+    "value": {
+      "schemaVersion": 1,
+      "sessionId": "S1",
+      "actorId": "C3",
+      "clientActionId": "A-7b8d",
+      "controlEpoch": "4",
+      "baseSeq": "1\n",
+      "action": {
+        "kind": "transfer_item",
+        "itemId": "I7",
+        "targetId": "C4",
+        "expectedItemRevision": "2"
+      }
+    }
+  },
+  {
+    "name": "R-vs001-p01-REQ-002：controlEpoch 不得有换行后缀",
+    "contract": "ClientAction",
+    "value": {
+      "schemaVersion": 1,
+      "sessionId": "S1",
+      "actorId": "C3",
+      "clientActionId": "A-7b8d",
+      "controlEpoch": "0\n",
+      "baseSeq": "1008",
+      "action": {
+        "kind": "transfer_item",
+        "itemId": "I7",
+        "targetId": "C4",
+        "expectedItemRevision": "2"
+      }
+    }
+  },
+  {
+    "name": "R-vs001-p01-REQ-002：sessionId 不得有换行后缀",
+    "contract": "ClientAction",
+    "value": {
+      "schemaVersion": 1,
+      "sessionId": "S1\n",
+      "actorId": "C3",
+      "clientActionId": "A-7b8d",
+      "controlEpoch": "4",
+      "baseSeq": "1008",
+      "action": {
+        "kind": "transfer_item",
+        "itemId": "I7",
+        "targetId": "C4",
+        "expectedItemRevision": "2"
+      }
+    }
+  },
+  {
+    "name": "R-vs001-p01-REQ-002：摘要不得有换行后缀",
+    "contract": "ClientReceipt",
+    "value": {
+      "schemaVersion": 1,
+      "semanticDigest": "cc520129c4a56e590d9ab6ede27f442465a0ee23a9bb0a3a35558a9930f2139a\n",
+      "actorId": "C3",
+      "status": "Accepted",
+      "code": "OK",
+      "observedSeq": "1009",
+      "actionEventRange": {
+        "first": "1009",
+        "last": "1009"
+      },
+      "result": {
+        "changedEntityIds": [
+          "I7"
+        ]
+      },
+      "sessionId": "S1",
+      "clientActionId": "A-7b8d"
+    }
+  },
+  {
+    "name": "R-vs001-p01-STD-001：正事件序号不得有换行后缀",
+    "contract": "WorldEvent",
+    "value": {
+      "schemaVersion": 1,
+      "sessionId": "S1",
+      "sessionSeq": "1009\n",
+      "eventId": "S1:E1009\n",
+      "causedBy": {
+        "principalId": "human:U1",
+        "actionId": "A-7b8d",
+        "actorId": "C3"
+      },
+      "serverTime": "2026-11-11T04:00:00.000Z",
+      "kind": "item.transferred",
+      "payload": {
+        "itemId": "I7",
+        "from": "C3",
+        "to": "C4",
+        "resourceRevision": "3"
+      },
+      "audience": {
+        "humanCharacterIds": [
+          "C3",
+          "C4"
+        ],
+        "coreNpcCharacterIds": [
+          "tang"
+        ],
+        "proxyCharacterIds": []
+      }
+    }
+  },
+  {
+    "name": "R-vs001-p01-STD-001：持久收据摘要不得有换行后缀",
+    "contract": "ActionReceipt",
+    "value": {
+      "schemaVersion": 1,
+      "key": {
+        "sessionId": "S1",
+        "principalId": "human:U1",
+        "clientActionId": "A-7b8d"
+      },
+      "semanticDigest": "cc520129c4a56e590d9ab6ede27f442465a0ee23a9bb0a3a35558a9930f2139a\n",
+      "actorId": "C3",
+      "status": "Accepted",
+      "code": "OK",
+      "observedSeq": "1009",
+      "actionEventRange": {
+        "first": "1009",
+        "last": "1009"
+      },
+      "result": {
+        "changedEntityIds": [
+          "I7"
+        ]
+      }
+    }
+  },
+  {
+    "name": "不存在的日历日期",
+    "contract": "WorldEvent",
+    "value": {
+      "schemaVersion": 1,
+      "sessionId": "S1",
+      "sessionSeq": "1009",
+      "eventId": "S1:E1009",
+      "causedBy": {
+        "principalId": "human:U1",
+        "actionId": "A-7b8d",
+        "actorId": "C3"
+      },
+      "serverTime": "2026-02-29T23:59:59.999Z",
+      "kind": "item.transferred",
+      "payload": {
+        "itemId": "I7",
+        "from": "C3",
+        "to": "C4",
+        "resourceRevision": "3"
+      },
+      "audience": {
+        "humanCharacterIds": [
+          "C3",
+          "C4"
+        ],
+        "coreNpcCharacterIds": [
+          "tang"
+        ],
+        "proxyCharacterIds": []
+      }
+    }
+  }
+]
