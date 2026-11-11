@@ -1,11 +1,13 @@
 # #8 前端阶段自查
 
+> 历史记录：本文件描述原候选 `40f2448c6ad23b5d5161af993ddbccfe4899cc8f` 的作者自查，关系为 `background`。当前审查修正及其自查见 [review-fix-self-check.md](review-fix-self-check.md)，不能把下文的 23 项历史结果当成新候选完整检查结论。
+
 ## 候选与范围
 
 - 日期：2026-11-11；自查环境读数为 UTC。
 - 基线：协议候选 `3394ad9a699d33dcb5afcf890427a23595d1a6dc`，树 `7c7952d059b10ecafa88ed7bb2527606fd0d046b`。
 - 客户端恢复实现之前取得的模型释放：[#7 / PR #15](https://github.com/gbcdby/xiyou/pull/15)，审查候选 `38d891579330be990cc44a51230d2ded81076dd1`。本记录只承接其客户端义务，不把模型视为真实服务证明。
-- 实际源码身份由同提交中的 [source-files.sha256](source-files.sha256) 固定；本文件所在 Git 提交是阶段候选。只改 `frontend/`。
+- 原候选源码清单保留在 `40f2448c6ad23b5d5161af993ddbccfe4899cc8f` 提交的 `frontend/evidence/source-files.sha256`。当前目录中的 [source-files.sha256](source-files.sha256) 随新的修正候选更新。原候选只改 `frontend/`。
 - 身份：实现者自查，**不是独立需求审查、独立标准审查或 #8 整票验收**。
 
 ## 已执行

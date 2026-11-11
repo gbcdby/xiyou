@@ -204,8 +204,8 @@ legend { font-weight: 500; font-size: 13px; margin-bottom: 8px; }
 .fact-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; padding: 15px 0; margin: 15px 0 12px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .fact-grid dt { font-size: 10px; color: #828d76; }
 .fact-grid dd { margin: 4px 0 0; font-size: 12px; }
-.status-wait { color: #a27f45; }
-.status-good { color: #597f4d; }
+.status-wait { color: #82602c; }
+.status-good { color: #4f7043; }
 .target-card .secondary-button { min-height: 36px; font-size: 11px; }
 .inline-form { margin-top: 12px; padding: 14px 0 0; border-top: 1px solid var(--line); }
 .inline-form .button-row { margin-top: 10px; }
@@ -230,7 +230,7 @@ legend { font-weight: 500; font-size: 13px; margin-bottom: 8px; }
 .evidence-meta .tiny { font-size: 9px; }
 .kind-tag { color: #7d8b64; font-size: 9px; background: #e8eedb; border-radius: 4px; padding: 2px 6px; }
 .WorldFact .kind-tag { color: #5c7b50; background: #e3edda; }
-.Claim .kind-tag { background: #eee4d1; color: #97815b; }
+.Claim .kind-tag { background: #eee4d1; color: #735d35; }
 .evidence-card p { font-size: 11px; line-height: 1.9; margin-top: 9px; color: #6c785d; }
 .evidence-card > .text-button { min-height: 34px; padding: 4px 0; font-size: 10px; }
 .quiet-note { display: flex; justify-content: center; align-items: center; gap: 12px; padding: 8px 0; color: #a2ad91; }
@@ -263,7 +263,7 @@ legend { font-weight: 500; font-size: 13px; margin-bottom: 8px; }
 .pending-action strong { display: block; font-size: 12px; font-weight: 500; }
 .pending-action span { display: block; font-size: 10px; }
 .pending-action.accepted { border-color: #d7e4c9; background: #f2f7eb; color: #5f7f4e; }
-.pending-action.rejected { background: #f9f0e6; color: #9a7852; }
+.pending-action.rejected { background: #f9f0e6; color: #805c35; }
 .waiting-room { text-align: center; padding: 42px; max-width: 900px; margin: 30px auto; }
 .waiting-room > .eyebrow { justify-content: center; }
 .waiting-room h2 { font-family: var(--serif); font-size: 30px; margin: 12px 0; font-weight: 500; }

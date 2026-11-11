@@ -2,6 +2,8 @@
 
 本目录提供 Vue 3 / TypeScript / Vue Router 的房间界面、授权投影视图、HTTP / Socket.IO 客户端以及恢复驱动。当前是等待 #6 运行服务接入的**阶段候选**，不代表 #8 整票完成或已通过多人联机验收。
 
+对原候选 `40f2448` 的四项审查发现已提交作者修正，状态为 `FIX_REPORTED`，等待独立复审。当前证据见[审查修正自查](evidence/review-fix-self-check.md)；[初始阶段自查](evidence/stage-self-check.md)保留原候选的历史范围。
+
 ## 运行与检查
 
 需要 Node.js 24 或更高版本。本轮实际使用 Node.js 24.22.1。依赖固定在本目录的 `package.json` 和 `package-lock.json`，不依赖仓库根目录安装。
@@ -24,11 +26,11 @@ npm run dev
 
 ### 浏览器检查
 
-`npm run test:browser` 使用安装环境中的 Playwright。可用 `PLAYWRIGHT_MODULE` 指定该模块的绝对入口，用 `CHROMIUM_PATH` 指定既有 Chromium，用 `FRONTEND_URL` 指定已运行的开发服务器。默认目标是本机 `5176` 端口，开发服务器可用 `npm run dev -- --port 5176 --strictPort` 启动。
+`npm run test:browser` 使用安装环境中的 Playwright。可用 `PLAYWRIGHT_MODULE` 指定该模块的绝对入口，用 `CHROMIUM_PATH` 指定既有 Chromium，用 `CHROMIUM_ARGS` 提供该二进制所需的启动参数（字符串数组的 JSON），用 `FRONTEND_URL` 指定已运行的开发服务器。默认目标是本机 `5176` 端口，开发服务器可用 `npm run dev -- --port 5176 --strictPort` 启动。
 
-该脚本包括桌面 / 390 像素窄屏截图、横向溢出检查、断网后的诚实失败反馈、静态演示动作停用，以及组件夹具中的接收者选择、物品交付和移动事件。浏览器输出遵循项目的临时产物规则。`tests/browser-fixture.html` 仅是开发期验证入口，生产构建只包含 `index.html`。
+该脚本包括桌面 / 390 像素窄屏截图、横向溢出检查、断网后的诚实失败反馈、静态演示动作停用，以及组件夹具中的接收者选择、物品交付和移动事件。另用受控 HTTP 响应验证明确身份失效后清凭据、恢复真实登录表单、由用户显式创建新访客；此响应替身不是运行服务。浏览器输出遵循项目的临时产物规则。`tests/browser-fixture.html` 仅是开发期验证入口，生产构建只包含 `index.html`。
 
-**本轮浏览器脚本未完成执行。** 环境缺少 Playwright 对应的 headless shell；既有 Chromium 无法创建所需套接字；提供的浏览器通道不能连接命令行开发服务器。没有形成页面截图或浏览器交互通过结论。具体执行边界见[阶段自查](evidence/stage-self-check.md)。
+**本轮完整浏览器脚本的 10 条限定检查通过。** 使用外置 Chromium 153.0.8010.0 与同一进程生命周期中的 Vite，实际检查桌面 1440×1000、窄屏 390×844；无横向溢出，页面脚本错误为 0。截图与结果绑定本轮源码摘要，见[修正自查](evidence/review-fix-self-check.md)和[浏览器结果摘要](evidence/browser-check-summary.json)。原候选的环境阻塞保留在[历史阶段自查](evidence/stage-self-check.md)。这些检查只覆盖前端渲染、受控故障和静态授权 DTO，真实后端与多人联机尚未执行。
 
 ## 页面与职责
 
@@ -45,6 +47,8 @@ npm run dev
 
 客户端保留自己的待确认动作原文到标签页 `sessionStorage`，以登录用户和 Session 隔离。刷新后重新取得授权，再查询原动作；不会把缓存当作授权依据。只缓存待确认的原始请求，不缓存授权投影。浏览器不允许保存时提示保留当前页面，未取得收据前不要刷新。
 
+HTTP 或 Socket 明确返回 `UNAUTHENTICATED` 时，身份层停止旧会话、清空授权视图并移除当前失效凭据，显示返回大厅重新登录的入口。待确认动作仍留在原用户 / Session 作用域。重新登录会创建新访客，不能取回原身份的房间成员资格或动作；页面对此明确提示。单房间 `FORBIDDEN` / `SESSION_GONE` 不会清除账号身份，普通网络故障也不会触发登出。迟到的旧 token 错误不能清除已登录的新身份。
+
 ## 与运行服务约定的最小接口
 
 这些接口经总控与 #6 实现范围对齐；本轮未做真实服务联调。
@@ -57,7 +61,7 @@ npm run dev
 | `POST /api/sessions/:id/join` | `{nonce}` | `{sessionId,actorId}`；原成员重复加入保持原角色 |
 | `POST /api/sessions/:id/start` | `{nonce}` | JSON 响应；实际 Running 状态仍须由授权流确认 |
 | `GET /api/sessions/:id` | 登录 token | 只读 `AuthorizedSnapshot`；不授予客户端连接控制 |
-| `GET /api/sessions/:id/actions/:actionId` | 登录 token | `ClientReceipt`；404 保持结果未知 |
+| `GET /api/sessions/:id/actions/:actionId` | 登录 token | `ClientReceipt`；无确定收据的 404 保持未知，明确的契约失效错误继续传给恢复驱动 |
 
 Socket.IO 使用默认 `/socket.io` 路径和 `auth: {token}`。服务端从真实 Socket 获得连接身份；客户端不通过 header 或动作载荷声明 `connectionId`。
 
@@ -76,11 +80,11 @@ Socket.IO 使用默认 `/socket.io` 路径和 `auth: {token}`。服务端从真�
 依据[已发布 M0 协议](../docs/specs/m0-protocol.md)和 #7 已释放的 reconnect 模型义务实现：
 
 1. 每条物理连接和每次视图换绑都产生新代次。断线、权限撤销和 `RESYNC_REQUIRED` 清空旧投影；旧代快照、事件与回包不能填回新视图。
-2. 订阅快照后立即补发，再以 1.5 秒周期补发兜底最后一个丢失批次。单轮最多 8 页，同一连接上合并并发补发请求。
+2. 首次订阅 / 握手遇到普通传输故障或 `OUTCOME_UNKNOWN` / `RESYNC_REQUIRED` 时，每个恢复延迟窗口只保留一个重连任务，默认延迟 1 秒；结束、换房和授权终止会使旧任务失效。订阅快照后立即补发，再以 1.5 秒周期补发兜底最后一个丢失批次。单轮最多 8 页，同一连接上合并并发补发请求。
 3. 只有 `fromExclusive == cursor` 才原子应用整批效果和游标。整批重复忽略；未来 / 重叠区间丢弃后从当前游标重取；空的完整区间也推进游标。游标使用十进制字符串比较，不转为 JavaScript Number。
 4. 投影替换可以移除旧可见字段。批次内任一效果无效时整批回滚，不留下前半段状态。客户端校验不替代服务端在事件发生时固定受众并过滤快照 / 流。
 5. 动作创建时固定 `clientActionId`、`controlEpoch`、`baseSeq` 和完整原文。重连或取得新控制代次后仍原样重试旧动作。只有明确的新动作才生成新的动作身份。
-6. 超时与收据 404 仍是结果未知；收据须匹配 Session、角色、动作身份和语义摘要。收据不直接修改世界投影。迟到的空查询不能覆盖已取得的终态收据。
+6. 超时与无确定收据的 404 仍是结果未知；404 正文若是合法 `SESSION_GONE`、`UNAUTHENTICATED`、`FORBIDDEN` 等契约错误，保留其确定语义。访问失效立即停止旧授权，原动作结果仍未知，不伪造 Rejected。收据须匹配 Session、角色、动作身份和语义摘要；不直接修改世界投影。迟到的空查询不能覆盖已取得的终态收据。
 7. 控制请求超时只在同一物理连接复用 nonce 和原文；新连接使用新 nonce。`CONTROL_HELD` 不会触发自动接管。已明确拒绝后的下一次用户尝试创建新的控制 nonce。
 8. `Finished` / `Aborted` 视图可读，旧收据可查，不允许新的世界动作；终态之后的新批次要求重新核对授权快照。
 
@@ -95,6 +99,6 @@ Socket.IO 使用默认 `/socket.io` 路径和 `auth: {token}`。服务端从真�
 ## 后续验收边界
 
 - 接入已释放的真实 #6 服务，逐项验证创建 / 加入 / 开局 / 快照 / 控制 / 动作 / 收据 / 批次，核对认证失败载荷与证据引用。
-- 补齐真实桌面与移动宽度截图、焦点、放大文字、长内容与组件交互。现有 CSS 和纯色对比计算不能代替实际渲染验收。
+- 在真实服务场景补齐焦点、放大文字、长内容及更广的组件交互。当前桌面 / 窄屏截图与所列前端交互已经实际检查，范围不等同完整平台验收。
 - 用同一候选执行五客户端至少 900 秒技术检查、真实丢包 / 重连 / 接管 / 越权场景及服务端授权投影对照。
 - 真人试玩和真实 AI 体验分别取证；本阶段的静态演示、网络替身及形式模型均不充当此类证据。

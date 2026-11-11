@@ -22,7 +22,10 @@ function text(value: unknown): string {
 export class HttpApi {
   #token: () => string | null;
   #fetch: typeof fetch;
-  constructor(token: () => string | null, fetcher: typeof fetch = fetch) { this.#token = token; this.#fetch = fetcher; }
+  #onUnauthenticated: (token: string) => void;
+  constructor(token: () => string | null, fetcher: typeof fetch = fetch, onUnauthenticated: (token: string) => void = () => {}) {
+    this.#token = token; this.#fetch = fetcher; this.#onUnauthenticated = onUnauthenticated;
+  }
 
   async #request(path: string, body?: unknown): Promise<unknown> {
     let response: Response;
@@ -31,7 +34,9 @@ export class HttpApi {
     if (token) headers.Authorization = `Bearer ${token}`;
     if (body !== undefined) headers['Content-Type'] = 'application/json';
     try {
-      response = await this.#fetch(`/api${path}`, { method: body === undefined ? 'GET' : 'POST', headers, ...(body === undefined ? {} : { body: JSON.stringify(body) }), signal: AbortSignal.timeout(10000) });
+      // 浏览器原生 fetch 不接受 HttpApi 作为 this；提取后按普通函数调用。
+      const fetcher = this.#fetch;
+      response = await fetcher(`/api${path}`, { method: body === undefined ? 'GET' : 'POST', headers, ...(body === undefined ? {} : { body: JSON.stringify(body) }), signal: AbortSignal.timeout(10000) });
     } catch { throw new ApiFailure('尚未连接到服务，请确认服务已启动后重试。'); }
     let data: unknown;
     try { data = await response.json(); }
@@ -39,6 +44,7 @@ export class HttpApi {
     if (!response.ok) {
       let code = 'REQUEST_FAILED'; let message = `请求未完成（${response.status}）。`;
       try { const error = validateContract('ErrorResponse', data); code = error.code; message = error.message || message; } catch { /* 非契约错误不作成功结果。 */ }
+      if (code === 'UNAUTHENTICATED' && token) this.#onUnauthenticated(token);
       throw new ApiFailure(message, response.status, code);
     }
     return data;
@@ -73,6 +79,10 @@ export class HttpApi {
   }
   async receipt(sessionId: string, actionId: string): Promise<ClientReceipt | null> {
     try { return validateContract('ClientReceipt', await this.#request(`/sessions/${encodeURIComponent(sessionId)}/actions/${encodeURIComponent(actionId)}`)); }
-    catch (error) { if (error instanceof ApiFailure && error.status === 404) return null; throw error; }
+    catch (error) {
+      // 确定的契约错误优先于 HTTP 状态；不能把失效的授权降格成尚无收据。
+      if (error instanceof ApiFailure && error.status === 404 && ['OUTCOME_UNKNOWN', 'REQUEST_FAILED', 'NETWORK_UNAVAILABLE'].includes(error.code)) return null;
+      throw error;
+    }
   }
 }

@@ -6,7 +6,9 @@ const { chromium } = await import(process.env.PLAYWRIGHT_MODULE ? pathToFileURL(
 const baseURL = process.env.FRONTEND_URL || 'http://127.0.0.1:5176';
 const output = resolve(process.env.FRONTEND_EVIDENCE_DIR || '../.agent-output/frontend/browser');
 await mkdir(output, { recursive: true });
-const browser = await chromium.launch({ headless: true, args: ['--no-sandbox'], ...(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {}) });
+const chromiumArgs = process.env.CHROMIUM_ARGS ? JSON.parse(process.env.CHROMIUM_ARGS) : ['--no-sandbox'];
+assert.ok(Array.isArray(chromiumArgs) && chromiumArgs.every(value => typeof value === 'string'), 'CHROMIUM_ARGS 必须是字符串数组的 JSON。');
+const browser = await chromium.launch({ headless: true, args: chromiumArgs, ...(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {}) });
 const checks = []; const errors = [];
 async function noOverflow(page, name) {
   const widths = await page.evaluate(() => ({ viewport: document.documentElement.clientWidth, content: document.documentElement.scrollWidth }));
@@ -20,7 +22,7 @@ try {
   await page.goto(baseURL);
   await page.getByRole('heading', { name: '暂未连上服务' }).waitFor();
   assert.equal(await page.getByRole('button', { name: '以此名同行' }).isDisabled(), true);
-  await page.getByLabel('你的称呼').fill('测试旅伴');
+  await page.getByRole('textbox', { name: '你的称呼', exact: true }).fill('测试旅伴');
   await page.getByRole('button', { name: '以此名同行' }).click();
   await page.getByRole('alert').filter({ hasText: '尚未连接到服务' }).waitFor();
   assert.equal(await page.getByRole('button', { name: '创建同行房间' }).count(), 0);
@@ -71,6 +73,35 @@ try {
   assert.deepEqual(actions[2], { kind: 'move', regionId: 'store' });
   assert.equal(await world.getByRole('heading', { name: '通路口', exact: true }).count(), 1);
   checks.push({ name: '转交与移动只发出动作，未取得授权事件前不改持物或位置', passed: true });
+  const authPage = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+  authPage.on('pageerror', error => errors.push(error.message));
+  await authPage.addInitScript(() => sessionStorage.setItem('xiyou.guest.v1', JSON.stringify({ token: 'expired-browser-fixture', userId: 'old-browser-user', name: '原旅伴' })));
+  const authRequests = []; let roomReads = 0;
+  await authPage.route('**/api/**', async route => {
+    const request = route.request(); const path = new URL(request.url()).pathname;
+    authRequests.push({ path, authorization: request.headers().authorization });
+    if (path === '/api/auth/guest') { await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ token: 'new-browser-fixture', userId: 'new-browser-user', name: '新访客' }) }); return; }
+    roomReads += 1;
+    await route.fulfill({ status: roomReads === 1 ? 401 : 200, contentType: 'application/json', body: roomReads === 1 ? JSON.stringify({ schemaVersion: 1, code: 'UNAUTHENTICATED' }) : '[]' });
+  });
+  await authPage.goto(baseURL);
+  await authPage.getByRole('status').filter({ hasText: '登录已失效' }).waitFor();
+  await authPage.getByRole('button', { name: '以此名同行' }).waitFor();
+  assert.equal(authRequests[0].authorization, 'Bearer expired-browser-fixture');
+  assert.equal(await authPage.evaluate(() => sessionStorage.getItem('xiyou.guest.v1')), null);
+  assert.equal(await authPage.getByRole('button', { name: '创建同行房间' }).count(), 0);
+  await noOverflow(authPage, 'expired-identity-lobby');
+  await authPage.screenshot({ path: `${output}/identity-expired.png`, fullPage: true });
+  await authPage.getByRole('textbox', { name: '你的称呼', exact: true }).fill('新访客');
+  await authPage.getByRole('button', { name: '以此名同行' }).click();
+  await authPage.getByRole('button', { name: '创建同行房间' }).waitFor();
+  await authPage.getByRole('heading', { name: '等一位发起同行的人' }).waitFor();
+  assert.equal(authRequests.find(request => request.path === '/api/auth/guest').authorization, undefined);
+  assert.equal(authRequests.at(-1).authorization, 'Bearer new-browser-fixture');
+  assert.equal(JSON.parse(await authPage.evaluate(() => sessionStorage.getItem('xiyou.guest.v1'))).userId, 'new-browser-user');
+  await authPage.screenshot({ path: `${output}/identity-new-guest.png`, fullPage: true });
+  checks.push({ name: '明确身份失效后恢复真实登录表单，清除旧凭据，新访客使用新身份；HTTP 为受控替身', passed: true });
+  await authPage.close();
   assert.deepEqual(errors, []);
   await writeFile(`${output}/browser-report.json`, JSON.stringify({ engine: 'Chromium', browserVersion: browser.version(), scope: '前端真实浏览器；HTTP 故障注入与静态授权 DTO 组件夹具；不是后端联调', checks, pageErrors: errors }, null, 2) + '\n');
   console.log(JSON.stringify({ checks: checks.length, passed: true, pageErrors: errors.length, output }, null, 2));

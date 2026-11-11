@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { api, enterSession, identity, leaveSession, localNotice, sendAction, sessionClient, sessionState, storageNotice } from '../../state/app-store.ts';
+import { api, authNotice, enterSession, identity, leaveSession, localNotice, sendAction, sessionClient, sessionState, storageNotice } from '../../state/app-store.ts';
 import { demoSnapshot } from '../../domain/demo.ts';
 import { controlNames, roleNames } from '../../domain/world.ts';
 import AppIcon from '../../components/AppIcon.vue';
@@ -72,6 +72,6 @@ async function copyRoom() {
         </div>
       </template>
     </template>
-    <section v-else class="panel session-empty" aria-live="polite"><span class="empty-icon"><AppIcon name="link" :size="30" /></span><h2>{{ !identity ? '先留下称呼，再与伙伴相见' : connectionNames[sessionState.connection] }}</h2><p>{{ !identity ? '返回房间大厅登录，然后用房间号加入。' : sessionState.message || '当前没有已确认的授权视图；连接后会显示你可以知道的内容。' }}</p><RouterLink v-if="!identity" to="/" class="primary-button">返回大厅</RouterLink><button v-else class="secondary-button" @click="sessionClient.reconnect()">重新连接<AppIcon name="refresh" :size="16" /></button></section>
+    <section v-else class="panel session-empty" aria-live="polite"><span class="empty-icon"><AppIcon name="link" :size="30" /></span><h2>{{ !identity ? (authNotice ? '登录已失效，请重新进入大厅' : '先留下称呼，再与伙伴相见') : connectionNames[sessionState.connection] }}</h2><p>{{ !identity ? (authNotice || '返回房间大厅登录，然后用房间号加入。') : sessionState.message || '当前没有已确认的授权视图；连接后会显示你可以知道的内容。' }}</p><RouterLink v-if="!identity" to="/" class="primary-button">{{ authNotice ? '返回大厅重新登录' : '返回大厅' }}</RouterLink><button v-else class="secondary-button" @click="sessionClient.reconnect()">重新连接<AppIcon name="refresh" :size="16" /></button></section>
   </div>
 </template>
