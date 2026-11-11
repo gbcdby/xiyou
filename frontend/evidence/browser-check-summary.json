@@ -1,0 +1,193 @@
+{
+  "workId": "vs001-p05",
+  "date": "2026-11-11",
+  "assessment": "PASS",
+  "scope": "作者阶段真实 Chromium 检查；受控 HTTP 响应与静态授权 DTO 组件夹具；不代表独立复审、实际 #6 或多人联机验收",
+  "testScript": "frontend/tests/browser-check.mjs",
+  "baseCommit": "40f2448c6ad23b5d5161af993ddbccfe4899cc8f",
+  "candidateBinding": "本文件所在 Git 提交与 source-files.sha256；执行前记录的前端源码 / 测试摘要如下，整理文档时已逐项回核一致",
+  "startedAt": "2026-11-11T07:15:09.362Z",
+  "finishedAt": "2026-11-11T07:15:15.602Z",
+  "browserVersion": "153.0.8010.0",
+  "viewports": [
+    {
+      "width": 1440,
+      "height": 1000
+    },
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "checks": [
+    {
+      "name": "desktop-lobby",
+      "widths": {
+        "viewport": 1440,
+        "content": 1440
+      }
+    },
+    {
+      "name": "不可达服务没有生成访客身份或房间",
+      "passed": true
+    },
+    {
+      "name": "desktop-session",
+      "widths": {
+        "viewport": 1440,
+        "content": 1440
+      }
+    },
+    {
+      "name": "演示明确标识且无法提交动作",
+      "passed": true
+    },
+    {
+      "name": "mobile-session",
+      "widths": {
+        "viewport": 390,
+        "content": 390
+      }
+    },
+    {
+      "name": "mobile-lobby",
+      "widths": {
+        "viewport": 390,
+        "content": 390
+      }
+    },
+    {
+      "name": "定向陈述必须选择接收者，私人频道不列核心 NPC，未确认文本不写入对话",
+      "passed": true
+    },
+    {
+      "name": "转交与移动只发出动作，未取得授权事件前不改持物或位置",
+      "passed": true
+    },
+    {
+      "name": "expired-identity-lobby",
+      "widths": {
+        "viewport": 1440,
+        "content": 1440
+      }
+    },
+    {
+      "name": "明确身份失效后恢复真实登录表单，清除旧凭据，新访客使用新身份；HTTP 为受控替身",
+      "passed": true
+    }
+  ],
+  "pageErrors": [],
+  "resourcesClosed": true,
+  "attempts": [
+    {
+      "number": 1,
+      "assessment": "FAIL",
+      "cause": "正式脚本的称呼定位同时匹配 region 与 textbox；改为精确 textbox"
+    },
+    {
+      "number": 2,
+      "assessment": "FAIL",
+      "cause": "真实浏览器原生 fetch 以 HttpApi 为接收者，Illegal invocation，HTTP 请求未发出；改为普通函数调用"
+    },
+    {
+      "number": 3,
+      "assessment": "PASS",
+      "cause": "完整正式脚本 10 条限定检查通过"
+    }
+  ],
+  "screenshots": [
+    {
+      "name": "lobby-desktop.png",
+      "sha256": "33483f21bcc249b7b2b74b04331a023bef8a9479d5104bae3ccdbf6977fa77f1",
+      "width": 1440,
+      "height": 1026,
+      "authorViewed": true
+    },
+    {
+      "name": "lobby-mobile.png",
+      "sha256": "44337d83b73923aca1be600136fb273f7c44fb677a057502a92c5767dedef663",
+      "width": 390,
+      "height": 1281,
+      "authorViewed": true
+    },
+    {
+      "name": "session-desktop.png",
+      "sha256": "900d1c9884379a248768b37a66d591a9a00742c97620494728250807113047d5",
+      "width": 1440,
+      "height": 1509,
+      "authorViewed": true
+    },
+    {
+      "name": "session-mobile.png",
+      "sha256": "4edf7f42cf6cd2acf77ac762067b400ad1fa6496ab2ac071c8faab915e0f166b",
+      "width": 390,
+      "height": 2805,
+      "authorViewed": true
+    },
+    {
+      "name": "identity-expired.png",
+      "sha256": "f0868f6ece134a3c3bff34d031fa4f56012d6ce887355a4c3ac05d9a0f9e620a",
+      "width": 1440,
+      "height": 1034,
+      "authorViewed": true
+    },
+    {
+      "name": "identity-new-guest.png",
+      "sha256": "2e4043dbdbf74808ae7b5fa78fee63aa561ca43e53fd1ce86195f31b3f2595ef",
+      "width": 1440,
+      "height": 1028,
+      "authorViewed": true
+    }
+  ],
+  "sourceHashes": {
+    "frontend/index.html": "ee1cbc00c7b398c210c0b813b3884e1504b1a3ccfd8c6aa0e6771d8b8f564088",
+    "frontend/package-lock.json": "15ce33745ce6d9f6773f1ea0eece72832b17e6ba13b4f51b4df78d1303ffbb2d",
+    "frontend/package.json": "8d8501895bade115e0c49d472b1a8422024ea93c558188b682bd920912c036e8",
+    "frontend/src/App.vue": "7d5627646da782723c6b543f25c0135e3796fd012b0fc088973b2ff017d77222",
+    "frontend/src/components/AppIcon.vue": "738cef5ed76ae10f0b615dbd7436b2b91446e781519ff7f5694b56abb7f83e18",
+    "frontend/src/domain/action-draft.ts": "8ae7bce556e2b88bc0d469fb7bfc404e2e10e7c011c64a83da3933a300c39657",
+    "frontend/src/domain/action-journal.ts": "c2b9ed0ff7b975b0f107d8174db3fa057ca1baaa33a79ee8a8edec91d58f2a3b",
+    "frontend/src/domain/client-view.ts": "b5a4f8913b6ff26b91f00be99be830fb0cc6376cdbc5ceced08f5d4c8d028ffb",
+    "frontend/src/domain/demo.ts": "215c499749192313c1b47650731bfef9dadc7b12a9eb35ff05e1d0dadb7dce3c",
+    "frontend/src/domain/world.ts": "668b00ae01ee1d290779768df9c82706123da1ae16a29ca11c2a1df6c431e2dd",
+    "frontend/src/features/character/EvidencePanel.vue": "fd5ae0b9c20aeb3476763c7ad28deb8f8c2f7782bd31c3aca3c0f6c21167f72e",
+    "frontend/src/features/character/TeamPanel.vue": "2273a8ff1d24d08b90f9a60c022a6d3ca4bcce64da984d95624f3150d661f161",
+    "frontend/src/features/dialogue/DialoguePanel.vue": "5a8c724c17d7c66ec35d64f2529a64b7612d5195a1ae016060546598fd29b605",
+    "frontend/src/features/inventory/InventoryPanel.vue": "401037d4b0112762e0e4e860783e4f74b920331e4b804b44734df0c7ae0b710f",
+    "frontend/src/features/lobby/LobbyPage.vue": "5039fa82e300611dcef04e3d00aa58ad2ea51694089ebf773a22973c4f31782a",
+    "frontend/src/features/objective/ObjectivePanel.vue": "2b74662509aac54c9fb4398bcab28a785b7045983b0b5710ae1dd29a63914044",
+    "frontend/src/features/recap/RecapPanel.vue": "de0d98659e57d8a9df2417b3b42c3459bd079a936ee75a32ea894ccf8437eff8",
+    "frontend/src/features/session/PendingActions.vue": "50b76a2f894940d3b2b2be8da6d0d929d601bf7e72bb3c909a9e80932443e50c",
+    "frontend/src/features/session/SessionPage.vue": "9fff8febf6f68f4a48f63eb010a35caaf59f3d326134f795160b4f5cf16081d0",
+    "frontend/src/features/world/WorldPanel.vue": "0b13313ce56e0f90766ef426dc2e0f2d87963e1b42a1addb75a9176aefd43ef4",
+    "frontend/src/main.ts": "4f8168aecea50101ba5537ab87775145879cbf99d848f8e5cb69091cd073115a",
+    "frontend/src/network/http-api.ts": "21a558675c54b59ab3a183059042d0c24269c7b152ea827849087d704202f1ed",
+    "frontend/src/network/link.ts": "cbd9119925db492ee46d238fe1152b904cb448a07e4759e0f2c398805cf22ca2",
+    "frontend/src/network/session-client.ts": "5f90c549df023cb591a8f79b6b5edeab37f519dc8701097e842efe43ad63458f",
+    "frontend/src/network/socket-link.ts": "614462bbfdd71e408f39622046a563e20d8f196e60c45551c9983072bd4448f8",
+    "frontend/src/router.ts": "1bdbd05f35fa68c8bae25593fc18ece7bd6de22f072f1c106deff6520cd01eb7",
+    "frontend/src/state/app-store.ts": "af5358775c7cfea88c5a589bb3f3fc827c5ac1a87678ca5f2ce5c7a34bf0f339",
+    "frontend/src/styles-responsive.css": "3ce771cd6b196a6d536d245d1da5c58e50137c9c8e8d19df8fb47fc810bae085",
+    "frontend/src/styles.css": "283b78d42b1064ef750bb5898b96296dd7216eb58fb7ed1f6252033b0f028f29",
+    "frontend/tests/action-draft.test.mjs": "7cdd7e896e18690636e89f25dbbec9c858373756c1a9c8e4e70f510618285997",
+    "frontend/tests/action-journal.test.mjs": "db2c71738b60dc73b6622afcd55c3a9a47badee27961cc15080c657e47860c4f",
+    "frontend/tests/browser-check.mjs": "998c00749f73a4dc223e0bd82918ee8bd6943269218db18e3c7a8a738c28aecd",
+    "frontend/tests/browser-fixture.html": "da6b7b4e6858d6de85347347bec22de212e5a3038e0da2b24ff93b64a5948d28",
+    "frontend/tests/browser-fixture.ts": "0990b7ca0261dda0554bde36defd1dad73abe6c1f4c311845277129f18a94809",
+    "frontend/tests/client-view.test.mjs": "d8248ee24f155ab84dd9bbc7dc948c996b70ee5bf8eaa80793f87e1500da0e22",
+    "frontend/tests/demo.test.mjs": "e12c210b9106078262dedf42d9bfed0780a70e6563893d42614eb27999c029bf",
+    "frontend/tests/http-api.test.mjs": "182c5420f97c51223c4becb007a66131c5308253f8f553ed0af6b15e6733c4b9",
+    "frontend/tests/identity-recovery.test.mjs": "37cc6ba00f6829a3660ae97a3d2179afc9469afe75c6049b74ca226ae5b2eeca",
+    "frontend/tests/recovery-errors.test.mjs": "e77618b31e97c9f45159139e2edbe42d2c857eb1b62b6eacff9e0a514fc9ec3e",
+    "frontend/tests/session-client.test.mjs": "1c827ecf66849455686c886c90f6babb06a901d093796a3721c663cf99555e7a",
+    "frontend/tsconfig.json": "9fafbffcb97044f9fcdeb27b75f99523ae1ea9feafd65c9010b167414054a7ea",
+    "frontend/vite.config.mjs": "0eea062a62cf072a0f155d7666530cf7dd8f2b1699a98c7664de425b356e23cd"
+  },
+  "notRun": [
+    "真实 #6 HTTP / Socket.IO / PostgreSQL 集成",
+    "五客户端至少 900 秒",
+    "真人试玩",
+    "真实 AI 体验",
+    "更广的焦点、文字放大及长内容平台验收"
+  ]
+}

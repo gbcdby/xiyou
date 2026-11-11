@@ -1,0 +1,15 @@
+{"stage":"真实页面登录、创建、两人加入、开始与控制","elapsedMs":6214}
+{"stage":"真实多出口可辨认并到达对应区域","elapsedMs":6568}
+{"stage":"未满足许可的出口收到真实拒绝，位置不提前改变","elapsedMs":6645}
+{"stage":"定向接收者、真实陈述与查看记录","elapsedMs":8201}
+{"stage":"desktop 无横向溢出","elapsedMs":8204}
+{"stage":"mobile 无横向溢出","elapsedMs":8648}
+{"cleanup":"browser","state":"starting"}
+{"cleanup":"browser","state":"closed"}
+{"cleanup":"vite","state":"starting"}
+{"cleanup":"vite","state":"closed"}
+{"cleanup":"server","state":"starting"}
+{"cleanup":"server","state":"closed"}
+{"cleanup":"postgres","state":"starting"}
+{"cleanup":"postgres","state":"closed"}
+{"assessment":"PASS","elapsedMs":8950,"checks":8,"resourcesClosed":true,"output":"/workspace/scratch/f9401eff266e/.agent-output/frontend-network/ui-worktree/.agent-output/frontend-network-ui/green-1"}

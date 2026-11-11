@@ -1,0 +1,43 @@
+{
+  "relation": "background",
+  "producer": "/root/frontend_implementation",
+  "sourceReportSha256": "bafe934a395280be38d1f25bf48b0c34ffd65d6c9dcea15cae265b0675fbbf5c",
+  "startedAt": "2026-11-11T08:35:22.329Z",
+  "finishedAt": "2026-11-11T08:35:57.970Z",
+  "sourceCommit": "cd29a87ace92b9973e0708d39dbca6e5e993e7ab",
+  "sourceTree": "4d399bc4b8e027a308fa3331ea2aacc2e6ffffca",
+  "sourceStatus": "M frontend/src/features/world/WorldPanel.vue\n M frontend/src/network/socket-link.ts\n?? frontend/tests/network-support.mjs\n?? frontend/tests/real-browser-check.mjs\n?? frontend/tests/socket-link.test.mjs",
+  "scriptSha256": "c94f01ff424353351902f00f7679cf38a355a082f9aba43eb772a1a1a1ac8b15",
+  "assessment": "FAIL",
+  "completedChecks": [
+    {
+      "name": "真实页面登录、创建、两人加入、开始与控制",
+      "status": "PASS"
+    },
+    {
+      "name": "真实多出口可辨认并到达对应区域",
+      "status": "PASS",
+      "initialLabels": [
+        "前往 store",
+        "前往 side_path",
+        "前往 destination"
+      ]
+    },
+    {
+      "name": "未满足许可的出口收到真实拒绝，位置不提前改变",
+      "status": "PASS"
+    }
+  ],
+  "failure": "真实页面已显示角色名称，但浏览器脚本仍按访客昵称“联机松风”定位接收者，locator.check 超时。",
+  "actualRecipientLabel": "材料保管者兼通行协调者兼记事者",
+  "pageErrors": [],
+  "databaseErrors": [],
+  "resourcesClosed": true,
+  "cleanup": [
+    "browser",
+    "vite",
+    "server",
+    "postgres"
+  ],
+  "scope": "主代理的前置失败记录摘要；本轮读取，不记为本轮重新执行。"
+}
