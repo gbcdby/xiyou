@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import { performance } from 'node:perf_hooks';
 import { canonicalize, contractSchema, parseProposedIntent, intentSemanticDigestSync } from '../../protocol/node.mjs';
+import { isPersistableIntent } from './output.mjs';
 
 export const gatewayVersion = 'intent-gateway-v1';
 export const instructions = '你只扮演指定角色。current 是当前合法可见状态；memory 是带来源的历史知识。Claim 是说法，Belief 是信念，均不能升级为世界事实。只输出符合 ProposedIntent 的单个 JSON，使用给定 decisionId 和 allowedTools；不输出 WorldEvent，不更新目标，不执行外部工具。代理仅可安全移动、观察、公开询问或等待。';
@@ -58,7 +59,10 @@ export class ModelGateway {
         const rawText = result.output?.rawText;
         try {
           const intent = parseProposedIntent(rawText, context.decision.decisionId);
-          result = { status: 'Valid', rawText, semanticDigest: intentSemanticDigestSync(intent) };
+          const semanticDigest = intentSemanticDigestSync(intent);
+          result = isPersistableIntent(intent)
+            ? { status: 'Valid', rawText, semanticDigest }
+            : { status: 'Invalid', reason: 'UNPERSISTABLE_INTENT', rawText, parsedSemanticDigest: semanticDigest };
         } catch {
           result = { status: 'Invalid', reason: 'INVALID_INTENT', ...(typeof rawText === 'string' && Buffer.byteLength(rawText) <= 65536 ? { rawText } : {}) };
         }

@@ -41,6 +41,7 @@ export class AuthorityRuntime extends EventEmitter {
       await client.query('SELECT pg_advisory_xact_lock(617248302)');
       await client.query(await readFile(new URL('./migrations/001-authority.sql', import.meta.url), 'utf8'));
       await client.query(await readFile(new URL('./migrations/002-ai.sql', import.meta.url), 'utf8'));
+      await client.query(await readFile(new URL('./migrations/003-ai-output-encoding.sql', import.meta.url), 'utf8'));
       await client.query('COMMIT');
     } catch (error) { await client.query('ROLLBACK').catch(() => {}); throw error; }
     finally { client.release(); }

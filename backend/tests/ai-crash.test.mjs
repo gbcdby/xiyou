@@ -8,6 +8,7 @@ import { ModelGateway } from '../ai/gateway.mjs';
 import { AIOrchestrator } from '../ai/orchestrator.mjs';
 import { createRunningRoom } from '../test-support/ai-room.mjs';
 import { captureAI } from '../test-support/ai-evidence.mjs';
+import { decodeStoredOutput } from '../ai/output.mjs';
 
 test('真实进程崩溃：模型原文、独立 fallback、原意图 ACK 与发布恢复', async t => {
   const database = await startTestPostgres('ai-crash');
@@ -57,8 +58,8 @@ test('真实进程崩溃：模型原文、独立 fallback、原意图 ACK 与发
         assert.deepEqual(await recovered.replay(room.sessionId), state);
         const count = (await database.pool.query('SELECT count(*) FROM action_receipts WHERE session_id=$1 AND client_action_id IN ($2,$3)', [room.sessionId, `${prepared.decisionId}:submit`, `${prepared.decisionId}:fallback`])).rows[0].count;
         assert.equal(count, '1');
-        const run = (await database.pool.query('SELECT output_raw,status FROM ai_runs WHERE session_id=$1 AND decision_id=$2', [room.sessionId, prepared.decisionId])).rows[0];
-        assert.equal(run.output_raw, prepared.raw); assert.equal(run.status, 'Resolved');
+        const run = (await database.pool.query('SELECT output_raw,output_encoding,status FROM ai_runs WHERE session_id=$1 AND decision_id=$2', [room.sessionId, prepared.decisionId])).rows[0];
+        assert.equal(decodeStoredOutput(run), prepared.raw); assert.equal(run.status, 'Resolved');
         assert.equal(gateway.metrics().calls, 0);
         await recovered.publishPending();
         assert.equal((await database.pool.query("SELECT count(*) FROM outbox WHERE session_id=$1 AND status='Pending'", [room.sessionId])).rows[0].count, '0');

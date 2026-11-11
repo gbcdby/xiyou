@@ -1,5 +1,7 @@
 import { reserveCall, saveOutput, saveOutcome, callCount } from './persistence.mjs';
 import { RuntimeError } from '../errors.mjs';
+import { decodeStoredOutput, isPersistableIntent } from './output.mjs';
+import { parseProposedIntent, intentSemanticDigestSync } from '../../protocol/node.mjs';
 
 /** 单进程的有界调度器；数据库仍决定权限、时序及每一项实际效果。 */
 export class AIOrchestrator {
@@ -52,7 +54,17 @@ export class AIOrchestrator {
         let receipt = await this.#runtime.internalReceipt(actor.handle, `${record.decisionId}:submit`);
         if (!receipt) {
           if (this.#closed) return { blocked: true };
-          receipt = await this.#runtime.submitIntent(actor.handle, record.decisionId, run.output_raw);
+          const raw = decodeStoredOutput(run);
+          const intent = parseProposedIntent(raw, record.decisionId);
+          if (intentSemanticDigestSync(intent) !== run.semantic_digest) throw new RuntimeError('ACTION_ID_REUSE', '恢复的原文与已保存摘要不匹配。');
+          // 旧版本可能把带 NUL 的 JSON 记为 Valid；确认无原收据后才拒绝，不能覆盖 Unknown。
+          if (!isPersistableIntent(intent)) {
+            await this.#runtime.settleDecision(actor.handle, record.decisionId, 'Rejected');
+            await this.#finishDecision(actor, record.decisionId, 'UNPERSISTABLE_INTENT');
+            actor.recoveryWork = null;
+            continue;
+          }
+          receipt = await this.#runtime.submitIntent(actor.handle, record.decisionId, raw);
         }
         if (!receipt.status || receipt.semanticDigest !== run.semantic_digest) throw new RuntimeError('ACTION_ID_REUSE', '恢复的原文与已保存收据不匹配。');
         actor.lastReceipt = receipt;
@@ -65,14 +77,14 @@ export class AIOrchestrator {
     }
     return { blocked: false };
   }
-  async #finishDecision(actor, decisionId) {
+  async #finishDecision(actor, decisionId, rejectionReason = null) {
     const current = await this.#runtime.decisionState(actor.handle, decisionId);
     let fallback = null;
     if (['Rejected', 'Expired'].includes(current.status)) {
       fallback = await this.#runtime.submitFallback(actor.handle, decisionId);
       actor.lastFallback = fallback;
     }
-    await saveOutcome(this.#runtime, actor.handle, decisionId, { decisionStatus: current.status, receipt: actor.lastReceipt?.clientActionId === `${decisionId}:submit` ? actor.lastReceipt : null, fallback });
+    await saveOutcome(this.#runtime, actor.handle, decisionId, { decisionStatus: current.status, receipt: actor.lastReceipt?.clientActionId === `${decisionId}:submit` ? actor.lastReceipt : null, fallback, ...(rejectionReason ? { rejectionReason } : {}) });
   }
   recover(handle) {
     const actor = this.#actor(handle);

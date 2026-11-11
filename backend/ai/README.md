@@ -12,12 +12,16 @@
 | [gateway.mjs](gateway.mjs) | 供应商无关适配、共享 ProposedIntent 严格解析、超时／取消／延迟统计 |
 | [orchestrator.mjs](orchestrator.mjs) | 单角色单在途、合并唤醒、并发／间隔／预算、提交与恢复 |
 | [persistence.mjs](persistence.mjs) | 本局持久调用预留、上下文／原文／摘要／结果关联 |
+| [output.mjs](output.mjs) | 原文无损编码、旧记录解码与 AI 意图的持久输入边界 |
 | [decisions.mjs](../decisions.mjs) | 原子准备、当前授权、Decision 围栏、整包 Validator 与稳定 fallback |
 | [002-ai.sql](../migrations/002-ai.sql) | 内部目标来源和模型尝试记录，无新队列服务 |
+| [003-ai-output-encoding.sql](../migrations/003-ai-output-encoding.sql) | 兼容旧 text 原文的编码版本字段 |
 
 `ai_goal_sources` 以 Session、Character 和 principalKind 隔离，保存策略版本、实际来源、相关资源版本、来源水位、语义摘要及对应 Goal revision。世界仍只记录现有 `GoalUpdated`；内部来源字段不进入共享 Goal DTO。`ai_runs` 保存过滤后的上下文、配置、原始输出、严格语义摘要、模型耗时／状态及最终 Receipt 关联。两类表的写入都在 Session 行锁内，锁后复核当前主体；新的持久入口先处理 Session 截止。
 
 这些表属于可信服务诊断数据，没有 HTTP／Socket.IO 查询接口，也不会进入玩家快照。完整内容快照仍只保存在 Session 服务端；上下文不含全量秘密、其他角色信念、内部 audience、UserId、连接凭据或事件日志。
+
+供应商返回的原始 JS 字符串可能包含 NUL 或孤立 surrogate，不能直接写入 PostgreSQL `text`。保留范围内的原文以 `JSON.stringify(rawText)` 编码进原 `output_raw` 字段，并标记 `output_encoding=json-string-v1`；解码恢复全部码元，不删除、替换或修补原文。旧记录的编码字段为空，继续按旧 text 原文读取。`outputDigest` 保留既有 UTF-8 摘要口径，新增 `outputStringDigest` 对 JSON-string-v1 编码字节求 SHA-256，避免孤立码元经 UTF-8 替换后混淆。世界状态、事件和公共协议的 JSON 存储方式不因此改变。
 
 ## 原子上下文、Memory 和目标
 
@@ -42,6 +46,8 @@ Memory 直接读取持久 Observation／Claim／Belief／Goal，不建立另一�
 
 它拿不到 Runtime、数据库或 WorldEvent 写入口。原文直接交给共享严格解析器，拒绝非法 JSON、重复键、未知工具／字段、不完整 Unicode、错误 decisionId 及 AI 私人频道；通过后保留原文和覆盖整包的语义摘要。模型给出的事实文字仍只是 Claim／Belief，世界改变只能由原 Validator 生成。
 
+共享 JSON 契约允许解码后的 NUL，但 PostgreSQL 世界 `jsonb` 不可保存该码元。Gateway 在共享解析之后增加 AI 输入的持久边界：这类意图记为 `Invalid / UNPERSISTABLE_INTENT`，保存原文及 `parsedSemanticDigest` 作为诊断，原包不执行，沿用原决定的拒绝与稳定 fallback。公共解析器和其他提交入口的既有字符语义不在本模块中更改；这不是一次公共协议修订。
+
 默认单次超时 10 秒，上下文最多 256 KiB；实际超时取配置和 Decision 剩余时间的较小值。Gateway 与 Abort 竞争，吸收忽略 Abort 的迟到完成／拒绝；关闭不等待未返回的供应商 Promise。适配器须管理它自己创建的网络资源；本实现没有创建供应商网络连接。Gateway 的指标区分有效格式、无效格式、超时、取消与供应商错误，提供最近至多 4096 次调用的 p50／p95；这些是运行观测，不是新性能 SLO。
 
 `external` 模式必须由可信集成方传入真实授权记录引用和正整数 `maxCalls`，且仍受调度器本局预算约束。这个参数是已有授权的输入位置，不会自动取得费用许可。当前没有任何供应商 SDK、默认 endpoint、凭证发现或外部模型适配器；默认 `npm start` 不启用 AI。
@@ -57,6 +63,8 @@ Memory 直接读取持久 Observation／Claim／Belief／Goal，不建立另一�
 每次有效输出在提交前保存原文与摘要，然后以原 `decisionId:submit` 走统一 Validator。批首比较外部读版本，批内继续使用候选状态；第二工具失败会回滚第一工具及对白。重复回调读旧 Receipt；同键异内容不覆盖原记录。
 
 `OUTCOME_UNKNOWN` 保留原 ID、原文和摘要。下一次恢复先做当前读权检查，查询同键 Receipt 并比摘要；尚无 Receipt 时只重试同一原文，不能直接改成拒绝、fallback 或新 ID。自动调度最多连续进行三次间隔恢复，仍未知时保留 Unknown，等待显式 `wake` 或后续合法通知；这个次数限制不把未知改写成失败。
+
+升级前可能存在被旧 Gateway 标为 Valid、但实际无法写入世界 `jsonb` 的 NUL 原文。恢复同样先查询原 Receipt，查询未知时继续保持 Unknown；确认没有原 Receipt 后，解码并核对原语义摘要，才依据上述 AI 持久边界拒绝继续提交、收束原决定并使用原 fallback 键。原文、原摘要和旧模型分类保留，新的恢复拒绝原因另写入 outcome。普通旧 text 原文仍按原 ID／原文恢复。取证接口输出解码后的原文，并额外标明实际存储编码，便于原有语义摘要校验。
 
 Rejected／Expired 的 fallback 从持久 Decision 和缺失 Receipt 推导，使用固定 `decisionId:fallback` 和原 epoch，走原等待命令及当前权限／终局检查。Cancelled／Committed 不安排失败 fallback。供应商超时若早于权威 Decision deadline，记录 Rejected；到达权威 deadline 才记录 Expired。恢复时无输出的 Pending 可取消并另起新计划，不复活旧 ID；有原文的提交未知优先恢复结果。
 
