@@ -2,7 +2,7 @@
 
 归属 [Ticket #11](https://github.com/gbcdby/xiyou/issues/11)，依据固定 Spec `6c2a0b9f6d137ad5fbd41721659404333ad8e16d` 的[玩法规格](../docs/specs/vertical-slice-gameplay.md)与 [M0 协议](../docs/specs/m0-protocol.md)。消费已经独立审查的协议候选 `3394ad9a699d33dcb5afcf890427a23595d1a6dc`。
 
-当前仅完成内容结构、版本化 fixture、人数职责装配和静态检查。没有权威世界提交、NPC 决策、联机完整局或真人试玩结论；#11 的完整交付继续等待其运行层、界面和真实 AI 依赖。
+本目录完成内容结构、版本化 fixture、人数职责装配及静态检查，结论限内容准备范围。#11 的完整交付还需当前有效验收 profile 所要求的运行层、界面和角色策略集成；权威世界效果、完整局及体验结果分别按对应运行证据判断。
 
 ## 文件与接口
 
