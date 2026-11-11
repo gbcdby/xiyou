@@ -688,5 +688,38 @@
         ]
       }
     }
+  },
+  {
+    "name": "不存在的日历日期",
+    "contract": "WorldEvent",
+    "value": {
+      "schemaVersion": 1,
+      "sessionId": "S1",
+      "sessionSeq": "1009",
+      "eventId": "S1:E1009",
+      "causedBy": {
+        "principalId": "human:U1",
+        "actionId": "A-7b8d",
+        "actorId": "C3"
+      },
+      "serverTime": "2026-02-29T23:59:59.999Z",
+      "kind": "item.transferred",
+      "payload": {
+        "itemId": "I7",
+        "from": "C3",
+        "to": "C4",
+        "resourceRevision": "3"
+      },
+      "audience": {
+        "humanCharacterIds": [
+          "C3",
+          "C4"
+        ],
+        "coreNpcCharacterIds": [
+          "tang"
+        ],
+        "proxyCharacterIds": []
+      }
+    }
   }
 ]

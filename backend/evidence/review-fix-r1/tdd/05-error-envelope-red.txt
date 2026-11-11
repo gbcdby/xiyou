@@ -1,0 +1,43 @@
+✖ STD-004：长未知字段的真实 ACK 保持有效且有界的协议错误 (1412.659356ms)
+✖ STD-004：错误正文按码点保留边界并修复不完整代理对 (1.360341ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1759.218885
+
+✖ failing tests:
+
+test at backend/tests/review-fixes.test.mjs:335:1
+✖ STD-004：长未知字段的真实 ACK 保持有效且有界的协议错误 (1412.659356ms)
+  Error [ContractError]: 字符串长度超出范围（$.message）
+      at fail (file:///workspace/scratch/f9401eff266e/.agent-output/runtime-fix/worktree/protocol/index.mjs:10:41)
+      at checkSchema (file:///workspace/scratch/f9401eff266e/.agent-output/runtime-fix/worktree/protocol/index.mjs:182:137)
+      at checkSchema (file:///workspace/scratch/f9401eff266e/.agent-output/runtime-fix/worktree/protocol/index.mjs:200:56)
+      at validateContract (file:///workspace/scratch/f9401eff266e/.agent-output/runtime-fix/worktree/protocol/index.mjs:317:3)
+      at TestContext.<anonymous> (file:///workspace/scratch/f9401eff266e/.agent-output/runtime-fix/worktree/backend/tests/review-fixes.test.mjs:349:7)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    code: 'INVALID_MESSAGE',
+    path: '$.message'
+  }
+
+test at backend/tests/review-fixes.test.mjs:357:1
+✖ STD-004：错误正文按码点保留边界并修复不完整代理对 (1.360341ms)
+  Error [ContractError]: 字符串长度超出范围（$.message）
+      at fail (file:///workspace/scratch/f9401eff266e/.agent-output/runtime-fix/worktree/protocol/index.mjs:10:41)
+      at checkSchema (file:///workspace/scratch/f9401eff266e/.agent-output/runtime-fix/worktree/protocol/index.mjs:182:137)
+      at checkSchema (file:///workspace/scratch/f9401eff266e/.agent-output/runtime-fix/worktree/protocol/index.mjs:200:56)
+      at validateContract (file:///workspace/scratch/f9401eff266e/.agent-output/runtime-fix/worktree/protocol/index.mjs:317:3)
+      at TestContext.<anonymous> (file:///workspace/scratch/f9401eff266e/.agent-output/runtime-fix/worktree/backend/tests/review-fixes.test.mjs:363:5)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'INVALID_MESSAGE',
+    path: '$.message'
+  }

@@ -1,0 +1,10 @@
+✔ STD-001：提交后响应故障仍须拒绝真人同 ID 的异载荷 (1402.025434ms)
+✔ STD-001：内部意图恢复也绑定完整包摘要，fallback 原键恢复保持幂等 (149.011753ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1875.977946

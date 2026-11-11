@@ -1,0 +1,16 @@
+▶ 真实进程崩溃：提交前、COMMIT 后 ACK 前及发布中的恢复
+  ✔ before-commit (320.021436ms)
+  ℹ 实际子进程 52 退出码 71；回放、收据、连续序号和发布恢复均符合预期。
+  ✔ after-commit (240.59892ms)
+  ℹ 实际子进程 65 退出码 72；回放、收据、连续序号和发布恢复均符合预期。
+  ✔ during-publish (329.574998ms)
+  ℹ 实际子进程 78 退出码 73；回放、收据、连续序号和发布恢复均符合预期。
+✔ 真实进程崩溃：提交前、COMMIT 后 ACK 前及发布中的恢复 (2052.125669ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2230.337

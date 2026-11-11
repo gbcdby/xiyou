@@ -1,0 +1,242 @@
+TAP version 13
+# Subtest: 真实进程崩溃：提交前、COMMIT 后 ACK 前及发布中的恢复
+    # Subtest: before-commit
+    ok 1 - before-commit
+      ---
+      duration_ms: 468.738029
+      type: 'test'
+      ...
+    # 实际子进程 173 退出码 71；回放、收据、连续序号和发布恢复均符合预期。
+    # Subtest: after-commit
+    ok 2 - after-commit
+      ---
+      duration_ms: 428.178459
+      type: 'test'
+      ...
+    # 实际子进程 190 退出码 72；回放、收据、连续序号和发布恢复均符合预期。
+    # Subtest: during-publish
+    ok 3 - during-publish
+      ---
+      duration_ms: 443.211421
+      type: 'test'
+      ...
+    # 实际子进程 203 退出码 73；回放、收据、连续序号和发布恢复均符合预期。
+    1..3
+ok 1 - 真实进程崩溃：提交前、COMMIT 后 ACK 前及发布中的恢复
+  ---
+  duration_ms: 3061.397145
+  type: 'test'
+  ...
+# Subtest: 真实 HTTP/Socket.IO：前端接口、严格原文、真实连接控制和恢复查询
+ok 2 - 真实 HTTP/Socket.IO：前端接口、严格原文、真实连接控制和恢复查询
+  ---
+  duration_ms: 1918.135337
+  type: 'test'
+  ...
+# Subtest: REQ-001：迟到的接管副作用不能断开重新获权的真实连接
+ok 3 - REQ-001：迟到的接管副作用不能断开重新获权的真实连接
+  ---
+  duration_ms: 1833.157239
+  type: 'test'
+  ...
+# Subtest: REQ-001：同一连接的迟到接管回调不能回退视图代次
+ok 4 - REQ-001：同一连接的迟到接管回调不能回退视图代次
+  ---
+  duration_ms: 155.40467
+  type: 'test'
+  ...
+# Subtest: REQ-001 邻近回归：迟到回调不能恢复撤权或终局控制
+ok 5 - REQ-001 邻近回归：迟到回调不能恢复撤权或终局控制
+  ---
+  duration_ms: 264.075329
+  type: 'test'
+  ...
+# Subtest: REQ-001 邻近回归：旧事务只撤原订阅，不撤换绑后新建的只读视图
+ok 6 - REQ-001 邻近回归：旧事务只撤原订阅，不撤换绑后新建的只读视图
+  ---
+  duration_ms: 124.39798
+  type: 'test'
+  ...
+# Subtest: STD-001：提交后响应故障仍须拒绝真人同 ID 的异载荷
+ok 7 - STD-001：提交后响应故障仍须拒绝真人同 ID 的异载荷
+  ---
+  duration_ms: 180.382602
+  type: 'test'
+  ...
+# Subtest: STD-001：内部意图恢复也绑定完整包摘要，fallback 原键恢复保持幂等
+ok 8 - STD-001：内部意图恢复也绑定完整包摘要，fallback 原键恢复保持幂等
+  ---
+  duration_ms: 138.197741
+  type: 'test'
+  ...
+# Subtest: STD-002：合法但不存在的原型属性名经真实网络得到持久目标拒绝
+ok 9 - STD-002：合法但不存在的原型属性名经真实网络得到持久目标拒绝
+  ---
+  duration_ms: 316.584478
+  type: 'test'
+  ...
+# Subtest: STD-002：合法同名自有角色与物品仍可观察，不把继承目标当真实对象
+ok 10 - STD-002：合法同名自有角色与物品仍可观察，不把继承目标当真实对象
+  ---
+  duration_ms: 0.615081
+  type: 'test'
+  ...
+# Subtest: STD-003：断开的只读订阅及时释放句柄，无需关闭整个运行层
+ok 11 - STD-003：断开的只读订阅及时释放句柄，无需关闭整个运行层
+  ---
+  duration_ms: 116.28742
+  type: 'test'
+  ...
+# Subtest: STD-003：换订阅会停止在途旧批次，旧任务不能撤销新视图
+ok 12 - STD-003：换订阅会停止在途旧批次，旧任务不能撤销新视图
+  ---
+  duration_ms: 188.735751
+  type: 'test'
+  ...
+# Subtest: STD-004：长未知字段的真实 ACK 保持有效且有界的协议错误
+ok 13 - STD-004：长未知字段的真实 ACK 保持有效且有界的协议错误
+  ---
+  duration_ms: 119.279441
+  type: 'test'
+  ...
+# Subtest: STD-004：错误正文按码点保留边界并修复不完整代理对
+ok 14 - STD-004：错误正文按码点保留边界并修复不完整代理对
+  ---
+  duration_ms: 0.990099
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：创建去重、房主重复加入、固定内容开局和同水位回放
+ok 15 - 真实 PostgreSQL：创建去重、房主重复加入、固定内容开局和同水位回放
+  ---
+  duration_ms: 1827.300512
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：并发物品版本竞争、持久收据、异载荷和旧游标
+ok 16 - 真实 PostgreSQL：并发物品版本竞争、持久收据、异载荷和旧游标
+  ---
+  duration_ms: 238.16949
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：观察、陈述分型，历史受众和显式证据传播
+ok 17 - 真实 PostgreSQL：观察、陈述分型，历史受众和显式证据传播
+  ---
+  duration_ms: 179.429576
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：内容驱动修复、工具和材料真实归属、许可前置条件
+ok 18 - 真实 PostgreSQL：内容驱动修复、工具和材料真实归属、许可前置条件
+  ---
+  duration_ms: 169.103779
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：内部 NPC 同一提交入口，最终动作和终局原子化
+ok 19 - 真实 PostgreSQL：内部 NPC 同一提交入口，最终动作和终局原子化
+  ---
+  duration_ms: 242.453564
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：截止先于动作/控制，拒绝范围为空且时间不倒退
+ok 20 - 真实 PostgreSQL：截止先于动作/控制，拒绝范围为空且时间不倒退
+  ---
+  duration_ms: 177.659511
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：代理看不到私人频道，禁止物品和最终许可，交还后旧意图失效
+ok 21 - 真实 PostgreSQL：代理看不到私人频道，禁止物品和最终许可，交还后旧意图失效
+  ---
+  duration_ms: 157.247078
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：跨 Session 读写拒绝，当前撤权先于旧收据，归档删除不重做
+ok 22 - 真实 PostgreSQL：跨 Session 读写拒绝，当前撤权先于旧收据，归档删除不重做
+  ---
+  duration_ms: 220.648702
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：服务端 view 绑定、隐藏空批次、固定水位投影和旧订阅失效
+ok 23 - 真实 PostgreSQL：服务端 view 绑定、隐藏空批次、固定水位投影和旧订阅失效
+  ---
+  duration_ms: 298.460968
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：真人与 NPC 同版本抢物，只有一个主体取得唯一物品
+ok 24 - 真实 PostgreSQL：真人与 NPC 同版本抢物，只有一个主体取得唯一物品
+  ---
+  duration_ms: 117.132017
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：内部 Decision 原子包、generation、相关版本、超时与 fallback 围栏
+ok 25 - 真实 PostgreSQL：内部 Decision 原子包、generation、相关版本、超时与 fallback 围栏
+  ---
+  duration_ms: 159.860988
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：控制往返、双连接、nonce 重试及迟到旧断开
+ok 26 - 真实 PostgreSQL：控制往返、双连接、nonce 重试及迟到旧断开
+  ---
+  duration_ms: 144.249073
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：重放旧控制 nonce 不回退服务端当前断开代次
+ok 27 - 真实 PostgreSQL：重放旧控制 nonce 不回退服务端当前断开代次
+  ---
+  duration_ms: 81.600785
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：受限代理读取旧收据也受当前成员权限约束
+ok 28 - 真实 PostgreSQL：受限代理读取旧收据也受当前成员权限约束
+  ---
+  duration_ms: 77.551099
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：分页最多 256 全局序号，投影准确对应中间前缀并移除旧可见物品
+ok 29 - 真实 PostgreSQL：分页最多 256 全局序号，投影准确对应中间前缀并移除旧可见物品
+  ---
+  duration_ms: 1925.100965
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：Decision 相关版本冲突被拒绝，Belief 不会写入世界事实
+ok 30 - 真实 PostgreSQL：Decision 相关版本冲突被拒绝，Belief 不会写入世界事实
+  ---
+  duration_ms: 132.527834
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：提交后响应异常先查询原键，不伪造拒绝或再执行
+ok 31 - 真实 PostgreSQL：提交后响应异常先查询原键，不伪造拒绝或再执行
+  ---
+  duration_ms: 80.537476
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：截止和最终动作真实竞争，提交顺序只产生一个终局
+ok 32 - 真实 PostgreSQL：截止和最终动作真实竞争，提交顺序只产生一个终局
+  ---
+  duration_ms: 263.352193
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：原材料查证通行与证据未齐通行按真实来源区分
+ok 33 - 真实 PostgreSQL：原材料查证通行与证据未齐通行按真实来源区分
+  ---
+  duration_ms: 429.246873
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：四人和五人的固定角色装配及人数上限
+ok 34 - 真实 PostgreSQL：四人和五人的固定角色装配及人数上限
+  ---
+  duration_ms: 148.454499
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：Lobby 房主取消幂等，终止后不能重新开局
+ok 35 - 真实 PostgreSQL：Lobby 房主取消幂等，终止后不能重新开局
+  ---
+  duration_ms: 39.989349
+  type: 'test'
+  ...
+1..35
+# tests 38
+# suites 0
+# pass 38
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 7454.234947

@@ -1,0 +1,2 @@
+# 原始测试差异输出的行尾空格按原字节保留；源码继续执行默认空白检查。
+tdd/*.txt whitespace=-blank-at-eol

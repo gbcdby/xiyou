@@ -1,0 +1,18 @@
+{
+  "capturedAt": "2026-11-11T07:24:27.104Z",
+  "node": "v24.22.1",
+  "platform": "linux",
+  "architecture": "x64",
+  "postgres": {
+    "version": "PostgreSQL 18.6 on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0, 64-bit",
+    "server_version": "18.6",
+    "server_encoding": "UTF8",
+    "timezone": "UTC"
+  },
+  "dependencies": {
+    "pg": "8.23.1",
+    "socket.io": "4.8.4",
+    "socket.io-client": "4.8.4",
+    "embedded-postgres": "18.6.0-beta.19"
+  }
+}

@@ -1,0 +1,10 @@
+✔ REQ-001：迟到的接管副作用不能断开重新获权的真实连接 (1625.683411ms)
+✔ REQ-001：同一连接的迟到接管回调不能回退视图代次 (143.145745ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2046.430501

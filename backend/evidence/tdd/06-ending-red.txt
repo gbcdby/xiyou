@@ -1,0 +1,25 @@
+✔ 真实 PostgreSQL：创建去重、房主重复加入、固定内容开局和同水位回放 (1119.448ms)
+✔ 真实 PostgreSQL：并发物品版本竞争、持久收据、异载荷和旧游标 (159.968969ms)
+✔ 真实 PostgreSQL：观察、陈述分型，历史受众和显式证据传播 (167.509349ms)
+✔ 真实 PostgreSQL：内容驱动修复、工具和材料真实归属、许可前置条件 (121.320877ms)
+✖ 真实 PostgreSQL：内部 NPC 同一提交入口，最终动作和终局原子化 (75.683794ms)
+✔ 真实 PostgreSQL：截止先于动作/控制，拒绝范围为空且时间不倒退 (123.11316ms)
+✔ 真实 PostgreSQL：控制往返、双连接、nonce 重试及迟到旧断开 (154.849818ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 6
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2140.174572
+
+✖ failing tests:
+
+test at backend/tests/runtime.test.mjs:152:1
+✖ 真实 PostgreSQL：内部 NPC 同一提交入口，最终动作和终局原子化 (75.683794ms)
+  TypeError [Error]: runtime.bindInternal is not a function
+      at TestContext.<anonymous> (file:///workspace/scratch/f9401eff266e/.agent-output/runtime-implementation/worktree/backend/tests/runtime.test.mjs:155:30)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)

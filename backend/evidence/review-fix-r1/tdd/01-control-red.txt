@@ -1,0 +1,44 @@
+✖ REQ-001：迟到的接管副作用不能断开重新获权的真实连接 (1611.752953ms)
+✖ REQ-001：同一连接的迟到接管回调不能回退视图代次 (90.213995ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1994.116013
+
+✖ failing tests:
+
+test at backend/tests/review-fixes.test.mjs:39:1
+✖ REQ-001：迟到的接管副作用不能断开重新获权的真实连接 (1611.752953ms)
+  AssertionError [ERR_ASSERTION]: 当前获权连接必须仍能同步，迟到回调不能关闭它。
+  + actual - expected
+  
+  + undefined
+  - 'world.batch'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/f9401eff266e/.agent-output/runtime-fix/worktree/backend/tests/review-fixes.test.mjs:68:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 'world.batch',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at backend/tests/review-fixes.test.mjs:79:1
+✖ REQ-001：同一连接的迟到接管回调不能回退视图代次 (90.213995ms)
+  Error: 原连接的控制绑定已经失效。
+      at file:///workspace/scratch/f9401eff266e/.agent-output/runtime-fix/worktree/backend/runtime.mjs:284:36
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async AuthorityRuntime.locked (file:///workspace/scratch/f9401eff266e/.agent-output/runtime-fix/worktree/backend/runtime.mjs:103:16)
+      at async TestContext.<anonymous> (file:///workspace/scratch/f9401eff266e/.agent-output/runtime-fix/worktree/backend/tests/review-fixes.test.mjs:94:20)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'RESYNC_REQUIRED'
+  }

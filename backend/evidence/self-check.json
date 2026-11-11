@@ -1,0 +1,226 @@
+{
+  "schema_version": "xiyou-runtime-self-check/v1",
+  "work_id": "vs001-p03",
+  "ticket": "https://github.com/gbcdby/xiyou/issues/6",
+  "producer": "worker-implement 作者自查",
+  "outcome": "PASS_WITHIN_SCOPE",
+  "source": {
+    "commit": "3443884069953eaf8da7ded49a520130b4d618f9",
+    "tree": "404a4bd4fabeba4ed7815529e8cd5672b56b244f",
+    "manifest": "source-manifest.json",
+    "aggregate_sha256": "2e95209c14fc6912420d3f77dfc769749db6d71cfea36cce21de3cb4ef14074f",
+    "base_commit": "19016f85656018064176d866f0906441077fbb1a",
+    "content_fix_integration": "a076ae31c90795c7ad8f5db3bd1197a71e3e8da7"
+  },
+  "spec_revision": "6c2a0b9f6d137ad5fbd41721659404333ad8e16d",
+  "environment": "environment.json",
+  "checks": [
+    {
+      "id": "backend",
+      "command": "npm run test:backend",
+      "status": "PASS",
+      "exit_code": 0,
+      "tests": 26,
+      "passed": 26,
+      "failed": 0,
+      "output": "raw/final-backend.txt"
+    },
+    {
+      "id": "protocol",
+      "command": "npm run test:protocol",
+      "status": "PASS",
+      "exit_code": 0,
+      "tests": 21,
+      "passed": 21,
+      "failed": 0,
+      "output": "raw/final-protocol.txt"
+    },
+    {
+      "id": "content",
+      "command": "npm run test:content",
+      "status": "PASS",
+      "exit_code": 0,
+      "tests": 8,
+      "passed": 8,
+      "failed": 0,
+      "output": "raw/final-content.txt"
+    },
+    {
+      "id": "schema",
+      "command": "协议与内容生成一致性、两项独立 Python Schema/摘要检查、git diff --check",
+      "status": "PASS",
+      "exit_code": 0,
+      "output": "raw/final-static.txt"
+    },
+    {
+      "id": "freeze",
+      "command": "源码摘要、正式链接／JSON、入口语法、冻结输入和进程收束",
+      "status": "PASS",
+      "exit_code": 0,
+      "output": "raw/freeze-check.txt"
+    }
+  ],
+  "raw_artifacts": [
+    {
+      "path": "backend/evidence/raw/final-backend.txt",
+      "sha256": "4f014fc15ae649e590de0c9eb3699c77a52e2d5924d450e2f05966e48c06e7f6"
+    },
+    {
+      "path": "backend/evidence/raw/final-content.txt",
+      "sha256": "2b95974f30840e5a70afe5fc1504bda7b9919aa685c8e8a3ff83b1599296aab3"
+    },
+    {
+      "path": "backend/evidence/raw/final-protocol.txt",
+      "sha256": "11adc0eb8afd61c939549bd92533be06aaa0201d94858289cd9d86058bb0a09f"
+    },
+    {
+      "path": "backend/evidence/raw/final-static.txt",
+      "sha256": "9045c7669d1a932e0d8a03ff743983d00942df0b59ec7a2f89d96d487314558b"
+    },
+    {
+      "path": "backend/evidence/tdd/01-lifecycle-green.txt",
+      "sha256": "a9e09da5040df5603f7f2e6195cf9ec03d241876444d6cc1bb03afa0d2a2f847"
+    },
+    {
+      "path": "backend/evidence/tdd/01-lifecycle-red.txt",
+      "sha256": "97406b24af61ad7b1a4e386dd3bed7462f82b345ffa09bbdad6cf7764019f621"
+    },
+    {
+      "path": "backend/evidence/tdd/02-control-green.txt",
+      "sha256": "2a1e7a67be8709c343d222d84e9985686b42aa4db7889531fdda52e57d3208a3"
+    },
+    {
+      "path": "backend/evidence/tdd/02-control-red.txt",
+      "sha256": "a2e239cf7d2aab2fc817681cc7da69a4e4d883a5355089abe79654ca9ea48942"
+    },
+    {
+      "path": "backend/evidence/tdd/03-actions-green.txt",
+      "sha256": "7a280343bba0263fcad557e3c0308d5b6047e23b8f27a2b401f10015e48be665"
+    },
+    {
+      "path": "backend/evidence/tdd/03-actions-red.txt",
+      "sha256": "4fe19cabc1c41fb7c6220b13128985f721970a9f23afe0a96458bf3284013589"
+    },
+    {
+      "path": "backend/evidence/tdd/04-visibility-green.txt",
+      "sha256": "1eaa8e1e0a87128245745fdebb69ecd5a7169bd32cfedbbbc0e3b4e975a10fe0"
+    },
+    {
+      "path": "backend/evidence/tdd/04-visibility-red.txt",
+      "sha256": "c0ed902281aa50936c3ed238006dede149b587e63efdf1851a0485d51888baa9"
+    },
+    {
+      "path": "backend/evidence/tdd/05-materials-green.txt",
+      "sha256": "42cf91a95fd00465cd420447e66c3de61c05641c93a7999894214835e5f6da33"
+    },
+    {
+      "path": "backend/evidence/tdd/05-materials-red.txt",
+      "sha256": "f4031048ee033b77a7fe7cc74ba0b21f9e87a69257cf4802ec4db7629eb0fe54"
+    },
+    {
+      "path": "backend/evidence/tdd/06-ending-green.txt",
+      "sha256": "351903ccdc1cac860b2cd6aaf145a54626658137bd76b834e62ea98887cc69d9"
+    },
+    {
+      "path": "backend/evidence/tdd/06-ending-red.txt",
+      "sha256": "e68873d1682b0396ab22b43bfe8b11b45a3698986eeded551b4332bf5c431930"
+    },
+    {
+      "path": "backend/evidence/tdd/07-authorization-green.txt",
+      "sha256": "e271e4af34d4b4543a1920787eb59ca0ca03b9926de181bd8e21301a73de7218"
+    },
+    {
+      "path": "backend/evidence/tdd/07-authorization-red.txt",
+      "sha256": "0b1d217c8b05e422254cd7568f85519206920a28c9a0d0181ab88a0a7461ef6b"
+    },
+    {
+      "path": "backend/evidence/tdd/08-sync-first-attempt.txt",
+      "sha256": "c481bb7e7777b936c48167be0854d9fe3fc3b268381d72c91168a2b3604a3201"
+    },
+    {
+      "path": "backend/evidence/tdd/08-sync-green.txt",
+      "sha256": "9a013e2a22294f07fecce9bb81ec90c5f012f6263226ceeeb0eff86f7bfba9c0"
+    },
+    {
+      "path": "backend/evidence/tdd/08-sync-red.txt",
+      "sha256": "9a76c0e5dce0523f8f109df383f44b9388714249bca158899d5b2d478c2a404c"
+    },
+    {
+      "path": "backend/evidence/tdd/09-network-green.txt",
+      "sha256": "9b0d113379370b796e54e7f7873b6671b668cae66d0532fe0a40034880b41bef"
+    },
+    {
+      "path": "backend/evidence/tdd/09-network-red.txt",
+      "sha256": "5ddbb78b672853f1e48e93997247ce0ce7b3fb8ff2dfbb10111f32b131d04059"
+    },
+    {
+      "path": "backend/evidence/tdd/10-crash-green.txt",
+      "sha256": "6c747ab1c9b98b2082be7472e860430c129049251c76be288322512352b201c2"
+    },
+    {
+      "path": "backend/evidence/tdd/10-crash-red.txt",
+      "sha256": "c5d92292fbc62e09f952f79a3fd19b77f243d747893bf8d0a2150151b75c5967"
+    },
+    {
+      "path": "backend/evidence/tdd/11-decisions-green.txt",
+      "sha256": "710d832d5fce38642640455e0d6aeead6fd53021b997a5cb186eaba5d8c3b08d"
+    },
+    {
+      "path": "backend/evidence/tdd/11-decisions-red.txt",
+      "sha256": "f2241d111a32f08e7933bc2651a71e008135e387564d8a59e5416ae904746a2e"
+    },
+    {
+      "path": "backend/evidence/tdd/12-current-authority-green.txt",
+      "sha256": "d644026415db94baab0cb3ffe572691d282e5d02219cfaa201c7367572c2fa72"
+    },
+    {
+      "path": "backend/evidence/tdd/12-current-authority-red.txt",
+      "sha256": "6fcce5c3b9881926a2c8577213f966ee3674defcce7688f406d24f70d99e5a02"
+    },
+    {
+      "path": "backend/evidence/tdd/13-internal-entry-first-attempt.txt",
+      "sha256": "ff5d417e937adb79b6af6aee85abd19859ea96ca5ca33352c242edd865305241"
+    },
+    {
+      "path": "backend/evidence/tdd/13-internal-entry-refactor.txt",
+      "sha256": "b87c49569f6f7da3fc23efeabf29db88c41604d50156cc2b3ec73bf703442912"
+    },
+    {
+      "path": "backend/evidence/tdd/14-boundaries-green.txt",
+      "sha256": "4effb6a90e18961589fc3f41840ec18b3d954d344c86538656d941c53a78d7f5"
+    },
+    {
+      "path": "backend/evidence/tdd/14-boundaries-red.txt",
+      "sha256": "7b7a7ddf15696e78a824170d1d057756e0cbcd61258429b6565393730f38d171"
+    },
+    {
+      "path": "backend/evidence/tdd/15-final-scenarios.txt",
+      "sha256": "3da2c018ca6fba70d9df5ca1f60bc859fb8036f906e5f48f65473d73d66a50fa"
+    },
+    {
+      "path": "backend/evidence/tdd/16-cancel-green.txt",
+      "sha256": "a9777ca9fa582d6907a35007746c68ecee9ee0f09adc86604bcf32c08b705fd5"
+    },
+    {
+      "path": "backend/evidence/tdd/16-cancel-red.txt",
+      "sha256": "f36232cd0124bb639308e4e69b201de2976d0627d03108e4e3c85cfcc7237904"
+    },
+    {
+      "path": "backend/evidence/raw/freeze-check.txt",
+      "sha256": "728fe242a6eb5c4a038d3dad2f6990e042240fbccfc1d8d833d2a69495bb309f"
+    }
+  ],
+  "evidence_boundary": [
+    "最终结果仅绑定 source-manifest.json 中的当前源码；早期红绿日志是历史执行过程。",
+    "10-crash-red 是故障驱动缺失的工具错误，不领取业务负样本结论；final-backend 中三个实际进程退出才是当前故障证据。",
+    "时间交错和故障屏障由可信测试参数注入；数据库为真实 PostgreSQL，未使用内存替身。",
+    "26 项后端计数包含 21 项运行层检查、1 项真实网络检查、1 项进程故障父测试及其 3 项子场景。"
+  ],
+  "not_covered": [
+    "独立需求／标准审查、TLA+ 源码 refinement 证明或本轮重新运行 TLC",
+    "真实 LLM、Model Gateway 接入、NPC 自主性和模型质量",
+    "与前端最终候选的联合验收、五客户端 900 秒、两人／五人真人试玩",
+    "生产部署、数据库进程／宿主机断电、数据库主备切换和性能 SLO"
+  ],
+  "next_action": "由总控对固定候选进行独立审查，并按释放条件接入 #8/#9/#11；不据本记录关闭父 Spec。"
+}
