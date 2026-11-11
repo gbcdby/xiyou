@@ -33,6 +33,15 @@ async function receiptFor(raw) {
   const action = parseClientAction(raw);
   return { ...structuredClone(fixtures.ClientReceipt), sessionId: action.sessionId, actorId: action.actorId, clientActionId: action.clientActionId, semanticDigest: await actionSemanticDigest(action) };
 }
+function controlResponseFor(raw, observedSeq) {
+  const request = JSON.parse(raw);
+  return { ...structuredClone(fixtures.ControlResponse), sessionId: request.sessionId, actorId: request.actorId, nonce: request.nonce, observedSeq };
+}
+function pushThrough(h, throughSeq, projection = null) {
+  const snapshot = h.client.state.snapshot;
+  h.ports.at(-1).handlers.batch({ schemaVersion: 1, type: 'world.batch', sessionId: snapshot.sessionId, viewId: snapshot.viewId, fromExclusive: snapshot.snapshotSeq, throughSeq,
+    events: projection ? [{ sessionSeq: throughSeq, eventId: `${snapshot.sessionId}:E${throughSeq}`, kind: 'projection.replace', payload: { projection } }] : [] });
+}
 
 test('丢失确认与查询不到结果后仍保留原文，重连后的重试不更换旧 epoch、游标或动作 ID', async t => {
   const h = harness(); t.after(() => h.client.close()); await ready(h);
@@ -156,4 +165,91 @@ test('连接握手明确拒绝身份时停止重连，不继续展示旧授权',
   h.ports[0].handlers.failed({ schemaVersion: 1, code: 'UNAUTHENTICATED', message: '登录已失效。' });
   assert.equal(h.client.state.snapshot, null);
   assert.equal(h.client.state.connection, 'forbidden');
+});
+
+test('控制 ACK 先到时只在授权投影达到 observedSeq 后清理同步提示，不从 ACK 修改权限', async t => {
+  const h = harness(); t.after(() => h.client.close());
+  h.snapshot.projection.self.mode = 'GracePeriod'; h.snapshot.projection.self.canControl = false;
+  await ready(h);
+  const before = structuredClone(h.client.state.snapshot);
+  const observedSeq = (BigInt(before.snapshotSeq) + 2n).toString();
+  const restoring = h.client.control('resume');
+  h.actions[0].response.resolve(controlResponseFor(h.actions[0].value, observedSeq)); await restoring;
+  assert.match(h.client.state.message, /正在同步当前授权/);
+  assert.deepEqual(h.client.state.snapshot, before);
+  pushThrough(h, (BigInt(before.snapshotSeq) + 1n).toString());
+  assert.match(h.client.state.message, /正在同步当前授权/);
+  const projection = structuredClone(before.projection);
+  projection.self.mode = 'HumanControlled'; projection.self.canControl = true;
+  pushThrough(h, observedSeq, projection);
+  assert.equal(h.client.state.message, '');
+  assert.equal(h.client.state.snapshot.projection.self.canControl, true);
+});
+
+test('授权推送先于控制 ACK 时不留下已经完成的同步提示', async t => {
+  const h = harness(); t.after(() => h.client.close()); await ready(h);
+  const observedSeq = (BigInt(h.snapshot.snapshotSeq) + 1n).toString();
+  const restoring = h.client.control('resume');
+  pushThrough(h, observedSeq);
+  h.actions[0].response.resolve(controlResponseFor(h.actions[0].value, observedSeq)); await restoring;
+  assert.equal(h.client.state.message, '');
+});
+
+test('暂态同步失败后只有合法补发成功才清理提示，同游标空批也代表恢复', async t => {
+  const h = harness(); t.after(() => h.client.close()); await ready(h);
+  const port = h.ports[0]; const original = port.request.bind(port);
+  port.request = (event, raw) => event === 'sync.request' ? Promise.reject(new Error('暂时断流')) : original(event, raw);
+  await h.client.sync();
+  assert.match(h.client.state.message, /状态同步尚未完成/);
+  const message = h.client.state.message;
+  port.request = (event, raw) => event === 'sync.request' ? Promise.resolve({ schemaVersion: 1, type: 'world.batch', sessionId: h.snapshot.sessionId, viewId: '其他授权视图', fromExclusive: h.snapshot.snapshotSeq, throughSeq: h.snapshot.snapshotSeq, events: [] }) : original(event, raw);
+  await h.client.sync();
+  assert.equal(h.client.state.message, message);
+  port.request = original;
+  await h.client.sync();
+  assert.equal(h.client.state.message, '');
+});
+
+test('控制水位随后到达不会清除后来出现的操作错误', async t => {
+  const h = harness(); t.after(() => h.client.close()); await ready(h);
+  const observedSeq = (BigInt(h.snapshot.snapshotSeq) + 1n).toString();
+  const restoring = h.client.control('resume');
+  h.actions[0].response.resolve(controlResponseFor(h.actions[0].value, observedSeq)); await restoring;
+  const sending = h.client.send({ kind: 'wait' });
+  const message = '新的操作结果仍待确认。';
+  h.actions[1].response.resolve({ schemaVersion: 1, code: 'OUTCOME_UNKNOWN', message }); await sending;
+  pushThrough(h, observedSeq);
+  await h.client.sync();
+  assert.equal(h.client.state.message, message);
+});
+
+for (const outcome of ['ACK', '超时']) test(`在途控制请求的迟到${outcome}不能覆盖较新的操作错误`, async t => {
+  const h = harness(); t.after(() => h.client.close()); await ready(h);
+  const observedSeq = (BigInt(h.snapshot.snapshotSeq) + 1n).toString();
+  const restoring = h.client.control('resume');
+  const sending = h.client.send({ kind: 'wait' });
+  const message = '较新的操作错误需要保留。';
+  h.actions[1].response.resolve({ schemaVersion: 1, code: 'OUTCOME_UNKNOWN', message }); await sending;
+  if (outcome === 'ACK') h.actions[0].response.resolve(controlResponseFor(h.actions[0].value, observedSeq));
+  else h.actions[0].response.reject(new Error('较早请求迟到超时'));
+  await restoring;
+  assert.equal(h.client.state.message, message);
+  assert.equal(h.client.state.controlBusy, false);
+  pushThrough(h, observedSeq);
+  await h.client.sync();
+  assert.equal(h.client.state.message, message);
+});
+
+test('较早同步请求的迟到超时不能覆盖较新的操作错误', async t => {
+  const h = harness(); t.after(() => h.client.close()); await ready(h);
+  const port = h.ports[0]; const original = port.request.bind(port); const pending = deferred();
+  port.request = (event, raw) => event === 'sync.request' ? pending.promise : original(event, raw);
+  const syncing = h.client.sync();
+  const sending = h.client.send({ kind: 'wait' });
+  const message = '同步期间出现的新错误。';
+  h.actions[0].response.resolve({ schemaVersion: 1, code: 'OUTCOME_UNKNOWN', message }); await sending;
+  pending.reject(new Error('较早同步迟到超时')); await syncing;
+  assert.equal(h.client.state.message, message);
+  port.request = original; await h.client.sync();
+  assert.equal(h.client.state.message, message);
 });
