@@ -2,7 +2,9 @@
 
 本目录实现 [Ticket #6](https://github.com/gbcdby/xiyou/issues/6) 的服务端基础，依据固定 Spec `6c2a0b9f6d137ad5fbd41721659404333ad8e16d` 的 [M0 协议](../docs/specs/m0-protocol.md)、[玩法契约](../docs/specs/vertical-slice-gameplay.md)和[验证计划](../docs/specs/vertical-slice-verification.md)。
 
-这是作者实现与自查候选，独立需求／标准审查由总控另行执行。真实 AI、前端联合验收、五客户端 900 秒、两人／五人真人试玩和生产部署没有由本目录宣称完成。本轮五项独立审查修正见 [修正结果](evidence/review-fix-r1/implementation-result.md)及[修正自查清单](evidence/review-fix-r1/self-check.json)，作者状态均为 `FIX_REPORTED`。初始候选 `e32c579` 的 [实现结果](evidence/implementation-result.md)及[自查清单](evidence/self-check.json)保留为历史证据。
+Ticket #6 的原作者修正结果见 [修正结果](evidence/review-fix-r1/implementation-result.md)及[修正自查清单](evidence/review-fix-r1/self-check.json)，保留其原作者 `FIX_REPORTED` 身份；初始候选 `e32c579` 的 [实现结果](evidence/implementation-result.md)及[自查清单](evidence/self-check.json)同样保留为历史证据。后续独立审查与释放由总控记录。
+
+本轮在固定运行基线上增加 [Ticket #9 的受控 AI 运行模块](ai/README.md)。用户在 2026-11-11 将本批明确调整为[模拟输入验收](../docs/specs/vertical-slice-mock.md)；实际外部模型调用为 0，真实供应商与真人输入不再阻塞该 profile 的交付。单 AI 的受控实现与原两轴证据按固定来源复用，双角色、授权复盘及同候选整体验收另行执行；不能据此宣称真实模型质量、真人体验或部署完成。
 
 ## 技术选择与启动
 
@@ -13,7 +15,7 @@
 DATABASE_URL='postgresql://USER:PASSWORD@127.0.0.1:5432/xiyou' npm start
 ```
 
-默认监听 `127.0.0.1:3000`，可通过 `HOST`、`PORT` 调整。`GET /health` 检查数据库连接。服务启动自动执行 [001-authority.sql](migrations/001-authority.sql)，迁移使用事务和数据库 advisory lock，不删除现有数据。未来结构升级应添加有序迁移，而非把升级逻辑藏在请求中。
+默认监听 `127.0.0.1:3000`，可通过 `HOST`、`PORT` 调整。`GET /health` 检查数据库连接。服务启动依序执行 [001-authority.sql](migrations/001-authority.sql) 和 [002-ai.sql](migrations/002-ai.sql)，迁移使用事务和数据库 advisory lock，不删除现有数据。默认启动不调用 AI；可信集成方式见 AI 模块说明。
 
 退出时处理 SIGINT／SIGTERM，停止维护、关闭 Socket.IO、等待已接纳任务结束，再关闭连接池。业务库不可用时不会切换到内存世界。原型登录是随机 Bearer token，数据库只保存 token 的 SHA-256；生产账号运营不在 #6 范围。
 
@@ -107,14 +109,14 @@ COMMIT、ACK 和发布是独立阶段。提交阶段结果未知时保留原动�
 
 结局读取实际修复材料、安全和许可、两位 NPC 的实际位置及已合法取得的独立证据来源。原材料与完整双证据链产生查证通行；备用材料或调查未齐产生带代价通行；截止产生未解决。结束摘要只公开必要的结果事实，不复制私聊、完整信念或未公开配置。
 
-## 后续 #9 的可信内部接口
+## 可信内部接口与 #9 接线
 
 `bindInternal(sessionId, actorId, 'core_npc' | 'proxy')` 只能由可信服务代码领取绑定句柄；客户端不能提交 principalKind。`observeInternal(handle)` 返回过滤后的投影、本角色信念和目标。代理视图剔除真人私人频道。
 
 内部写入只开放 **prepareDecision → submitIntent**，没有绕过 Decision 的裸 NPC／proxy 动作入口：
 
 1. `prepareDecision(handle, {allowedTools?, observationIds?, readEntityIds?})` 在 Session 锁内保存固定 epoch、递增 generation、合法 Observation 引用、对象版本和默认 10 秒期限，取消旧 Pending。读取对象用 `item:ID`、`target:ID`、`character:ID`、`belief:持有者ID:信念ID` 或 `goal:持有者ID:目标ID`。
-2. 调用方在事务外请求未来的 Model Gateway。本票没有供应商 SDK、模型调用或伪造 AI 运行结论。
+2. 旧调用方自行在事务外使用过滤上下文。#9 调度器改用 `prepareDecisionContext(handle)`，在同锁同水位形成目标、Memory 和 Decision，再在事务外请求供应商无关 Gateway；详情及纯恢复入口见 [AI 模块说明](ai/README.md)。实际外部模型仍未配置或调用。
 3. `submitIntent(handle, decisionId, rawJson)` 解析完整 ProposedIntent，并使用固定 `decisionId:submit` 及整包摘要。批首比较可信读版本，再按序模拟工具；后续工具失败时全部工具和对白回滚。相关版本、generation、epoch、期限、当前授权和终局在提交时复核。
 4. `settleDecision` 收束非法输出、取消或超时；定时维护也会使到期 Pending 变为 Expired。`submitFallback(handle, decisionId)` 使用独立稳定键 `decisionId:fallback`，仅执行受限等待，仍检查当前授权、epoch 和终局。是否调度下一次模型调用由 #9 负责。
 
