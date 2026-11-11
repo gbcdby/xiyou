@@ -1,0 +1,2396 @@
+{
+  "schema_version": 1,
+  "implementation_status": "NOT_ASSESSED",
+  "manifest_sha256": "9ed0d6b24f3f372a8a9c1981f76ef317067bd7876fd74845613cf0524fbe2b2c",
+  "expectations_sha256": "574510d976ec71982829acbdf751a3bf2405b4273bb7d1a53c11f80b1e172609",
+  "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+  "model_inputs": {
+    "Core.tla": "9acdb7052457da1c5dbbd59b7548ed6547c2d03951cc74938ad3b7651962289a",
+    "composed.cfg": "a6986a642bdc1c0def3a760bf869a7d93a61a410b1505d023798770e7e1c1e58",
+    "handoff-ai-cancel.cfg": "02211f34a4324d133d620d0b4f7d4f992bbd524b59680aec44e0fcf0169bb5c6",
+    "handoff-ai-epoch.cfg": "07a638e277cb0b6db9684755b409b28b01d67ee83fe107d9c445c744464d0e26",
+    "handoff-ai-expiry.cfg": "2880aa79ed01432b01249b8ab7fd0ad5e7d56940ea36d778fcb225eb6f7b748f",
+    "handoff-ai-generation.cfg": "35caa084af71ac8202cd67c14c550f935b15bcc9244eb1a7c2eda127e48bcb87",
+    "handoff-ai-invalid.cfg": "ddffbd0d4281c005f4eb1e6b371cdd3655fee7c54704bc48f5b66d71510ad0fa",
+    "handoff-ai-package.cfg": "94029bb45a866dd354e0f800ec7ad8fd2c4a9ca9f9830b617ed004014693aa47",
+    "handoff-ai-revision.cfg": "ba1a83d15af93e2a55d317041a313b8bd28324ef5e4242fbb0ca8f036ddfd160",
+    "handoff-ai-terminal.cfg": "2515586122e09bb6489537cda8eb57c1dcb0fdb46e1bde23d6afac18132c6a59",
+    "handoff-ai-unrelated.cfg": "1559bebdc59bf299ce85288c0e41bfe563c4cea8fd2773b63fe15afcdbedf3d1",
+    "handoff.cfg": "79382e2f4c53e7d15a82f89e32c1d3502e0aa327978171937115d1597435914b",
+    "live-composed.cfg": "2b0b0d7c887eba71ee3329af4cbbd3680a588dda7abbbd25ce47848771b12913",
+    "live-handoff.cfg": "c9d1d8cba71e05b867ec73b03d61ba24b1d946298591259ff8620efcd87aedb9",
+    "live-ownership.cfg": "a31a62787c7c2475f695c20b296200e04e1e68eecd01b7bc7e84bf2b4008c961",
+    "negative-ai_terminal.cfg": "42416293ab71f86f603e0b2260ce014d0ec000ca51e4de817227b7000e2c8afd",
+    "negative-control_nonce.cfg": "4b37c9939d3839890c8dc7e3d43cf748e349da295f0b8c2669391140371807aa",
+    "negative-deadline_control.cfg": "cf9a022f23194bf88a76f97c9d9900aca2ed53f4fbc921fd91b8989ce4668720",
+    "negative-deadlock.cfg": "c2e24de51f1301eb7fcc69a6638b8309ef0f3f1aa33e08e7827a58ff97725862",
+    "negative-decision-finality.cfg": "6ea6df4677331abc6d6c1b61b491c54e79937528e89ba983822d796de355a0a4",
+    "negative-decision_deadline.cfg": "24bb4b6627e509f7ad69e623f94d2d011ee7d7dae9cb1efbd05c728e27797791",
+    "negative-decision_epoch.cfg": "83980cfc5ecf660adf002ec7fa2de03b5083f974ac3ad52df184c6e11b9c39b1",
+    "negative-decision_generation.cfg": "a16c67c9a3748f8bf881c962f99970dd576990676826c9d1f4b0a78e009429ea",
+    "negative-decision_revision.cfg": "5b84936b97ca181baa4e2036993d4e7b55be926686a291f97b3c77a4febe5bd8",
+    "negative-decision_status.cfg": "f733a7f656ce22b981a0d0fe60f6839b122bbe8cd8fecc4468203a678341557c",
+    "negative-duplicate_owner.cfg": "0d231594703739c142afd0ceeb02f684477af5820e294fa7f59c948247130584",
+    "negative-early_ack.cfg": "c764ccbe42b6efe84981e4a2958a50614a543379e65c87c87f1f98ecbfa90e7b",
+    "negative-future_base.cfg": "5df68470140e206a4724b3070c858ea0a2f383dd2a0134cdc9659f235586fdb2",
+    "negative-no_retry.cfg": "df5913ab7b8aa2fd05e2df69cb0959baa66b55919630a13491dfc62ce7357d38",
+    "negative-no_timeout.cfg": "97b01e05c74c542c85da7ea02421891c1584c84a607733b64d0dd1fac2dca441",
+    "negative-old_human.cfg": "f5db5be3d34f9b84c4800c9cea1e54ce73017d1559bcd2899bce04068a9e93cf",
+    "negative-old_proxy.cfg": "6fe3ed901ecbed47341c85894e97aa68b07c208151b9eff837666219c1836d13",
+    "negative-partial_ai.cfg": "f9ebf4dbfe809028ea090b959f79ffa748642de6c0bf5b775fbf688c7aa59c5e",
+    "negative-payload_overwrite.cfg": "a9c68a70e34e704511e8bbac36b075c48107c3ddbf803906e7b6858a4d39cd03",
+    "negative-post_terminal.cfg": "0d60d9b8dcdabf7ce45d46df32672f96d627ac12d71093f41d3a11739731a7ce",
+    "negative-sequence_gap.cfg": "58a0e5461386cbc4b7211dd782719b7f7c69062126804c1f9802d3742fc73732",
+    "negative-sequence_repeat.cfg": "3d6374eefccfef3f00bf229be5d75a88ec43e22ac0ed1a28839825d15b60cb1a",
+    "negative-split_bundle.cfg": "8aed30c4145f8c35c2baf251866ac41b077001b7ddb9ea25a97c7fd5e472d438",
+    "negative-split_receipt.cfg": "08f21af7f6e5df2acd53dda86ab69fb0054654b4e1d8ed2bba82fd1d678df102",
+    "negative-split_terminal.cfg": "932ed3953a9a7fe6819065857b54fd1529458cb734092f015fda22452eedcb35",
+    "negative-stale-item-precondition.cfg": "921ae110d7fd22aa7218b832ec80787ce535cb661fde75ed5c521b4317fa356a",
+    "negative-stale_disconnect.cfg": "068230ff5bea5c59b2e0081834d8ed4a708cddad4af621db47fc7cfbc3a2f97c",
+    "negative-stale_item.cfg": "cf46b4f5e8d4e76f0e09f8755719c16b3371c20c0526c2063af4b607cf5b3f58",
+    "negative-type.cfg": "be6ab14d33baef4935ab644a2397ddbe13a48f6f62ba0e3072c6e37f93efb647",
+    "ownership-competition.cfg": "a2af77b990fb349769f46f81f1dba2ca35f77cd9e6bd064b624baec5690198bd",
+    "ownership-ending.cfg": "4c94e65a4c9defb5e949645c024272c9dd7e2864106f20234cb645617aafecf4",
+    "ownership-future.cfg": "98f4467186624e2524dc05f33301eb32b1962568658940f5f445c04a9bda067a",
+    "ownership-idempotence.cfg": "b21a8e496684236d7e1338eb43007c63c4e552400af886618ded143069e087da",
+    "ownership-payload.cfg": "3e06911e68724b28fc4040b0d2e82f2569096d232f0a30ccc19e6b6cb70366dc",
+    "ownership-publication.cfg": "b15fd7580da0e5b42bd319261e0b0411e93641e948bc246bee5e5cfb9807f019",
+    "witness-aborted.cfg": "2619cde140aa84778aa3eacb3ebefe42aad888d0c8821ec4ea21629b0be351a9",
+    "witness-ai-after-unrelated.cfg": "cf4d6e15df2461eb8b9cfe23706ae972f58ae9ce4ff67e7c11b99b0006fb6a88",
+    "witness-ai-committed.cfg": "63652705ab1a9062d17a39e95c83368eec54fbd1360f67d394563d6466e404a2",
+    "witness-atomic-package-rejected.cfg": "646dc63123be1a9081837e36cd90d1a069a83007d81744062425a08308312130",
+    "witness-control-nonce-retry.cfg": "bda49bd839b46ade9a90aeba8a2d3993731cc5e49d8435d01d6b441761a4939b",
+    "witness-control-reject.cfg": "19d1ce81ab8c7b7cdfe3c8251ce0becba7c327c8766ebe588bcfcb6bb04cdf70",
+    "witness-crash-after-commit.cfg": "3c90a6ff58f2d74379831349acf53d751cba2e52d48a5b33883d1c2c6176196e",
+    "witness-crash-before-commit.cfg": "4d0d6c5bc735a3431d74d8f2632169d615b8ffe1970b23876155f2412e9fad22",
+    "witness-deadline-late-ai.cfg": "7ac636ea7bb709c834e7efc7f225f095131e3e7cb4f243e39cf6a96330657b80",
+    "witness-deadline-reject.cfg": "06b9e670edacd5f127d1ed26e384cda74399c831fb7078b88031c34d44ac229e",
+    "witness-decision-cancelled.cfg": "1904686aad5bd2fc4f5c54dd3134e00ddf719152637e5fcbe39476900ac0b39f",
+    "witness-decision-expired.cfg": "de8f3ddf7c8ad342dbac02c11474649cf7110c834063e00b0f73e9b4f5c351f9",
+    "witness-early-ack-crash.cfg": "85593e6a193a9f2b92e3faec9f4da9882e759c551b0c50fc8cede0ad5232f3fd",
+    "witness-effect-crash-handoff-retry.cfg": "4e97aa9b862c3a76b5506d862662debd4a4eb7e6212de8296c80996b1d657c54",
+    "witness-effect-crash-retry-negative.cfg": "1a86d3cbf5684f636c8fafadbcf16c10bcaf7a163bba45583eebc8d236fc7d44",
+    "witness-epoch-late-ai.cfg": "f3498948ba6c6be3c53b86ee6851ee955bdfde1028e9609325834a1f677d2970",
+    "witness-explicit-take.cfg": "1064c19678bb25746b52e1bc12dc1483bfed4f9f072029c6dd360395a5e914b5",
+    "witness-future-reject.cfg": "a02ae1a89238b2d94187e97b9dd6a685f0083b9b297ac1a67c6c09a1a501d47c",
+    "witness-generation-late-ai.cfg": "28754a50866eca0883f2dd8ff4fb085f039f117ba7e6f1bdd6bbfe6b47042004",
+    "witness-grace.cfg": "f742d75a1b7e30ef1e2af63775afb3c1265d596be09dcc5a7d4fac0b7a7b51aa",
+    "witness-invalid-ai-rejected.cfg": "a81db89e976b9ed16eca56553dbc1c28027d4a143bddaf41500db69e7decd06c",
+    "witness-item-conflict.cfg": "f7b8b3300b98e010a0c0d012657699eb803f7b66fc791e2a959b0377aad1f9ca",
+    "witness-manual-ending.cfg": "74d69cf50878496d678178bd0cdb81b43db72e9d1a1026c2121d343a92da04e2",
+    "witness-old-disconnect-rejected.cfg": "2c866fd318d114a7a53fd9fc229cba409c4b42e13a64f4cd772f5a39a7364f72",
+    "witness-partial-bundle-crash.cfg": "4e11371e3f6c32c8c385fbbf3f58f193b2b30b759f7d18d4097cfd925759b303",
+    "witness-payload-conflict.cfg": "d4fda08209c57e51886323305a3e66959f3d438e233c2897eae8f9280cb3e769",
+    "witness-proxy.cfg": "061b5d6bc72a2af4132576114cc4116b5bc28073bc535973a38a9a87ab6785b6",
+    "witness-published.cfg": "2398630255e2ce858d807969f12228480855e5144e8834df399268a7348df750",
+    "witness-recovered.cfg": "aec160a20aabe10921d14784c4cdf5aac80920d978c6278aedd4ea5552e030c9",
+    "witness-resume-held.cfg": "de5ffeffb462f1d76bb11692c32dd9cdaa7212d07f8998574da8ca279ab9b177",
+    "witness-returned.cfg": "7df5de0c38f66e907e5ff4d754e28e7ddd45413e75a021cdfa02213a0e243162",
+    "witness-revision-late-ai.cfg": "a3c3c971c93c4171d06a6a175b747cf21d824acba54f303e15dda859b917439e",
+    "witness-same-receipt.cfg": "6871125dc8c606dd1ede14fff2b4d1649a16b423db8bafb354d4d08506056aab",
+    "witness-take-success.cfg": "241f02c44de17b060dd05608cf32d2f0320dbd1d822104a48b9a203273020cfb",
+    "witness-terminal-late-ai.cfg": "9dc6047965a88c6e46c9f692c9bd415d959d27c680ab0a12055ea5d84ea24c09"
+  },
+  "selected_profiles": [
+    "ownership-competition",
+    "ownership-idempotence",
+    "ownership-ending",
+    "ownership-future",
+    "handoff",
+    "composed",
+    "ownership-payload",
+    "ownership-publication",
+    "handoff-ai-epoch",
+    "handoff-ai-generation",
+    "handoff-ai-revision",
+    "handoff-ai-unrelated",
+    "handoff-ai-cancel",
+    "handoff-ai-invalid",
+    "handoff-ai-package",
+    "handoff-ai-expiry",
+    "handoff-ai-terminal",
+    "live-ownership",
+    "live-handoff",
+    "live-composed",
+    "negative-type",
+    "negative-duplicate_owner",
+    "negative-stale_item",
+    "negative-split_receipt",
+    "negative-payload_overwrite",
+    "negative-split_bundle",
+    "negative-split_terminal",
+    "negative-partial_ai",
+    "negative-early_ack",
+    "negative-old_human",
+    "negative-stale_disconnect",
+    "negative-old_proxy",
+    "negative-control_nonce",
+    "negative-decision_epoch",
+    "negative-decision_generation",
+    "negative-decision_revision",
+    "negative-decision_deadline",
+    "negative-decision_status",
+    "negative-ai_terminal",
+    "negative-post_terminal",
+    "negative-deadline_control",
+    "negative-sequence_gap",
+    "negative-sequence_repeat",
+    "negative-future_base",
+    "negative-stale-item-precondition",
+    "negative-decision-finality",
+    "negative-no_retry",
+    "negative-no_timeout",
+    "negative-deadlock",
+    "witness-take-success",
+    "witness-item-conflict",
+    "witness-same-receipt",
+    "witness-payload-conflict",
+    "witness-crash-before-commit",
+    "witness-crash-after-commit",
+    "witness-recovered",
+    "witness-published",
+    "witness-manual-ending",
+    "witness-deadline-reject",
+    "witness-future-reject",
+    "witness-grace",
+    "witness-proxy",
+    "witness-returned",
+    "witness-explicit-take",
+    "witness-resume-held",
+    "witness-control-nonce-retry",
+    "witness-old-disconnect-rejected",
+    "witness-control-reject",
+    "witness-ai-committed",
+    "witness-ai-after-unrelated",
+    "witness-epoch-late-ai",
+    "witness-generation-late-ai",
+    "witness-revision-late-ai",
+    "witness-deadline-late-ai",
+    "witness-terminal-late-ai",
+    "witness-atomic-package-rejected",
+    "witness-decision-expired",
+    "witness-invalid-ai-rejected",
+    "witness-decision-cancelled",
+    "witness-aborted",
+    "witness-effect-crash-handoff-retry",
+    "witness-effect-crash-retry-negative",
+    "witness-partial-bundle-crash",
+    "witness-early-ack-crash"
+  ],
+  "complete": true,
+  "audit_pass": false,
+  "results": [
+    {
+      "profile": "composed",
+      "audit_pass": false,
+      "errors": [
+        "原始状态不符",
+        "TLC 原始退出码不符",
+        "执行超时或中断",
+        "未达到预先声明的 distinct 下限",
+        "正向探索未完整收束",
+        "runner 退出码不符"
+      ],
+      "status": "INCONCLUSIVE",
+      "reason": "TIMEOUT",
+      "raw_exit": 143,
+      "statistics": {
+        "generated_states": null,
+        "distinct_states": null,
+        "remaining_states": null
+      },
+      "duration_seconds": 180.412123,
+      "minimum_declared_before_run": 500,
+      "invariants": [
+        "TypeOK",
+        "AtMostOneEffect",
+        "ReceiptPayloadBinding",
+        "AtomicCommitBundle",
+        "AckRequiresCommit",
+        "TerminalBlocksNewEffects",
+        "ContinuousCommittedSequence",
+        "PreconditionDiscipline",
+        "SingleEffectiveOwner",
+        "NoDualControl",
+        "ControlNonceIdempotent",
+        "FreshDecisionOnly",
+        "DecisionSettlesOnce"
+      ],
+      "properties": [],
+      "run_id": "6f3e72f7-9194-4618-bf51-8fda8190788d",
+      "result_sha256": "e64671c08fcb2eb6b63df7031196c275ad46ce4ac53b51c338e76c4e1bfbfd97",
+      "log_sha256": "f28f628924c19a36b1edfaabfe2ed225e2e2cfaab8f5a242b116d1d7831bffb2",
+      "messages_sha256": "1538cfb688b1ae3750b4713a3a736be137304f609f3646e70f13e8be4420ed51",
+      "runner_exit": 3
+    },
+    {
+      "profile": "handoff",
+      "audit_pass": true,
+      "errors": [],
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "raw_exit": 0,
+      "statistics": {
+        "generated_states": 28619,
+        "distinct_states": 8512,
+        "remaining_states": 0
+      },
+      "duration_seconds": 1.520622,
+      "minimum_declared_before_run": 500,
+      "invariants": [
+        "TypeOK",
+        "AtMostOneEffect",
+        "ReceiptPayloadBinding",
+        "AtomicCommitBundle",
+        "AckRequiresCommit",
+        "TerminalBlocksNewEffects",
+        "ContinuousCommittedSequence",
+        "PreconditionDiscipline",
+        "NoDualControl",
+        "ControlNonceIdempotent",
+        "FreshDecisionOnly",
+        "DecisionSettlesOnce"
+      ],
+      "properties": [],
+      "run_id": "6aa8915c-9502-410a-abc9-7a27eb8bc60d",
+      "result_sha256": "34f7d7a983fcd9a45638b306352b9f965b916ed4d88a47631efdf82d3fd2360b",
+      "log_sha256": "7d35da98b55877c7e1905d3e47be810a74443cd5e681c1fe055909d5417e9f7f",
+      "messages_sha256": "f4093b84c072566706abf7094faf9c7df1edf3a4e2514893b4853a7416930065",
+      "runner_exit": 0
+    },
+    {
+      "profile": "handoff-ai-cancel",
+      "audit_pass": true,
+      "errors": [],
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "raw_exit": 0,
+      "statistics": {
+        "generated_states": 8589,
+        "distinct_states": 2628,
+        "remaining_states": 0
+      },
+      "duration_seconds": 1.234545,
+      "minimum_declared_before_run": 500,
+      "invariants": [
+        "TypeOK",
+        "AtMostOneEffect",
+        "ReceiptPayloadBinding",
+        "AtomicCommitBundle",
+        "AckRequiresCommit",
+        "TerminalBlocksNewEffects",
+        "ContinuousCommittedSequence",
+        "PreconditionDiscipline",
+        "NoDualControl",
+        "ControlNonceIdempotent",
+        "FreshDecisionOnly",
+        "DecisionSettlesOnce"
+      ],
+      "properties": [],
+      "run_id": "c95d5019-b207-423d-83e0-4df2986814b6",
+      "result_sha256": "40ff35551ed3967fe790006c485dd504c590b11f5d20ca512a5c8c36ca4b3b1c",
+      "log_sha256": "bc77e42060fe1fd620e455e99e6ceb8cec4b310077bba5cf5110866fc37584ff",
+      "messages_sha256": "1ed9c6aff40d897b4f20ddbeafe3d8c79c8870585a56cfa71c2ae9ab7cb57929",
+      "runner_exit": 0
+    },
+    {
+      "profile": "handoff-ai-epoch",
+      "audit_pass": true,
+      "errors": [],
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "raw_exit": 0,
+      "statistics": {
+        "generated_states": 41843,
+        "distinct_states": 12452,
+        "remaining_states": 0
+      },
+      "duration_seconds": 1.62294,
+      "minimum_declared_before_run": 500,
+      "invariants": [
+        "TypeOK",
+        "AtMostOneEffect",
+        "ReceiptPayloadBinding",
+        "AtomicCommitBundle",
+        "AckRequiresCommit",
+        "TerminalBlocksNewEffects",
+        "ContinuousCommittedSequence",
+        "PreconditionDiscipline",
+        "NoDualControl",
+        "ControlNonceIdempotent",
+        "FreshDecisionOnly",
+        "DecisionSettlesOnce"
+      ],
+      "properties": [],
+      "run_id": "ab7a8b0d-ede1-432b-989c-71ddbd779080",
+      "result_sha256": "38908ca46673a7c91270aaf3f930a56b2aac1969b5f53dda48d45356124552ec",
+      "log_sha256": "c6aa917dfe7dab06b09b5e0e429568a44da65dd7c6fce766b32df14eb5d4555e",
+      "messages_sha256": "feaedc743b1860d889ca7cb5d232a8a388458cf2b4864faf3a635f6ea2e81b36",
+      "runner_exit": 0
+    },
+    {
+      "profile": "handoff-ai-expiry",
+      "audit_pass": true,
+      "errors": [],
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "raw_exit": 0,
+      "statistics": {
+        "generated_states": 6039,
+        "distinct_states": 1928,
+        "remaining_states": 0
+      },
+      "duration_seconds": 1.238345,
+      "minimum_declared_before_run": 500,
+      "invariants": [
+        "TypeOK",
+        "AtMostOneEffect",
+        "ReceiptPayloadBinding",
+        "AtomicCommitBundle",
+        "AckRequiresCommit",
+        "TerminalBlocksNewEffects",
+        "ContinuousCommittedSequence",
+        "PreconditionDiscipline",
+        "NoDualControl",
+        "ControlNonceIdempotent",
+        "FreshDecisionOnly",
+        "DecisionSettlesOnce"
+      ],
+      "properties": [],
+      "run_id": "3eebcf8c-a55f-48e7-8228-5fed3bba8ecb",
+      "result_sha256": "947fa85b22a99cec9f9cb6d28582b967b68ee8feb2845e15bf1957ffff4c0f35",
+      "log_sha256": "51c84aba73221f841c8e1758619df0f0d2aba7ec461258f55b53d71a5b1fd698",
+      "messages_sha256": "20ee97d48d26667c090caf66c27fe6d3b11c2e3b18c62427bbcfe0a18172b831",
+      "runner_exit": 0
+    },
+    {
+      "profile": "handoff-ai-generation",
+      "audit_pass": true,
+      "errors": [],
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "raw_exit": 0,
+      "statistics": {
+        "generated_states": 10259,
+        "distinct_states": 3160,
+        "remaining_states": 0
+      },
+      "duration_seconds": 1.18242,
+      "minimum_declared_before_run": 500,
+      "invariants": [
+        "TypeOK",
+        "AtMostOneEffect",
+        "ReceiptPayloadBinding",
+        "AtomicCommitBundle",
+        "AckRequiresCommit",
+        "TerminalBlocksNewEffects",
+        "ContinuousCommittedSequence",
+        "PreconditionDiscipline",
+        "NoDualControl",
+        "ControlNonceIdempotent",
+        "FreshDecisionOnly",
+        "DecisionSettlesOnce"
+      ],
+      "properties": [],
+      "run_id": "d8e90071-2718-4aa3-a1c2-0b3a50605507",
+      "result_sha256": "6cfe9ff3330a32afd2b185d565df19e5ace1f82f1c8acbd0d35b9bcbdef65bc3",
+      "log_sha256": "4a345f0cd8ab45ba8b1f0b07e43e9321559b06264be28bfcc8ca96b19468a6ee",
+      "messages_sha256": "74eaf040a4258e1da415b373460fc245117908f33b36176d80f608577ef758d9",
+      "runner_exit": 0
+    },
+    {
+      "profile": "handoff-ai-invalid",
+      "audit_pass": true,
+      "errors": [],
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "raw_exit": 0,
+      "statistics": {
+        "generated_states": 7886,
+        "distinct_states": 2362,
+        "remaining_states": 0
+      },
+      "duration_seconds": 1.133335,
+      "minimum_declared_before_run": 500,
+      "invariants": [
+        "TypeOK",
+        "AtMostOneEffect",
+        "ReceiptPayloadBinding",
+        "AtomicCommitBundle",
+        "AckRequiresCommit",
+        "TerminalBlocksNewEffects",
+        "ContinuousCommittedSequence",
+        "PreconditionDiscipline",
+        "NoDualControl",
+        "ControlNonceIdempotent",
+        "FreshDecisionOnly",
+        "DecisionSettlesOnce"
+      ],
+      "properties": [],
+      "run_id": "3c44d5cd-7c7e-414f-b482-5a5baeaeaa79",
+      "result_sha256": "1c68b0dd89d8b65905317534da8fb154bbc265b9e216dd905cc50b725ca87aba",
+      "log_sha256": "ca2710ef11a883308d78cebe0210b9d651335912d8ccf0ecfcf72d93915b9a47",
+      "messages_sha256": "bcbd992a7d999395146084063fb9bf6e433d54611b224771f241a62bb74bdf3d",
+      "runner_exit": 0
+    },
+    {
+      "profile": "handoff-ai-package",
+      "audit_pass": true,
+      "errors": [],
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "raw_exit": 0,
+      "statistics": {
+        "generated_states": 10245,
+        "distinct_states": 3160,
+        "remaining_states": 0
+      },
+      "duration_seconds": 1.215573,
+      "minimum_declared_before_run": 500,
+      "invariants": [
+        "TypeOK",
+        "AtMostOneEffect",
+        "ReceiptPayloadBinding",
+        "AtomicCommitBundle",
+        "AckRequiresCommit",
+        "TerminalBlocksNewEffects",
+        "ContinuousCommittedSequence",
+        "PreconditionDiscipline",
+        "NoDualControl",
+        "ControlNonceIdempotent",
+        "FreshDecisionOnly",
+        "DecisionSettlesOnce"
+      ],
+      "properties": [],
+      "run_id": "fcca94ea-4633-4e52-baec-d825a4661307",
+      "result_sha256": "ba3eaca91ba436ce1246323a9b145beffce54cee380ff90726a77807478877aa",
+      "log_sha256": "2281ed96a825abbb3de7bb4a6c707bef0a90a0f147c41535281c648fc62a7a55",
+      "messages_sha256": "b52f051ee0188797c4ff9740c1a622366e31ab557c4dd620be4ede3311dedd04",
+      "runner_exit": 0
+    },
+    {
+      "profile": "handoff-ai-revision",
+      "audit_pass": true,
+      "errors": [],
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "raw_exit": 0,
+      "statistics": {
+        "generated_states": 15095,
+        "distinct_states": 4616,
+        "remaining_states": 0
+      },
+      "duration_seconds": 1.313702,
+      "minimum_declared_before_run": 500,
+      "invariants": [
+        "TypeOK",
+        "AtMostOneEffect",
+        "ReceiptPayloadBinding",
+        "AtomicCommitBundle",
+        "AckRequiresCommit",
+        "TerminalBlocksNewEffects",
+        "ContinuousCommittedSequence",
+        "PreconditionDiscipline",
+        "NoDualControl",
+        "ControlNonceIdempotent",
+        "FreshDecisionOnly",
+        "DecisionSettlesOnce"
+      ],
+      "properties": [],
+      "run_id": "308fb8d0-d196-4512-b989-b92a19c51849",
+      "result_sha256": "77cb9af3ea39d7a787f8dbad360fcdf5b7eeb1daf1e05ada8d8d754c0a82500c",
+      "log_sha256": "78afc311886bff859a40007abef878a5f6994cd641663ac1fac958c3f3351c0e",
+      "messages_sha256": "e099325da8030236eadae34a826574cd2b380d0d8d525c58f4a9aec4cb191065",
+      "runner_exit": 0
+    },
+    {
+      "profile": "handoff-ai-terminal",
+      "audit_pass": true,
+      "errors": [],
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "raw_exit": 0,
+      "statistics": {
+        "generated_states": 18036,
+        "distinct_states": 4946,
+        "remaining_states": 0
+      },
+      "duration_seconds": 1.474372,
+      "minimum_declared_before_run": 500,
+      "invariants": [
+        "TypeOK",
+        "AtMostOneEffect",
+        "ReceiptPayloadBinding",
+        "AtomicCommitBundle",
+        "AckRequiresCommit",
+        "TerminalBlocksNewEffects",
+        "ContinuousCommittedSequence",
+        "PreconditionDiscipline",
+        "NoDualControl",
+        "ControlNonceIdempotent",
+        "FreshDecisionOnly",
+        "DecisionSettlesOnce"
+      ],
+      "properties": [],
+      "run_id": "030345ca-f7e7-4b32-b900-84c5384132e0",
+      "result_sha256": "88f8477579087040a8c031810e403daf24e16690b6a169456063dca1b41b5742",
+      "log_sha256": "bc8b8be2c1731f29bb815c40e2dcc03fd0521a770a14416559d047bd9550f198",
+      "messages_sha256": "f401939cf171d8a4ea6498eaf995c49b16b16534bbb75eef8786d43479fabe28",
+      "runner_exit": 0
+    },
+    {
+      "profile": "handoff-ai-unrelated",
+      "audit_pass": true,
+      "errors": [],
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "raw_exit": 0,
+      "statistics": {
+        "generated_states": 44431,
+        "distinct_states": 13932,
+        "remaining_states": 0
+      },
+      "duration_seconds": 1.715822,
+      "minimum_declared_before_run": 500,
+      "invariants": [
+        "TypeOK",
+        "AtMostOneEffect",
+        "ReceiptPayloadBinding",
+        "AtomicCommitBundle",
+        "AckRequiresCommit",
+        "TerminalBlocksNewEffects",
+        "ContinuousCommittedSequence",
+        "PreconditionDiscipline",
+        "NoDualControl",
+        "ControlNonceIdempotent",
+        "FreshDecisionOnly",
+        "DecisionSettlesOnce"
+      ],
+      "properties": [],
+      "run_id": "3881a225-5fdd-476a-ba77-2f9b0a6da9fe",
+      "result_sha256": "38e47808f9e315d43c98ed081128b9f7c93c79bd7e52213b8e4546f87237857c",
+      "log_sha256": "7e61ddf50611433391529040786cc62728d9d6fe66be9555e702f4b78e5af935",
+      "messages_sha256": "0e38d7967f9f390a0bbec892794d17a7560f5de2d94ad46abaed3b5c6cc862cf",
+      "runner_exit": 0
+    },
+    {
+      "profile": "live-composed",
+      "audit_pass": false,
+      "errors": [
+        "原始状态不符",
+        "TLC 原始退出码不符",
+        "执行超时或中断",
+        "未达到预先声明的 distinct 下限",
+        "正向探索未完整收束",
+        "runner 退出码不符"
+      ],
+      "status": "INCONCLUSIVE",
+      "reason": "TIMEOUT",
+      "raw_exit": 143,
+      "statistics": {
+        "generated_states": null,
+        "distinct_states": null,
+        "remaining_states": null
+      },
+      "duration_seconds": 180.490672,
+      "minimum_declared_before_run": 200,
+      "invariants": [
+        "TypeOK"
+      ],
+      "properties": [
+        "AdmittedRequestResolves",
+        "DecisionResolvesOrExpires"
+      ],
+      "run_id": "2ad54d0f-17d9-4085-aa18-e55f268aa8cb",
+      "result_sha256": "2a0a26052f46c0498c9a82a1bec6fec3a3fdc48002ccf248c4a2a4c22d255be0",
+      "log_sha256": "b67c0b7b4bc424cda8ff1952337e3bd8592960623584af36be035d26c746d7b1",
+      "messages_sha256": "93c34fb8f53442b700f734b0107d5527aaeab908c10b8104b7379ff89a105dd1",
+      "runner_exit": 3
+    },
+    {
+      "profile": "live-handoff",
+      "audit_pass": true,
+      "errors": [],
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "raw_exit": 0,
+      "statistics": {
+        "generated_states": 6039,
+        "distinct_states": 1928,
+        "remaining_states": 0
+      },
+      "duration_seconds": 1.563617,
+      "minimum_declared_before_run": 200,
+      "invariants": [
+        "TypeOK"
+      ],
+      "properties": [
+        "AdmittedRequestResolves",
+        "DecisionResolvesOrExpires"
+      ],
+      "run_id": "750df4e7-8216-4f63-a017-99177eebd737",
+      "result_sha256": "65d56c81f2f674ab36246ae9adf43dae5db2bc8ba4d2550ccaf8db49ad04b931",
+      "log_sha256": "4a4eeb3cd4afbf7c26b2fcc45e071f3a5fe039ccbdc1e1a10415b67e320dd4c2",
+      "messages_sha256": "a994bdbd59a86a7d9c53b834c6be5e93dab090e00062db51a5329c01d6419c36",
+      "runner_exit": 0
+    },
+    {
+      "profile": "live-ownership",
+      "audit_pass": true,
+      "errors": [],
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "raw_exit": 0,
+      "statistics": {
+        "generated_states": 3055,
+        "distinct_states": 920,
+        "remaining_states": 0
+      },
+      "duration_seconds": 1.214284,
+      "minimum_declared_before_run": 200,
+      "invariants": [
+        "TypeOK"
+      ],
+      "properties": [
+        "AdmittedRequestResolves"
+      ],
+      "run_id": "b86ff81f-1261-4952-bf3e-71f8416c8042",
+      "result_sha256": "98fddaeabe290c005b551a4d26778c33cd44cebec25c17a4e0b56cf8d311a5f4",
+      "log_sha256": "c6d4b060a290c9db3b88467f8a0ac1a9189a157c7c92e8bf5dbf329fa1d0e271",
+      "messages_sha256": "22cc4d3d94d426ee73a2d103800db28cc878a04f20db20c869edcf660a662037",
+      "runner_exit": 0
+    },
+    {
+      "profile": "negative-ai_terminal",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 866,
+        "distinct_states": 385,
+        "remaining_states": 178
+      },
+      "duration_seconds": 0.962804,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "FreshDecisionOnly"
+      ],
+      "properties": [],
+      "run_id": "91ba85dd-9b1d-4aa7-9348-9daec934a40c",
+      "result_sha256": "12057b04b6c6fbd8c6e250aa04a800f23e9151d8f3edda7fe6be4fadb8547d31",
+      "log_sha256": "7adf032ef8296315034eb091ef7c5290d365de4506e8f317818e1052a20170b2",
+      "messages_sha256": "d5b24b39342fdca416b26f5f8128d8433754e51e703f7fd58c782589074c12d9",
+      "runner_exit": 2
+    },
+    {
+      "profile": "negative-control_nonce",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 29,
+        "distinct_states": 20,
+        "remaining_states": 14
+      },
+      "duration_seconds": 0.872741,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "ControlNonceIdempotent"
+      ],
+      "properties": [],
+      "run_id": "c080fa7e-aa80-43cc-9b82-94148bdbff5d",
+      "result_sha256": "b20664ff0d1d41ee70ab0ceab7fd7873ee8dce2e29979c570c798cd13a00cd63",
+      "log_sha256": "479f1486b48ed8bd26c0aa96ef6f6bc22d73e48edd2302c3900d4006883caf55",
+      "messages_sha256": "5f29e58f6e6b68217dcf72a4ed7b25ebc3f710cffbee1241b632f76ecc14bd55",
+      "runner_exit": 2
+    },
+    {
+      "profile": "negative-deadline_control",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 449,
+        "distinct_states": 222,
+        "remaining_states": 135
+      },
+      "duration_seconds": 0.917717,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "TerminalBlocksNewEffects"
+      ],
+      "properties": [],
+      "run_id": "0caa2329-aa87-498b-9da3-0e2340387466",
+      "result_sha256": "26bb11dd3ee1d180111123ca476fac2a4b17e43555b176a064eee67cb347a6fd",
+      "log_sha256": "4e7a28b9cb708166dcee46bc5d137431453d749532aeb6317c5c75431d1ed76d",
+      "messages_sha256": "22d2be53acbe20d9b844932e5361ad321630942054528cc8ad4332405d9cfae6",
+      "runner_exit": 2
+    },
+    {
+      "profile": "negative-deadlock",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 11,
+      "statistics": {
+        "generated_states": 6,
+        "distinct_states": 5,
+        "remaining_states": 3
+      },
+      "duration_seconds": 0.919851,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "TypeOK"
+      ],
+      "properties": [],
+      "run_id": "b9a173c0-87a9-45d3-814a-2a0bbed80398",
+      "result_sha256": "43a7ea486d2ab9c425199e2d5c3bfbe60a4775837876cd33c964dbc0ad4e460f",
+      "log_sha256": "11316bd57fee18528f04b5f4aeb64e4d1ee0fc97c6ceff9ccb8c57d0bb3d58f4",
+      "messages_sha256": "c8739d56bae596c6f072fa69b4883f857cb8a217e42dceebfb60382a634a1bf8",
+      "runner_exit": 2
+    },
+    {
+      "profile": "negative-decision-finality",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 382,
+        "distinct_states": 194,
+        "remaining_states": 86
+      },
+      "duration_seconds": 1.396839,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "DecisionSettlesOnce"
+      ],
+      "properties": [],
+      "run_id": "c88b7cf5-e4e9-42af-89a0-5a9767362336",
+      "result_sha256": "3a81512f1cff7761ae3cab283522715576242376d0204af9e7608d6e1ab07b73",
+      "log_sha256": "13a920b722429fed152c282a2cc034c166c98a73118a08b189173c3b3c4ec1c5",
+      "messages_sha256": "cc4e079d62d87508d5722fafaba8e08d4755fe8f3df909ed9548fde0d7d620ce",
+      "runner_exit": 2
+    },
+    {
+      "profile": "negative-decision_deadline",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 383,
+        "distinct_states": 192,
+        "remaining_states": 83
+      },
+      "duration_seconds": 0.912187,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "FreshDecisionOnly"
+      ],
+      "properties": [],
+      "run_id": "6dc35618-fdd3-450d-bb70-d753401dcec0",
+      "result_sha256": "97f00b48ad1d3b54863df2b0afc3a8a1c49818d7bd9cba49fe84d5c5780ca0ef",
+      "log_sha256": "8bfb0e2829ba6a9390c8678d2a357faa5fb0ad3080bd3426ac889416dcc78501",
+      "messages_sha256": "56891834b1f9ee953e5b702638a7f8e6cc04399a47aa40f1244e219f8b637049",
+      "runner_exit": 2
+    },
+    {
+      "profile": "negative-decision_epoch",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 596,
+        "distinct_states": 305,
+        "remaining_states": 150
+      },
+      "duration_seconds": 0.969703,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "FreshDecisionOnly"
+      ],
+      "properties": [],
+      "run_id": "e96036e1-e320-4a95-8b5e-ae4389c3fbf8",
+      "result_sha256": "28910f8a0d3c14f5071d57a0a60e7c25df17befb90f43ea550d4ae181ea00140",
+      "log_sha256": "d84e069554641de180b01466da02fc4a811d05e45468c52bf9f67fde412e5a26",
+      "messages_sha256": "9f5450a327ae1911659dd6db0d0ed9af6fc084b22a216f4a9a82e4c77e97e68a",
+      "runner_exit": 2
+    },
+    {
+      "profile": "negative-decision_generation",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 382,
+        "distinct_states": 194,
+        "remaining_states": 86
+      },
+      "duration_seconds": 0.866528,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "FreshDecisionOnly"
+      ],
+      "properties": [],
+      "run_id": "ea5ca566-94af-4f88-b528-a80d0f38ef2b",
+      "result_sha256": "0b4171a53b386d697b7535b4b9a7d48b74d169879ac69abc3157aa1a91480c8c",
+      "log_sha256": "de42fdec6830b075c9d5f3895543b9a117a682b4498422f806e31a24321b6b0f",
+      "messages_sha256": "1c69d1f34376397af3a0ef6d34eb506b7556290226c142a9a441caa4ffb59ed7",
+      "runner_exit": 2
+    },
+    {
+      "profile": "negative-decision_revision",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 382,
+        "distinct_states": 194,
+        "remaining_states": 86
+      },
+      "duration_seconds": 0.918233,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "FreshDecisionOnly"
+      ],
+      "properties": [],
+      "run_id": "05cb0da5-4592-4aa4-b378-98511263b958",
+      "result_sha256": "cb00bbc07e31cd2501581f3cd153fc1ee91a4595ca952ed71305cc97f506d2f8",
+      "log_sha256": "9213d0ef424772686fd6d31b35b957a2d2450f16d9f1e386c987d9b46d76ffc5",
+      "messages_sha256": "f07525080d108c3575ce0dd227b444071d6e10373c7774f1cab5598189fc96c5",
+      "runner_exit": 2
+    },
+    {
+      "profile": "negative-decision_status",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 382,
+        "distinct_states": 194,
+        "remaining_states": 86
+      },
+      "duration_seconds": 1.080094,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "FreshDecisionOnly"
+      ],
+      "properties": [],
+      "run_id": "ea62e854-7607-47f0-ad8e-8e7fbc0d66cf",
+      "result_sha256": "5171425bcc0f8e8235b089f6fd0793ff381b00bc73d17eddb1b94027b1490224",
+      "log_sha256": "65eb3450198de749143cab6715350e9c8ac51f1be51939c489d80cb01d6fd9b3",
+      "messages_sha256": "9c545793f8454446650f72a0c89497f7ee7e42324ffd5f182ab01ba21a083267",
+      "runner_exit": 2
+    },
+    {
+      "profile": "negative-duplicate_owner",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 113,
+        "distinct_states": 57,
+        "remaining_states": 35
+      },
+      "duration_seconds": 0.912535,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "SingleEffectiveOwner"
+      ],
+      "properties": [],
+      "run_id": "a1fb2534-de0b-4a92-a95d-497829eea936",
+      "result_sha256": "a160c486c1a06aeec3e7a18e4cb50b91cb6c0b0a5ec693daa32aa23f09b024a5",
+      "log_sha256": "e7afb002a88185c0921a051b7e7b227a73f84741259c9b3d05f334170d5098d6",
+      "messages_sha256": "05c2efc0c4a40190014553b4cfc7701c1f666aa3e7d4f9069c3099a5ca315723",
+      "runner_exit": 2
+    },
+    {
+      "profile": "negative-early_ack",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 7,
+        "distinct_states": 6,
+        "remaining_states": 3
+      },
+      "duration_seconds": 0.908546,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "AckRequiresCommit"
+      ],
+      "properties": [],
+      "run_id": "e8fffc43-0d37-48db-9f44-4be990076afe",
+      "result_sha256": "4dfd652ff0a7ca3c4404a8eab301bb9babb2ef14794583320dfeba138aa12ae2",
+      "log_sha256": "6f972a3576329f88bc0d5edcd0629425699792f62fbe2e753ce2409a870d27a8",
+      "messages_sha256": "c9d06de6b27be611e206dc2e8a064174ef73114691e856cd29ab7a2677f65b69",
+      "runner_exit": 2
+    },
+    {
+      "profile": "negative-future_base",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 40,
+        "distinct_states": 21,
+        "remaining_states": 13
+      },
+      "duration_seconds": 1.392337,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "PreconditionDiscipline"
+      ],
+      "properties": [],
+      "run_id": "12421387-0534-4fd8-b1c6-108541b7bafe",
+      "result_sha256": "50d930e9d7e3abc9466c289b08c3834742520710ea11af7adbc5dce7bbcd0cb0",
+      "log_sha256": "e529e6d7588575c000b592a8340db47db61545727c8be16bd6cf5b8c756a5c9b",
+      "messages_sha256": "770d5ee606f0e868c85f644b21fe6532eb29426f53fd4c5905b902810f9252b8",
+      "runner_exit": 2
+    },
+    {
+      "profile": "negative-no_retry",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 13,
+      "statistics": {
+        "generated_states": 1991,
+        "distinct_states": 616,
+        "remaining_states": 0
+      },
+      "duration_seconds": 1.565688,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "TypeOK"
+      ],
+      "properties": [
+        "AdmittedRequestResolves"
+      ],
+      "run_id": "d33e51e5-8b6e-4bea-81e4-4cdc4cccf531",
+      "result_sha256": "eda90a02595d9b57e76abf00e6d857e4398cf50a8b38bacbb45f543fd206f689",
+      "log_sha256": "5ffec9fe0137b470eac36904c392b272610925dd1ba64e23e63cb317ab0aee33",
+      "messages_sha256": "36849329cf8dc695194f942c9bfa8a0a78e956377b0f18487d227635d2784638",
+      "runner_exit": 2
+    },
+    {
+      "profile": "negative-no_timeout",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 13,
+      "statistics": {
+        "generated_states": 4101,
+        "distinct_states": 1396,
+        "remaining_states": 0
+      },
+      "duration_seconds": 1.313067,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "TypeOK"
+      ],
+      "properties": [
+        "DecisionResolvesOrExpires"
+      ],
+      "run_id": "82f5b1a9-e4e4-4ac4-a023-27196261b9f7",
+      "result_sha256": "6e25057054668e4eaec310bb75544dbedba91bba1be8f05b556f494cc5b1a5c8",
+      "log_sha256": "9ee2fbd99221e44d8d3a67f123a6ef2d274ba8119d21771e3e4e1d22ac4aecb6",
+      "messages_sha256": "f6245ccf1ad8a5dc28506f5aac6de135f732eff56f14816c7569b5fa9f997d50",
+      "runner_exit": 2
+    },
+    {
+      "profile": "negative-old_human",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 170,
+        "distinct_states": 97,
+        "remaining_states": 65
+      },
+      "duration_seconds": 0.907539,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "NoDualControl"
+      ],
+      "properties": [],
+      "run_id": "4a9ba92e-c462-4bf1-8f7d-6e23db78db31",
+      "result_sha256": "1c5ff64250bbad74271c6feca41f63d5b3bf5dd518a9265d3905c48ef67ae080",
+      "log_sha256": "321ba9b9a67cf717302e1b6474022421240baf1cdca4e68e8298fdcd7ac0e209",
+      "messages_sha256": "39203c4e89f137f4e493aebf415e362df1b52eb7d96ba36daf2329b81e0ce56a",
+      "runner_exit": 2
+    },
+    {
+      "profile": "negative-old_proxy",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 590,
+        "distinct_states": 302,
+        "remaining_states": 148
+      },
+      "duration_seconds": 0.916565,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "NoDualControl"
+      ],
+      "properties": [],
+      "run_id": "1a9b41fa-aee5-4882-8dc9-cd59dcdd2079",
+      "result_sha256": "2e4c2afaa53fe48eed7d0b0442a130e763c3639852f37a9442ccdeeadd217fe7",
+      "log_sha256": "2d17b465a982d8d098fecf1106e971ae5be389b6304a75c92148f38e4ae3f987",
+      "messages_sha256": "2342a1bb2d0a70622d215bb4de24e7eccbc602393584eff9c528f595dadf4262",
+      "runner_exit": 2
+    },
+    {
+      "profile": "negative-partial_ai",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 215,
+        "distinct_states": 112,
+        "remaining_states": 54
+      },
+      "duration_seconds": 0.91042,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "AtomicCommitBundle"
+      ],
+      "properties": [],
+      "run_id": "f7fbae9c-cdc8-4122-afc8-cf2f9bb2beb0",
+      "result_sha256": "9231f6047707ce350e1491a5574872416b5de30ca08985169395e1305002c9ec",
+      "log_sha256": "a9afceb11d1c198a57877af5bca354bef30a673fd8e500bbb3b4390c06728de5",
+      "messages_sha256": "71e9e6624158ed5ef23ec8aef1281713cc833999f591e53624a53c8ed9cf7ae3",
+      "runner_exit": 2
+    },
+    {
+      "profile": "negative-payload_overwrite",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 194,
+        "distinct_states": 83,
+        "remaining_states": 24
+      },
+      "duration_seconds": 1.024864,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "ReceiptPayloadBinding"
+      ],
+      "properties": [],
+      "run_id": "96da239c-3782-4140-9d9d-cfe1dfe9b653",
+      "result_sha256": "b0f71bf4a0a9410e5349024991233d118af8cc47e7ccc8e685ee59ab51962406",
+      "log_sha256": "5b0a0e018a0e7d866170a4b30d69b12482fb2e476425390149e9e44127a23088",
+      "messages_sha256": "dbc206414323a32954608cb4cee682c035b03ef27d21104a39f8ac8ff6f620fd",
+      "runner_exit": 2
+    },
+    {
+      "profile": "negative-post_terminal",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 217,
+        "distinct_states": 116,
+        "remaining_states": 51
+      },
+      "duration_seconds": 1.099446,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "TerminalBlocksNewEffects"
+      ],
+      "properties": [],
+      "run_id": "7e605d9b-8529-40c8-b8f6-e12812853a2e",
+      "result_sha256": "af656cd721a8f212593facc3000afb37fb92c3960b5d9fea34e03b3c3f7423ef",
+      "log_sha256": "3eb2492882a9410c349372a04112ec0f611218cccd9a7e6978834c7592923f0f",
+      "messages_sha256": "97f2b978ef0df13ae9f9afea1eae2e1b070f33f6c40614e3807388f97b1e484c",
+      "runner_exit": 2
+    },
+    {
+      "profile": "negative-sequence_gap",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 22,
+        "distinct_states": 14,
+        "remaining_states": 7
+      },
+      "duration_seconds": 0.90809,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "ContinuousCommittedSequence"
+      ],
+      "properties": [],
+      "run_id": "247e9a0e-f918-44ee-9fb3-b164669ea5f6",
+      "result_sha256": "0687383af99c7abd458b075b61ca7b83deabe278aa11a685d3c612c8ef9347e8",
+      "log_sha256": "50f680a73bfd6b4c36a699aa59d2ff98743710b70af648f0d3f52b9aefed27a3",
+      "messages_sha256": "c13e4a2b9aa4e30279baed9695240e3366b4557ab72dda8baca59b75777a1886",
+      "runner_exit": 2
+    },
+    {
+      "profile": "negative-sequence_repeat",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 189,
+        "distinct_states": 97,
+        "remaining_states": 40
+      },
+      "duration_seconds": 0.931985,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "ContinuousCommittedSequence"
+      ],
+      "properties": [],
+      "run_id": "7ebfb413-6835-4d61-a918-b87e6ac41dbf",
+      "result_sha256": "246f62016716b03e376c552aed13e1894e1d1271b81ead800d5f698eb80e6d80",
+      "log_sha256": "a8c810332d65c48fcdf47032e7c6ff7c4c344835dab88efe4875820a5bd41793",
+      "messages_sha256": "d3ffdd10e9e393396c1903c9dbfcfb87dedc5b33410252c6ca2aded4bef716cb",
+      "runner_exit": 2
+    },
+    {
+      "profile": "negative-split_bundle",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 22,
+        "distinct_states": 14,
+        "remaining_states": 7
+      },
+      "duration_seconds": 0.90926,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "AtomicCommitBundle"
+      ],
+      "properties": [],
+      "run_id": "3ccf5596-51cf-4d6c-a25b-6e7991471f26",
+      "result_sha256": "92ead10c89b037729403e904854d31d05e12c2ee1914ee19b1415b274f4563bb",
+      "log_sha256": "b074f425b5d5f8a92c87190f3e355ba3fbdd9388a7e92bcaa33fc3c07d2ea9ed",
+      "messages_sha256": "d85ae85d3150daae6767311c1cec21ec4fc60383ad785f2cb4b5d507d2fc7571",
+      "runner_exit": 2
+    },
+    {
+      "profile": "negative-split_receipt",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 438,
+        "distinct_states": 220,
+        "remaining_states": 82
+      },
+      "duration_seconds": 0.967932,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "AtMostOneEffect"
+      ],
+      "properties": [],
+      "run_id": "18b5a4ff-eba5-436c-bb67-1ef536bf5321",
+      "result_sha256": "f1b1a063bf4a7e7c66153007845f342c841f749cc4ea70a46dced5b0c03d2b0a",
+      "log_sha256": "b565619f856b411ab79de99da9ec6ee64b0a27f42b8daf260c93898c4452675e",
+      "messages_sha256": "deac6ebb84900fa168b4579aec890658e5831ca381f24c7163a4189f50f484db",
+      "runner_exit": 2
+    },
+    {
+      "profile": "negative-split_terminal",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 71,
+        "distinct_states": 35,
+        "remaining_states": 22
+      },
+      "duration_seconds": 0.907249,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "AtomicCommitBundle"
+      ],
+      "properties": [],
+      "run_id": "0617aad2-898a-489e-bff5-65724edd53e1",
+      "result_sha256": "952202e0b5f913fc3f89e52d05cf08927293f9321a0ad0607740630c7ca5fe8d",
+      "log_sha256": "5bd53097ef10883a7a15781652c215251020a4ced9c3be8eb75824027dabb740",
+      "messages_sha256": "535a87a2ca0c1b5d2fee053adeda63f972dbe5f1e1550b3cb3b864fbb4cf293b",
+      "runner_exit": 2
+    },
+    {
+      "profile": "negative-stale-item-precondition",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 1024,
+        "distinct_states": 390,
+        "remaining_states": 161
+      },
+      "duration_seconds": 1.180506,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "PreconditionDiscipline"
+      ],
+      "properties": [],
+      "run_id": "9b3387f1-9a83-4d91-a6af-644b279d60a9",
+      "result_sha256": "6a30dc482e3687ccc66edad52bb9865f6495a975f81130cfd8708f1f25a0549a",
+      "log_sha256": "e4f8f857a9547bd0d4202e5d2513faee740c3f8b1e6e6e7f26a79d40a2aa46a5",
+      "messages_sha256": "6dba3d9c470cb12ff4eaf6b9131eaeae83c9e7cfc995dc2e3b0c10c5d95678cf",
+      "runner_exit": 2
+    },
+    {
+      "profile": "negative-stale_disconnect",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 30,
+        "distinct_states": 21,
+        "remaining_states": 15
+      },
+      "duration_seconds": 0.919054,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "NoDualControl"
+      ],
+      "properties": [],
+      "run_id": "6c2fa5b6-19e2-4fad-9700-8560cbbeace5",
+      "result_sha256": "bc706a4e9fadf215f7b300310cafc364f2cf3d1cc292720cb1e9bc2a233f5b33",
+      "log_sha256": "a3eb923402c8d2525306c3106cc931e3ee9168f88b9e53d10ecfba51111d1c28",
+      "messages_sha256": "13e0e67db70b877a49830761c3c77182e12a586a3127974308aad439cb5343ee",
+      "runner_exit": 2
+    },
+    {
+      "profile": "negative-stale_item",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 1024,
+        "distinct_states": 390,
+        "remaining_states": 161
+      },
+      "duration_seconds": 0.965481,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "SingleEffectiveOwner"
+      ],
+      "properties": [],
+      "run_id": "510eb040-9e31-489c-bc49-92a2d48d1b0a",
+      "result_sha256": "c6159f847908e4fc195904f9710349ea1b0bc70ab804bdb8bb85e6f2c1c6bb2f",
+      "log_sha256": "4fc25b0e1a91b9bc6184b12621f46b0b2b2bb8d80a6e0e0a5927d445e3908251",
+      "messages_sha256": "435f59b362922f009f5a12dab3db8dc60d983b2d9e58602c13ed770d6574dcaf",
+      "runner_exit": 2
+    },
+    {
+      "profile": "negative-type",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 7,
+        "distinct_states": 6,
+        "remaining_states": 4
+      },
+      "duration_seconds": 1.100853,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "TypeOK"
+      ],
+      "properties": [],
+      "run_id": "f51aec33-3314-4a22-8aff-7f537da07e5b",
+      "result_sha256": "8ba1dcf9b404c61f21572dd4ea5400696a18647dccfa3c49375789e756171e91",
+      "log_sha256": "f7c5a00096d645cc732100eb32baa5f0ec6b0d986905f0549d7f48bd6bb4f71d",
+      "messages_sha256": "103f3e6b2be697885c0861caf53584749868f037d094a350e4329f36cc5c95a2",
+      "runner_exit": 2
+    },
+    {
+      "profile": "ownership-competition",
+      "audit_pass": true,
+      "errors": [],
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "raw_exit": 0,
+      "statistics": {
+        "generated_states": 5524,
+        "distinct_states": 1696,
+        "remaining_states": 0
+      },
+      "duration_seconds": 1.181523,
+      "minimum_declared_before_run": 200,
+      "invariants": [
+        "TypeOK",
+        "AtMostOneEffect",
+        "ReceiptPayloadBinding",
+        "AtomicCommitBundle",
+        "AckRequiresCommit",
+        "TerminalBlocksNewEffects",
+        "ContinuousCommittedSequence",
+        "PreconditionDiscipline",
+        "SingleEffectiveOwner"
+      ],
+      "properties": [],
+      "run_id": "43b9ee0b-922a-4fea-bc43-a74560298376",
+      "result_sha256": "8f97958b2a02925043b15d9e818c5632d95423ed08dfe1bcbbfc7c479b72d89a",
+      "log_sha256": "3ea91030dc93597ddb7ae9f6784d5b6e86238926e995b7273d7e577e0075b1cf",
+      "messages_sha256": "3b06831324a1de83a0538a6000d23a5bfd824649d936e03c7710439edf865b53",
+      "runner_exit": 0
+    },
+    {
+      "profile": "ownership-ending",
+      "audit_pass": true,
+      "errors": [],
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "raw_exit": 0,
+      "statistics": {
+        "generated_states": 2904,
+        "distinct_states": 750,
+        "remaining_states": 0
+      },
+      "duration_seconds": 1.079291,
+      "minimum_declared_before_run": 200,
+      "invariants": [
+        "TypeOK",
+        "AtMostOneEffect",
+        "ReceiptPayloadBinding",
+        "AtomicCommitBundle",
+        "AckRequiresCommit",
+        "TerminalBlocksNewEffects",
+        "ContinuousCommittedSequence",
+        "PreconditionDiscipline",
+        "SingleEffectiveOwner"
+      ],
+      "properties": [],
+      "run_id": "3f0a4018-a110-43ec-a904-208947633594",
+      "result_sha256": "bb0b4fe097a6f69aa1baaa558fda2d238cc1c14357cce699f601d4466c321d05",
+      "log_sha256": "09a8c8ed9eb135f1b9b6d898b37084ef3a0cf6f0865d80726f29ee3fc85a3902",
+      "messages_sha256": "6fc557b74065ce0d29381966cca4866e24953baf256897ace1ba77cede2d2cb9",
+      "runner_exit": 0
+    },
+    {
+      "profile": "ownership-future",
+      "audit_pass": true,
+      "errors": [],
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "raw_exit": 0,
+      "statistics": {
+        "generated_states": 5108,
+        "distinct_states": 1570,
+        "remaining_states": 0
+      },
+      "duration_seconds": 1.126815,
+      "minimum_declared_before_run": 200,
+      "invariants": [
+        "TypeOK",
+        "AtMostOneEffect",
+        "ReceiptPayloadBinding",
+        "AtomicCommitBundle",
+        "AckRequiresCommit",
+        "TerminalBlocksNewEffects",
+        "ContinuousCommittedSequence",
+        "PreconditionDiscipline",
+        "SingleEffectiveOwner"
+      ],
+      "properties": [],
+      "run_id": "3b59dcd3-f09e-41ec-bb1c-1af565d42417",
+      "result_sha256": "129ac942c9096f00191256a7cce927ac0dd6cc925a9ae24e438f83ec4e745030",
+      "log_sha256": "b11a9838caea95fb0a8440148925fa9c10869a373d522e7c9a5dc688813a1507",
+      "messages_sha256": "b5112f5a84ee922a5d9c257052f13875646da29f5ec6a67a6a21fe63d19b8ac8",
+      "runner_exit": 0
+    },
+    {
+      "profile": "ownership-idempotence",
+      "audit_pass": true,
+      "errors": [],
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "raw_exit": 0,
+      "statistics": {
+        "generated_states": 3055,
+        "distinct_states": 920,
+        "remaining_states": 0
+      },
+      "duration_seconds": 1.278002,
+      "minimum_declared_before_run": 200,
+      "invariants": [
+        "TypeOK",
+        "AtMostOneEffect",
+        "ReceiptPayloadBinding",
+        "AtomicCommitBundle",
+        "AckRequiresCommit",
+        "TerminalBlocksNewEffects",
+        "ContinuousCommittedSequence",
+        "PreconditionDiscipline",
+        "SingleEffectiveOwner"
+      ],
+      "properties": [],
+      "run_id": "1376d37f-01f8-4421-b361-200eddb33e81",
+      "result_sha256": "a61d7ab33e64a14b7dcafef3e5e86d5a5a456a8bfa38fc2a6eef13868001354f",
+      "log_sha256": "9d47cf619091bc7abfbf0a50aa4a6f3eb77cbefc1a8d5b6567ff38d95f4e3f85",
+      "messages_sha256": "199dc3d7253f49cc4a03ba7cfde3c11ec9c35ad51201414ab14fff46a7f7399d",
+      "runner_exit": 0
+    },
+    {
+      "profile": "ownership-payload",
+      "audit_pass": true,
+      "errors": [],
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "raw_exit": 0,
+      "statistics": {
+        "generated_states": 1053,
+        "distinct_states": 296,
+        "remaining_states": 0
+      },
+      "duration_seconds": 1.026813,
+      "minimum_declared_before_run": 200,
+      "invariants": [
+        "TypeOK",
+        "AtMostOneEffect",
+        "ReceiptPayloadBinding",
+        "AtomicCommitBundle",
+        "AckRequiresCommit",
+        "TerminalBlocksNewEffects",
+        "ContinuousCommittedSequence",
+        "PreconditionDiscipline",
+        "SingleEffectiveOwner"
+      ],
+      "properties": [],
+      "run_id": "6e5863a0-cf83-40b0-97ee-91c3ff2fe390",
+      "result_sha256": "308a55654971c5bd10e9f4ca481d5120b873fb4afbc66c3c5577d39aeaf875a3",
+      "log_sha256": "dc88a36a4ef7bb66f370862ac6118959f4f87d73a7d962aa97a8e0b9f319af7e",
+      "messages_sha256": "f69809d625fd026eb71442d43f214c57c3090b01732d9b2b26296095164a2137",
+      "runner_exit": 0
+    },
+    {
+      "profile": "ownership-publication",
+      "audit_pass": true,
+      "errors": [],
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "raw_exit": 0,
+      "statistics": {
+        "generated_states": 6174,
+        "distinct_states": 1546,
+        "remaining_states": 0
+      },
+      "duration_seconds": 1.324696,
+      "minimum_declared_before_run": 200,
+      "invariants": [
+        "TypeOK",
+        "AtMostOneEffect",
+        "ReceiptPayloadBinding",
+        "AtomicCommitBundle",
+        "AckRequiresCommit",
+        "TerminalBlocksNewEffects",
+        "ContinuousCommittedSequence",
+        "PreconditionDiscipline",
+        "SingleEffectiveOwner"
+      ],
+      "properties": [],
+      "run_id": "78d952c3-a74c-4a7e-85d2-bc4537e7b250",
+      "result_sha256": "3b1c566a6b6cef2c508e9206a48b563fdff9918d30f474aa4dcd0d8c1687a6ec",
+      "log_sha256": "74ab4cb1b709346dccad784431093593a64f1c65e393ea5fb78fb0c996809461",
+      "messages_sha256": "0ef724f2790e0101cf76ecdbd96f69e9fa861d5946e8fc5a339d59bb9472ed2d",
+      "runner_exit": 0
+    },
+    {
+      "profile": "witness-aborted",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 8,
+        "distinct_states": 6,
+        "remaining_states": 4
+      },
+      "duration_seconds": 0.966375,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "73ae123a-6ee7-4813-acb5-1801d73c4293",
+      "result_sha256": "e2060938bee6065ba542d1f57ea2b40722c55f49ec8f8a289a947d357cb8e4fc",
+      "log_sha256": "026f6c6fa1b01071c11ccf98bbecbcede8e00e4128ee7c5053ae9d87cc353510",
+      "messages_sha256": "663a88d7bc748f837826d0a7c656f0edf8a8cfff54ad7074cb7345560bcb7588",
+      "runner_exit": 2
+    },
+    {
+      "profile": "witness-ai-after-unrelated",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 1014,
+        "distinct_states": 531,
+        "remaining_states": 274
+      },
+      "duration_seconds": 1.115813,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "265f6954-6c0e-4ce5-a83c-f269500c6e19",
+      "result_sha256": "b28fea1584eeb01171b4b6585af5d55da9626c421ace2f760d7ca3ef2bc8ff2f",
+      "log_sha256": "b33a26168d054ce10b15c0f97acfbe16332530616aed4f5ee07cce5aabc01513",
+      "messages_sha256": "7f45e59f41e00f091d67f025810eed4d511e9d62fa36997ae38ee78ff31db70a",
+      "runner_exit": 2
+    },
+    {
+      "profile": "witness-ai-committed",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 204,
+        "distinct_states": 107,
+        "remaining_states": 50
+      },
+      "duration_seconds": 1.113416,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "0ae46e11-550b-40df-bf7e-39630a334799",
+      "result_sha256": "a5dbbadb123230b3ae652df26ced8e106b7d94f6b4eb34af871642a2716d3473",
+      "log_sha256": "e84e48c4dc5bcc35a1493855b1ed63cdfeb2ba4833d72453a20a93d238c8a79d",
+      "messages_sha256": "90c00a5a3da91b1020dcf7d5613fa0b37e2896d0f757f3de56af45517d056a60",
+      "runner_exit": 2
+    },
+    {
+      "profile": "witness-atomic-package-rejected",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 215,
+        "distinct_states": 112,
+        "remaining_states": 54
+      },
+      "duration_seconds": 1.014244,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "18d3e44a-1592-473f-95f5-5700f6986047",
+      "result_sha256": "8065533982903e28184dd72b2b2cfa53f90394d63a05709d198a270de1fe759a",
+      "log_sha256": "8d9f0c3f4c202ff8cd9d81c1327bd0f8e09a2efc826fb45dd53e6a536b9b29b5",
+      "messages_sha256": "e2266378c31041001cb4e7d178fa07e4deabfeb970b564287b57d132aae3d636",
+      "runner_exit": 2
+    },
+    {
+      "profile": "witness-control-nonce-retry",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 29,
+        "distinct_states": 20,
+        "remaining_states": 14
+      },
+      "duration_seconds": 1.241499,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "11842781-0162-4263-8164-695667e3713b",
+      "result_sha256": "dc476753a3fbe0fb1b5aa3c155286bc2faaa7ca1947def0abfa0a21846bf931c",
+      "log_sha256": "1b167c2c97e7c536593f451aee2a3ef7cdf11ebb8d2245141d5c442c29ab3dc3",
+      "messages_sha256": "9390ef750bfae27f7ac0b8da02a2551a3057e2ab1c63aac72337ac1179a40e45",
+      "runner_exit": 2
+    },
+    {
+      "profile": "witness-control-reject",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 170,
+        "distinct_states": 97,
+        "remaining_states": 65
+      },
+      "duration_seconds": 1.086653,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "ab56011d-e015-4bfa-831e-557ce4fa3dd9",
+      "result_sha256": "0deb13b7e55ab8e1d655448e8c5625c6b00b2088e773d64d91bbcf6f0af9dbb2",
+      "log_sha256": "068868522c9b945d00ee3aeeb27d45d4272683a7e90187191a7a6f886ad94b4b",
+      "messages_sha256": "13a0c84d1010106e4d2414c50ac0782e2c61d63c36976d1c04752807f28001d2",
+      "runner_exit": 2
+    },
+    {
+      "profile": "witness-crash-after-commit",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 50,
+        "distinct_states": 28,
+        "remaining_states": 13
+      },
+      "duration_seconds": 1.014986,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "34bee3d3-d262-48b7-9fa3-9fe14240b528",
+      "result_sha256": "0f969c35ccbd73fadb6e6a953cf4b25e637cc0c15d4bcc825d6dee059b242086",
+      "log_sha256": "84d01b098a35d11358b53da7a5f8cf17b0b5c7c0ae6765ae9ab902c8061fce7c",
+      "messages_sha256": "1f36c0f489619589262c7d4df12cb36d67b66b24eebedb7ce8ace1ed96053a20",
+      "runner_exit": 2
+    },
+    {
+      "profile": "witness-crash-before-commit",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 4,
+        "distinct_states": 3,
+        "remaining_states": 1
+      },
+      "duration_seconds": 1.01565,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "77a9450d-5710-400a-83da-eab46dcd3b76",
+      "result_sha256": "05c8f980465ace5e043f7e63672b41920a0ab0940ee1fd49e5eac04287ebc458",
+      "log_sha256": "7b449b3bff84fcb4f3b024fb2d3307d5507fa56739c6dba6de398f3326d2dc73",
+      "messages_sha256": "34d93aabb84224d72fba57667f1e8e5fd21c25b54acd338e65ee93813bdd5600",
+      "runner_exit": 2
+    },
+    {
+      "profile": "witness-deadline-late-ai",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 383,
+        "distinct_states": 192,
+        "remaining_states": 83
+      },
+      "duration_seconds": 1.015262,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "0b0d13fe-6f36-4b21-9401-c68fb957fa5e",
+      "result_sha256": "85412cf461baf600d1f275028a9198732650e6fa6718416e39c729e8e45f4945",
+      "log_sha256": "9305432aff089eb763745f02edb885be70b73f7fd152fcfe0dae35dde3f89f20",
+      "messages_sha256": "f2f43f6f8d1347d14c4785c32481265562bacaf4a330f51681c875ff71e37e56",
+      "runner_exit": 2
+    },
+    {
+      "profile": "witness-deadline-reject",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 112,
+        "distinct_states": 63,
+        "remaining_states": 29
+      },
+      "duration_seconds": 1.082242,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "66cf8799-7194-49e4-8517-36cd959f5826",
+      "result_sha256": "62b9d5c7f6e401f57f55a999fe87ae16dfb6bc7062a125ab64b2d39edf4dbab8",
+      "log_sha256": "efc36936a0a1ba5086f26894ce8fbb4248136526303bde5da8ae58cad80dab37",
+      "messages_sha256": "080676d2fba5fc288e6acc5f0ede58d6ec189c5f55de7956ea358e4411ba684a",
+      "runner_exit": 2
+    },
+    {
+      "profile": "witness-decision-cancelled",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 204,
+        "distinct_states": 107,
+        "remaining_states": 50
+      },
+      "duration_seconds": 1.075674,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "590ef67d-f2c8-476d-98c1-a499edbf8075",
+      "result_sha256": "f8b45fe0940790046ad273c2283092b8d69549eeb5c61aef6b7f0c46fc68a93c",
+      "log_sha256": "3a654ca1357efc72329f5802fc5273f05839ff41ecbdaf904ee957549a15b9b1",
+      "messages_sha256": "f93b5729d1f1ae9bbc65ec6f271636f901f0c84d492e703ca8c851e664f3e908",
+      "runner_exit": 2
+    },
+    {
+      "profile": "witness-decision-expired",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 384,
+        "distinct_states": 193,
+        "remaining_states": 84
+      },
+      "duration_seconds": 0.97422,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "ab92aaba-2c07-4946-9dea-aaa46b805568",
+      "result_sha256": "784dcf3d7f81998a94a4c057dda18afd540f713a68e705285f37ce92f4ee338b",
+      "log_sha256": "82db3f6c70fb188e89a99a0d2e640370ef1cf1012a968f494ad21cbd18d23c57",
+      "messages_sha256": "5f2a05404baa914681a6ea2fb1e2961b2a1dbcddfb169182c1f174d8b36b0fc0",
+      "runner_exit": 2
+    },
+    {
+      "profile": "witness-early-ack-crash",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 23,
+        "distinct_states": 15,
+        "remaining_states": 8
+      },
+      "duration_seconds": 0.926374,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "797c7161-548d-44fe-a02b-e8c0759e1eb7",
+      "result_sha256": "e187005596945ea060b81bc201650d0a4424cdb47613d928cdf839b2f7ec1b83",
+      "log_sha256": "5f37bd7849377ee378035b9f637d112f1c667ffab5772b899321220cd2c8ee96",
+      "messages_sha256": "a6878f031e26dd7f20ef3df433933e6c214adb795707957ad27061371e600029",
+      "runner_exit": 2
+    },
+    {
+      "profile": "witness-effect-crash-handoff-retry",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 2229199,
+        "distinct_states": 677943,
+        "remaining_states": 203778
+      },
+      "duration_seconds": 19.834171,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "bc7f6e4d-75b5-4115-bfdb-cec4c9ffcf91",
+      "result_sha256": "d5755bd40449127cf73b6d62ae4344f74929f3f538cf7767480682c4a29f60e9",
+      "log_sha256": "5d194095f4b1adbc13fe4a90612b9cb3dd9d72441f26904f2912784f53e9ed90",
+      "messages_sha256": "9337aaa56e186d3466230a30defd904fb54ca8556d3cde02e7843c53ad856f27",
+      "runner_exit": 2
+    },
+    {
+      "profile": "witness-effect-crash-retry-negative",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 438,
+        "distinct_states": 221,
+        "remaining_states": 83
+      },
+      "duration_seconds": 1.113196,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "069b6b82-c4aa-409f-8a1c-ed5000881cb6",
+      "result_sha256": "92bed255ba94a3b4ba97cee48efd882fefdd252968266c5e9ad3d5c344972c0a",
+      "log_sha256": "9938f3dcacce30ddae06aeb2b3e5904a73fe05a001680ac90be19a9dea12a670",
+      "messages_sha256": "bc19d87e38b3b8464b71852fafa037ab3bf72d70c6d2022504dd5b08898e1177",
+      "runner_exit": 2
+    },
+    {
+      "profile": "witness-epoch-late-ai",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 590,
+        "distinct_states": 302,
+        "remaining_states": 148
+      },
+      "duration_seconds": 1.080779,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "b6f7cca1-f041-4857-9344-fd478576b08c",
+      "result_sha256": "41f8250afe2275ddda6db443502fd402fb39028e3abc4e5aaba8fe9e603bbdbc",
+      "log_sha256": "d2ccd46d5f3047f9783f777bbc19d4f1e8c49c4e67fa138b3b67ad4b6b542016",
+      "messages_sha256": "70f6db977b055b1def9a54237274f9c8949b602f6271f44896befa3bd1d54b0d",
+      "runner_exit": 2
+    },
+    {
+      "profile": "witness-explicit-take",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 6,
+        "distinct_states": 5,
+        "remaining_states": 3
+      },
+      "duration_seconds": 0.924849,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "fc60ab05-887d-497d-9d42-c7fcb8fc2e92",
+      "result_sha256": "c49e5fe82fdd30d08e9fa7a177353c6310c900605828a81ae9db4346f75e43b7",
+      "log_sha256": "97c114767f7ced0e9cbd9a0267e1d6fbf4c73dbe98463570555ce52cf6ad49a9",
+      "messages_sha256": "037dab73a33adfa8f7e7702fd689753f3302bb244ad11a6d184d68192ccb1b28",
+      "runner_exit": 2
+    },
+    {
+      "profile": "witness-future-reject",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 40,
+        "distinct_states": 21,
+        "remaining_states": 13
+      },
+      "duration_seconds": 0.970982,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "d403747b-e82a-4f2b-ae7e-0f9846edfc4a",
+      "result_sha256": "516d58d8295e324d8459603aaa2079a881945f2fd7c5d07d39c13a392b02b9ef",
+      "log_sha256": "20c5059be9d025ca994b3d79f6647fdb480eb6d3d1c3990866e610d18e335977",
+      "messages_sha256": "1ae6e46e4f92f71178edc983e1f4c576c45298e54730e203af2ace2b5f657875",
+      "runner_exit": 2
+    },
+    {
+      "profile": "witness-generation-late-ai",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 382,
+        "distinct_states": 194,
+        "remaining_states": 86
+      },
+      "duration_seconds": 1.012859,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "287818b2-acba-4da8-9a1b-e1d9d4d64ce0",
+      "result_sha256": "38e5415ff109f4c9a109bec1e4669ffc9d6726d93c7f4ac3482c6d3bb53e5ac6",
+      "log_sha256": "1b8a54c4060f8e4cd938ce2a5b4bfcf3a3c87692135b560780e3b6a17cdc33bf",
+      "messages_sha256": "6cb12a155be189c70485a5eb08c172b7a6938bc07871e0305f2ef31f350ff3d8",
+      "runner_exit": 2
+    },
+    {
+      "profile": "witness-grace",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 5,
+        "distinct_states": 4,
+        "remaining_states": 2
+      },
+      "duration_seconds": 0.927331,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "53c9ab02-7bea-4e96-ad03-075f4e2dc7d6",
+      "result_sha256": "cb07cf3fade3d429e59ce3a0c1da6c12f4fb8f4116cabc919141f3f3ebfdf115",
+      "log_sha256": "0c6871709b60e5cefeb791ed6061eb841adb0fac4d7b4e5a5e49014bad30fd18",
+      "messages_sha256": "9ed9e7c5f1f96f6a18177793df4ad43536e3102b57cb5b990db13562c659fa34",
+      "runner_exit": 2
+    },
+    {
+      "profile": "witness-invalid-ai-rejected",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 205,
+        "distinct_states": 108,
+        "remaining_states": 51
+      },
+      "duration_seconds": 1.121833,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "5ad31c9e-54e3-4a82-b43a-3fec87733b07",
+      "result_sha256": "13d46f388df46247ab8bc9bd122e06c5fa9258438007ec506055aa02d990f18f",
+      "log_sha256": "92a4b8ab491ac1ee39fed82b31aa9ec755df020f0b2bd6197f3eac5a4bd14af3",
+      "messages_sha256": "e7698b573dbc130f7e74c6e7b459d5d3c92ba8dda7f6c96acd95e1043e245edb",
+      "runner_exit": 2
+    },
+    {
+      "profile": "witness-item-conflict",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 1024,
+        "distinct_states": 390,
+        "remaining_states": 161
+      },
+      "duration_seconds": 1.015097,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "ac0a3c64-166e-46d5-a5ce-e4a9d0fc8a8a",
+      "result_sha256": "94519a001213edb3dda55be27be3625853b36eb613c0ef49c08c05efe77cb638",
+      "log_sha256": "592bf7a8110b63da7e77d42f85d38eda4cf905d361af6b100c029fdf9b7d240e",
+      "messages_sha256": "4fe67fd5e3771bf3d8002de0819e3a73a3c46090c2a0bbb51b2a2e6a1c8fd9b5",
+      "runner_exit": 2
+    },
+    {
+      "profile": "witness-manual-ending",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 71,
+        "distinct_states": 35,
+        "remaining_states": 22
+      },
+      "duration_seconds": 1.073897,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "e08fc2c2-421b-4da3-bfc6-10498e54983f",
+      "result_sha256": "4274d2bc694ab9cd746d6ea8d4737b89a8987d3e60322f7b1c131966961c13cc",
+      "log_sha256": "d266554aaaf4bfd5025030c0dd820f26f07d4786ce27bd0f8d228be42eb6a133",
+      "messages_sha256": "919546497e7fba296dec2e89249c9ba482c72c058235cae3e0d9134da06778af",
+      "runner_exit": 2
+    },
+    {
+      "profile": "witness-old-disconnect-rejected",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 30,
+        "distinct_states": 21,
+        "remaining_states": 15
+      },
+      "duration_seconds": 1.236398,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "de0388b3-473a-4d2e-ae2e-659de1edbfa1",
+      "result_sha256": "3d619e5d8a4fa69fa994864501275dbd463343cb1ad0bd07613c0c777eda32a8",
+      "log_sha256": "ae63241fc35d35a710094d120527e29bf7cf98885c9e24a65c1e4a8a3aadf9ac",
+      "messages_sha256": "057f47b3cbdbfabb791ecc8877dd16dd8e947584e36566dd127722e6c1a5eb27",
+      "runner_exit": 2
+    },
+    {
+      "profile": "witness-partial-bundle-crash",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 50,
+        "distinct_states": 28,
+        "remaining_states": 13
+      },
+      "duration_seconds": 1.071936,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "883ab8cd-80ff-4633-9fad-ec851d377f09",
+      "result_sha256": "90cc5a8340ed391bbfcb13c3b144ef9377f517d2e498efba55e3c37a60acd91f",
+      "log_sha256": "c288cd8610faab0001875a72b60dd2f03604e81f5c3abd92364355299f39d9a0",
+      "messages_sha256": "4625bfdc73e3f9449e0ba05d2008d2d8a72d5fd06fcb8bba6b956335e769f244",
+      "runner_exit": 2
+    },
+    {
+      "profile": "witness-payload-conflict",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 194,
+        "distinct_states": 83,
+        "remaining_states": 24
+      },
+      "duration_seconds": 0.967614,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "92c4f96c-ac54-4d11-a6bb-18847dabfd31",
+      "result_sha256": "ab73cc8a9eee63b212ad6aea3b331138ef294779f576b32878b9ff6eeebff8e0",
+      "log_sha256": "3004379363fd86a860faf508d24d02bf93e3cba2392dcac4eee1cdf9a4378685",
+      "messages_sha256": "245ec39948bed8be6c1f8300cebb1108a749b2477aadb4b7cb9f439d72323c18",
+      "runner_exit": 2
+    },
+    {
+      "profile": "witness-proxy",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 105,
+        "distinct_states": 64,
+        "remaining_states": 44
+      },
+      "duration_seconds": 1.071204,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "8c8ac9da-7b9e-433e-b5b6-87b4577d5356",
+      "result_sha256": "ebee47cab6c9ce2ddc37727b5557d787d8079ea0b437162b2812188025cdcd89",
+      "log_sha256": "30ff12fa0662e1f1499cc306c203e7a4ee713d1ee212c3b198a2b5770a9f13a3",
+      "messages_sha256": "9d4d0b17e24b8bb346d2449e0409a7baeff185da909ed55586bc1ca4da8ccf30",
+      "runner_exit": 2
+    },
+    {
+      "profile": "witness-published",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 76,
+        "distinct_states": 34,
+        "remaining_states": 18
+      },
+      "duration_seconds": 0.92352,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "96962599-eab3-4eb6-bcf0-31471c4d1373",
+      "result_sha256": "f8b82bbb82523033c991d550a0b48dac6c082acbd350bc35ae0c8dc2fecd0d7f",
+      "log_sha256": "00cc41613adcd304242a43c70e721d274772f1b8dbda583f27f197a9fce31067",
+      "messages_sha256": "e5338204a527237008b6e5ffe47d0d2025daa666702b6d27fd072b0930b5128b",
+      "runner_exit": 2
+    },
+    {
+      "profile": "witness-recovered",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 11,
+        "distinct_states": 9,
+        "remaining_states": 5
+      },
+      "duration_seconds": 0.919072,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "ef6f5a6c-1c01-478f-8c6b-881820bfb99e",
+      "result_sha256": "c011ebd430c65def3067ed5cc78cd5f6681aa883038d15fcac13f9dd388c30a6",
+      "log_sha256": "6c6e0127fc4ee4eb29159541bb6ae37d9d3c4360c32f926005eb2bed1cbf7b26",
+      "messages_sha256": "0ace93b08b00199b4b9cea2973535f17981fc697ca2cc5324a04c75275fb2dfe",
+      "runner_exit": 2
+    },
+    {
+      "profile": "witness-resume-held",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 7,
+        "distinct_states": 6,
+        "remaining_states": 4
+      },
+      "duration_seconds": 0.963933,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "c1b3b467-fa11-4bb2-8055-0569f935bcab",
+      "result_sha256": "9526dc65d4e87f4e61f0cac53c4daf7a55184b4a7d8c4a57036d0a9a30200af1",
+      "log_sha256": "bf0b81d20063f06a3602ff74ccfedbd7b7e79a4577b38b8066751f0af9b94c9b",
+      "messages_sha256": "ea0e87d97939aa1f146f001473615ea32bb2e2feb8092004a569d848c8552ac8",
+      "runner_exit": 2
+    },
+    {
+      "profile": "witness-returned",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 24,
+        "distinct_states": 18,
+        "remaining_states": 13
+      },
+      "duration_seconds": 1.024568,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "fe488bca-b83a-46c7-8063-4e3923e44cef",
+      "result_sha256": "8f0775257aaf2dc868e7a8bd4a7e8e504bff53eb6a63ec3a866cd86aceccb25e",
+      "log_sha256": "d73b3378b16f6be26d74b4ee46e7a5f5ecec71f55dfb006e07214322b58d5979",
+      "messages_sha256": "9fd0e32f94b8a3757d7e9e561deb30551c2a89c0280b9c3e94c73f3c46f43611",
+      "runner_exit": 2
+    },
+    {
+      "profile": "witness-revision-late-ai",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 382,
+        "distinct_states": 194,
+        "remaining_states": 86
+      },
+      "duration_seconds": 1.013858,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "69d46f5f-51e7-4236-b77d-76bc37975b7d",
+      "result_sha256": "a0e155e4b0d1586936e7b8d1f0ed01d96c4613a8dce3f3cf091b620d0dacc106",
+      "log_sha256": "16bc2cf4eeac859103fb227909c16f43d85c3cf557d07c7e86e7d64926a61744",
+      "messages_sha256": "1f3808843d8c930dbd44d3f670fef5a79b87d507779441ac02912175949bde5d",
+      "runner_exit": 2
+    },
+    {
+      "profile": "witness-same-receipt",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 282,
+        "distinct_states": 139,
+        "remaining_states": 55
+      },
+      "duration_seconds": 0.963459,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "d573a7e8-1315-4c08-8b86-47d3f1edebee",
+      "result_sha256": "277ab99ab9e3abbaec831402c1fdc8d017316788a61417e38ac2ebff9b73865d",
+      "log_sha256": "527793937b1a4e93d1e3d869fd9d86e849d1afd3338d527be48df11390682b89",
+      "messages_sha256": "020f52e4d2b95b1702744b4209a3e0e0da4bebbccc08f824811a55ebee50e1a9",
+      "runner_exit": 2
+    },
+    {
+      "profile": "witness-take-success",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 113,
+        "distinct_states": 57,
+        "remaining_states": 35
+      },
+      "duration_seconds": 0.979783,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "44479735-9e91-42e7-a5a5-4d9f7f7c48aa",
+      "result_sha256": "fa153c3e75c8e0f937893e501060a1a98ebd98908c3ff29505f588cd5a9c8c2c",
+      "log_sha256": "6bb1c19432e436467b76e79792e888a56fca8e775887d64c8df9d7790c4fa039",
+      "messages_sha256": "086ea241f91157bec86d58437a856ec45e2615c377bff832aac27e4ea1ccae6e",
+      "runner_exit": 2
+    },
+    {
+      "profile": "witness-terminal-late-ai",
+      "audit_pass": true,
+      "errors": [],
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "raw_exit": 12,
+      "statistics": {
+        "generated_states": 866,
+        "distinct_states": 385,
+        "remaining_states": 178
+      },
+      "duration_seconds": 1.02422,
+      "minimum_declared_before_run": 1,
+      "invariants": [
+        "WitnessAbsent"
+      ],
+      "properties": [],
+      "run_id": "809bdbdd-29c8-4a7d-bf89-15455bd21b0f",
+      "result_sha256": "1af3416c302aedc7d71c1792a11b051c23862896bc8223780ffd87d4a417c0da",
+      "log_sha256": "f847d7d75e083c4fb602e01fcadbc159632dea8ffb39f93f4153fa6f94c4189a",
+      "messages_sha256": "0a65ed653c9fc780868b7f6454c590e8fad2b8c5bd887ad7749e762779d80aed",
+      "runner_exit": 2
+    }
+  ]
+}

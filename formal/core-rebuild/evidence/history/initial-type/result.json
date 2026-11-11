@@ -1,0 +1,485 @@
+{
+  "schema_version": 1,
+  "run_id": "02df26a3-4bac-450c-b056-f4e21d0640b3",
+  "status": "COUNTEREXAMPLE",
+  "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+  "mode": "modelcheck",
+  "profile": "negative-type",
+  "started_at": "2026-11-11T11:46:37.942298+00:00",
+  "finished_at": "2026-11-11T11:46:39.054250+00:00",
+  "duration_seconds": 1.11202,
+  "completed": false,
+  "implementation_status": "NOT_ASSESSED",
+  "tool": {
+    "version_label": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+    "jar_snapshot": "/workspace/scratch/17ff92cde78f/xiyou-core-rebuild/.agent-output/core-rebuild/initial-type/tool/tla2tools.jar",
+    "java_path": "/usr/bin/java",
+    "java_version": "openjdk version \"21.0.13\" 2026-10-20\nOpenJDK Runtime Environment (build 21.0.13+9-1-deb13u2-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.13+9-1-deb13u2-Debian, mixed mode, sharing)",
+    "removed_environment_names": [],
+    "reported_version": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)"
+  },
+  "inputs": {
+    "manifest_sha256": "692eb0e24069c707d7d3cd068c87d45d6ed4219c8b697af8bef2026290fc58cd",
+    "model_root": "/workspace/scratch/17ff92cde78f/xiyou-core-rebuild/formal/core-rebuild/model",
+    "snapshot_directory": "/workspace/scratch/17ff92cde78f/xiyou-core-rebuild/.agent-output/core-rebuild/initial-type/input",
+    "files": [
+      {
+        "path": "Core.tla",
+        "sha256": "883aebb817ebb9e2fcb62bc0d404c676f65c7f7faf367baa9ecf7db1d427009d",
+        "bytes": 23788
+      },
+      {
+        "path": "composed.cfg",
+        "sha256": "3ba0581364bda2d27ced10cdf6a8d0301686f967e7547395357055e992e0d1cd",
+        "bytes": 389
+      },
+      {
+        "path": "handoff.cfg",
+        "sha256": "5d94315d2ce03c09ac7b14536d3fb46e844b2739ba07d41528f2b31b24697ddd",
+        "bytes": 367
+      },
+      {
+        "path": "live-composed.cfg",
+        "sha256": "843cf4c3b55d6a32c7a499642ecb2f7ea24d3334e157d34d5326cd239f29b6aa",
+        "bytes": 207
+      },
+      {
+        "path": "live-handoff.cfg",
+        "sha256": "737b6714bdbd38d54ef91f79754ebb1cfb2e290941660680bf253781962c3910",
+        "bytes": 206
+      },
+      {
+        "path": "live-ownership.cfg",
+        "sha256": "59a14f84d4ff6ee53ab4a4ac68bd709787bee7c18a1f1122f5bb0254437d7fc7",
+        "bytes": 182
+      },
+      {
+        "path": "negative-ai_terminal.cfg",
+        "sha256": "27756dc47b5cd7be61596bc302ca1a6aa53b70f5219344293f807d0b92d26eeb",
+        "bytes": 159
+      },
+      {
+        "path": "negative-control_nonce.cfg",
+        "sha256": "dabb0932a07b518ae62eaf9b9427b0299562890183a62e771bc1aab747a0a6eb",
+        "bytes": 166
+      },
+      {
+        "path": "negative-deadline_control.cfg",
+        "sha256": "ef8773160feefd8b4aa9158919782f47c4ba28c6f08442bc93040a578488582c",
+        "bytes": 171
+      },
+      {
+        "path": "negative-deadlock.cfg",
+        "sha256": "ad95bf3ec8b8e60d1dcc08f91301531839663252c1adebb954b60ac3d8596cb7",
+        "bytes": 147
+      },
+      {
+        "path": "negative-decision-finality.cfg",
+        "sha256": "adb53959b956f4d7d3f27cee9453eee92a8fd967f98e284fde035a6b768bdd46",
+        "bytes": 165
+      },
+      {
+        "path": "negative-decision_deadline.cfg",
+        "sha256": "f8166b366cb08f14854bfe61472743e933b8ef368eb36bdda845f67d9862c641",
+        "bytes": 165
+      },
+      {
+        "path": "negative-decision_epoch.cfg",
+        "sha256": "f60696f19a5e4834954ebc2f3025f6c2ab64bf3ef0c6448f6bf9ef3f01ebf5f6",
+        "bytes": 162
+      },
+      {
+        "path": "negative-decision_generation.cfg",
+        "sha256": "a97f96d8b5aed27c2b3eaf775ebc707a7831ddbb54195cb33a1ff9a1e68fcbf0",
+        "bytes": 167
+      },
+      {
+        "path": "negative-decision_revision.cfg",
+        "sha256": "2405315901ea2825849c2d6050bb59b9bc8e6f4a0bf059207b8669b2bfac8144",
+        "bytes": 165
+      },
+      {
+        "path": "negative-decision_status.cfg",
+        "sha256": "77207f3ef9bdaa7787023f897e6ae1dffc73acf7329748568d6138cebe158b5a",
+        "bytes": 163
+      },
+      {
+        "path": "negative-duplicate_owner.cfg",
+        "sha256": "4581c8a0230bc5c24ccc41b9d1aaa4e500cfd4fabdccdbca357e71aa0b267e62",
+        "bytes": 168
+      },
+      {
+        "path": "negative-early_ack.cfg",
+        "sha256": "abc6629c3aa67a38b82cd7c774a800d4bf35a2a7c4691cf624afe61a8fab0b9e",
+        "bytes": 159
+      },
+      {
+        "path": "negative-future_base.cfg",
+        "sha256": "2ec38cf07a9ee833416b994b993f66e6e30a0e19363a26983281331f5110db9f",
+        "bytes": 161
+      },
+      {
+        "path": "negative-no_retry.cfg",
+        "sha256": "4538cc478caf0145022b181e6637b9a88e196fbbe44e61cb2cd679648471a0cf",
+        "bytes": 186
+      },
+      {
+        "path": "negative-no_timeout.cfg",
+        "sha256": "946f078ee8b1afb7951799ded8361bd48d92ea15f775bfe6a7990466edd21153",
+        "bytes": 188
+      },
+      {
+        "path": "negative-old_human.cfg",
+        "sha256": "cd7d30e9eb38e6a5e790bf75a87d81c4e07bab64bddf90beff7c8ffa248d1e43",
+        "bytes": 153
+      },
+      {
+        "path": "negative-old_proxy.cfg",
+        "sha256": "ae5fce41db76d2d777740b6a126c5143768d68494d7f9aa0c461d9c04b4f511e",
+        "bytes": 153
+      },
+      {
+        "path": "negative-partial_ai.cfg",
+        "sha256": "d7595f1c0e31e628d114a6d9890d3c34868a810d9182867cfdbdcda2390f85c3",
+        "bytes": 159
+      },
+      {
+        "path": "negative-payload_overwrite.cfg",
+        "sha256": "4d8c74f0bd7a1df7062041dace3fd014c493a0b58676d77ef6707a8e5aa7eb12",
+        "bytes": 171
+      },
+      {
+        "path": "negative-post_terminal.cfg",
+        "sha256": "2214b6b02984846bd20b6f9fa6e939bf9b7d47ace1c19a1b51d989b43ee50b43",
+        "bytes": 170
+      },
+      {
+        "path": "negative-sequence_gap.cfg",
+        "sha256": "ccf8f8f973e66f3b2d4e516127b3dfb139493c2f9ce00c00f8bbe8a636ca140b",
+        "bytes": 172
+      },
+      {
+        "path": "negative-sequence_repeat.cfg",
+        "sha256": "983378416068453ed2f00b7858332a4dde402b9f379fb89415b2f6f6536b38bd",
+        "bytes": 175
+      },
+      {
+        "path": "negative-split_bundle.cfg",
+        "sha256": "f428844b51cd72eae61167b1dca424051ca31fcf555a281ad83cadddccafaf49",
+        "bytes": 163
+      },
+      {
+        "path": "negative-split_receipt.cfg",
+        "sha256": "ed807db1192256e14a21edbc99c3ac45c0ac95b1bca60352d59592c9085ab99b",
+        "bytes": 161
+      },
+      {
+        "path": "negative-split_terminal.cfg",
+        "sha256": "3c7132697ed52cefb930aacc5e3485afc68a9ad6d5b8025cefa2f7380ed3a082",
+        "bytes": 160
+      },
+      {
+        "path": "negative-stale-item-precondition.cfg",
+        "sha256": "15d3c1dcc6eb09cc60a684e6e5142a6b0471f9ea9d844b4fb30fb4845c49ce51",
+        "bytes": 165
+      },
+      {
+        "path": "negative-stale_disconnect.cfg",
+        "sha256": "5e3b7987e6332363c6861c0befae1f2e881f5227bfcda717a340320941289aeb",
+        "bytes": 160
+      },
+      {
+        "path": "negative-stale_item.cfg",
+        "sha256": "b1a7022eaad4405763704bf411646739ee2182182884a9f112c779062b8329ce",
+        "bytes": 163
+      },
+      {
+        "path": "negative-type.cfg",
+        "sha256": "71bc4162e612591cfb0ab7f850a7c5ac6e5a879d3ec5244525fc0f82ad6bb979",
+        "bytes": 143
+      },
+      {
+        "path": "ownership-competition.cfg",
+        "sha256": "1641694b5c2bafc926cb2e67ea872c9c8930cde53e9bd917c2576b8d6ab165a3",
+        "bytes": 315
+      },
+      {
+        "path": "ownership-ending.cfg",
+        "sha256": "eac0fa8645ee85e2df5a41655c791a2738937acd51894ffd2e5f55b127c75af3",
+        "bytes": 310
+      },
+      {
+        "path": "ownership-future.cfg",
+        "sha256": "be36ccf74d1b307c1b9ea1a0d47ec72326d9861fa5ea50ce5826d4b29ec0fa94",
+        "bytes": 310
+      },
+      {
+        "path": "ownership-idempotence.cfg",
+        "sha256": "c22d7dcdb6905ab70f51a5bfe84654b917e698817269d73957cf09afd9d02043",
+        "bytes": 315
+      },
+      {
+        "path": "witness-ai-after-unrelated.cfg",
+        "sha256": "23824a87199d02110b2efacd860b830b8e57be892bf90c05ef47c0cb30ed9a54",
+        "bytes": 162
+      },
+      {
+        "path": "witness-ai-committed.cfg",
+        "sha256": "d577a870a988ff1996ab7299909301590e61d3814b7579f72ca2c2131460a9b3",
+        "bytes": 156
+      },
+      {
+        "path": "witness-atomic-package-rejected.cfg",
+        "sha256": "4b641bbf4abdc799e6327f50ce3de93d88576ed661ab2c70489e0a5fbbeeb343",
+        "bytes": 167
+      },
+      {
+        "path": "witness-control-nonce-retry.cfg",
+        "sha256": "115e278eedd8eff631c7fa40ef228d0790e7631c3df9a83582b8f54186c58615",
+        "bytes": 163
+      },
+      {
+        "path": "witness-control-reject.cfg",
+        "sha256": "1ffaad3509e10786a63602b8059d5673e1c4758af27ebd535b251f57419422b8",
+        "bytes": 158
+      },
+      {
+        "path": "witness-crash-after-commit.cfg",
+        "sha256": "dfd128f7531ebca8a12b6a9b8cb0607aacab9d6c412e9703d48fc9fad33b9d0c",
+        "bytes": 164
+      },
+      {
+        "path": "witness-crash-before-commit.cfg",
+        "sha256": "2290387f0db8f8a0c7aaca3e571b0fc050577dae2a3c893660a98d70ee6c656f",
+        "bytes": 165
+      },
+      {
+        "path": "witness-deadline-late-ai.cfg",
+        "sha256": "de3c6a3efe78f1466e73bbbe41d45691202f03319d1686d5daea1e509f0b0c3d",
+        "bytes": 160
+      },
+      {
+        "path": "witness-deadline-reject.cfg",
+        "sha256": "66fd1a3861900e92e8e48d323a4df0f1397189b1852c414ffeb46cb1b03d945a",
+        "bytes": 161
+      },
+      {
+        "path": "witness-decision-expired.cfg",
+        "sha256": "ac3cbb6d214a168fe1eaab7eed2d971c86b17e3857f5be80175a80178f30bf88",
+        "bytes": 160
+      },
+      {
+        "path": "witness-effect-crash-handoff-retry.cfg",
+        "sha256": "664d1d9c4f3236a55bedd63f1eea1eace67a580ab3b140fc8cfd2a78a53d56e4",
+        "bytes": 171
+      },
+      {
+        "path": "witness-effect-crash-retry-negative.cfg",
+        "sha256": "affa26edd4147637df8826c88d6050af2b8668a2bd788d02e3a5b4cd71052204",
+        "bytes": 182
+      },
+      {
+        "path": "witness-epoch-late-ai.cfg",
+        "sha256": "992e73b038b85ce49cde276460aeead76ce9b76b873095d7973567ea675d2ca0",
+        "bytes": 157
+      },
+      {
+        "path": "witness-explicit-take.cfg",
+        "sha256": "b59f62b244ef2157029bb0d210e97dc3e9b53aa235dd3067bf4f0711fac27a3d",
+        "bytes": 157
+      },
+      {
+        "path": "witness-future-reject.cfg",
+        "sha256": "0e7d5fde7d705abf4e13c20ac931cd5ca40fecb05b0b26671f2ef7f72c453797",
+        "bytes": 154
+      },
+      {
+        "path": "witness-generation-late-ai.cfg",
+        "sha256": "9c69ec9681ef26b66b1366159f0a552a7a12e095e12cea4c97b3805a7dcaf0f8",
+        "bytes": 162
+      },
+      {
+        "path": "witness-grace.cfg",
+        "sha256": "fd926dbc56be86e706567ee82383512ffb53aafa410749415c6fdd0de3aed9f3",
+        "bytes": 149
+      },
+      {
+        "path": "witness-invalid-ai-rejected.cfg",
+        "sha256": "5ad492a9dd14f6e77123ac0a5453af5d2deeae012a4bff3eae12c2fd845c49a4",
+        "bytes": 163
+      },
+      {
+        "path": "witness-item-conflict.cfg",
+        "sha256": "f8c88a1628a97e356abe229590cc6e47429efc58154ab76e038f98d2054a085f",
+        "bytes": 159
+      },
+      {
+        "path": "witness-manual-ending.cfg",
+        "sha256": "a9429fa01ad828523933a2bad33d6368625396c3f6b0721c47403dd7cec47064",
+        "bytes": 154
+      },
+      {
+        "path": "witness-old-disconnect-rejected.cfg",
+        "sha256": "b071d07f4515cf5d7ba372fd4305559121084e6f5e41c15dabf702a70d788e6e",
+        "bytes": 167
+      },
+      {
+        "path": "witness-payload-conflict.cfg",
+        "sha256": "f3aa28ccf0bd722ae850f0f5ef02b6e86a5baa40498d3f9eb9ccd273a0c7a4f5",
+        "bytes": 162
+      },
+      {
+        "path": "witness-proxy.cfg",
+        "sha256": "9a5badfae56a526e1da6f83c8875399b0ad02aa53f46ed869bf8076192b6e09d",
+        "bytes": 149
+      },
+      {
+        "path": "witness-published.cfg",
+        "sha256": "92e23a1d99567ca52288e4a0e7c30d5d4e13be5ddb97bd2bc5e6c03ba5deb8e7",
+        "bytes": 155
+      },
+      {
+        "path": "witness-recovered.cfg",
+        "sha256": "a9be53a7e3ddc9208bde779dd8eafe203ef639d38a92f71774d26c6c4a9a9b9c",
+        "bytes": 155
+      },
+      {
+        "path": "witness-resume-held.cfg",
+        "sha256": "163a26b9155cddaf942a0faee06ac242a57040edbd7ca5b34b9958145cd30196",
+        "bytes": 155
+      },
+      {
+        "path": "witness-returned.cfg",
+        "sha256": "d02ef6e4f875d5ad912a167e507c1415ac7e7834330bb3d055bdb334148eeab1",
+        "bytes": 152
+      },
+      {
+        "path": "witness-revision-late-ai.cfg",
+        "sha256": "e1a9e225af9eb7aebc7d6c754aedcf81076785d6ccf48be37c29627a285f123a",
+        "bytes": 160
+      },
+      {
+        "path": "witness-same-receipt.cfg",
+        "sha256": "44d22d98e0fc447f064bf234008517415037db346e7d58dbdbee8bbe5f05a171",
+        "bytes": 158
+      },
+      {
+        "path": "witness-take-success.cfg",
+        "sha256": "c46b670049e9d764e22cf647f530f2654e3c7cb9bc240d6b6a8ad8e04713aecd",
+        "bytes": 158
+      },
+      {
+        "path": "witness-terminal-late-ai.cfg",
+        "sha256": "c18a9b3dd26565a494fd657c2bf24212086d0ec6dad19e70aaf356e6b4215b6e",
+        "bytes": 160
+      }
+    ],
+    "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a"
+  },
+  "checks": {
+    "expected_invariants": [
+      "TypeOK"
+    ],
+    "expected_properties": [],
+    "configured_invariants": [
+      "TypeOK"
+    ],
+    "configured_properties": [],
+    "checks_deadlock": true,
+    "deadlock_reason": null,
+    "behavior": {
+      "SPECIFICATION": "Spec"
+    }
+  },
+  "scope": {
+    "profile": "ownership",
+    "pattern": "idempotence",
+    "fault": "type",
+    "probe": "none",
+    "actors": 2,
+    "items": 2,
+    "request_keys": 2,
+    "physical_connections_for_handoff_role": 2,
+    "proxy_decisions": 0,
+    "session_deadline_ticks": 2,
+    "grace_ticks": 3,
+    "decision_timeout_ticks": 1,
+    "distinct_state_min": 1,
+    "covered_interleavings_and_faults": [
+      "接收、预检、事务提交、ACK、发布各自可交错",
+      "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+      "同版本物品竞争、控制围栏、自然/异常/到期终局",
+      "故障隔离和可达探针按本配置常量限定"
+    ],
+    "excluded_behaviors": [
+      "任意规模、真实数据库或业务源码的形式证明",
+      "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+      "多轮无限控制往返、多次新计划与多进程调度"
+    ],
+    "liveness": "NOT_CHECKED"
+  },
+  "assumptions": [
+    "服务端权威；合成参与者身份和有限请求集在初态固定",
+    "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+    "时间为有限逻辑切点，不调用真实时钟"
+  ],
+  "command": [
+    "/usr/bin/java",
+    "-Xmx1024m",
+    "-XX:+UseParallelGC",
+    "-Duser.language=en",
+    "-Duser.country=US",
+    "-Duser.home=/workspace/scratch/17ff92cde78f/xiyou-core-rebuild/.agent-output/core-rebuild/initial-type/runtime-home",
+    "-Djava.io.tmpdir=/workspace/scratch/17ff92cde78f/xiyou-core-rebuild/.agent-output/core-rebuild/initial-type/tmp",
+    "-DTLA-Library=/workspace/scratch/17ff92cde78f/xiyou-core-rebuild/.agent-output/core-rebuild/initial-type/input",
+    "-cp",
+    "/workspace/scratch/17ff92cde78f/xiyou-core-rebuild/.agent-output/core-rebuild/initial-type/tool/tla2tools.jar",
+    "tlc2.TLC",
+    "-tool",
+    "-modelcheck",
+    "-workers",
+    "1",
+    "-metadir",
+    "/workspace/scratch/17ff92cde78f/xiyou-core-rebuild/.agent-output/core-rebuild/initial-type/states",
+    "-config",
+    "/workspace/scratch/17ff92cde78f/xiyou-core-rebuild/.agent-output/core-rebuild/initial-type/input/negative-type.cfg",
+    "/workspace/scratch/17ff92cde78f/xiyou-core-rebuild/.agent-output/core-rebuild/initial-type/input/Core.tla"
+  ],
+  "process": {
+    "exit_code": 12,
+    "timed_out": false,
+    "interrupted": false
+  },
+  "statistics": {
+    "generated_states": 14,
+    "distinct_states": 12,
+    "remaining_states": 10
+  },
+  "evidence": {
+    "log": "/workspace/scratch/17ff92cde78f/xiyou-core-rebuild/.agent-output/core-rebuild/initial-type/tlc.log",
+    "messages": "/workspace/scratch/17ff92cde78f/xiyou-core-rebuild/.agent-output/core-rebuild/initial-type/messages.json"
+  },
+  "message_codes": [
+    2110,
+    2121,
+    2185,
+    2186,
+    2187,
+    2189,
+    2190,
+    2194,
+    2199,
+    2200,
+    2217,
+    2219,
+    2220,
+    2262,
+    2269
+  ],
+  "error_codes": [
+    2110,
+    2121
+  ],
+  "warning_codes": []
+}

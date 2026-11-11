@@ -1,0 +1,77 @@
+[
+  {
+    "code": 2262,
+    "severity": 0,
+    "text": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)"
+  },
+  {
+    "code": 2187,
+    "severity": 0,
+    "text": "Running breadth-first search Model-Checking with fp 20 and seed 6807203169544271222 with 1 worker on 9 cores with 910MB heap and 64MB offheap memory [pid: 22] (Linux 6.18.57 amd64, Debian 21.0.13 x86_64, MSBDiskFPSet, DiskStateQueue)."
+  },
+  {
+    "code": 2220,
+    "severity": 0,
+    "text": "Starting SANY..."
+  },
+  {
+    "code": 2219,
+    "severity": 0,
+    "text": "SANY finished."
+  },
+  {
+    "code": 2185,
+    "severity": 0,
+    "text": "Starting... (2026-11-11 03:53:41)"
+  },
+  {
+    "code": 2189,
+    "severity": 0,
+    "text": "Computing initial states..."
+  },
+  {
+    "code": 2190,
+    "severity": 0,
+    "text": "Finished computing initial states: 1 distinct state generated at 2026-11-11 03:53:41."
+  },
+  {
+    "code": 2200,
+    "severity": 0,
+    "text": "Progress(13) at 2026-11-11 03:53:44: 154,666 states generated (154,666 s/min), 56,369 distinct states found (56,369 ds/min), 24,184 states left on queue."
+  },
+  {
+    "code": 2200,
+    "severity": 0,
+    "text": "Progress(24) at 2026-11-11 03:54:44: 5,543,889 states generated (5,389,223 s/min), 1,469,731 distinct states found (1,413,362 ds/min), 203,198 states left on queue."
+  },
+  {
+    "code": 2193,
+    "severity": 0,
+    "text": "Model checking completed. No error has been found.\n  Estimates of the probability that TLC did not check all reachable states\n  because two distinct states had the same fingerprint:\n  calculated (optimistic):  val = 1.0E-6\n  based on the actual fingerprints:  val = 2.0E-7"
+  },
+  {
+    "code": 2200,
+    "severity": 0,
+    "text": "Progress(37) at 2026-11-11 03:55:32: 10,352,231 states generated (5,540,742 s/min), 2,393,736 distinct states found (1,281,180 ds/min), 0 states left on queue."
+  },
+  {
+    "code": 2199,
+    "severity": 0,
+    "text": "10352231 states generated, 2393736 distinct states found, 0 states left on queue."
+  },
+  {
+    "code": 2194,
+    "severity": 0,
+    "text": "The depth of the complete state graph search is 37."
+  },
+  {
+    "code": 2268,
+    "severity": 0,
+    "text": "The average outdegree of the complete state graph is 1 (minimum is 0, the maximum 7 and the 95th percentile is 3)."
+  },
+  {
+    "code": 2186,
+    "severity": 0,
+    "text": "Finished in 112120ms at (2026-11-11 03:55:32)"
+  }
+]

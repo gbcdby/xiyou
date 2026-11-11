@@ -1,0 +1,311 @@
+@!@!@STARTMSG 2262:0 @!@!@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+@!@!@ENDMSG 2262 @!@!@
+@!@!@STARTMSG 2187:0 @!@!@
+Running breadth-first search Model-Checking with fp 104 and seed -7777001310992357781 with 1 worker on 9 cores with 910MB heap and 64MB offheap memory [pid: 2191] (Linux 6.18.57 amd64, Debian 21.0.13 x86_64, MSBDiskFPSet, DiskStateQueue).
+@!@!@ENDMSG 2187 @!@!@
+@!@!@STARTMSG 2220:0 @!@!@
+Starting SANY...
+@!@!@ENDMSG 2220 @!@!@
+Parsing file /workspace/scratch/17ff92cde78f/xiyou-core-rebuild/.agent-output/core-rebuild/batch-02/negative-future_base/input/Core.tla
+Parsing file /workspace/scratch/17ff92cde78f/xiyou-core-rebuild/.agent-output/core-rebuild/batch-02/negative-future_base/tmp/Naturals.tla
+Parsing file /workspace/scratch/17ff92cde78f/xiyou-core-rebuild/.agent-output/core-rebuild/batch-02/negative-future_base/tmp/Integers.tla
+Parsing file /workspace/scratch/17ff92cde78f/xiyou-core-rebuild/.agent-output/core-rebuild/batch-02/negative-future_base/tmp/Sequences.tla
+Parsing file /workspace/scratch/17ff92cde78f/xiyou-core-rebuild/.agent-output/core-rebuild/batch-02/negative-future_base/tmp/FiniteSets.tla
+Semantic processing of module Naturals
+Semantic processing of module Integers
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module Core
+@!@!@STARTMSG 2219:0 @!@!@
+SANY finished.
+@!@!@ENDMSG 2219 @!@!@
+@!@!@STARTMSG 2185:0 @!@!@
+Starting... (2026-11-11 04:03:32)
+@!@!@ENDMSG 2185 @!@!@
+@!@!@STARTMSG 2189:0 @!@!@
+Computing initial states...
+@!@!@ENDMSG 2189 @!@!@
+@!@!@STARTMSG 2190:0 @!@!@
+Finished computing initial states: 1 distinct state generated at 2026-11-11 04:03:32.
+@!@!@ENDMSG 2190 @!@!@
+@!@!@STARTMSG 2110:1 @!@!@
+Invariant PreconditionDiscipline is violated.
+@!@!@ENDMSG 2110 @!@!@
+@!@!@STARTMSG 2121:1 @!@!@
+The behavior up to this point is:
+@!@!@ENDMSG 2121 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+1: <Initial predicate>
+/\ d = [ mode |-> "Human",
+  graceDeadline |-> 0,
+  aiStatus |-> "Idle",
+  aiDeadline |-> 0,
+  now |-> 0,
+  phase |-> "Running",
+  epoch |-> 0,
+  connection |-> 1,
+  revision |-> <<0, 0>>,
+  item |-> <<1, 1>>,
+  owner |-> <<0, 0>>,
+  aiEpoch |-> 0,
+  aiGeneration |-> 0,
+  generation |-> 0,
+  aiRevision |-> 0,
+  holders |-> <<{0}, {0}>>,
+  effects |-> <<0, 0>>,
+  commits |-> <<>>,
+  receipts |->
+      << [status |-> "None", payload |-> 0, first |-> 0, last |-> 0],
+         [status |-> "None", payload |-> 0, first |-> 0, last |-> 0] >>,
+  boundPayload |-> <<-1, -1>>,
+  events |-> <<>>,
+  outbox |-> <<>>,
+  head |-> 0,
+  terminalSeq |-> 0,
+  terminalAction |-> 0,
+  handoffStep |-> 0,
+  controls |-> <<>>,
+  nonceWrites |-> 0,
+  nonceEpoch |-> 0,
+  aiSealed |-> "None",
+  aiBadPackage |-> FALSE,
+  aiEffects |-> 0,
+  aiReceipt |-> "None",
+  aiCommit |-> <<>> ]
+/\ v = [ payload |-> <<0, 0>>,
+  witness |-> FALSE,
+  progress |-> 0,
+  up |-> TRUE,
+  crashed |-> FALSE,
+  stable |-> FALSE,
+  lost |-> FALSE,
+  stage |-> <<"Idle", "Idle">>,
+  response |-> <<"None", "None">>,
+  changed |-> <<FALSE, FALSE>>,
+  retried |-> <<FALSE, FALSE>>,
+  resolved |-> {},
+  acceptedAcks |-> {},
+  published |-> {},
+  callbackSeen |-> FALSE,
+  heldSeen |-> FALSE,
+  oldDisconnectSeen |-> FALSE,
+  nonceRetried |-> FALSE,
+  unrelated |-> FALSE,
+  revised |-> FALSE,
+  epochRevoked |-> FALSE ]
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+2: <Next line 409, col 9 to line 409, col 80 of module Core>
+/\ d = [ mode |-> "Human",
+  graceDeadline |-> 0,
+  aiStatus |-> "Idle",
+  aiDeadline |-> 0,
+  now |-> 0,
+  phase |-> "Running",
+  epoch |-> 0,
+  connection |-> 1,
+  revision |-> <<0, 0>>,
+  item |-> <<1, 1>>,
+  owner |-> <<0, 0>>,
+  aiEpoch |-> 0,
+  aiGeneration |-> 0,
+  generation |-> 0,
+  aiRevision |-> 0,
+  holders |-> <<{0}, {0}>>,
+  effects |-> <<0, 0>>,
+  commits |-> <<>>,
+  receipts |->
+      << [status |-> "None", payload |-> 0, first |-> 0, last |-> 0],
+         [status |-> "None", payload |-> 0, first |-> 0, last |-> 0] >>,
+  boundPayload |-> <<-1, -1>>,
+  events |-> <<>>,
+  outbox |-> <<>>,
+  head |-> 0,
+  terminalSeq |-> 0,
+  terminalAction |-> 0,
+  handoffStep |-> 0,
+  controls |-> <<>>,
+  nonceWrites |-> 0,
+  nonceEpoch |-> 0,
+  aiSealed |-> "None",
+  aiBadPackage |-> FALSE,
+  aiEffects |-> 0,
+  aiReceipt |-> "None",
+  aiCommit |-> <<>> ]
+/\ v = [ payload |-> <<0, 0>>,
+  witness |-> FALSE,
+  progress |-> 0,
+  up |-> TRUE,
+  crashed |-> FALSE,
+  stable |-> FALSE,
+  lost |-> FALSE,
+  stage |-> <<"Received", "Idle">>,
+  response |-> <<"None", "None">>,
+  changed |-> <<FALSE, FALSE>>,
+  retried |-> <<FALSE, FALSE>>,
+  resolved |-> {},
+  acceptedAcks |-> {},
+  published |-> {},
+  callbackSeen |-> FALSE,
+  heldSeen |-> FALSE,
+  oldDisconnectSeen |-> FALSE,
+  nonceRetried |-> FALSE,
+  unrelated |-> FALSE,
+  revised |-> FALSE,
+  epochRevoked |-> FALSE ]
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+3: <Next line 409, col 9 to line 409, col 80 of module Core>
+/\ d = [ mode |-> "Human",
+  graceDeadline |-> 0,
+  aiStatus |-> "Idle",
+  aiDeadline |-> 0,
+  now |-> 0,
+  phase |-> "Running",
+  epoch |-> 0,
+  connection |-> 1,
+  revision |-> <<0, 0>>,
+  item |-> <<1, 1>>,
+  owner |-> <<0, 0>>,
+  aiEpoch |-> 0,
+  aiGeneration |-> 0,
+  generation |-> 0,
+  aiRevision |-> 0,
+  holders |-> <<{0}, {0}>>,
+  effects |-> <<0, 0>>,
+  commits |-> <<>>,
+  receipts |->
+      << [status |-> "None", payload |-> 0, first |-> 0, last |-> 0],
+         [status |-> "None", payload |-> 0, first |-> 0, last |-> 0] >>,
+  boundPayload |-> <<-1, -1>>,
+  events |-> <<>>,
+  outbox |-> <<>>,
+  head |-> 0,
+  terminalSeq |-> 0,
+  terminalAction |-> 0,
+  handoffStep |-> 0,
+  controls |-> <<>>,
+  nonceWrites |-> 0,
+  nonceEpoch |-> 0,
+  aiSealed |-> "None",
+  aiBadPackage |-> FALSE,
+  aiEffects |-> 0,
+  aiReceipt |-> "None",
+  aiCommit |-> <<>> ]
+/\ v = [ payload |-> <<0, 0>>,
+  witness |-> FALSE,
+  progress |-> 0,
+  up |-> TRUE,
+  crashed |-> FALSE,
+  stable |-> FALSE,
+  lost |-> FALSE,
+  stage |-> <<"Validated", "Idle">>,
+  response |-> <<"None", "None">>,
+  changed |-> <<FALSE, FALSE>>,
+  retried |-> <<FALSE, FALSE>>,
+  resolved |-> {},
+  acceptedAcks |-> {},
+  published |-> {},
+  callbackSeen |-> FALSE,
+  heldSeen |-> FALSE,
+  oldDisconnectSeen |-> FALSE,
+  nonceRetried |-> FALSE,
+  unrelated |-> FALSE,
+  revised |-> FALSE,
+  epochRevoked |-> FALSE ]
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+4: <Next line 409, col 9 to line 409, col 80 of module Core>
+/\ d = [ mode |-> "Human",
+  graceDeadline |-> 0,
+  aiStatus |-> "Idle",
+  aiDeadline |-> 0,
+  now |-> 0,
+  phase |-> "Running",
+  epoch |-> 0,
+  connection |-> 1,
+  revision |-> <<0, 0>>,
+  item |-> <<1, 1>>,
+  owner |-> <<0, 0>>,
+  aiEpoch |-> 0,
+  aiGeneration |-> 0,
+  generation |-> 0,
+  aiRevision |-> 0,
+  holders |-> <<{0}, {0}>>,
+  effects |-> <<1, 0>>,
+  commits |->
+      << [ mode |-> "Human",
+           payload |-> 0,
+           phase |-> "Running",
+           key |-> 1,
+           epoch |-> 0,
+           connection |-> 1,
+           item |-> 1,
+           kind |-> "claim",
+           at |-> 0,
+           base |-> 0,
+           destination |-> 1,
+           baseSeq |-> 1,
+           headBefore |-> 0,
+           revisionBefore |-> 0,
+           ownerBefore |-> 0 ] >>,
+  receipts |->
+      << [status |-> "Accepted", payload |-> 0, first |-> 1, last |-> 1],
+         [status |-> "None", payload |-> 0, first |-> 0, last |-> 0] >>,
+  boundPayload |-> <<0, -1>>,
+  events |-> <<[seq |-> 1, key |-> 1, kind |-> "claim", at |-> 0]>>,
+  outbox |-> <<[seq |-> 1, key |-> 1, kind |-> "claim", at |-> 0]>>,
+  head |-> 1,
+  terminalSeq |-> 0,
+  terminalAction |-> 0,
+  handoffStep |-> 0,
+  controls |-> <<>>,
+  nonceWrites |-> 0,
+  nonceEpoch |-> 0,
+  aiSealed |-> "None",
+  aiBadPackage |-> FALSE,
+  aiEffects |-> 0,
+  aiReceipt |-> "None",
+  aiCommit |-> <<>> ]
+/\ v = [ payload |-> <<0, 0>>,
+  witness |-> FALSE,
+  progress |-> 0,
+  up |-> TRUE,
+  crashed |-> FALSE,
+  stable |-> FALSE,
+  lost |-> FALSE,
+  stage |-> <<"Reply", "Idle">>,
+  response |-> <<"Accepted", "None">>,
+  changed |-> <<FALSE, FALSE>>,
+  retried |-> <<FALSE, FALSE>>,
+  resolved |-> {},
+  acceptedAcks |-> {},
+  published |-> {},
+  callbackSeen |-> FALSE,
+  heldSeen |-> FALSE,
+  oldDisconnectSeen |-> FALSE,
+  nonceRetried |-> FALSE,
+  unrelated |-> FALSE,
+  revised |-> FALSE,
+  epochRevoked |-> FALSE ]
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2200:0 @!@!@
+Progress(4) at 2026-11-11 04:03:32: 40 states generated (4,868 s/min), 21 distinct states found (2,555 ds/min), 13 states left on queue.
+@!@!@ENDMSG 2200 @!@!@
+@!@!@STARTMSG 2199:0 @!@!@
+40 states generated, 21 distinct states found, 13 states left on queue.
+@!@!@ENDMSG 2199 @!@!@
+@!@!@STARTMSG 2194:0 @!@!@
+The depth of the complete state graph search is 4.
+@!@!@ENDMSG 2194 @!@!@
+@!@!@STARTMSG 2268:0 @!@!@
+The average outdegree of the complete state graph is 3 (minimum is 1, the maximum 5 and the 95th percentile is 5).
+@!@!@ENDMSG 2268 @!@!@
+@!@!@STARTMSG 2186:0 @!@!@
+Finished in 496ms at (2026-11-11 04:03:32)
+@!@!@ENDMSG 2186 @!@!@

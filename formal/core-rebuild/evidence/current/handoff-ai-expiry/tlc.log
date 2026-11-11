@@ -1,0 +1,52 @@
+@!@!@STARTMSG 2262:0 @!@!@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+@!@!@ENDMSG 2262 @!@!@
+@!@!@STARTMSG 2187:0 @!@!@
+Running breadth-first search Model-Checking with fp 71 and seed 759599034159993654 with 1 worker on 9 cores with 910MB heap and 64MB offheap memory [pid: 779] (Linux 6.18.57 amd64, Debian 21.0.13 x86_64, MSBDiskFPSet, DiskStateQueue).
+@!@!@ENDMSG 2187 @!@!@
+@!@!@STARTMSG 2220:0 @!@!@
+Starting SANY...
+@!@!@ENDMSG 2220 @!@!@
+Parsing file /workspace/scratch/17ff92cde78f/xiyou-core-rebuild/.agent-output/core-rebuild/batch-02/handoff-ai-expiry/input/Core.tla
+Parsing file /workspace/scratch/17ff92cde78f/xiyou-core-rebuild/.agent-output/core-rebuild/batch-02/handoff-ai-expiry/tmp/Naturals.tla
+Parsing file /workspace/scratch/17ff92cde78f/xiyou-core-rebuild/.agent-output/core-rebuild/batch-02/handoff-ai-expiry/tmp/Integers.tla
+Parsing file /workspace/scratch/17ff92cde78f/xiyou-core-rebuild/.agent-output/core-rebuild/batch-02/handoff-ai-expiry/tmp/Sequences.tla
+Parsing file /workspace/scratch/17ff92cde78f/xiyou-core-rebuild/.agent-output/core-rebuild/batch-02/handoff-ai-expiry/tmp/FiniteSets.tla
+Semantic processing of module Naturals
+Semantic processing of module Integers
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module Core
+@!@!@STARTMSG 2219:0 @!@!@
+SANY finished.
+@!@!@ENDMSG 2219 @!@!@
+@!@!@STARTMSG 2185:0 @!@!@
+Starting... (2026-11-11 04:02:38)
+@!@!@ENDMSG 2185 @!@!@
+@!@!@STARTMSG 2189:0 @!@!@
+Computing initial states...
+@!@!@ENDMSG 2189 @!@!@
+@!@!@STARTMSG 2190:0 @!@!@
+Finished computing initial states: 1 distinct state generated at 2026-11-11 04:02:38.
+@!@!@ENDMSG 2190 @!@!@
+@!@!@STARTMSG 2193:0 @!@!@
+Model checking completed. No error has been found.
+  Estimates of the probability that TLC did not check all reachable states
+  because two distinct states had the same fingerprint:
+  calculated (optimistic):  val = 3.8E-13
+@!@!@ENDMSG 2193 @!@!@
+@!@!@STARTMSG 2200:0 @!@!@
+Progress(17) at 2026-11-11 04:02:39: 5,577 states generated (482,857 s/min), 1,928 distinct states found (166,926 ds/min), 0 states left on queue.
+@!@!@ENDMSG 2200 @!@!@
+@!@!@STARTMSG 2199:0 @!@!@
+5577 states generated, 1928 distinct states found, 0 states left on queue.
+@!@!@ENDMSG 2199 @!@!@
+@!@!@STARTMSG 2194:0 @!@!@
+The depth of the complete state graph search is 17.
+@!@!@ENDMSG 2194 @!@!@
+@!@!@STARTMSG 2268:0 @!@!@
+The average outdegree of the complete state graph is 1 (minimum is 0, the maximum 4 and the 95th percentile is 2).
+@!@!@ENDMSG 2268 @!@!@
+@!@!@STARTMSG 2186:0 @!@!@
+Finished in 699ms at (2026-11-11 04:02:39)
+@!@!@ENDMSG 2186 @!@!@

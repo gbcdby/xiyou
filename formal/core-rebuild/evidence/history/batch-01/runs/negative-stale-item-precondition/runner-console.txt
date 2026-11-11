@@ -1,0 +1,1 @@
+{"status": "COUNTEREXAMPLE", "reason": "PROPERTY_OR_DEADLOCK_VIOLATION", "result": "/workspace/scratch/17ff92cde78f/xiyou-core-rebuild/.agent-output/core-rebuild/batch-01/negative-stale-item-precondition/result.json"}
