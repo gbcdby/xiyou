@@ -123,6 +123,6 @@ python3 protocol/scripts/check-schema.py
 tsc --noEmit --strict --module nodenext --target es2022 protocol/tests/consumer.mts
 ```
 
-Node 测试与生成器不需要额外运行库。独立交叉检查需要 Python 的 `jsonschema`；编译检查需要 TypeScript。跨语言后端应复用固定样本、原始重复键规则、关系检查与摘要向量，不能只通过 JSON Schema 后就省略其余边界。
+Node 测试与生成器不需要额外运行库。独立交叉检查需要 Python 的 `jsonschema`；编译检查需要 TypeScript。Python 入口通过 `scripts/utc_time.py` 显式注册本协议的 UTC 毫秒日历检查，不依赖可选格式插件；没有启用检查器时直接失败。检查包含闰年、有效日期、小时/分/秒、精确三位毫秒和四位年份；不接受闰秒、偏移时区或额外后缀。跨语言后端应复用固定样本、原始重复键规则、关系检查与摘要向量，不能只通过 JSON Schema 后就省略其余边界。
 
-2026-11-11 的修正候选作者自查使用 Node 24.22.1 和 TypeScript 7.0.2；20 项行为测试、15 类正样本、16 类反样本、独立 JSON Schema 与固定摘要检查、生成一致性和 TypeScript 消费编译通过。原始检查与输入摘要保存于 [自查证据](evidence/self-check.json)，独立审查发现的来源和修正映射见 [审查修正记录](evidence/review-fixes.md)。这是作者自查，发现的最终状态等待原审查者复审；TLC、持久数据库和运行验收不属于本票结论。
+2026-11-11 的日期检查补充候选使用 Node 24.22.1 和 TypeScript 7.0.2；21 项行为测试、15 类正样本、17 类反样本、23 个共用 UTC 日历边界、独立 JSON Schema 与摘要、生成一致性和 TypeScript 消费编译通过。原始检查与输入摘要保存于 [自查证据](evidence/self-check.json)，独立审查发现的来源和修正映射见 [审查修正记录](evidence/review-fixes.md)。日期检查补充为作者自查，STD-003 最终状态等待复审；此前已验证修正仍绑定原候选，TLC、持久数据库和运行验收不属于本票结论。
