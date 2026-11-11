@@ -1,0 +1,3 @@
+# 原始测试差异输出按原字节保留；仅此处允许日志中的行尾空格。
+tdd/*.txt whitespace=-blank-at-eol
+raw/*.txt whitespace=-blank-at-eol

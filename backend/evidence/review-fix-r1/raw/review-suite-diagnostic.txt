@@ -1,0 +1,82 @@
+TAP version 13
+# Subtest: REQ-001：迟到的接管副作用不能断开重新获权的真实连接
+ok 1 - REQ-001：迟到的接管副作用不能断开重新获权的真实连接
+  ---
+  duration_ms: 1666.274876
+  type: 'test'
+  ...
+# Subtest: REQ-001：同一连接的迟到接管回调不能回退视图代次
+ok 2 - REQ-001：同一连接的迟到接管回调不能回退视图代次
+  ---
+  duration_ms: 120.777129
+  type: 'test'
+  ...
+# Subtest: REQ-001 邻近回归：迟到回调不能恢复撤权或终局控制
+ok 3 - REQ-001 邻近回归：迟到回调不能恢复撤权或终局控制
+  ---
+  duration_ms: 211.07451
+  type: 'test'
+  ...
+# Subtest: REQ-001 邻近回归：旧事务只撤原订阅，不撤换绑后新建的只读视图
+ok 4 - REQ-001 邻近回归：旧事务只撤原订阅，不撤换绑后新建的只读视图
+  ---
+  duration_ms: 107.170383
+  type: 'test'
+  ...
+# Subtest: STD-001：提交后响应故障仍须拒绝真人同 ID 的异载荷
+ok 5 - STD-001：提交后响应故障仍须拒绝真人同 ID 的异载荷
+  ---
+  duration_ms: 149.465869
+  type: 'test'
+  ...
+# Subtest: STD-001：内部意图恢复也绑定完整包摘要，fallback 原键恢复保持幂等
+ok 6 - STD-001：内部意图恢复也绑定完整包摘要，fallback 原键恢复保持幂等
+  ---
+  duration_ms: 142.485122
+  type: 'test'
+  ...
+# Subtest: STD-002：合法但不存在的原型属性名经真实网络得到持久目标拒绝
+ok 7 - STD-002：合法但不存在的原型属性名经真实网络得到持久目标拒绝
+  ---
+  duration_ms: 256.000437
+  type: 'test'
+  ...
+# Subtest: STD-002：合法同名自有角色与物品仍可观察，不把继承目标当真实对象
+ok 8 - STD-002：合法同名自有角色与物品仍可观察，不把继承目标当真实对象
+  ---
+  duration_ms: 0.542604
+  type: 'test'
+  ...
+# Subtest: STD-003：断开的只读订阅及时释放句柄，无需关闭整个运行层
+ok 9 - STD-003：断开的只读订阅及时释放句柄，无需关闭整个运行层
+  ---
+  duration_ms: 91.683329
+  type: 'test'
+  ...
+# Subtest: STD-003：换订阅会停止在途旧批次，旧任务不能撤销新视图
+ok 10 - STD-003：换订阅会停止在途旧批次，旧任务不能撤销新视图
+  ---
+  duration_ms: 181.964367
+  type: 'test'
+  ...
+# Subtest: STD-004：长未知字段的真实 ACK 保持有效且有界的协议错误
+ok 11 - STD-004：长未知字段的真实 ACK 保持有效且有界的协议错误
+  ---
+  duration_ms: 127.997215
+  type: 'test'
+  ...
+# Subtest: STD-004：错误正文按码点保留边界并修复不完整代理对
+ok 12 - STD-004：错误正文按码点保留边界并修复不完整代理对
+  ---
+  duration_ms: 1.008075
+  type: 'test'
+  ...
+1..12
+# tests 12
+# suites 0
+# pass 12
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3397.93787

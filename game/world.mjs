@@ -1,5 +1,6 @@
 import { assemblePlayers } from '../content/index.mjs';
 import { validateContract } from '../protocol/index.mjs';
+import { ownRecord } from './records.mjs';
 
 export const increment = value => String(BigInt(value) + 1n);
 export const terminal = state => state.phase === 'Finished' || state.phase === 'Aborted';
@@ -7,7 +8,7 @@ export const emptyAudience = () => ({ humanCharacterIds: [], coreNpcCharacterIds
 export function audienceFor(state, actorIds, { privateChannel = false } = {}) {
   const audience = emptyAudience();
   for (const id of [...new Set(actorIds)]) {
-    const actor = state.characters[id];
+    const actor = ownRecord(state.characters, id);
     if (!actor) continue;
     if (actor.kind === 'core_npc') { if (!privateChannel) audience.coreNpcCharacterIds.push(id); }
     else { audience.humanCharacterIds.push(id); if (!privateChannel) audience.proxyCharacterIds.push(id); }
@@ -44,7 +45,7 @@ export function reduceWorld(previous, event, content) {
     case 'session.started': {
       state.phase = 'Running'; state.deadlineAt = p.deadlineAt;
       const assembly = assemblePlayers(content, state.members.length);
-      state.members.forEach((member, index) => Object.assign(state.characters[member.characterId], { ...assembly[index], regionId: assembly[index].initialRegionId }));
+      state.members.forEach((member, index) => Object.assign(ownRecord(state.characters, member.characterId), { ...assembly[index], regionId: assembly[index].initialRegionId }));
       for (const npc of content.npcs) {
         const actor = character(npc.characterId, npc.name, 'core_npc');
         Object.assign(actor, { regionId: npc.initialRegionId, mode: 'CoreNPCControlled', controlEpoch: '1', capabilities: ['move', 'inspect', 'speak', 'make_claim', 'share_evidence', 'take_item', 'transfer_item', 'wait', ...new Set(content.targets.flatMap(t => t.inspections.map(i => i.requiredCapability))), ...new Set(content.items.map(i => i.takeCapability).filter(Boolean))] });
@@ -59,15 +60,15 @@ export function reduceWorld(previous, event, content) {
       for (const target of content.targets) state.targets[target.targetId] = { targetId: target.targetId, name: target.name, regionId: target.regionId, resourceRevision: '0', fields: structuredClone(target.fields) };
       break;
     }
-    case 'control.changed': Object.assign(state.characters[p.actorId], p); break;
-    case 'character.moved': Object.assign(state.characters[p.actorId], { regionId: p.to, resourceRevision: p.resourceRevision }); break;
-    case 'item.transferred': Object.assign(state.items[p.itemId], { location: { kind: 'character', characterId: p.to }, resourceRevision: p.resourceRevision }); break;
-    case 'item.taken': Object.assign(state.items[p.itemId], { location: { kind: 'character', characterId: p.to }, resourceRevision: p.resourceRevision }); break;
+    case 'control.changed': Object.assign(ownRecord(state.characters, p.actorId), p); break;
+    case 'character.moved': Object.assign(ownRecord(state.characters, p.actorId), { regionId: p.to, resourceRevision: p.resourceRevision }); break;
+    case 'item.transferred': Object.assign(ownRecord(state.items, p.itemId), { location: { kind: 'character', characterId: p.to }, resourceRevision: p.resourceRevision }); break;
+    case 'item.taken': Object.assign(ownRecord(state.items, p.itemId), { location: { kind: 'character', characterId: p.to }, resourceRevision: p.resourceRevision }); break;
     case 'item.used':
-      state.items[p.itemId].resourceRevision = p.resourceRevision;
-      if (p.consumed) state.items[p.itemId].location = { kind: 'consumed' };
+      ownRecord(state.items, p.itemId).resourceRevision = p.resourceRevision;
+      if (p.consumed) ownRecord(state.items, p.itemId).location = { kind: 'consumed' };
       break;
-    case 'target.updated': Object.assign(state.targets[p.targetId], { fields: p.fields, resourceRevision: p.resourceRevision }); break;
+    case 'target.updated': Object.assign(ownRecord(state.targets, p.targetId), { fields: p.fields, resourceRevision: p.resourceRevision }); break;
     case 'ClaimRecorded': state.claims[p.claimId] = p; state.claimAudiences[p.claimId] = event.audience; break;
     case 'ObservationRecorded': state.observations[p.observationId] = p; state.observationAudiences[p.observationId] = event.audience; break;
     case 'BeliefUpdated': state.beliefs[`${p.holderId}:${p.beliefId}`] = p; break;

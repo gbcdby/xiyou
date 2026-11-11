@@ -1,0 +1,330 @@
+{
+  "schema_version": "xiyou-runtime-review-fix-self-check/v1",
+  "work_id": "vs001-p03",
+  "ticket": "https://github.com/gbcdby/xiyou/issues/6",
+  "producer": "worker-implement 作者修正与自查",
+  "outcome": "PASS_WITHIN_SCOPE",
+  "base_commit": "e32c579da3f41b131368ca2e9fca80bdb0b449fd",
+  "spec_revision": "6c2a0b9f6d137ad5fbd41721659404333ad8e16d",
+  "source": {
+    "commit": "8daac7cb50075a9c43317d3c193f0effed4acc7b",
+    "tree": "eabc52e78923bed88e6b38a1372cf6a9ae9e5218",
+    "manifest": "source-manifest.json",
+    "aggregate_sha256": "3680283a4c0d776ec391304f4b545f69d7bcb9779032e9f904757640c6b6edc9"
+  },
+  "environment": "environment.json",
+  "findings": [
+    {
+      "id": "R-vs001-p03-REQ-001",
+      "axis": "requirements",
+      "status": "FIX_REPORTED",
+      "modules": [
+        "backend/runtime.mjs"
+      ],
+      "tests": [
+        "REQ-001：迟到的接管副作用不能断开重新获权的真实连接",
+        "REQ-001：同一连接的迟到接管回调不能回退视图代次",
+        "REQ-001 邻近回归：迟到回调不能恢复撤权或终局控制",
+        "REQ-001 邻近回归：旧事务只撤原订阅，不撤换绑后新建的只读视图"
+      ]
+    },
+    {
+      "id": "R-vs001-p03-STD-001",
+      "axis": "standards",
+      "status": "FIX_REPORTED",
+      "modules": [
+        "backend/runtime.mjs",
+        "backend/decisions.mjs"
+      ],
+      "tests": [
+        "STD-001：提交后响应故障仍须拒绝真人同 ID 的异载荷",
+        "STD-001：内部意图恢复也绑定完整包摘要，fallback 原键恢复保持幂等"
+      ]
+    },
+    {
+      "id": "R-vs001-p03-STD-002",
+      "axis": "standards",
+      "status": "FIX_REPORTED",
+      "modules": [
+        "game/records.mjs",
+        "game/rules.mjs",
+        "game/projection.mjs",
+        "game/world.mjs",
+        "backend/runtime.mjs",
+        "backend/decisions.mjs"
+      ],
+      "tests": [
+        "STD-002：合法但不存在的原型属性名经真实网络得到持久目标拒绝",
+        "STD-002：合法同名自有角色与物品仍可观察，不把继承目标当真实对象"
+      ]
+    },
+    {
+      "id": "R-vs001-p03-STD-003",
+      "axis": "standards",
+      "status": "FIX_REPORTED",
+      "modules": [
+        "backend/runtime.mjs"
+      ],
+      "tests": [
+        "STD-003：断开的只读订阅及时释放句柄，无需关闭整个运行层",
+        "STD-003：换订阅会停止在途旧批次，旧任务不能撤销新视图"
+      ]
+    },
+    {
+      "id": "R-vs001-p03-STD-004",
+      "axis": "standards",
+      "status": "FIX_REPORTED",
+      "modules": [
+        "backend/errors.mjs"
+      ],
+      "tests": [
+        "STD-004：长未知字段的真实 ACK 保持有效且有界的协议错误",
+        "STD-004：错误正文按码点保留边界并修复不完整代理对"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "id": "backend",
+      "command": "npm run test:backend",
+      "status": "PASS",
+      "exit_code": 0,
+      "tests": 38,
+      "passed": 38,
+      "failed": 0,
+      "output": "raw/final-backend.txt"
+    },
+    {
+      "id": "protocol",
+      "command": "npm run test:protocol",
+      "status": "PASS",
+      "exit_code": 0,
+      "tests": 21,
+      "passed": 21,
+      "failed": 0,
+      "output": "raw/final-protocol.txt"
+    },
+    {
+      "id": "content",
+      "command": "npm run test:content",
+      "status": "PASS",
+      "exit_code": 0,
+      "tests": 8,
+      "passed": 8,
+      "failed": 0,
+      "output": "raw/final-content.txt"
+    },
+    {
+      "id": "static",
+      "command": "两份 Schema 生成一致性、两项独立 Python Schema/摘要检查、git diff --check",
+      "status": "PASS",
+      "exit_code": 0,
+      "output": "raw/final-static.txt"
+    },
+    {
+      "id": "review-diagnostic",
+      "command": "node --expose-gc --test --test-reporter=tap backend/tests/review-fixes.test.mjs",
+      "status": "PASS",
+      "exit_code": 0,
+      "tests": 12,
+      "passed": 12,
+      "failed": 0,
+      "output": "raw/review-suite-diagnostic.txt"
+    },
+    {
+      "id": "full-diagnostic",
+      "command": "node --expose-gc --test --test-reporter=tap backend/tests/*.test.mjs",
+      "status": "PASS",
+      "exit_code": 0,
+      "tests": 38,
+      "passed": 38,
+      "failed": 0,
+      "output": "raw/full-suite-diagnostic.txt"
+    },
+    {
+      "id": "freeze",
+      "command": "固定源码和原始日志摘要、旧证据、链接、JSON、语法、冻结输入与进程收束",
+      "status": "PASS",
+      "exit_code": 0,
+      "output": "raw/freeze-check.txt"
+    }
+  ],
+  "tdd_runs": [
+    {
+      "finding_id": "R-vs001-p03-REQ-001",
+      "red": {
+        "status": "EXPECTED_FAIL",
+        "exit_code": 1,
+        "failed": 2,
+        "output": "tdd/01-control-red.txt"
+      },
+      "green": {
+        "status": "PASS",
+        "exit_code": 0,
+        "passed": 2,
+        "output": "tdd/01-control-green.txt"
+      }
+    },
+    {
+      "finding_id": "R-vs001-p03-STD-001",
+      "red": {
+        "status": "EXPECTED_FAIL",
+        "exit_code": 1,
+        "failed": 2,
+        "output": "tdd/02-receipt-red.txt"
+      },
+      "green": {
+        "status": "PASS",
+        "exit_code": 0,
+        "passed": 2,
+        "output": "tdd/02-receipt-green.txt"
+      }
+    },
+    {
+      "finding_id": "R-vs001-p03-STD-002",
+      "red": {
+        "status": "EXPECTED_FAIL",
+        "exit_code": 1,
+        "failed": 2,
+        "output": "tdd/03-own-record-red.txt"
+      },
+      "green": {
+        "status": "PASS",
+        "exit_code": 0,
+        "passed": 2,
+        "output": "tdd/03-own-record-green.txt"
+      }
+    },
+    {
+      "finding_id": "R-vs001-p03-STD-003",
+      "red": {
+        "status": "EXPECTED_FAIL",
+        "exit_code": 1,
+        "failed": 2,
+        "output": "tdd/04-view-lifecycle-red.txt"
+      },
+      "green": {
+        "status": "PASS",
+        "exit_code": 0,
+        "passed": 6,
+        "output": "tdd/04-view-lifecycle-green.txt"
+      }
+    },
+    {
+      "finding_id": "R-vs001-p03-STD-004",
+      "red": {
+        "status": "EXPECTED_FAIL",
+        "exit_code": 1,
+        "failed": 2,
+        "output": "tdd/05-error-envelope-red.txt"
+      },
+      "green": {
+        "status": "PASS",
+        "exit_code": 0,
+        "passed": 2,
+        "output": "tdd/05-error-envelope-green.txt"
+      }
+    }
+  ],
+  "raw_artifacts": [
+    {
+      "path": "backend/evidence/review-fix-r1/tdd/01-control-green.txt",
+      "sha256": "4eedb58f4b7c3ea7c042596eb370c53d48861b571c9d473c25c1b3c771758ac8"
+    },
+    {
+      "path": "backend/evidence/review-fix-r1/tdd/01-control-neighbors.txt",
+      "sha256": "2c1dc2fefe9207c8af68bcae151fdbddf247102f3aa72f4f04a03f79132eefe1"
+    },
+    {
+      "path": "backend/evidence/review-fix-r1/tdd/01-control-red.txt",
+      "sha256": "f96cc8f94526c9615b32caf8e4ed66118b211ff5289ca019cde1a2a191943396"
+    },
+    {
+      "path": "backend/evidence/review-fix-r1/tdd/02-receipt-green.txt",
+      "sha256": "1606796edd94959fed3e0aa72c2c8e02d06ca36ea6e9af3805d0930ec6872603"
+    },
+    {
+      "path": "backend/evidence/review-fix-r1/tdd/02-receipt-red.txt",
+      "sha256": "30daf81110d7af3b1a8cf57ce1f34ca23c031e1a2ec0cedca84dded45f44a63e"
+    },
+    {
+      "path": "backend/evidence/review-fix-r1/tdd/03-own-record-green.txt",
+      "sha256": "2dbe86b80c355d11c79f07e7f66de7e0495871a363aded573124961cf716d49d"
+    },
+    {
+      "path": "backend/evidence/review-fix-r1/tdd/03-own-record-red.txt",
+      "sha256": "9cdab18fd1b87e264b4ee17ba02d245b6e417755b303253b0a5296b244c2b42c"
+    },
+    {
+      "path": "backend/evidence/review-fix-r1/tdd/04-view-lifecycle-green.txt",
+      "sha256": "3d0ce7085cd925f118495f6d0fc33c1246e9f2e6654f96935e1e0cc362b5b3dc"
+    },
+    {
+      "path": "backend/evidence/review-fix-r1/tdd/04-view-lifecycle-red.txt",
+      "sha256": "bfee5438f8eceb837ab7512128a27e5240d0d1c157c5bc877ae42f5a0bca4de3"
+    },
+    {
+      "path": "backend/evidence/review-fix-r1/tdd/05-error-envelope-green.txt",
+      "sha256": "a0cb77ed034eae8d1119bc92864220ec4d0e7ba82ef82be05494534998f8ca72"
+    },
+    {
+      "path": "backend/evidence/review-fix-r1/tdd/05-error-envelope-red.txt",
+      "sha256": "952e396da744b195483e28381bb9674f63b809c77cc6a885717e153641493679"
+    },
+    {
+      "path": "backend/evidence/review-fix-r1/raw/final-backend-first-attempt.txt",
+      "sha256": "841380c691fdcffffaf16bb410b552bb4163d6af578f8bbb6425bc57c77bf1f2"
+    },
+    {
+      "path": "backend/evidence/review-fix-r1/raw/final-backend.txt",
+      "sha256": "defed3988cf5133a847ef70574a90ba93deb6f7e052bec702d65c6a92bfc5863"
+    },
+    {
+      "path": "backend/evidence/review-fix-r1/raw/final-content.txt",
+      "sha256": "c09ed1a0fb88fff3495ebb7f5068d8fc28764ba698fef0fc3a5b091c773fb780"
+    },
+    {
+      "path": "backend/evidence/review-fix-r1/raw/final-protocol.txt",
+      "sha256": "753459323fa65c068961b99af98060a78be3b744c876503bea5f7e22a6c881f3"
+    },
+    {
+      "path": "backend/evidence/review-fix-r1/raw/final-static.txt",
+      "sha256": "9045c7669d1a932e0d8a03ff743983d00942df0b59ec7a2f89d96d487314558b"
+    },
+    {
+      "path": "backend/evidence/review-fix-r1/raw/full-suite-diagnostic.txt",
+      "sha256": "9b27f4e72908bb0e0e2e0df5de0c83f68e41f9802d50676810b0861860e19896"
+    },
+    {
+      "path": "backend/evidence/review-fix-r1/raw/review-suite-diagnostic.txt",
+      "sha256": "1a1a76cfdc80e0a178654a73958341b50817626329ebdc247263037e05a6b4d9"
+    },
+    {
+      "path": "backend/evidence/review-fix-r1/raw/freeze-check.txt",
+      "sha256": "ea8f55b99b1f5f41c5a555c58af1146dc06633a5a719e326db39753c64eb5b93"
+    }
+  ],
+  "historical_runner_failure": {
+    "status": "ROOT_CAUSE_UNDETERMINED",
+    "output": "raw/final-backend-first-attempt.txt",
+    "exit_code": 1,
+    "tests": 39,
+    "passed": 38,
+    "failed": 1,
+    "observation": "所有 38 个行为检查通过；Node 测试文件级汇总另报 test failed，原输出没有退出码或信号细节。随后未改业务或测试源码的单文件、全套 TAP、原 npm 命令均通过；不把首次失败称为已定位或已修复。",
+    "if_repeated": "同时记录 spec 与 TAP，或捕获 details.error.exitCode / signal；不靠重复绿灯补造根因。"
+  },
+  "historical_evidence": {
+    "commit": "e32c579da3f41b131368ca2e9fca80bdb0b449fd",
+    "path": "../implementation-result.md",
+    "relation": "background",
+    "statement": "原始 e32c579 作者证据逐字节保留；首次独立审查的反例仍属于该旧候选，不用旧 26 项绿灯反驳。"
+  },
+  "not_covered": [
+    "五项 finding 的独立增量复审尚未执行；作者状态只是 FIX_REPORTED。",
+    "未执行新的 TLC 或源码 refinement 证明。",
+    "未执行最新前端联合验收、五客户端 900 秒、真实模型、NPC 自主性或真人体验。",
+    "没有新增压力、性能 SLO、宿主机或数据库自身断电覆盖。"
+  ],
+  "next_action": "由总控以最终固定候选安排需求／标准增量复审；复审 VERIFIED 前不释放后续联调或 #9。"
+}

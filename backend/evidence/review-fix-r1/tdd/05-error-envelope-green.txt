@@ -1,0 +1,10 @@
+✔ STD-004：长未知字段的真实 ACK 保持有效且有界的协议错误 (1477.649971ms)
+✔ STD-004：错误正文按码点保留边界并修复不完整代理对 (1.233285ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1772.989898

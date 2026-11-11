@@ -4,11 +4,12 @@ import { applyAction, RuleError } from '../game/rules.mjs';
 import { increment, audienceFor } from '../game/world.mjs';
 import { authorizedProjection, visibleItem } from '../game/projection.mjs';
 import { RuntimeError } from './errors.mjs';
+import { ownRecord } from '../game/records.mjs';
 
 const currentMode = principal => principal.principalKind === 'core_npc' ? 'CoreNPCControlled' : 'AIProxyControlled';
 const entity = (state, key) => {
   const colon = key.indexOf(':'); const kind = key.slice(0, colon); const id = key.slice(colon + 1);
-  return { kind, id, value: ({ item: state.items, target: state.targets, character: state.characters, belief: state.beliefs, goal: state.goals })[kind]?.[id] };
+  return { kind, id, value: ownRecord(ownRecord({ item: state.items, target: state.targets, character: state.characters, belief: state.beliefs, goal: state.goals }, kind), id) };
 };
 const version = value => value?.resourceRevision ?? value?.revision;
 async function readDecision(tx, principal, decisionId) {
@@ -24,7 +25,7 @@ export async function prepareDecision(runtime, handle, options = {}) {
   return runtime.locked(principal.sessionId, { kind: 'prepare-decision' }, async tx => {
     await runtime.authorizeInternal(tx, principal);
     await runtime.deadline(tx);
-    const actor = tx.state.characters[principal.actorId];
+    const actor = ownRecord(tx.state.characters, principal.actorId);
     if (tx.state.phase !== 'Running' || actor?.mode !== currentMode(principal)) return new RuntimeError('FORBIDDEN', '该角色当前不能创建新决策。');
     const projection = authorizedProjection(tx.state, tx.content, principal.actorId, { principalKind: principal.principalKind });
     const observationIds = options.observationIds ?? projection.observations.slice(-256).map(o => o.observationId);
@@ -75,11 +76,12 @@ export async function submitIntent(runtime, handle, decisionId, raw) {
   let intent;
   try { intent = parseProposedIntent(raw, decisionId); }
   catch (error) { await settleDecision(runtime, handle, decisionId, 'Rejected'); throw error; }
+  const semanticDigest = intentSemanticDigestSync(intent);
   return runtime.confirmOutcome(() => runtime.locked(principal.sessionId, { kind: 'intent' }, async tx => {
     await runtime.authorizeInternal(tx, principal);
     const record = await readDecision(tx, principal, decisionId);
     const request = { schemaVersion: 1, sessionId: principal.sessionId, actorId: principal.actorId, clientActionId: `${decisionId}:submit`, controlEpoch: record.controlEpoch, baseSeq: '0' };
-    const receipt = await runtime.executeAction(tx, request, intentSemanticDigestSync(intent), principal, async actor => actor.mode === currentMode(principal), {
+    const receipt = await runtime.executeAction(tx, request, semanticDigest, principal, async actor => actor.mode === currentMode(principal), {
       decisionId, authorizationCode: 'DECISION_STALE',
       async validate() {
         if (record.status === 'Expired' || (record.status === 'Pending' && tx.time >= record.deadlineAt)) throw new RuleError('DECISION_EXPIRED');
@@ -102,8 +104,8 @@ export async function submitIntent(runtime, handle, decisionId, raw) {
         }
         for (const proposal of intent.beliefUpdates ?? []) {
           const audienceKey = principal.principalKind === 'core_npc' ? 'coreNpcCharacterIds' : 'proxyCharacterIds';
-          if (!proposal.basedOnObservationIds.every(id => record.observationIds.includes(id) && tx.state.observations[id]?.observerId === principal.actorId && tx.state.observationAudiences[id][audienceKey].includes(principal.actorId))) throw new RuleError('RULE_VIOLATION');
-          const old = tx.state.beliefs[`${principal.actorId}:${proposal.beliefId}`];
+          if (!proposal.basedOnObservationIds.every(id => record.observationIds.includes(id) && ownRecord(tx.state.observations, id)?.observerId === principal.actorId && ownRecord(tx.state.observationAudiences, id)?.[audienceKey].includes(principal.actorId))) throw new RuleError('RULE_VIOLATION');
+          const old = ownRecord(tx.state.beliefs, `${principal.actorId}:${proposal.beliefId}`);
           tx.emit('BeliefUpdated', { ...proposal, holderId: principal.actorId, revision: old ? increment(old.revision) : '0' }, audienceFor(tx.state, [principal.actorId]));
         }
       },
@@ -111,19 +113,21 @@ export async function submitIntent(runtime, handle, decisionId, raw) {
     const status = receipt.status === 'Accepted' ? 'Committed' : receipt.code === 'DECISION_EXPIRED' ? 'Expired' : 'Rejected';
     await tx.client.query("UPDATE decisions SET record=jsonb_set(record,'{status}',to_jsonb($3::text)) WHERE session_id=$1 AND decision_id=$2 AND record->>'status'='Pending'", [principal.sessionId, decisionId, status]);
     return receipt;
-  }), () => runtime.internalReceipt(handle, `${decisionId}:submit`));
+  }), () => runtime.internalReceipt(handle, `${decisionId}:submit`), () => semanticDigest);
 }
 
 /** 受限等待是独立系统命令；调度器是否再请求模型由 #9 决定。 */
 export async function submitFallback(runtime, handle, decisionId) {
   const principal = runtime.internal(handle);
+  let semanticDigest;
   return runtime.confirmOutcome(() => runtime.locked(principal.sessionId, { kind: 'fallback' }, async tx => {
     await runtime.authorizeInternal(tx, principal);
     const record = await readDecision(tx, principal, decisionId);
     const request = { schemaVersion: 1, sessionId: principal.sessionId, actorId: principal.actorId, clientActionId: `${decisionId}:fallback`, controlEpoch: record.controlEpoch, baseSeq: '0', action: { kind: 'wait' } };
-    return runtime.executeAction(tx, request, actionSemanticDigestSync(request), { ...principal, principalId: 'system' }, async actor => actor.mode === currentMode(principal), {
+    semanticDigest = actionSemanticDigestSync(request);
+    return runtime.executeAction(tx, request, semanticDigest, { ...principal, principalId: 'system' }, async actor => actor.mode === currentMode(principal), {
       decisionId,
       validate() { if (!['Expired', 'Rejected'].includes(record.status)) throw new RuleError('DECISION_STALE'); },
     });
-  }), () => runtime.internalReceipt(handle, `${decisionId}:fallback`, true));
+  }), () => runtime.internalReceipt(handle, `${decisionId}:fallback`, true), () => semanticDigest);
 }
