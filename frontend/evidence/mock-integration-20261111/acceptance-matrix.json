@@ -1,0 +1,89 @@
+{
+  "acceptanceProfile": "mock-20261111",
+  "executionCandidate": "fa87e221aa1e48cb19eeecc1beafcb83c0a7a21a",
+  "executionAssessment": "PASS",
+  "finalReviewAssessment": "PASS",
+  "items": [
+    {
+      "id": "VER-01",
+      "scope": "有限模型、严格契约、源码对应",
+      "evidence": "新core84项是20正向/64预期反例；原#7模型按精确子树继承；协议23项和真实后端检查，独立IM-01至10源码对应另附。",
+      "executionStatus": "PASS",
+      "requirementsAssessment": "PASS_WITHIN_SCOPE"
+    },
+    {
+      "id": "VER-02",
+      "scope": "五身份实际900秒",
+      "evidence": "900907.627508ms；25个同游标检查点，每点5份授权视图比较；410连续事件；8个职责窗口/40次真实合法操作。",
+      "executionStatus": "PASS",
+      "requirementsAssessment": "PASS_WITHIN_SCOPE"
+    },
+    {
+      "id": "VER-03",
+      "scope": "恢复、未知结果与联合故障",
+      "evidence": "同候选真实丢包/乱序/重叠/重连/30秒Grace/接管；联合专例保留同ID同字节两次发送、一次效果、旧AI DECISION_STALE。专例受控31秒不计900秒。",
+      "executionStatus": "PASS",
+      "requirementsAssessment": "PASS_WITHIN_SCOPE"
+    },
+    {
+      "id": "VER-04",
+      "scope": "受控单AI完整链",
+      "evidence": "实际106项后端检查中的Gateway/原文持久/非法/超时/取消/Unknown/进程崩溃恢复；0外部模型调用。",
+      "executionStatus": "PASS",
+      "requirementsAssessment": "PASS_WITHIN_SCOPE"
+    },
+    {
+      "id": "VER-05",
+      "scope": "受控双角色",
+      "evidence": "12项针对性行为回归、两组证据变化、不同知识/分歧/拒绝；作者默认60016.968272ms窗口按同源范围继承，9调用、0新增玩家动作；原两finding需求复核VERIFIED，标准PASS。",
+      "executionStatus": "PASS",
+      "requirementsAssessment": "PASS_WITHIN_SCOPE"
+    },
+    {
+      "id": "VER-06",
+      "scope": "人数、五职责与四条结局",
+      "evidence": "2/3/4/5装配；五人查证通行19个AI决定；两人备用材料和调查未齐各10决定；超时未解决专例；五人10项贡献均有真实下游。3/4装配样本人工终止，不算自然结局。",
+      "executionStatus": "PASS",
+      "requirementsAssessment": "PASS_WITHIN_SCOPE"
+    },
+    {
+      "id": "VER-07",
+      "scope": "授权因果复盘",
+      "evidence": "完整局Action/Receipt/Event/Observation/Decision链；逐人历史受众校验；当前浏览器15项与2图，含Claim A→C→B、113条两页、撤权、迟到与只读。",
+      "executionStatus": "PASS",
+      "requirementsAssessment": "PASS_WITHIN_SCOPE"
+    },
+    {
+      "id": "VER-08",
+      "scope": "同候选证据与最终独立审查",
+      "evidence": "同一119输入的实际执行与独立两轴PASS均已固定；原报告按各自身份归档。执行后仅增加证据及四份入口说明，业务和测试不变。",
+      "executionStatus": "PASS",
+      "requirementsAssessment": "PASS_WITHIN_SCOPE"
+    }
+  ],
+  "notRequired": {
+    "actualState": "NOT_RUN",
+    "scopes": [
+      "真实供应商质量",
+      "真人乐趣及理解难度",
+      "真实设备",
+      "公网部署"
+    ]
+  },
+  "finalReviews": [
+    {
+      "axis": "requirements",
+      "reviewer": "/root/mock_ui_requirements",
+      "assessment": "PASS",
+      "executionCandidate": "fa87e221aa1e48cb19eeecc1beafcb83c0a7a21a",
+      "report": "reviews/final-requirements-review/review-result.json"
+    },
+    {
+      "axis": "standards",
+      "reviewer": "/root/network_standards",
+      "assessment": "PASS",
+      "executionCandidate": "fa87e221aa1e48cb19eeecc1beafcb83c0a7a21a",
+      "report": "reviews/final-standards-review/review-r1.json"
+    }
+  ]
+}

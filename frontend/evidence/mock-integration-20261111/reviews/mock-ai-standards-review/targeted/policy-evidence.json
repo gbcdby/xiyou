@@ -1,0 +1,1615 @@
+{
+  "acceptanceProfile": "mock-20261111",
+  "input": "新建合成身份与标准内容，经实际 Runtime 取得 Gateway 输入；没有模型外部调用",
+  "clock": "real",
+  "policies": {
+    "tangseng": {
+      "providerId": "controlled-tangseng",
+      "modelId": "tangseng-safety-v2",
+      "policyVersion": "tangseng-safety-v2"
+    },
+    "wukong": {
+      "providerId": "controlled-wukong",
+      "modelId": "wukong-inspection-v2",
+      "policyVersion": "wukong-inspection-v2"
+    }
+  },
+  "proposals": [
+    {
+      "actorId": "wukong",
+      "sessionId": "S-12272ac1-f0ca-43bf-bb28-b068ac346a06",
+      "decisionId": "D-9666fcdf-b242-4b57-a776-ca773600bc4b",
+      "inputDigest": "b99095a3b8db5466eda2122b00d87c3289da627ed0816957d6eb717faf88681c",
+      "contextDigest": "227729d90fd8bace79060afd545c8750fcc6e467744e957661265315d32d4976",
+      "outputDigest": "84c1dc01aa56134ba103719844ef8b9851b4d4d44eb0ceec9e8ddf1237ccfd76",
+      "semanticDigest": "d25e3e62e04ca26dd8bf2458b5a324d7b0c408ed3a8702c47ba99760cb6b12a1",
+      "observationIds": [
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O14",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O20"
+      ],
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我按当前可见的出口 store 前往核验或通行，实际效果仍由通路规则决定。"
+        },
+        {
+          "kind": "move",
+          "regionId": "store"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "first": "24",
+          "last": "27"
+        },
+        "semanticDigest": "d25e3e62e04ca26dd8bf2458b5a324d7b0c408ed3a8702c47ba99760cb6b12a1"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-12272ac1-f0ca-43bf-bb28-b068ac346a06",
+      "decisionId": "D-f3ced697-c5cf-46a8-9894-5c768d7e2a5d",
+      "inputDigest": "294db15de6ced65d5212ef13261aeed8e77b86c684b41cd68531872db4c739a1",
+      "contextDigest": "318e401d2aa519f5aec04bce4f269371a972593d223f2573c5510c9293ac6fe3",
+      "outputDigest": "8b3de9e31d16c756623b8c1ae8a373829070568ba7031db9e5934095f61b272d",
+      "semanticDigest": "a390ead245ad6734d5eae0884681842a2b20b797c4be2cd9a07e45b9bd65d3ca",
+      "observationIds": [
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O14",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O20",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O25",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O30"
+      ],
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我按当前可见的出口 side_path 前往核验或通行，实际效果仍由通路规则决定。"
+        },
+        {
+          "kind": "move",
+          "regionId": "side_path"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "first": "34",
+          "last": "38"
+        },
+        "semanticDigest": "a390ead245ad6734d5eae0884681842a2b20b797c4be2cd9a07e45b9bd65d3ca"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-12272ac1-f0ca-43bf-bb28-b068ac346a06",
+      "decisionId": "D-b5e12446-5e6a-4214-bccd-aa3da389f926",
+      "inputDigest": "effde4160605002df3a4708117e8fd034560dc2579cc35eb50052e5d76b5bbfd",
+      "contextDigest": "0cf6d4ef0923ffbd5885ba16be58c82c5b7aaaa464639ace5caf8d3bebd0adec",
+      "outputDigest": "47aa3f16f53fa64f7444b69b2338d2383e6512fe33766f0fc1c2444eda61163b",
+      "semanticDigest": "888806a875e0dd6a04b7820eeba7583b8470bf479dfa74c7f13b558f81fe330b",
+      "observationIds": [
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O14",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O20",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O25",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O30",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O35"
+      ],
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我先亲自检查原材料，查找材料和现场来源；仅凭口头说法不能定责。我不会替玩家最终修复。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "original_material"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "first": "39",
+          "last": "41"
+        },
+        "semanticDigest": "888806a875e0dd6a04b7820eeba7583b8470bf479dfa74c7f13b558f81fe330b"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-12272ac1-f0ca-43bf-bb28-b068ac346a06",
+      "decisionId": "D-c3a26951-e759-4d54-919a-df184c09537f",
+      "inputDigest": "6c6525f4770389d5ae0e773a861357dfd296159b039558a1d9def69fef876047",
+      "contextDigest": "e3651a7814881b5e53c0eef5d152f1e09ab88aaeed5237c796642e07c57d652b",
+      "outputDigest": "4b74667aa0e3fd77b794de60b6a0c5c184e264355b0c3e9677229cc5720d5226",
+      "semanticDigest": "a4b4e68e1877da0a488f898129878d2cd6b2f15547043f7fb9b4935f6236a166",
+      "observationIds": [
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O14",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O20",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O25",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O30",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O35",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O40",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O41"
+      ],
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我先亲自检查临时存放处，查找材料和现场来源；仅凭口头说法不能定责。我不会替玩家最终修复。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "material_cache"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "first": "42",
+          "last": "45"
+        },
+        "semanticDigest": "a4b4e68e1877da0a488f898129878d2cd6b2f15547043f7fb9b4935f6236a166"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-12272ac1-f0ca-43bf-bb28-b068ac346a06",
+      "decisionId": "D-1d3afe26-0b58-4e7b-a089-e1736583fefd",
+      "inputDigest": "52ada5aba5d54ee60172f61b0fc8c78a2a13072efec4e2972075bd37af10cdaf",
+      "contextDigest": "b9d115dd81b3a96b78f5e99c249ec0a8ae8315f4f18b82e67ed9352c18c181f6",
+      "outputDigest": "494ed5e9cd13c7ff5db331e541486a500ab5b5e0b73154b6aeabd11b99d3e1c0",
+      "semanticDigest": "df9931d59569b8f7f442b6321c50b830455970861c6853132bafa029ed9d375a",
+      "observationIds": [
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O14",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O20",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O25",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O30",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O35",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O40",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O41",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O43",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O44",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O45"
+      ],
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "此处可见现场已检查。请把登记、痕迹等原来源分享过来，或明确一个当前可见出口，我再前往核验；不凭转述定责。"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "first": "47",
+          "last": "48"
+        },
+        "semanticDigest": "df9931d59569b8f7f442b6321c50b830455970861c6853132bafa029ed9d375a"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-12272ac1-f0ca-43bf-bb28-b068ac346a06",
+      "decisionId": "D-5d96e33c-7850-4e1f-b514-8a8758c18112",
+      "inputDigest": "14e438dd6d8a68b4b11e414465b79c7d69ccdde796929b35304151aca4226123",
+      "contextDigest": "0b1623ebeb1360aa890ee4ef9aa5fb9ee973e8f2bf8aaafcc1ef0c6bb4bf5c89",
+      "outputDigest": "50f4a199338853661f99e267e565e7bda9193d18129548f12817cd1e7c2a3c14",
+      "semanticDigest": "50f4a199338853661f99e267e565e7bda9193d18129548f12817cd1e7c2a3c14",
+      "observationIds": [
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O14",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O20",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O25",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O30",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O35",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O40",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O41",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O43",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O44",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O45",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O48"
+      ],
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "actionEventRange": null,
+        "semanticDigest": "50f4a199338853661f99e267e565e7bda9193d18129548f12817cd1e7c2a3c14"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-12272ac1-f0ca-43bf-bb28-b068ac346a06",
+      "decisionId": "D-3eba712a-910c-4383-870d-600549ceeb67",
+      "inputDigest": "2735195dda2297f0fc976b8e08e284aa974eacdad61d5f72decbf2e047a67a5a",
+      "contextDigest": "b4e5715b26e6b693d4bd8d36674d603f94af125a0bc2c552b636e11b062cf189",
+      "outputDigest": "10fa94446f108bc22e728fa4957f8ada085f5ac2636d9de9b14fae7bdef5babe",
+      "semanticDigest": "10fa94446f108bc22e728fa4957f8ada085f5ac2636d9de9b14fae7bdef5babe",
+      "observationIds": [
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O14",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O20",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O25",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O30",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O35",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O40",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O41",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O43",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O44",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O45",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O48"
+      ],
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "actionEventRange": null,
+        "semanticDigest": "10fa94446f108bc22e728fa4957f8ada085f5ac2636d9de9b14fae7bdef5babe"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-12272ac1-f0ca-43bf-bb28-b068ac346a06",
+      "decisionId": "D-d88ef773-3284-44ef-b7a5-11d339b8456b",
+      "inputDigest": "f5efbe80a2f4638050d156b3de212d2c0785b3b3b74e1d9cef2a1ebcadd909cc",
+      "contextDigest": "9f8ff4eced1d510b1a4c932042ab360e1c647bee53b0f19916448904f52f2759",
+      "outputDigest": "60c5c83cbd9957344a721e1383cf16ff3e61b0e3317cd0013d4d3958030914c0",
+      "semanticDigest": "60c5c83cbd9957344a721e1383cf16ff3e61b0e3317cd0013d4d3958030914c0",
+      "observationIds": [
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O14",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O20",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O25",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O30",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O35",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O40",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O41",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O43",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O44",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O45",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O48"
+      ],
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "actionEventRange": null,
+        "semanticDigest": "60c5c83cbd9957344a721e1383cf16ff3e61b0e3317cd0013d4d3958030914c0"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-12272ac1-f0ca-43bf-bb28-b068ac346a06",
+      "decisionId": "D-f8b28de1-b3d1-4f28-91e0-f4039cde9eb1",
+      "inputDigest": "c61536a77121b4e1db5cf512e61c90ad1a4a058ab65721fd02a4963352f72d23",
+      "contextDigest": "8d66b49637f69c999314fed517c3bb7e31ddbf432b3ebc95648ac680e61a5986",
+      "outputDigest": "4bb4d875e4702ed786970376139f091f64f9c19c33bcb8c5855c95d08d3f9768",
+      "semanticDigest": "4bb4d875e4702ed786970376139f091f64f9c19c33bcb8c5855c95d08d3f9768",
+      "observationIds": [
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O14",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O20",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O25",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O30",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O35",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O40",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O41",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O43",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O44",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O45",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O48"
+      ],
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "actionEventRange": null,
+        "semanticDigest": "4bb4d875e4702ed786970376139f091f64f9c19c33bcb8c5855c95d08d3f9768"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-12272ac1-f0ca-43bf-bb28-b068ac346a06",
+      "decisionId": "D-2239e498-15c5-43e9-80cd-5be1a3c4fc8c",
+      "inputDigest": "4afa4786eadf2d5951d246580f138ff49aa667d4ed8e05b23bfa358589b25572",
+      "contextDigest": "f09913095ddaa2ccf888737805e14aeda9d7d2e635d7f52c3e78b70a2b342a57",
+      "outputDigest": "4ffbe7674bd10f0fa27d2c108660100e43371fc98b561f7ea665ca8030166761",
+      "semanticDigest": "4ffbe7674bd10f0fa27d2c108660100e43371fc98b561f7ea665ca8030166761",
+      "observationIds": [
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O14",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O20",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O25",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O30",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O35",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O40",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O41",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O43",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O44",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O45",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O48"
+      ],
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "actionEventRange": null,
+        "semanticDigest": "4ffbe7674bd10f0fa27d2c108660100e43371fc98b561f7ea665ca8030166761"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-12272ac1-f0ca-43bf-bb28-b068ac346a06",
+      "decisionId": "D-22fc1956-4646-46db-b543-e6db999d135c",
+      "inputDigest": "8774643417901cdbcecc1e227eaf36c4d26b2cb267abe42780688aa17a6924b9",
+      "contextDigest": "1d5223a5db793847389083f3056cec3998f03a35f6f5f04893bb3bba21793e67",
+      "outputDigest": "847b00b80617271ee1c704098071d7d14f6719c159ea0a7f12bc43321111ab8e",
+      "semanticDigest": "847b00b80617271ee1c704098071d7d14f6719c159ea0a7f12bc43321111ab8e",
+      "observationIds": [
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O14",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O20",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O25",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O30",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O35",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O40",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O41",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O43",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O44",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O45",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O48"
+      ],
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "actionEventRange": null,
+        "semanticDigest": "847b00b80617271ee1c704098071d7d14f6719c159ea0a7f12bc43321111ab8e"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-12272ac1-f0ca-43bf-bb28-b068ac346a06",
+      "decisionId": "D-c2e5d8d7-bf38-4819-8c6b-03d80ade52a4",
+      "inputDigest": "b928fae48ad6f468d3776a74c383b7f0a0897852e19cba6db16318acf62bffa6",
+      "contextDigest": "ff9358f85bcad0f5be176ab3dde394633d4ed2b0bdbfb115ea23da7736bfeb4a",
+      "outputDigest": "b52f841f88fb715e1bc081eb29d0f1fa2da764ed59fd09c93a0ccf1405ea54b8",
+      "semanticDigest": "b52f841f88fb715e1bc081eb29d0f1fa2da764ed59fd09c93a0ccf1405ea54b8",
+      "observationIds": [
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O14",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O20",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O25",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O30",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O35",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O40",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O41",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O43",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O44",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O45",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O48"
+      ],
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "actionEventRange": null,
+        "semanticDigest": "b52f841f88fb715e1bc081eb29d0f1fa2da764ed59fd09c93a0ccf1405ea54b8"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-12272ac1-f0ca-43bf-bb28-b068ac346a06",
+      "decisionId": "D-68c6f5e5-dc78-453b-abd9-55e50a292b9f",
+      "inputDigest": "3e8ebb13364f3e51b92ac9392fc556938b7a9d8bcd9d29bbc3fc4f8202ec6803",
+      "contextDigest": "213e5d58f6b8eccf4b0454cc9086b159a1638f5c338552b062486779ce8dc31e",
+      "outputDigest": "c144cbc6173c519886493f6d8b5fdb9110a551ab5bc80e56e6db7c569c95b931",
+      "semanticDigest": "c144cbc6173c519886493f6d8b5fdb9110a551ab5bc80e56e6db7c569c95b931",
+      "observationIds": [
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O14",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O20",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O25",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O30",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O35",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O40",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O41",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O43",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O44",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O45",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O48"
+      ],
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "actionEventRange": null,
+        "semanticDigest": "c144cbc6173c519886493f6d8b5fdb9110a551ab5bc80e56e6db7c569c95b931"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-12272ac1-f0ca-43bf-bb28-b068ac346a06",
+      "decisionId": "D-b222755d-569b-4468-aad4-beeda898b651",
+      "inputDigest": "e79e9cbc815d956accf9c7b3ffbd69770b7f265f51b350204cda1c1a82e1e792",
+      "contextDigest": "76a1c73327d1221bd4051e2ec6b79e78f245193ad3f01c71b117864df4aec63e",
+      "outputDigest": "448b58f32d6bdeb2ed31e327bb918d787b9a3a7706af1b8e8feca8a387134bac",
+      "semanticDigest": "448b58f32d6bdeb2ed31e327bb918d787b9a3a7706af1b8e8feca8a387134bac",
+      "observationIds": [
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O14",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O20",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O25",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O30",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O35",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O40",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O41",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O43",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O44",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O45",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O48"
+      ],
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "actionEventRange": null,
+        "semanticDigest": "448b58f32d6bdeb2ed31e327bb918d787b9a3a7706af1b8e8feca8a387134bac"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-12272ac1-f0ca-43bf-bb28-b068ac346a06",
+      "decisionId": "D-37c0df77-7d77-4760-969c-d9706698852c",
+      "inputDigest": "51fa6cd514de740108cc83ffb264601fe5ef3a13173778550ea5e60d1d40fc1c",
+      "contextDigest": "92c223146ea4b400b54d31f3d367301cdc96056b4d03432face561734509a58b",
+      "outputDigest": "34566d507f60e86dfe27f22690709bca97213446af02277fa41e4189952047a5",
+      "semanticDigest": "34566d507f60e86dfe27f22690709bca97213446af02277fa41e4189952047a5",
+      "observationIds": [
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O14",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O20",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O25",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O30",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O35",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O40",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O41",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O43",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O44",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O45",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O48"
+      ],
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "actionEventRange": null,
+        "semanticDigest": "34566d507f60e86dfe27f22690709bca97213446af02277fa41e4189952047a5"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-12272ac1-f0ca-43bf-bb28-b068ac346a06",
+      "decisionId": "D-5e052c1b-c134-4ec3-87f5-7643d27e6008",
+      "inputDigest": "f0daaccb6e5c9c3683d67cdd7ae89565c1a4390782cf371f30bc7aef42f7c3f5",
+      "contextDigest": "1e5bc510deb9b5444abe1f1ec7e98b01a7c015493c7b2385ce64e74fa63f5449",
+      "outputDigest": "a6c1313c4928a9ad4536a2d15db0086fdbd087446b2a04644011d69b7d0b2cfd",
+      "semanticDigest": "a6c1313c4928a9ad4536a2d15db0086fdbd087446b2a04644011d69b7d0b2cfd",
+      "observationIds": [
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O14",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O20",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O25",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O30",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O35",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O40",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O41",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O43",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O44",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O45",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O48"
+      ],
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "actionEventRange": null,
+        "semanticDigest": "a6c1313c4928a9ad4536a2d15db0086fdbd087446b2a04644011d69b7d0b2cfd"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-12272ac1-f0ca-43bf-bb28-b068ac346a06",
+      "decisionId": "D-b7bf1af8-935b-4967-883d-d75613d820f2",
+      "inputDigest": "201197ef8c0efc66ae2c46a1a337b7dd8c7f7713e875c9b2ed965acaed0e9b0a",
+      "contextDigest": "54788ffafcd863245fa5b597f307bce936317fbb08441a728d824c3320d36539",
+      "outputDigest": "242cd4adc344a4e6267ab6a014a0181f09833a4cf8687d09829da8573be89377",
+      "semanticDigest": "242cd4adc344a4e6267ab6a014a0181f09833a4cf8687d09829da8573be89377",
+      "observationIds": [
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O14",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O20",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O25",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O30",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O35",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O40",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O41",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O43",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O44",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O45",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O48"
+      ],
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "actionEventRange": null,
+        "semanticDigest": "242cd4adc344a4e6267ab6a014a0181f09833a4cf8687d09829da8573be89377"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-12272ac1-f0ca-43bf-bb28-b068ac346a06",
+      "decisionId": "D-e489b7b3-2a9b-4461-8397-102cdf4d708a",
+      "inputDigest": "20d72a952c8839bf58b0e9db833273b0cb47f0eb75ab17afac78c9c52b9b909d",
+      "contextDigest": "f47265c96cdb2f785efe1029cbb561ba44e9ec729eebdaf810e1c1978eb3591a",
+      "outputDigest": "c4f9572d70cfbda957215746bd23d520a66a0125c40a0b9fd8ee2a8edd1b385c",
+      "semanticDigest": "c4f9572d70cfbda957215746bd23d520a66a0125c40a0b9fd8ee2a8edd1b385c",
+      "observationIds": [
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O14",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O20",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O25",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O30",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O35",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O40",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O41",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O43",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O44",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O45",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O48"
+      ],
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "actionEventRange": null,
+        "semanticDigest": "c4f9572d70cfbda957215746bd23d520a66a0125c40a0b9fd8ee2a8edd1b385c"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-12272ac1-f0ca-43bf-bb28-b068ac346a06",
+      "decisionId": "D-206cd884-bdfe-4a26-a75e-efb79a86232b",
+      "inputDigest": "5c8cf9e26785d36ead969cf181ec515053e69555502076110f54cabff3f14c05",
+      "contextDigest": "a4a65d737acccaeb92f66aaa647747693a872d359127a141854e8f1a0b021cfc",
+      "outputDigest": "dcde02ad0f3e5086216e58ffb308bc4605c12a89edad3c7bc4751d4555997a42",
+      "semanticDigest": "dcde02ad0f3e5086216e58ffb308bc4605c12a89edad3c7bc4751d4555997a42",
+      "observationIds": [
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O14",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O20",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O25",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O30",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O35",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O40",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O41",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O43",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O44",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O45",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O48"
+      ],
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "actionEventRange": null,
+        "semanticDigest": "dcde02ad0f3e5086216e58ffb308bc4605c12a89edad3c7bc4751d4555997a42"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-12272ac1-f0ca-43bf-bb28-b068ac346a06",
+      "decisionId": "D-a0c308cb-a813-4e5f-87aa-b10afacbb82f",
+      "inputDigest": "0ff38f60b6b7cda793b4e627e6780ea26ee525467702d3a7a6cb7f34c1dbd9a8",
+      "contextDigest": "ff5712d35bfe85ab7f7ab6e26ed2d0f8fd3f6ce141f04899f8a1e0a106c3cda5",
+      "outputDigest": "42e38dabac9e595ac1d7c2b22d64b38d7daa5f655bddfb18383c7fea2fcd3da9",
+      "semanticDigest": "42e38dabac9e595ac1d7c2b22d64b38d7daa5f655bddfb18383c7fea2fcd3da9",
+      "observationIds": [
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O14",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O20",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O25",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O30",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O35",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O40",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O41",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O43",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O44",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O45",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O48"
+      ],
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "actionEventRange": null,
+        "semanticDigest": "42e38dabac9e595ac1d7c2b22d64b38d7daa5f655bddfb18383c7fea2fcd3da9"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-12272ac1-f0ca-43bf-bb28-b068ac346a06",
+      "decisionId": "D-7bfa4d3d-73fd-42c3-b259-f961ba8461f3",
+      "inputDigest": "6d41d1986e7c460ef35c80c178bd186f5b6f443e35783403c4a40d8f6f07ee02",
+      "contextDigest": "6b3fa6da9fd3fb1022427374b29f400a864c652ddb57244dff747ae37617acdf",
+      "outputDigest": "c6678c4826d865ac5b30edc7cf135963f3ae504dc9239f2aa21f83a2ece8ccda",
+      "semanticDigest": "c6678c4826d865ac5b30edc7cf135963f3ae504dc9239f2aa21f83a2ece8ccda",
+      "observationIds": [
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O14",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O20",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O25",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O30",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O35",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O40",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O41",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O43",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O44",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O45",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O48"
+      ],
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "actionEventRange": null,
+        "semanticDigest": "c6678c4826d865ac5b30edc7cf135963f3ae504dc9239f2aa21f83a2ece8ccda"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-12272ac1-f0ca-43bf-bb28-b068ac346a06",
+      "decisionId": "D-5fa6ea22-6bc1-4cb6-857f-947aa22ef914",
+      "inputDigest": "bfef239d11630a6fd953e6dd7279f84078629674cf62f2c8732d580d4e269bc4",
+      "contextDigest": "01b8cdbf35060c02e312f78b943b90ed1bdf1db800ccad6de4c0106b148890d8",
+      "outputDigest": "89d88d9c0ea7265a65e40f369981c27123c4a18e4369d8b77cff37dc98d735de",
+      "semanticDigest": "89d88d9c0ea7265a65e40f369981c27123c4a18e4369d8b77cff37dc98d735de",
+      "observationIds": [
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O14",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O20",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O25",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O30",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O35",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O40",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O41",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O43",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O44",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O45",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O48"
+      ],
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "actionEventRange": null,
+        "semanticDigest": "89d88d9c0ea7265a65e40f369981c27123c4a18e4369d8b77cff37dc98d735de"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-12272ac1-f0ca-43bf-bb28-b068ac346a06",
+      "decisionId": "D-0a57196e-0433-4324-8b1d-b450f00fd8d8",
+      "inputDigest": "ad4eaed76835e135a1f8f30f79f6166ddfa9a2b2e8dd24399759126defffe293",
+      "contextDigest": "f87f65770589b3e91b52db51561d345b6488616d222df0bd38b866f4a841fcc8",
+      "outputDigest": "b6e9fdde781b8c143dfc462cf6db08b213c4e276fa3f5859a896244d3eb7d32d",
+      "semanticDigest": "b6e9fdde781b8c143dfc462cf6db08b213c4e276fa3f5859a896244d3eb7d32d",
+      "observationIds": [
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O14",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O20",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O25",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O30",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O35",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O40",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O41",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O43",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O44",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O45",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O48"
+      ],
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "actionEventRange": null,
+        "semanticDigest": "b6e9fdde781b8c143dfc462cf6db08b213c4e276fa3f5859a896244d3eb7d32d"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-12272ac1-f0ca-43bf-bb28-b068ac346a06",
+      "decisionId": "D-2d8b441c-2055-410d-acc6-4700e94907bd",
+      "inputDigest": "1f66254d97850e8a6d144253d9bc12fe160847d93e57269cead2ed44caf7869e",
+      "contextDigest": "10a56ca029bfa0aaa160d80eee894b0295e262599e13796a505062eb54cbedde",
+      "outputDigest": "2ed30fb5be26cf2aa9687ee896fa9a8b06e1c994862bc035f11cc103f88cdbd7",
+      "semanticDigest": "2ed30fb5be26cf2aa9687ee896fa9a8b06e1c994862bc035f11cc103f88cdbd7",
+      "observationIds": [
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O14",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O20",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O25",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O30",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O35",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O40",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O41",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O43",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O44",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O45",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O48"
+      ],
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "actionEventRange": null,
+        "semanticDigest": "2ed30fb5be26cf2aa9687ee896fa9a8b06e1c994862bc035f11cc103f88cdbd7"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-12272ac1-f0ca-43bf-bb28-b068ac346a06",
+      "decisionId": "D-8852239b-f444-4726-bc61-c0c4361208ef",
+      "inputDigest": "12c116f0060573ce2f2f77d27f19998f883ca1eac5d766de17412b6bf62f04ac",
+      "contextDigest": "4dc4fe264b09054bae4f957a7deb836a6ac12609979ee8041c4468bda35cbf06",
+      "outputDigest": "215d394829c034e251f7a398b6d9477fd679e750a62e0ea0023ba4d7b305090f",
+      "semanticDigest": "215d394829c034e251f7a398b6d9477fd679e750a62e0ea0023ba4d7b305090f",
+      "observationIds": [
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O14",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O20",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O25",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O30",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O35",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O40",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O41",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O43",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O44",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O45",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O48"
+      ],
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "actionEventRange": null,
+        "semanticDigest": "215d394829c034e251f7a398b6d9477fd679e750a62e0ea0023ba4d7b305090f"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-12272ac1-f0ca-43bf-bb28-b068ac346a06",
+      "decisionId": "D-36d8733e-9a1d-4a84-9a7d-bbb7f7825d01",
+      "inputDigest": "835a15f0f5b4467ea758e6ac8e745fba769eb0ff234577741cc1c6dea17fe9b7",
+      "contextDigest": "ac7f5001ac53cf77d83d9a3ad3f8ec378f5199ab185fe2cd04b534857ac62f29",
+      "outputDigest": "5bbc31c2b1cf987659fcf1507ddc56a47a7573b4f668d0b6d849dde8355d19db",
+      "semanticDigest": "5bbc31c2b1cf987659fcf1507ddc56a47a7573b4f668d0b6d849dde8355d19db",
+      "observationIds": [
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O14",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O20",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O25",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O30",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O35",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O40",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O41",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O43",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O44",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O45",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O48"
+      ],
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "actionEventRange": null,
+        "semanticDigest": "5bbc31c2b1cf987659fcf1507ddc56a47a7573b4f668d0b6d849dde8355d19db"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-12272ac1-f0ca-43bf-bb28-b068ac346a06",
+      "decisionId": "D-f8332284-58a3-42de-b4ea-5da94df4311a",
+      "inputDigest": "3ecbdb7511ea335ebcfd57a7a60b2f2f6c1042f835e41f31a026c431c7220c4f",
+      "contextDigest": "272abc4b46ca0c2080d952039525c63eb65b728b411c18ad6e7bb475b860aa4a",
+      "outputDigest": "01a7b61bc5720b73f6616e9e6b2d4d6c038e097556450fceb3665a17075a00fb",
+      "semanticDigest": "01a7b61bc5720b73f6616e9e6b2d4d6c038e097556450fceb3665a17075a00fb",
+      "observationIds": [
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O14",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O20",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O25",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O30",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O35",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O40",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O41",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O43",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O44",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O45",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O48"
+      ],
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "actionEventRange": null,
+        "semanticDigest": "01a7b61bc5720b73f6616e9e6b2d4d6c038e097556450fceb3665a17075a00fb"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-12272ac1-f0ca-43bf-bb28-b068ac346a06",
+      "decisionId": "D-bbe0cd49-b053-4020-af9e-a18b38539a82",
+      "inputDigest": "2834f37ac7985ca12c7b5b48f65b73b15c73016d3be0a5d5ceb097702d2246e9",
+      "contextDigest": "0e71aaf467602776cd23163534717b7fb611e86b5e971297887b81dfb39f3872",
+      "outputDigest": "1d77f3a11fe750f699519a75abb494a1e5da41caf4e117b7cb877abde8af040d",
+      "semanticDigest": "1d77f3a11fe750f699519a75abb494a1e5da41caf4e117b7cb877abde8af040d",
+      "observationIds": [
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O14",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O20",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O25",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O30",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O35",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O40",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O41",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O43",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O44",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O45",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O48"
+      ],
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "actionEventRange": null,
+        "semanticDigest": "1d77f3a11fe750f699519a75abb494a1e5da41caf4e117b7cb877abde8af040d"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-12272ac1-f0ca-43bf-bb28-b068ac346a06",
+      "decisionId": "D-4bd43982-e496-4bef-803a-6c328c8fe268",
+      "inputDigest": "cc034a2af6241e5d5db7c1de9c5cc8230faea0396caa7a5560839c9264c67800",
+      "contextDigest": "f6dc815cefc90f90d90143bad885f744d9cf2f233141974c285c77c784f54b3a",
+      "outputDigest": "d509fdcdc658e8f9ff3e3df7cb76ee7303aa2bf4c648642af6b3eeaf587e25f3",
+      "semanticDigest": "d509fdcdc658e8f9ff3e3df7cb76ee7303aa2bf4c648642af6b3eeaf587e25f3",
+      "observationIds": [
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O14",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O20",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O25",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O30",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O35",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O40",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O41",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O43",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O44",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O45",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O48"
+      ],
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "actionEventRange": null,
+        "semanticDigest": "d509fdcdc658e8f9ff3e3df7cb76ee7303aa2bf4c648642af6b3eeaf587e25f3"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-12272ac1-f0ca-43bf-bb28-b068ac346a06",
+      "decisionId": "D-b2d7c6e6-dd66-4aef-bf1c-e84bb245bf7c",
+      "inputDigest": "c51910db3e0956d85ed515845168c95c1ab898124ddf80a80d418da69f385a6e",
+      "contextDigest": "7967ce9b46844a7c14ed606dfd3fede16d51d1e95454c8958d0a2a0da64e14ea",
+      "outputDigest": "8e95e443c6b5c93f300075f9f68b40d854fede28ff8aab28e9c4880417042db1",
+      "semanticDigest": "8e95e443c6b5c93f300075f9f68b40d854fede28ff8aab28e9c4880417042db1",
+      "observationIds": [
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O14",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O20",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O25",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O30",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O35",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O40",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O41",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O43",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O44",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O45",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O48"
+      ],
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "actionEventRange": null,
+        "semanticDigest": "8e95e443c6b5c93f300075f9f68b40d854fede28ff8aab28e9c4880417042db1"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-12272ac1-f0ca-43bf-bb28-b068ac346a06",
+      "decisionId": "D-2878802a-1e36-4f0e-a705-5c9243afdc89",
+      "inputDigest": "3b0a8bddfe34337b6774fd563ca360503862be1bfecd3d7d826b263af045a034",
+      "contextDigest": "97faac68930bc2690ba2f5fea822fbd9493a32124f160466e0a3f0878b3227b2",
+      "outputDigest": "b489ef92dcef97723cbb850579eef066e9867fc98dfab06d7bbea505a66a2f89",
+      "semanticDigest": "b489ef92dcef97723cbb850579eef066e9867fc98dfab06d7bbea505a66a2f89",
+      "observationIds": [
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O14",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O20",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O25",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O30",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O35",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O40",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O41",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O43",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O44",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O45",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O48"
+      ],
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "actionEventRange": null,
+        "semanticDigest": "b489ef92dcef97723cbb850579eef066e9867fc98dfab06d7bbea505a66a2f89"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-12272ac1-f0ca-43bf-bb28-b068ac346a06",
+      "decisionId": "D-41cde7ba-7426-4ef6-83fd-51158bd0508b",
+      "inputDigest": "42820555bc3e5b83cd4a1d7b7f274bf073ccb621a49d445a4f41268f580df0b5",
+      "contextDigest": "828c867b730f46fd24a30193114a915a556e03472b6ab140935d43b20d5d4366",
+      "outputDigest": "7b921b95f407ffd6131718fc47ea920a411ef54a29df170d0dd1d36563ed8882",
+      "semanticDigest": "7b921b95f407ffd6131718fc47ea920a411ef54a29df170d0dd1d36563ed8882",
+      "observationIds": [
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O14",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O20",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O25",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O30",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O35",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O40",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O41",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O43",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O44",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O45",
+        "S-12272ac1-f0ca-43bf-bb28-b068ac346a06:O48"
+      ],
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "actionEventRange": null,
+        "semanticDigest": "7b921b95f407ffd6131718fc47ea920a411ef54a29df170d0dd1d36563ed8882"
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "sessionId": "S-288d1960-51bb-4362-a6d7-1b1d6946526c",
+      "decisionId": "D-d24f916d-9138-4217-bbc0-b2aff76a0ca9",
+      "inputDigest": "27c1b59fc58208e693d0756315544abb74c58faa1c2984de925d6190592f311e",
+      "contextDigest": "4732b13bb8493282c4b8f81e8a43eda2c3dbde78f38a42d09a65a1a4493539ec",
+      "outputDigest": "c3e90ff2b15b16dda8a003f617b37b62f39248b145477ec0a828dabb9d836d61",
+      "semanticDigest": "2dfb692bde4c575dfb09d329c8251e54cb4542826f67911f10c30e0d5a3f7542",
+      "observationIds": [
+        "S-288d1960-51bb-4362-a6d7-1b1d6946526c:O12"
+      ],
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "当前通路尚未实际修复，暂不通行。先核查安全，再请玩家自愿协调材料、实际修复并取得许可；垫付不代表认罪。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "passage_structure"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "first": "22",
+          "last": "26"
+        },
+        "semanticDigest": "2dfb692bde4c575dfb09d329c8251e54cb4542826f67911f10c30e0d5a3f7542"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-288d1960-51bb-4362-a6d7-1b1d6946526c",
+      "decisionId": "D-0d7ee3d0-4437-4a48-9e96-2509c87d8103",
+      "inputDigest": "cfba02b34de377642a198e71355b82ffec1be8cfccac41acea92f9359d46c921",
+      "contextDigest": "dfe55c42d3d786f54d206555653620354cae195a616cc99158f34c7537aa9154",
+      "outputDigest": "978c61fa15c495c2f1f18e21c9d2bd2c6311a719798cd0cbb5d0677c0ea9d3a8",
+      "semanticDigest": "35afd941d93609ae1fe7b1092a82565ef15d565f6aef11cc7d97de36d1cbe477",
+      "observationIds": [
+        "S-288d1960-51bb-4362-a6d7-1b1d6946526c:O14"
+      ],
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我先亲自检查原材料，查找材料和现场来源；仅凭口头说法不能定责。我不会替玩家最终修复。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "original_material"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "first": "27",
+          "last": "29"
+        },
+        "semanticDigest": "35afd941d93609ae1fe7b1092a82565ef15d565f6aef11cc7d97de36d1cbe477"
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "sessionId": "S-6674716a-997b-49fa-8a82-3ae44c5fb130",
+      "decisionId": "D-3c29dca6-8102-4496-a143-ef1a1bc933dd",
+      "inputDigest": "83e4deae82933dc2a09c45630ccd4999cc90b3fddaa987505a5c65d8f448ff33",
+      "contextDigest": "66fdcd6178880d632498d9853690214cdb8d489f43700a234c1221d7fb82590b",
+      "outputDigest": "5250f4b991cd505d2e8f73a0b63c9ea2cdfbbe2081c46bdb17863cbff4443af1",
+      "semanticDigest": "eebf9a7398974e9216516fc5e13c9b58d06d148552a6de75d622a9f16d2afd1a",
+      "observationIds": [
+        "S-6674716a-997b-49fa-8a82-3ae44c5fb130:O12",
+        "S-6674716a-997b-49fa-8a82-3ae44c5fb130:O19",
+        "S-6674716a-997b-49fa-8a82-3ae44c5fb130:O21",
+        "S-6674716a-997b-49fa-8a82-3ae44c5fb130:O22"
+      ],
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "当前通路尚未实际修复，暂不通行。先核查安全，再请玩家自愿协调材料、实际修复并取得许可；垫付不代表认罪。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "passage_structure"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "first": "25",
+          "last": "29"
+        },
+        "semanticDigest": "eebf9a7398974e9216516fc5e13c9b58d06d148552a6de75d622a9f16d2afd1a"
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "sessionId": "S-6674716a-997b-49fa-8a82-3ae44c5fb130",
+      "decisionId": "D-14718bfa-b171-489d-8fcb-0d0f48b4f1b9",
+      "inputDigest": "86d7a39663fdf5caae27a93c12324ff7d67f1b1e3100b5efaaf942c34b3857c7",
+      "contextDigest": "ecd069b2bc63827b0e8cf6bfece71e55994a4509cb63ca3b629615df5117af61",
+      "outputDigest": "763619c1f373c83a113b582e94e9ed7e8158b8c6af9652294c99cf0c34cbde96",
+      "semanticDigest": "ffe9ffd8ea5d5b57446d146f6d0c6b4d860fd50408c531c36e07c47f3305f46f",
+      "observationIds": [
+        "S-6674716a-997b-49fa-8a82-3ae44c5fb130:O12",
+        "S-6674716a-997b-49fa-8a82-3ae44c5fb130:O19",
+        "S-6674716a-997b-49fa-8a82-3ae44c5fb130:O21",
+        "S-6674716a-997b-49fa-8a82-3ae44c5fb130:O22",
+        "S-6674716a-997b-49fa-8a82-3ae44c5fb130:O26",
+        "S-6674716a-997b-49fa-8a82-3ae44c5fb130:O28",
+        "S-6674716a-997b-49fa-8a82-3ae44c5fb130:O29",
+        "S-6674716a-997b-49fa-8a82-3ae44c5fb130:O32",
+        "S-6674716a-997b-49fa-8a82-3ae44c5fb130:O34"
+      ],
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "旧记录与现场痕迹已相互印证，损坏早于到达。我不再把损坏归咎同行；请按核验来源自愿协调材料，仍须实际修复和合法许可。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-6674716a-997b-49fa-8a82-3ae44c5fb130:O21",
+          "recipientIds": [
+            "C-f8eb6229-f36f-4a99-b4b8-a7639f795c49"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "first": "37",
+          "last": "41"
+        },
+        "semanticDigest": "ffe9ffd8ea5d5b57446d146f6d0c6b4d860fd50408c531c36e07c47f3305f46f"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-6674716a-997b-49fa-8a82-3ae44c5fb130",
+      "decisionId": "D-7c3a0c2d-5401-48b6-b55f-9417771c623d",
+      "inputDigest": "b472f0190310302138b63e0276ccfe7fd3cfbd9155314cfcd09bacef34d1f7e8",
+      "contextDigest": "2cc62b344b32da016e88d83f7726aa9c5f26484ba6455a44555d33973ab87cc8",
+      "outputDigest": "b9e3c8dbefb23439bc6cfa4b60df15b85f305e6faaa91404439576e6329f4411",
+      "semanticDigest": "9aaff95ec51395416b31030cb1616f0da36ba36db084e2b48069ed94506aa328",
+      "observationIds": [
+        "S-6674716a-997b-49fa-8a82-3ae44c5fb130:O14"
+      ],
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我先亲自检查原材料，查找材料和现场来源；仅凭口头说法不能定责。我不会替玩家最终修复。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "original_material"
+        }
+      ],
+      "receipt": null
+    },
+    {
+      "actorId": "tangseng",
+      "sessionId": "S-cffc7634-f712-4c35-a706-01c9c1bc111e",
+      "decisionId": "D-2c2fcaa3-2de6-4ca9-a8ec-93e2160d3c69",
+      "inputDigest": "da70a62b1d9b7b12ffb7bfacaab1bccc96467f918d84b5ac9737c89665f8285f",
+      "contextDigest": "4acaf2910e51dbf784e873809c2435b18622dc2b12da3f3c115c0bbde900d499",
+      "outputDigest": "6e9e0e7f06c1885960a6de610b27d9560113bcde7228cd2be9680c939f1858c2",
+      "semanticDigest": "d466412db64e86c5f5d2b32436e1af9c7ff6d33495861c88dad8a22cb47485c7",
+      "observationIds": [
+        "S-cffc7634-f712-4c35-a706-01c9c1bc111e:O12",
+        "S-cffc7634-f712-4c35-a706-01c9c1bc111e:O23",
+        "S-cffc7634-f712-4c35-a706-01c9c1bc111e:O26"
+      ],
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "当前通路尚未实际修复，暂不通行。先核查安全，再请玩家自愿协调材料、实际修复并取得许可；垫付不代表认罪。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "passage_structure"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "first": "29",
+          "last": "34"
+        },
+        "semanticDigest": "d466412db64e86c5f5d2b32436e1af9c7ff6d33495861c88dad8a22cb47485c7"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-cffc7634-f712-4c35-a706-01c9c1bc111e",
+      "decisionId": "D-b1d38c2c-4562-4c70-bd84-1d88367652f0",
+      "inputDigest": "546b839d3d32e66bbcd107df77d71c0ef73728843d2293d77ffb38f59a8f21f8",
+      "contextDigest": "ab9b3c604da2ee11ea9dbb1d55be689414474e67b03ad4bf4d518247fe79c9d2",
+      "outputDigest": "efae712cf5c0d1efeb1db687c96fc47be0e6d030dcbe6257732039ac6cfbaf14",
+      "semanticDigest": "bc2cc5859097816d3e07bb9656675b52857aa78d619345ba5faf0182d1ed35da",
+      "observationIds": [
+        "S-cffc7634-f712-4c35-a706-01c9c1bc111e:O14"
+      ],
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我先亲自检查原材料，查找材料和现场来源；仅凭口头说法不能定责。我不会替玩家最终修复。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "original_material"
+        }
+      ],
+      "receipt": null
+    },
+    {
+      "actorId": "tangseng",
+      "sessionId": "S-cffc7634-f712-4c35-a706-01c9c1bc111e",
+      "decisionId": "D-ac7850b6-0d82-4de5-a7fa-ec19750c1ff6",
+      "inputDigest": "9ec6a0fa952e8e9c713063961fedc0b7c6da2e7da1fd3a48ed10a6f7f311cddb",
+      "contextDigest": "26bfcb2113ba22573faef28a29b74a032e3e80dae6f230cba5880941659b0972",
+      "outputDigest": "c8f90a288996257f1fb3022712c0c20fed23f8f63f7a1d9d3deb4b851f3b23d3",
+      "semanticDigest": "b6509fe3455107004c7c0c72956412700f9ea486e97b9624c930ba6224b5d239",
+      "observationIds": [
+        "S-cffc7634-f712-4c35-a706-01c9c1bc111e:O12",
+        "S-cffc7634-f712-4c35-a706-01c9c1bc111e:O23",
+        "S-cffc7634-f712-4c35-a706-01c9c1bc111e:O26",
+        "S-cffc7634-f712-4c35-a706-01c9c1bc111e:O30",
+        "S-cffc7634-f712-4c35-a706-01c9c1bc111e:O33",
+        "S-cffc7634-f712-4c35-a706-01c9c1bc111e:O34",
+        "S-cffc7634-f712-4c35-a706-01c9c1bc111e:O41",
+        "S-cffc7634-f712-4c35-a706-01c9c1bc111e:O43"
+      ],
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "登记与现场标记已相互印证，材料属于合法搬运，不能按盗取定责。请有职责的玩家自愿取回原材料，备用垫付也不代表认罪。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-cffc7634-f712-4c35-a706-01c9c1bc111e:O26",
+          "recipientIds": [
+            "C-74b7fd93-cf35-47eb-9354-c50888d02fcd",
+            "C-98f2ba83-a556-410c-90d3-eda6e8678f11"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "first": "47",
+          "last": "53"
+        },
+        "semanticDigest": "b6509fe3455107004c7c0c72956412700f9ea486e97b9624c930ba6224b5d239"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-cffc7634-f712-4c35-a706-01c9c1bc111e",
+      "decisionId": "D-73571665-be3c-4aa3-a38c-ccd10084de45",
+      "inputDigest": "b8f339c50f5e25fb5426d49f5e70dab8542bf5ca907a12aa1db3eaec345cd530",
+      "contextDigest": "4dca776a3083a592c1e7601f52e222c84f830cf20ab64ce11580531b5634dfcd",
+      "outputDigest": "3c53f61adfea9024b5e8e54dc3741781497fb6be8de655ad0eb3a2115d501c54",
+      "semanticDigest": "3ba71e049541439ef57ed3115a8cee65f7454fd0b9cf686a2c0ac696ae271005",
+      "observationIds": [
+        "S-cffc7634-f712-4c35-a706-01c9c1bc111e:O14",
+        "S-cffc7634-f712-4c35-a706-01c9c1bc111e:O55",
+        "S-cffc7634-f712-4c35-a706-01c9c1bc111e:O57",
+        "S-cffc7634-f712-4c35-a706-01c9c1bc111e:O59"
+      ],
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "登记与现场标记已相互印证，我改为支持取回原材料并展示来源，不再根据口头指责追责；实际修复仍由玩家执行。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-cffc7634-f712-4c35-a706-01c9c1bc111e:O55",
+          "recipientIds": [
+            "C-74b7fd93-cf35-47eb-9354-c50888d02fcd",
+            "C-98f2ba83-a556-410c-90d3-eda6e8678f11"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "first": "62",
+          "last": "68"
+        },
+        "semanticDigest": "3ba71e049541439ef57ed3115a8cee65f7454fd0b9cf686a2c0ac696ae271005"
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "sessionId": "S-025991f7-7310-4b9e-9030-dd24f8859d04",
+      "decisionId": "D-d9c106eb-a201-4bc9-94c6-e60c4a815cff",
+      "inputDigest": "9b30fca19dad7edf9c5f1e7e45e3b6fb5fad92d7f795200ad0b8ee578c968dd6",
+      "contextDigest": "56a69d6ba45e01826d5bb7ef82de743375c9ebfb422003040d1e1d4ff717de95",
+      "outputDigest": "3b16a936039e929410ad85f376d3a4a7b37146654a0cba475e2b29820e50b652",
+      "semanticDigest": "77453f6baac6cf4c84d1e85b3f99431300ebdfb537dc52c780457de46bcbc1ae",
+      "observationIds": [
+        "S-025991f7-7310-4b9e-9030-dd24f8859d04:O12",
+        "S-025991f7-7310-4b9e-9030-dd24f8859d04:O19"
+      ],
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "当前通路尚未实际修复，暂不通行。先核查安全，再请玩家自愿协调材料、实际修复并取得许可；垫付不代表认罪。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "passage_structure"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "first": "23",
+          "last": "27"
+        },
+        "semanticDigest": "77453f6baac6cf4c84d1e85b3f99431300ebdfb537dc52c780457de46bcbc1ae"
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "sessionId": "S-025991f7-7310-4b9e-9030-dd24f8859d04",
+      "decisionId": "D-56f264c6-f3db-401a-a736-6f1494beffea",
+      "inputDigest": "89a8ed2ff48c7dd80a46f8290dd831b6766220e5fd91dfb86718eef2651eddd9",
+      "contextDigest": "f28dec8e84848faea4d89a9e2be0171aafef4ce3d96d29d488c2e5b446c1aefe",
+      "outputDigest": "54024fec5de94de695a9b371e337f5a07e96fe0f02d1e3d6bf6573a314dc8bef",
+      "semanticDigest": "ae9f659b0490eead4f909212e6527a8818e27e1bf9dcbfd747d7550d7638e006",
+      "observationIds": [
+        "S-025991f7-7310-4b9e-9030-dd24f8859d04:O12",
+        "S-025991f7-7310-4b9e-9030-dd24f8859d04:O19",
+        "S-025991f7-7310-4b9e-9030-dd24f8859d04:O24",
+        "S-025991f7-7310-4b9e-9030-dd24f8859d04:O26",
+        "S-025991f7-7310-4b9e-9030-dd24f8859d04:O27"
+      ],
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我已看到实际修复，但许可尚未生效，暂不通行。请有通行职责的玩家确认并授予许可，我不能代为授权。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "passage_structure"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "first": "37",
+          "last": "42"
+        },
+        "semanticDigest": "ae9f659b0490eead4f909212e6527a8818e27e1bf9dcbfd747d7550d7638e006"
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "sessionId": "S-025991f7-7310-4b9e-9030-dd24f8859d04",
+      "decisionId": "D-359a328f-11c4-4c72-9cc6-1aaf347585f0",
+      "inputDigest": "fa0e6b0e25cfdaee322eade849ca21e4b8c53ad319eb0be2d18cd630f98b23a3",
+      "contextDigest": "f8884209d6eb2ce9695af38b67df281766926c83b0c1c234b434eb2351ea2870",
+      "outputDigest": "d4564047ebd60ebe6355e480974c5d8848c1569d1b06d6e895d9746f6a0039d3",
+      "semanticDigest": "0f6dbb2004cac01c83f036b764423f7dbb46055308e005c65da663465a954b19",
+      "observationIds": [
+        "S-025991f7-7310-4b9e-9030-dd24f8859d04:O12",
+        "S-025991f7-7310-4b9e-9030-dd24f8859d04:O19",
+        "S-025991f7-7310-4b9e-9030-dd24f8859d04:O24",
+        "S-025991f7-7310-4b9e-9030-dd24f8859d04:O26",
+        "S-025991f7-7310-4b9e-9030-dd24f8859d04:O27",
+        "S-025991f7-7310-4b9e-9030-dd24f8859d04:O38",
+        "S-025991f7-7310-4b9e-9030-dd24f8859d04:O41",
+        "S-025991f7-7310-4b9e-9030-dd24f8859d04:O42",
+        "S-025991f7-7310-4b9e-9030-dd24f8859d04:O45"
+      ],
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "当前可见状态已确认实际修复与有效许可，我愿意按已见出口通行。请明确希望前往的出口；我的同意不代表已经抵达。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "passage_structure"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "first": "49",
+          "last": "54"
+        },
+        "semanticDigest": "0f6dbb2004cac01c83f036b764423f7dbb46055308e005c65da663465a954b19"
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "sessionId": "S-025991f7-7310-4b9e-9030-dd24f8859d04",
+      "decisionId": "D-f5abf737-cc04-4aa7-a55c-98e8c1a34c54",
+      "inputDigest": "ac45b4f3f9cee578574d063e30f6f7eb07ad915029fcc4eff2db3c2d38e748e3",
+      "contextDigest": "fd6a1501dbe7219d7984b810471adf9a1e7454bc12a1d6adfd8b303780eeab58",
+      "outputDigest": "16f1ed8ce01f648444cccedf65b470eff149912370cd8e95dfd5b3f7aff5d768",
+      "semanticDigest": "b88918b9e22e787e749520be032d7ecc6343ead922640856ec94c714c6b112c5",
+      "observationIds": [
+        "S-025991f7-7310-4b9e-9030-dd24f8859d04:O12",
+        "S-025991f7-7310-4b9e-9030-dd24f8859d04:O19",
+        "S-025991f7-7310-4b9e-9030-dd24f8859d04:O24",
+        "S-025991f7-7310-4b9e-9030-dd24f8859d04:O26",
+        "S-025991f7-7310-4b9e-9030-dd24f8859d04:O27",
+        "S-025991f7-7310-4b9e-9030-dd24f8859d04:O38",
+        "S-025991f7-7310-4b9e-9030-dd24f8859d04:O41",
+        "S-025991f7-7310-4b9e-9030-dd24f8859d04:O42",
+        "S-025991f7-7310-4b9e-9030-dd24f8859d04:O45",
+        "S-025991f7-7310-4b9e-9030-dd24f8859d04:O50",
+        "S-025991f7-7310-4b9e-9030-dd24f8859d04:O53",
+        "S-025991f7-7310-4b9e-9030-dd24f8859d04:O54"
+      ],
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我按当前可见的出口 destination 前往核验或通行，实际效果仍由通路规则决定。"
+        },
+        {
+          "kind": "move",
+          "regionId": "destination"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "first": "56",
+          "last": "60"
+        },
+        "semanticDigest": "b88918b9e22e787e749520be032d7ecc6343ead922640856ec94c714c6b112c5"
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "sessionId": "S-5f6dfc0b-e4f1-4098-966d-61559209b6f8",
+      "decisionId": "D-a8f773f0-97a2-4af4-a5f5-e7d3acef6dd2",
+      "inputDigest": "3d708df551e66dbab549eaac3a6bf6c2d085f75924efed549e44253b01b9a660",
+      "contextDigest": "d4fb7574ea3936fb703e6126f342130aba0537009fdfb8eb242cbfd1d42ad3f7",
+      "outputDigest": "72d852788461ad28c77bb2612a8cbbc6cb2f0909fd92a10e46564e07bafcb305",
+      "semanticDigest": "149bc2cf9920334afc4c27922f3373bfd43b1d9010cb8cfd13b7f64a14626859",
+      "observationIds": [
+        "S-5f6dfc0b-e4f1-4098-966d-61559209b6f8:O12"
+      ],
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "当前通路尚未实际修复，暂不通行。先核查安全，再请玩家自愿协调材料、实际修复并取得许可；垫付不代表认罪。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "passage_structure"
+        }
+      ],
+      "receipt": null
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-5f6dfc0b-e4f1-4098-966d-61559209b6f8",
+      "decisionId": "D-0164b355-1f33-4430-8457-2f4e90d9a455",
+      "inputDigest": "fcd818b84deb86cbf3827a0a14988d61ce1b3d7a9260777d9072821249167d05",
+      "contextDigest": "cfded9f269b1ea96cd54d4e1ecf00b826c17e3aec0c52f4e180a8e55351d1c84",
+      "outputDigest": "4f3549c794c512748eefb2e02c19a687df3db0a01b6f5ec008fa8e115375c0f1",
+      "semanticDigest": "94e0dcfe473b77cb55d90a7181e87146c1cfa2cd98aa5df5eb348058ec111a2e",
+      "observationIds": [
+        "S-5f6dfc0b-e4f1-4098-966d-61559209b6f8:O14"
+      ],
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我先亲自检查原材料，查找材料和现场来源；仅凭口头说法不能定责。我不会替玩家最终修复。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "original_material"
+        }
+      ],
+      "receipt": null
+    }
+  ]
+}

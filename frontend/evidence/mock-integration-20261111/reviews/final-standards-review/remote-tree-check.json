@@ -1,0 +1,159 @@
+{
+  "kind": "source_inspection",
+  "status": "OBSERVED",
+  "assessment": "PASS",
+  "execution": {
+    "commit": "fa87e221aa1e48cb19eeecc1beafcb83c0a7a21a",
+    "tree": "2d81686787d35d3a26747fbd7896ab1ec54c31ed"
+  },
+  "publication": {
+    "sha": "78a85960e4c2de64fc36a48ba1ed4c4b5e82f227",
+    "node_id": "C_kwDOVqF6ENoAKDc4YTg1OTYwZTRjMmRlNjRmYzM2YTQ4YmExZWQ0YzRiNWU4MmYyMjc",
+    "url": "https://api.github.com/repos/gbcdby/xiyou/git/commits/78a85960e4c2de64fc36a48ba1ed4c4b5e82f227",
+    "html_url": "https://github.com/gbcdby/xiyou/commit/78a85960e4c2de64fc36a48ba1ed4c4b5e82f227",
+    "author": {
+      "name": "gbcdby",
+      "email": "137158171+gbcdby@users.noreply.github.com",
+      "date": "2026-11-11T13:14:43Z"
+    },
+    "committer": {
+      "name": "gbcdby",
+      "email": "137158171+gbcdby@users.noreply.github.com",
+      "date": "2026-11-11T13:14:43Z"
+    },
+    "tree": {
+      "sha": "2d81686787d35d3a26747fbd7896ab1ec54c31ed",
+      "url": "https://api.github.com/repos/gbcdby/xiyou/git/trees/2d81686787d35d3a26747fbd7896ab1ec54c31ed"
+    },
+    "message": "固定双角色模拟策略与授权复盘的集成执行候选\n\n关联 #10、#11、#12。该完整tree与本地实际执行fa87e221aa1e48cb19eeecc1beafcb83c0a7a21a一致。七项完整局及联合故障、190项自动检查和当前浏览器检查已完成；900秒长测及最终独立审查另行归档，不在本提交提前宣称完成。",
+    "parents": [
+      {
+        "sha": "10fd0f93b069446d34b08fcddb171d98ee4c50a3",
+        "url": "https://api.github.com/repos/gbcdby/xiyou/git/commits/10fd0f93b069446d34b08fcddb171d98ee4c50a3",
+        "html_url": "https://github.com/gbcdby/xiyou/commit/10fd0f93b069446d34b08fcddb171d98ee4c50a3"
+      }
+    ],
+    "verification": {
+      "verified": false,
+      "reason": "unsigned",
+      "signature": null,
+      "payload": null,
+      "verified_at": null
+    }
+  },
+  "inheritedBoundaryCommit": {
+    "sha": "c78066d9b95eb3657293fd26a6a5d8b325846b38",
+    "node_id": "C_kwDOVqF6ENoAKGM3ODA2NmQ5Yjk1ZWIzNjU3MjkzZmQyNmE2YTVkOGIzMjU4NDZiMzg",
+    "url": "https://api.github.com/repos/gbcdby/xiyou/git/commits/c78066d9b95eb3657293fd26a6a5d8b325846b38",
+    "html_url": "https://github.com/gbcdby/xiyou/commit/c78066d9b95eb3657293fd26a6a5d8b325846b38",
+    "author": {
+      "name": "gbcdby",
+      "email": "137158171+gbcdby@users.noreply.github.com",
+      "date": "2026-11-11T06:22:52Z"
+    },
+    "committer": {
+      "name": "gbcdby",
+      "email": "137158171+gbcdby@users.noreply.github.com",
+      "date": "2026-11-11T06:22:52Z"
+    },
+    "tree": {
+      "sha": "a56b544a163eb1293a93aa93fe89c82863a43134",
+      "url": "https://api.github.com/repos/gbcdby/xiyou/git/trees/a56b544a163eb1293a93aa93fe89c82863a43134"
+    },
+    "message": "补齐独立 fallback 组合模型及可证伪证据",
+    "parents": [
+      {
+        "sha": "a7bc66b481d2b156dd88d70a5ae4e5fe185c3cfc",
+        "url": "https://api.github.com/repos/gbcdby/xiyou/git/commits/a7bc66b481d2b156dd88d70a5ae4e5fe185c3cfc",
+        "html_url": "https://github.com/gbcdby/xiyou/commit/a7bc66b481d2b156dd88d70a5ae4e5fe185c3cfc"
+      }
+    ],
+    "verification": {
+      "verified": false,
+      "reason": "unsigned",
+      "signature": null,
+      "payload": null,
+      "verified_at": null
+    }
+  },
+  "inheritedBoundaryRoot": {
+    "sha": "a56b544a163eb1293a93aa93fe89c82863a43134",
+    "url": "https://api.github.com/repos/gbcdby/xiyou/git/trees/a56b544a163eb1293a93aa93fe89c82863a43134",
+    "tree": [
+      {
+        "path": ".agents",
+        "mode": "040000",
+        "type": "tree",
+        "sha": "b70f07319d55097be72e813f8ae5d2675eff6836",
+        "url": "https://api.github.com/repos/gbcdby/xiyou/git/trees/b70f07319d55097be72e813f8ae5d2675eff6836"
+      },
+      {
+        "path": ".gitignore",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "c2aca7a248912d81d1d47c729d282a3a936e8dfa",
+        "size": 1593,
+        "url": "https://api.github.com/repos/gbcdby/xiyou/git/blobs/c2aca7a248912d81d1d47c729d282a3a936e8dfa"
+      },
+      {
+        "path": "AGENTS.md",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "8b372339de1790711617d7868708128de1a40119",
+        "size": 2843,
+        "url": "https://api.github.com/repos/gbcdby/xiyou/git/blobs/8b372339de1790711617d7868708128de1a40119"
+      },
+      {
+        "path": "README.md",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "f6c96fee03174fb197cca4991354e2598f58a3ef",
+        "size": 2069,
+        "url": "https://api.github.com/repos/gbcdby/xiyou/git/blobs/f6c96fee03174fb197cca4991354e2598f58a3ef"
+      },
+      {
+        "path": "docs",
+        "mode": "040000",
+        "type": "tree",
+        "sha": "5a043c199fe3eb22401c2536a6cf6e9cb81650c7",
+        "url": "https://api.github.com/repos/gbcdby/xiyou/git/trees/5a043c199fe3eb22401c2536a6cf6e9cb81650c7"
+      },
+      {
+        "path": "formal",
+        "mode": "040000",
+        "type": "tree",
+        "sha": "285e2cd9901c22999dc5aa0de2f964a7475c9833",
+        "url": "https://api.github.com/repos/gbcdby/xiyou/git/trees/285e2cd9901c22999dc5aa0de2f964a7475c9833"
+      },
+      {
+        "path": "初步设计文档.md",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "81d0ab9571164083cd27c0d4ae14c8d4843806f6",
+        "size": 33536,
+        "url": "https://api.github.com/repos/gbcdby/xiyou/git/blobs/81d0ab9571164083cd27c0d4ae14c8d4843806f6"
+      }
+    ],
+    "truncated": false
+  },
+  "inheritedBoundaryFormal": {
+    "sha": "285e2cd9901c22999dc5aa0de2f964a7475c9833",
+    "url": "https://api.github.com/repos/gbcdby/xiyou/git/trees/285e2cd9901c22999dc5aa0de2f964a7475c9833",
+    "tree": [
+      {
+        "path": "boundary",
+        "mode": "040000",
+        "type": "tree",
+        "sha": "5d5d94135bbbef0f68588a127bff9c8807574cfc",
+        "url": "https://api.github.com/repos/gbcdby/xiyou/git/trees/5d5d94135bbbef0f68588a127bff9c8807574cfc"
+      }
+    ],
+    "truncated": false
+  },
+  "mergedModelPR": {"url":"https://github.com/gbcdby/xiyou/pull/21","number":21,"state":"closed","merged":true,"mergedAt":"2026-11-11T12:55:43Z","mergeCommit":"10fd0f93b069446d34b08fcddb171d98ee4c50a3"},
+  "comparison": {
+    "publicationTreeEqualsExecution": true,
+    "currentBoundaryTree": "5d5d94135bbbef0f68588a127bff9c8807574cfc",
+    "inheritedBoundaryTreeEqualsCurrent": true
+  }
+}

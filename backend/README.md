@@ -4,7 +4,7 @@
 
 Ticket #6 的原作者修正结果见 [修正结果](evidence/review-fix-r1/implementation-result.md)及[修正自查清单](evidence/review-fix-r1/self-check.json)，保留其原作者 `FIX_REPORTED` 身份；初始候选 `e32c579` 的 [实现结果](evidence/implementation-result.md)及[自查清单](evidence/self-check.json)同样保留为历史证据。后续独立审查与释放由总控记录。
 
-本轮在固定运行基线上增加 [Ticket #9 的受控 AI 运行模块](ai/README.md)。用户在 2026-11-11 将本批明确调整为[模拟输入验收](../docs/specs/vertical-slice-mock.md)；实际外部模型调用为 0，真实供应商与真人输入不再阻塞该 profile 的交付。单 AI 的受控实现与原两轴证据按固定来源复用，双角色、授权复盘及同候选整体验收另行执行；不能据此宣称真实模型质量、真人体验或部署完成。
+本轮在固定运行基线上增加 [Ticket #9 的受控 AI 运行模块](ai/README.md)。用户在 2026-11-11 将本批明确调整为[模拟输入验收](../docs/specs/vertical-slice-mock.md)；实际外部模型调用为 0，真实供应商与真人输入不再阻塞该 profile 的交付。单 AI 的受控实现与原两轴证据按固定来源复用，双角色、授权复盘及同候选整体验证的实际结果见[模拟切片证据](../frontend/evidence/mock-integration-20261111/README.md)；不能据此宣称真实模型质量、真人体验或部署完成。
 
 ## 技术选择与启动
 
@@ -124,11 +124,11 @@ COMMIT、ACK 和发布是独立阶段。提交阶段结果未知时保留原动�
 
 `replay(sessionId, throughSeq?)` 是可信诊断接口，不提供给玩家。它使用本局初始状态、保存的内容快照和固定 reducer，从连续持久事件重建指定前缀，不取新时间、随机数、模型输出或触发 outbox。运行记录如逻辑时间、连接租约和 Decision 处理状态不冒充可由 WorldEvent 回放的世界事实。
 
-## 已固定的实现依据
+## 初始实现固定依据（历史）
 
 - 协议释放候选：`5067542eede979ffdf59e016e3103aec663dc6d8`。
 - 核心模型释放候选：`31766d6c0166cc61c49578dc353514292dfacc5e`；消费其中 Session 锁、原子包、控制、截止优先及动作终局义务。
 - 隔离／恢复模型：`38d891579330be990cc44a51230d2ded81076dd1` 对应的固定目录内容；消费当前授权、Session 范围、历史受众和完整区间义务。
 - 内容装配基线：`b0405af1bd955a933e762dd062cc7647a39ab2b3`，另接入 `7e04e4ad94b7f409318b0bc35847fa98cf0208e6` 的组合协议上限检查；现有 fixture 与摘要不变。
 
-本目录的作者自查没有重跑或替代模型的独立审查，也没有复制或发布受阻的模型原始日志。义务与本次真实运行检查的对应见实现结果。吞吐量、长时间运行、前端新候选集成和真人体验仍须由后续对应 Ticket 取证。
+本节保留初始实现消费的固定身份。本轮已通过 [PR #21](https://github.com/gbcdby/xiyou/pull/21) 发布新核心有限模型及独立检查，当前源码映射、900 秒长测和前端整体验证见[模拟切片验收](../frontend/evidence/mock-integration-20261111/README.md)。没有复制或发布受阻的旧模型日志，也没有把有限模型审计称为源码形式化证明。吞吐量、真实模型质量与真人体验尚未执行。

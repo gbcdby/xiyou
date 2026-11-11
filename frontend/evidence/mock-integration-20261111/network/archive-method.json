@@ -1,0 +1,19 @@
+{
+  "sourceTrace": {
+    "sha256": "6753477d534c2527c9b8789bba7ff28f225fbf75556c13b45cba7d3a67536cac",
+    "uncompressedSha256": "bd7f10c03dd4a05b2371c2d7fd494138e5d1e680cf3b8e51b32993af6b23df0e",
+    "records": 17776,
+    "bytes": 39809275
+  },
+  "sourceResultSha256": "9692c71d3cdcaed63547a8c975692cd13ff8b0918c5ebb87b023f916e6033f6c",
+  "selectedKinds": [
+    "case",
+    "checkpoint",
+    "cleanup",
+    "failure",
+    "progress",
+    "role-opportunities"
+  ],
+  "selectedRecords": 68,
+  "method": "只从本轮新样本逐行选择必要断言；选中行保持原字节，未生成预期回包或改写结果。"
+}

@@ -2,7 +2,7 @@
 
 ## 当前基线
 
-更新日期：**2026-11-11**。当前实现已包含 `game/`、`protocol/`、`formal/`、`backend/`、`frontend/` 与 `content/`：Node.js / PostgreSQL 权威服务、Vue 界面、受控双角色、第一机制关及授权复盘。用户已将本轮终点明确为[模拟输入下完成验证并合并的可玩切片](specs/vertical-slice-mock.md)，实际候选、独立审查、运行证据与合并事实统一见 [#2](https://github.com/gbcdby/xiyou/issues/2) / [#12](https://github.com/gbcdby/xiyou/issues/12)。本页不复制活动任务清单。
+更新日期：**2026-11-11**。当前实现已包含 `game/`、`protocol/`、`formal/`、`backend/`、`frontend/` 与 `content/`：Node.js / PostgreSQL 权威服务、Vue 界面、受控双角色、第一机制关及授权复盘。用户已将本轮终点明确为[模拟输入下完成验证并合并的可玩切片](specs/vertical-slice-mock.md)，实际候选、独立审查、运行证据与合并事实统一见 [#2](https://github.com/gbcdby/xiyou/issues/2) / [#12](https://github.com/gbcdby/xiyou/issues/12)。本页不复制活动任务清单。本轮固定候选的运行结果、来源对应与未覆盖范围见[模拟切片验收](../frontend/evidence/mock-integration-20261111/README.md)。
 
 模拟策略经正式 Gateway、Decision 和 Validator 执行；有限模型、数据库、HTTP / Socket.IO 与浏览器检查分别保留证据。实际供应商质量、真人体验、真实设备和公网部署仍未执行。运行入口见[仓库说明](../README.md#本机运行模拟切片)。
 
@@ -32,7 +32,7 @@
 - 《西游记》多人合作叙事：唐僧与孙悟空跨关持续存在；每局最多五位真人，玩家逐关扮演当地配角。
 - 六关当前确定的是机制类型，具体原著篇章和情节尚未选定。第一机制关优先“信任与证据 + 纠纷解决”。
 - 协作依赖信息、权限与能力的差异；NPC 可以怀疑、拒绝和改变计划。世界事实、NPC 信念与角色陈述必须分开。
-- 前端采用 Vue 3 与 TypeScript；后端语言尚未锁定。采用服务端权威状态与顺序事件，模型通过 Model Gateway 接入。
+- 当前前端采用 Vue 3 与 TypeScript，后端采用 Node.js 与 PostgreSQL。服务端维护权威状态与顺序事件，受控模型输入通过 Model Gateway 接入。
 - 关卡以配置复用机制，按阶段扩展。下一步无需预先完成六关剧情或全部六类能力。
 
 详细依据见[总设计](../初步设计文档.md)与[工程约定](engineering.md)。

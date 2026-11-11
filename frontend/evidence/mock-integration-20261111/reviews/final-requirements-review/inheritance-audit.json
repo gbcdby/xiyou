@@ -1,0 +1,29 @@
+{
+  "implementationCandidate": "fa87e221aa1e48cb19eeecc1beafcb83c0a7a21a",
+  "implementationTree": "2d81686787d35d3a26747fbd7896ab1ec54c31ed",
+  "uiReviewedCandidate": "b221ab89784b197431cf682b0c9036e46bb03932",
+  "uiRelevantDiff": [],
+  "aiAuthorCandidate": "ce57d0f172b5a447cf16069ed1255fd009ecc931",
+  "aiAuthorTree": "e0f7a7533ff21b4b58c5a878c36e1d5be8fb26ed",
+  "aiRelevantDiff": [],
+  "aiManifestCheckedCount": 70,
+  "aiManifestUnchangedCount": 63,
+  "aiManifestChangedFiles": [
+    "backend/runtime.mjs",
+    "backend/server.mjs",
+    "protocol/README.md",
+    "protocol/contracts.schema.json",
+    "protocol/fixtures/valid-v1.json",
+    "protocol/index.mjs",
+    "protocol/schema.mjs"
+  ],
+  "oldContractDefinitionCount": 55,
+  "changedOldContractDefinitions": [],
+  "addedContractDefinitions": [
+    "AuthorizedRecap",
+    "RecapEntry",
+    "RecapReference"
+  ],
+  "assessment": "允许有界继承：UI所审业务路径完全一致；AI策略、调度、上下文、决策、规则、内容与窗口脚本不变，runtime/server差异仅增加独立终态只读recap入口，协议旧定义逐项不变。完整后端与接口回归在当前候选实际执行。60秒窗口为旧执行身份，未改称当前重新执行。",
+  "notCovered": "该比较不代替#10独立需求复审，也不把旧#8的900秒结果继承为新候选长测。"
+}

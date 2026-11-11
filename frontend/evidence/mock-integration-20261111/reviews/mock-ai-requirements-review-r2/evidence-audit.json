@@ -1,0 +1,213 @@
+{
+  "reviewer": "/root/ai_requirements",
+  "source_ref": "71aad48878c532521919c72511c023285785d7e7",
+  "source_tree": "b438c5641290cf70cf9cf0fccafb85bab98e76f5",
+  "working_head": "ce57d0f172b5a447cf16069ed1255fd009ecc931",
+  "source_inputs_checked": 64,
+  "source_unchanged_after_execution": true,
+  "original_probe_sequences_unchanged_except_candidate_label": true,
+  "targeted_tests": {
+    "count": 12,
+    "pass": 12,
+    "fail": 0,
+    "exitCode": 0
+  },
+  "REQ-001": {
+    "status": "VERIFIED",
+    "prior_status": "OPEN",
+    "calls": 76,
+    "limit": 120,
+    "ending": "clarified_passage",
+    "locations": {
+      "tangseng": "destination",
+      "wukong": "destination"
+    },
+    "humanActions": 22,
+    "phases": [
+      {
+        "label": "五身份开局主动行为",
+        "calls": 12,
+        "phase": "Running"
+      },
+      {
+        "label": "五人提供合法核验来源并请求悟空前往通路口",
+        "calls": 38,
+        "phase": "Running"
+      },
+      {
+        "label": "五人携材料与工具在通路口会合",
+        "calls": 62,
+        "phase": "Running"
+      },
+      {
+        "label": "工具已合法交接",
+        "calls": 64,
+        "phase": "Running"
+      },
+      {
+        "label": "玩家实际修复后",
+        "calls": 70,
+        "phase": "Running"
+      },
+      {
+        "label": "实际安全与许可均满足且公开明确终点后",
+        "calls": 76,
+        "phase": "Finished"
+      }
+    ]
+  },
+  "REQ-002": {
+    "status": "VERIFIED",
+    "prior_status": "OPEN",
+    "decisions": 61,
+    "moves": [
+      {
+        "from": "side_path",
+        "to": "store",
+        "decisionId": "D-3b18ef09-40bd-4ace-a884-79c9933020ef",
+        "humanInputs": 2
+      },
+      {
+        "from": "store",
+        "to": "side_path",
+        "decisionId": "D-7b3384a9-1854-4685-b733-fb15e13c34fe",
+        "humanInputs": 4
+      }
+    ],
+    "extraMovement": false
+  },
+  "wake_checks": [
+    {
+      "name": "仅真人可见的private Claim不唤醒",
+      "before": {
+        "tangseng": 5,
+        "wukong": 4
+      },
+      "after": {
+        "tangseng": 5,
+        "wukong": 4
+      },
+      "status": "PASS"
+    },
+    {
+      "name": "仅检查者可见的新Observation不唤醒",
+      "before": {
+        "tangseng": 5,
+        "wukong": 4
+      },
+      "after": {
+        "tangseng": 5,
+        "wukong": 4
+      },
+      "status": "PASS"
+    },
+    {
+      "name": "合法新Claim只唤醒实际在场受众且仍不泄露私人输入",
+      "before": {
+        "tangseng": 5,
+        "wukong": 4
+      },
+      "after": {
+        "tangseng": 6,
+        "wukong": 4
+      },
+      "status": "PASS"
+    },
+    {
+      "name": "真实control.take增长epoch并按实际核心受众唤醒",
+      "epochBefore": "2",
+      "epochAfter": "3",
+      "audience": [
+        "wukong",
+        "tangseng"
+      ],
+      "before": {
+        "tangseng": 6,
+        "wukong": 4
+      },
+      "after": {
+        "tangseng": 7,
+        "wukong": 5
+      },
+      "status": "PASS"
+    },
+    {
+      "name": "变化WorldFact唤醒相关受众，重新构造各自可见位置",
+      "before": {
+        "tangseng": 7,
+        "wukong": 5
+      },
+      "after": {
+        "tangseng": 8,
+        "wukong": 9
+      },
+      "status": "PASS"
+    },
+    {
+      "name": "新Runtime恢复Running局，处理停机期间合法Claim，保留原调用预算记录",
+      "callsBefore": 17,
+      "callsAfter": 19,
+      "status": "PASS"
+    },
+    {
+      "name": "新会话自动登记两角色且不会唤醒旧会话",
+      "oldSessionBefore": {
+        "tangseng": 1,
+        "wukong": 1
+      },
+      "oldSessionAfter": {
+        "tangseng": 1,
+        "wukong": 1
+      },
+      "newSessionCalls": {
+        "tangseng": 5,
+        "wukong": 4
+      },
+      "status": "PASS"
+    },
+    {
+      "name": "终局不触发新模型调用，原调度器仍负责取消在途任务",
+      "callsBefore": "19",
+      "callsAfter": "19",
+      "status": "PASS",
+      "inFlightCancellation": "由未改Orchestrator及本轮受影响测试单列验证，此步骤从Idle检查"
+    }
+  ],
+  "provided_author_evidence": {
+    "manifest_files": 70,
+    "window_ms": 60016.968272,
+    "window_calls": 9,
+    "window_process": {
+      "code": 0,
+      "signal": null
+    },
+    "formal_window_matches_raw_without_source_maps": true,
+    "raw_window_source_before_equals_after": true,
+    "raw_window_sha256": "c2dd0aa491b535eb32569be66951a9ca29d74b82d61ed6370c647dbee9d55e37",
+    "backend_raw_log_checked": true,
+    "not_rerun_this_review": [
+      "102项完整后端",
+      "60秒窗口"
+    ]
+  },
+  "historical_failures_preserved": {
+    "review.md": "755cfdb560156397869ca3d4ea3b5f33e16c05c64510c418e60b6de97024bedf",
+    "priority-probe.json": "0d14fded261fe3e168041e82b574d931e1474c490f12dd8e6868f76ecf3cce05",
+    "route-replay-probe.json": "df332a77c9089efb512ca5f19c434713f519a4284f89b9b0bf66b4f4135a5a1e",
+    "priority-probe-first-window.json": "7f7cfa8bc16c2051b2d77c8f2cc5b70aa85f98e4dea252c48689553108c9a89e",
+    "priority-probe-second-window.json": "e2dc0617d30cac0208f0b91d7dfa1d0e910d6cce71db0ef73e18d1054f734888"
+  },
+  "artifacts": {
+    "source-before.json": "4dd9a026fb1fe04892c8de8b4c02cc67c7859151588bac4adc93b2b84f053c74",
+    "targeted.log": "4c4e8aaf16e94b02ddf4d123fef3808be9d307405a84abb761dfd1cf07585cb9",
+    "priority-probe.mjs": "303c424245d4dfe1b2ed03e0f8554992f6d54c441aa609389bdec92680caa511",
+    "priority-probe.json": "6039953678c1c5566faabf178ccbc26ac93f749d4a7014bbf0ce4981eb2ee540",
+    "priority-probe.log": "5a7c00f5396e4d2265da9471b202288d49a49b54b667592b5af70db90f6b396b",
+    "route-replay-probe.mjs": "399d05473e3b0b8d5ca0c3c1a9942c3c77033575a3e5d74aee7439a058f80395",
+    "route-replay-probe.json": "4a8323e2a717d8ead6ecbfa64601441d437954d470a5bec9d1a366e1ac46b470",
+    "route-replay-probe.log": "bf82ecfccd29080429e8da6b5d121d794a58082d57d3be0b0e5b969a6059f208",
+    "wake-probe.mjs": "be26d030babd5efd5a30df2e3304b0334dd3e09bb1a07bca07181ed27ea0bb17",
+    "wake-probe.json": "db49866ec1d87860309cb98e461487ce5f663a25127ea017856040b667f7ec65",
+    "wake-probe.log": "e78a5af7d3f55369b25801925490ddbae22abfe3d2f8a5540dd428c8d8838c0e"
+  }
+}

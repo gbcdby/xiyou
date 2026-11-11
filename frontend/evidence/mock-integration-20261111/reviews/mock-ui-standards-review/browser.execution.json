@@ -1,0 +1,19 @@
+{
+  "name": "browser",
+  "command": [
+    "node",
+    "frontend/tests/recap-browser-check.mjs"
+  ],
+  "startedAt": "2026-11-11T12:55:38.457546+00:00",
+  "finishedAt": "2026-11-11T12:56:24.417639+00:00",
+  "elapsedSeconds": 45.96011483999973,
+  "exitCode": 0,
+  "gitHead": "b221ab89784b197431cf682b0c9036e46bb03932",
+  "gitTree": "4f330795548d03f93ae38366a98d6ddf162eb97e",
+  "gitStatus": "",
+  "environment": {
+    "FRONTEND_EVIDENCE_DIR": "/workspace/scratch/17ff92cde78f/xiyou-mock-ui/.agent-output/mock-ui-standards-review/browser",
+    "PLAYWRIGHT_MODULE": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs",
+    "CHROMIUM_PACKAGE": "/workspace/scratch/17ff92cde78f/xiyou-network/.agent-output/browser-deps/node_modules/@sparticuz/chromium/build/index.js"
+  }
+}

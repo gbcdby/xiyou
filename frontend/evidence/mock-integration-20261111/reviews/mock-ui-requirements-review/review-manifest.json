@@ -1,0 +1,44 @@
+{
+  "candidate": "b221ab89784b197431cf682b0c9036e46bb03932",
+  "tree": "4f330795548d03f93ae38366a98d6ddf162eb97e",
+  "producer": "/root/mock_ui_requirements",
+  "运行后输入摘要不符": [],
+  "artifacts": {
+    "review-result.json": {
+      "sha256": "941b8dbe2275953819fc0faf8137597769708c70cd6b0079797de596198e0210",
+      "bytes": 7127
+    },
+    "review-report.md": {
+      "sha256": "44e03c344c61b5df3c62b8c987de19d5dc53710ba5aa7ad3c9796f4c4ed21500",
+      "bytes": 6543
+    },
+    "focused-tests.log": {
+      "sha256": "e7a42e71a1cedd22fb5c2993baf4c5df91604300dbdc31b33e8472063c5d755a",
+      "bytes": 1289
+    },
+    "browser-execution.log": {
+      "sha256": "244a628ecaf4a22b8cb866a459e37511bba0c1d0c9796041dc86510d64915ecb",
+      "bytes": 1891
+    },
+    "evidence-integrity.json": {
+      "sha256": "7bd923a37dbde006294b63047faa8a784b8d8159c7eaacc389ded425b1a11faa",
+      "bytes": 512
+    },
+    "output-path-hook.mjs": {
+      "sha256": "9c09ef16e4610227e5aa0be67a81c975901c8a2c8e8607dad33dadec8ff14834",
+      "bytes": 1013
+    },
+    "browser/result.json": {
+      "sha256": "a4f71b48b69d5ce24cfac4cdae5e1b0a2a24401c260b2ea10942f0fc6c65d749",
+      "bytes": 15178
+    },
+    "browser/recap-desktop.png": {
+      "sha256": "1a2d5746c95e3fa658dfc06de7d385cd8a3b7667cf8b51faa11825891d24a2bb",
+      "bytes": 236624
+    },
+    "browser/recap-mobile.png": {
+      "sha256": "d5ae1408e5f441c8f040050846d675fab293f2d6b4f06484e4623bc746bd4f6b",
+      "bytes": 102265
+    }
+  }
+}

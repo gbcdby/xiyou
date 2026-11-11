@@ -1,0 +1,179 @@
+{
+  "schema_version": "work-result/v1",
+  "work_id": "vs001-p07",
+  "skill": "worker-review",
+  "outcome": "FAIL",
+  "axis": "requirements",
+  "reviewer": "/root/ai_requirements",
+  "independent": true,
+  "standards_axis": "NOT_RUN_BY_THIS_REVIEWER",
+  "subject": {
+    "kind": "git_commit",
+    "id": "c2511f4a81d29502aed4c122cd701d3c3632d237",
+    "head_id": "c2511f4a81d29502aed4c122cd701d3c3632d237",
+    "base_id": "cf6f880f292d835f1644cd2e8f215fcf8aff512f",
+    "merge_base_id": "cf6f880f292d835f1644cd2e8f215fcf8aff512f",
+    "tree": "5c02c7273fbf02fe470e9ac77c95032ec0d9e455",
+    "contract_id": "3690b481d1805f6a7b535584c80a8574c5103d97",
+    "acceptance_profile": "mock-20261111",
+    "working_tree_note": "探针结束后的独立摘要复核匹配c251；之后作者开始同目录修正。R1仅指固定commit，不审查当前dirty修正。"
+  },
+  "evidence": [
+    {
+      "id": "E-REQ-SOURCE",
+      "kind": "source_inspection",
+      "status": "OBSERVED",
+      "scope": "固定9文件变更及受影响原消费者；未读对侧报告",
+      "path": "review.md"
+    },
+    {
+      "id": "E-REQ-TEST",
+      "kind": "test_execution",
+      "status": "PASS",
+      "raw_exit": 0,
+      "tests": 9,
+      "passed": 9,
+      "failed": 0,
+      "path": "targeted.log"
+    },
+    {
+      "id": "E-REQ-AUTHOR",
+      "kind": "provided_execution_audit",
+      "status": "OBSERVED",
+      "scope": "核对作者当前输入摘要与99/99和真实60秒原件，非本次重跑",
+      "path": "author-evidence-audit.json"
+    },
+    {
+      "id": "E-REQ-BUDGET",
+      "kind": "runtime_counterexample",
+      "status": "OBSERVED",
+      "assessment": "FAIL",
+      "raw_exit": 0,
+      "scope": "真实PG、原双调度器、默认120预算；10ms公开可配间隔，不计为60秒窗口",
+      "path": "priority-probe.json"
+    },
+    {
+      "id": "E-REQ-ROUTE",
+      "kind": "runtime_counterexample",
+      "status": "OBSERVED",
+      "assessment": "FAIL",
+      "raw_exit": 0,
+      "scope": "真实PG逐决策驱动26次，2条人类路线产生4次实际移动，不计为自动调度时长",
+      "path": "route-replay-probe.json"
+    },
+    {
+      "id": "E-REQ-AUDIT",
+      "kind": "evidence_audit",
+      "status": "OBSERVED",
+      "path": "evidence-audit.json"
+    },
+    {
+      "id": "E-REQ-PROBE-DRAFT1",
+      "kind": "probe_execution",
+      "status": "INCONCLUSIVE",
+      "raw_status": "PROBE_ERROR",
+      "raw_exit": 1,
+      "path": "priority-probe-first-window.json"
+    },
+    {
+      "id": "E-REQ-PROBE-DRAFT2",
+      "kind": "probe_execution",
+      "status": "INCONCLUSIVE",
+      "raw_status": "PROBE_ERROR",
+      "raw_exit": 1,
+      "path": "priority-probe-second-window.json"
+    }
+  ],
+  "findings": [
+    {
+      "id": "R-vs001-p07-REQ-001",
+      "axis": "requirements",
+      "severity": "high",
+      "blocking": true,
+      "status": "OPEN",
+      "subject_id": "c2511f4a81d29502aed4c122cd701d3c3632d237",
+      "location": [
+        "backend/ai/mock-provider.mjs:98",
+        "backend/ai/mock-runtime.mjs:12",
+        "backend/ai/orchestrator.mjs:onCommit/#run"
+      ],
+      "rule_or_acceptance": [
+        "mock §3.1",
+        "mock §3.2",
+        "mock §3.3",
+        "INT-AC-05",
+        "GP-AC-04"
+      ],
+      "trigger": "五人标准内容中四核验来源合法共享，角色自动处理检查/逐人分享；另一地区的提交仍唤醒无新合法信息的角色，消耗整局120预算。",
+      "impact": "两角色各60调用且BudgetExhausted，后续真实修复、许可、明确destination均Accepted却仍Running/passsage，无法产生实际NPC通行。",
+      "evidence_ids": [
+        "E-REQ-BUDGET",
+        "E-REQ-AUDIT"
+      ],
+      "recommended_action": "给合法目标推进有界优先级并限制无新合法信息的调用/无目标分享；保持120持久预算和权限，不以提高预算或改等待期限代替。补查新Claim、变化Fact、epoch、重启与新会话均不漏触发。"
+    },
+    {
+      "id": "R-vs001-p07-REQ-002",
+      "axis": "requirements",
+      "severity": "high",
+      "blocking": true,
+      "status": "OPEN",
+      "subject_id": "c2511f4a81d29502aed4c122cd701d3c3632d237",
+      "location": [
+        "backend/ai/mock-provider.mjs:113",
+        "backend/ai/mock-provider.mjs:114",
+        "backend/ai/mock-provider.mjs:117"
+      ],
+      "rule_or_acceptance": [
+        "mock §3.1",
+        "mock §3.2",
+        "mock §3.3.2"
+      ],
+      "trigger": "先实际完成出口store，再实际完成出口side_path，后续没有新玩家输入；扫描最新当前合法出口时跳过已到达目标，回选更旧Claim。",
+      "impact": "真实Accepted的side_path→store→side_path反复移动，陈旧请求复活并继续消耗预算；仅上移路线优先级会放大该路径。",
+      "evidence_ids": [
+        "E-REQ-ROUTE",
+        "E-REQ-AUDIT"
+      ],
+      "recommended_action": "区分最新、已满足及被替代的路线建议，不能因邻接关系变化恢复已完成旧建议；新Claim仍应响应，保留可见出口与安全许可校验。"
+    }
+  ],
+  "unresolved": [
+    "R-vs001-p07-REQ-001",
+    "R-vs001-p07-REQ-002"
+  ],
+  "changed_assumptions": [],
+  "next_action": "作者修正后固定新候选，执行两个原finding的需求轴R2局部复审，保留R1及探针失败原件。",
+  "not_run": [
+    "完整99项本次重跑",
+    "60秒窗口本次重跑",
+    "五人900秒",
+    "完整集成矩阵",
+    "真实模型/真人/公网"
+  ],
+  "finished_at": "2026-11-11T12:54:25.550662+00:00",
+  "current_tracked_input_hashes_match": {
+    "backend/ai/README.md": true,
+    "backend/ai/mock-provider.mjs": true,
+    "backend/ai/mock-runtime.mjs": true,
+    "backend/ai/mock.md": true,
+    "backend/mock-main.mjs": true,
+    "backend/scripts/verify-mock-ai.mjs": true,
+    "backend/tests/ai-mock-policy.test.mjs": false,
+    "backend/tests/ai-mock-runtime.test.mjs": false,
+    "package.json": true
+  },
+  "artifacts": {
+    "review.md": "755cfdb560156397869ca3d4ea3b5f33e16c05c64510c418e60b6de97024bedf",
+    "evidence-audit.json": "cf3782e1083c43773876963abcb8d7352cdb379289de85ea20ef2bc72c996f6d",
+    "author-evidence-audit.json": "d3b8af8b8965e736c23a69872e8c1026f4e511f46a97d865409f6c7460c28e61",
+    "targeted.log": "1a4eb7ca05d0ec38b426a294ef4dc814430561a5b23d1319c7d7bef1fd79bd54",
+    "priority-probe.json": "0d14fded261fe3e168041e82b574d931e1474c490f12dd8e6868f76ecf3cce05",
+    "route-replay-probe.json": "df332a77c9089efb512ca5f19c434713f519a4284f89b9b0bf66b4f4135a5a1e"
+  },
+  "working_tree_changes_after_post_run_audit": [
+    "backend/tests/ai-mock-policy.test.mjs",
+    "backend/tests/ai-mock-runtime.test.mjs",
+    "backend/tests/ai-mock-progress.test.mjs (untracked)"
+  ]
+}

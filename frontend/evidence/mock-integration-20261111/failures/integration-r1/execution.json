@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "frontend/tests/mock-integration.mjs"
+  ],
+  "startedAt": "2026-11-11T12:39:10.835333+00:00",
+  "elapsedSeconds": 133.224,
+  "exitCode": 1,
+  "rawStatus": "completed",
+  "log": "command.log"
+}

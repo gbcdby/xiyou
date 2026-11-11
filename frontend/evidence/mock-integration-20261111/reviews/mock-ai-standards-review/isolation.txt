@@ -1,0 +1,5 @@
+{"name":"私人Claim与仅真人取得的Observation均不唤醒核心角色","assessment":"PASS"}
+{"name":"另一Session的合法唤醒不消耗本局持久预算","assessment":"PASS"}
+{"name":"空闲角色终态后没有新provider调用，两个Gateway外部调用为0","assessment":"PASS"}
+{"name":"最新不可见出口阻止旧合法请求复活：14次真实Decision/预留/提交均无移动","assessment":"PASS"}
+{"status":"PASS","checks":4,"elapsedMs":3292.587577}

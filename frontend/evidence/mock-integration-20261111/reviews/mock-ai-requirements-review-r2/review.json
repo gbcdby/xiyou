@@ -1,0 +1,204 @@
+{
+  "schema_version": "work-result/v1",
+  "work_id": "vs001-p07",
+  "skill": "worker-review",
+  "outcome": "PASS",
+  "axis": "requirements",
+  "reviewer": "/root/ai_requirements",
+  "independent": true,
+  "standards_axis": "NOT_RUN_BY_THIS_REVIEWER",
+  "standards_report_read": false,
+  "subject": {
+    "kind": "git_commit",
+    "id": "71aad48878c532521919c72511c023285785d7e7",
+    "head_id": "71aad48878c532521919c72511c023285785d7e7",
+    "base_id": "c2511f4a81d29502aed4c122cd701d3c3632d237",
+    "merge_base_id": "c2511f4a81d29502aed4c122cd701d3c3632d237",
+    "tree": "b438c5641290cf70cf9cf0fccafb85bab98e76f5",
+    "contract_id": "3690b481d1805f6a7b535584c80a8574c5103d97",
+    "acceptance_profile": "mock-20261111",
+    "execution_working_head": "ce57d0f172b5a447cf16069ed1255fd009ecc931",
+    "execution_working_tree": "e0f7a7533ff21b4b58c5a878c36e1d5be8fb26ed",
+    "source_equivalence": "64个生产/测试输入逐字节匹配固定71aad提交，执行前后摘要相同；ce57相对71aad仅证据归档变化。"
+  },
+  "evidence": [
+    {
+      "id": "E-REQ-R2-SOURCE",
+      "kind": "source_inspection",
+      "status": "OBSERVED",
+      "assessment": "PASS",
+      "scope": "固定两生产文件及受影响消费者；64个实际输入身份核对，未读标准轴。",
+      "path": "source-after.json"
+    },
+    {
+      "id": "E-REQ-R2-TEST",
+      "kind": "test_execution",
+      "status": "PASS",
+      "raw_exit": 0,
+      "tests": 12,
+      "passed": 12,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "scope": "ai-mock-policy/runtime/progress三个固定测试文件",
+      "path": "targeted.log"
+    },
+    {
+      "id": "E-REQ-R2-BUDGET",
+      "kind": "runtime_reverification",
+      "status": "OBSERVED",
+      "assessment": "PASS",
+      "raw_exit": 0,
+      "scope": "原序列除候选标签外相同；真实PG、原自动双调度器、120默认预算、10ms公开间隔；76次调用自然终局。非60秒/900秒时长。",
+      "path": "priority-probe.json"
+    },
+    {
+      "id": "E-REQ-R2-ROUTE",
+      "kind": "runtime_reverification",
+      "status": "OBSERVED",
+      "assessment": "PASS",
+      "raw_exit": 0,
+      "scope": "原序列除候选标签外相同；真实PG逐决策61次、2次实际移动，无旧路线重放。非自动调度时长。",
+      "path": "route-replay-probe.json"
+    },
+    {
+      "id": "E-REQ-R2-WAKE",
+      "kind": "runtime_boundary_probe",
+      "status": "PASS",
+      "raw_exit": 0,
+      "checks": 8,
+      "passed": 8,
+      "scope": "私有消息/检查不醒、合法Claim、位置Fact、控制epoch、Runtime重启保留预算、新会话隔离、终局无新调用；终局步骤从Idle，未冒称该步骤覆盖在途取消。",
+      "path": "wake-probe.json"
+    },
+    {
+      "id": "E-REQ-R2-AUTHOR",
+      "kind": "provided_execution_audit",
+      "status": "OBSERVED",
+      "assessment": "PASS",
+      "scope": "核对正式70输入摘要和作者102/102、60016.968272ms/9调用窗口原件；本审查未重跑全套或60秒。",
+      "path": "evidence-audit.json"
+    },
+    {
+      "id": "E-REQ-R2-AUDIT",
+      "kind": "evidence_audit",
+      "status": "OBSERVED",
+      "assessment": "PASS",
+      "scope": "当前原件摘要、原探针等价、R1 FAIL和两份INCONCLUSIVE保留。",
+      "path": "evidence-audit.json"
+    }
+  ],
+  "findings": [
+    {
+      "id": "R-vs001-p07-REQ-001",
+      "axis": "requirements",
+      "severity": "high",
+      "blocking": false,
+      "status": "VERIFIED",
+      "subject_id": "71aad48878c532521919c72511c023285785d7e7",
+      "location": [
+        "backend/ai/mock-provider.mjs: route priority and grouped sharing",
+        "backend/ai/mock-runtime.mjs: audience-aware wake"
+      ],
+      "rule_or_acceptance": [
+        "mock §3.1",
+        "mock §3.2",
+        "mock §3.3",
+        "INT-AC-05",
+        "GP-AC-04"
+      ],
+      "trigger": "五人标准内容中四核验来源合法共享，角色自动处理检查/逐人分享；另一地区的提交仍唤醒无新合法信息的角色，消耗整局120预算。",
+      "impact": "两角色各60调用且BudgetExhausted，后续真实修复、许可、明确destination均Accepted却仍Running/passsage，无法产生实际NPC通行。",
+      "evidence_ids": [
+        "E-REQ-R2-SOURCE",
+        "E-REQ-R2-BUDGET",
+        "E-REQ-R2-WAKE",
+        "E-REQ-R2-AUDIT"
+      ],
+      "recommended_action": "给合法目标推进有界优先级并限制无新合法信息的调用/无目标分享；保持120持久预算和权限，不以提高预算或改等待期限代替。补查新Claim、变化Fact、epoch、重启与新会话均不漏触发。",
+      "previous_status": "OPEN",
+      "original_subject_id": "c2511f4a81d29502aed4c122cd701d3c3632d237",
+      "verified_subject_id": "71aad48878c532521919c72511c023285785d7e7",
+      "original_blocking": true,
+      "original_location": [
+        "backend/ai/mock-provider.mjs:98",
+        "backend/ai/mock-runtime.mjs:12",
+        "backend/ai/orchestrator.mjs:onCommit/#run"
+      ],
+      "resolution": "原输入序列独立真实PG复跑：22次玩家动作Accepted，默认持久预算120保持；76次调用自然Finished/clarified_passage，两NPC实际destination。8项独立唤醒边界通过，合法新Claim、事实变化、epoch、重启及新会话仍工作。",
+      "trigger_scope": "沿用R1反例条件；trigger/impact/recommended_action描述原发现，resolution记录固定R2复核结果。"
+    },
+    {
+      "id": "R-vs001-p07-REQ-002",
+      "axis": "requirements",
+      "severity": "high",
+      "blocking": false,
+      "status": "VERIFIED",
+      "subject_id": "71aad48878c532521919c72511c023285785d7e7",
+      "location": [
+        "backend/ai/mock-provider.mjs: newest route claim selection"
+      ],
+      "rule_or_acceptance": [
+        "mock §3.1",
+        "mock §3.2",
+        "mock §3.3.2"
+      ],
+      "trigger": "先实际完成出口store，再实际完成出口side_path，后续没有新玩家输入；扫描最新当前合法出口时跳过已到达目标，回选更旧Claim。",
+      "impact": "真实Accepted的side_path→store→side_path反复移动，陈旧请求复活并继续消耗预算；仅上移路线优先级会放大该路径。",
+      "evidence_ids": [
+        "E-REQ-R2-SOURCE",
+        "E-REQ-R2-ROUTE",
+        "E-REQ-R2-AUDIT"
+      ],
+      "recommended_action": "区分最新、已满足及被替代的路线建议，不能因邻接关系变化恢复已完成旧建议；新Claim仍应响应，保留可见出口与安全许可校验。",
+      "previous_status": "OPEN",
+      "original_subject_id": "c2511f4a81d29502aed4c122cd701d3c3632d237",
+      "verified_subject_id": "71aad48878c532521919c72511c023285785d7e7",
+      "original_blocking": true,
+      "original_location": [
+        "backend/ai/mock-provider.mjs:113",
+        "backend/ai/mock-provider.mjs:114",
+        "backend/ai/mock-provider.mjs:117"
+      ],
+      "resolution": "原输入序列独立真实PG逐决策复跑：61个真实Decision仅2次玩家要求的移动；没有新输入后的旧路线往返。先选最新请求再判当前位置与合法出口，不回选已满足或被替代的旧请求。",
+      "trigger_scope": "沿用R1反例条件；trigger/impact/recommended_action描述原发现，resolution记录固定R2复核结果。"
+    }
+  ],
+  "new_findings": [],
+  "unresolved": [],
+  "changed_assumptions": [],
+  "next_action": "总控可继续同一集成候选上的其余验收及已授权PR/合并流程；本结果只释放两个原需求finding，不替代标准轴或集成验收。",
+  "not_run": [
+    "完整102项后端本审查重跑",
+    "默认真实60秒窗口本审查重跑",
+    "根代理当前整合候选HTTP/Socket.IO完整局和900秒矩阵",
+    "真实外部模型/真人体验/公网部署"
+  ],
+  "not_run_profile_note": "当前明确授权全部mock，真实外部模型与真人输入不作为本轮profile释放阻断；外部模型调用0，不宣称真实已测。",
+  "historical_results_preserved": {
+    "review.md": "755cfdb560156397869ca3d4ea3b5f33e16c05c64510c418e60b6de97024bedf",
+    "priority-probe.json": "0d14fded261fe3e168041e82b574d931e1474c490f12dd8e6868f76ecf3cce05",
+    "route-replay-probe.json": "df332a77c9089efb512ca5f19c434713f519a4284f89b9b0bf66b4f4135a5a1e",
+    "priority-probe-first-window.json": "7f7cfa8bc16c2051b2d77c8f2cc5b70aa85f98e4dea252c48689553108c9a89e",
+    "priority-probe-second-window.json": "e2dc0617d30cac0208f0b91d7dfa1d0e910d6cce71db0ef73e18d1054f734888"
+  },
+  "source_unchanged": true,
+  "resources_closed": true,
+  "artifacts": {
+    "priority-probe.log": "5a7c00f5396e4d2265da9471b202288d49a49b54b667592b5af70db90f6b396b",
+    "wake-probe.log": "e78a5af7d3f55369b25801925490ddbae22abfe3d2f8a5540dd428c8d8838c0e",
+    "wake-probe.mjs": "be26d030babd5efd5a30df2e3304b0334dd3e09bb1a07bca07181ed27ea0bb17",
+    "priority-probe.json": "6039953678c1c5566faabf178ccbc26ac93f749d4a7014bbf0ce4981eb2ee540",
+    "source-before.json": "4dd9a026fb1fe04892c8de8b4c02cc67c7859151588bac4adc93b2b84f053c74",
+    "targeted.log": "4c4e8aaf16e94b02ddf4d123fef3808be9d307405a84abb761dfd1cf07585cb9",
+    "evidence-audit.json": "24637891c9224fc74a4e83f08505f304f3fbb32683ce8349de2ec9b3364f0eae",
+    "wake-probe.json": "db49866ec1d87860309cb98e461487ce5f663a25127ea017856040b667f7ec65",
+    "route-replay-probe.json": "4a8323e2a717d8ead6ecbfa64601441d437954d470a5bec9d1a366e1ac46b470",
+    "source-after.json": "5e7e0a79b704c94a8689752b9a5bf0b1bb0f3e960023f1ececa9546a5141190b",
+    "priority-probe.mjs": "303c424245d4dfe1b2ed03e0f8554992f6d54c441aa609389bdec92680caa511",
+    "route-replay-probe.log": "bf82ecfccd29080429e8da6b5d121d794a58082d57d3be0b0e5b969a6059f208",
+    "route-replay-probe.mjs": "399d05473e3b0b8d5ca0c3c1a9942c3c77033575a3e5d74aee7439a058f80395",
+    "review.md": "38b455893a89642e2af35995ee3b9d34dfc106618691b128a1c8895c9a4cc891"
+  },
+  "finished_at": "2026-11-11T13:15:47.013803+00:00"
+}

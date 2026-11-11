@@ -1,0 +1,140 @@
+{
+  "schema_version": "work-result/v1",
+  "work_id": "vs001-p08",
+  "skill": "worker-review",
+  "outcome": "PASS",
+  "scope": "仅本次#11授权证据详情、独立终态复盘以及2/5人页面技术接合的需求轴；不是完整#11/full-slice/#12释放结论",
+  "subject": {
+    "kind": "candidate",
+    "id": "b221ab89784b197431cf682b0c9036e46bb03932",
+    "head_id": "b221ab89784b197431cf682b0c9036e46bb03932",
+    "tree_id": "4f330795548d03f93ae38366a98d6ddf162eb97e",
+    "base_id": "cf6f880f292d835f1644cd2e8f215fcf8aff512f",
+    "merge_base_id": "cf6f880f292d835f1644cd2e8f215fcf8aff512f",
+    "contract_id": "3690b481d1805f6a7b535584c80a8574c5103d97 / mock-20261111 / docs/specs/vertical-slice-mock.md §4及§5相关窄范围",
+    "contract_blob": "c5197eb41639d5b4bd2281199a4627d8a734c173",
+    "environment_id": "Node v24.22.1 / PostgreSQL 18.6 / Chromium 153.0.8010.0 / Linux；合成账号、真实HTTP/Socket/Vue",
+    "producer": "/root/mock_ui_requirements",
+    "independence": "independent",
+    "worktree_status": "clean",
+    "coverage": "累计差异全部业务/协议/前端消费者，新增测试、原始证据、#7实施义务；无staged/unstaged/untracked候选改动"
+  },
+  "axes": {
+    "requirements": {
+      "outcome": "PASS",
+      "reviewer": "/root/mock_ui_requirements",
+      "independence": "independent"
+    },
+    "standards": {
+      "outcome": "NOT_RUN",
+      "reason": "单轴委派；未读取另一轴当前报告"
+    }
+  },
+  "findings": [],
+  "evidence": [
+    {
+      "id": "E-REQ-001",
+      "locator": "b221ab89784b197431cf682b0c9036e46bb03932:backend/recap.mjs; frontend/src/features/character/EvidencePanel.vue; frontend/src/features/recap/RecapPanel.vue; frontend/src/features/session/SessionPage.vue; frontend/src/network/recap-client.ts; protocol/schema.mjs; protocol/index.mjs",
+      "kind": "source_inspection",
+      "scope": "授权详情、字段白名单、Claim语义、当前认证与历史受众、只读终态分页、前端代次与兼容",
+      "status": "OBSERVED",
+      "assessment": "PASS",
+      "producer": "/root/mock_ui_requirements",
+      "subject_id": "b221ab89784b197431cf682b0c9036e46bb03932"
+    },
+    {
+      "id": "E-REQ-002",
+      "locator": "/workspace/scratch/17ff92cde78f/xiyou-mock-ui/.agent-output/mock-ui-requirements-review/focused-tests.log",
+      "kind": "execution",
+      "scope": "协议2项、真实PostgreSQL/HTTP后端4项、前端读取生命周期6项；共12项，无失败/跳过",
+      "status": "exit_code=0",
+      "assessment": "PASS",
+      "producer": "/root/mock_ui_requirements",
+      "subject_id": "b221ab89784b197431cf682b0c9036e46bb03932",
+      "duration_ms": 6015.38951
+    },
+    {
+      "id": "E-REQ-003",
+      "locator": "/workspace/scratch/17ff92cde78f/xiyou-mock-ui/.agent-output/mock-ui-requirements-review/browser/result.json",
+      "kind": "execution",
+      "scope": "15项具名检查及2张截图；真实2/5人页面链、A→C→B假修复陈述、当前/历史权限、113条授权记录分页与旧响应取消",
+      "status": "exit_code=0",
+      "assessment": "PASS",
+      "producer": "/root/mock_ui_requirements",
+      "subject_id": "b221ab89784b197431cf682b0c9036e46bb03932",
+      "duration_ms": 49504.623105,
+      "resources_closed": true,
+      "page_errors": [],
+      "database_errors": []
+    },
+    {
+      "id": "E-REQ-004",
+      "locator": "/workspace/scratch/17ff92cde78f/xiyou-mock-ui/.agent-output/mock-ui-requirements-review/evidence-integrity.json",
+      "kind": "source_inspection",
+      "scope": "31份作者归档产物及111个运行输入摘要匹配；3个原严格同步DTO不变；Spec blob与远端固定版本一致",
+      "status": "OBSERVED",
+      "assessment": "PASS",
+      "producer": "/root/mock_ui_requirements",
+      "subject_id": "b221ab89784b197431cf682b0c9036e46bb03932",
+      "historical_subject_id": "7e28d72fbdbfee88df6c5b709e519354b54820fd",
+      "transfer_basis": "7e28d72至b221ab8仅增加证据及README，现行111个输入文件摘要逐项匹配"
+    },
+    {
+      "id": "E-REQ-005",
+      "locator": "https://github.com/gbcdby/xiyou/blob/c78066d9b95eb3657293fd26a6a5d8b325846b38/formal/boundary/reconnect/README.md; isolation/README.md; visibility/README.md",
+      "kind": "source_inspection",
+      "scope": "读取#7固定模型的可信绑定、历史受众、合法传播、当前授权/视图代次及终态只读实施义务，与新接口源码及本轮负例对应；未重跑TLC",
+      "status": "OBSERVED",
+      "assessment": "PASS",
+      "producer": "/root/mock_ui_requirements",
+      "subject_id": "b221ab89784b197431cf682b0c9036e46bb03932",
+      "reference_subject_id": "c78066d9b95eb3657293fd26a6a5d8b325846b38"
+    },
+    {
+      "id": "E-REQ-006",
+      "locator": "frontend/evidence/mock-recap-20261111/checks/result.json",
+      "kind": "historical",
+      "scope": "作者全量170项及build/生成/JSON Schema检查；本轮未重复执行完整检查组",
+      "status": "HISTORICAL",
+      "raw_status": "PASS",
+      "producer": "实现者作者自查",
+      "subject_id": "7e28d72fbdbfee88df6c5b709e519354b54820fd",
+      "relation": "background",
+      "transfer_basis": "本轮独立核对现行输入及文档/证据增量，保留原执行身份"
+    }
+  ],
+  "unresolved": [
+    {
+      "scope": "full-slice-candidate/#11整票",
+      "status": "NOT_RUN",
+      "blocking_current_scope": false,
+      "detail": "本候选未接合#10正式受控双角色策略；2/5人页面终局NPC移动来自合法内部意图。完整产物须由总控在接合后的同一候选另核验。"
+    },
+    {
+      "scope": "#12完整模拟验收",
+      "status": "NOT_RUN",
+      "blocking_current_scope": false,
+      "detail": "未执行四结局合集、五职责有效贡献与120秒窗口、900000ms长测及组合故障全部矩阵；不能据此关闭父#2。"
+    },
+    {
+      "scope": "formal/full-real/生产",
+      "status": "NOT_RUN",
+      "blocking_current_scope": false,
+      "detail": "本轮没有TLC重跑/refinement、真实模型质量、真人体验、公网或生产部署检查；真实模型/真人/公网在本profile为NOT_REQUIRED。"
+    },
+    {
+      "scope": "standards",
+      "status": "NOT_RUN",
+      "blocking_current_scope": false,
+      "detail": "另一独立上下文负责，本报告不合并其结论。"
+    }
+  ],
+  "changed_assumptions": [],
+  "execution_notes": [
+    "所有新增审查材料仅位于本工作树.agent-output/mock-ui-requirements-review；没有改业务、正式测试、提交或远端写入。",
+    "output-path-hook.mjs仅把测试helper的固定PostgreSQL临时输出路径重定向至本目录，其他运行源代码、断言与流程不变。",
+    "浏览器运行前后候选与111个源码摘要一致；实际资源全部关闭。"
+  ],
+  "next_action": "交总控汇总另一独立标准轴；本窄范围可按既有授权继续PR流程。完整#11/full-slice须接合#10，在实际集成候选完成必要增量验收后再释放给#12。",
+  "finished_at": "2026-11-11T13:01:32.058907+00:00"
+}

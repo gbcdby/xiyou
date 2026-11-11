@@ -1,0 +1,155 @@
+{
+  "schema_version": "work-result/v1",
+  "work_id": "vs001-p09",
+  "skill": "worker-review",
+  "outcome": "PASS",
+  "axis": "requirements",
+  "reviewer": "/root/mock_ui_requirements",
+  "independent": true,
+  "standards_axis": "NOT_RUN_BY_THIS_REVIEWER",
+  "standards_report_read": false,
+  "subject": {
+    "kind": "git_commit",
+    "id": "fa87e221aa1e48cb19eeecc1beafcb83c0a7a21a",
+    "head_id": "fa87e221aa1e48cb19eeecc1beafcb83c0a7a21a",
+    "tree": "2d81686787d35d3a26747fbd7896ab1ec54c31ed",
+    "base_id": "10fd0f93b069446d34b08fcddb171d98ee4c50a3",
+    "base_tree": "49748fa1b4b32d8723e3fee3aad919e96311afef",
+    "merge_base_id": null,
+    "comparison": "实际使用可读完整tree比较；本工作树缺base commit对象，不虚构merge-base。",
+    "remote_equivalent_source_commit": "78a85960e4c2de64fc36a48ba1ed4c4b5e82f227",
+    "contract_id": "3690b481d1805f6a7b535584c80a8574c5103d97",
+    "contract_blob": "c5197eb41639d5b4bd2281199a4627d8a734c173",
+    "acceptance_profile": "mock-20261111"
+  },
+  "recorded_at": "2026-11-11T13:26:28.054799+00:00",
+  "evidence": [
+    {
+      "id": "E-FINAL-REQ-SOURCE",
+      "kind": "source_inspection",
+      "status": "OBSERVED",
+      "assessment": "PASS",
+      "path": "review-report.md",
+      "scope": "有效Spec全部§5矩阵、集成脚本及实际消费者，贡献/四路径/联合故障/复盘边界。"
+    },
+    {
+      "id": "E-FINAL-REQ-CORE",
+      "kind": "finite_model_source_mapping",
+      "status": "OBSERVED",
+      "assessment": "PASS",
+      "path": "model-source-mapping.md",
+      "scope": "新core精确tree及IM01..10、INV/LIVE有限实现义务；#7固定README来源；不是formal refinement或无限规模证明。"
+    },
+    {
+      "id": "E-FINAL-REQ-INTEGRITY",
+      "kind": "provided_execution_audit",
+      "status": "OBSERVED",
+      "assessment": "PASS",
+      "raw_exit": 0,
+      "path": "evidence-integrity.json",
+      "scope": "84项模型原始材料（20正向64预期反例）、当前190tests/build/generated/schema；整局7项、GUI15项+2图、900907.627508ms长测；119源码输入对应。非本审查重跑全部测试/TLC。"
+    },
+    {
+      "id": "E-FINAL-REQ-NETWORK",
+      "kind": "raw_execution_evidence_audit",
+      "status": "OBSERVED",
+      "assessment": "PASS",
+      "raw_exit": 0,
+      "path": "network-audit.json",
+      "scope": "独立关联17776条本轮新trace；8窗口40实际请求/收据；25同cursor检查点125逐人比较；真实Grace原字节两次一效果。"
+    },
+    {
+      "id": "E-FINAL-REQ-INHERIT",
+      "kind": "source_equivalence_audit",
+      "status": "OBSERVED",
+      "assessment": "PASS",
+      "raw_exit": 0,
+      "path": "inheritance-audit.json",
+      "scope": "#11对应路径零差异；#10策略/调度/上下文/决策/规则/内容/60秒脚本不变；55旧DTO定义不变。"
+    },
+    {
+      "id": "E-FINAL-REQ-ARCHIVE",
+      "kind": "artifact_audit",
+      "status": "OBSERVED",
+      "assessment": "PASS",
+      "raw_exit": 0,
+      "path": "archive-audit.json",
+      "scope": "95项预归档清单中66非标准材料、59复制原件、68必要新trace原行、摘要派生身份。29标准材料内容未读。"
+    }
+  ],
+  "findings": [],
+  "new_findings": [],
+  "unresolved": [],
+  "inherited_verified_findings": [
+    {
+      "id": "R-vs001-p07-REQ-001",
+      "status": "VERIFIED",
+      "verified_by": "/root/ai_requirements",
+      "subject_id": "71aad48878c532521919c72511c023285785d7e7",
+      "basis": "原序列独立复跑76/120自然终局；当前策略/调度路径不变并由R2完整局覆盖。"
+    },
+    {
+      "id": "R-vs001-p07-REQ-002",
+      "status": "VERIFIED",
+      "verified_by": "/root/ai_requirements",
+      "subject_id": "71aad48878c532521919c72511c023285785d7e7",
+      "basis": "原序列独立61决定只有2次请求移动；当前策略路径不变。"
+    }
+  ],
+  "matrix": [
+    {
+      "id": "VER-01",
+      "requirements_assessment": "PASS_WITHIN_SCOPE"
+    },
+    {
+      "id": "VER-02",
+      "requirements_assessment": "PASS_WITHIN_SCOPE"
+    },
+    {
+      "id": "VER-03",
+      "requirements_assessment": "PASS_WITHIN_SCOPE"
+    },
+    {
+      "id": "VER-04",
+      "requirements_assessment": "PASS_WITHIN_SCOPE"
+    },
+    {
+      "id": "VER-05",
+      "requirements_assessment": "PASS_WITHIN_SCOPE"
+    },
+    {
+      "id": "VER-06",
+      "requirements_assessment": "PASS_WITHIN_SCOPE"
+    },
+    {
+      "id": "VER-07",
+      "requirements_assessment": "PASS_WITHIN_SCOPE"
+    },
+    {
+      "id": "VER-08",
+      "requirements_assessment": "PASS_WITHIN_SCOPE"
+    }
+  ],
+  "uncovered": [
+    {
+      "scope": "真实LLM质量、真人体验、真实设备、公网部署",
+      "required": "NOT_REQUIRED",
+      "execution": "NOT_RUN"
+    },
+    {
+      "scope": "无限规模/无限重试、全笛卡尔积、源码形式化refinement、多实例/滚动升级",
+      "execution": "NOT_ASSESSED"
+    },
+    {
+      "scope": "独立标准轴、远端最终提交/PR/合并与合并后回读",
+      "execution": "由主控及另一轴另行处理，不由本报告冒称完成"
+    }
+  ],
+  "next_action": "主控可结合独立标准轴，将最终报告和入口说明作为纯归档差异固定提交并回读，按既有授权推进PR及合并；新业务改动需重新审受影响范围。",
+  "constraints_observed": {
+    "business_or_formal_tests_modified": false,
+    "remote_writes": false,
+    "old_rejected_payload_read_or_retransmitted": false,
+    "all_review_materials_within_assigned_directory": true
+  }
+}

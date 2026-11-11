@@ -1,0 +1,15 @@
+{
+  "说明": "审查者独立核对原始证据摘要、现行源码及既有严格DTO",
+  "证据源候选": "7e28d72fbdbfee88df6c5b709e519354b54820fd",
+  "当前候选": "b221ab89784b197431cf682b0c9036e46bb03932",
+  "产物检查数": 31,
+  "产物摘要不符": [],
+  "源码检查数": 111,
+  "源码摘要不符": [],
+  "既有DTO保持不变": {
+    "AuthorizedProjection": true,
+    "AuthorizedSnapshot": true,
+    "WorldBatch": true
+  },
+  "有效SpecBlob": "c5197eb41639d5b4bd2281199a4627d8a734c173"
+}

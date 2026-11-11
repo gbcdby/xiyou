@@ -1,0 +1,2353 @@
+{
+  "acceptanceProfile": "mock-20261111",
+  "source": {
+    "commit": "fa87e221aa1e48cb19eeecc1beafcb83c0a7a21a",
+    "tree": "2d81686787d35d3a26747fbd7896ab1ec54c31ed",
+    "status": "",
+    "sourceHashes": {
+      "frontend/index.html": "ee1cbc00c7b398c210c0b813b3884e1504b1a3ccfd8c6aa0e6771d8b8f564088",
+      "frontend/package-lock.json": "15ce33745ce6d9f6773f1ea0eece72832b17e6ba13b4f51b4df78d1303ffbb2d",
+      "frontend/package.json": "8d8501895bade115e0c49d472b1a8422024ea93c558188b682bd920912c036e8",
+      "frontend/src/App.vue": "7d5627646da782723c6b543f25c0135e3796fd012b0fc088973b2ff017d77222",
+      "frontend/src/components/AppIcon.vue": "738cef5ed76ae10f0b615dbd7436b2b91446e781519ff7f5694b56abb7f83e18",
+      "frontend/src/domain/action-draft.ts": "8ae7bce556e2b88bc0d469fb7bfc404e2e10e7c011c64a83da3933a300c39657",
+      "frontend/src/domain/action-journal.ts": "c2b9ed0ff7b975b0f107d8174db3fa057ca1baaa33a79ee8a8edec91d58f2a3b",
+      "frontend/src/domain/client-view.ts": "b5a4f8913b6ff26b91f00be99be830fb0cc6376cdbc5ceced08f5d4c8d028ffb",
+      "frontend/src/domain/demo.ts": "215c499749192313c1b47650731bfef9dadc7b12a9eb35ff05e1d0dadb7dce3c",
+      "frontend/src/domain/world.ts": "5344868fa8cab9e0ee5e2c5c8eef9136f241784119070fd09a6062e905d79abe",
+      "frontend/src/features/character/EvidencePanel.vue": "be5b3a51e26fad7df89029f5b361e2abebebea5043edfd74d9e685a590a9bec0",
+      "frontend/src/features/character/TeamPanel.vue": "2273a8ff1d24d08b90f9a60c022a6d3ca4bcce64da984d95624f3150d661f161",
+      "frontend/src/features/dialogue/DialoguePanel.vue": "5a8c724c17d7c66ec35d64f2529a64b7612d5195a1ae016060546598fd29b605",
+      "frontend/src/features/inventory/InventoryPanel.vue": "401037d4b0112762e0e4e860783e4f74b920331e4b804b44734df0c7ae0b710f",
+      "frontend/src/features/lobby/LobbyPage.vue": "5039fa82e300611dcef04e3d00aa58ad2ea51694089ebf773a22973c4f31782a",
+      "frontend/src/features/objective/ObjectivePanel.vue": "2b74662509aac54c9fb4398bcab28a785b7045983b0b5710ae1dd29a63914044",
+      "frontend/src/features/recap/RecapPanel.vue": "32b3e9bea20d3d3326cfb0ee490f1f8d80d77b0c763303ba5f6763cc98e2ceec",
+      "frontend/src/features/session/PendingActions.vue": "50b76a2f894940d3b2b2be8da6d0d929d601bf7e72bb3c909a9e80932443e50c",
+      "frontend/src/features/session/SessionPage.vue": "58da003b172191a74f15530698cd52161b14469f627d10c71f658a0e16387120",
+      "frontend/src/features/world/WorldPanel.vue": "4d6acf7393e78ce7337419f1644ecb60cccac01a10c5b57f1f0f37cfc0ecaeb4",
+      "frontend/src/main.ts": "4f8168aecea50101ba5537ab87775145879cbf99d848f8e5cb69091cd073115a",
+      "frontend/src/network/http-api.ts": "61c136c0f0cfbd675748927cc42f984d5df62b50af29914d12db8fe19452ab65",
+      "frontend/src/network/link.ts": "cbd9119925db492ee46d238fe1152b904cb448a07e4759e0f2c398805cf22ca2",
+      "frontend/src/network/recap-client.ts": "1ca0b7ddb04a7a412541085952c0f8848127b310b787891d1230e0f4f116839f",
+      "frontend/src/network/session-client.ts": "3eb59f5f14c779f371d3953d91b42260120c44166aeffeb4e456dce06ac0cae0",
+      "frontend/src/network/socket-link.ts": "f5e49493d466e3d8941c2f491d33a3dbca296f6a91c71b2e8535dcee63f1eb64",
+      "frontend/src/router.ts": "1bdbd05f35fa68c8bae25593fc18ece7bd6de22f072f1c106deff6520cd01eb7",
+      "frontend/src/state/app-store.ts": "af5358775c7cfea88c5a589bb3f3fc827c5ac1a87678ca5f2ce5c7a34bf0f339",
+      "frontend/src/styles-responsive.css": "3ce771cd6b196a6d536d245d1da5c58e50137c9c8e8d19df8fb47fc810bae085",
+      "frontend/src/styles.css": "66699b6899bfc3a57ec9b8e44589034cd63cac9df0ee442b2b3791c6866c6be6",
+      "frontend/tests/action-draft.test.mjs": "7cdd7e896e18690636e89f25dbbec9c858373756c1a9c8e4e70f510618285997",
+      "frontend/tests/action-journal.test.mjs": "db2c71738b60dc73b6622afcd55c3a9a47badee27961cc15080c657e47860c4f",
+      "frontend/tests/browser-check.mjs": "998c00749f73a4dc223e0bd82918ee8bd6943269218db18e3c7a8a738c28aecd",
+      "frontend/tests/browser-fixture.html": "da6b7b4e6858d6de85347347bec22de212e5a3038e0da2b24ff93b64a5948d28",
+      "frontend/tests/browser-fixture.ts": "0990b7ca0261dda0554bde36defd1dad73abe6c1f4c311845277129f18a94809",
+      "frontend/tests/client-view.test.mjs": "d8248ee24f155ab84dd9bbc7dc948c996b70ee5bf8eaa80793f87e1500da0e22",
+      "frontend/tests/demo.test.mjs": "e12c210b9106078262dedf42d9bfed0780a70e6563893d42614eb27999c029bf",
+      "frontend/tests/http-api.test.mjs": "182c5420f97c51223c4becb007a66131c5308253f8f553ed0af6b15e6733c4b9",
+      "frontend/tests/identity-recovery.test.mjs": "37cc6ba00f6829a3660ae97a3d2179afc9469afe75c6049b74ca226ae5b2eeca",
+      "frontend/tests/mock-integration.mjs": "f90a86acf8214eadfe2169c15eafd79e7e269ff794a95da85f1cb60552a8fb0a",
+      "frontend/tests/network-acceptance.mjs": "2814bac1f8500cb66465562ffa91181ab5f4a270803d7941121ee66547bac1b9",
+      "frontend/tests/network-harness.mjs": "520be322622881b966e2a4e1405bd7e4be1178971142489f418fba812465bf35",
+      "frontend/tests/network-support.mjs": "0f3fcf18499b1d6eb9f5ca6faf8e648c32753e7c56fa2859f6c47398803d27e3",
+      "frontend/tests/real-browser-check.mjs": "a7bc1f09b7297129872731c2ef84bb3020ae5c61720c190b82afdb281eb80c69",
+      "frontend/tests/recap-browser-check.mjs": "6e9a93360fc24eee248647b26df2ceceffd34c6eb05e66b0abb9ae31aafd3731",
+      "frontend/tests/recap-client.test.mjs": "070f8b8bc45e28a9005a50e17c31141c0de4c77a18247e84f5a921fb82d22bcf",
+      "frontend/tests/recovery-errors.test.mjs": "e77618b31e97c9f45159139e2edbe42d2c857eb1b62b6eacff9e0a514fc9ec3e",
+      "frontend/tests/session-client.test.mjs": "b72e292e121427ec91f7d3bda7c078028ce732fe55cf8203ea4710e2772add53",
+      "frontend/tests/socket-link.test.mjs": "2e4ad98e907d0c91f7746215840f64460eddc65638a773c556462e6534a5d57c",
+      "frontend/tsconfig.json": "9fafbffcb97044f9fcdeb27b75f99523ae1ea9feafd65c9010b167414054a7ea",
+      "frontend/vite.config.mjs": "0eea062a62cf072a0f155d7666530cf7dd8f2b1699a98c7664de425b356e23cd",
+      "backend/ai/context.mjs": "412d707040edaf596353ae0163a13cfac7bef4b7121cd0cbb91bdf499a7af8c0",
+      "backend/ai/gateway.mjs": "af87bceefb03ed4651169d19302d5f0d9cf231e8cd63c8bf2b1b247a13472a54",
+      "backend/ai/mock-provider.mjs": "5559e983b1c28fd288b516ce8ce64776a35183f5e1862e49ca984bc56691750b",
+      "backend/ai/mock-runtime.mjs": "08118db1aa81dca5968569e9d4703cfd5c77e53cdf63a93abdf2089b5ca57b2f",
+      "backend/ai/orchestrator.mjs": "47d7206d0ea0dfc7c84fcce5d787d6ec712e34082282169b616325ffe20cbe62",
+      "backend/ai/output.mjs": "99702b3e92bc469362d984aa789e00bcb6211c8377d6ec08b2c14c42b73f6492",
+      "backend/ai/persistence.mjs": "fa1954c8a288f2785d013f574d05a230aaa0da53ca8f4da5cc6d156fe14ea9a7",
+      "backend/decisions.mjs": "9b58d538223728c5d4bfb7cdeda6417bf54104c9074a6c3a5c99796da7bb5a0d",
+      "backend/errors.mjs": "3107ea638e663abf9314db0df3453fe03269de7a893135986e0b23896aa1ce1c",
+      "backend/main.mjs": "93ad5d54624ceb8b0c6ec8eadb2823320f9263e7d7335e3a66d29cfb72393afe",
+      "backend/migrations/001-authority.sql": "9b3782e1902193c22a82d6c562002246d0f211f60cd8ffb72c41e4c7063936ec",
+      "backend/migrations/002-ai.sql": "763c2c84d4df8698b1d3cb204c99c8a6125987275724d6a7a3a103e7390be2f6",
+      "backend/migrations/003-ai-output-encoding.sql": "04c6ce8c3571751b4ee68616736ff86e1cdd9825154f7f6365f10690b6849fdc",
+      "backend/mock-main.mjs": "85fba682f647b3eb85c9e2b2ad5466b01df667e4b4629723b39cfff5548c6d26",
+      "backend/recap.mjs": "cc39fc91004c9f309d77e3eb5f85ec551e1ddb483827c786641b07246d6d968b",
+      "backend/runtime.mjs": "ead73f2e007edf5ce49e13039728575a212a8fdc8971bd1ce0492984678f88f7",
+      "backend/scripts/verify-mock-ai.mjs": "465f0823483f237b7ee24126944a7f12725b7e561abaf87e1959b84fafa12a68",
+      "backend/server.mjs": "59318b5960a222ad7296e024956dffa32fe51b26f0006a18fed2c1ded81b2ef5",
+      "backend/test-support/ai-crash-worker.mjs": "02c76cd059fb4cf11d29b6290cecd2166d1482cd1166481259d3643f3dab41c6",
+      "backend/test-support/ai-evidence.mjs": "a27998aa87b17275310b53a44e6f499d945033cb35ff1a9dc771262ffa1d8407",
+      "backend/test-support/ai-room.mjs": "47b4ba8c38370b7ee87da1733fdd265f01a55a31a27f0139dddfcc6ae9df0e7f",
+      "backend/test-support/crash-worker.mjs": "04b93358c9f2b241ff0767510ca5f3bcb1d94de1a94a3ffff472f34fbaf885fb",
+      "backend/test-support/postgres.mjs": "bea44ab4cab517f87cb466316c3f89480b34cf68fb609b0e95b921158de9cb46",
+      "backend/tests/ai-context.test.mjs": "48aedb4293630399b692bdc02e2ebfcfdb3718ab9d062c7f627187700fb08fa4",
+      "backend/tests/ai-crash.test.mjs": "8e73543d84668e5de05ef35aabdf92fb428c12bd6cc6111631660c1d02aab85c",
+      "backend/tests/ai-gateway.test.mjs": "07fe533454585db4d0d6c4ff2485e0dca4fc5ad46f733392950fcf5395bee824",
+      "backend/tests/ai-mock-policy.test.mjs": "eafd39270ab00dc5aaefbf28162ca84e879252f9a91c0ab4d5c1cf8f47045992",
+      "backend/tests/ai-mock-progress.test.mjs": "e24e85940e382d892da1edaf9064bf0a28c9afe26339ae7e082321346eda3550",
+      "backend/tests/ai-mock-runtime.test.mjs": "9a08f7d722e838ac23175a6b942fa00fefa88673346ce36b60f6f53f01e39469",
+      "backend/tests/ai-network.test.mjs": "1f1c76b585ae3ba1324856ce671855d47862604f59afc836dd82e8556dd1b6ac",
+      "backend/tests/ai-orchestrator.test.mjs": "0f6c6d922389746130c25aa033a01fe699918a7616e81061d44ee8d05bfd7d1f",
+      "backend/tests/ai-output.test.mjs": "fa0cbbe40540c1e7c858d689ad738bfe5c9818a59155d4e39bda0877746364c9",
+      "backend/tests/crash.test.mjs": "e1f622591534344263a7a0e588d849a965f835453477e8ad10f3300071a83a59",
+      "backend/tests/network.test.mjs": "bd4925ab68c9db86470d6b14681a8a5bdaf33a655b72101c03300302e3f80466",
+      "backend/tests/postgres-lifecycle.test.mjs": "fd6cfd4cbc47474d55679b19553b65624ada6ff6c2c7ac392c1d1ae25c2b340c",
+      "backend/tests/recap.test.mjs": "5faecacf36f9d3d08c3804f8915fe2f10d7fb0a70eb4fafeba83e2be7d0f4913",
+      "backend/tests/review-fixes.test.mjs": "9fe836b99cfc1fe13774292255a423e4a8e19a218ab0ff08590e157a606a3dff",
+      "backend/tests/runtime.test.mjs": "bd89c7abe969de30f051fca167e4384a876734b660b7b21e3a87650439e7c504",
+      "game/projection.mjs": "52c28948068173b6368a2598a928165dc8d13ea2c33695c224c2cbb89cb54c37",
+      "game/records.mjs": "55ddd06bfb8fd729a0a89896e8993bc2891ea40e461a92362300eb1b8464c3f8",
+      "game/rules.mjs": "bd736e8b19ed6ee50efd0cc6814274c4ac0451b4f1ced699d632a79e52959977",
+      "game/types.ts": "2651098b5cf8622dbe593aaa56e264f430d82e11cb0c8b6cbcb3371ba022d6f9",
+      "game/world.mjs": "73b452f9e517030002af549c3636d701f37fb40ce2b19988ee282d4091ac4b91",
+      "protocol/contracts.schema.json": "dfc734ba27d32cdd8f36463779a5db384e5e964c827596265204ce4689c04710",
+      "protocol/fixtures/dates-v1.json": "79bebef0e89304d523bd2d9708c11bb5a10c379656ca542616384c96387eb8dc",
+      "protocol/fixtures/digest-v1.json": "94d51df1125bf9c0f190421183a22a1157420c5292ec1fbbc6fca966978597f6",
+      "protocol/fixtures/invalid-v1.json": "dd0f93047b6a4881aa1b13612fae465cb65129d570891340d01bd212089907bc",
+      "protocol/fixtures/valid-v1.json": "d959a7ec1410fd059d8a32b1226d9048cd5db01bd731671388e4306ec8a73e11",
+      "protocol/index.mjs": "a28bee237d590a5586cc844c7b0bdb234ff9b1719c15775ad55c9a2ce275aa3b",
+      "protocol/node.mjs": "fcbf2da0fd72566e8af112dd615224bb5a18c1c9ae23fafc4739b6aa9b69754a",
+      "protocol/schema.mjs": "fdab36dddb8f9114b4e77a66b87ac4adc7a36f24c414192386aaae75273f191c",
+      "protocol/scripts/generate.mjs": "8931235bc25210ac16d5d7e8a4ef0dc872ed4935f3d5569f029b493825242fb2",
+      "protocol/tests/contracts.test.mjs": "3e63761bf58ec7df7654c23f352babd90dd6e53f20a6a84bb86d0ffda7de55f1",
+      "protocol/tests/dates.test.mjs": "f94195cb2f251bcf7bd6d41e48e8483a567f210c4d7d59d0c976c4d5a92f6d15",
+      "protocol/tests/event-relations.test.mjs": "78028674909f8f7a9de75e1e8160bb8e4b3ba56701ca14b62fe6411e2165764e",
+      "protocol/tests/json.test.mjs": "6a97293603ead9ab52256e3a4b9f235e1e29fa79270b43220936460b9ef2c6a5",
+      "protocol/tests/recap.test.mjs": "753535bf20475cc2b87cbf1dcef6f206a5bb00ee6c2a185463a3586af6abb090",
+      "protocol/tests/samples.test.mjs": "24f5e33c3899a73d3141dfdf0b2a56a1cdbee2618a58e557010fb7a32e017912",
+      "content/content.schema.json": "d46d1e44359af3cd6ad27b51cf0e09ea979eb1bc59f43eb3ccba1baf6816a7a8",
+      "content/fixtures/trust-repair-fixture-v1.json": "2c3bfc582615c3a65d341a06a872dc7e8243114fc0446dead15463567e29097e",
+      "content/index.mjs": "72744b12d494a0f365ce42136a2b072f8b0f7f0f98fe94a285015d8a5bd019f7",
+      "content/schema.mjs": "5f0faa82ae305e690256bf62ac8820390d59273e077607d144b869d657a7e2ba",
+      "content/scripts/generate.mjs": "3f568f1fd49e779dff816981bf921e935b2e7ce71989837aeac14f4f99970c37",
+      "content/tests/content.test.mjs": "c688952d1353437ac6f4c960206dedb6f8b106a93962f52cf31a6d140fa0daf9",
+      "content/validate.mjs": "5b7fae82bf0a1556c2216ccbc77c4321bfaff5175571e730024a74cd5b421a84",
+      "content/versions.json": "2e1168e414eb3a01a5d86e8e48839c51512cd20c4f0055531bb7557f7feb2e09",
+      "package.json": "bb3e7e46d4a5a5818309926685def0d9dd53ffc7a5791ee6406e4fe125fdeda5",
+      "package-lock.json": "05b7939b74fe1ef072450f3f7c6d0dc4556c52469a761723700c3c7ce67ed6e3"
+    }
+  },
+  "startedAt": "2026-11-11T13:04:01.098Z",
+  "participants": "合成独立身份",
+  "externalModelCalls": 0,
+  "cases": [
+    {
+      "name": "3人实际开局覆盖全部五职责",
+      "status": "PASS",
+      "sessionId": "S-4c7a0315-bccb-48d7-839f-68e9df268a4b",
+      "roles": {
+        "A": "C-0acd791b-ceb1-45f4-b827-747e446ace6a",
+        "B": "C-f06f02c3-b8f6-4da0-ad7d-ba63adcb781d",
+        "C": "C-4c70017d-9079-4796-b9ce-07386b4a9aff",
+        "D": "C-0acd791b-ceb1-45f4-b827-747e446ace6a",
+        "E": "C-4c70017d-9079-4796-b9ce-07386b4a9aff"
+      }
+    },
+    {
+      "name": "4人实际开局覆盖全部五职责",
+      "status": "PASS",
+      "sessionId": "S-1caa1508-f186-4051-9cf1-7a910e310f1f",
+      "roles": {
+        "A": "C-e1472c9f-9eff-4fa3-ae34-cc3878e314f9",
+        "B": "C-41d9ba26-4a6e-4d56-819b-c99bfa0da6f5",
+        "C": "C-5c6a40b5-b31c-485c-9aec-bbe0c2327bd1",
+        "D": "C-c742ee11-338b-4bb5-a28c-7efa773e3930",
+        "E": "C-5c6a40b5-b31c-485c-9aec-bbe0c2327bd1"
+      }
+    },
+    {
+      "name": "五人查证原材料完整局",
+      "status": "PASS",
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "players": 5,
+      "endingCode": "clarified_passage",
+      "material": "original_material",
+      "completeEvidence": true,
+      "cursor": "223",
+      "events": 223,
+      "aiDecisions": 19,
+      "causal": [
+        {
+          "actorId": "tangseng",
+          "decisionId": "D-07f64868-222d-4063-9d42-79bc989624d5",
+          "routeClaimId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:Q159",
+          "inputObservationIds": [
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O18",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O32",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O35",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O36",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O50",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O64",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O76",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O86",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O92",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O93",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O95",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O97",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O99",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O103",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O114",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O116",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O120",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O133",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O135",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O137",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O145",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O161",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O170",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O181",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O186",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O192",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O193"
+          ],
+          "eventSeq": "213",
+          "contextDigest": "e01ca916f455f5d41654162504795ce8f69078c22fcb5509f6ccad3f14366c26"
+        },
+        {
+          "actorId": "wukong",
+          "decisionId": "D-ee15cf8c-1007-4eca-b565-419e8afb611f",
+          "routeClaimId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:Q159",
+          "inputObservationIds": [
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O20",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O40",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O42",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O60",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O70",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O77",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O78",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O85",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O94",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O96",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O98",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O100",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O102",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O117",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O119",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O131",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O134",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O136",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O138",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O144",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O156",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O160",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O169",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O185",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O196",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O203",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O204",
+            "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O206"
+          ],
+          "eventSeq": "222",
+          "contextDigest": "eb8b8c630c62e700920f7e7cccb7e4e5dee7d2f68be3bdf85252a1c9a83ef7ff"
+        }
+      ],
+      "recaps": [
+        {
+          "actorId": "C-a2dd0a3a-dc94-4409-93ee-c79d1ce82b72",
+          "count": 48,
+          "digest": "b041721fe00a72776ab833060f8e3e914330add4ac8f48da642445e80f4b79fc"
+        },
+        {
+          "actorId": "C-3a0bd529-6f56-492a-859d-03c4c6a53f31",
+          "count": 45,
+          "digest": "a855739af0f298bffaa73d073b8c88f0b45334b8b98ddd430e28e6830dd1faa0"
+        },
+        {
+          "actorId": "C-c3cc69b8-91e4-467d-b912-981928ac527a",
+          "count": 46,
+          "digest": "30e4cf702541b6e5b1c89d98373fa90a811031b127c6707931ca65b9d40cafcb"
+        },
+        {
+          "actorId": "C-83c50454-a006-4bfe-8126-9b5f228c7b5c",
+          "count": 48,
+          "digest": "07a79b5871c26bcbbd697038ed4910e6aa43e6fccbe1c23f577190b539547728"
+        },
+        {
+          "actorId": "C-a46450a0-e16e-407f-b796-332ad6e04279",
+          "count": 39,
+          "digest": "4a47ecad009dfaf96fbe5219c9c853f8cea825ad4810673b072f3fb5f57ce24d"
+        }
+      ],
+      "clock": "真实 Date.now"
+    },
+    {
+      "name": "两人备用材料完整局",
+      "status": "PASS",
+      "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+      "players": 2,
+      "endingCode": "costly_passage",
+      "material": "spare_material",
+      "completeEvidence": false,
+      "cursor": "120",
+      "events": 120,
+      "aiDecisions": 10,
+      "causal": [
+        {
+          "actorId": "tangseng",
+          "decisionId": "D-37c4fd41-6658-4b11-9bd9-5ea0d2242a98",
+          "routeClaimId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb:Q86",
+          "inputObservationIds": [
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O12",
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O23",
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O25",
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O26",
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O45",
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O55",
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O57",
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O59",
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O64",
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O69",
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O73",
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O80",
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O88",
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O95",
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O98",
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O99",
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O102"
+          ],
+          "eventSeq": "113",
+          "contextDigest": "dcebb4c1e037342175876830e955a70de8bb0283488a543fd2f64f49c3899e2d"
+        },
+        {
+          "actorId": "wukong",
+          "decisionId": "D-241a89e7-01cc-4500-a588-7815b81c39c5",
+          "routeClaimId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb:Q86",
+          "inputObservationIds": [
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O14",
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O28",
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O29",
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O40",
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O47",
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O56",
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O58",
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O60",
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O63",
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O72",
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O78",
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O81",
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O87",
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O94",
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O101",
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O105",
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O106",
+            "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O109"
+          ],
+          "eventSeq": "119",
+          "contextDigest": "dc9c93f0b05a6ce642c97e7ce96c64fa33e95d482b13de7ed7ace952207ff828"
+        }
+      ],
+      "recaps": [
+        {
+          "actorId": "C-380ff723-7f75-42ce-bf1e-e5b3778aeb37",
+          "count": 42,
+          "digest": "121cda9cd064f70728855844d59883f91cba2cea5f26c4b268c2e9c3e8d48a99"
+        },
+        {
+          "actorId": "C-967802c5-17fa-4d4e-a104-5e0c72075731",
+          "count": 39,
+          "digest": "de6fc0ef0bd7cf51f8d35601003d87a287cfab810d05189968877f7a3422b883"
+        }
+      ],
+      "clock": "真实 Date.now"
+    },
+    {
+      "name": "两人原材料调查未齐完整局",
+      "status": "PASS",
+      "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+      "players": 2,
+      "endingCode": "costly_passage",
+      "material": "original_material",
+      "completeEvidence": false,
+      "cursor": "119",
+      "events": 119,
+      "aiDecisions": 10,
+      "causal": [
+        {
+          "actorId": "tangseng",
+          "decisionId": "D-709febec-2a62-4bb9-9f3b-09e63c9c035a",
+          "routeClaimId": "S-17171c7d-748a-47e7-b994-3421583533bd:Q67",
+          "inputObservationIds": [
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O12",
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O23",
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O25",
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O26",
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O46",
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O55",
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O57",
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O59",
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O61",
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O69",
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O76",
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O85",
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O90",
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O94",
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O97",
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O98",
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O101"
+          ],
+          "eventSeq": "112",
+          "contextDigest": "5c3fde3ff17e685e6f652da9584183336d3eeb87565f2bba4d32bc80c64d4d77"
+        },
+        {
+          "actorId": "wukong",
+          "decisionId": "D-b1fe53c1-5a49-4481-a055-8006ca6a3c59",
+          "routeClaimId": "S-17171c7d-748a-47e7-b994-3421583533bd:Q67",
+          "inputObservationIds": [
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O14",
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O28",
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O29",
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O41",
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O48",
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O56",
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O58",
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O60",
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O62",
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O68",
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O75",
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O81",
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O84",
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O93",
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O100",
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O104",
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O105",
+            "S-17171c7d-748a-47e7-b994-3421583533bd:O108"
+          ],
+          "eventSeq": "118",
+          "contextDigest": "c77e6fc7dbe8d1c678e59405b8a5cc637052910e5d5bc569634fcd533ece732c"
+        }
+      ],
+      "recaps": [
+        {
+          "actorId": "C-15e92443-5bab-4757-b285-48666e6b3be3",
+          "count": 42,
+          "digest": "214ef79636cf7fe7eee308b4c44c3f634ab1dc52e7210c4e190eb537eba98d9d"
+        },
+        {
+          "actorId": "C-0c007ebc-00df-46f6-b7d5-92a39d2160b6",
+          "count": 38,
+          "digest": "cabdf6ab698a786c34e2f0103f4df20759991927e6b3415b08e5193cfc9dfd3b"
+        }
+      ],
+      "clock": "真实 Date.now"
+    },
+    {
+      "name": "原1200秒规则的超时未解决路径",
+      "status": "PASS",
+      "sessionId": "S-09fcf840-36ce-42a2-8d11-eeccfc556b37",
+      "endingCode": "unresolved",
+      "cursor": "27",
+      "clock": "期限专例受控时钟，不计900秒真实运行",
+      "recaps": [
+        {
+          "actorId": "C-bb8c6b5c-d1d2-43d0-84f6-d2895fb101fa",
+          "count": 5,
+          "digest": "1351f37409952bfbed655296fffdd73d8ca53f8560c3f9218e60260ac7665ffe"
+        },
+        {
+          "actorId": "C-a33230ef-5bfb-4e78-99a6-9d242e975678",
+          "count": 4,
+          "digest": "cae5d7ab91b501ebf57d0f10627a54935f3c8b8aba63ad4b04278341de6c13b8"
+        }
+      ]
+    },
+    {
+      "name": "真实ACK丢失→断线/代理→交还/原键重试与旧AI迟到联合轨迹",
+      "status": "PASS",
+      "sessionId": "S-fd4108e8-e1f3-4e19-b3a6-d1c6aa70f2b2",
+      "clientActionId": "39611089-d096-461d-aeb5-c3380a752c6a",
+      "rawDigest": "c0e2659b54256a800ee904745f2777837f2e13eee875d42d6bd923c9472761d7",
+      "sends": 2,
+      "effects": 1,
+      "oldDecisionId": "D-acfde2f0-5b48-487e-9a48-c0e5fbc1ee46",
+      "oldIntentCode": "DECISION_STALE",
+      "clock": "仅此期限专例使用受控时钟前进31000ms；不计900秒真实时长",
+      "gateway": {
+        "calls": 1,
+        "externalCalls": 0,
+        "valid": 0,
+        "invalid": 0,
+        "timeouts": 0,
+        "cancelled": 1,
+        "providerErrors": 0,
+        "active": 0,
+        "p50Ms": 77.493,
+        "p95Ms": 77.493,
+        "invalidRate": 0
+      }
+    }
+  ],
+  "actions": [
+    {
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "actorId": "C-a2dd0a3a-dc94-4409-93ee-c79d1ce82b72",
+      "participant": "五人查证原材料完整局-P1",
+      "actionId": "8f75794b-d94f-4bd8-bd22-54997c58f67c",
+      "kind": "inspect",
+      "purpose": "检查passage_structure",
+      "usedObservationIds": [],
+      "rawDigest": "ea3ec5a2edf312805b3541ff54448498618e74fdad2889d299e74375d9a3e425",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "a2126078fd928ce31c9883641034ed4a9d217ead18b817dd73f8b15fb3d6d924",
+        "actorId": "C-a2dd0a3a-dc94-4409-93ee-c79d1ce82b72",
+        "observedSeq": "38",
+        "actionEventRange": {
+          "first": "37",
+          "last": "38"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+        "clientActionId": "8f75794b-d94f-4bd8-bd22-54997c58f67c"
+      }
+    },
+    {
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "actorId": "C-3a0bd529-6f56-492a-859d-03c4c6a53f31",
+      "participant": "五人查证原材料完整局-P2",
+      "actionId": "c09187c9-ac3a-4b73-9607-07b9ce14466b",
+      "kind": "inspect",
+      "purpose": "检查stock_record",
+      "usedObservationIds": [],
+      "rawDigest": "c5b873672826a2fe3485993a95d251aa99fa18d75e9ca1bc4dae5f7b0af7a7c9",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "35f4b4ab2aa17b69cb846e7df26e400d4d924b920ea12698afcecc237543acbf",
+        "actorId": "C-3a0bd529-6f56-492a-859d-03c4c6a53f31",
+        "observedSeq": "44",
+        "actionEventRange": {
+          "first": "43",
+          "last": "44"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+        "clientActionId": "c09187c9-ac3a-4b73-9607-07b9ce14466b"
+      }
+    },
+    {
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "actorId": "C-3a0bd529-6f56-492a-859d-03c4c6a53f31",
+      "participant": "五人查证原材料完整局-P2",
+      "actionId": "3a4b9897-cc4c-4274-882c-4a169cd46403",
+      "kind": "share_evidence",
+      "purpose": "将库存短缺交给记事者核对登记",
+      "usedObservationIds": [
+        "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O8"
+      ],
+      "rawDigest": "8ec76d8c201bdf83af88ca6653931c5c71cbb15ef72a75b6e287bcee94c73690",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "5da6cfa65083310c08c75a0139599c93d1672bd00b9766f3e2b7f3a17b3c37c8",
+        "actorId": "C-3a0bd529-6f56-492a-859d-03c4c6a53f31",
+        "observedSeq": "45",
+        "actionEventRange": {
+          "first": "45",
+          "last": "45"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+        "clientActionId": "3a4b9897-cc4c-4274-882c-4a169cd46403"
+      }
+    },
+    {
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "actorId": "C-a46450a0-e16e-407f-b796-332ad6e04279",
+      "participant": "五人查证原材料完整局-P5",
+      "actionId": "37b4b0c7-5645-4daa-b9ce-95b63a5384f2",
+      "kind": "inspect",
+      "purpose": "检查stock_record",
+      "usedObservationIds": [
+        "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O45"
+      ],
+      "rawDigest": "69a40d98cf1fe03e248ac239e9353943e87f0271cee7dfe8c79d48baedd427a0",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "8f7ab40fedbd68aaca63bf0e6ea3e3040a78d9e061bda67edcd5190d64921854",
+        "actorId": "C-a46450a0-e16e-407f-b796-332ad6e04279",
+        "observedSeq": "47",
+        "actionEventRange": {
+          "first": "46",
+          "last": "47"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+        "clientActionId": "37b4b0c7-5645-4daa-b9ce-95b63a5384f2"
+      }
+    },
+    {
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "actorId": "C-83c50454-a006-4bfe-8126-9b5f228c7b5c",
+      "participant": "五人查证原材料完整局-P4",
+      "actionId": "49177a36-25ca-498c-9a0a-11497574dc1d",
+      "kind": "inspect",
+      "purpose": "检查material_cache",
+      "usedObservationIds": [],
+      "rawDigest": "ff4aa25a3c7d02f578d3a3fd19d9138da02c8d3547a73b6a4988c0b4a5ccc2f1",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "f8c8aa10aea0b83c8afd6707888955e7167db26427c7efa4e0cb031793f645f2",
+        "actorId": "C-83c50454-a006-4bfe-8126-9b5f228c7b5c",
+        "observedSeq": "56",
+        "actionEventRange": {
+          "first": "55",
+          "last": "56"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+        "clientActionId": "49177a36-25ca-498c-9a0a-11497574dc1d"
+      }
+    },
+    {
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "actorId": "C-83c50454-a006-4bfe-8126-9b5f228c7b5c",
+      "participant": "五人查证原材料完整局-P4",
+      "actionId": "671db31b-aded-4b39-94e7-d248f3b76e1c",
+      "kind": "take_item",
+      "purpose": "找回可见原材料",
+      "usedObservationIds": [],
+      "rawDigest": "923ceb15b7b075a54a518d116863b0ce85beb02f47a6e6a47b131549a29bee65",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "8b82afb33dd747a9b4a63f374a86e37bcaff5095d25b7a9c33c9577b2d37f1da",
+        "actorId": "C-83c50454-a006-4bfe-8126-9b5f228c7b5c",
+        "observedSeq": "57",
+        "actionEventRange": {
+          "first": "57",
+          "last": "57"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+        "clientActionId": "671db31b-aded-4b39-94e7-d248f3b76e1c"
+      }
+    },
+    {
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "actorId": "C-3a0bd529-6f56-492a-859d-03c4c6a53f31",
+      "participant": "五人查证原材料完整局-P2",
+      "actionId": "0f3b1844-d904-4920-af37-ca061fad0882",
+      "kind": "move",
+      "purpose": "前往side_path",
+      "usedObservationIds": [],
+      "rawDigest": "5f3495046c93b0a179e701537ac1e083356533de4331dd24362c20b53fc22743",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "fd3656f6960ec2a8f66609772538db4a3164eef5f2dc16777b33a81db47490a6",
+        "actorId": "C-3a0bd529-6f56-492a-859d-03c4c6a53f31",
+        "observedSeq": "58",
+        "actionEventRange": {
+          "first": "58",
+          "last": "58"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+        "clientActionId": "0f3b1844-d904-4920-af37-ca061fad0882"
+      }
+    },
+    {
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "actorId": "C-3a0bd529-6f56-492a-859d-03c4c6a53f31",
+      "participant": "五人查证原材料完整局-P2",
+      "actionId": "36053d26-a124-4a23-b193-c2b458dfb2d2",
+      "kind": "speak",
+      "purpose": "协调悟空与工具供给汇合",
+      "usedObservationIds": [],
+      "rawDigest": "37539899adf3f45b19a616c8ba7a349beda1c5f3695fa8dd54a0fc853e38b493",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "590175014d1a52d71761e70498a1319e799b6b3df9fd3b146529fa2335e37aff",
+        "actorId": "C-3a0bd529-6f56-492a-859d-03c4c6a53f31",
+        "observedSeq": "62",
+        "actionEventRange": {
+          "first": "59",
+          "last": "62"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+        "clientActionId": "36053d26-a124-4a23-b193-c2b458dfb2d2"
+      }
+    },
+    {
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "actorId": "C-3a0bd529-6f56-492a-859d-03c4c6a53f31",
+      "participant": "五人查证原材料完整局-P2",
+      "actionId": "b4a56305-676b-4ca2-9ca8-660aa83e46ab",
+      "kind": "move",
+      "purpose": "前往passage",
+      "usedObservationIds": [],
+      "rawDigest": "9ff912f0d7c71325ccc3dae8b12e4ccdb32cf2c54a6ab2e75af66446d2b1e51f",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "a3525a9b4cf22577ba813acf508ab35efe680e6f6b51747beef9005abd82d7b5",
+        "actorId": "C-3a0bd529-6f56-492a-859d-03c4c6a53f31",
+        "observedSeq": "74",
+        "actionEventRange": {
+          "first": "74",
+          "last": "74"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+        "clientActionId": "b4a56305-676b-4ca2-9ca8-660aa83e46ab"
+      }
+    },
+    {
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "actorId": "C-83c50454-a006-4bfe-8126-9b5f228c7b5c",
+      "participant": "五人查证原材料完整局-P4",
+      "actionId": "fd8cbc2f-a687-45d8-9a2a-6a8e066fe7b9",
+      "kind": "move",
+      "purpose": "前往passage",
+      "usedObservationIds": [],
+      "rawDigest": "57618f11b09687c72c590c57bfb5824b17f11b79a75b57df27f977d471c675ce",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "c5a368d4d7e8fdf93be4d7ce308e64a115199e22f3115acb8bff2568a6ccd785",
+        "actorId": "C-83c50454-a006-4bfe-8126-9b5f228c7b5c",
+        "observedSeq": "79",
+        "actionEventRange": {
+          "first": "79",
+          "last": "79"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+        "clientActionId": "fd8cbc2f-a687-45d8-9a2a-6a8e066fe7b9"
+      }
+    },
+    {
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "actorId": "C-a46450a0-e16e-407f-b796-332ad6e04279",
+      "participant": "五人查证原材料完整局-P5",
+      "actionId": "ab8aba9d-c803-4095-add8-5ba565d8dd96",
+      "kind": "move",
+      "purpose": "前往passage",
+      "usedObservationIds": [],
+      "rawDigest": "4ef2ccc46b90f261794c7a9a3b01a61cde1f94b6f8e37ae52da03b72e865f62d",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "555aca306a40a3f33f0c1bfc8f05de8512025fe12e5fb3074bace8cb3c88f111",
+        "actorId": "C-a46450a0-e16e-407f-b796-332ad6e04279",
+        "observedSeq": "80",
+        "actionEventRange": {
+          "first": "80",
+          "last": "80"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+        "clientActionId": "ab8aba9d-c803-4095-add8-5ba565d8dd96"
+      }
+    },
+    {
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "actorId": "C-3a0bd529-6f56-492a-859d-03c4c6a53f31",
+      "participant": "五人查证原材料完整局-P2",
+      "actionId": "5143fcca-db0a-471f-b3da-ce18f5dac6b2",
+      "kind": "transfer_item",
+      "purpose": "交付repair_tool",
+      "usedObservationIds": [],
+      "rawDigest": "ecb80c49dcf0ea4cf16be4218dd1a7f437bd7b3ec3edb8c96a13662e82b63617",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "18552127fe27121462b41c28c2dc002ee1a31b3e428a97935f483c976e303283",
+        "actorId": "C-3a0bd529-6f56-492a-859d-03c4c6a53f31",
+        "observedSeq": "81",
+        "actionEventRange": {
+          "first": "81",
+          "last": "81"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+        "clientActionId": "5143fcca-db0a-471f-b3da-ce18f5dac6b2"
+      }
+    },
+    {
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "actorId": "C-83c50454-a006-4bfe-8126-9b5f228c7b5c",
+      "participant": "五人查证原材料完整局-P4",
+      "actionId": "225f26e9-4c2f-4384-a7ea-7a0f8d4a0585",
+      "kind": "transfer_item",
+      "purpose": "交付original_material",
+      "usedObservationIds": [],
+      "rawDigest": "858127e4aedc509a98e8b25c0fb8a694658b8f28f4353088acb2da3199111918",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "a8b004d22a685a9e66992c933260440dcf62a531a617ce5f41f86eb995944dbf",
+        "actorId": "C-83c50454-a006-4bfe-8126-9b5f228c7b5c",
+        "observedSeq": "83",
+        "actionEventRange": {
+          "first": "83",
+          "last": "83"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+        "clientActionId": "225f26e9-4c2f-4384-a7ea-7a0f8d4a0585"
+      }
+    },
+    {
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "actorId": "C-a2dd0a3a-dc94-4409-93ee-c79d1ce82b72",
+      "participant": "五人查证原材料完整局-P1",
+      "actionId": "0bd46c1e-dd06-4a2a-9d0a-764f41aee57e",
+      "kind": "share_evidence",
+      "purpose": "将独立证据交给两位核心角色",
+      "usedObservationIds": [
+        "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O12"
+      ],
+      "rawDigest": "254e5fbe28a53eac84341400bdee9f06c44c71c51c2fa6a995e0e0ce83fd3f55",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "54cda0e550fc82082d9dacc7a231d0f0151c1a68df37dbdccdc2d6add26bbed3",
+        "actorId": "C-a2dd0a3a-dc94-4409-93ee-c79d1ce82b72",
+        "observedSeq": "94",
+        "actionEventRange": {
+          "first": "93",
+          "last": "94"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+        "clientActionId": "0bd46c1e-dd06-4a2a-9d0a-764f41aee57e"
+      }
+    },
+    {
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "actorId": "C-a2dd0a3a-dc94-4409-93ee-c79d1ce82b72",
+      "participant": "五人查证原材料完整局-P1",
+      "actionId": "8a8b9eaf-cff3-47a3-996e-1d1ba7a90883",
+      "kind": "share_evidence",
+      "purpose": "将独立证据交给两位核心角色",
+      "usedObservationIds": [
+        "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O38"
+      ],
+      "rawDigest": "10ded7667259e51d687aa7b7d23f13104077a81484a37322a3d8d18e3244d35c",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "92a4700db18685de812050f95690ec26f1a5fe87922a3c19f67174cf557e0211",
+        "actorId": "C-a2dd0a3a-dc94-4409-93ee-c79d1ce82b72",
+        "observedSeq": "96",
+        "actionEventRange": {
+          "first": "95",
+          "last": "96"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+        "clientActionId": "8a8b9eaf-cff3-47a3-996e-1d1ba7a90883"
+      }
+    },
+    {
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "actorId": "C-a2dd0a3a-dc94-4409-93ee-c79d1ce82b72",
+      "participant": "五人查证原材料完整局-P1",
+      "actionId": "06a70c01-2395-4bee-9922-e2324668471b",
+      "kind": "share_evidence",
+      "purpose": "将独立证据交给两位核心角色",
+      "usedObservationIds": [
+        "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O67"
+      ],
+      "rawDigest": "b0249fdfaf6004910191294d07196172f28eb5a3fec5fb0322d132354c8fca0d",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "70d89479f8c1e3ca5137acd81fa7a5019188aa26516b99b81500ce67cc91c589",
+        "actorId": "C-a2dd0a3a-dc94-4409-93ee-c79d1ce82b72",
+        "observedSeq": "98",
+        "actionEventRange": {
+          "first": "97",
+          "last": "98"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+        "clientActionId": "06a70c01-2395-4bee-9922-e2324668471b"
+      }
+    },
+    {
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "actorId": "C-3a0bd529-6f56-492a-859d-03c4c6a53f31",
+      "participant": "五人查证原材料完整局-P2",
+      "actionId": "36ad0c16-3175-4548-8f65-c019ecb254d9",
+      "kind": "share_evidence",
+      "purpose": "将独立证据交给两位核心角色",
+      "usedObservationIds": [
+        "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O44"
+      ],
+      "rawDigest": "5d14b339f2931a9f39cc6abd6e6e16777eed6fcae1814905d5f0da74a31191c8",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "734fb20b3b7e2d0ef829065ee88cda3f1f015d7bb1cd171bc27279bead1e461f",
+        "actorId": "C-3a0bd529-6f56-492a-859d-03c4c6a53f31",
+        "observedSeq": "100",
+        "actionEventRange": {
+          "first": "99",
+          "last": "100"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+        "clientActionId": "36ad0c16-3175-4548-8f65-c019ecb254d9"
+      }
+    },
+    {
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "actorId": "C-83c50454-a006-4bfe-8126-9b5f228c7b5c",
+      "participant": "五人查证原材料完整局-P4",
+      "actionId": "bfccd50f-374f-4ea5-b822-49558f19bd93",
+      "kind": "share_evidence",
+      "purpose": "将独立证据交给两位核心角色",
+      "usedObservationIds": [
+        "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O56"
+      ],
+      "rawDigest": "2bc8237bc153b472a0cf10191ef3bb7dfe5a827473141d744d3d3491f33d705a",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "b3da2aba9e21106e70e46a43a35dc292126c76158b8d876713bc58c567d5708f",
+        "actorId": "C-83c50454-a006-4bfe-8126-9b5f228c7b5c",
+        "observedSeq": "117",
+        "actionEventRange": {
+          "first": "116",
+          "last": "117"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+        "clientActionId": "bfccd50f-374f-4ea5-b822-49558f19bd93"
+      }
+    },
+    {
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "actorId": "C-a46450a0-e16e-407f-b796-332ad6e04279",
+      "participant": "五人查证原材料完整局-P5",
+      "actionId": "f2d7d1a4-f304-4bc8-878e-b1b5b543a80d",
+      "kind": "share_evidence",
+      "purpose": "将独立证据交给两位核心角色",
+      "usedObservationIds": [
+        "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O47"
+      ],
+      "rawDigest": "4c94ac5c527d81d644a4c489fa7b81db65f918126d914bde42be36ce5999dcaf",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "29f52896613c46050df4cf1f5bc7a217bbc6f7bc5a3702dae8e399019b10e491",
+        "actorId": "C-a46450a0-e16e-407f-b796-332ad6e04279",
+        "observedSeq": "134",
+        "actionEventRange": {
+          "first": "133",
+          "last": "134"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+        "clientActionId": "f2d7d1a4-f304-4bc8-878e-b1b5b543a80d"
+      }
+    },
+    {
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "actorId": "C-a46450a0-e16e-407f-b796-332ad6e04279",
+      "participant": "五人查证原材料完整局-P5",
+      "actionId": "003bccd8-6fec-45fb-b9d4-ec8e8233f377",
+      "kind": "share_evidence",
+      "purpose": "将独立证据交给两位核心角色",
+      "usedObservationIds": [
+        "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O112"
+      ],
+      "rawDigest": "a80dfbd0130a043a3f3c66ce6825e3d8098c82cd6e11a9ff92897b2e1f1015bc",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "19de3b317e01e03c119846c1d398874d53a429cd6c1db30ef6f3da04472c6d82",
+        "actorId": "C-a46450a0-e16e-407f-b796-332ad6e04279",
+        "observedSeq": "136",
+        "actionEventRange": {
+          "first": "135",
+          "last": "136"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+        "clientActionId": "003bccd8-6fec-45fb-b9d4-ec8e8233f377"
+      }
+    },
+    {
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "actorId": "C-a46450a0-e16e-407f-b796-332ad6e04279",
+      "participant": "五人查证原材料完整局-P5",
+      "actionId": "aba7b633-4a53-4f19-a96f-6175b5f6fda9",
+      "kind": "share_evidence",
+      "purpose": "将独立证据交给两位核心角色",
+      "usedObservationIds": [
+        "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O129"
+      ],
+      "rawDigest": "9618b1b93dae1c8a316456c92fe70cde5fbaf88d4937f587ca22b73888aa112a",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "742b1d5a480dad72a3436a80324ff094a0ebc56c2e36274351fa43bce2c69d77",
+        "actorId": "C-a46450a0-e16e-407f-b796-332ad6e04279",
+        "observedSeq": "138",
+        "actionEventRange": {
+          "first": "137",
+          "last": "138"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+        "clientActionId": "aba7b633-4a53-4f19-a96f-6175b5f6fda9"
+      }
+    },
+    {
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "actorId": "C-a2dd0a3a-dc94-4409-93ee-c79d1ce82b72",
+      "participant": "五人查证原材料完整局-P1",
+      "actionId": "dcd6cab3-ddd0-4014-88bb-a930fc9acfa9",
+      "kind": "use_item",
+      "purpose": "由玩家提交实际修复",
+      "usedObservationIds": [],
+      "rawDigest": "b439b1c9b0077d5d034811b519bbc8d33dd04c0f085cda5232c7c69a9e23135e",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "f02c2ff193cd2f6706b0021f8216a104305ff52191dfdca48b9775dfabafc031",
+        "actorId": "C-a2dd0a3a-dc94-4409-93ee-c79d1ce82b72",
+        "observedSeq": "141",
+        "actionEventRange": {
+          "first": "139",
+          "last": "141"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+        "clientActionId": "dcd6cab3-ddd0-4014-88bb-a930fc9acfa9"
+      }
+    },
+    {
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "actorId": "C-c3cc69b8-91e4-467d-b912-981928ac527a",
+      "participant": "五人查证原材料完整局-P3",
+      "actionId": "f16e52cf-de8f-49a0-bf63-da154e8871d4",
+      "kind": "interact",
+      "purpose": "由通行协调者核对修复后授予许可",
+      "usedObservationIds": [],
+      "rawDigest": "e57b266371af5c9231a7d61216b9b8971af01404210f72073e7fae48d7124797",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "773cdb93829ea27a8df77da91ec708cda1427136c5848d8370b8d8624aa993bb",
+        "actorId": "C-c3cc69b8-91e4-467d-b912-981928ac527a",
+        "observedSeq": "158",
+        "actionEventRange": {
+          "first": "158",
+          "last": "158"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+        "clientActionId": "f16e52cf-de8f-49a0-bf63-da154e8871d4"
+      }
+    },
+    {
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "actorId": "C-c3cc69b8-91e4-467d-b912-981928ac527a",
+      "participant": "五人查证原材料完整局-P3",
+      "actionId": "3ebe42fe-0183-4de2-bf83-799bb1c88149",
+      "kind": "speak",
+      "purpose": "基于当前合法出口协调最终通行",
+      "usedObservationIds": [],
+      "rawDigest": "a2663e61658fa59007abcb92dcbbce04e88b78c9593d445f0f431fdfe33fe7b6",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "071de643bd601ba60a332f2bcb1b2f86dd6e77602a42594f151ad2578643d457",
+        "actorId": "C-c3cc69b8-91e4-467d-b912-981928ac527a",
+        "observedSeq": "166",
+        "actionEventRange": {
+          "first": "159",
+          "last": "166"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+        "clientActionId": "3ebe42fe-0183-4de2-bf83-799bb1c88149"
+      }
+    },
+    {
+      "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+      "actorId": "C-380ff723-7f75-42ce-bf1e-e5b3778aeb37",
+      "participant": "两人备用材料完整局-P1",
+      "actionId": "7ac2a22d-dc80-45e9-96ec-cd078246077a",
+      "kind": "inspect",
+      "purpose": "检查passage_structure",
+      "usedObservationIds": [],
+      "rawDigest": "0d1d2e7290dd3278ac5bbd64220c7d4a716ad338cfb54e9fdb219ce8345ee747",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "03147f9c2ed07a6d3892f1596bc5691753806a0d36b62d3cd73de6eb718f0818",
+        "actorId": "C-380ff723-7f75-42ce-bf1e-e5b3778aeb37",
+        "observedSeq": "31",
+        "actionEventRange": {
+          "first": "30",
+          "last": "31"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+        "clientActionId": "7ac2a22d-dc80-45e9-96ec-cd078246077a"
+      }
+    },
+    {
+      "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+      "actorId": "C-967802c5-17fa-4d4e-a104-5e0c72075731",
+      "participant": "两人备用材料完整局-P2",
+      "actionId": "286c1de4-6201-4a0f-a2bf-489fffe8344c",
+      "kind": "inspect",
+      "purpose": "检查stock_record",
+      "usedObservationIds": [],
+      "rawDigest": "30a39637cd0714b5332e47c1eea5226eccf4791640f8e7e329077e37ef4ec9f6",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "dc049cdc89b11c78140f201c5e7fa5f58479f1975aa42a5d8339cca71b5fb808",
+        "actorId": "C-967802c5-17fa-4d4e-a104-5e0c72075731",
+        "observedSeq": "34",
+        "actionEventRange": {
+          "first": "32",
+          "last": "34"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+        "clientActionId": "286c1de4-6201-4a0f-a2bf-489fffe8344c"
+      }
+    },
+    {
+      "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+      "actorId": "C-380ff723-7f75-42ce-bf1e-e5b3778aeb37",
+      "participant": "两人备用材料完整局-P1",
+      "actionId": "ed60af87-1bd9-4912-a789-fea6f3657798",
+      "kind": "move",
+      "purpose": "前往side_path",
+      "usedObservationIds": [],
+      "rawDigest": "6486d3167dd00da10e8102867e21229c79128007df123913cce5f51c0305fff7",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "76fdc90c27f2a3e34dbf174ab394a307f8100a7db024deb1ee29763a8c5d9279",
+        "actorId": "C-380ff723-7f75-42ce-bf1e-e5b3778aeb37",
+        "observedSeq": "35",
+        "actionEventRange": {
+          "first": "35",
+          "last": "35"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+        "clientActionId": "ed60af87-1bd9-4912-a789-fea6f3657798"
+      }
+    },
+    {
+      "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+      "actorId": "C-380ff723-7f75-42ce-bf1e-e5b3778aeb37",
+      "participant": "两人备用材料完整局-P1",
+      "actionId": "da4628b8-88be-4712-bda0-bd4830fb664c",
+      "kind": "inspect",
+      "purpose": "检查material_cache",
+      "usedObservationIds": [],
+      "rawDigest": "da849e0b88a383aeea19559fb1e357eecd28be2dee151b5de5853548ba031a4c",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "067fe30cdb0a185f489e04e4034ac2616fc944c1c639aaaf12a4d685a5686002",
+        "actorId": "C-380ff723-7f75-42ce-bf1e-e5b3778aeb37",
+        "observedSeq": "37",
+        "actionEventRange": {
+          "first": "36",
+          "last": "37"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+        "clientActionId": "da4628b8-88be-4712-bda0-bd4830fb664c"
+      }
+    },
+    {
+      "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+      "actorId": "C-967802c5-17fa-4d4e-a104-5e0c72075731",
+      "participant": "两人备用材料完整局-P2",
+      "actionId": "85c19833-db02-4d92-bdf4-59e6f5bd21cb",
+      "kind": "move",
+      "purpose": "前往side_path",
+      "usedObservationIds": [],
+      "rawDigest": "9aa3669aabad5e5bbd37395c05fa41db5a1f2414e8218ab288bc7f2c16720f98",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "8b012b27dd8c33ded66cd9fc8d37af73ee0a7e83e9db68cb19c27e9a46b5b96a",
+        "actorId": "C-967802c5-17fa-4d4e-a104-5e0c72075731",
+        "observedSeq": "38",
+        "actionEventRange": {
+          "first": "38",
+          "last": "38"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+        "clientActionId": "85c19833-db02-4d92-bdf4-59e6f5bd21cb"
+      }
+    },
+    {
+      "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+      "actorId": "C-967802c5-17fa-4d4e-a104-5e0c72075731",
+      "participant": "两人备用材料完整局-P2",
+      "actionId": "6d38b553-5a16-4712-bf90-a5ddd7acd2e7",
+      "kind": "speak",
+      "purpose": "协调悟空与工具供给汇合",
+      "usedObservationIds": [],
+      "rawDigest": "fc21e378ab99c8299ae0036386abc1574f08541f3b6842be99e92e5da58db926",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "bda7e4d17cc49003d2539ff1d2a203823c0e7723564fa60db2dcbff4483dcee0",
+        "actorId": "C-967802c5-17fa-4d4e-a104-5e0c72075731",
+        "observedSeq": "42",
+        "actionEventRange": {
+          "first": "39",
+          "last": "42"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+        "clientActionId": "6d38b553-5a16-4712-bf90-a5ddd7acd2e7"
+      }
+    },
+    {
+      "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+      "actorId": "C-380ff723-7f75-42ce-bf1e-e5b3778aeb37",
+      "participant": "两人备用材料完整局-P1",
+      "actionId": "5a94446c-c2c4-4346-a1ff-e9de8af2008f",
+      "kind": "move",
+      "purpose": "前往passage",
+      "usedObservationIds": [],
+      "rawDigest": "8dc692b11b1d7a6bcb4e09aba6f0fa192d74e040cff88db98d9d64bb38cca5e9",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "12570f58a7ef7d7b9f9b784324fdc91b534dde7550d2ca9929f9efed16428ada",
+        "actorId": "C-380ff723-7f75-42ce-bf1e-e5b3778aeb37",
+        "observedSeq": "51",
+        "actionEventRange": {
+          "first": "51",
+          "last": "51"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+        "clientActionId": "5a94446c-c2c4-4346-a1ff-e9de8af2008f"
+      }
+    },
+    {
+      "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+      "actorId": "C-967802c5-17fa-4d4e-a104-5e0c72075731",
+      "participant": "两人备用材料完整局-P2",
+      "actionId": "2bbec164-0de7-4b01-8e1b-4d0d3bda8b12",
+      "kind": "move",
+      "purpose": "前往passage",
+      "usedObservationIds": [],
+      "rawDigest": "2d0479a4d19d6add24eacc834cd4bca3f1f0b3c562a724508eed8bc09396337e",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "235b84cc6a35c195c2e4c63e0a09d4f654c04a7d4a1d545cdaec8b538268cfd6",
+        "actorId": "C-967802c5-17fa-4d4e-a104-5e0c72075731",
+        "observedSeq": "52",
+        "actionEventRange": {
+          "first": "52",
+          "last": "52"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+        "clientActionId": "2bbec164-0de7-4b01-8e1b-4d0d3bda8b12"
+      }
+    },
+    {
+      "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+      "actorId": "C-967802c5-17fa-4d4e-a104-5e0c72075731",
+      "participant": "两人备用材料完整局-P2",
+      "actionId": "d822a1c0-f5c3-4345-8f46-2bbca0df5e2f",
+      "kind": "transfer_item",
+      "purpose": "交付repair_tool",
+      "usedObservationIds": [],
+      "rawDigest": "544aa4f8a72b8338026572ffabde49365a50c0ed3c5f03eea40d2941f50cd23e",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "d57cb1c51089714a225489662362ccf26788d2ca0887ea221e23969df831aadb",
+        "actorId": "C-967802c5-17fa-4d4e-a104-5e0c72075731",
+        "observedSeq": "53",
+        "actionEventRange": {
+          "first": "53",
+          "last": "53"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+        "clientActionId": "d822a1c0-f5c3-4345-8f46-2bbca0df5e2f"
+      }
+    },
+    {
+      "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+      "actorId": "C-967802c5-17fa-4d4e-a104-5e0c72075731",
+      "participant": "两人备用材料完整局-P2",
+      "actionId": "57d044c6-fb62-419b-81a9-f2d74163b391",
+      "kind": "transfer_item",
+      "purpose": "交付spare_material",
+      "usedObservationIds": [],
+      "rawDigest": "058cf616bf0ab1fa75d35d922e1b4f9ffe8745d5ab34ca37d24c624fd646e3b0",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "abef1a3958d1656453186877a7160a35e574a4ad5ffb3d06e1423f99d1d1e1be",
+        "actorId": "C-967802c5-17fa-4d4e-a104-5e0c72075731",
+        "observedSeq": "54",
+        "actionEventRange": {
+          "first": "54",
+          "last": "54"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+        "clientActionId": "57d044c6-fb62-419b-81a9-f2d74163b391"
+      }
+    },
+    {
+      "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+      "actorId": "C-380ff723-7f75-42ce-bf1e-e5b3778aeb37",
+      "participant": "两人备用材料完整局-P1",
+      "actionId": "cc78879e-693a-4f54-ab82-802e708ed3f9",
+      "kind": "share_evidence",
+      "purpose": "将独立证据交给两位核心角色",
+      "usedObservationIds": [
+        "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O5"
+      ],
+      "rawDigest": "0bbc7e0b4a80f74c5308cea4626de3e0ef7b9a0e49e81fb0abf44ff585341829",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "11f6b2a2eafe45dd07bb2f1ef4f69c69d10e72ba1a7511f3575ba508b52ee22f",
+        "actorId": "C-380ff723-7f75-42ce-bf1e-e5b3778aeb37",
+        "observedSeq": "56",
+        "actionEventRange": {
+          "first": "55",
+          "last": "56"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+        "clientActionId": "cc78879e-693a-4f54-ab82-802e708ed3f9"
+      }
+    },
+    {
+      "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+      "actorId": "C-380ff723-7f75-42ce-bf1e-e5b3778aeb37",
+      "participant": "两人备用材料完整局-P1",
+      "actionId": "f9f17a58-5b05-4aaf-acc3-9ea2ab59ce08",
+      "kind": "share_evidence",
+      "purpose": "将独立证据交给两位核心角色",
+      "usedObservationIds": [
+        "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O31"
+      ],
+      "rawDigest": "399862932b188459ac2ffa7d32df51c3048915795955ba18e9851ba2a203f861",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "f383895f3eb3ea7a627b84292d15e28fc87736503988e9bf339c1b13f0f5d6eb",
+        "actorId": "C-380ff723-7f75-42ce-bf1e-e5b3778aeb37",
+        "observedSeq": "58",
+        "actionEventRange": {
+          "first": "57",
+          "last": "58"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+        "clientActionId": "f9f17a58-5b05-4aaf-acc3-9ea2ab59ce08"
+      }
+    },
+    {
+      "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+      "actorId": "C-380ff723-7f75-42ce-bf1e-e5b3778aeb37",
+      "participant": "两人备用材料完整局-P1",
+      "actionId": "5bc8e863-a88e-4a86-928c-8a9d277a8099",
+      "kind": "share_evidence",
+      "purpose": "将独立证据交给两位核心角色",
+      "usedObservationIds": [
+        "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O37"
+      ],
+      "rawDigest": "df6fd7323b98def04e6318c3adc2ce4370778d6e626e9ea8b30fca829cd18d4f",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "9c80d95af3990d391076f137cfd29a1ce6b698f3cd67a268b846bc470f84424a",
+        "actorId": "C-380ff723-7f75-42ce-bf1e-e5b3778aeb37",
+        "observedSeq": "60",
+        "actionEventRange": {
+          "first": "59",
+          "last": "60"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+        "clientActionId": "5bc8e863-a88e-4a86-928c-8a9d277a8099"
+      }
+    },
+    {
+      "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+      "actorId": "C-967802c5-17fa-4d4e-a104-5e0c72075731",
+      "participant": "两人备用材料完整局-P2",
+      "actionId": "1d39c195-87f7-488f-80d0-cbae5ea2ff4b",
+      "kind": "share_evidence",
+      "purpose": "将独立证据交给两位核心角色",
+      "usedObservationIds": [
+        "S-eb1396bd-4b80-466e-a135-268ed72c9feb:O33"
+      ],
+      "rawDigest": "e41bdcad848ded8f63585f1b01dd5b11a0c27f90f53f4f2e9a834dcb707892ad",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "e81e559477fd00d6eb6cf212b87526bb47c8442446e781c041f3e7ce028fb9ab",
+        "actorId": "C-967802c5-17fa-4d4e-a104-5e0c72075731",
+        "observedSeq": "81",
+        "actionEventRange": {
+          "first": "80",
+          "last": "81"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+        "clientActionId": "1d39c195-87f7-488f-80d0-cbae5ea2ff4b"
+      }
+    },
+    {
+      "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+      "actorId": "C-380ff723-7f75-42ce-bf1e-e5b3778aeb37",
+      "participant": "两人备用材料完整局-P1",
+      "actionId": "5c2793e7-65ac-4402-95e4-ca8a2ae84343",
+      "kind": "use_item",
+      "purpose": "由玩家提交实际修复",
+      "usedObservationIds": [],
+      "rawDigest": "35c09b358f84a5d6562fedc60081120501225b7e21c496d1895b5e44257b07df",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "2c8672c89bfa3fe9f24a50688437d9c7fab3441d41e7c59517f2e12d6582dfbc",
+        "actorId": "C-380ff723-7f75-42ce-bf1e-e5b3778aeb37",
+        "observedSeq": "84",
+        "actionEventRange": {
+          "first": "82",
+          "last": "84"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+        "clientActionId": "5c2793e7-65ac-4402-95e4-ca8a2ae84343"
+      }
+    },
+    {
+      "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+      "actorId": "C-967802c5-17fa-4d4e-a104-5e0c72075731",
+      "participant": "两人备用材料完整局-P2",
+      "actionId": "69ce2f84-0f57-4798-aab6-e97f5c35fbeb",
+      "kind": "interact",
+      "purpose": "由通行协调者核对修复后授予许可",
+      "usedObservationIds": [],
+      "rawDigest": "06d514ee7e440ffb2d109fc3c6ac669bb58f3921c9372f35564a82ef4df0e234",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "cc8bdd192f45613ad3b7159d2cbdcc9bf7e161e2c5eec0cd78c4d585b5440cb5",
+        "actorId": "C-967802c5-17fa-4d4e-a104-5e0c72075731",
+        "observedSeq": "85",
+        "actionEventRange": {
+          "first": "85",
+          "last": "85"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+        "clientActionId": "69ce2f84-0f57-4798-aab6-e97f5c35fbeb"
+      }
+    },
+    {
+      "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+      "actorId": "C-967802c5-17fa-4d4e-a104-5e0c72075731",
+      "participant": "两人备用材料完整局-P2",
+      "actionId": "75a59b05-f5bc-4329-9755-ddb0d830ad90",
+      "kind": "speak",
+      "purpose": "基于当前合法出口协调最终通行",
+      "usedObservationIds": [],
+      "rawDigest": "9cd5ade66403c65973d8fe3805c55606f5ee3ff6f93633f023da7126152415a6",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "7143e25e191aaca5863bde82604306d0d019f59501c27580f519b2ea37230004",
+        "actorId": "C-967802c5-17fa-4d4e-a104-5e0c72075731",
+        "observedSeq": "90",
+        "actionEventRange": {
+          "first": "86",
+          "last": "90"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-eb1396bd-4b80-466e-a135-268ed72c9feb",
+        "clientActionId": "75a59b05-f5bc-4329-9755-ddb0d830ad90"
+      }
+    },
+    {
+      "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+      "actorId": "C-15e92443-5bab-4757-b285-48666e6b3be3",
+      "participant": "两人原材料调查未齐完整局-P1",
+      "actionId": "f5394bac-af92-4abf-8455-6ec00d959ec8",
+      "kind": "inspect",
+      "purpose": "检查passage_structure",
+      "usedObservationIds": [],
+      "rawDigest": "becf9e67f1ecdc81da25f7bb2270b4398f85cf18140da561dce0e954f3ba45d0",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "2c92e045ea83cd397474c84e2528b4b31d658f6c2d5e42f82f76ffa979923280",
+        "actorId": "C-15e92443-5bab-4757-b285-48666e6b3be3",
+        "observedSeq": "31",
+        "actionEventRange": {
+          "first": "30",
+          "last": "31"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+        "clientActionId": "f5394bac-af92-4abf-8455-6ec00d959ec8"
+      }
+    },
+    {
+      "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+      "actorId": "C-0c007ebc-00df-46f6-b7d5-92a39d2160b6",
+      "participant": "两人原材料调查未齐完整局-P2",
+      "actionId": "f2ffe4d0-9750-4af4-a6c8-66a1c017bf9b",
+      "kind": "inspect",
+      "purpose": "检查stock_record",
+      "usedObservationIds": [],
+      "rawDigest": "a25da4f1a39f3b0568c28959f90453bb029fd91b4ee3c6aa070cf09307bbc8da",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "a321c8d2a03dec0028da705ae70d36385eca9cc3529bde492e114c3b99aca8ec",
+        "actorId": "C-0c007ebc-00df-46f6-b7d5-92a39d2160b6",
+        "observedSeq": "34",
+        "actionEventRange": {
+          "first": "32",
+          "last": "34"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+        "clientActionId": "f2ffe4d0-9750-4af4-a6c8-66a1c017bf9b"
+      }
+    },
+    {
+      "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+      "actorId": "C-15e92443-5bab-4757-b285-48666e6b3be3",
+      "participant": "两人原材料调查未齐完整局-P1",
+      "actionId": "1cc31c0d-dca4-4b1c-8b8f-514eb0215a4d",
+      "kind": "move",
+      "purpose": "前往side_path",
+      "usedObservationIds": [],
+      "rawDigest": "fbf73e0dd69086ecbcc8b193027cfedfac8cc7127f05d396c80a223d676c48e8",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "334630bba21ad66c09af1ef4770563e9c9e39e934e47a391205cfaf35fc84447",
+        "actorId": "C-15e92443-5bab-4757-b285-48666e6b3be3",
+        "observedSeq": "35",
+        "actionEventRange": {
+          "first": "35",
+          "last": "35"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+        "clientActionId": "1cc31c0d-dca4-4b1c-8b8f-514eb0215a4d"
+      }
+    },
+    {
+      "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+      "actorId": "C-15e92443-5bab-4757-b285-48666e6b3be3",
+      "participant": "两人原材料调查未齐完整局-P1",
+      "actionId": "a49fd7c9-ce18-4dbb-a088-637660796257",
+      "kind": "inspect",
+      "purpose": "检查material_cache",
+      "usedObservationIds": [],
+      "rawDigest": "7734bbbc6c3672599feed14aec3d3af5d559e7a6f594090d59a46deca99cdc37",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "118132c861888f5a4b7fc415f673e03e494a1174c437f307347aadc7b5b07e72",
+        "actorId": "C-15e92443-5bab-4757-b285-48666e6b3be3",
+        "observedSeq": "37",
+        "actionEventRange": {
+          "first": "36",
+          "last": "37"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+        "clientActionId": "a49fd7c9-ce18-4dbb-a088-637660796257"
+      }
+    },
+    {
+      "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+      "actorId": "C-15e92443-5bab-4757-b285-48666e6b3be3",
+      "participant": "两人原材料调查未齐完整局-P1",
+      "actionId": "8409e7c0-3ce6-47d9-beb4-5cb7c721b3d0",
+      "kind": "take_item",
+      "purpose": "找回可见原材料",
+      "usedObservationIds": [],
+      "rawDigest": "7c032eb090c90d05dd191cf1ca4336e4e6d99ca956d4c6b55bbd53577243af04",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "e5788a702abace3068990f001df8c95e644a8138c96b75c9927d65a89bc7d946",
+        "actorId": "C-15e92443-5bab-4757-b285-48666e6b3be3",
+        "observedSeq": "38",
+        "actionEventRange": {
+          "first": "38",
+          "last": "38"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+        "clientActionId": "8409e7c0-3ce6-47d9-beb4-5cb7c721b3d0"
+      }
+    },
+    {
+      "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+      "actorId": "C-0c007ebc-00df-46f6-b7d5-92a39d2160b6",
+      "participant": "两人原材料调查未齐完整局-P2",
+      "actionId": "4900c376-49e9-4ad6-8081-35586d14c02a",
+      "kind": "move",
+      "purpose": "前往side_path",
+      "usedObservationIds": [],
+      "rawDigest": "bf92c4d154a906c5dff025cb6e7a2ae9dbbaad76c17661eae34202483af6a312",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "16e05cc9db02e571edd82d3c9b3cb93e9db60e30c5f1aa5755c033c6c4407f29",
+        "actorId": "C-0c007ebc-00df-46f6-b7d5-92a39d2160b6",
+        "observedSeq": "39",
+        "actionEventRange": {
+          "first": "39",
+          "last": "39"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+        "clientActionId": "4900c376-49e9-4ad6-8081-35586d14c02a"
+      }
+    },
+    {
+      "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+      "actorId": "C-0c007ebc-00df-46f6-b7d5-92a39d2160b6",
+      "participant": "两人原材料调查未齐完整局-P2",
+      "actionId": "557d512d-345f-40ba-8df2-7c487c54cfb4",
+      "kind": "speak",
+      "purpose": "协调悟空与工具供给汇合",
+      "usedObservationIds": [],
+      "rawDigest": "b1b42b64149485e69491defe37881342837e37dede14900f573a837db3b3f95f",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "4af6909d527487534eb12a73fbb0cd6c4ca4c6d5c90e35730b4999e842e41950",
+        "actorId": "C-0c007ebc-00df-46f6-b7d5-92a39d2160b6",
+        "observedSeq": "43",
+        "actionEventRange": {
+          "first": "40",
+          "last": "43"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+        "clientActionId": "557d512d-345f-40ba-8df2-7c487c54cfb4"
+      }
+    },
+    {
+      "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+      "actorId": "C-15e92443-5bab-4757-b285-48666e6b3be3",
+      "participant": "两人原材料调查未齐完整局-P1",
+      "actionId": "ad21e467-d3b0-42e9-9008-d3ba9a57ba9c",
+      "kind": "move",
+      "purpose": "前往passage",
+      "usedObservationIds": [],
+      "rawDigest": "35513362c9d47172cd6e194b75a1bf2710dc9d727223797eced0183fdc4305a7",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "79499fcd9c037ee46904486c24d3968f16df0cc157f1718573abaa0e7ceb1607",
+        "actorId": "C-15e92443-5bab-4757-b285-48666e6b3be3",
+        "observedSeq": "52",
+        "actionEventRange": {
+          "first": "52",
+          "last": "52"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+        "clientActionId": "ad21e467-d3b0-42e9-9008-d3ba9a57ba9c"
+      }
+    },
+    {
+      "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+      "actorId": "C-0c007ebc-00df-46f6-b7d5-92a39d2160b6",
+      "participant": "两人原材料调查未齐完整局-P2",
+      "actionId": "87dfbe1e-26f1-4a0a-aacd-c9bdbc304da8",
+      "kind": "move",
+      "purpose": "前往passage",
+      "usedObservationIds": [],
+      "rawDigest": "1cb0fb2c9a212fd92b049b3be197fac6284b5044d21f038c9fe4791195e67c76",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "dc03b0b982a06429d4ae493f375a1b8a370e40d8d646aa4dd60dbf8f1bedf54a",
+        "actorId": "C-0c007ebc-00df-46f6-b7d5-92a39d2160b6",
+        "observedSeq": "53",
+        "actionEventRange": {
+          "first": "53",
+          "last": "53"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+        "clientActionId": "87dfbe1e-26f1-4a0a-aacd-c9bdbc304da8"
+      }
+    },
+    {
+      "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+      "actorId": "C-0c007ebc-00df-46f6-b7d5-92a39d2160b6",
+      "participant": "两人原材料调查未齐完整局-P2",
+      "actionId": "b6150c42-53f8-48b7-b655-0be6ad527cc1",
+      "kind": "transfer_item",
+      "purpose": "交付repair_tool",
+      "usedObservationIds": [],
+      "rawDigest": "95eda2eff607afd51a3fa9ae03b656797d10099d3bfbfd190e1f8f537c78285a",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "ea6dee26cc39337d34ba58edf6ef9fe163e34e08fc3e48ac03789be8ac748131",
+        "actorId": "C-0c007ebc-00df-46f6-b7d5-92a39d2160b6",
+        "observedSeq": "54",
+        "actionEventRange": {
+          "first": "54",
+          "last": "54"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+        "clientActionId": "b6150c42-53f8-48b7-b655-0be6ad527cc1"
+      }
+    },
+    {
+      "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+      "actorId": "C-15e92443-5bab-4757-b285-48666e6b3be3",
+      "participant": "两人原材料调查未齐完整局-P1",
+      "actionId": "09ad3709-3296-4cac-a220-ba97753a468d",
+      "kind": "share_evidence",
+      "purpose": "将独立证据交给两位核心角色",
+      "usedObservationIds": [
+        "S-17171c7d-748a-47e7-b994-3421583533bd:O9"
+      ],
+      "rawDigest": "6e8e347fc2491edccdc8b93ebe87c91f03e312d5a7f277de6d053af41710d10b",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "b76626097cabe85724921c9c43df0621d8e150a554d42cd45ac9f146948ea1c2",
+        "actorId": "C-15e92443-5bab-4757-b285-48666e6b3be3",
+        "observedSeq": "56",
+        "actionEventRange": {
+          "first": "55",
+          "last": "56"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+        "clientActionId": "09ad3709-3296-4cac-a220-ba97753a468d"
+      }
+    },
+    {
+      "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+      "actorId": "C-15e92443-5bab-4757-b285-48666e6b3be3",
+      "participant": "两人原材料调查未齐完整局-P1",
+      "actionId": "d0d34cbf-477d-4717-8466-f025ff1e27d2",
+      "kind": "share_evidence",
+      "purpose": "将独立证据交给两位核心角色",
+      "usedObservationIds": [
+        "S-17171c7d-748a-47e7-b994-3421583533bd:O31"
+      ],
+      "rawDigest": "b2d8187e1cebd4cebbfbe1bc1547b472bfd1ee1ae842d5fa7490a4188d804271",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "66ab4542194fc4ed5cf0f0a5f8dba7124d04a4c3fc74c2373b9700f99439fa2f",
+        "actorId": "C-15e92443-5bab-4757-b285-48666e6b3be3",
+        "observedSeq": "58",
+        "actionEventRange": {
+          "first": "57",
+          "last": "58"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+        "clientActionId": "d0d34cbf-477d-4717-8466-f025ff1e27d2"
+      }
+    },
+    {
+      "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+      "actorId": "C-15e92443-5bab-4757-b285-48666e6b3be3",
+      "participant": "两人原材料调查未齐完整局-P1",
+      "actionId": "3ecda748-5591-4e9e-ad56-479792c48eb4",
+      "kind": "share_evidence",
+      "purpose": "将独立证据交给两位核心角色",
+      "usedObservationIds": [
+        "S-17171c7d-748a-47e7-b994-3421583533bd:O37"
+      ],
+      "rawDigest": "4b00a3a2d99a8592693432de9d63375131535a39decd469a05e0cf44b56b423b",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "39aaee9e6725bea5cb9135192b9d58c832a746507662bfd825535399ad1021bd",
+        "actorId": "C-15e92443-5bab-4757-b285-48666e6b3be3",
+        "observedSeq": "60",
+        "actionEventRange": {
+          "first": "59",
+          "last": "60"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+        "clientActionId": "3ecda748-5591-4e9e-ad56-479792c48eb4"
+      }
+    },
+    {
+      "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+      "actorId": "C-0c007ebc-00df-46f6-b7d5-92a39d2160b6",
+      "participant": "两人原材料调查未齐完整局-P2",
+      "actionId": "9870ec18-0469-475f-8021-fc0b67c542c8",
+      "kind": "share_evidence",
+      "purpose": "将独立证据交给两位核心角色",
+      "usedObservationIds": [
+        "S-17171c7d-748a-47e7-b994-3421583533bd:O33"
+      ],
+      "rawDigest": "3cd357434b06ea6465af639d82a73938285d0683c5765b114ea3441da0f27ac7",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "f62048226f9b56343336d220733a634c34621ce0ccc4c1841208db95432bdafb",
+        "actorId": "C-0c007ebc-00df-46f6-b7d5-92a39d2160b6",
+        "observedSeq": "62",
+        "actionEventRange": {
+          "first": "61",
+          "last": "62"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+        "clientActionId": "9870ec18-0469-475f-8021-fc0b67c542c8"
+      }
+    },
+    {
+      "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+      "actorId": "C-15e92443-5bab-4757-b285-48666e6b3be3",
+      "participant": "两人原材料调查未齐完整局-P1",
+      "actionId": "78eae395-13bb-48fc-95c8-34dce407d4c7",
+      "kind": "use_item",
+      "purpose": "由玩家提交实际修复",
+      "usedObservationIds": [],
+      "rawDigest": "baf03587d8f2ba6d3ec42edd038e6ee10ccf4f68b278dda05ba1dff05e2c5fe5",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "272b29bdb712d89c62fb886d16d93dfbe40de44d53fa702a61d12ea0d85e1d7d",
+        "actorId": "C-15e92443-5bab-4757-b285-48666e6b3be3",
+        "observedSeq": "65",
+        "actionEventRange": {
+          "first": "63",
+          "last": "65"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+        "clientActionId": "78eae395-13bb-48fc-95c8-34dce407d4c7"
+      }
+    },
+    {
+      "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+      "actorId": "C-0c007ebc-00df-46f6-b7d5-92a39d2160b6",
+      "participant": "两人原材料调查未齐完整局-P2",
+      "actionId": "37516d72-680c-4f67-9441-e3ab3ef670a5",
+      "kind": "interact",
+      "purpose": "由通行协调者核对修复后授予许可",
+      "usedObservationIds": [],
+      "rawDigest": "44be0e8af0039d776feaecc68390bdd9c62c1f76e33153b4414bb06c2e080bb4",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "603d870d5008d45c2040606fc526fd0385b1c7dda8da9e0c932d7debc00475e5",
+        "actorId": "C-0c007ebc-00df-46f6-b7d5-92a39d2160b6",
+        "observedSeq": "66",
+        "actionEventRange": {
+          "first": "66",
+          "last": "66"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+        "clientActionId": "37516d72-680c-4f67-9441-e3ab3ef670a5"
+      }
+    },
+    {
+      "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+      "actorId": "C-0c007ebc-00df-46f6-b7d5-92a39d2160b6",
+      "participant": "两人原材料调查未齐完整局-P2",
+      "actionId": "d6c34947-d581-4f54-8fce-18eca83b299d",
+      "kind": "speak",
+      "purpose": "基于当前合法出口协调最终通行",
+      "usedObservationIds": [],
+      "rawDigest": "fc1845910f1d091763af7b632cfc4e1bdefb5b3f2f76f3cb66b3b7af13eb1467",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "35d62f25bd5db60cd47f4a216bdae65fab240041205142ed07cdb781cb9fa860",
+        "actorId": "C-0c007ebc-00df-46f6-b7d5-92a39d2160b6",
+        "observedSeq": "71",
+        "actionEventRange": {
+          "first": "67",
+          "last": "71"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-17171c7d-748a-47e7-b994-3421583533bd",
+        "clientActionId": "d6c34947-d581-4f54-8fce-18eca83b299d"
+      }
+    },
+    {
+      "sessionId": "S-fd4108e8-e1f3-4e19-b3a6-d1c6aa70f2b2",
+      "actorId": "C-23af372b-e899-4195-af0f-5f7808f5517f",
+      "participant": "联合恢复-P2",
+      "actionId": "1d33670b-6dff-4dc0-8aba-9b4617d633aa",
+      "kind": "move",
+      "purpose": "前往passage",
+      "usedObservationIds": [],
+      "rawDigest": "4952797627c7175975d1cdfe393188cf5cfbb355b77f07404cae70204f4be400",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "cd82386c8a3ab277c78c7faea3a936679f265f4744ab077cd85711d16e4ab55b",
+        "actorId": "C-23af372b-e899-4195-af0f-5f7808f5517f",
+        "observedSeq": "18",
+        "actionEventRange": {
+          "first": "18",
+          "last": "18"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-fd4108e8-e1f3-4e19-b3a6-d1c6aa70f2b2",
+        "clientActionId": "1d33670b-6dff-4dc0-8aba-9b4617d633aa"
+      }
+    },
+    {
+      "sessionId": "S-fd4108e8-e1f3-4e19-b3a6-d1c6aa70f2b2",
+      "actorId": "C-821747e4-8713-4383-ae48-505c3fc4f71c",
+      "participant": "联合恢复-P1",
+      "actionId": "f109d591-5dd4-41db-a120-6d5d2515ba6c",
+      "kind": "inspect",
+      "purpose": "检查passage_structure",
+      "usedObservationIds": [],
+      "rawDigest": "e23caf80ccc84976f784d0019e538a502175d0013ef6233a16e1203d54f3852f",
+      "receipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "c605938fa0c17b6785a7520211731973fef33f203343041ccf5814de0a1fd1fc",
+        "actorId": "C-821747e4-8713-4383-ae48-505c3fc4f71c",
+        "observedSeq": "25",
+        "actionEventRange": {
+          "first": "24",
+          "last": "25"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-fd4108e8-e1f3-4e19-b3a6-d1c6aa70f2b2",
+        "clientActionId": "f109d591-5dd4-41db-a120-6d5d2515ba6c"
+      }
+    }
+  ],
+  "contributions": [
+    {
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "role": "B",
+      "actorId": "C-3a0bd529-6f56-492a-859d-03c4c6a53f31",
+      "actionId": "3a4b9897-cc4c-4274-882c-4a169cd46403",
+      "kind": "share_evidence",
+      "purpose": "将库存短缺交给记事者核对登记",
+      "downstream": [
+        {
+          "actionId": "37b4b0c7-5645-4daa-b9ce-95b63a5384f2",
+          "observationId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O45"
+        }
+      ]
+    },
+    {
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "role": "A",
+      "actorId": "C-a2dd0a3a-dc94-4409-93ee-c79d1ce82b72",
+      "actionId": "0bd46c1e-dd06-4a2a-9d0a-764f41aee57e",
+      "kind": "share_evidence",
+      "purpose": "将独立证据交给两位核心角色",
+      "downstream": [
+        {
+          "decisionId": "D-07f64868-222d-4063-9d42-79bc989624d5",
+          "sourceId": "structure-before-arrival"
+        },
+        {
+          "decisionId": "D-ee15cf8c-1007-4eca-b565-419e8afb611f",
+          "sourceId": "structure-before-arrival"
+        }
+      ]
+    },
+    {
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "role": "A",
+      "actorId": "C-a2dd0a3a-dc94-4409-93ee-c79d1ce82b72",
+      "actionId": "dcd6cab3-ddd0-4014-88bb-a930fc9acfa9",
+      "kind": "use_item",
+      "purpose": "由玩家提交实际修复",
+      "downstream": [
+        {
+          "actionId": "f16e52cf-de8f-49a0-bf63-da154e8871d4",
+          "endingCode": "clarified_passage"
+        }
+      ]
+    },
+    {
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "role": "B",
+      "actorId": "C-3a0bd529-6f56-492a-859d-03c4c6a53f31",
+      "actionId": "5143fcca-db0a-471f-b3da-ce18f5dac6b2",
+      "kind": "transfer_item",
+      "purpose": "交付repair_tool",
+      "downstream": [
+        {
+          "actionId": "dcd6cab3-ddd0-4014-88bb-a930fc9acfa9",
+          "itemId": "repair_tool"
+        }
+      ]
+    },
+    {
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "role": "C",
+      "actorId": "C-c3cc69b8-91e4-467d-b912-981928ac527a",
+      "actionId": "f16e52cf-de8f-49a0-bf63-da154e8871d4",
+      "kind": "interact",
+      "purpose": "由通行协调者核对修复后授予许可",
+      "downstream": [
+        {
+          "eventSeq": "213"
+        },
+        {
+          "eventSeq": "222"
+        }
+      ]
+    },
+    {
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "role": "C",
+      "actorId": "C-c3cc69b8-91e4-467d-b912-981928ac527a",
+      "actionId": "3ebe42fe-0183-4de2-bf83-799bb1c88149",
+      "kind": "speak",
+      "purpose": "基于当前合法出口协调最终通行",
+      "downstream": [
+        {
+          "decisionId": "D-07f64868-222d-4063-9d42-79bc989624d5",
+          "eventSeq": "213"
+        },
+        {
+          "decisionId": "D-ee15cf8c-1007-4eca-b565-419e8afb611f",
+          "eventSeq": "222"
+        }
+      ]
+    },
+    {
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "role": "D",
+      "actorId": "C-83c50454-a006-4bfe-8126-9b5f228c7b5c",
+      "actionId": "671db31b-aded-4b39-94e7-d248f3b76e1c",
+      "kind": "take_item",
+      "purpose": "找回可见原材料",
+      "downstream": [
+        {
+          "actionId": "225f26e9-4c2f-4384-a7ea-7a0f8d4a0585",
+          "itemId": "original_material"
+        }
+      ]
+    },
+    {
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "role": "D",
+      "actorId": "C-83c50454-a006-4bfe-8126-9b5f228c7b5c",
+      "actionId": "225f26e9-4c2f-4384-a7ea-7a0f8d4a0585",
+      "kind": "transfer_item",
+      "purpose": "交付original_material",
+      "downstream": [
+        {
+          "actionId": "dcd6cab3-ddd0-4014-88bb-a930fc9acfa9",
+          "itemId": "original_material"
+        }
+      ]
+    },
+    {
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "role": "E",
+      "actorId": "C-a46450a0-e16e-407f-b796-332ad6e04279",
+      "actionId": "37b4b0c7-5645-4daa-b9ce-95b63a5384f2",
+      "kind": "inspect",
+      "purpose": "检查stock_record",
+      "downstream": [
+        {
+          "actionId": "f2d7d1a4-f304-4bc8-878e-b1b5b543a80d",
+          "observationId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877:O47"
+        }
+      ]
+    },
+    {
+      "sessionId": "S-a4a4c61f-4430-49b8-bba5-a17b3c5a5877",
+      "role": "E",
+      "actorId": "C-a46450a0-e16e-407f-b796-332ad6e04279",
+      "actionId": "f2d7d1a4-f304-4bc8-878e-b1b5b543a80d",
+      "kind": "share_evidence",
+      "purpose": "将独立证据交给两位核心角色",
+      "downstream": [
+        {
+          "decisionId": "D-07f64868-222d-4063-9d42-79bc989624d5",
+          "sourceId": "authorized-movement-register"
+        },
+        {
+          "decisionId": "D-ee15cf8c-1007-4eca-b565-419e8afb611f",
+          "sourceId": "authorized-movement-register"
+        }
+      ]
+    }
+  ],
+  "databaseErrors": [],
+  "cleanup": [
+    {
+      "participant": "3人职责装配-P1",
+      "status": "closed"
+    },
+    {
+      "participant": "3人职责装配-P2",
+      "status": "closed"
+    },
+    {
+      "participant": "3人职责装配-P3",
+      "status": "closed"
+    },
+    {
+      "participant": "4人职责装配-P1",
+      "status": "closed"
+    },
+    {
+      "participant": "4人职责装配-P2",
+      "status": "closed"
+    },
+    {
+      "participant": "4人职责装配-P3",
+      "status": "closed"
+    },
+    {
+      "participant": "4人职责装配-P4",
+      "status": "closed"
+    },
+    {
+      "participant": "五人查证原材料完整局-P1",
+      "status": "closed"
+    },
+    {
+      "participant": "五人查证原材料完整局-P2",
+      "status": "closed"
+    },
+    {
+      "participant": "五人查证原材料完整局-P3",
+      "status": "closed"
+    },
+    {
+      "participant": "五人查证原材料完整局-P4",
+      "status": "closed"
+    },
+    {
+      "participant": "五人查证原材料完整局-P5",
+      "status": "closed"
+    },
+    {
+      "participant": "两人备用材料完整局-P1",
+      "status": "closed"
+    },
+    {
+      "participant": "两人备用材料完整局-P2",
+      "status": "closed"
+    },
+    {
+      "participant": "两人原材料调查未齐完整局-P1",
+      "status": "closed"
+    },
+    {
+      "participant": "两人原材料调查未齐完整局-P2",
+      "status": "closed"
+    },
+    {
+      "participant": "超时未解决-P1",
+      "status": "closed"
+    },
+    {
+      "participant": "超时未解决-P2",
+      "status": "closed"
+    },
+    {
+      "participant": "联合恢复-P1",
+      "status": "closed"
+    },
+    {
+      "participant": "联合恢复-P2",
+      "status": "closed"
+    },
+    {
+      "resource": "joint-fault/server",
+      "status": "closed"
+    },
+    {
+      "resource": "joint-fault/postgres",
+      "status": "closed"
+    },
+    {
+      "resource": "deadline/server",
+      "status": "closed"
+    },
+    {
+      "resource": "deadline/postgres",
+      "status": "closed"
+    },
+    {
+      "resource": "full-games/server",
+      "status": "closed"
+    },
+    {
+      "resource": "full-games/postgres",
+      "status": "closed"
+    }
+  ],
+  "resourcesClosed": true,
+  "environment": {
+    "node": "v24.22.1",
+    "postgres": "18.6",
+    "controlledPolicies": {
+      "mode": "模拟角色策略",
+      "minIntervalMs": 1000,
+      "maxCallsPerSession": 120,
+      "closed": false,
+      "registering": 0,
+      "roles": [
+        {
+          "actorId": "tangseng",
+          "providerId": "controlled-tangseng",
+          "modelId": "tangseng-safety-v2",
+          "policyVersion": "tangseng-safety-v2",
+          "configuration": {
+            "gatewayVersion": "intent-gateway-v1",
+            "providerId": "controlled-tangseng",
+            "providerKind": "controlled",
+            "modelId": "tangseng-safety-v2",
+            "timeoutMs": 10000,
+            "maxContextBytes": 262144
+          },
+          "metrics": {
+            "calls": 0,
+            "externalCalls": 0,
+            "valid": 0,
+            "invalid": 0,
+            "timeouts": 0,
+            "cancelled": 0,
+            "providerErrors": 0,
+            "active": 0,
+            "p50Ms": null,
+            "p95Ms": null,
+            "invalidRate": 0
+          },
+          "sessions": []
+        },
+        {
+          "actorId": "wukong",
+          "providerId": "controlled-wukong",
+          "modelId": "wukong-inspection-v2",
+          "policyVersion": "wukong-inspection-v2",
+          "configuration": {
+            "gatewayVersion": "intent-gateway-v1",
+            "providerId": "controlled-wukong",
+            "providerKind": "controlled",
+            "modelId": "wukong-inspection-v2",
+            "timeoutMs": 10000,
+            "maxContextBytes": 262144
+          },
+          "metrics": {
+            "calls": 0,
+            "externalCalls": 0,
+            "valid": 0,
+            "invalid": 0,
+            "timeouts": 0,
+            "cancelled": 0,
+            "providerErrors": 0,
+            "active": 0,
+            "p50Ms": null,
+            "p95Ms": null,
+            "invalidRate": 0
+          },
+          "sessions": []
+        }
+      ]
+    }
+  },
+  "assessment": "PASS",
+  "sourceUnchanged": true,
+  "finishedAt": "2026-11-11T13:04:36.656Z",
+  "actualElapsedMs": 35557.962369
+}

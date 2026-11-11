@@ -1,0 +1,20 @@
+{"stage":"2个独立浏览器身份经页面创建、加入、开局和恢复控制","elapsedMs":5435}
+{"stage":"2人实际页面完成查看、拿取、交付、修复、许可、终局与只读复盘","elapsedMs":8712}
+{"stage":"5个独立浏览器身份经页面创建、加入、开局和恢复控制","elapsedMs":13763}
+{"stage":"5人实际页面完成查看、拿取、交付、修复、许可、终局与只读复盘","elapsedMs":16662}
+{"stage":"3个独立浏览器身份经页面创建、加入、开局和恢复控制","elapsedMs":20500}
+{"stage":"实际页面区分 A→C→B 分享陈述与未修复事实，私有和晚到记录未泄露，文本不解释为HTML","elapsedMs":22424}
+{"stage":"实际浏览器请求覆盖空结果、未知参数、非法和重复游标、跨局拒绝","elapsedMs":22469}
+{"stage":"复盘与长引用在桌面及390像素页面没有横向溢出","elapsedMs":22745}
+{"stage":"实际撤权后授权投影与复盘区域均清空","elapsedMs":22790}
+{"stage":"受控旧服务缺端点响应仅影响过程区，真实结局仍可读","elapsedMs":23098}
+{"stage":"2个独立浏览器身份经页面创建、加入、开局和恢复控制","elapsedMs":27617}
+{"stage":"实际浏览器按100条授权记录分页，故障保留已读页，同水位原游标重试且排序无重复","elapsedMs":38174}
+{"stage":"实际断连重建视图后迟到的旧复盘回包不能重填或追加","elapsedMs":40473}
+{"stage":"实际经大厅切换房间后迟到旧复盘不能进入新房间","elapsedMs":41148}
+{"stage":"实际认证失效清空复盘，新访客登录后迟到旧身份回包不恢复旧记录","elapsedMs":45904}
+{"cleanup":"browser","state":"closed"}
+{"cleanup":"vite","state":"closed"}
+{"cleanup":"server","state":"closed"}
+{"cleanup":"postgres","state":"closed"}
+{"assessment":"PASS","elapsedMs":46004,"checks":17,"resourcesClosed":true}

@@ -1,0 +1,1020 @@
+{
+  "status": "PASS",
+  "clock": "真实 Runtime 时钟；显式单轮唤醒、调度间隔1ms用于有界策略回归，不计60秒主动窗口",
+  "maxCallsPerSession": 120,
+  "inputs": "五个新合成身份；所有物品、证据、修复与许可经实际 Runtime/Validator",
+  "providerDigest": "5559e983b1c28fd288b516ce8ce64776a35183f5e1862e49ca984bc56691750b",
+  "steps": [
+    {
+      "actorId": "wukong",
+      "decisionId": "D-c30745a8-1721-4d5b-9ec3-b24abe5f52a0",
+      "contextDigest": "9aeb4f890f37163a0be06717d70af0531bf032c473adf88d5124fc1dee13dd96",
+      "inputObservationIds": [
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O20",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O37"
+      ],
+      "outputDigest": "3fa12c1f678b0df4022800366fea301c377d7330f8f40166563a13d4ca5e1ac1",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我按当前可见的出口 passage 前往核验或通行，实际效果仍由通路规则决定。"
+        },
+        {
+          "kind": "move",
+          "regionId": "passage"
+        }
+      ],
+      "gateFields": null,
+      "receivedRoute": false,
+      "receipt": {
+        "code": "OK",
+        "result": {},
+        "status": "Accepted",
+        "actorId": "wukong",
+        "sessionId": "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090",
+        "observedSeq": "46",
+        "schemaVersion": 1,
+        "clientActionId": "D-c30745a8-1721-4d5b-9ec3-b24abe5f52a0:submit",
+        "semanticDigest": "3fa12c1f678b0df4022800366fea301c377d7330f8f40166563a13d4ca5e1ac1",
+        "actionEventRange": {
+          "last": "46",
+          "first": "44"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-ef32231e-a547-466f-b388-6c06efd56242",
+      "contextDigest": "8493c6c7c4d6019a213dc370dec8e681d640ea6ce634768a7c459af5ab7ec83b",
+      "inputObservationIds": [
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O18",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O49",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O51",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O53",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O55",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O57"
+      ],
+      "outputDigest": "e374ec20229cf39a8e3a16e1a0d95eca64e370d745e2c383da9e8c062390a214",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "旧记录与现场痕迹已相互印证，损坏早于到达。我不再把损坏归咎同行；请按核验来源自愿协调材料，仍须实际修复和合法许可。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O49",
+          "recipientIds": [
+            "C-0668f2c4-23d5-42cf-91bf-a3b5be7a92a4",
+            "C-bc086f86-b6d7-4fd6-9b1e-fe2ec6bc818a",
+            "C-c22e36c4-3455-45bd-92a3-3dc35f1a0344",
+            "C-e59afc22-8430-4126-966f-c1da9453bb0f",
+            "C-f3bda576-365e-4521-bfb1-9f39eefe1f49",
+            "wukong"
+          ]
+        }
+      ],
+      "gateFields": [
+        {
+          "key": "safe",
+          "label": "安全",
+          "value": false
+        },
+        {
+          "key": "permit",
+          "label": "通行许可",
+          "value": false
+        },
+        {
+          "key": "repairMaterial",
+          "label": "实际修复材料",
+          "value": null
+        }
+      ],
+      "receivedRoute": false,
+      "receipt": {
+        "code": "OK",
+        "result": {},
+        "status": "Accepted",
+        "actorId": "tangseng",
+        "sessionId": "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090",
+        "observedSeq": "75",
+        "schemaVersion": 1,
+        "clientActionId": "D-ef32231e-a547-466f-b388-6c06efd56242:submit",
+        "semanticDigest": "e374ec20229cf39a8e3a16e1a0d95eca64e370d745e2c383da9e8c062390a214",
+        "actionEventRange": {
+          "last": "75",
+          "first": "61"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-3a07984a-0c68-4b56-a703-239742eac089",
+      "contextDigest": "db6159d34403045a67554ff386cb3d4b366c797267b9380abb0a90cf5e405373",
+      "inputObservationIds": [
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O18",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O49",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O51",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O53",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O55",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O57",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O63"
+      ],
+      "outputDigest": "9a3c0f24fb5d09ad06a062223bf8802c9348ffe5e3f5ee9117db47388b614df9",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "登记与现场标记已相互印证，材料属于合法搬运，不能按盗取定责。请有职责的玩家自愿取回原材料，备用垫付也不代表认罪。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O57",
+          "recipientIds": [
+            "C-0668f2c4-23d5-42cf-91bf-a3b5be7a92a4",
+            "C-bc086f86-b6d7-4fd6-9b1e-fe2ec6bc818a",
+            "C-c22e36c4-3455-45bd-92a3-3dc35f1a0344",
+            "C-e59afc22-8430-4126-966f-c1da9453bb0f",
+            "C-f3bda576-365e-4521-bfb1-9f39eefe1f49",
+            "wukong"
+          ]
+        }
+      ],
+      "gateFields": [
+        {
+          "key": "safe",
+          "label": "安全",
+          "value": false
+        },
+        {
+          "key": "permit",
+          "label": "通行许可",
+          "value": false
+        },
+        {
+          "key": "repairMaterial",
+          "label": "实际修复材料",
+          "value": null
+        }
+      ],
+      "receivedRoute": false,
+      "receipt": {
+        "code": "OK",
+        "result": {},
+        "status": "Accepted",
+        "actorId": "tangseng",
+        "sessionId": "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090",
+        "observedSeq": "90",
+        "schemaVersion": 1,
+        "clientActionId": "D-3a07984a-0c68-4b56-a703-239742eac089:submit",
+        "semanticDigest": "9a3c0f24fb5d09ad06a062223bf8802c9348ffe5e3f5ee9117db47388b614df9",
+        "actionEventRange": {
+          "last": "90",
+          "first": "76"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-2901f733-9576-42b5-a8d8-a2a54ff0f3ea",
+      "contextDigest": "ad8327ff69514fbf48b135ef2b0d2eb4a12afe7e7ff370b5bb6a382a1ff5b051",
+      "inputObservationIds": [
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O18",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O49",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O51",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O53",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O55",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O57",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O63",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O78"
+      ],
+      "outputDigest": "5ea97ab78e1074dbbaa46cd4cef7c7a96b6eed2ef104a1231af720272af666ef",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "当前通路尚未实际修复，暂不通行。先核查安全，再请玩家自愿协调材料、实际修复并取得许可；垫付不代表认罪。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "passage_structure"
+        }
+      ],
+      "gateFields": [
+        {
+          "key": "safe",
+          "label": "安全",
+          "value": false
+        },
+        {
+          "key": "permit",
+          "label": "通行许可",
+          "value": false
+        },
+        {
+          "key": "repairMaterial",
+          "label": "实际修复材料",
+          "value": null
+        }
+      ],
+      "receivedRoute": false,
+      "receipt": {
+        "code": "OK",
+        "result": {},
+        "status": "Accepted",
+        "actorId": "tangseng",
+        "sessionId": "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090",
+        "observedSeq": "100",
+        "schemaVersion": 1,
+        "clientActionId": "D-2901f733-9576-42b5-a8d8-a2a54ff0f3ea:submit",
+        "semanticDigest": "5ea97ab78e1074dbbaa46cd4cef7c7a96b6eed2ef104a1231af720272af666ef",
+        "actionEventRange": {
+          "last": "100",
+          "first": "91"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-ca06197d-fb7a-4f59-9beb-09e52af011bb",
+      "contextDigest": "1c4ae4031abc5fdd7fc2b28636e8b71179ef4b83aeb70890044c097d34168f87",
+      "inputObservationIds": [
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O20",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O37",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O45",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O50",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O52",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O54",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O56",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O58",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O62",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O74",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O77",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O89",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O92"
+      ],
+      "outputDigest": "41470ee331d179ff7e74725973937bd56b571bfdb80efdb36aa03ee4356930dd",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "旧记录与现场痕迹已相互印证，不能凭封路争执任意定责。我改为展示核验来源，并继续检查实际通行条件。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O50",
+          "recipientIds": [
+            "C-0668f2c4-23d5-42cf-91bf-a3b5be7a92a4",
+            "C-bc086f86-b6d7-4fd6-9b1e-fe2ec6bc818a",
+            "C-c22e36c4-3455-45bd-92a3-3dc35f1a0344",
+            "C-e59afc22-8430-4126-966f-c1da9453bb0f",
+            "C-f3bda576-365e-4521-bfb1-9f39eefe1f49",
+            "tangseng"
+          ]
+        }
+      ],
+      "gateFields": [
+        {
+          "key": "safe",
+          "label": "安全",
+          "value": false
+        },
+        {
+          "key": "permit",
+          "label": "通行许可",
+          "value": false
+        },
+        {
+          "key": "repairMaterial",
+          "label": "实际修复材料",
+          "value": null
+        }
+      ],
+      "receivedRoute": false,
+      "receipt": {
+        "code": "OK",
+        "result": {},
+        "status": "Accepted",
+        "actorId": "wukong",
+        "sessionId": "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090",
+        "observedSeq": "116",
+        "schemaVersion": 1,
+        "clientActionId": "D-ca06197d-fb7a-4f59-9beb-09e52af011bb:submit",
+        "semanticDigest": "41470ee331d179ff7e74725973937bd56b571bfdb80efdb36aa03ee4356930dd",
+        "actionEventRange": {
+          "last": "116",
+          "first": "102"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-eef81a4e-e144-4a57-bd1a-5fb4994b3c41",
+      "contextDigest": "d7eb17b497e58841629ed4dbe2a3421a4e5f94e1f2f2cabd053df8fa96c87f53",
+      "inputObservationIds": [
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O20",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O37",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O45",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O50",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O52",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O54",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O56",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O58",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O62",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O74",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O77",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O89",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O92",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O103"
+      ],
+      "outputDigest": "e40afd59e213379745b76365bb4566da1d07ccb06352ae32bfdd93be6e8e79d1",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "登记与现场标记已相互印证，我改为支持取回原材料并展示来源，不再根据口头指责追责；实际修复仍由玩家执行。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O58",
+          "recipientIds": [
+            "C-0668f2c4-23d5-42cf-91bf-a3b5be7a92a4",
+            "C-bc086f86-b6d7-4fd6-9b1e-fe2ec6bc818a",
+            "C-c22e36c4-3455-45bd-92a3-3dc35f1a0344",
+            "C-e59afc22-8430-4126-966f-c1da9453bb0f",
+            "C-f3bda576-365e-4521-bfb1-9f39eefe1f49",
+            "tangseng"
+          ]
+        }
+      ],
+      "gateFields": [
+        {
+          "key": "safe",
+          "label": "安全",
+          "value": false
+        },
+        {
+          "key": "permit",
+          "label": "通行许可",
+          "value": false
+        },
+        {
+          "key": "repairMaterial",
+          "label": "实际修复材料",
+          "value": null
+        }
+      ],
+      "receivedRoute": false,
+      "receipt": {
+        "code": "OK",
+        "result": {},
+        "status": "Accepted",
+        "actorId": "wukong",
+        "sessionId": "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090",
+        "observedSeq": "131",
+        "schemaVersion": 1,
+        "clientActionId": "D-eef81a4e-e144-4a57-bd1a-5fb4994b3c41:submit",
+        "semanticDigest": "e40afd59e213379745b76365bb4566da1d07ccb06352ae32bfdd93be6e8e79d1",
+        "actionEventRange": {
+          "last": "131",
+          "first": "117"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-e58d9dc6-570b-499b-92f0-67e1206eac34",
+      "contextDigest": "05089342eb2914027bd47153894cd95abcdecbe8d6855c22422d42fc9ba58de7",
+      "inputObservationIds": [
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O20",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O37",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O45",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O50",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O52",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O54",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O56",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O58",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O62",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O74",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O77",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O89",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O92",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O103",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O118"
+      ],
+      "outputDigest": "794b558e3e077e94ff3158e80d2784d87badbbdc415a60c1b2d79f975554cb4a",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我先亲自检查通路，不凭口头说法认定已修好或任意定责。请提供可核验来源，实际修复和许可由有职责的玩家完成。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "passage_structure"
+        }
+      ],
+      "gateFields": [
+        {
+          "key": "safe",
+          "label": "安全",
+          "value": false
+        },
+        {
+          "key": "permit",
+          "label": "通行许可",
+          "value": false
+        },
+        {
+          "key": "repairMaterial",
+          "label": "实际修复材料",
+          "value": null
+        }
+      ],
+      "receivedRoute": false,
+      "receipt": {
+        "code": "OK",
+        "result": {},
+        "status": "Accepted",
+        "actorId": "wukong",
+        "sessionId": "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090",
+        "observedSeq": "141",
+        "schemaVersion": 1,
+        "clientActionId": "D-e58d9dc6-570b-499b-92f0-67e1206eac34:submit",
+        "semanticDigest": "794b558e3e077e94ff3158e80d2784d87badbbdc415a60c1b2d79f975554cb4a",
+        "actionEventRange": {
+          "last": "141",
+          "first": "132"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-b248ee84-b1fc-488c-8382-83ad2af4ad92",
+      "contextDigest": "38faf227790eb4c057c898d4ee7168196a9ad2be4e4af453225f5732870eb0e7",
+      "inputObservationIds": [
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O18",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O49",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O51",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O53",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O55",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O57",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O63",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O78",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O93",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O99",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O100",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O104",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O115",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O119",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O130",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O134"
+      ],
+      "outputDigest": "130a0f5ec40d9e6df39d88e857e4855aaea6484488429f0d2b3848613331a438",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我已看到实际修复，但许可尚未生效，暂不通行。请有通行职责的玩家确认并授予许可，我不能代为授权。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "passage_structure"
+        }
+      ],
+      "gateFields": [
+        {
+          "key": "safe",
+          "label": "安全",
+          "value": true
+        },
+        {
+          "key": "permit",
+          "label": "通行许可",
+          "value": false
+        },
+        {
+          "key": "repairMaterial",
+          "label": "实际修复材料",
+          "value": "original_material"
+        }
+      ],
+      "receivedRoute": false,
+      "receipt": {
+        "code": "OK",
+        "result": {},
+        "status": "Accepted",
+        "actorId": "tangseng",
+        "sessionId": "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090",
+        "observedSeq": "155",
+        "schemaVersion": 1,
+        "clientActionId": "D-b248ee84-b1fc-488c-8382-83ad2af4ad92:submit",
+        "semanticDigest": "130a0f5ec40d9e6df39d88e857e4855aaea6484488429f0d2b3848613331a438",
+        "actionEventRange": {
+          "last": "155",
+          "first": "146"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-671c3d87-4188-483c-a6f4-3bdd6dd6cefa",
+      "contextDigest": "504271434d5697d1ecf1670ed4d506b6fc95467bd17561f99f519926087bfbc2",
+      "inputObservationIds": [
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O20",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O37",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O45",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O50",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O52",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O54",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O56",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O58",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O62",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O74",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O77",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O89",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O92",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O103",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O118",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O133",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O140",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O141",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O147"
+      ],
+      "outputDigest": "986fcb964a7acefe0e50b9eb1cbb511269c7216896b643e93067c7cbeac68208",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "实际修复已经可见，我改为核对通行许可。请有职责的玩家完成许可，不能靠一句“已修好”越过条件。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "passage_structure"
+        }
+      ],
+      "gateFields": [
+        {
+          "key": "safe",
+          "label": "安全",
+          "value": true
+        },
+        {
+          "key": "permit",
+          "label": "通行许可",
+          "value": false
+        },
+        {
+          "key": "repairMaterial",
+          "label": "实际修复材料",
+          "value": "original_material"
+        }
+      ],
+      "receivedRoute": false,
+      "receipt": {
+        "code": "OK",
+        "result": {},
+        "status": "Accepted",
+        "actorId": "wukong",
+        "sessionId": "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090",
+        "observedSeq": "166",
+        "schemaVersion": 1,
+        "clientActionId": "D-671c3d87-4188-483c-a6f4-3bdd6dd6cefa:submit",
+        "semanticDigest": "986fcb964a7acefe0e50b9eb1cbb511269c7216896b643e93067c7cbeac68208",
+        "actionEventRange": {
+          "last": "166",
+          "first": "157"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-034a58e0-aef5-4c2e-9f06-70691d563ff8",
+      "contextDigest": "05e325d2fa4b1c3e05a8c9fe55ef3a3838a973ecb204987b4c00fc1783007b40",
+      "inputObservationIds": [
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O18",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O49",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O51",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O53",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O55",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O57",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O63",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O78",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O93",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O99",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O100",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O104",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O115",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O119",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O130",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O134",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O148",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O154",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O155",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O159"
+      ],
+      "outputDigest": "657b2354a7ef1fc99f8f487c22f004976b9e2c761b7198c02cc94564acd4177e",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "当前可见状态已确认实际修复与有效许可，我愿意按已见出口通行。请明确希望前往的出口；我的同意不代表已经抵达。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "passage_structure"
+        }
+      ],
+      "gateFields": [
+        {
+          "key": "safe",
+          "label": "安全",
+          "value": true
+        },
+        {
+          "key": "permit",
+          "label": "通行许可",
+          "value": true
+        },
+        {
+          "key": "repairMaterial",
+          "label": "实际修复材料",
+          "value": "original_material"
+        }
+      ],
+      "receivedRoute": false,
+      "receipt": {
+        "code": "OK",
+        "result": {},
+        "status": "Accepted",
+        "actorId": "tangseng",
+        "sessionId": "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090",
+        "observedSeq": "178",
+        "schemaVersion": 1,
+        "clientActionId": "D-034a58e0-aef5-4c2e-9f06-70691d563ff8:submit",
+        "semanticDigest": "657b2354a7ef1fc99f8f487c22f004976b9e2c761b7198c02cc94564acd4177e",
+        "actionEventRange": {
+          "last": "178",
+          "first": "169"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-cb368496-4bc2-445c-91db-ee2d7c1ffd8c",
+      "contextDigest": "f9034e228d72b3b19fb28e9e35a0cf1c332af1b08405df348a69ab693ccb9077",
+      "inputObservationIds": [
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O20",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O37",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O45",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O50",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O52",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O54",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O56",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O58",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O62",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O74",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O77",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O89",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O92",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O103",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O118",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O133",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O140",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O141",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O147",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O158",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O165",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O166",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O170"
+      ],
+      "outputDigest": "abd7d35028dcdb3363b4c32981f3ee5e2f594a42d0cc89f9aa7e777ed605dac1",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "当前可见状态已确认实际修复与有效许可，我改为核对通行路线；沿已见出口行动，抵达与否以实际移动为准。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "passage_structure"
+        }
+      ],
+      "gateFields": [
+        {
+          "key": "safe",
+          "label": "安全",
+          "value": true
+        },
+        {
+          "key": "permit",
+          "label": "通行许可",
+          "value": true
+        },
+        {
+          "key": "repairMaterial",
+          "label": "实际修复材料",
+          "value": "original_material"
+        }
+      ],
+      "receivedRoute": false,
+      "receipt": {
+        "code": "OK",
+        "result": {},
+        "status": "Accepted",
+        "actorId": "wukong",
+        "sessionId": "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090",
+        "observedSeq": "189",
+        "schemaVersion": 1,
+        "clientActionId": "D-cb368496-4bc2-445c-91db-ee2d7c1ffd8c:submit",
+        "semanticDigest": "abd7d35028dcdb3363b4c32981f3ee5e2f594a42d0cc89f9aa7e777ed605dac1",
+        "actionEventRange": {
+          "last": "189",
+          "first": "180"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-74181a77-e6c2-47a4-91ce-b8534849d103",
+      "contextDigest": "5a23976efe202d2165e75c686c60c1025fd33f5175f4a99a2c6d2cb14c9f2719",
+      "inputObservationIds": [
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O18",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O49",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O51",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O53",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O55",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O57",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O63",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O78",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O93",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O99",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O100",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O104",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O115",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O119",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O130",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O134",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O148",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O154",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O155",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O159",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O171",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O177",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O178",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O182",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O192"
+      ],
+      "outputDigest": "72e519727b522b34e54d7a93d98c9d7384977501c4ac549c613fc2e71b6db6bf",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我按当前可见的出口 destination 前往核验或通行，实际效果仍由通路规则决定。"
+        },
+        {
+          "kind": "move",
+          "regionId": "destination"
+        }
+      ],
+      "gateFields": [
+        {
+          "key": "safe",
+          "label": "安全",
+          "value": true
+        },
+        {
+          "key": "permit",
+          "label": "通行许可",
+          "value": true
+        },
+        {
+          "key": "repairMaterial",
+          "label": "实际修复材料",
+          "value": "original_material"
+        }
+      ],
+      "receivedRoute": true,
+      "receipt": {
+        "code": "OK",
+        "result": {},
+        "status": "Accepted",
+        "actorId": "tangseng",
+        "sessionId": "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090",
+        "observedSeq": "207",
+        "schemaVersion": 1,
+        "clientActionId": "D-74181a77-e6c2-47a4-91ce-b8534849d103:submit",
+        "semanticDigest": "72e519727b522b34e54d7a93d98c9d7384977501c4ac549c613fc2e71b6db6bf",
+        "actionEventRange": {
+          "last": "207",
+          "first": "199"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-0be7e262-a919-40f8-adfd-30e6b94be4bd",
+      "contextDigest": "65c9eba4532a6c2927c073c2ede3584222081adb54df4e708acefbb3de4200e7",
+      "inputObservationIds": [
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O20",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O37",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O45",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O50",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O52",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O54",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O56",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O58",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O62",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O74",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O77",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O89",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O92",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O103",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O118",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O133",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O140",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O141",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O147",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O158",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O165",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O166",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O170",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O181",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O188",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O189",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O191",
+        "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090:O200"
+      ],
+      "outputDigest": "6108157297ee107da89ebdd3826756fa706f75b8ccb94107068b1c06899af673",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我按当前可见的出口 destination 前往核验或通行，实际效果仍由通路规则决定。"
+        },
+        {
+          "kind": "move",
+          "regionId": "destination"
+        }
+      ],
+      "gateFields": [
+        {
+          "key": "safe",
+          "label": "安全",
+          "value": true
+        },
+        {
+          "key": "permit",
+          "label": "通行许可",
+          "value": true
+        },
+        {
+          "key": "repairMaterial",
+          "label": "实际修复材料",
+          "value": "original_material"
+        }
+      ],
+      "receivedRoute": true,
+      "receipt": {
+        "code": "OK",
+        "result": {},
+        "status": "Accepted",
+        "actorId": "wukong",
+        "sessionId": "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090",
+        "observedSeq": "217",
+        "schemaVersion": 1,
+        "clientActionId": "D-0be7e262-a919-40f8-adfd-30e6b94be4bd:submit",
+        "semanticDigest": "6108157297ee107da89ebdd3826756fa706f75b8ccb94107068b1c06899af673",
+        "actionEventRange": {
+          "last": "217",
+          "first": "209"
+        }
+      }
+    }
+  ],
+  "sessionId": "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090",
+  "routeReceipt": {
+    "schemaVersion": 1,
+    "semanticDigest": "636f0477e43c183c95a9aff563afce7087a2f0b3c7d2f1b524b06e4c400ef921",
+    "actorId": "C-e59afc22-8430-4126-966f-c1da9453bb0f",
+    "observedSeq": "197",
+    "actionEventRange": {
+      "first": "190",
+      "last": "197"
+    },
+    "status": "Accepted",
+    "code": "OK",
+    "result": {},
+    "sessionId": "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090",
+    "clientActionId": "71bc4851-96b4-4c23-ae5f-8a385963e06b"
+  },
+  "callsAtRoute": 11,
+  "phase": "Finished",
+  "ending": {
+    "facts": [
+      {
+        "key": "safe",
+        "label": "通路安全",
+        "value": true
+      },
+      {
+        "key": "permit",
+        "label": "通行许可有效",
+        "value": true
+      },
+      {
+        "key": "arrived",
+        "label": "师徒实际到达终点",
+        "value": true
+      },
+      {
+        "key": "spareConsumed",
+        "label": "备用材料实际消耗",
+        "value": false
+      },
+      {
+        "key": "originalConsumed",
+        "label": "原材料实际用于修复",
+        "value": true
+      },
+      {
+        "key": "evidenceComplete",
+        "label": "双方已取得完整核验来源",
+        "value": true
+      }
+    ],
+    "endingCode": "clarified_passage"
+  },
+  "totalCalls": 13,
+  "callsAfterRoute": 2,
+  "npcRegions": {
+    "tangseng": "destination",
+    "wukong": "destination"
+  },
+  "routeAwareShares": 0,
+  "scheduler": {
+    "tangseng": {
+      "phase": "Idle",
+      "calls": 6,
+      "pendingWake": false,
+      "decisionId": "D-74181a77-e6c2-47a4-91ce-b8534849d103",
+      "lastReceipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "72e519727b522b34e54d7a93d98c9d7384977501c4ac549c613fc2e71b6db6bf",
+        "actorId": "tangseng",
+        "observedSeq": "207",
+        "actionEventRange": {
+          "first": "199",
+          "last": "207"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090",
+        "clientActionId": "D-74181a77-e6c2-47a4-91ce-b8534849d103:submit"
+      },
+      "lastFallback": null,
+      "error": null
+    },
+    "wukong": {
+      "phase": "Idle",
+      "calls": 7,
+      "pendingWake": false,
+      "decisionId": "D-0be7e262-a919-40f8-adfd-30e6b94be4bd",
+      "lastReceipt": {
+        "schemaVersion": 1,
+        "semanticDigest": "6108157297ee107da89ebdd3826756fa706f75b8ccb94107068b1c06899af673",
+        "actorId": "wukong",
+        "observedSeq": "217",
+        "actionEventRange": {
+          "first": "209",
+          "last": "217"
+        },
+        "status": "Accepted",
+        "code": "OK",
+        "result": {},
+        "sessionId": "S-a5cd8212-39dd-48c0-8228-dcef6bfd4090",
+        "clientActionId": "D-0be7e262-a919-40f8-adfd-30e6b94be4bd:submit"
+      },
+      "lastFallback": null,
+      "error": null
+    }
+  },
+  "elapsedMs": 1811.0578759999999,
+  "resourcesClosed": true
+}

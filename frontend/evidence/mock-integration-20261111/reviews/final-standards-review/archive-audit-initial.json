@@ -1,0 +1,2352 @@
+{
+  "kind": "evidence_audit",
+  "reviewer": "/root/network_standards",
+  "startedAt": "2026-11-11T13:27:33.145183+00:00",
+  "candidate": "fa87e221aa1e48cb19eeecc1beafcb83c0a7a21a",
+  "tree": "2d81686787d35d3a26747fbd7896ab1ec54c31ed",
+  "checks": [
+    {
+      "name": "归档索引实际字节",
+      "assessment": "PASS",
+      "indexed": 95,
+      "audited": 63,
+      "unreadOtherAxis": 32,
+      "files": [
+        {
+          "path": "README.md",
+          "sha256": "8d0a29725f3925f4cef9f573b44642fdf0acfe4d0dbbbbd2c0f61814f5c82739",
+          "bytes": 6226,
+          "match": true
+        },
+        {
+          "path": "acceptance-matrix.json",
+          "sha256": "c9901d170c8db19139d7de52c7bbd9ab471c84558d9cf204a0b56e8e8f185b0b",
+          "bytes": 2812,
+          "match": true
+        },
+        {
+          "path": "archive-plan.json",
+          "sha256": "ef5456ce0dfd5bb9e338df7052b1688d1b2d6557a7ed7ed05389315372ec26e1",
+          "bytes": 25507,
+          "match": true
+        },
+        {
+          "path": "browser/execution.json",
+          "sha256": "47f7e228c42341d12e1ab0edda694e40da9c85739715e8d1e4f63e2faf1bec56",
+          "bytes": 439,
+          "match": true
+        },
+        {
+          "path": "browser/recap-desktop.png",
+          "sha256": "bf0456443a88eb7f7337f5ff6837d4ddd191d5507b0ce8ed4a278d9722977b4d",
+          "bytes": 236531,
+          "match": true
+        },
+        {
+          "path": "browser/recap-mobile.png",
+          "sha256": "a4208c7d58071672aafa2b43ddf84108f979639e4c889a463579e277bf43086b",
+          "bytes": 102010,
+          "match": true
+        },
+        {
+          "path": "browser/result.json",
+          "sha256": "2c175fa6ebad88e9683f40412a558e3d44d2fc9dc3917e7769ee074cd807cd5c",
+          "bytes": 16061,
+          "match": true
+        },
+        {
+          "path": "browser/stdout.txt",
+          "sha256": "9222a3952d607045c7205d5213d808b14ff9efcb4541ff682353fcc51eba0b80",
+          "bytes": 1891,
+          "match": true
+        },
+        {
+          "path": "checks/backend.json",
+          "sha256": "2cf9fa2cde59681e823a2267f3c21eadc257c611ad12fd5224e2449739ee94d7",
+          "bytes": 424,
+          "match": true
+        },
+        {
+          "path": "checks/backend.txt",
+          "sha256": "750205f7ed53eba1d076bb4560aeff224ee72b8373f435a9cde27b653ce6ae58",
+          "bytes": 11600,
+          "match": true
+        },
+        {
+          "path": "checks/build.json",
+          "sha256": "b0af94409867d712727091822de8b2659c68a4ebaedbd2489da4a3c351d92b54",
+          "bytes": 449,
+          "match": true
+        },
+        {
+          "path": "checks/build.txt",
+          "sha256": "a394802a67fb229dbce27186e6e61092e445decd0ad03a953536a51d924e48d1",
+          "bytes": 511,
+          "match": true
+        },
+        {
+          "path": "checks/content.json",
+          "sha256": "134819b5a07c6b47ad33d787d6e9003fa666030bdfddb76fdb6e03355a4295da",
+          "bytes": 422,
+          "match": true
+        },
+        {
+          "path": "checks/content.txt",
+          "sha256": "06f72938844357f080fa2411f7cd8ca6747a8597494b904ddc66e19577e53be0",
+          "bytes": 1039,
+          "match": true
+        },
+        {
+          "path": "checks/frontend.json",
+          "sha256": "03226193e5285bcda0fe4eec16df02924142b929855ced53d1bf7a7ce18cd06f",
+          "bytes": 437,
+          "match": true
+        },
+        {
+          "path": "checks/frontend.txt",
+          "sha256": "fce8e68b1ecf0c46aeb63c73fdcc5d66bbcc3efc9b1eedf1e0d2ac1cb93ecf26",
+          "bytes": 5706,
+          "match": true
+        },
+        {
+          "path": "checks/generated.json",
+          "sha256": "fcd1b1b222c89e94db61961c5d71f78162158fe0e95cce7b3eb4bbd323ec6857",
+          "bytes": 445,
+          "match": true
+        },
+        {
+          "path": "checks/generated.txt",
+          "sha256": "3772d5a8194fe2950808390b12ebd05aeb418aca03551e83473108133ed00b9c",
+          "bytes": 46,
+          "match": true
+        },
+        {
+          "path": "checks/protocol.json",
+          "sha256": "ff372796975adb4b32b314d467889a91f169a2dd7ca080a4709ae9e939e9adbc",
+          "bytes": 424,
+          "match": true
+        },
+        {
+          "path": "checks/protocol.txt",
+          "sha256": "6ccd4fbbe3dafd244fd9fd47f59d327e3335e78c8637548d1fb4ee3f19358bad",
+          "bytes": 2279,
+          "match": true
+        },
+        {
+          "path": "checks/schema.json",
+          "sha256": "1c3aeba28e5df47b78ec1a45fd6a86da6f6261a307ee70dc4e3bb7d030f4d372",
+          "bytes": 435,
+          "match": true
+        },
+        {
+          "path": "checks/schema.txt",
+          "sha256": "0505293c2c67a789f97dd9337168f1a66b8ccf76255b640b0f6b3c4fc18ce386",
+          "bytes": 132,
+          "match": true
+        },
+        {
+          "path": "execution-source.json",
+          "sha256": "0a4b674cbcc3a6bac6cdca16765949289f051bb88690f9ed0c978bfe2f4f6082",
+          "bytes": 13984,
+          "match": true
+        },
+        {
+          "path": "failures/integration-r1/execution.json",
+          "sha256": "1a36c7c5b69882649a725557e94d23acd191dd5fe9a4390173fe7d4966a69078",
+          "bytes": 226,
+          "match": true
+        },
+        {
+          "path": "failures/integration-r1/result.json",
+          "sha256": "ac39afc5f64e55b65ce10fdbe070ce86f1cddfdcedceff0968ed4299b1c00ac5",
+          "bytes": 59645,
+          "match": true
+        },
+        {
+          "path": "failures/integration-r1/stdout.txt",
+          "sha256": "b4b8643a1556c47ed0171df47209160281470830449b61674ed20b45d06b29af",
+          "bytes": 1424,
+          "match": true
+        },
+        {
+          "path": "integration/execution.json",
+          "sha256": "e499600fc2f2016e98079889e4ab501da899efde90e47b18b8be4bac5e96c74f",
+          "bytes": 437,
+          "match": true
+        },
+        {
+          "path": "integration/result.json",
+          "sha256": "a770b057f5240fe9da3778dbfe532c983391f2576be858c9a0e60a61fd470ccb",
+          "bytes": 97075,
+          "match": true
+        },
+        {
+          "path": "integration/stdout.txt",
+          "sha256": "ebd996929e4744b94690bd9bdca8c9c8f59554be6e0f39a995f4a3da07c8758d",
+          "bytes": 11439,
+          "match": true
+        },
+        {
+          "path": "network/archive-method.json",
+          "sha256": "410dbed103122047d7a4d1122bb0d801ddc6a8f394a6423c0f6caceeacf5a366",
+          "bytes": 621,
+          "match": true
+        },
+        {
+          "path": "network/assertions.jsonl",
+          "sha256": "7059c8c1eab2818cee23b7b27d12b9df62af88a3c41906f09bb7e877b230e69c",
+          "bytes": 121982,
+          "match": true
+        },
+        {
+          "path": "network/execution.json",
+          "sha256": "1631aeb31fd8be64d1fcd566dc00e5a11008b018430601ecd35e2906fa734d11",
+          "bytes": 438,
+          "match": true
+        },
+        {
+          "path": "network/stdout.txt",
+          "sha256": "3b4dfdca881d2e7c55d53a6e88a2462b07f1190ce42a3b7ebb00ba6cc5515edc",
+          "bytes": 17580,
+          "match": true
+        },
+        {
+          "path": "network/summary.json",
+          "sha256": "cc287cdb5c9f7a468ee0496bd41aa525dac92e6e30eaa445a7499b1f153cac53",
+          "bytes": 147021,
+          "match": true
+        },
+        {
+          "path": "reviews/mock-ai-standards-review/archive-audit.json",
+          "sha256": "be7cbfad05598c8da4bf175f107d0a8ffe5e3b21a2b3ebe2406780cd25424ec0",
+          "bytes": 27964,
+          "match": true
+        },
+        {
+          "path": "reviews/mock-ai-standards-review/audit-archive.py",
+          "sha256": "dec5b74a3a4f6021bfe866abaab5546af3df3ac5ac13074cf3a437feb4c4e8eb",
+          "bytes": 10925,
+          "match": true
+        },
+        {
+          "path": "reviews/mock-ai-standards-review/isolation-probe.json",
+          "sha256": "9bc5d35a2ef15c04a9ca33323ca9e71e01cad1fa13e2a82b757f96e8f13e5afa",
+          "bytes": 7247,
+          "match": true
+        },
+        {
+          "path": "reviews/mock-ai-standards-review/isolation-probe.mjs",
+          "sha256": "4ff351d31b2733756fc32bcba37b4cd5e87f363d7b90742d5955edd4394801da",
+          "bytes": 7187,
+          "match": true
+        },
+        {
+          "path": "reviews/mock-ai-standards-review/isolation.execution.json",
+          "sha256": "94eab3c38c87e798dd0752c08a1cd54db059cd482fcfa246fb1292f83fcd15f6",
+          "bytes": 15090,
+          "match": true
+        },
+        {
+          "path": "reviews/mock-ai-standards-review/isolation.txt",
+          "sha256": "23057687fdf4bd7351596984b35453f53fb143466ac8e53b95b11b4bd0ee04b4",
+          "bytes": 475,
+          "match": true
+        },
+        {
+          "path": "reviews/mock-ai-standards-review/review-r1.json",
+          "sha256": "d6ec49be54ed1f0d866dee88cdbebe80ce99ee100870545d6acd0b1eba32ad2d",
+          "bytes": 40556,
+          "match": true
+        },
+        {
+          "path": "reviews/mock-ai-standards-review/review-r1.md",
+          "sha256": "47fc2e3bf71e1ce773c3e7b3fab95b72e4bb73484240779dbd1137f14f163073",
+          "bytes": 11644,
+          "match": true
+        },
+        {
+          "path": "reviews/mock-ai-standards-review/run-check.py",
+          "sha256": "9e4c727a668bc38b491b7428edfc45c07f7837784af3f06321d0809b24560258",
+          "bytes": 1692,
+          "match": true
+        },
+        {
+          "path": "reviews/mock-ai-standards-review/targeted/policy-evidence.json",
+          "sha256": "a75d2e2fcc3831ccaf7476659df26f4fdebf096336735775931e1c28bfe418ee",
+          "bytes": 67823,
+          "match": true
+        },
+        {
+          "path": "reviews/mock-ai-standards-review/targeted/progress-evidence.json",
+          "sha256": "2de7dbd1c936216765982810b0ba366d52b591335a908f19c65a82495d7fedb4",
+          "bytes": 36223,
+          "match": true
+        },
+        {
+          "path": "reviews/mock-ai-standards-review/targeted.execution.json",
+          "sha256": "af1e6d733fb6866de47aa78c2dd88534012c723cf2f57d23342ad2df5c5ad73d",
+          "bytes": 15174,
+          "match": true
+        },
+        {
+          "path": "reviews/mock-ai-standards-review/targeted.txt",
+          "sha256": "b03e2375b08fb7459f2f47569835795aa9c3a3312ccf7e7f8ce9b3d8551f07b3",
+          "bytes": 1540,
+          "match": true
+        },
+        {
+          "path": "reviews/mock-ui-standards-review/archive-audit.json",
+          "sha256": "a96b582fd8f998ac81955cfab680dad7c0c6d9a627c23d8123b100b17ecac40e",
+          "bytes": 54325,
+          "match": true
+        },
+        {
+          "path": "reviews/mock-ui-standards-review/audit-archive.py",
+          "sha256": "8e2da59e5458b2391773a48ef191f4a59254e59e0296427597f633cf990b2d0c",
+          "bytes": 7668,
+          "match": true
+        },
+        {
+          "path": "reviews/mock-ui-standards-review/browser/recap-desktop.png",
+          "sha256": "3153c768de9532e6d866cabc04b30d6bbc1da73f89365c2fb013205a9714cf65",
+          "bytes": 235985,
+          "match": true
+        },
+        {
+          "path": "reviews/mock-ui-standards-review/browser/recap-mobile.png",
+          "sha256": "39cf1ee32da09a1e279c3a5caa9e2d9e70158269d6dee1f677c29f7f69e231b3",
+          "bytes": 102000,
+          "match": true
+        },
+        {
+          "path": "reviews/mock-ui-standards-review/browser/result.json",
+          "sha256": "296251d4fff12c18a0e2001e12ca65850d9891f31e1cfc07a18e42a28cc86fb1",
+          "bytes": 15178,
+          "match": true
+        },
+        {
+          "path": "reviews/mock-ui-standards-review/browser.execution.json",
+          "sha256": "fd58b6fa048d67ea57c2c969fb35acbc607ca99af2da4e0df8198a7829c35f9e",
+          "bytes": 811,
+          "match": true
+        },
+        {
+          "path": "reviews/mock-ui-standards-review/browser.txt",
+          "sha256": "697e0266b63364c6b1e93d9298e44e4de92661872f8b4f49422444dd3fb65efc",
+          "bytes": 2146,
+          "match": true
+        },
+        {
+          "path": "reviews/mock-ui-standards-review/generated.execution.json",
+          "sha256": "bd32d52226d72c6a6c0f16ed6ffa5f8b9c16b3b41b623eb3bdc539c625d154c1",
+          "bytes": 402,
+          "match": true
+        },
+        {
+          "path": "reviews/mock-ui-standards-review/generated.txt",
+          "sha256": "3772d5a8194fe2950808390b12ebd05aeb418aca03551e83473108133ed00b9c",
+          "bytes": 46,
+          "match": true
+        },
+        {
+          "path": "reviews/mock-ui-standards-review/review-r1.json",
+          "sha256": "34793f90a298ab76816cbddfef331701afb52fb2a8b30a6b13bb2a2097c9024c",
+          "bytes": 9364,
+          "match": true
+        },
+        {
+          "path": "reviews/mock-ui-standards-review/review-r1.md",
+          "sha256": "aa800218ff15011e1d64e772d9a9a35d7da39bb3406e7c7dcb51ab5d48e86f70",
+          "bytes": 13741,
+          "match": true
+        },
+        {
+          "path": "reviews/mock-ui-standards-review/run-check.py",
+          "sha256": "fa4bf4fb58b84b54a0a252cf7a2ff17f0a978f96664dccfa601ea1a219363ada",
+          "bytes": 1610,
+          "match": true
+        },
+        {
+          "path": "reviews/mock-ui-standards-review/targeted.execution.json",
+          "sha256": "ecd4c4970496bf5eac6fd60243ab15d60439e9b762bf041a47cb463636655702",
+          "bytes": 615,
+          "match": true
+        },
+        {
+          "path": "reviews/mock-ui-standards-review/targeted.txt",
+          "sha256": "350e1731d4cf7c515a0aaee26b2c39c1e8d8d11649c94d4a0311bcde493fc012",
+          "bytes": 3338,
+          "match": true
+        },
+        {
+          "path": "reviews/mock-ui-standards-review/typecheck.execution.json",
+          "sha256": "119f223c02bb3b6f4ec607db4df90419a3cae3b2cd5094bafeeeb973ec66ef1d",
+          "bytes": 408,
+          "match": true
+        },
+        {
+          "path": "reviews/mock-ui-standards-review/typecheck.txt",
+          "sha256": "b12c8f920cb387f8b0e3e5922af7dbaa9f89e54b43d237016b9cde316a294a93",
+          "bytes": 153,
+          "match": true
+        }
+      ]
+    },
+    {
+      "name": "原件原字节复制",
+      "assessment": "PASS",
+      "audited": 56,
+      "unreadOtherAxis": 32,
+      "files": [
+        {
+          "archive": "checks/backend.json",
+          "sha256": "2cf9fa2cde59681e823a2267f3c21eadc257c611ad12fd5224e2449739ee94d7",
+          "bytes": 424,
+          "match": true
+        },
+        {
+          "archive": "checks/backend.txt",
+          "sha256": "750205f7ed53eba1d076bb4560aeff224ee72b8373f435a9cde27b653ce6ae58",
+          "bytes": 11600,
+          "match": true
+        },
+        {
+          "archive": "checks/protocol.json",
+          "sha256": "ff372796975adb4b32b314d467889a91f169a2dd7ca080a4709ae9e939e9adbc",
+          "bytes": 424,
+          "match": true
+        },
+        {
+          "archive": "checks/protocol.txt",
+          "sha256": "6ccd4fbbe3dafd244fd9fd47f59d327e3335e78c8637548d1fb4ee3f19358bad",
+          "bytes": 2279,
+          "match": true
+        },
+        {
+          "archive": "checks/content.json",
+          "sha256": "134819b5a07c6b47ad33d787d6e9003fa666030bdfddb76fdb6e03355a4295da",
+          "bytes": 422,
+          "match": true
+        },
+        {
+          "archive": "checks/content.txt",
+          "sha256": "06f72938844357f080fa2411f7cd8ca6747a8597494b904ddc66e19577e53be0",
+          "bytes": 1039,
+          "match": true
+        },
+        {
+          "archive": "checks/frontend.json",
+          "sha256": "03226193e5285bcda0fe4eec16df02924142b929855ced53d1bf7a7ce18cd06f",
+          "bytes": 437,
+          "match": true
+        },
+        {
+          "archive": "checks/frontend.txt",
+          "sha256": "fce8e68b1ecf0c46aeb63c73fdcc5d66bbcc3efc9b1eedf1e0d2ac1cb93ecf26",
+          "bytes": 5706,
+          "match": true
+        },
+        {
+          "archive": "checks/build.json",
+          "sha256": "b0af94409867d712727091822de8b2659c68a4ebaedbd2489da4a3c351d92b54",
+          "bytes": 449,
+          "match": true
+        },
+        {
+          "archive": "checks/build.txt",
+          "sha256": "a394802a67fb229dbce27186e6e61092e445decd0ad03a953536a51d924e48d1",
+          "bytes": 511,
+          "match": true
+        },
+        {
+          "archive": "checks/generated.json",
+          "sha256": "fcd1b1b222c89e94db61961c5d71f78162158fe0e95cce7b3eb4bbd323ec6857",
+          "bytes": 445,
+          "match": true
+        },
+        {
+          "archive": "checks/generated.txt",
+          "sha256": "3772d5a8194fe2950808390b12ebd05aeb418aca03551e83473108133ed00b9c",
+          "bytes": 46,
+          "match": true
+        },
+        {
+          "archive": "checks/schema.json",
+          "sha256": "1c3aeba28e5df47b78ec1a45fd6a86da6f6261a307ee70dc4e3bb7d030f4d372",
+          "bytes": 435,
+          "match": true
+        },
+        {
+          "archive": "checks/schema.txt",
+          "sha256": "0505293c2c67a789f97dd9337168f1a66b8ccf76255b640b0f6b3c4fc18ce386",
+          "bytes": 132,
+          "match": true
+        },
+        {
+          "archive": "integration/result.json",
+          "sha256": "a770b057f5240fe9da3778dbfe532c983391f2576be858c9a0e60a61fd470ccb",
+          "bytes": 97075,
+          "match": true
+        },
+        {
+          "archive": "integration/execution.json",
+          "sha256": "e499600fc2f2016e98079889e4ab501da899efde90e47b18b8be4bac5e96c74f",
+          "bytes": 437,
+          "match": true
+        },
+        {
+          "archive": "integration/stdout.txt",
+          "sha256": "ebd996929e4744b94690bd9bdca8c9c8f59554be6e0f39a995f4a3da07c8758d",
+          "bytes": 11439,
+          "match": true
+        },
+        {
+          "archive": "failures/integration-r1/result.json",
+          "sha256": "ac39afc5f64e55b65ce10fdbe070ce86f1cddfdcedceff0968ed4299b1c00ac5",
+          "bytes": 59645,
+          "match": true
+        },
+        {
+          "archive": "failures/integration-r1/execution.json",
+          "sha256": "1a36c7c5b69882649a725557e94d23acd191dd5fe9a4390173fe7d4966a69078",
+          "bytes": 226,
+          "match": true
+        },
+        {
+          "archive": "failures/integration-r1/stdout.txt",
+          "sha256": "b4b8643a1556c47ed0171df47209160281470830449b61674ed20b45d06b29af",
+          "bytes": 1424,
+          "match": true
+        },
+        {
+          "archive": "reviews/mock-ui-standards-review/review-r1.md",
+          "sha256": "aa800218ff15011e1d64e772d9a9a35d7da39bb3406e7c7dcb51ab5d48e86f70",
+          "bytes": 13741,
+          "match": true
+        },
+        {
+          "archive": "reviews/mock-ui-standards-review/review-r1.json",
+          "sha256": "34793f90a298ab76816cbddfef331701afb52fb2a8b30a6b13bb2a2097c9024c",
+          "bytes": 9364,
+          "match": true
+        },
+        {
+          "archive": "reviews/mock-ui-standards-review/archive-audit.json",
+          "sha256": "a96b582fd8f998ac81955cfab680dad7c0c6d9a627c23d8123b100b17ecac40e",
+          "bytes": 54325,
+          "match": true
+        },
+        {
+          "archive": "reviews/mock-ui-standards-review/audit-archive.py",
+          "sha256": "8e2da59e5458b2391773a48ef191f4a59254e59e0296427597f633cf990b2d0c",
+          "bytes": 7668,
+          "match": true
+        },
+        {
+          "archive": "reviews/mock-ui-standards-review/run-check.py",
+          "sha256": "fa4bf4fb58b84b54a0a252cf7a2ff17f0a978f96664dccfa601ea1a219363ada",
+          "bytes": 1610,
+          "match": true
+        },
+        {
+          "archive": "reviews/mock-ui-standards-review/targeted.txt",
+          "sha256": "350e1731d4cf7c515a0aaee26b2c39c1e8d8d11649c94d4a0311bcde493fc012",
+          "bytes": 3338,
+          "match": true
+        },
+        {
+          "archive": "reviews/mock-ui-standards-review/targeted.execution.json",
+          "sha256": "ecd4c4970496bf5eac6fd60243ab15d60439e9b762bf041a47cb463636655702",
+          "bytes": 615,
+          "match": true
+        },
+        {
+          "archive": "reviews/mock-ui-standards-review/generated.txt",
+          "sha256": "3772d5a8194fe2950808390b12ebd05aeb418aca03551e83473108133ed00b9c",
+          "bytes": 46,
+          "match": true
+        },
+        {
+          "archive": "reviews/mock-ui-standards-review/generated.execution.json",
+          "sha256": "bd32d52226d72c6a6c0f16ed6ffa5f8b9c16b3b41b623eb3bdc539c625d154c1",
+          "bytes": 402,
+          "match": true
+        },
+        {
+          "archive": "reviews/mock-ui-standards-review/typecheck.txt",
+          "sha256": "b12c8f920cb387f8b0e3e5922af7dbaa9f89e54b43d237016b9cde316a294a93",
+          "bytes": 153,
+          "match": true
+        },
+        {
+          "archive": "reviews/mock-ui-standards-review/typecheck.execution.json",
+          "sha256": "119f223c02bb3b6f4ec607db4df90419a3cae3b2cd5094bafeeeb973ec66ef1d",
+          "bytes": 408,
+          "match": true
+        },
+        {
+          "archive": "reviews/mock-ui-standards-review/browser.txt",
+          "sha256": "697e0266b63364c6b1e93d9298e44e4de92661872f8b4f49422444dd3fb65efc",
+          "bytes": 2146,
+          "match": true
+        },
+        {
+          "archive": "reviews/mock-ui-standards-review/browser.execution.json",
+          "sha256": "fd58b6fa048d67ea57c2c969fb35acbc607ca99af2da4e0df8198a7829c35f9e",
+          "bytes": 811,
+          "match": true
+        },
+        {
+          "archive": "reviews/mock-ui-standards-review/browser/result.json",
+          "sha256": "296251d4fff12c18a0e2001e12ca65850d9891f31e1cfc07a18e42a28cc86fb1",
+          "bytes": 15178,
+          "match": true
+        },
+        {
+          "archive": "reviews/mock-ui-standards-review/browser/recap-desktop.png",
+          "sha256": "3153c768de9532e6d866cabc04b30d6bbc1da73f89365c2fb013205a9714cf65",
+          "bytes": 235985,
+          "match": true
+        },
+        {
+          "archive": "reviews/mock-ui-standards-review/browser/recap-mobile.png",
+          "sha256": "39cf1ee32da09a1e279c3a5caa9e2d9e70158269d6dee1f677c29f7f69e231b3",
+          "bytes": 102000,
+          "match": true
+        },
+        {
+          "archive": "browser/result.json",
+          "sha256": "2c175fa6ebad88e9683f40412a558e3d44d2fc9dc3917e7769ee074cd807cd5c",
+          "bytes": 16061,
+          "match": true
+        },
+        {
+          "archive": "browser/execution.json",
+          "sha256": "47f7e228c42341d12e1ab0edda694e40da9c85739715e8d1e4f63e2faf1bec56",
+          "bytes": 439,
+          "match": true
+        },
+        {
+          "archive": "browser/stdout.txt",
+          "sha256": "9222a3952d607045c7205d5213d808b14ff9efcb4541ff682353fcc51eba0b80",
+          "bytes": 1891,
+          "match": true
+        },
+        {
+          "archive": "browser/recap-desktop.png",
+          "sha256": "bf0456443a88eb7f7337f5ff6837d4ddd191d5507b0ce8ed4a278d9722977b4d",
+          "bytes": 236531,
+          "match": true
+        },
+        {
+          "archive": "browser/recap-mobile.png",
+          "sha256": "a4208c7d58071672aafa2b43ddf84108f979639e4c889a463579e277bf43086b",
+          "bytes": 102010,
+          "match": true
+        },
+        {
+          "archive": "reviews/mock-ai-standards-review/review-r1.md",
+          "sha256": "47fc2e3bf71e1ce773c3e7b3fab95b72e4bb73484240779dbd1137f14f163073",
+          "bytes": 11644,
+          "match": true
+        },
+        {
+          "archive": "reviews/mock-ai-standards-review/review-r1.json",
+          "sha256": "d6ec49be54ed1f0d866dee88cdbebe80ce99ee100870545d6acd0b1eba32ad2d",
+          "bytes": 40556,
+          "match": true
+        },
+        {
+          "archive": "reviews/mock-ai-standards-review/archive-audit.json",
+          "sha256": "be7cbfad05598c8da4bf175f107d0a8ffe5e3b21a2b3ebe2406780cd25424ec0",
+          "bytes": 27964,
+          "match": true
+        },
+        {
+          "archive": "reviews/mock-ai-standards-review/audit-archive.py",
+          "sha256": "dec5b74a3a4f6021bfe866abaab5546af3df3ac5ac13074cf3a437feb4c4e8eb",
+          "bytes": 10925,
+          "match": true
+        },
+        {
+          "archive": "reviews/mock-ai-standards-review/run-check.py",
+          "sha256": "9e4c727a668bc38b491b7428edfc45c07f7837784af3f06321d0809b24560258",
+          "bytes": 1692,
+          "match": true
+        },
+        {
+          "archive": "reviews/mock-ai-standards-review/targeted.txt",
+          "sha256": "b03e2375b08fb7459f2f47569835795aa9c3a3312ccf7e7f8ce9b3d8551f07b3",
+          "bytes": 1540,
+          "match": true
+        },
+        {
+          "archive": "reviews/mock-ai-standards-review/targeted.execution.json",
+          "sha256": "af1e6d733fb6866de47aa78c2dd88534012c723cf2f57d23342ad2df5c5ad73d",
+          "bytes": 15174,
+          "match": true
+        },
+        {
+          "archive": "reviews/mock-ai-standards-review/targeted/policy-evidence.json",
+          "sha256": "a75d2e2fcc3831ccaf7476659df26f4fdebf096336735775931e1c28bfe418ee",
+          "bytes": 67823,
+          "match": true
+        },
+        {
+          "archive": "reviews/mock-ai-standards-review/targeted/progress-evidence.json",
+          "sha256": "2de7dbd1c936216765982810b0ba366d52b591335a908f19c65a82495d7fedb4",
+          "bytes": 36223,
+          "match": true
+        },
+        {
+          "archive": "reviews/mock-ai-standards-review/isolation-probe.mjs",
+          "sha256": "4ff351d31b2733756fc32bcba37b4cd5e87f363d7b90742d5955edd4394801da",
+          "bytes": 7187,
+          "match": true
+        },
+        {
+          "archive": "reviews/mock-ai-standards-review/isolation-probe.json",
+          "sha256": "9bc5d35a2ef15c04a9ca33323ca9e71e01cad1fa13e2a82b757f96e8f13e5afa",
+          "bytes": 7247,
+          "match": true
+        },
+        {
+          "archive": "reviews/mock-ai-standards-review/isolation.txt",
+          "sha256": "23057687fdf4bd7351596984b35453f53fb143466ac8e53b95b11b4bd0ee04b4",
+          "bytes": 475,
+          "match": true
+        },
+        {
+          "archive": "reviews/mock-ai-standards-review/isolation.execution.json",
+          "sha256": "94eab3c38c87e798dd0752c08a1cd54db059cd482fcfa246fb1292f83fcd15f6",
+          "bytes": 15090,
+          "match": true
+        },
+        {
+          "archive": "network/execution.json",
+          "sha256": "1631aeb31fd8be64d1fcd566dc00e5a11008b018430601ecd35e2906fa734d11",
+          "bytes": 438,
+          "match": true
+        },
+        {
+          "archive": "network/stdout.txt",
+          "sha256": "3b4dfdca881d2e7c55d53a6e88a2462b07f1190ce42a3b7ebb00ba6cc5515edc",
+          "bytes": 17580,
+          "match": true
+        }
+      ]
+    },
+    {
+      "name": "四次执行同一固定输入",
+      "assessment": "PASS",
+      "identities": {
+        "integration": {
+          "commit": "fa87e221aa1e48cb19eeecc1beafcb83c0a7a21a",
+          "tree": "2d81686787d35d3a26747fbd7896ab1ec54c31ed",
+          "status": "",
+          "inputs": 119,
+          "same": true,
+          "assessment": "PASS",
+          "resourcesClosed": true
+        },
+        "network": {
+          "commit": "fa87e221aa1e48cb19eeecc1beafcb83c0a7a21a",
+          "tree": "2d81686787d35d3a26747fbd7896ab1ec54c31ed",
+          "status": "",
+          "inputs": 119,
+          "same": true,
+          "assessment": "PASS",
+          "resourcesClosed": true
+        },
+        "browser": {
+          "commit": "fa87e221aa1e48cb19eeecc1beafcb83c0a7a21a",
+          "tree": "2d81686787d35d3a26747fbd7896ab1ec54c31ed",
+          "status": "",
+          "inputs": 119,
+          "same": true,
+          "assessment": "PASS",
+          "resourcesClosed": true
+        },
+        "independentIntegration": {
+          "commit": "fa87e221aa1e48cb19eeecc1beafcb83c0a7a21a",
+          "tree": "2d81686787d35d3a26747fbd7896ab1ec54c31ed",
+          "status": "",
+          "inputs": 119,
+          "same": true,
+          "assessment": "PASS",
+          "resourcesClosed": true
+        }
+      }
+    },
+    {
+      "name": "当前119摘要匹配执行输入",
+      "assessment": "PASS",
+      "count": 119,
+      "mismatch": []
+    },
+    {
+      "name": "冻结Git代码测试补充核对含mts和py",
+      "assessment": "PASS",
+      "count": 125,
+      "files": [
+        {
+          "path": "backend/ai/context.mjs",
+          "match": true,
+          "sha256": "412d707040edaf596353ae0163a13cfac7bef4b7121cd0cbb91bdf499a7af8c0"
+        },
+        {
+          "path": "backend/ai/gateway.mjs",
+          "match": true,
+          "sha256": "af87bceefb03ed4651169d19302d5f0d9cf231e8cd63c8bf2b1b247a13472a54"
+        },
+        {
+          "path": "backend/ai/mock-provider.mjs",
+          "match": true,
+          "sha256": "5559e983b1c28fd288b516ce8ce64776a35183f5e1862e49ca984bc56691750b"
+        },
+        {
+          "path": "backend/ai/mock-runtime.mjs",
+          "match": true,
+          "sha256": "08118db1aa81dca5968569e9d4703cfd5c77e53cdf63a93abdf2089b5ca57b2f"
+        },
+        {
+          "path": "backend/ai/orchestrator.mjs",
+          "match": true,
+          "sha256": "47d7206d0ea0dfc7c84fcce5d787d6ec712e34082282169b616325ffe20cbe62"
+        },
+        {
+          "path": "backend/ai/output.mjs",
+          "match": true,
+          "sha256": "99702b3e92bc469362d984aa789e00bcb6211c8377d6ec08b2c14c42b73f6492"
+        },
+        {
+          "path": "backend/ai/persistence.mjs",
+          "match": true,
+          "sha256": "fa1954c8a288f2785d013f574d05a230aaa0da53ca8f4da5cc6d156fe14ea9a7"
+        },
+        {
+          "path": "backend/decisions.mjs",
+          "match": true,
+          "sha256": "9b58d538223728c5d4bfb7cdeda6417bf54104c9074a6c3a5c99796da7bb5a0d"
+        },
+        {
+          "path": "backend/errors.mjs",
+          "match": true,
+          "sha256": "3107ea638e663abf9314db0df3453fe03269de7a893135986e0b23896aa1ce1c"
+        },
+        {
+          "path": "backend/main.mjs",
+          "match": true,
+          "sha256": "93ad5d54624ceb8b0c6ec8eadb2823320f9263e7d7335e3a66d29cfb72393afe"
+        },
+        {
+          "path": "backend/migrations/001-authority.sql",
+          "match": true,
+          "sha256": "9b3782e1902193c22a82d6c562002246d0f211f60cd8ffb72c41e4c7063936ec"
+        },
+        {
+          "path": "backend/migrations/002-ai.sql",
+          "match": true,
+          "sha256": "763c2c84d4df8698b1d3cb204c99c8a6125987275724d6a7a3a103e7390be2f6"
+        },
+        {
+          "path": "backend/migrations/003-ai-output-encoding.sql",
+          "match": true,
+          "sha256": "04c6ce8c3571751b4ee68616736ff86e1cdd9825154f7f6365f10690b6849fdc"
+        },
+        {
+          "path": "backend/mock-main.mjs",
+          "match": true,
+          "sha256": "85fba682f647b3eb85c9e2b2ad5466b01df667e4b4629723b39cfff5548c6d26"
+        },
+        {
+          "path": "backend/recap.mjs",
+          "match": true,
+          "sha256": "cc39fc91004c9f309d77e3eb5f85ec551e1ddb483827c786641b07246d6d968b"
+        },
+        {
+          "path": "backend/runtime.mjs",
+          "match": true,
+          "sha256": "ead73f2e007edf5ce49e13039728575a212a8fdc8971bd1ce0492984678f88f7"
+        },
+        {
+          "path": "backend/scripts/verify-mock-ai.mjs",
+          "match": true,
+          "sha256": "465f0823483f237b7ee24126944a7f12725b7e561abaf87e1959b84fafa12a68"
+        },
+        {
+          "path": "backend/server.mjs",
+          "match": true,
+          "sha256": "59318b5960a222ad7296e024956dffa32fe51b26f0006a18fed2c1ded81b2ef5"
+        },
+        {
+          "path": "backend/test-support/ai-crash-worker.mjs",
+          "match": true,
+          "sha256": "02c76cd059fb4cf11d29b6290cecd2166d1482cd1166481259d3643f3dab41c6"
+        },
+        {
+          "path": "backend/test-support/ai-evidence.mjs",
+          "match": true,
+          "sha256": "a27998aa87b17275310b53a44e6f499d945033cb35ff1a9dc771262ffa1d8407"
+        },
+        {
+          "path": "backend/test-support/ai-room.mjs",
+          "match": true,
+          "sha256": "47b4ba8c38370b7ee87da1733fdd265f01a55a31a27f0139dddfcc6ae9df0e7f"
+        },
+        {
+          "path": "backend/test-support/crash-worker.mjs",
+          "match": true,
+          "sha256": "04b93358c9f2b241ff0767510ca5f3bcb1d94de1a94a3ffff472f34fbaf885fb"
+        },
+        {
+          "path": "backend/test-support/postgres.mjs",
+          "match": true,
+          "sha256": "bea44ab4cab517f87cb466316c3f89480b34cf68fb609b0e95b921158de9cb46"
+        },
+        {
+          "path": "backend/tests/ai-context.test.mjs",
+          "match": true,
+          "sha256": "48aedb4293630399b692bdc02e2ebfcfdb3718ab9d062c7f627187700fb08fa4"
+        },
+        {
+          "path": "backend/tests/ai-crash.test.mjs",
+          "match": true,
+          "sha256": "8e73543d84668e5de05ef35aabdf92fb428c12bd6cc6111631660c1d02aab85c"
+        },
+        {
+          "path": "backend/tests/ai-gateway.test.mjs",
+          "match": true,
+          "sha256": "07fe533454585db4d0d6c4ff2485e0dca4fc5ad46f733392950fcf5395bee824"
+        },
+        {
+          "path": "backend/tests/ai-mock-policy.test.mjs",
+          "match": true,
+          "sha256": "eafd39270ab00dc5aaefbf28162ca84e879252f9a91c0ab4d5c1cf8f47045992"
+        },
+        {
+          "path": "backend/tests/ai-mock-progress.test.mjs",
+          "match": true,
+          "sha256": "e24e85940e382d892da1edaf9064bf0a28c9afe26339ae7e082321346eda3550"
+        },
+        {
+          "path": "backend/tests/ai-mock-runtime.test.mjs",
+          "match": true,
+          "sha256": "9a08f7d722e838ac23175a6b942fa00fefa88673346ce36b60f6f53f01e39469"
+        },
+        {
+          "path": "backend/tests/ai-network.test.mjs",
+          "match": true,
+          "sha256": "1f1c76b585ae3ba1324856ce671855d47862604f59afc836dd82e8556dd1b6ac"
+        },
+        {
+          "path": "backend/tests/ai-orchestrator.test.mjs",
+          "match": true,
+          "sha256": "0f6c6d922389746130c25aa033a01fe699918a7616e81061d44ee8d05bfd7d1f"
+        },
+        {
+          "path": "backend/tests/ai-output.test.mjs",
+          "match": true,
+          "sha256": "fa0cbbe40540c1e7c858d689ad738bfe5c9818a59155d4e39bda0877746364c9"
+        },
+        {
+          "path": "backend/tests/crash.test.mjs",
+          "match": true,
+          "sha256": "e1f622591534344263a7a0e588d849a965f835453477e8ad10f3300071a83a59"
+        },
+        {
+          "path": "backend/tests/network.test.mjs",
+          "match": true,
+          "sha256": "bd4925ab68c9db86470d6b14681a8a5bdaf33a655b72101c03300302e3f80466"
+        },
+        {
+          "path": "backend/tests/postgres-lifecycle.test.mjs",
+          "match": true,
+          "sha256": "fd6cfd4cbc47474d55679b19553b65624ada6ff6c2c7ac392c1d1ae25c2b340c"
+        },
+        {
+          "path": "backend/tests/recap.test.mjs",
+          "match": true,
+          "sha256": "5faecacf36f9d3d08c3804f8915fe2f10d7fb0a70eb4fafeba83e2be7d0f4913"
+        },
+        {
+          "path": "backend/tests/review-fixes.test.mjs",
+          "match": true,
+          "sha256": "9fe836b99cfc1fe13774292255a423e4a8e19a218ab0ff08590e157a606a3dff"
+        },
+        {
+          "path": "backend/tests/runtime.test.mjs",
+          "match": true,
+          "sha256": "bd89c7abe969de30f051fca167e4384a876734b660b7b21e3a87650439e7c504"
+        },
+        {
+          "path": "content/content.schema.json",
+          "match": true,
+          "sha256": "d46d1e44359af3cd6ad27b51cf0e09ea979eb1bc59f43eb3ccba1baf6816a7a8"
+        },
+        {
+          "path": "content/fixtures/trust-repair-fixture-v1.json",
+          "match": true,
+          "sha256": "2c3bfc582615c3a65d341a06a872dc7e8243114fc0446dead15463567e29097e"
+        },
+        {
+          "path": "content/index.mjs",
+          "match": true,
+          "sha256": "72744b12d494a0f365ce42136a2b072f8b0f7f0f98fe94a285015d8a5bd019f7"
+        },
+        {
+          "path": "content/schema.mjs",
+          "match": true,
+          "sha256": "5f0faa82ae305e690256bf62ac8820390d59273e077607d144b869d657a7e2ba"
+        },
+        {
+          "path": "content/scripts/check-schema.py",
+          "match": true,
+          "sha256": "77ae736dd80ade724ea06dec68b479ca9ce6d0845369f1adfc00e40b77906796"
+        },
+        {
+          "path": "content/scripts/generate.mjs",
+          "match": true,
+          "sha256": "3f568f1fd49e779dff816981bf921e935b2e7ce71989837aeac14f4f99970c37"
+        },
+        {
+          "path": "content/tests/content.test.mjs",
+          "match": true,
+          "sha256": "c688952d1353437ac6f4c960206dedb6f8b106a93962f52cf31a6d140fa0daf9"
+        },
+        {
+          "path": "content/validate.mjs",
+          "match": true,
+          "sha256": "5b7fae82bf0a1556c2216ccbc77c4321bfaff5175571e730024a74cd5b421a84"
+        },
+        {
+          "path": "content/versions.json",
+          "match": true,
+          "sha256": "2e1168e414eb3a01a5d86e8e48839c51512cd20c4f0055531bb7557f7feb2e09"
+        },
+        {
+          "path": "frontend/index.html",
+          "match": true,
+          "sha256": "ee1cbc00c7b398c210c0b813b3884e1504b1a3ccfd8c6aa0e6771d8b8f564088"
+        },
+        {
+          "path": "frontend/package-lock.json",
+          "match": true,
+          "sha256": "15ce33745ce6d9f6773f1ea0eece72832b17e6ba13b4f51b4df78d1303ffbb2d"
+        },
+        {
+          "path": "frontend/package.json",
+          "match": true,
+          "sha256": "8d8501895bade115e0c49d472b1a8422024ea93c558188b682bd920912c036e8"
+        },
+        {
+          "path": "frontend/src/App.vue",
+          "match": true,
+          "sha256": "7d5627646da782723c6b543f25c0135e3796fd012b0fc088973b2ff017d77222"
+        },
+        {
+          "path": "frontend/src/components/AppIcon.vue",
+          "match": true,
+          "sha256": "738cef5ed76ae10f0b615dbd7436b2b91446e781519ff7f5694b56abb7f83e18"
+        },
+        {
+          "path": "frontend/src/domain/action-draft.ts",
+          "match": true,
+          "sha256": "8ae7bce556e2b88bc0d469fb7bfc404e2e10e7c011c64a83da3933a300c39657"
+        },
+        {
+          "path": "frontend/src/domain/action-journal.ts",
+          "match": true,
+          "sha256": "c2b9ed0ff7b975b0f107d8174db3fa057ca1baaa33a79ee8a8edec91d58f2a3b"
+        },
+        {
+          "path": "frontend/src/domain/client-view.ts",
+          "match": true,
+          "sha256": "b5a4f8913b6ff26b91f00be99be830fb0cc6376cdbc5ceced08f5d4c8d028ffb"
+        },
+        {
+          "path": "frontend/src/domain/demo.ts",
+          "match": true,
+          "sha256": "215c499749192313c1b47650731bfef9dadc7b12a9eb35ff05e1d0dadb7dce3c"
+        },
+        {
+          "path": "frontend/src/domain/world.ts",
+          "match": true,
+          "sha256": "5344868fa8cab9e0ee5e2c5c8eef9136f241784119070fd09a6062e905d79abe"
+        },
+        {
+          "path": "frontend/src/features/character/EvidencePanel.vue",
+          "match": true,
+          "sha256": "be5b3a51e26fad7df89029f5b361e2abebebea5043edfd74d9e685a590a9bec0"
+        },
+        {
+          "path": "frontend/src/features/character/TeamPanel.vue",
+          "match": true,
+          "sha256": "2273a8ff1d24d08b90f9a60c022a6d3ca4bcce64da984d95624f3150d661f161"
+        },
+        {
+          "path": "frontend/src/features/dialogue/DialoguePanel.vue",
+          "match": true,
+          "sha256": "5a8c724c17d7c66ec35d64f2529a64b7612d5195a1ae016060546598fd29b605"
+        },
+        {
+          "path": "frontend/src/features/inventory/InventoryPanel.vue",
+          "match": true,
+          "sha256": "401037d4b0112762e0e4e860783e4f74b920331e4b804b44734df0c7ae0b710f"
+        },
+        {
+          "path": "frontend/src/features/lobby/LobbyPage.vue",
+          "match": true,
+          "sha256": "5039fa82e300611dcef04e3d00aa58ad2ea51694089ebf773a22973c4f31782a"
+        },
+        {
+          "path": "frontend/src/features/objective/ObjectivePanel.vue",
+          "match": true,
+          "sha256": "2b74662509aac54c9fb4398bcab28a785b7045983b0b5710ae1dd29a63914044"
+        },
+        {
+          "path": "frontend/src/features/recap/RecapPanel.vue",
+          "match": true,
+          "sha256": "32b3e9bea20d3d3326cfb0ee490f1f8d80d77b0c763303ba5f6763cc98e2ceec"
+        },
+        {
+          "path": "frontend/src/features/session/PendingActions.vue",
+          "match": true,
+          "sha256": "50b76a2f894940d3b2b2be8da6d0d929d601bf7e72bb3c909a9e80932443e50c"
+        },
+        {
+          "path": "frontend/src/features/session/SessionPage.vue",
+          "match": true,
+          "sha256": "58da003b172191a74f15530698cd52161b14469f627d10c71f658a0e16387120"
+        },
+        {
+          "path": "frontend/src/features/world/WorldPanel.vue",
+          "match": true,
+          "sha256": "4d6acf7393e78ce7337419f1644ecb60cccac01a10c5b57f1f0f37cfc0ecaeb4"
+        },
+        {
+          "path": "frontend/src/main.ts",
+          "match": true,
+          "sha256": "4f8168aecea50101ba5537ab87775145879cbf99d848f8e5cb69091cd073115a"
+        },
+        {
+          "path": "frontend/src/network/http-api.ts",
+          "match": true,
+          "sha256": "61c136c0f0cfbd675748927cc42f984d5df62b50af29914d12db8fe19452ab65"
+        },
+        {
+          "path": "frontend/src/network/link.ts",
+          "match": true,
+          "sha256": "cbd9119925db492ee46d238fe1152b904cb448a07e4759e0f2c398805cf22ca2"
+        },
+        {
+          "path": "frontend/src/network/recap-client.ts",
+          "match": true,
+          "sha256": "1ca0b7ddb04a7a412541085952c0f8848127b310b787891d1230e0f4f116839f"
+        },
+        {
+          "path": "frontend/src/network/session-client.ts",
+          "match": true,
+          "sha256": "3eb59f5f14c779f371d3953d91b42260120c44166aeffeb4e456dce06ac0cae0"
+        },
+        {
+          "path": "frontend/src/network/socket-link.ts",
+          "match": true,
+          "sha256": "f5e49493d466e3d8941c2f491d33a3dbca296f6a91c71b2e8535dcee63f1eb64"
+        },
+        {
+          "path": "frontend/src/router.ts",
+          "match": true,
+          "sha256": "1bdbd05f35fa68c8bae25593fc18ece7bd6de22f072f1c106deff6520cd01eb7"
+        },
+        {
+          "path": "frontend/src/state/app-store.ts",
+          "match": true,
+          "sha256": "af5358775c7cfea88c5a589bb3f3fc827c5ac1a87678ca5f2ce5c7a34bf0f339"
+        },
+        {
+          "path": "frontend/src/styles-responsive.css",
+          "match": true,
+          "sha256": "3ce771cd6b196a6d536d245d1da5c58e50137c9c8e8d19df8fb47fc810bae085"
+        },
+        {
+          "path": "frontend/src/styles.css",
+          "match": true,
+          "sha256": "66699b6899bfc3a57ec9b8e44589034cd63cac9df0ee442b2b3791c6866c6be6"
+        },
+        {
+          "path": "frontend/tests/action-draft.test.mjs",
+          "match": true,
+          "sha256": "7cdd7e896e18690636e89f25dbbec9c858373756c1a9c8e4e70f510618285997"
+        },
+        {
+          "path": "frontend/tests/action-journal.test.mjs",
+          "match": true,
+          "sha256": "db2c71738b60dc73b6622afcd55c3a9a47badee27961cc15080c657e47860c4f"
+        },
+        {
+          "path": "frontend/tests/browser-check.mjs",
+          "match": true,
+          "sha256": "998c00749f73a4dc223e0bd82918ee8bd6943269218db18e3c7a8a738c28aecd"
+        },
+        {
+          "path": "frontend/tests/browser-fixture.html",
+          "match": true,
+          "sha256": "da6b7b4e6858d6de85347347bec22de212e5a3038e0da2b24ff93b64a5948d28"
+        },
+        {
+          "path": "frontend/tests/browser-fixture.ts",
+          "match": true,
+          "sha256": "0990b7ca0261dda0554bde36defd1dad73abe6c1f4c311845277129f18a94809"
+        },
+        {
+          "path": "frontend/tests/client-view.test.mjs",
+          "match": true,
+          "sha256": "d8248ee24f155ab84dd9bbc7dc948c996b70ee5bf8eaa80793f87e1500da0e22"
+        },
+        {
+          "path": "frontend/tests/demo.test.mjs",
+          "match": true,
+          "sha256": "e12c210b9106078262dedf42d9bfed0780a70e6563893d42614eb27999c029bf"
+        },
+        {
+          "path": "frontend/tests/http-api.test.mjs",
+          "match": true,
+          "sha256": "182c5420f97c51223c4becb007a66131c5308253f8f553ed0af6b15e6733c4b9"
+        },
+        {
+          "path": "frontend/tests/identity-recovery.test.mjs",
+          "match": true,
+          "sha256": "37cc6ba00f6829a3660ae97a3d2179afc9469afe75c6049b74ca226ae5b2eeca"
+        },
+        {
+          "path": "frontend/tests/mock-integration.mjs",
+          "match": true,
+          "sha256": "f90a86acf8214eadfe2169c15eafd79e7e269ff794a95da85f1cb60552a8fb0a"
+        },
+        {
+          "path": "frontend/tests/network-acceptance.mjs",
+          "match": true,
+          "sha256": "2814bac1f8500cb66465562ffa91181ab5f4a270803d7941121ee66547bac1b9"
+        },
+        {
+          "path": "frontend/tests/network-harness.mjs",
+          "match": true,
+          "sha256": "520be322622881b966e2a4e1405bd7e4be1178971142489f418fba812465bf35"
+        },
+        {
+          "path": "frontend/tests/network-support.mjs",
+          "match": true,
+          "sha256": "0f3fcf18499b1d6eb9f5ca6faf8e648c32753e7c56fa2859f6c47398803d27e3"
+        },
+        {
+          "path": "frontend/tests/real-browser-check.mjs",
+          "match": true,
+          "sha256": "a7bc1f09b7297129872731c2ef84bb3020ae5c61720c190b82afdb281eb80c69"
+        },
+        {
+          "path": "frontend/tests/recap-browser-check.mjs",
+          "match": true,
+          "sha256": "6e9a93360fc24eee248647b26df2ceceffd34c6eb05e66b0abb9ae31aafd3731"
+        },
+        {
+          "path": "frontend/tests/recap-client.test.mjs",
+          "match": true,
+          "sha256": "070f8b8bc45e28a9005a50e17c31141c0de4c77a18247e84f5a921fb82d22bcf"
+        },
+        {
+          "path": "frontend/tests/recovery-errors.test.mjs",
+          "match": true,
+          "sha256": "e77618b31e97c9f45159139e2edbe42d2c857eb1b62b6eacff9e0a514fc9ec3e"
+        },
+        {
+          "path": "frontend/tests/session-client.test.mjs",
+          "match": true,
+          "sha256": "b72e292e121427ec91f7d3bda7c078028ce732fe55cf8203ea4710e2772add53"
+        },
+        {
+          "path": "frontend/tests/socket-link.test.mjs",
+          "match": true,
+          "sha256": "2e4ad98e907d0c91f7746215840f64460eddc65638a773c556462e6534a5d57c"
+        },
+        {
+          "path": "frontend/tsconfig.json",
+          "match": true,
+          "sha256": "9fafbffcb97044f9fcdeb27b75f99523ae1ea9feafd65c9010b167414054a7ea"
+        },
+        {
+          "path": "frontend/vite.config.mjs",
+          "match": true,
+          "sha256": "0eea062a62cf072a0f155d7666530cf7dd8f2b1699a98c7664de425b356e23cd"
+        },
+        {
+          "path": "game/projection.mjs",
+          "match": true,
+          "sha256": "52c28948068173b6368a2598a928165dc8d13ea2c33695c224c2cbb89cb54c37"
+        },
+        {
+          "path": "game/records.mjs",
+          "match": true,
+          "sha256": "55ddd06bfb8fd729a0a89896e8993bc2891ea40e461a92362300eb1b8464c3f8"
+        },
+        {
+          "path": "game/rules.mjs",
+          "match": true,
+          "sha256": "bd736e8b19ed6ee50efd0cc6814274c4ac0451b4f1ced699d632a79e52959977"
+        },
+        {
+          "path": "game/types.ts",
+          "match": true,
+          "sha256": "2651098b5cf8622dbe593aaa56e264f430d82e11cb0c8b6cbcb3371ba022d6f9"
+        },
+        {
+          "path": "game/world.mjs",
+          "match": true,
+          "sha256": "73b452f9e517030002af549c3636d701f37fb40ce2b19988ee282d4091ac4b91"
+        },
+        {
+          "path": "package-lock.json",
+          "match": true,
+          "sha256": "05b7939b74fe1ef072450f3f7c6d0dc4556c52469a761723700c3c7ce67ed6e3"
+        },
+        {
+          "path": "package.json",
+          "match": true,
+          "sha256": "bb3e7e46d4a5a5818309926685def0d9dd53ffc7a5791ee6406e4fe125fdeda5"
+        },
+        {
+          "path": "protocol/contracts.schema.json",
+          "match": true,
+          "sha256": "dfc734ba27d32cdd8f36463779a5db384e5e964c827596265204ce4689c04710"
+        },
+        {
+          "path": "protocol/fixtures/dates-v1.json",
+          "match": true,
+          "sha256": "79bebef0e89304d523bd2d9708c11bb5a10c379656ca542616384c96387eb8dc"
+        },
+        {
+          "path": "protocol/fixtures/digest-v1.json",
+          "match": true,
+          "sha256": "94d51df1125bf9c0f190421183a22a1157420c5292ec1fbbc6fca966978597f6"
+        },
+        {
+          "path": "protocol/fixtures/invalid-v1.json",
+          "match": true,
+          "sha256": "dd0f93047b6a4881aa1b13612fae465cb65129d570891340d01bd212089907bc"
+        },
+        {
+          "path": "protocol/fixtures/valid-v1.json",
+          "match": true,
+          "sha256": "d959a7ec1410fd059d8a32b1226d9048cd5db01bd731671388e4306ec8a73e11"
+        },
+        {
+          "path": "protocol/index.d.mts",
+          "match": true,
+          "sha256": "22a9a5f0c570f145881567b9bf3c869300832dabedb3ebf16989e317c786fd6d"
+        },
+        {
+          "path": "protocol/index.mjs",
+          "match": true,
+          "sha256": "a28bee237d590a5586cc844c7b0bdb234ff9b1719c15775ad55c9a2ce275aa3b"
+        },
+        {
+          "path": "protocol/node.d.mts",
+          "match": true,
+          "sha256": "4d7d04124dc0edde43091340398ad9bdbb09a6b35ac450503d529746383fafb9"
+        },
+        {
+          "path": "protocol/node.mjs",
+          "match": true,
+          "sha256": "fcbf2da0fd72566e8af112dd615224bb5a18c1c9ae23fafc4739b6aa9b69754a"
+        },
+        {
+          "path": "protocol/schema.mjs",
+          "match": true,
+          "sha256": "fdab36dddb8f9114b4e77a66b87ac4adc7a36f24c414192386aaae75273f191c"
+        },
+        {
+          "path": "protocol/scripts/check-schema.py",
+          "match": true,
+          "sha256": "92c080c823732482165cd02a4309c066b953ab4536c83126ef4ccd4d0cf9be90"
+        },
+        {
+          "path": "protocol/scripts/generate.mjs",
+          "match": true,
+          "sha256": "8931235bc25210ac16d5d7e8a4ef0dc872ed4935f3d5569f029b493825242fb2"
+        },
+        {
+          "path": "protocol/scripts/utc_time.py",
+          "match": true,
+          "sha256": "69d0e583ad8e6a63ebd98842a454c81550293b4a8dadc1ced9b499a1ed9e1c4a"
+        },
+        {
+          "path": "protocol/tests/consumer.mts",
+          "match": true,
+          "sha256": "8d56dc6d4846712bc79ca94744c365f875c4ecdd8e3d5b6d3e22337fe1755234"
+        },
+        {
+          "path": "protocol/tests/contracts.test.mjs",
+          "match": true,
+          "sha256": "3e63761bf58ec7df7654c23f352babd90dd6e53f20a6a84bb86d0ffda7de55f1"
+        },
+        {
+          "path": "protocol/tests/dates.test.mjs",
+          "match": true,
+          "sha256": "f94195cb2f251bcf7bd6d41e48e8483a567f210c4d7d59d0c976c4d5a92f6d15"
+        },
+        {
+          "path": "protocol/tests/event-relations.test.mjs",
+          "match": true,
+          "sha256": "78028674909f8f7a9de75e1e8160bb8e4b3ba56701ca14b62fe6411e2165764e"
+        },
+        {
+          "path": "protocol/tests/json.test.mjs",
+          "match": true,
+          "sha256": "6a97293603ead9ab52256e3a4b9f235e1e29fa79270b43220936460b9ef2c6a5"
+        },
+        {
+          "path": "protocol/tests/recap.test.mjs",
+          "match": true,
+          "sha256": "753535bf20475cc2b87cbf1dcef6f206a5bb00ee6c2a185463a3586af6abb090"
+        },
+        {
+          "path": "protocol/tests/samples.test.mjs",
+          "match": true,
+          "sha256": "24f5e33c3899a73d3141dfdf0b2a56a1cdbee2618a58e557010fb7a32e017912"
+        }
+      ]
+    },
+    {
+      "name": "当前190测试原输出计数",
+      "assessment": "PASS",
+      "groups": {
+        "backend": {
+          "command": [
+            "npm",
+            "run",
+            "test:backend"
+          ],
+          "sourceCommit": "fa87e221aa1e48cb19eeecc1beafcb83c0a7a21a",
+          "sourceTree": "2d81686787d35d3a26747fbd7896ab1ec54c31ed",
+          "exitCode": 0,
+          "tests": 106,
+          "pass": 106,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "protocol": {
+          "command": [
+            "npm",
+            "run",
+            "test:protocol"
+          ],
+          "sourceCommit": "fa87e221aa1e48cb19eeecc1beafcb83c0a7a21a",
+          "sourceTree": "2d81686787d35d3a26747fbd7896ab1ec54c31ed",
+          "exitCode": 0,
+          "tests": 23,
+          "pass": 23,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "content": {
+          "command": [
+            "npm",
+            "run",
+            "test:content"
+          ],
+          "sourceCommit": "fa87e221aa1e48cb19eeecc1beafcb83c0a7a21a",
+          "sourceTree": "2d81686787d35d3a26747fbd7896ab1ec54c31ed",
+          "exitCode": 0,
+          "tests": 8,
+          "pass": 8,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "frontend": {
+          "command": [
+            "npm",
+            "--prefix",
+            "frontend",
+            "test"
+          ],
+          "sourceCommit": "fa87e221aa1e48cb19eeecc1beafcb83c0a7a21a",
+          "sourceTree": "2d81686787d35d3a26747fbd7896ab1ec54c31ed",
+          "exitCode": 0,
+          "tests": 53,
+          "pass": 53,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        }
+      }
+    },
+    {
+      "name": "构建类型生成和Schema原命令",
+      "assessment": "PASS",
+      "commands": {
+        "build": {
+          "command": [
+            "npm",
+            "--prefix",
+            "frontend",
+            "run",
+            "build"
+          ],
+          "cwd": "/workspace/scratch/17ff92cde78f/xiyou-mock",
+          "startedAt": "2026-11-11T13:04:23.757188+00:00",
+          "sourceCommit": "fa87e221aa1e48cb19eeecc1beafcb83c0a7a21a",
+          "sourceTree": "2d81686787d35d3a26747fbd7896ab1ec54c31ed",
+          "rawStatus": "completed",
+          "finishedAt": "2026-11-11T13:04:26.963460+00:00",
+          "elapsedMs": 3206.3033459999133,
+          "exitCode": 0
+        },
+        "generated": {
+          "command": [
+            "node",
+            "protocol/scripts/generate.mjs",
+            "--check"
+          ],
+          "cwd": "/workspace/scratch/17ff92cde78f/xiyou-mock",
+          "startedAt": "2026-11-11T13:04:23.752612+00:00",
+          "sourceCommit": "fa87e221aa1e48cb19eeecc1beafcb83c0a7a21a",
+          "sourceTree": "2d81686787d35d3a26747fbd7896ab1ec54c31ed",
+          "rawStatus": "completed",
+          "finishedAt": "2026-11-11T13:04:23.823864+00:00",
+          "elapsedMs": 71.26427200091712,
+          "exitCode": 0
+        },
+        "schema": {
+          "command": [
+            "python",
+            "protocol/scripts/check-schema.py"
+          ],
+          "cwd": "/workspace/scratch/17ff92cde78f/xiyou-mock",
+          "startedAt": "2026-11-11T13:04:23.750863+00:00",
+          "sourceCommit": "fa87e221aa1e48cb19eeecc1beafcb83c0a7a21a",
+          "sourceTree": "2d81686787d35d3a26747fbd7896ab1ec54c31ed",
+          "rawStatus": "completed",
+          "finishedAt": "2026-11-11T13:04:24.371533+00:00",
+          "elapsedMs": 620.6822990006913,
+          "exitCode": 0
+        }
+      }
+    },
+    {
+      "name": "长测摘要仅去未发布文件locator",
+      "assessment": "FAIL",
+      "sourceResultSha256": "9692c71d3cdcaed63547a8c975692cd13ff8b0918c5ebb87b023f916e6033f6c"
+    },
+    {
+      "name": "新trace摘要及必要断言原行",
+      "assessment": "PASS",
+      "records": 17776,
+      "bytes": 39809275,
+      "selectedRecords": 68,
+      "selectedKindCounts": {
+        "checkpoint": 25,
+        "case": 9,
+        "role-opportunities": 8,
+        "progress": 25,
+        "cleanup": 1
+      },
+      "compressedSha256": "6753477d534c2527c9b8789bba7ff28f225fbf75556c13b45cba7d3a67536cac",
+      "rawSha256": "bd7f10c03dd4a05b2371c2d7fd494138e5d1e680cf3b8e51b32993af6b23df0e",
+      "selectedSha256": "7059c8c1eab2818cee23b7b27d12b9df62af88a3c41906f09bb7e877b230e69c"
+    },
+    {
+      "name": "同游标与持久前缀检查点",
+      "assessment": "PASS",
+      "count": 25,
+      "comparisons": 125,
+      "allStoredAtSameCursor": true,
+      "finalCursor": "410"
+    },
+    {
+      "name": "真实时长原期限与八职责窗口",
+      "assessment": "PASS",
+      "actualDurationMs": 900907.627508,
+      "windows": [
+        {
+          "window": 0,
+          "checkedAtMs": 181.68242699999996,
+          "roles": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E"
+          ],
+          "match": true
+        },
+        {
+          "window": 1,
+          "checkedAtMs": 125454.207034,
+          "roles": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E"
+          ],
+          "match": true
+        },
+        {
+          "window": 2,
+          "checkedAtMs": 241762.39507499998,
+          "roles": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E"
+          ],
+          "match": true
+        },
+        {
+          "window": 3,
+          "checkedAtMs": 371395.673686,
+          "roles": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E"
+          ],
+          "match": true
+        },
+        {
+          "window": 4,
+          "checkedAtMs": 491393.35937799996,
+          "roles": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E"
+          ],
+          "match": true
+        },
+        {
+          "window": 5,
+          "checkedAtMs": 605478.6766390001,
+          "roles": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E"
+          ],
+          "match": true
+        },
+        {
+          "window": 6,
+          "checkedAtMs": 732647.400628,
+          "roles": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E"
+          ],
+          "match": true
+        },
+        {
+          "window": 7,
+          "checkedAtMs": 857933.8865700001,
+          "roles": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E"
+          ],
+          "match": true
+        }
+      ],
+      "finalPhase": "Running",
+      "finalEvents": 410
+    },
+    {
+      "name": "实际31秒Grace与原字节重试",
+      "assessment": "PASS",
+      "proxyAfterMs": 31008.322043,
+      "sends": 2,
+      "effectCount": 1,
+      "rawDigest": "dc9663de968a232a0bea6bc4a8a62a85e1e1fcf10ea9044d05ef3bc74b394883"
+    },
+    {
+      "name": "跨局与主局计数分别计算",
+      "assessment": "PASS",
+      "kind": "source_observation",
+      "perSession": {
+        "S-ebbe989a-ebf6-425b-8ab1-2eede8280544": {
+          "sent": 478,
+          "accepted": 478,
+          "rejected": 0
+        },
+        "S-861327b3-03be-47b6-8701-183423671534": {
+          "sent": 3,
+          "accepted": 2,
+          "rejected": 0
+        }
+      },
+      "mainSession": "S-ebbe989a-ebf6-425b-8ab1-2eede8280544",
+      "aggregateReportCounts": [
+        {
+          "userId": "U-653beefb-7a7d-440d-bd58-96d834655411",
+          "uniqueOutboundActions": 103,
+          "acceptedActionIds": 103
+        },
+        {
+          "userId": "U-40da3fd7-0dcd-4884-aa15-a76ac3f90667",
+          "uniqueOutboundActions": 96,
+          "acceptedActionIds": 96
+        },
+        {
+          "userId": "U-bf4be75e-bfbc-4a6b-bab9-e6c18b8f9cad",
+          "uniqueOutboundActions": 96,
+          "acceptedActionIds": 95
+        },
+        {
+          "userId": "U-d27c92cc-fa81-49dd-95d9-1ed212c42584",
+          "uniqueOutboundActions": 92,
+          "acceptedActionIds": 92
+        },
+        {
+          "userId": "U-64b83077-060f-4873-88a6-bc08ab051293",
+          "uniqueOutboundActions": 94,
+          "acceptedActionIds": 94
+        }
+      ]
+    },
+    {
+      "name": "integration完整局因果与联合故障",
+      "assessment": "PASS",
+      "elapsedMs": 35557.962369,
+      "contributions": {
+        "B": 2,
+        "A": 2,
+        "C": 2,
+        "D": 2,
+        "E": 2
+      },
+      "natural": [
+        {
+          "players": 5,
+          "endingCode": "clarified_passage",
+          "material": "original_material",
+          "completeEvidence": true,
+          "events": 223,
+          "aiDecisions": 19,
+          "clock": "真实 Date.now"
+        },
+        {
+          "players": 2,
+          "endingCode": "costly_passage",
+          "material": "spare_material",
+          "completeEvidence": false,
+          "events": 120,
+          "aiDecisions": 10,
+          "clock": "真实 Date.now"
+        },
+        {
+          "players": 2,
+          "endingCode": "costly_passage",
+          "material": "original_material",
+          "completeEvidence": false,
+          "events": 119,
+          "aiDecisions": 10,
+          "clock": "真实 Date.now"
+        }
+      ],
+      "deadline": [
+        {
+          "endingCode": "unresolved",
+          "clock": "期限专例受控时钟，不计900秒真实运行"
+        }
+      ],
+      "joint": {
+        "name": "真实ACK丢失→断线/代理→交还/原键重试与旧AI迟到联合轨迹",
+        "status": "PASS",
+        "sessionId": "S-fd4108e8-e1f3-4e19-b3a6-d1c6aa70f2b2",
+        "clientActionId": "39611089-d096-461d-aeb5-c3380a752c6a",
+        "rawDigest": "c0e2659b54256a800ee904745f2777837f2e13eee875d42d6bd923c9472761d7",
+        "sends": 2,
+        "effects": 1,
+        "oldDecisionId": "D-acfde2f0-5b48-487e-9a48-c0e5fbc1ee46",
+        "oldIntentCode": "DECISION_STALE",
+        "clock": "仅此期限专例使用受控时钟前进31000ms；不计900秒真实时长",
+        "gateway": {
+          "calls": 1,
+          "externalCalls": 0,
+          "valid": 0,
+          "invalid": 0,
+          "timeouts": 0,
+          "cancelled": 1,
+          "providerErrors": 0,
+          "active": 0,
+          "p50Ms": 77.493,
+          "p95Ms": 77.493,
+          "invalidRate": 0
+        }
+      }
+    },
+    {
+      "name": "independentIntegration完整局因果与联合故障",
+      "assessment": "PASS",
+      "elapsedMs": 33695.692874,
+      "contributions": {
+        "B": 2,
+        "A": 2,
+        "C": 2,
+        "D": 2,
+        "E": 2
+      },
+      "natural": [
+        {
+          "players": 5,
+          "endingCode": "clarified_passage",
+          "material": "original_material",
+          "completeEvidence": true,
+          "events": 229,
+          "aiDecisions": 20,
+          "clock": "真实 Date.now"
+        },
+        {
+          "players": 2,
+          "endingCode": "costly_passage",
+          "material": "spare_material",
+          "completeEvidence": false,
+          "events": 120,
+          "aiDecisions": 10,
+          "clock": "真实 Date.now"
+        },
+        {
+          "players": 2,
+          "endingCode": "costly_passage",
+          "material": "original_material",
+          "completeEvidence": false,
+          "events": 119,
+          "aiDecisions": 10,
+          "clock": "真实 Date.now"
+        }
+      ],
+      "deadline": [
+        {
+          "endingCode": "unresolved",
+          "clock": "期限专例受控时钟，不计900秒真实运行"
+        }
+      ],
+      "joint": {
+        "name": "真实ACK丢失→断线/代理→交还/原键重试与旧AI迟到联合轨迹",
+        "status": "PASS",
+        "sessionId": "S-03a0a10e-f47c-455b-a9d3-aff8ea02bb5d",
+        "clientActionId": "45a00251-d21f-4789-92cb-5a688be7e1bf",
+        "rawDigest": "06578aa79d035dbefdfc15627960a483f69d5f27db90bcc9c8ec1a0de25a0532",
+        "sends": 2,
+        "effects": 1,
+        "oldDecisionId": "D-7a01c53c-e47a-44dd-b3af-fb71efe64765",
+        "oldIntentCode": "DECISION_STALE",
+        "clock": "仅此期限专例使用受控时钟前进31000ms；不计900秒真实时长",
+        "gateway": {
+          "calls": 1,
+          "externalCalls": 0,
+          "valid": 0,
+          "invalid": 0,
+          "timeouts": 0,
+          "cancelled": 1,
+          "providerErrors": 0,
+          "active": 0,
+          "p50Ms": 76.435,
+          "p95Ms": 76.435,
+          "invalidRate": 0
+        }
+      }
+    },
+    {
+      "name": "本候选浏览器真实结果",
+      "assessment": "FAIL",
+      "checks": 17,
+      "elapsedMs": 46003.683076,
+      "chromium": "153.0.8010.0",
+      "node": "v24.22.1",
+      "postgres": "18.6",
+      "imageHashes": {
+        "recap-desktop.png": "bf0456443a88eb7f7337f5ff6837d4ddd191d5507b0ce8ed4a278d9722977b4d",
+        "recap-mobile.png": "a4208c7d58071672aafa2b43ddf84108f979639e4c889a463579e277bf43086b"
+      }
+    },
+    {
+      "name": "失败保留原候选输入与exit1",
+      "assessment": "PASS",
+      "source": {
+        "commit": "3d90640f15404d0822d35b7f1d5aae842a02e37b",
+        "tree": "dcfa9755983543a5222ac14439c34bc8a436d1cd",
+        "status": ""
+      },
+      "inputs": 118,
+      "mismatches": [],
+      "elapsedMs": 132831.688631,
+      "error": {
+        "name": "Error",
+        "message": "等待超时：两位核心NPC实际抵达后自然结算（90000 ms）",
+        "stack": "Error: 等待超时：两位核心NPC实际抵达后自然结算（90000 ms）\n    at until (file:///workspace/scratch/17ff92cde78f/xiyou-mock/frontend/tests/network-support.mjs:19:9)\n    at async finishGame (file:///workspace/scratch/17ff92cde78f/xiyou-mock/frontend/tests/mock-integration.mjs:195:17)\n    at async file:///workspace/scratch/17ff92cde78f/xiyou-mock/frontend/tests/mock-integration.mjs:300:3"
+      }
+    },
+    {
+      "name": "组件继承的精确差异",
+      "assessment": "PASS",
+      "mockAIInputs": 70,
+      "recapUIInputs": 111,
+      "differences": {
+        "mockAI": [
+          "backend/runtime.mjs",
+          "backend/server.mjs",
+          "protocol/README.md",
+          "protocol/contracts.schema.json",
+          "protocol/fixtures/valid-v1.json",
+          "protocol/index.mjs",
+          "protocol/schema.mjs"
+        ],
+        "recapUI": [
+          "frontend/tests/network-acceptance.mjs",
+          "package.json"
+        ]
+      },
+      "interpretation": "AI的7项为已审新增独立recap入口/DTO/说明；UI的2项为新增mock命令及当前长测。当前106后端/23协议/53前端/8内容与整局浏览器另有本候选执行。"
+    },
+    {
+      "name": "新核心模型及完整证据树不变",
+      "assessment": "PASS",
+      "currentTree": "d0931a2d91b27f2276f95b4f58cd3d0525082cf0",
+      "reviewedCandidate": "d7088ac7c58334454a3f0de8835b49d1e6be245c",
+      "reviewedTree": "d0931a2d91b27f2276f95b4f58cd3d0525082cf0",
+      "execution": "本审查未重跑TLC。"
+    },
+    {
+      "name": "正式位置文档相对目标",
+      "assessment": "PASS",
+      "count": 73,
+      "links": [
+        {
+          "from": "frontend/evidence/mock-integration-20261111/README.md",
+          "target": "checks/",
+          "exists": true
+        },
+        {
+          "from": "frontend/evidence/mock-integration-20261111/README.md",
+          "target": "integration/result.json",
+          "exists": true
+        },
+        {
+          "from": "frontend/evidence/mock-integration-20261111/README.md",
+          "target": "integration/stdout.txt",
+          "exists": true
+        },
+        {
+          "from": "frontend/evidence/mock-integration-20261111/README.md",
+          "target": "network/summary.json",
+          "exists": true
+        },
+        {
+          "from": "frontend/evidence/mock-integration-20261111/README.md",
+          "target": "network/execution.json",
+          "exists": true
+        },
+        {
+          "from": "frontend/evidence/mock-integration-20261111/README.md",
+          "target": "network/assertions.jsonl",
+          "exists": true
+        },
+        {
+          "from": "frontend/evidence/mock-integration-20261111/README.md",
+          "target": "browser/result.json",
+          "exists": true
+        },
+        {
+          "from": "frontend/evidence/mock-integration-20261111/README.md",
+          "target": "browser/recap-desktop.png",
+          "exists": true
+        },
+        {
+          "from": "frontend/evidence/mock-integration-20261111/README.md",
+          "target": "browser/recap-mobile.png",
+          "exists": true
+        },
+        {
+          "from": "frontend/evidence/mock-integration-20261111/README.md",
+          "target": "execution-source.json",
+          "exists": true
+        },
+        {
+          "from": "frontend/evidence/mock-integration-20261111/README.md",
+          "target": "reviews/",
+          "exists": true
+        },
+        {
+          "from": "frontend/evidence/mock-integration-20261111/README.md",
+          "target": "failures/integration-r1/result.json",
+          "exists": true
+        },
+        {
+          "from": "frontend/evidence/mock-integration-20261111/README.md",
+          "target": "../mock-recap-20261111/README.md",
+          "exists": true
+        },
+        {
+          "from": "README.md",
+          "target": "docs/project-status.md",
+          "exists": true
+        },
+        {
+          "from": "README.md",
+          "target": "初步设计文档.md",
+          "exists": true
+        },
+        {
+          "from": "README.md",
+          "target": "docs/specs/vertical-slice.md",
+          "exists": true
+        },
+        {
+          "from": "README.md",
+          "target": "frontend/evidence/mock-integration-20261111/README.md",
+          "exists": true
+        },
+        {
+          "from": "README.md",
+          "target": "docs/README.md",
+          "exists": true
+        },
+        {
+          "from": "README.md",
+          "target": "docs/engineering.md",
+          "exists": true
+        },
+        {
+          "from": "README.md",
+          "target": "docs/agents/workflow.md",
+          "exists": true
+        },
+        {
+          "from": "README.md",
+          "target": "docs/design-direction/README.md",
+          "exists": true
+        },
+        {
+          "from": "README.md",
+          "target": "AGENTS.md",
+          "exists": true
+        },
+        {
+          "from": "README.md",
+          "target": "docs/specs/vertical-slice-mock.md",
+          "exists": true
+        },
+        {
+          "from": "README.md",
+          "target": "docs/project-status.md#当前基线",
+          "exists": true
+        },
+        {
+          "from": "README.md",
+          "target": "backend/README.md#技术选择与启动",
+          "exists": true
+        },
+        {
+          "from": "README.md",
+          "target": "backend/ai/mock.md",
+          "exists": true
+        },
+        {
+          "from": "README.md",
+          "target": "docs/agents/issue-tracker.md",
+          "exists": true
+        },
+        {
+          "from": "docs/project-status.md",
+          "target": "specs/vertical-slice-mock.md",
+          "exists": true
+        },
+        {
+          "from": "docs/project-status.md",
+          "target": "../frontend/evidence/mock-integration-20261111/README.md",
+          "exists": true
+        },
+        {
+          "from": "docs/project-status.md",
+          "target": "../README.md#本机运行模拟切片",
+          "exists": true
+        },
+        {
+          "from": "docs/project-status.md",
+          "target": "agents/issue-tracker.md",
+          "exists": true
+        },
+        {
+          "from": "docs/project-status.md",
+          "target": "../初步设计文档.md",
+          "exists": true
+        },
+        {
+          "from": "docs/project-status.md",
+          "target": "engineering.md",
+          "exists": true
+        },
+        {
+          "from": "docs/project-status.md",
+          "target": "specs/vertical-slice.md",
+          "exists": true
+        },
+        {
+          "from": "docs/project-status.md",
+          "target": "specs/vertical-slice-tasks.md",
+          "exists": true
+        },
+        {
+          "from": "backend/README.md",
+          "target": "../docs/specs/m0-protocol.md",
+          "exists": true
+        },
+        {
+          "from": "backend/README.md",
+          "target": "../docs/specs/vertical-slice-gameplay.md",
+          "exists": true
+        },
+        {
+          "from": "backend/README.md",
+          "target": "../docs/specs/vertical-slice-verification.md",
+          "exists": true
+        },
+        {
+          "from": "backend/README.md",
+          "target": "evidence/review-fix-r1/implementation-result.md",
+          "exists": true
+        },
+        {
+          "from": "backend/README.md",
+          "target": "evidence/review-fix-r1/self-check.json",
+          "exists": true
+        },
+        {
+          "from": "backend/README.md",
+          "target": "evidence/implementation-result.md",
+          "exists": true
+        },
+        {
+          "from": "backend/README.md",
+          "target": "evidence/self-check.json",
+          "exists": true
+        },
+        {
+          "from": "backend/README.md",
+          "target": "ai/README.md",
+          "exists": true
+        },
+        {
+          "from": "backend/README.md",
+          "target": "../docs/specs/vertical-slice-mock.md",
+          "exists": true
+        },
+        {
+          "from": "backend/README.md",
+          "target": "../frontend/evidence/mock-integration-20261111/README.md",
+          "exists": true
+        },
+        {
+          "from": "backend/README.md",
+          "target": "migrations/001-authority.sql",
+          "exists": true
+        },
+        {
+          "from": "backend/README.md",
+          "target": "migrations/002-ai.sql",
+          "exists": true
+        },
+        {
+          "from": "backend/README.md",
+          "target": "test-support/README.md",
+          "exists": true
+        },
+        {
+          "from": "backend/README.md",
+          "target": "runtime.mjs",
+          "exists": true
+        },
+        {
+          "from": "backend/README.md",
+          "target": "decisions.mjs",
+          "exists": true
+        },
+        {
+          "from": "backend/README.md",
+          "target": "server.mjs",
+          "exists": true
+        },
+        {
+          "from": "backend/README.md",
+          "target": "main.mjs",
+          "exists": true
+        },
+        {
+          "from": "backend/README.md",
+          "target": "../game/world.mjs",
+          "exists": true
+        },
+        {
+          "from": "backend/README.md",
+          "target": "../game/rules.mjs",
+          "exists": true
+        },
+        {
+          "from": "backend/README.md",
+          "target": "../game/projection.mjs",
+          "exists": true
+        },
+        {
+          "from": "backend/README.md",
+          "target": "../game/records.mjs",
+          "exists": true
+        },
+        {
+          "from": "backend/README.md",
+          "target": "ai/README.md",
+          "exists": true
+        },
+        {
+          "from": "frontend/README.md",
+          "target": "evidence/mock-integration-20261111/README.md",
+          "exists": true
+        },
+        {
+          "from": "frontend/README.md",
+          "target": "evidence/review-fix-self-check.md",
+          "exists": true
+        },
+        {
+          "from": "frontend/README.md",
+          "target": "evidence/stage-self-check.md",
+          "exists": true
+        },
+        {
+          "from": "frontend/README.md",
+          "target": "evidence/mock-shell-20261111/README.md",
+          "exists": true
+        },
+        {
+          "from": "frontend/README.md",
+          "target": "../backend/recap.md",
+          "exists": true
+        },
+        {
+          "from": "frontend/README.md",
+          "target": "evidence/mock-recap-20261111/README.md",
+          "exists": true
+        },
+        {
+          "from": "frontend/README.md",
+          "target": "../backend/README.md#技术选择与启动",
+          "exists": true
+        },
+        {
+          "from": "frontend/README.md",
+          "target": "../backend/ai/mock.md",
+          "exists": true
+        },
+        {
+          "from": "frontend/README.md",
+          "target": "evidence/review-fix-self-check.md",
+          "exists": true
+        },
+        {
+          "from": "frontend/README.md",
+          "target": "evidence/browser-check-summary.json",
+          "exists": true
+        },
+        {
+          "from": "frontend/README.md",
+          "target": "evidence/stage-self-check.md",
+          "exists": true
+        },
+        {
+          "from": "frontend/README.md",
+          "target": "evidence/mock-shell-20261111/result.json",
+          "exists": true
+        },
+        {
+          "from": "frontend/README.md",
+          "target": "../backend/recap.md#检查入口与范围",
+          "exists": true
+        },
+        {
+          "from": "frontend/README.md",
+          "target": "../docs/specs/m0-protocol.md",
+          "exists": true
+        },
+        {
+          "from": "frontend/README.md",
+          "target": "../docs/design-direction/guidelines/ui-and-ux.md",
+          "exists": true
+        },
+        {
+          "from": "frontend/README.md",
+          "target": "../docs/design-direction/guidelines/color-and-light.md",
+          "exists": true
+        }
+      ]
+    }
+  ],
+  "notRead": [
+    "reviews/mock-ai-requirements-review/evidence-audit.json",
+    "reviews/mock-ai-requirements-review/priority-probe.json",
+    "reviews/mock-ai-requirements-review/priority-probe.log",
+    "reviews/mock-ai-requirements-review/priority-probe.mjs",
+    "reviews/mock-ai-requirements-review/review.json",
+    "reviews/mock-ai-requirements-review/review.md",
+    "reviews/mock-ai-requirements-review/route-replay-probe.json",
+    "reviews/mock-ai-requirements-review/route-replay-probe.log",
+    "reviews/mock-ai-requirements-review/route-replay-probe.mjs",
+    "reviews/mock-ai-requirements-review-r2/evidence-audit.json",
+    "reviews/mock-ai-requirements-review-r2/priority-probe.json",
+    "reviews/mock-ai-requirements-review-r2/priority-probe.log",
+    "reviews/mock-ai-requirements-review-r2/priority-probe.mjs",
+    "reviews/mock-ai-requirements-review-r2/review.json",
+    "reviews/mock-ai-requirements-review-r2/review.md",
+    "reviews/mock-ai-requirements-review-r2/route-replay-probe.json",
+    "reviews/mock-ai-requirements-review-r2/route-replay-probe.log",
+    "reviews/mock-ai-requirements-review-r2/route-replay-probe.mjs",
+    "reviews/mock-ai-requirements-review-r2/source-after.json",
+    "reviews/mock-ai-requirements-review-r2/source-before.json",
+    "reviews/mock-ai-requirements-review-r2/targeted.log",
+    "reviews/mock-ai-requirements-review-r2/wake-probe.json",
+    "reviews/mock-ai-requirements-review-r2/wake-probe.log",
+    "reviews/mock-ai-requirements-review-r2/wake-probe.mjs",
+    "reviews/mock-ui-requirements-review/browser/recap-desktop.png",
+    "reviews/mock-ui-requirements-review/browser/recap-mobile.png",
+    "reviews/mock-ui-requirements-review/browser/result.json",
+    "reviews/mock-ui-requirements-review/evidence-integrity.json",
+    "reviews/mock-ui-requirements-review/focused-tests.log",
+    "reviews/mock-ui-requirements-review/review-manifest.json",
+    "reviews/mock-ui-requirements-review/review-report.md",
+    "reviews/mock-ui-requirements-review/review-result.json"
+  ],
+  "documentCandidates": {
+    "README.md": "6957c801bb721aa7986b7657de2c0e9ae0a6206810eb839066b5a78bfb53bfd6",
+    "docs/project-status.md": "b244c716b995e4e746a880529635ee64b27084c11936a82ceea65bb37f83f688",
+    "backend/README.md": "91c3e70509607c43faa7f128c42a2099651bf288cc51659cbd4242e5ad6af445",
+    "frontend/README.md": "dd8628e26901490abe771f17e6ab8c8049099bfec7522dcb4be045bf56f40016"
+  },
+  "bundleIndexSha256": "53ca81ac8950e8657f4ed0ae6b4c71bc67138a5665e6373ff18214e979b36882",
+  "bundleReadmeSha256": "8d0a29725f3925f4cef9f573b44642fdf0acfe4d0dbbbbd2c0f61814f5c82739",
+  "matrixSha256": "c9901d170c8db19139d7de52c7bbd9ab471c84558d9cf204a0b56e8e8f185b0b",
+  "finishedAt": "2026-11-11T13:27:35.048335+00:00",
+  "assessment": "FAIL"
+}

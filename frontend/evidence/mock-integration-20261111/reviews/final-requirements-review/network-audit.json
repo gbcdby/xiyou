@@ -1,0 +1,145 @@
+{
+  "assessment": "PASS",
+  "sourceCommit": "fa87e221aa1e48cb19eeecc1beafcb83c0a7a21a",
+  "sourceTree": "2d81686787d35d3a26747fbd7896ab1ec54c31ed",
+  "actualDurationMs": 900907.627508,
+  "traceRecords": 17776,
+  "traceSha256": "6753477d534c2527c9b8789bba7ff28f225fbf75556c13b45cba7d3a67536cac",
+  "rawTraceSha256": "bd7f10c03dd4a05b2371c2d7fd494138e5d1e680cf3b8e51b32993af6b23df0e",
+  "recordKinds": {
+    "http": 224,
+    "identity": 5,
+    "client-state": 2130,
+    "trusted-connection": 12,
+    "connected": 12,
+    "outbound": 4838,
+    "inbound": 5239,
+    "delivery": 5240,
+    "checkpoint": 25,
+    "case": 9,
+    "role-opportunities": 8,
+    "privacy-check": 5,
+    "dropped": 1,
+    "disconnected": 2,
+    "progress": 25,
+    "cleanup": 1
+  },
+  "roleWindows": [
+    {
+      "window": 0,
+      "checkedAtMs": 181.68242699999996,
+      "roles": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E"
+      ],
+      "actualRequestsAndReceipts": 5
+    },
+    {
+      "window": 1,
+      "checkedAtMs": 125454.207034,
+      "roles": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E"
+      ],
+      "actualRequestsAndReceipts": 5
+    },
+    {
+      "window": 2,
+      "checkedAtMs": 241762.39507499998,
+      "roles": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E"
+      ],
+      "actualRequestsAndReceipts": 5
+    },
+    {
+      "window": 3,
+      "checkedAtMs": 371395.673686,
+      "roles": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E"
+      ],
+      "actualRequestsAndReceipts": 5
+    },
+    {
+      "window": 4,
+      "checkedAtMs": 491393.35937799996,
+      "roles": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E"
+      ],
+      "actualRequestsAndReceipts": 5
+    },
+    {
+      "window": 5,
+      "checkedAtMs": 605478.6766390001,
+      "roles": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E"
+      ],
+      "actualRequestsAndReceipts": 5
+    },
+    {
+      "window": 6,
+      "checkedAtMs": 732647.400628,
+      "roles": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E"
+      ],
+      "actualRequestsAndReceipts": 5
+    },
+    {
+      "window": 7,
+      "checkedAtMs": 857933.8865700001,
+      "roles": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E"
+      ],
+      "actualRequestsAndReceipts": 5
+    }
+  ],
+  "actualRoleRequestsAndReceipts": 40,
+  "checkpoints": 25,
+  "projectionComparisons": 125,
+  "allCheckpointsComparedStoredState": true,
+  "retry": {
+    "sends": 2,
+    "sameRaw": true,
+    "proxyAfterMs": 31008.322043,
+    "effects": 1
+  },
+  "final": {
+    "cursor": "410",
+    "eventCount": 410,
+    "stateDigest": "ac0c19dbe7fef7d1e5640e92b39904191f3e02ff461ea896484b9ac082100802",
+    "phase": "Running",
+    "contentVersion": "trust-repair-fixture-v1",
+    "reducerVersion": "world-v1"
+  },
+  "errors": [],
+  "scope": "仅本次 fa87 新合成 trace 的本地独立核验。未复制或重传任何旧被拒绝 trace；不在报告包含全量新 trace；未重跑长测。HTTP 只读投影的 canControl=false 与实际 Socket 控制位分别校验，比较时仅去除此授权上下文字段。"
+}

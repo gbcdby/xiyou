@@ -1,0 +1,263 @@
+{
+  "reviewId": "vs001-p08-recap-standards-r1",
+  "round": "R1",
+  "date": "2026-11-11T13:01:36.910882+00:00",
+  "reviewer": "/root/network_standards",
+  "skill": "worker-review",
+  "axis": "standards",
+  "subject": {
+    "issue": "https://github.com/gbcdby/xiyou/issues/11",
+    "scope": "Observation详情、终态只读授权recap协议/服务/页面、对应证据",
+    "profile": "mock-20261111",
+    "reviewHead": "b221ab89784b197431cf682b0c9036e46bb03932",
+    "reviewTree": "4f330795548d03f93ae38366a98d6ddf162eb97e",
+    "executedCommit": "7e28d72fbdbfee88df6c5b709e519354b54820fd",
+    "executedTree": "d2af9ea21b827d6bb39ee4793cd99c3fb5526b44",
+    "baseCommit": "cf6f880f292d835f1644cd2e8f215fcf8aff512f",
+    "specRef": "3690b481d1805f6a7b535584c80a8574c5103d97",
+    "specBlob": "c5197eb41639d5b4bd2281199a4627d8a734c173",
+    "specBlobVerifiedAgainstGitHub": true
+  },
+  "independence": {
+    "candidateAuthor": false,
+    "otherAxisReportRead": false,
+    "businessOrTestFilesModified": false,
+    "remoteWritten": false,
+    "recursiveDelegation": false
+  },
+  "conclusions": {
+    "standards": "PASS",
+    "requirements": "NOT_RUN",
+    "fullSliceRelease": "NOT_ASSESSED",
+    "prOrMerge": "NOT_RUN"
+  },
+  "findings": [],
+  "blockingFindings": 0,
+  "executions": {
+    "targeted": {
+      "name": "targeted",
+      "command": [
+        "node",
+        "--test",
+        "protocol/tests/recap.test.mjs",
+        "backend/tests/recap.test.mjs",
+        "frontend/tests/recap-client.test.mjs",
+        "frontend/tests/http-api.test.mjs",
+        "frontend/tests/identity-recovery.test.mjs",
+        "frontend/tests/recovery-errors.test.mjs"
+      ],
+      "startedAt": "2026-11-11T12:55:38.494095+00:00",
+      "finishedAt": "2026-11-11T12:55:44.465684+00:00",
+      "elapsedSeconds": 5.971596489998774,
+      "exitCode": 0,
+      "gitHead": "b221ab89784b197431cf682b0c9036e46bb03932",
+      "gitTree": "4f330795548d03f93ae38366a98d6ddf162eb97e",
+      "gitStatus": ""
+    },
+    "browser": {
+      "name": "browser",
+      "command": [
+        "node",
+        "frontend/tests/recap-browser-check.mjs"
+      ],
+      "startedAt": "2026-11-11T12:55:38.457546+00:00",
+      "finishedAt": "2026-11-11T12:56:24.417639+00:00",
+      "elapsedSeconds": 45.96011483999973,
+      "exitCode": 0,
+      "gitHead": "b221ab89784b197431cf682b0c9036e46bb03932",
+      "gitTree": "4f330795548d03f93ae38366a98d6ddf162eb97e",
+      "gitStatus": "",
+      "environment": {
+        "FRONTEND_EVIDENCE_DIR": "/workspace/scratch/17ff92cde78f/xiyou-mock-ui/.agent-output/mock-ui-standards-review/browser",
+        "PLAYWRIGHT_MODULE": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs",
+        "CHROMIUM_PACKAGE": "/workspace/scratch/17ff92cde78f/xiyou-network/.agent-output/browser-deps/node_modules/@sparticuz/chromium/build/index.js"
+      }
+    },
+    "generated": {
+      "name": "generated",
+      "command": [
+        "node",
+        "protocol/scripts/generate.mjs",
+        "--check"
+      ],
+      "startedAt": "2026-11-11T12:57:44.683056+00:00",
+      "finishedAt": "2026-11-11T12:57:44.776031+00:00",
+      "elapsedSeconds": 0.0929829790002259,
+      "exitCode": 0,
+      "gitHead": "b221ab89784b197431cf682b0c9036e46bb03932",
+      "gitTree": "4f330795548d03f93ae38366a98d6ddf162eb97e",
+      "gitStatus": ""
+    },
+    "typecheck": {
+      "name": "typecheck",
+      "command": [
+        "npm",
+        "--prefix",
+        "frontend",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-11-11T12:57:44.683057+00:00",
+      "finishedAt": "2026-11-11T12:57:46.731657+00:00",
+      "elapsedSeconds": 2.048612206999678,
+      "exitCode": 0,
+      "gitHead": "b221ab89784b197431cf682b0c9036e46bb03932",
+      "gitTree": "4f330795548d03f93ae38366a98d6ddf162eb97e",
+      "gitStatus": ""
+    }
+  },
+  "results": {
+    "targetedTests": 30,
+    "targetedPass": 30,
+    "targetedFail": 0,
+    "browser": {
+      "checks": 15,
+      "screenshots": 2,
+      "elapsedMs": 45459.024295,
+      "assessment": "PASS",
+      "source": {
+        "commit": "b221ab89784b197431cf682b0c9036e46bb03932",
+        "tree": "4f330795548d03f93ae38366a98d6ddf162eb97e",
+        "status": ""
+      },
+      "resourcesClosed": true,
+      "pageErrors": [],
+      "databaseErrors": []
+    },
+    "generated": "PASS",
+    "typecheck": "PASS"
+  },
+  "sourceInspection": {
+    "kind": "source_inspection",
+    "status": "OBSERVED",
+    "assessment": "PASS",
+    "sourceFilesMatched": 111,
+    "archivedArtifactsMatched": 31,
+    "originalOutputsExactBytes": 30,
+    "unchangedExistingSchemaDefinitions": 55,
+    "newSchemaDefinitions": [
+      "AuthorizedRecap",
+      "RecapEntry",
+      "RecapReference"
+    ],
+    "localLinksChecked": 38,
+    "findingEvidence": "archive-audit.json"
+  },
+  "authorEvidence": {
+    "assessment": "VERIFIED_AS_ARCHIVED_EVIDENCE",
+    "counts": {
+      "backend": {
+        "tests": 94,
+        "pass": 94,
+        "fail": 0
+      },
+      "frontend": {
+        "tests": 53,
+        "pass": 53,
+        "fail": 0
+      },
+      "protocol": {
+        "tests": 23,
+        "pass": 23,
+        "fail": 0
+      }
+    },
+    "browser": {
+      "checks": 15,
+      "screenshots": 2,
+      "elapsedMs": 47580.386908,
+      "assessment": "PASS"
+    },
+    "failureRunsPreserved": [
+      {
+        "run": "browser-r1",
+        "assessment": "FAIL",
+        "exitCode": 1
+      },
+      {
+        "run": "browser-r2",
+        "assessment": "FAIL",
+        "exitCode": 1
+      },
+      {
+        "run": "browser-r3",
+        "assessment": "FAIL",
+        "exitCode": 1
+      }
+    ]
+  },
+  "coverage": [
+    "strict DTO及既有55定义兼容",
+    "当前认证/成员资格先于历史读取",
+    "终态current head、严格query、授权后分页与游标",
+    "逐字段白名单、Claim A→C→B接收者及事实分离",
+    "真实PG只读与回放一致",
+    "前端账号/房间/view代次取消、分页失败保留与重试",
+    "实际撤权、旧服务降级、已有身份恢复",
+    "桌面和390像素实际浏览器、文本插值、无横向溢出",
+    "固定来源哈希、原始归档字节、失败历史、文档链接和模型义务来源"
+  ],
+  "limitations": [
+    "未重跑全部170项、Vite生产构建或Python schema；读取固定原始记录",
+    "开发期TDD无完整输入源码快照、历史dirty浏览器中间态未逐字重播",
+    "未执行#10 provider接合、#12四结局/五职责贡献/900秒/全部组合故障",
+    "未执行TLC/refinement、需求轴、远端PR/合并或部署",
+    "未做全平台/设备/辅助技术/规模压力审计",
+    "真实模型质量及真人体验在mock profile为NOT_REQUIRED，实际NOT_RUN"
+  ],
+  "observations": [
+    {
+      "topic": "原始失败日志空白",
+      "assessment": "保留原字节，无需修正",
+      "details": {
+        "exitCode": 2,
+        "output": "frontend/evidence/mock-recap-20261111/tdd/recap-api-red.txt:17: trailing whitespace.\n+  \nfrontend/evidence/mock-recap-20261111/tdd/recap-api-red.txt:20: trailing whitespace.\n+  \n"
+      },
+      "sourceAndDocsDiffCheck": {
+        "exitCode": 0,
+        "output": ""
+      }
+    },
+    {
+      "topic": "浏览器关闭时Vite连接重置",
+      "assessment": "记录保留",
+      "details": "原始stdout两条ECONNRESET；pageErrors/databaseErrors为空，全部资源关闭，脚本与外层exit0。"
+    }
+  ],
+  "minimalArchiveFiles": [
+    "review-r1.md",
+    "review-r1.json",
+    "archive-audit.json",
+    "audit-archive.py",
+    "run-check.py",
+    "targeted.txt",
+    "targeted.execution.json",
+    "generated.txt",
+    "generated.execution.json",
+    "typecheck.txt",
+    "typecheck.execution.json",
+    "browser.txt",
+    "browser.execution.json",
+    "browser/result.json",
+    "browser/recap-desktop.png",
+    "browser/recap-mobile.png"
+  ],
+  "artifactHashes": {
+    "review-r1.md": "aa800218ff15011e1d64e772d9a9a35d7da39bb3406e7c7dcb51ab5d48e86f70",
+    "archive-audit.json": "a96b582fd8f998ac81955cfab680dad7c0c6d9a627c23d8123b100b17ecac40e",
+    "audit-archive.py": "8e2da59e5458b2391773a48ef191f4a59254e59e0296427597f633cf990b2d0c",
+    "run-check.py": "fa4bf4fb58b84b54a0a252cf7a2ff17f0a978f96664dccfa601ea1a219363ada",
+    "targeted.txt": "350e1731d4cf7c515a0aaee26b2c39c1e8d8d11649c94d4a0311bcde493fc012",
+    "targeted.execution.json": "ecd4c4970496bf5eac6fd60243ab15d60439e9b762bf041a47cb463636655702",
+    "generated.txt": "3772d5a8194fe2950808390b12ebd05aeb418aca03551e83473108133ed00b9c",
+    "generated.execution.json": "bd32d52226d72c6a6c0f16ed6ffa5f8b9c16b3b41b623eb3bdc539c625d154c1",
+    "typecheck.txt": "b12c8f920cb387f8b0e3e5922af7dbaa9f89e54b43d237016b9cde316a294a93",
+    "typecheck.execution.json": "119f223c02bb3b6f4ec607db4df90419a3cae3b2cd5094bafeeeb973ec66ef1d",
+    "browser.txt": "697e0266b63364c6b1e93d9298e44e4de92661872f8b4f49422444dd3fb65efc",
+    "browser.execution.json": "fd58b6fa048d67ea57c2c969fb35acbc607ca99af2da4e0df8198a7829c35f9e",
+    "browser/result.json": "296251d4fff12c18a0e2001e12ca65850d9891f31e1cfc07a18e42a28cc86fb1",
+    "browser/recap-desktop.png": "3153c768de9532e6d866cabc04b30d6bbc1da73f89365c2fb013205a9714cf65",
+    "browser/recap-mobile.png": "39cf1ee32da09a1e279c3a5caa9e2d9e70158269d6dee1f677c29f7f69e231b3"
+  },
+  "worktreeStatusAfter": ""
+}

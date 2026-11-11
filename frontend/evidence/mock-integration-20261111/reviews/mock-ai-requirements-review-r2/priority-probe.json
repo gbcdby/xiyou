@@ -1,0 +1,3134 @@
+{
+  "candidate": "71aad48878c532521919c72511c023285785d7e7",
+  "clock": "real",
+  "schedulingIntervalMs": 10,
+  "maxCallsPerSession": 120,
+  "scope": "五人标准内容合法输入，经真实 Runtime、双 provider/Gateway/Orchestrator 和 PostgreSQL；缩短公开可配的调度间隔以检查有限调用预算，不计作60秒观察或整局验收。",
+  "phases": [
+    {
+      "label": "五身份开局主动行为",
+      "phase": "Running",
+      "calls": 12,
+      "roles": [
+        {
+          "actorId": "tangseng",
+          "calls": 5,
+          "sessionId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64",
+          "phase": "Idle",
+          "pendingWake": false,
+          "decisionId": "D-9ba121c6-8f1d-4a75-a7be-554a85689f65",
+          "lastReceipt": {
+            "schemaVersion": 1,
+            "semanticDigest": "2b185a5fb180a5afc25bb0ceae6be4039cc1dcd60fe4a67e3cab98224f9d8f8e",
+            "actorId": "tangseng",
+            "observedSeq": "71",
+            "actionEventRange": null,
+            "status": "Accepted",
+            "code": "NO_CHANGE",
+            "result": {},
+            "sessionId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64",
+            "clientActionId": "D-9ba121c6-8f1d-4a75-a7be-554a85689f65:submit"
+          },
+          "lastFallback": null,
+          "error": null
+        },
+        {
+          "actorId": "wukong",
+          "calls": 7,
+          "sessionId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64",
+          "phase": "Idle",
+          "pendingWake": false,
+          "decisionId": "D-b026cc34-83c2-4871-a998-9072fad5073c",
+          "lastReceipt": {
+            "schemaVersion": 1,
+            "semanticDigest": "c64822ff936a25b6126220c62bb611cd6da6ade7241a7b58d2e680afb962784e",
+            "actorId": "wukong",
+            "observedSeq": "78",
+            "actionEventRange": null,
+            "status": "Accepted",
+            "code": "NO_CHANGE",
+            "result": {},
+            "sessionId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64",
+            "clientActionId": "D-b026cc34-83c2-4871-a998-9072fad5073c:submit"
+          },
+          "lastFallback": null,
+          "error": null
+        }
+      ],
+      "locations": {
+        "tangseng": "passage",
+        "wukong": "side_path"
+      },
+      "gate": [
+        {
+          "key": "safe",
+          "label": "安全",
+          "value": false
+        },
+        {
+          "key": "permit",
+          "label": "通行许可",
+          "value": false
+        },
+        {
+          "key": "repairMaterial",
+          "label": "实际修复材料",
+          "value": null
+        }
+      ]
+    },
+    {
+      "label": "五人提供合法核验来源并请求悟空前往通路口",
+      "phase": "Running",
+      "calls": 38,
+      "roles": [
+        {
+          "actorId": "tangseng",
+          "calls": 17,
+          "sessionId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64",
+          "phase": "Idle",
+          "pendingWake": false,
+          "decisionId": "D-54fd5f44-2e8c-4035-9ca1-52ef2fc0e85e",
+          "lastReceipt": {
+            "schemaVersion": 1,
+            "semanticDigest": "5983a90a38bbac1152cfedb686cbe4f9b45f020e0740d250b56ee17f17a5f4c5",
+            "actorId": "tangseng",
+            "observedSeq": "203",
+            "actionEventRange": null,
+            "status": "Accepted",
+            "code": "NO_CHANGE",
+            "result": {},
+            "sessionId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64",
+            "clientActionId": "D-54fd5f44-2e8c-4035-9ca1-52ef2fc0e85e:submit"
+          },
+          "lastFallback": {
+            "schemaVersion": 1,
+            "semanticDigest": "7bce00678ffe86cdfe7aa82b8cd656e6c20f04e10bd8809e191bdf1ebb9cc339",
+            "actorId": "tangseng",
+            "observedSeq": "94",
+            "actionEventRange": null,
+            "status": "Accepted",
+            "code": "NO_CHANGE",
+            "result": {},
+            "sessionId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64",
+            "clientActionId": "D-b437a1f1-bec6-4b1f-9d98-226edfcb3168:fallback"
+          },
+          "error": null
+        },
+        {
+          "actorId": "wukong",
+          "calls": 21,
+          "sessionId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64",
+          "phase": "Idle",
+          "pendingWake": false,
+          "decisionId": "D-b1c6d34c-43f9-4b60-b754-085a4728aedf",
+          "lastReceipt": {
+            "schemaVersion": 1,
+            "semanticDigest": "76cea78e7d2ae8fc92ab30c71cf1227f0e7cb420e724d17a005e720ceb262f20",
+            "actorId": "wukong",
+            "observedSeq": "203",
+            "actionEventRange": null,
+            "status": "Accepted",
+            "code": "NO_CHANGE",
+            "result": {},
+            "sessionId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64",
+            "clientActionId": "D-b1c6d34c-43f9-4b60-b754-085a4728aedf:submit"
+          },
+          "lastFallback": null,
+          "error": null
+        }
+      ],
+      "locations": {
+        "tangseng": "passage",
+        "wukong": "passage"
+      },
+      "gate": [
+        {
+          "key": "safe",
+          "label": "安全",
+          "value": false
+        },
+        {
+          "key": "permit",
+          "label": "通行许可",
+          "value": false
+        },
+        {
+          "key": "repairMaterial",
+          "label": "实际修复材料",
+          "value": null
+        }
+      ]
+    },
+    {
+      "label": "五人携材料与工具在通路口会合",
+      "phase": "Running",
+      "calls": 62,
+      "roles": [
+        {
+          "actorId": "tangseng",
+          "calls": 29,
+          "sessionId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64",
+          "phase": "Idle",
+          "pendingWake": false,
+          "decisionId": "D-1cf7908b-3684-4fa1-ba43-c18a04f18a8c",
+          "lastReceipt": {
+            "schemaVersion": 1,
+            "semanticDigest": "4fb5ac4d40f7211eb2dd31653d342b87f19d8e85483fbef1dabe7e8499589784",
+            "actorId": "tangseng",
+            "observedSeq": "451",
+            "actionEventRange": null,
+            "status": "Accepted",
+            "code": "NO_CHANGE",
+            "result": {},
+            "sessionId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64",
+            "clientActionId": "D-1cf7908b-3684-4fa1-ba43-c18a04f18a8c:submit"
+          },
+          "lastFallback": {
+            "schemaVersion": 1,
+            "semanticDigest": "7bce00678ffe86cdfe7aa82b8cd656e6c20f04e10bd8809e191bdf1ebb9cc339",
+            "actorId": "tangseng",
+            "observedSeq": "94",
+            "actionEventRange": null,
+            "status": "Accepted",
+            "code": "NO_CHANGE",
+            "result": {},
+            "sessionId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64",
+            "clientActionId": "D-b437a1f1-bec6-4b1f-9d98-226edfcb3168:fallback"
+          },
+          "error": null
+        },
+        {
+          "actorId": "wukong",
+          "calls": 33,
+          "sessionId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64",
+          "phase": "Idle",
+          "pendingWake": false,
+          "decisionId": "D-59f1f98f-3963-4631-a0bc-6f9e7e25a7f7",
+          "lastReceipt": {
+            "schemaVersion": 1,
+            "semanticDigest": "85584905e1a5847308c304d13b777e050263ab087fbc4b4f0a0ed03eae11a1c9",
+            "actorId": "wukong",
+            "observedSeq": "451",
+            "actionEventRange": null,
+            "status": "Accepted",
+            "code": "NO_CHANGE",
+            "result": {},
+            "sessionId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64",
+            "clientActionId": "D-59f1f98f-3963-4631-a0bc-6f9e7e25a7f7:submit"
+          },
+          "lastFallback": null,
+          "error": null
+        }
+      ],
+      "locations": {
+        "tangseng": "passage",
+        "wukong": "passage"
+      },
+      "gate": [
+        {
+          "key": "safe",
+          "label": "安全",
+          "value": false
+        },
+        {
+          "key": "permit",
+          "label": "通行许可",
+          "value": false
+        },
+        {
+          "key": "repairMaterial",
+          "label": "实际修复材料",
+          "value": null
+        }
+      ]
+    },
+    {
+      "label": "工具已合法交接",
+      "phase": "Running",
+      "calls": 64,
+      "roles": [
+        {
+          "actorId": "tangseng",
+          "calls": 30,
+          "sessionId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64",
+          "phase": "Idle",
+          "pendingWake": false,
+          "decisionId": "D-d50a2f5a-7cf8-4c66-bf87-141e9dd4051e",
+          "lastReceipt": {
+            "schemaVersion": 1,
+            "semanticDigest": "d88f350324d3c375978cca87756f9d3ea1494339a42f26461c3c8d59aea59d5c",
+            "actorId": "tangseng",
+            "observedSeq": "452",
+            "actionEventRange": null,
+            "status": "Accepted",
+            "code": "NO_CHANGE",
+            "result": {},
+            "sessionId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64",
+            "clientActionId": "D-d50a2f5a-7cf8-4c66-bf87-141e9dd4051e:submit"
+          },
+          "lastFallback": {
+            "schemaVersion": 1,
+            "semanticDigest": "7bce00678ffe86cdfe7aa82b8cd656e6c20f04e10bd8809e191bdf1ebb9cc339",
+            "actorId": "tangseng",
+            "observedSeq": "94",
+            "actionEventRange": null,
+            "status": "Accepted",
+            "code": "NO_CHANGE",
+            "result": {},
+            "sessionId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64",
+            "clientActionId": "D-b437a1f1-bec6-4b1f-9d98-226edfcb3168:fallback"
+          },
+          "error": null
+        },
+        {
+          "actorId": "wukong",
+          "calls": 34,
+          "sessionId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64",
+          "phase": "Idle",
+          "pendingWake": false,
+          "decisionId": "D-5bdffc2b-fe96-4520-9d65-ff18a6c455cf",
+          "lastReceipt": {
+            "schemaVersion": 1,
+            "semanticDigest": "b552c2250a5ef1c990ef5b2cb652f417c2129f7146284a94845b36ae54fbc306",
+            "actorId": "wukong",
+            "observedSeq": "452",
+            "actionEventRange": null,
+            "status": "Accepted",
+            "code": "NO_CHANGE",
+            "result": {},
+            "sessionId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64",
+            "clientActionId": "D-5bdffc2b-fe96-4520-9d65-ff18a6c455cf:submit"
+          },
+          "lastFallback": null,
+          "error": null
+        }
+      ],
+      "locations": {
+        "tangseng": "passage",
+        "wukong": "passage"
+      },
+      "gate": [
+        {
+          "key": "safe",
+          "label": "安全",
+          "value": false
+        },
+        {
+          "key": "permit",
+          "label": "通行许可",
+          "value": false
+        },
+        {
+          "key": "repairMaterial",
+          "label": "实际修复材料",
+          "value": null
+        }
+      ]
+    },
+    {
+      "label": "玩家实际修复后",
+      "phase": "Running",
+      "calls": 70,
+      "roles": [
+        {
+          "actorId": "tangseng",
+          "calls": 33,
+          "sessionId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64",
+          "phase": "Idle",
+          "pendingWake": false,
+          "decisionId": "D-1ebf171e-9e15-493a-b6d0-ef81601a5d60",
+          "lastReceipt": {
+            "schemaVersion": 1,
+            "semanticDigest": "fa61b5b4e84fc73b33e6fa8e14f94716eb1855a924c467bde11a73281bb9d973",
+            "actorId": "tangseng",
+            "observedSeq": "507",
+            "actionEventRange": null,
+            "status": "Accepted",
+            "code": "NO_CHANGE",
+            "result": {},
+            "sessionId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64",
+            "clientActionId": "D-1ebf171e-9e15-493a-b6d0-ef81601a5d60:submit"
+          },
+          "lastFallback": {
+            "schemaVersion": 1,
+            "semanticDigest": "7bce00678ffe86cdfe7aa82b8cd656e6c20f04e10bd8809e191bdf1ebb9cc339",
+            "actorId": "tangseng",
+            "observedSeq": "94",
+            "actionEventRange": null,
+            "status": "Accepted",
+            "code": "NO_CHANGE",
+            "result": {},
+            "sessionId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64",
+            "clientActionId": "D-b437a1f1-bec6-4b1f-9d98-226edfcb3168:fallback"
+          },
+          "error": null
+        },
+        {
+          "actorId": "wukong",
+          "calls": 37,
+          "sessionId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64",
+          "phase": "Idle",
+          "pendingWake": false,
+          "decisionId": "D-923578f0-9e0c-4616-9967-a2ee5a3b0b8c",
+          "lastReceipt": {
+            "schemaVersion": 1,
+            "semanticDigest": "51abf2f6afcf532c1e5771014d3c487b10002038e78dfb707717227005774201",
+            "actorId": "wukong",
+            "observedSeq": "507",
+            "actionEventRange": null,
+            "status": "Accepted",
+            "code": "NO_CHANGE",
+            "result": {},
+            "sessionId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64",
+            "clientActionId": "D-923578f0-9e0c-4616-9967-a2ee5a3b0b8c:submit"
+          },
+          "lastFallback": null,
+          "error": null
+        }
+      ],
+      "locations": {
+        "tangseng": "passage",
+        "wukong": "passage"
+      },
+      "gate": [
+        {
+          "key": "safe",
+          "label": "安全",
+          "value": true
+        },
+        {
+          "key": "permit",
+          "label": "通行许可",
+          "value": false
+        },
+        {
+          "key": "repairMaterial",
+          "label": "实际修复材料",
+          "value": "original_material"
+        }
+      ]
+    },
+    {
+      "label": "实际安全与许可均满足且公开明确终点后",
+      "phase": "Finished",
+      "calls": 76,
+      "roles": [
+        {
+          "actorId": "tangseng",
+          "calls": 36,
+          "sessionId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64",
+          "phase": "Idle",
+          "pendingWake": false,
+          "decisionId": "D-f490c5cb-90f3-482b-b185-0b7350e0f5ce",
+          "lastReceipt": {
+            "schemaVersion": 1,
+            "semanticDigest": "d8cace4e200295ab8043f5ce5cc5f24da3de226c0ff90abd641dbecffae5000e",
+            "actorId": "tangseng",
+            "observedSeq": "549",
+            "actionEventRange": null,
+            "status": "Accepted",
+            "code": "NO_CHANGE",
+            "result": {},
+            "sessionId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64",
+            "clientActionId": "D-f490c5cb-90f3-482b-b185-0b7350e0f5ce:submit"
+          },
+          "lastFallback": {
+            "schemaVersion": 1,
+            "semanticDigest": "7bce00678ffe86cdfe7aa82b8cd656e6c20f04e10bd8809e191bdf1ebb9cc339",
+            "actorId": "tangseng",
+            "observedSeq": "94",
+            "actionEventRange": null,
+            "status": "Accepted",
+            "code": "NO_CHANGE",
+            "result": {},
+            "sessionId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64",
+            "clientActionId": "D-b437a1f1-bec6-4b1f-9d98-226edfcb3168:fallback"
+          },
+          "error": null
+        },
+        {
+          "actorId": "wukong",
+          "calls": 40,
+          "sessionId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64",
+          "phase": "Idle",
+          "pendingWake": false,
+          "decisionId": "D-6287889f-16f6-494b-abc1-e65e6df3979a",
+          "lastReceipt": {
+            "schemaVersion": 1,
+            "semanticDigest": "91ce96d170c9a37378b81cc76d7fdda0b0d2d9c52effee52a6be9bf2d85e9b13",
+            "actorId": "wukong",
+            "observedSeq": "558",
+            "actionEventRange": {
+              "first": "550",
+              "last": "558"
+            },
+            "status": "Accepted",
+            "code": "OK",
+            "result": {},
+            "sessionId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64",
+            "clientActionId": "D-6287889f-16f6-494b-abc1-e65e6df3979a:submit"
+          },
+          "lastFallback": {
+            "schemaVersion": 1,
+            "semanticDigest": "a03fcfc5c0062e835327c2bd141c124d40b3ca6985d34e7285bce7b45d7a938b",
+            "actorId": "wukong",
+            "observedSeq": "549",
+            "actionEventRange": null,
+            "status": "Accepted",
+            "code": "NO_CHANGE",
+            "result": {},
+            "sessionId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64",
+            "clientActionId": "D-4af6479a-7b35-420c-91a6-883d9471dfe4:fallback"
+          },
+          "error": null
+        }
+      ],
+      "locations": {
+        "tangseng": "destination",
+        "wukong": "destination"
+      },
+      "gate": [
+        {
+          "key": "safe",
+          "label": "安全",
+          "value": true
+        },
+        {
+          "key": "permit",
+          "label": "通行许可",
+          "value": true
+        },
+        {
+          "key": "repairMaterial",
+          "label": "实际修复材料",
+          "value": "original_material"
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "actor": 0,
+      "action": {
+        "kind": "inspect",
+        "targetId": "passage_structure"
+      },
+      "status": "Accepted",
+      "code": "OK",
+      "actionEventRange": {
+        "first": "79",
+        "last": "80"
+      }
+    },
+    {
+      "actor": 4,
+      "action": {
+        "kind": "inspect",
+        "targetId": "stock_record"
+      },
+      "status": "Accepted",
+      "code": "OK",
+      "actionEventRange": {
+        "first": "81",
+        "last": "82"
+      }
+    },
+    {
+      "actor": 3,
+      "action": {
+        "kind": "inspect",
+        "targetId": "material_cache"
+      },
+      "status": "Accepted",
+      "code": "OK",
+      "actionEventRange": {
+        "first": "83",
+        "last": "84"
+      }
+    },
+    {
+      "actor": 3,
+      "action": {
+        "kind": "take_item",
+        "itemId": "original_material",
+        "expectedItemRevision": "0"
+      },
+      "status": "Accepted",
+      "code": "OK",
+      "actionEventRange": {
+        "first": "85",
+        "last": "85"
+      }
+    },
+    {
+      "actor": 0,
+      "action": {
+        "kind": "move",
+        "regionId": "side_path"
+      },
+      "status": "Accepted",
+      "code": "OK",
+      "actionEventRange": {
+        "first": "86",
+        "last": "86"
+      }
+    },
+    {
+      "actor": 1,
+      "action": {
+        "kind": "move",
+        "regionId": "side_path"
+      },
+      "status": "Accepted",
+      "code": "OK",
+      "actionEventRange": {
+        "first": "87",
+        "last": "87"
+      }
+    },
+    {
+      "actor": 2,
+      "action": {
+        "kind": "move",
+        "regionId": "side_path"
+      },
+      "status": "Accepted",
+      "code": "OK",
+      "actionEventRange": {
+        "first": "88",
+        "last": "88"
+      }
+    },
+    {
+      "actor": 4,
+      "action": {
+        "kind": "move",
+        "regionId": "side_path"
+      },
+      "status": "Accepted",
+      "code": "OK",
+      "actionEventRange": {
+        "first": "93",
+        "last": "93"
+      }
+    },
+    {
+      "actor": 0,
+      "action": {
+        "kind": "share_evidence",
+        "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O10",
+        "recipientIds": [
+          "wukong"
+        ]
+      },
+      "status": "Accepted",
+      "code": "OK",
+      "actionEventRange": {
+        "first": "94",
+        "last": "94"
+      }
+    },
+    {
+      "actor": 0,
+      "action": {
+        "kind": "share_evidence",
+        "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O58",
+        "recipientIds": [
+          "wukong"
+        ]
+      },
+      "status": "Accepted",
+      "code": "OK",
+      "actionEventRange": {
+        "first": "95",
+        "last": "95"
+      }
+    },
+    {
+      "actor": 4,
+      "action": {
+        "kind": "share_evidence",
+        "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O82",
+        "recipientIds": [
+          "wukong"
+        ]
+      },
+      "status": "Accepted",
+      "code": "OK",
+      "actionEventRange": {
+        "first": "96",
+        "last": "96"
+      }
+    },
+    {
+      "actor": 3,
+      "action": {
+        "kind": "share_evidence",
+        "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O75",
+        "recipientIds": [
+          "wukong"
+        ]
+      },
+      "status": "Accepted",
+      "code": "OK",
+      "actionEventRange": {
+        "first": "97",
+        "last": "97"
+      }
+    },
+    {
+      "actor": 0,
+      "action": {
+        "kind": "speak",
+        "channel": "public",
+        "recipientIds": [],
+        "text": "请从出口 passage 前往通路口，我们按实际条件协调修复。"
+      },
+      "status": "Accepted",
+      "code": "OK",
+      "actionEventRange": {
+        "first": "111",
+        "last": "117"
+      }
+    },
+    {
+      "actor": 0,
+      "action": {
+        "kind": "move",
+        "regionId": "passage"
+      },
+      "status": "Accepted",
+      "code": "OK",
+      "actionEventRange": {
+        "first": "204",
+        "last": "204"
+      }
+    },
+    {
+      "actor": 1,
+      "action": {
+        "kind": "move",
+        "regionId": "passage"
+      },
+      "status": "Accepted",
+      "code": "OK",
+      "actionEventRange": {
+        "first": "205",
+        "last": "205"
+      }
+    },
+    {
+      "actor": 2,
+      "action": {
+        "kind": "move",
+        "regionId": "passage"
+      },
+      "status": "Accepted",
+      "code": "OK",
+      "actionEventRange": {
+        "first": "206",
+        "last": "206"
+      }
+    },
+    {
+      "actor": 3,
+      "action": {
+        "kind": "move",
+        "regionId": "passage"
+      },
+      "status": "Accepted",
+      "code": "OK",
+      "actionEventRange": {
+        "first": "207",
+        "last": "207"
+      }
+    },
+    {
+      "actor": 4,
+      "action": {
+        "kind": "move",
+        "regionId": "passage"
+      },
+      "status": "Accepted",
+      "code": "OK",
+      "actionEventRange": {
+        "first": "208",
+        "last": "208"
+      }
+    },
+    {
+      "actor": 1,
+      "action": {
+        "kind": "transfer_item",
+        "itemId": "repair_tool",
+        "targetId": "C-196fcf5f-3ce4-4974-b971-25afee300489",
+        "expectedItemRevision": "0"
+      },
+      "status": "Accepted",
+      "code": "OK",
+      "actionEventRange": {
+        "first": "452",
+        "last": "452"
+      }
+    },
+    {
+      "actor": 3,
+      "action": {
+        "kind": "use_item",
+        "itemIds": [
+          "original_material",
+          "repair_tool"
+        ],
+        "expectedItemRevisions": {
+          "original_material": "1",
+          "repair_tool": "1"
+        },
+        "targetId": "passage_structure",
+        "expectedTargetRevision": "0",
+        "operation": "repair"
+      },
+      "status": "Accepted",
+      "code": "OK",
+      "actionEventRange": {
+        "first": "453",
+        "last": "455"
+      }
+    },
+    {
+      "actor": 2,
+      "action": {
+        "kind": "interact",
+        "targetId": "passage_structure",
+        "expectedTargetRevision": "1",
+        "operation": "grant_passage"
+      },
+      "status": "Accepted",
+      "code": "OK",
+      "actionEventRange": {
+        "first": "508",
+        "last": "508"
+      }
+    },
+    {
+      "actor": 0,
+      "action": {
+        "kind": "speak",
+        "channel": "public",
+        "recipientIds": [],
+        "text": "请从出口 destination 通行。"
+      },
+      "status": "Accepted",
+      "code": "OK",
+      "actionEventRange": {
+        "first": "509",
+        "last": "516"
+      }
+    }
+  ],
+  "sessionId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64",
+  "observation": "两角色均执行实际通行",
+  "final": {
+    "phase": "Finished",
+    "locations": {
+      "tangseng": "destination",
+      "wukong": "destination"
+    },
+    "gate": [
+      {
+        "key": "safe",
+        "label": "安全",
+        "value": true
+      },
+      {
+        "key": "permit",
+        "label": "通行许可",
+        "value": true
+      },
+      {
+        "key": "repairMaterial",
+        "label": "实际修复材料",
+        "value": "original_material"
+      }
+    ],
+    "ending": {
+      "facts": [
+        {
+          "key": "safe",
+          "label": "通路安全",
+          "value": true
+        },
+        {
+          "key": "permit",
+          "label": "通行许可有效",
+          "value": true
+        },
+        {
+          "key": "arrived",
+          "label": "师徒实际到达终点",
+          "value": true
+        },
+        {
+          "key": "spareConsumed",
+          "label": "备用材料实际消耗",
+          "value": false
+        },
+        {
+          "key": "originalConsumed",
+          "label": "原材料实际用于修复",
+          "value": true
+        },
+        {
+          "key": "evidenceComplete",
+          "label": "双方已取得完整核验来源",
+          "value": true
+        }
+      ],
+      "endingCode": "clarified_passage"
+    }
+  },
+  "runs": [
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-3bd24f17-1309-4d8b-a649-66e0b4f9d2d6",
+      "location": "passage",
+      "observationCount": 1,
+      "ownClaimCount": 0,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "当前通路尚未实际修复，暂不通行。先核查安全，再请玩家自愿协调材料、实际修复并取得许可；垫付不代表认罪。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "passage_structure"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "34",
+          "first": "29"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-be4f21a9-7261-4553-a1ad-cda2f3c788e2",
+      "location": "side_path",
+      "observationCount": 1,
+      "ownClaimCount": 0,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我先亲自检查原材料，查找材料和现场来源；仅凭口头说法不能定责。我不会替玩家最终修复。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "original_material"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "38",
+          "first": "35"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-aadd535e-8be6-40ac-ba96-cadb32603b5c",
+      "location": "passage",
+      "observationCount": 4,
+      "ownClaimCount": 1,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a"
+          ],
+          "text": "我把关于 passage_structure 的“亲自检查当前可见状态。”（安全=false，通行许可=false，实际修复材料=null）及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O33",
+          "recipientIds": [
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "47",
+          "first": "42"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-121fd81a-5b0d-4611-8a59-0bf781a9a9fa",
+      "location": "side_path",
+      "observationCount": 3,
+      "ownClaimCount": 1,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我先亲自检查临时存放处，查找材料和现场来源；仅凭口头说法不能定责。我不会替玩家最终修复。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "material_cache"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "52",
+          "first": "48"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-83b6a583-3c4a-4bcd-967c-4312fb78573c",
+      "location": "passage",
+      "observationCount": 5,
+      "ownClaimCount": 2,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a"
+          ],
+          "text": "我把关于 passage_structure 的“现场旧损痕迹与到达前结构记录相符。”（痕迹与旧记录相符=true）及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O34",
+          "recipientIds": [
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "59",
+          "first": "54"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-3ebf6d80-e4df-4768-bc33-0522e8c5bf9d",
+      "location": "side_path",
+      "observationCount": 6,
+      "ownClaimCount": 2,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489"
+          ],
+          "text": "我把关于 original_material 的“亲自检查当前可见状态。”（原定材料=true）及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O38",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "63",
+          "first": "60"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-87c5e3a1-4c47-4ebd-836e-34a650592bf9",
+      "location": "passage",
+      "observationCount": 6,
+      "ownClaimCount": 3,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "请继续提供有来源的记录，并由玩家完成修复和许可；若条件已满足，请明确当前可见出口，我再实际通行。"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "67",
+          "first": "64"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-b8a06942-1fe4-4f53-aabe-f2ffa0ff827c",
+      "location": "side_path",
+      "observationCount": 7,
+      "ownClaimCount": 3,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489"
+          ],
+          "text": "我把关于 material_cache 的“亲自检查当前可见状态。”及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O51",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "71",
+          "first": "68"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-9ba121c6-8f1d-4a75-a7be-554a85689f65",
+      "location": "passage",
+      "observationCount": 7,
+      "ownClaimCount": 4,
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "range": null
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-9a0dc253-0f86-4480-94b7-d2fc066ff239",
+      "location": "side_path",
+      "observationCount": 8,
+      "ownClaimCount": 4,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489"
+          ],
+          "text": "我把关于 original_material 的“临时存放处的标记与登记相符，原材料尚未用于修复。”（现场与登记相符=true）及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O52",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "75",
+          "first": "72"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-f106799e-64f5-452e-b2b2-922c28726a88",
+      "location": "side_path",
+      "observationCount": 9,
+      "ownClaimCount": 5,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "此处可见现场已检查。请把登记、痕迹等原来源分享过来，或明确一个当前可见出口，我再前往核验；不凭转述定责。"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "78",
+          "first": "76"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-b026cc34-83c2-4871-a998-9072fad5073c",
+      "location": "side_path",
+      "observationCount": 10,
+      "ownClaimCount": 6,
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "range": null
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-9795a584-a3b7-467a-869f-9687136cb936",
+      "location": "side_path",
+      "observationCount": 10,
+      "ownClaimCount": 6,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "C-4bacd653-3235-43ae-9841-91e073c17404"
+          ],
+          "text": "我把关于 original_material 的“亲自检查当前可见状态。”（原定材料=true）及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O38",
+          "recipientIds": [
+            "C-4bacd653-3235-43ae-9841-91e073c17404"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "92",
+          "first": "89"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-b437a1f1-bec6-4b1f-9d98-226edfcb3168",
+      "location": "passage",
+      "observationCount": 7,
+      "ownClaimCount": 4,
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Rejected",
+        "code": "DECISION_STALE",
+        "range": null
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-1913f67b-cb51-4124-9f2d-fa4de0e6df38",
+      "location": "passage",
+      "observationCount": 7,
+      "ownClaimCount": 4,
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "range": null
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-c1ec81f9-6abf-402e-90a7-48d197890a64",
+      "location": "side_path",
+      "observationCount": 13,
+      "ownClaimCount": 7,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "旧记录与现场痕迹已相互印证，不能凭封路争执任意定责。我改为展示核验来源，并继续检查实际通行条件。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O94",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489",
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "110",
+          "first": "98"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-345c5d78-a1a1-48d8-94b4-633a8c703e4e",
+      "location": "side_path",
+      "observationCount": 17,
+      "ownClaimCount": 8,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "登记与现场标记已相互印证，我改为支持取回原材料并展示来源，不再根据口头指责追责；实际修复仍由玩家执行。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O96",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489",
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "130",
+          "first": "118"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-ef67ff45-1c42-460b-b1a2-eef90d43362d",
+      "location": "side_path",
+      "observationCount": 18,
+      "ownClaimCount": 9,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我按当前可见的出口 passage 前往核验或通行，实际效果仍由通路规则决定。"
+        },
+        {
+          "kind": "move",
+          "regionId": "passage"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "138",
+          "first": "131"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-1ae26d9f-fd9b-4515-b956-48961e7c0081",
+      "location": "passage",
+      "observationCount": 7,
+      "ownClaimCount": 4,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "wukong"
+          ],
+          "text": "我把关于 passage_structure 的“亲自检查当前可见状态。”（安全=false，通行许可=false，实际修复材料=null）及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O33",
+          "recipientIds": [
+            "wukong"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "143",
+          "first": "140"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-b571378f-2f69-4437-873b-236459eeebf1",
+      "location": "passage",
+      "observationCount": 19,
+      "ownClaimCount": 10,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我先亲自检查通路，不凭口头说法认定已修好或任意定责。请提供可核验来源，实际修复和许可由有职责的玩家完成。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "passage_structure"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "148",
+          "first": "144"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-6e73a303-1acb-410d-8600-ec2ecd740509",
+      "location": "passage",
+      "observationCount": 9,
+      "ownClaimCount": 5,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "wukong"
+          ],
+          "text": "我把关于 passage_structure 的“现场旧损痕迹与到达前结构记录相符。”（痕迹与旧记录相符=true）及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O34",
+          "recipientIds": [
+            "wukong"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "153",
+          "first": "150"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-a7887e48-7af1-4a3e-95ce-9cc3a72a6be4",
+      "location": "passage",
+      "observationCount": 24,
+      "ownClaimCount": 11,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "tangseng"
+          ],
+          "text": "我把关于 original_material 的“亲自检查当前可见状态。”（原定材料=true）及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O38",
+          "recipientIds": [
+            "tangseng"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "157",
+          "first": "154"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-df4793f3-eec6-4dd0-b70b-ed7d97ce9e3d",
+      "location": "passage",
+      "observationCount": 12,
+      "ownClaimCount": 6,
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "range": null
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-510e82eb-52c8-4da3-8718-101de3c23f19",
+      "location": "passage",
+      "observationCount": 27,
+      "ownClaimCount": 12,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "tangseng"
+          ],
+          "text": "我把关于 material_cache 的“亲自检查当前可见状态。”及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O51",
+          "recipientIds": [
+            "tangseng"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "161",
+          "first": "158"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-2dd0b98d-8bd0-4cc4-897c-c9dd6e38cb3c",
+      "location": "passage",
+      "observationCount": 14,
+      "ownClaimCount": 6,
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "range": null
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-df11f403-a506-454d-b903-748693ef8e98",
+      "location": "passage",
+      "observationCount": 28,
+      "ownClaimCount": 13,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "tangseng"
+          ],
+          "text": "我把关于 original_material 的“临时存放处的标记与登记相符，原材料尚未用于修复。”（现场与登记相符=true）及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O52",
+          "recipientIds": [
+            "tangseng"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "165",
+          "first": "162"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-a1785215-546b-44a9-8570-fef51115fc90",
+      "location": "passage",
+      "observationCount": 16,
+      "ownClaimCount": 6,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "wukong"
+          ],
+          "text": "我把关于 original_material 的“临时存放处的标记与登记相符，原材料尚未用于修复。”（现场与登记相符=true）及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O165",
+          "recipientIds": [
+            "wukong"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "169",
+          "first": "166"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-dedd8655-ba30-4a60-9315-6d36c6ef336d",
+      "location": "passage",
+      "observationCount": 29,
+      "ownClaimCount": 14,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "tangseng"
+          ],
+          "text": "我把关于 passage_structure 的“师徒到达前留下的结构记录记有同处损坏。”（损坏早于到达=true）及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O94",
+          "recipientIds": [
+            "tangseng"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "173",
+          "first": "170"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-4a5e2580-f6f1-4d14-8481-a808dcc051e1",
+      "location": "passage",
+      "observationCount": 19,
+      "ownClaimCount": 7,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "旧记录与现场痕迹已相互印证，损坏早于到达。我不再把损坏归咎同行；请按核验来源自愿协调材料，仍须实际修复和合法许可。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O173",
+          "recipientIds": [
+            "wukong"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "178",
+          "first": "174"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-a2e341df-f593-4c25-a094-e0e3442a7779",
+      "location": "passage",
+      "observationCount": 32,
+      "ownClaimCount": 15,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "tangseng"
+          ],
+          "text": "我把关于 passage_structure 的“现场旧损痕迹与到达前结构记录相符。”（痕迹与旧记录相符=true）及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O95",
+          "recipientIds": [
+            "tangseng"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "182",
+          "first": "179"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-4c4f94ef-cb19-4b6c-a465-3d197266b783",
+      "location": "passage",
+      "observationCount": 22,
+      "ownClaimCount": 8,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "wukong"
+          ],
+          "text": "我把关于 passage_structure 的“师徒到达前留下的结构记录记有同处损坏。”（损坏早于到达=true）及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O173",
+          "recipientIds": [
+            "wukong"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "186",
+          "first": "183"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-87a810d3-d2c2-4b6a-adbe-7d1cc5b4745e",
+      "location": "passage",
+      "observationCount": 35,
+      "ownClaimCount": 16,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "tangseng"
+          ],
+          "text": "我把关于 original_material 的“登记确认原材料获准搬往侧路临时存放，并非擅自取走。”（合法搬运=true，登记目的地=side_path）及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O96",
+          "recipientIds": [
+            "tangseng"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "190",
+          "first": "187"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-435a646c-a779-4f24-8a92-a215092613e2",
+      "location": "passage",
+      "observationCount": 25,
+      "ownClaimCount": 9,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "登记与现场标记已相互印证，材料属于合法搬运，不能按盗取定责。请有职责的玩家自愿取回原材料，备用垫付也不代表认罪。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O190",
+          "recipientIds": [
+            "wukong"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "195",
+          "first": "191"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-eb172d83-c821-4bd4-809a-53053119afaa",
+      "location": "passage",
+      "observationCount": 38,
+      "ownClaimCount": 17,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "tangseng"
+          ],
+          "text": "我把关于 passage_structure 的“亲自检查当前可见状态。”（安全=false，通行许可=false，实际修复材料=null）及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O147",
+          "recipientIds": [
+            "tangseng"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "199",
+          "first": "196"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-795ebb2c-d74d-40c3-a61a-a7946739b0f5",
+      "location": "passage",
+      "observationCount": 28,
+      "ownClaimCount": 10,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "wukong"
+          ],
+          "text": "我把关于 original_material 的“登记确认原材料获准搬往侧路临时存放，并非擅自取走。”（合法搬运=true，登记目的地=side_path）及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O190",
+          "recipientIds": [
+            "wukong"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "203",
+          "first": "200"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-17d8b79b-3c49-4bda-baf5-f1f7da4d7eb7",
+      "location": "passage",
+      "observationCount": 41,
+      "ownClaimCount": 18,
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "range": null
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-54fd5f44-2e8c-4035-9ca1-52ef2fc0e85e",
+      "location": "passage",
+      "observationCount": 29,
+      "ownClaimCount": 11,
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "range": null
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-b1c6d34c-43f9-4b60-b754-085a4728aedf",
+      "location": "passage",
+      "observationCount": 43,
+      "ownClaimCount": 18,
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "range": null
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-87f0e788-89f1-4703-abfa-3c6fd695af53",
+      "location": "passage",
+      "observationCount": 29,
+      "ownClaimCount": 11,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我先核查修复工具的可见状态，请各位按证据自愿协调，不把承诺当成已完成。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "repair_tool"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "217",
+          "first": "209"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-8944dec5-7139-47a9-82bd-ad2fc8aec8a4",
+      "location": "passage",
+      "observationCount": 43,
+      "ownClaimCount": 18,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我先亲自检查修复工具，查找材料和现场来源；仅凭口头说法不能定责。我不会替玩家最终修复。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "repair_tool"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "226",
+          "first": "218"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-45f138c3-e069-4930-b6b6-d16e080de8b1",
+      "location": "passage",
+      "observationCount": 32,
+      "ownClaimCount": 12,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我先核查备用材料的可见状态，请各位按证据自愿协调，不把承诺当成已完成。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "spare_material"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "235",
+          "first": "227"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-9b59066b-ba22-43ad-95ea-8b7785e1d4f4",
+      "location": "passage",
+      "observationCount": 46,
+      "ownClaimCount": 19,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我先亲自检查备用材料，查找材料和现场来源；仅凭口头说法不能定责。我不会替玩家最终修复。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "spare_material"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "244",
+          "first": "236"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-e4887cb6-4d8d-49f4-a9cd-ec319b349740",
+      "location": "passage",
+      "observationCount": 35,
+      "ownClaimCount": 13,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我先核查原材料的可见状态，请各位按证据自愿协调，不把承诺当成已完成。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "original_material"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "253",
+          "first": "245"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-4e7656e2-eba8-4b3c-96f2-f079c0a1548d",
+      "location": "passage",
+      "observationCount": 49,
+      "ownClaimCount": 20,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a"
+          ],
+          "text": "我把关于 original_material 的“亲自检查当前可见状态。”（原定材料=true）及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O38",
+          "recipientIds": [
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "261",
+          "first": "254"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-a678555f-bb15-479b-b2c6-bee9cbcd519c",
+      "location": "passage",
+      "observationCount": 37,
+      "ownClaimCount": 14,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc"
+          ],
+          "text": "我把关于 passage_structure 的“亲自检查当前可见状态。”（安全=false，通行许可=false，实际修复材料=null）及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O33",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "269",
+          "first": "262"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-62194aca-c638-488b-8940-3c0aed064325",
+      "location": "passage",
+      "observationCount": 51,
+      "ownClaimCount": 21,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a"
+          ],
+          "text": "我把关于 material_cache 的“亲自检查当前可见状态。”及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O51",
+          "recipientIds": [
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "279",
+          "first": "270"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-bf07d692-ca96-4668-a25c-58c0cddc7a37",
+      "location": "passage",
+      "observationCount": 38,
+      "ownClaimCount": 15,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc"
+          ],
+          "text": "我把关于 passage_structure 的“现场旧损痕迹与到达前结构记录相符。”（痕迹与旧记录相符=true）及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O34",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "287",
+          "first": "280"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-e4fb1021-8e25-493d-be26-6cd467900f66",
+      "location": "passage",
+      "observationCount": 52,
+      "ownClaimCount": 22,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a"
+          ],
+          "text": "我把关于 original_material 的“临时存放处的标记与登记相符，原材料尚未用于修复。”（现场与登记相符=true）及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O52",
+          "recipientIds": [
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "297",
+          "first": "288"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-29871fbd-70cd-4d3b-973a-383193ec6ad7",
+      "location": "passage",
+      "observationCount": 39,
+      "ownClaimCount": 16,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489",
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a"
+          ],
+          "text": "我把关于 original_material 的“临时存放处的标记与登记相符，原材料尚未用于修复。”（现场与登记相符=true）及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O165",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489",
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "309",
+          "first": "298"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-752e131a-7ca1-4059-9756-ec532d0148a8",
+      "location": "passage",
+      "observationCount": 53,
+      "ownClaimCount": 23,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489",
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a"
+          ],
+          "text": "我把关于 passage_structure 的“师徒到达前留下的结构记录记有同处损坏。”（损坏早于到达=true）及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O94",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489",
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "321",
+          "first": "310"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-e5a6b261-026f-4770-b08d-d1e65ad2df37",
+      "location": "passage",
+      "observationCount": 40,
+      "ownClaimCount": 17,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489",
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a"
+          ],
+          "text": "我把关于 passage_structure 的“师徒到达前留下的结构记录记有同处损坏。”（损坏早于到达=true）及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O173",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489",
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "333",
+          "first": "322"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-371c036c-e75e-4dc8-9ada-1a1cb65d5a1b",
+      "location": "passage",
+      "observationCount": 54,
+      "ownClaimCount": 24,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489",
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a"
+          ],
+          "text": "我把关于 passage_structure 的“现场旧损痕迹与到达前结构记录相符。”（痕迹与旧记录相符=true）及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O95",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489",
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "345",
+          "first": "334"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-c484d96a-1574-4734-8084-d9dae8b39619",
+      "location": "passage",
+      "observationCount": 41,
+      "ownClaimCount": 18,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489",
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a"
+          ],
+          "text": "我把关于 original_material 的“登记确认原材料获准搬往侧路临时存放，并非擅自取走。”（合法搬运=true，登记目的地=side_path）及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O190",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489",
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "357",
+          "first": "346"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-ae6e28db-f731-4a09-a0e7-a1b306d0677f",
+      "location": "passage",
+      "observationCount": 55,
+      "ownClaimCount": 25,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489",
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a"
+          ],
+          "text": "我把关于 original_material 的“登记确认原材料获准搬往侧路临时存放，并非擅自取走。”（合法搬运=true，登记目的地=side_path）及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O96",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489",
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "369",
+          "first": "358"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-c514a01d-5d06-4241-9f4a-284641965984",
+      "location": "passage",
+      "observationCount": 42,
+      "ownClaimCount": 19,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489",
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a",
+            "wukong"
+          ],
+          "text": "我把关于 repair_tool 的“亲自检查当前可见状态。”及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O217",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489",
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a",
+            "wukong"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "383",
+          "first": "370"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-d980556c-dd38-47a3-8c9e-26f87f78b767",
+      "location": "passage",
+      "observationCount": 56,
+      "ownClaimCount": 26,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489",
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a"
+          ],
+          "text": "我把关于 passage_structure 的“亲自检查当前可见状态。”（安全=false，通行许可=false，实际修复材料=null）及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O147",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489",
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "395",
+          "first": "384"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-810aa76b-8037-4923-9be7-1d1f767bbf92",
+      "location": "passage",
+      "observationCount": 59,
+      "ownClaimCount": 27,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489",
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a",
+            "tangseng"
+          ],
+          "text": "我把关于 repair_tool 的“亲自检查当前可见状态。”及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O226",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489",
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a",
+            "tangseng"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "409",
+          "first": "396"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-d127b00b-2a1a-45ed-8740-8f268a6279bb",
+      "location": "passage",
+      "observationCount": 43,
+      "ownClaimCount": 20,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489",
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a",
+            "wukong"
+          ],
+          "text": "我把关于 spare_material 的“亲自检查当前可见状态。”（原定材料=false）及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O235",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489",
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a",
+            "wukong"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "423",
+          "first": "410"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-cb453554-0130-4c27-b06c-3f5bdf54bd9f",
+      "location": "passage",
+      "observationCount": 62,
+      "ownClaimCount": 28,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489",
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a",
+            "tangseng"
+          ],
+          "text": "我把关于 spare_material 的“亲自检查当前可见状态。”（原定材料=false）及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O244",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489",
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a",
+            "tangseng"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "437",
+          "first": "424"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-52db4bd3-6939-43de-90fc-78767bd4322d",
+      "location": "passage",
+      "observationCount": 46,
+      "ownClaimCount": 21,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489",
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a",
+            "wukong"
+          ],
+          "text": "我把关于 original_material 的“亲自检查当前可见状态。”（原定材料=true）及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O253",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489",
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a",
+            "wukong"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "451",
+          "first": "438"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-59f1f98f-3963-4631-a0bc-6f9e7e25a7f7",
+      "location": "passage",
+      "observationCount": 65,
+      "ownClaimCount": 29,
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "range": null
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-1cf7908b-3684-4fa1-ba43-c18a04f18a8c",
+      "location": "passage",
+      "observationCount": 49,
+      "ownClaimCount": 22,
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "range": null
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-d50a2f5a-7cf8-4c66-bf87-141e9dd4051e",
+      "location": "passage",
+      "observationCount": 49,
+      "ownClaimCount": 22,
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "range": null
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-5bdffc2b-fe96-4520-9d65-ff18a6c455cf",
+      "location": "passage",
+      "observationCount": 65,
+      "ownClaimCount": 29,
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "range": null
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-5cb00d4b-66c2-4111-a91f-ee7384b83b42",
+      "location": "passage",
+      "observationCount": 65,
+      "ownClaimCount": 29,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "实际修复已经可见，我改为核对通行许可。请有职责的玩家完成许可，不能靠一句“已修好”越过条件。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "passage_structure"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "467",
+          "first": "458"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-c6d06e21-064f-45b4-98c0-f15dc0e69b95",
+      "location": "passage",
+      "observationCount": 49,
+      "ownClaimCount": 22,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我已看到实际修复，但许可尚未生效，暂不通行。请有通行职责的玩家确认并授予许可，我不能代为授权。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "passage_structure"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "477",
+          "first": "468"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-a0113069-5699-438c-bcee-ba8b3f5b54e0",
+      "location": "passage",
+      "observationCount": 69,
+      "ownClaimCount": 30,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489",
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a",
+            "tangseng"
+          ],
+          "text": "我把关于 passage_structure 的“亲自检查当前可见状态。”（安全=true，通行许可=false，实际修复材料=original_material）及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O466",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489",
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a",
+            "tangseng"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "493",
+          "first": "480"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-11e718fa-edd1-4b15-b541-7af0d4aaa1f0",
+      "location": "passage",
+      "observationCount": 53,
+      "ownClaimCount": 23,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "directed",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489",
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a",
+            "wukong"
+          ],
+          "text": "我把关于 passage_structure 的“亲自检查当前可见状态。”（安全=true，通行许可=false，实际修复材料=original_material）及其原来源分享给各位，供自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-9024f7b8-378e-46ed-9be7-2ead49fa6a64:O476",
+          "recipientIds": [
+            "C-196fcf5f-3ce4-4974-b971-25afee300489",
+            "C-4bacd653-3235-43ae-9841-91e073c17404",
+            "C-9b25d4ab-48ca-4207-8846-d3dd4aa70868",
+            "C-aa7b06b5-1d85-4c90-8994-dbfc0a6a20bc",
+            "C-e7b2df5d-39d5-4f1d-a0aa-0085c0cc682a",
+            "wukong"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "507",
+          "first": "494"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-923578f0-9e0c-4616-9967-a2ee5a3b0b8c",
+      "location": "passage",
+      "observationCount": 72,
+      "ownClaimCount": 31,
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "range": null
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-1ebf171e-9e15-493a-b6d0-ef81601a5d60",
+      "location": "passage",
+      "observationCount": 56,
+      "ownClaimCount": 24,
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "range": null
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-fbdce932-1b38-496d-bb5b-00391089b3d2",
+      "location": "passage",
+      "observationCount": 57,
+      "ownClaimCount": 24,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "当前可见状态已确认实际修复与有效许可，我愿意按已见出口通行。请明确希望前往的出口；我的同意不代表已经抵达。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "passage_structure"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "528",
+          "first": "519"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-b4e59962-9489-47e0-b0f5-ff9a6c1a5ca2",
+      "location": "passage",
+      "observationCount": 73,
+      "ownClaimCount": 31,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "当前可见状态已确认实际修复与有效许可，我改为核对通行路线；沿已见出口行动，抵达与否以实际移动为准。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "passage_structure"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "538",
+          "first": "529"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-c2032492-8428-4e27-8a85-d6a86e496044",
+      "location": "passage",
+      "observationCount": 61,
+      "ownClaimCount": 25,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我按当前可见的出口 destination 前往核验或通行，实际效果仍由通路规则决定。"
+        },
+        {
+          "kind": "move",
+          "regionId": "destination"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "549",
+          "first": "541"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-4af6479a-7b35-420c-91a6-883d9471dfe4",
+      "location": "passage",
+      "observationCount": 77,
+      "ownClaimCount": 32,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我按当前可见的出口 destination 前往核验或通行，实际效果仍由通路规则决定。"
+        },
+        {
+          "kind": "move",
+          "regionId": "destination"
+        }
+      ],
+      "receipt": {
+        "status": "Rejected",
+        "code": "DECISION_STALE",
+        "range": null
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-f490c5cb-90f3-482b-b185-0b7350e0f5ce",
+      "location": "destination",
+      "observationCount": 62,
+      "ownClaimCount": 26,
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "range": null
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-6287889f-16f6-494b-abc1-e65e6df3979a",
+      "location": "passage",
+      "observationCount": 78,
+      "ownClaimCount": 32,
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我按当前可见的出口 destination 前往核验或通行，实际效果仍由通路规则决定。"
+        },
+        {
+          "kind": "move",
+          "regionId": "destination"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "558",
+          "first": "550"
+        }
+      }
+    }
+  ],
+  "totalCalls": 76,
+  "status": "OBSERVED"
+}

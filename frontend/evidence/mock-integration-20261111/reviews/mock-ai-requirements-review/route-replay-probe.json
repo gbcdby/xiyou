@@ -1,0 +1,983 @@
+{
+  "candidate": "c2511f4a81d29502aed4c122cd701d3c3632d237",
+  "scope": "真实PG、原始Gateway上下文和未修改provider；两次合法路线输入后，检查旧请求是否复活并产生反复移动。逐次驱动真实Decision/预留/提交，未启用自动调度，不计为60秒观察。",
+  "actions": [
+    {
+      "action": {
+        "kind": "move",
+        "regionId": "side_path"
+      },
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "18",
+          "last": "18"
+        }
+      }
+    },
+    {
+      "action": {
+        "kind": "speak",
+        "text": "出口 store",
+        "channel": "public",
+        "recipientIds": []
+      },
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "19",
+          "last": "21"
+        }
+      }
+    },
+    {
+      "action": {
+        "kind": "move",
+        "regionId": "store"
+      },
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "50",
+          "last": "50"
+        }
+      }
+    },
+    {
+      "action": {
+        "kind": "speak",
+        "text": "出口 side_path",
+        "channel": "public",
+        "recipientIds": []
+      },
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "51",
+          "last": "54"
+        }
+      }
+    }
+  ],
+  "decisions": [
+    {
+      "decisionId": "D-19cacd41-8c7f-4d6b-87b8-fde91e4c2756",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我先亲自检查原材料，查找材料和现场来源；仅凭口头说法不能定责。我不会替玩家最终修复。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "original_material"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "24",
+          "last": "27"
+        }
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q19",
+          "text": "出口 store"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-6ca4b9ae-50bc-49de-adb1-e46c7e024651",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我先亲自检查临时存放处，查找材料和现场来源；仅凭口头说法不能定责。我不会替玩家最终修复。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "material_cache"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "28",
+          "last": "32"
+        }
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q19",
+          "text": "出口 store"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-38ed3d53-816d-4193-9014-f0af9f5ff4aa",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我把关于 original_material 的“亲自检查当前可见状态。”（原定材料=true）及其原来源分享给勘查者兼寻物者，供其自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:O27",
+          "recipientIds": [
+            "C-afa8cb1a-d19b-4e9d-af5b-7e21493aade2"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "34",
+          "last": "37"
+        }
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q19",
+          "text": "出口 store"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-1ae6593f-b15a-4c3e-85cc-f068f5311972",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我把关于 material_cache 的“亲自检查当前可见状态。”及其原来源分享给勘查者兼寻物者，供其自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:O31",
+          "recipientIds": [
+            "C-afa8cb1a-d19b-4e9d-af5b-7e21493aade2"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "38",
+          "last": "41"
+        }
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q19",
+          "text": "出口 store"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-ebabb083-30e9-480d-a325-31d86a41e5f6",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我把关于 original_material 的“临时存放处的标记与登记相符，原材料尚未用于修复。”（现场与登记相符=true）及其原来源分享给勘查者兼寻物者，供其自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:O32",
+          "recipientIds": [
+            "C-afa8cb1a-d19b-4e9d-af5b-7e21493aade2"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "42",
+          "last": "45"
+        }
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q19",
+          "text": "出口 store"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-724a8c11-1c52-42c7-8499-121848a64574",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我按当前可见的出口 store 前往核验或通行，实际效果仍由通路规则决定。"
+        },
+        {
+          "kind": "move",
+          "regionId": "store"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "46",
+          "last": "49"
+        }
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q19",
+          "text": "出口 store"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-6f9e3cd8-f487-4332-bf18-812c164531ff",
+      "region": "store",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我先亲自检查修复工具，查找材料和现场来源；仅凭口头说法不能定责。我不会替玩家最终修复。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "repair_tool"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "56",
+          "last": "60"
+        }
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q51",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-fec1ef12-c3ff-49b6-b684-8ae56c124293",
+      "region": "store",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我先亲自检查备用材料，查找材料和现场来源；仅凭口头说法不能定责。我不会替玩家最终修复。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "spare_material"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "61",
+          "last": "65"
+        }
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q51",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-e6ced41e-d7da-49ff-93d9-d2143fb8fe6f",
+      "region": "store",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我先亲自检查库存与登记簿，查找材料和现场来源；仅凭口头说法不能定责。我不会替玩家最终修复。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "stock_record"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "66",
+          "last": "72"
+        }
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q51",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-bd1e4ea9-c888-4559-8cc7-30dcd5d7255c",
+      "region": "store",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "登记与现场标记已相互印证，我改为支持取回原材料并展示来源，不再根据口头指责追责；实际修复仍由玩家执行。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:O72",
+          "recipientIds": [
+            "C-930682be-ac74-4b13-a398-2f8c1966902d",
+            "C-afa8cb1a-d19b-4e9d-af5b-7e21493aade2"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "74",
+          "last": "80"
+        }
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q51",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-f77bf5f1-38d3-4c5c-8232-965256199acb",
+      "region": "store",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我把关于 original_material 的“亲自检查当前可见状态。”（原定材料=true）及其原来源分享给材料保管者兼通行协调者兼记事者，供其自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:O27",
+          "recipientIds": [
+            "C-930682be-ac74-4b13-a398-2f8c1966902d"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "81",
+          "last": "85"
+        }
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q51",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-56fdf216-c73a-4193-a5aa-dbf0801bf89b",
+      "region": "store",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我把关于 material_cache 的“亲自检查当前可见状态。”及其原来源分享给材料保管者兼通行协调者兼记事者，供其自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:O31",
+          "recipientIds": [
+            "C-930682be-ac74-4b13-a398-2f8c1966902d"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "86",
+          "last": "90"
+        }
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q51",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-5ce36f28-d64d-4cd5-b2a8-15db5ec3fdc7",
+      "region": "store",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我把关于 original_material 的“临时存放处的标记与登记相符，原材料尚未用于修复。”（现场与登记相符=true）及其原来源分享给材料保管者兼通行协调者兼记事者，供其自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:O32",
+          "recipientIds": [
+            "C-930682be-ac74-4b13-a398-2f8c1966902d"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "91",
+          "last": "95"
+        }
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q51",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-4c8d1fe1-bed5-465a-ad0c-feb60cd6c40b",
+      "region": "store",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我把关于 repair_tool 的“亲自检查当前可见状态。”及其原来源分享给材料保管者兼通行协调者兼记事者，供其自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:O60",
+          "recipientIds": [
+            "C-930682be-ac74-4b13-a398-2f8c1966902d"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "96",
+          "last": "100"
+        }
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q51",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-051ead50-eca0-4cea-8f92-27496bb43dd6",
+      "region": "store",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我把关于 repair_tool 的“亲自检查当前可见状态。”及其原来源分享给勘查者兼寻物者，供其自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:O60",
+          "recipientIds": [
+            "C-afa8cb1a-d19b-4e9d-af5b-7e21493aade2"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "101",
+          "last": "105"
+        }
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q51",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-4bb0b5f0-14be-4c72-9416-2928c445c7e7",
+      "region": "store",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我把关于 spare_material 的“亲自检查当前可见状态。”（原定材料=false）及其原来源分享给材料保管者兼通行协调者兼记事者，供其自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:O65",
+          "recipientIds": [
+            "C-930682be-ac74-4b13-a398-2f8c1966902d"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "106",
+          "last": "110"
+        }
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q51",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-8d052768-360f-4dd5-b63b-ce5be7e1443c",
+      "region": "store",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我把关于 spare_material 的“亲自检查当前可见状态。”（原定材料=false）及其原来源分享给勘查者兼寻物者，供其自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:O65",
+          "recipientIds": [
+            "C-afa8cb1a-d19b-4e9d-af5b-7e21493aade2"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "111",
+          "last": "115"
+        }
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q51",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-1a945827-d674-461e-9d97-c3a28f435de2",
+      "region": "store",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我把关于 stock_record 的“亲自检查当前可见状态。”（原材料在库=false）及其原来源分享给材料保管者兼通行协调者兼记事者，供其自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:O70",
+          "recipientIds": [
+            "C-930682be-ac74-4b13-a398-2f8c1966902d"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "116",
+          "last": "120"
+        }
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q51",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-df2bc11c-fc8a-4d73-abbc-001abbf1f3fa",
+      "region": "store",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我把关于 stock_record 的“亲自检查当前可见状态。”（原材料在库=false）及其原来源分享给勘查者兼寻物者，供其自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:O70",
+          "recipientIds": [
+            "C-afa8cb1a-d19b-4e9d-af5b-7e21493aade2"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "121",
+          "last": "125"
+        }
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q51",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-b938c63c-0552-4af1-bba8-0eeeb6672c01",
+      "region": "store",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我把关于 stock_record 的“库存检查确认原材料已经移出，备用材料和工具仍有唯一保管者。”（原材料在库=false）及其原来源分享给材料保管者兼通行协调者兼记事者，供其自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:O71",
+          "recipientIds": [
+            "C-930682be-ac74-4b13-a398-2f8c1966902d"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "126",
+          "last": "130"
+        }
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q51",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-6059b7f3-9d52-4031-a2c1-92ce98bd204d",
+      "region": "store",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我把关于 stock_record 的“库存检查确认原材料已经移出，备用材料和工具仍有唯一保管者。”（原材料在库=false）及其原来源分享给勘查者兼寻物者，供其自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:O71",
+          "recipientIds": [
+            "C-afa8cb1a-d19b-4e9d-af5b-7e21493aade2"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "131",
+          "last": "135"
+        }
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q51",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-921de307-3e7c-48e1-a229-2288d3e965aa",
+      "region": "store",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我把关于 original_material 的“登记确认原材料获准搬往侧路临时存放，并非擅自取走。”（合法搬运=true，登记目的地=side_path）及其原来源分享给材料保管者兼通行协调者兼记事者，供其自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:O72",
+          "recipientIds": [
+            "C-930682be-ac74-4b13-a398-2f8c1966902d"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "136",
+          "last": "140"
+        }
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q51",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-71dbe1ce-a208-4c22-b430-cacf5115240a",
+      "region": "store",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我把关于 original_material 的“登记确认原材料获准搬往侧路临时存放，并非擅自取走。”（合法搬运=true，登记目的地=side_path）及其原来源分享给勘查者兼寻物者，供其自行核验。"
+        },
+        {
+          "kind": "share_evidence",
+          "evidenceId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:O72",
+          "recipientIds": [
+            "C-afa8cb1a-d19b-4e9d-af5b-7e21493aade2"
+          ]
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "141",
+          "last": "145"
+        }
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q51",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-23fffdbe-a5e6-48b0-877b-607898d68844",
+      "region": "store",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我按当前可见的出口 side_path 前往核验或通行，实际效果仍由通路规则决定。"
+        },
+        {
+          "kind": "move",
+          "regionId": "side_path"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "146",
+          "last": "150"
+        }
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q51",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-a3d6427f-d1eb-4e5e-ab22-c2ffec4ced0e",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我按当前可见的出口 store 前往核验或通行，实际效果仍由通路规则决定。"
+        },
+        {
+          "kind": "move",
+          "regionId": "store"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "151",
+          "last": "153"
+        }
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q51",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-9f5a37b3-7847-488c-aff8-9eff2450d8f7",
+      "region": "store",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我按当前可见的出口 side_path 前往核验或通行，实际效果仍由通路规则决定。"
+        },
+        {
+          "kind": "move",
+          "regionId": "side_path"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "154",
+          "last": "158"
+        }
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714:Q51",
+          "text": "出口 side_path"
+        }
+      ]
+    }
+  ],
+  "moves": [
+    {
+      "from": "side_path",
+      "to": "store",
+      "decisionId": "D-724a8c11-1c52-42c7-8499-121848a64574",
+      "humanInputs": 2
+    },
+    {
+      "from": "store",
+      "to": "side_path",
+      "decisionId": "D-23fffdbe-a5e6-48b0-877b-607898d68844",
+      "humanInputs": 4
+    },
+    {
+      "from": "side_path",
+      "to": "store",
+      "decisionId": "D-a3d6427f-d1eb-4e5e-ab22-c2ffec4ced0e",
+      "humanInputs": 4
+    },
+    {
+      "from": "store",
+      "to": "side_path",
+      "decisionId": "D-9f5a37b3-7847-488c-aff8-9eff2450d8f7",
+      "humanInputs": 4
+    }
+  ],
+  "sessionId": "S-f3c6bcde-9889-4640-b532-7921ca2b8714",
+  "final": {
+    "phase": "Running",
+    "region": "side_path"
+  },
+  "replayedWithoutNewInput": true,
+  "status": "OBSERVED"
+}

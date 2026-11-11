@@ -1,0 +1,75 @@
+{
+  "scope": "需求轴正式报告与必要独立核验材料；全部新建于指定目录，未包含全量网络trace或数据库。",
+  "subject": {
+    "kind": "git_commit",
+    "id": "fa87e221aa1e48cb19eeecc1beafcb83c0a7a21a",
+    "head_id": "fa87e221aa1e48cb19eeecc1beafcb83c0a7a21a",
+    "tree": "2d81686787d35d3a26747fbd7896ab1ec54c31ed",
+    "base_id": "10fd0f93b069446d34b08fcddb171d98ee4c50a3",
+    "base_tree": "49748fa1b4b32d8723e3fee3aad919e96311afef",
+    "merge_base_id": null,
+    "comparison": "实际使用可读完整tree比较；本工作树缺base commit对象，不虚构merge-base。",
+    "remote_equivalent_source_commit": "78a85960e4c2de64fc36a48ba1ed4c4b5e82f227",
+    "contract_id": "3690b481d1805f6a7b535584c80a8574c5103d97",
+    "contract_blob": "c5197eb41639d5b4bd2281199a4627d8a734c173",
+    "acceptance_profile": "mock-20261111"
+  },
+  "recorded_at": "2026-11-11T13:26:28.055296+00:00",
+  "files": {
+    "review-report.md": {
+      "sha256": "c8d98da9730dee5483cdae9d8276a4e3a54b7dc02813d961dceddd1b4db4c500",
+      "bytes": 16393
+    },
+    "review-result.json": {
+      "sha256": "698c9ad26ae102bad91323f3837cec8d6b44b0cdfb4f09ad1fdd731d9616a0ea",
+      "bytes": 5576
+    },
+    "model-source-mapping.md": {
+      "sha256": "3d94d4656bb1c8bdbac69ec41d6bcb5262a93960e71ac0658c83da6dd9d6d3d6",
+      "bytes": 16128
+    },
+    "evidence-integrity.json": {
+      "sha256": "3ad1db5081f8d1b9d3443cc5c2825c712a4caa7128c28e777ba4059f7bfffcd3",
+      "bytes": 108609
+    },
+    "inheritance-audit.json": {
+      "sha256": "ff285ffc264524c05626f0ca2ee06f5d60e39ad0c1b36c1e959a3cb6771cbdcd",
+      "bytes": 1357
+    },
+    "network-audit.json": {
+      "sha256": "5bfcdc496fdd46d8f0d3e54539cb10003f7e01d8758c84b6f47c2bff46ad82b8",
+      "bytes": 3167
+    },
+    "archive-audit.json": {
+      "sha256": "d81ef36a630fa91633749f9214991c93124b7f8e0a0249c43725a9acb0dd89a9",
+      "bytes": 5744
+    },
+    "audit-evidence.py": {
+      "sha256": "b8db5a183048c16e3b8251e10fbc33be1e907b059f76188f1fb3e3fd4f5a1de0",
+      "bytes": 9231
+    },
+    "audit-network.py": {
+      "sha256": "9e7491c5384dcaddd2dfdc03f4757f26c460b49bf4dc4daa70b3f8be837a574b",
+      "bytes": 7094
+    },
+    "audit-archive.py": {
+      "sha256": "5adcc83faff5d6f573b3489ed0c77c243b47e5ae4cca37c9196a6f5e7e09980d",
+      "bytes": 5069
+    }
+  },
+  "minimum_archive": [
+    "review-report.md",
+    "review-result.json",
+    "model-source-mapping.md",
+    "evidence-integrity.json",
+    "inheritance-audit.json",
+    "network-audit.json",
+    "archive-audit.json",
+    "audit-evidence.py",
+    "audit-network.py",
+    "audit-archive.py",
+    "review-manifest.json"
+  ],
+  "index_self_hash": false,
+  "source_status_at_completion": ""
+}

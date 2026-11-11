@@ -1,0 +1,17 @@
+{
+  "command": [
+    "npm",
+    "--prefix",
+    "frontend",
+    "run",
+    "build"
+  ],
+  "cwd": "/workspace/scratch/17ff92cde78f/xiyou-mock",
+  "startedAt": "2026-11-11T13:04:23.757188+00:00",
+  "sourceCommit": "fa87e221aa1e48cb19eeecc1beafcb83c0a7a21a",
+  "sourceTree": "2d81686787d35d3a26747fbd7896ab1ec54c31ed",
+  "rawStatus": "completed",
+  "finishedAt": "2026-11-11T13:04:26.963460+00:00",
+  "elapsedMs": 3206.3033459999133,
+  "exitCode": 0
+}

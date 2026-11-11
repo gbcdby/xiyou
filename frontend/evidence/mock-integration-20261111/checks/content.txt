@@ -1,0 +1,21 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> xiyou@0.1.0 test:content
+> node --test content/tests/*.test.mjs
+
+✔ 内容装配拒绝无法进入共享投影协议的配置：组合名称超长 (68.8793ms)
+✔ 内容装配拒绝无法进入共享投影协议的配置：能力并集超量 (23.7178ms)
+✔ 组合职责只装配一个出生区域，同时保留全部能力和初始知识 (91.025107ms)
+✔ 两至五人配置完整分配五项职责，每人始终只有一个职责组合 (28.165594ms)
+✔ 已注册版本的文件被意外改写时拒绝装载 (87.210009ms)
+✔ 内容版本使用规范摘要固定，未知版本不作为文件路径读取 (35.421224ms)
+✔ 内容校验拒绝缺失职责、悬空引用、重复来源和越界配置 (28.991212ms)
+✔ 试验场景固定材料、工具、三处场所、真人操作及两组独立来源 (15.868499ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 638.403606

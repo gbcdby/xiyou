@@ -1,0 +1,140 @@
+{
+  "candidate": "c2511f4a81d29502aed4c122cd701d3c3632d237",
+  "tree": "5c02c7273fbf02fe470e9ac77c95032ec0d9e455",
+  "base": "cf6f880f292d835f1644cd2e8f215fcf8aff512f",
+  "status": "COUNTEREXAMPLES_OBSERVED",
+  "changed_files": {
+    "backend/ai/README.md": "97a0ddf5d658d0c155b24640e75f1bbaadcc227c5b9d033feb9edd9c46073669",
+    "backend/ai/mock-provider.mjs": "5b0b8eb5b321bd9616fcbf5cf66b3473e3c34f554b529787625084c7c5ff1770",
+    "backend/ai/mock-runtime.mjs": "2632807bdb4a4c612d4e4470d1280b828faa637e80faf2030e82d0ea501a2e0f",
+    "backend/ai/mock.md": "2391d12454f79dcb85b18c912610a513af34fb4a37b3e93dd09cb91d888b197b",
+    "backend/mock-main.mjs": "85fba682f647b3eb85c9e2b2ad5466b01df667e4b4629723b39cfff5548c6d26",
+    "backend/scripts/verify-mock-ai.mjs": "465f0823483f237b7ee24126944a7f12725b7e561abaf87e1959b84fafa12a68",
+    "backend/tests/ai-mock-policy.test.mjs": "df80d089ccfcc3c211afddac2045986b15027dc40a2002719776b12996b7e985",
+    "backend/tests/ai-mock-runtime.test.mjs": "133a68e0ee6438af6f15da31395cef7cc7042295d44cbbb52e26ac7c0305c96a",
+    "package.json": "bb3e7e46d4a5a5818309926685def0d9dd53ffc7a5791ee6406e4fe125fdeda5"
+  },
+  "production_snapshot_files_checked": 63,
+  "git_status": "?? backend/tests/ai-mock-progress.test.mjs",
+  "new_untracked_files_scope": "作者新增ai-mock-progress.test.mjs属于未来修正，不读取、不执行、不计入固定c251范围；生产63文件仍匹配冻结摘要",
+  "budget": {
+    "max": 120,
+    "actualCalls": 120,
+    "firstExhaustedPhase": "五人提供合法核验来源并请求悟空前往通路口",
+    "final": {
+      "phase": "Running",
+      "locations": {
+        "tangseng": "passage",
+        "wukong": "passage"
+      },
+      "gate": [
+        {
+          "key": "safe",
+          "label": "安全",
+          "value": true
+        },
+        {
+          "key": "permit",
+          "label": "通行许可",
+          "value": true
+        },
+        {
+          "key": "repairMaterial",
+          "label": "实际修复材料",
+          "value": "original_material"
+        }
+      ],
+      "ending": null
+    },
+    "humanActions": 22,
+    "perActor": {
+      "tangseng": {
+        "calls": 60,
+        "tools": {
+          "make_claim": 13,
+          "inspect": 1,
+          "share_evidence": 11,
+          "wait": 47
+        },
+        "receiptCodes": {
+          "OK": 13,
+          "NO_CHANGE": 46,
+          "DECISION_STALE": 1
+        }
+      },
+      "wukong": {
+        "calls": 60,
+        "tools": {
+          "make_claim": 58,
+          "inspect": 5,
+          "share_evidence": 51,
+          "wait": 2,
+          "move": 1
+        },
+        "receiptCodes": {
+          "OK": 58,
+          "NO_CHANGE": 1,
+          "DECISION_STALE": 1
+        }
+      }
+    }
+  },
+  "route": {
+    "decisions": 26,
+    "moves": [
+      {
+        "from": "side_path",
+        "to": "store",
+        "decisionId": "D-724a8c11-1c52-42c7-8499-121848a64574",
+        "humanInputs": 2
+      },
+      {
+        "from": "store",
+        "to": "side_path",
+        "decisionId": "D-23fffdbe-a5e6-48b0-877b-607898d68844",
+        "humanInputs": 4
+      },
+      {
+        "from": "side_path",
+        "to": "store",
+        "decisionId": "D-a3d6427f-d1eb-4e5e-ab22-c2ffec4ced0e",
+        "humanInputs": 4
+      },
+      {
+        "from": "store",
+        "to": "side_path",
+        "decisionId": "D-9f5a37b3-7847-488c-aff8-9eff2450d8f7",
+        "humanInputs": 4
+      }
+    ],
+    "noNewHumanInputsAfterSecondRequest": true,
+    "executionMode": "真实PG逐决策驱动，不是自动调度时长检查"
+  },
+  "probe_watchdog_failures_preserved": [
+    {
+      "file": "priority-probe-first-window.json",
+      "status": "INCONCLUSIVE",
+      "rawStatus": "PROBE_ERROR",
+      "reason": "阶段未收束：五人提供合法核验来源并请求悟空前往通路口 [{\"actorId\":\"tangseng\",\"calls\":33,\"sessionId\":\"S-501a20a3-057a-4fcc-8cb3-defcd3c092ed\",\"phase\":\"Preparing\",\"pendingWake\":false,\"decisionId\":\"D-e9f3327d-f514-41c2-93e3-75d476226b68\",\"lastReceipt\":{\"schemaVersion\":1,\"semanticDigest\":\"bddad91b05403e05ea17fa930b78b08c773889350a8b352782f9ad634031fa78\",\"actorId\":\"tangseng\",\"observedSeq\":\"310\",\"actionEventRange\":null,\"status\":\"Accepted\",\"code\":\"NO_CHANGE\",\"result\":{},\"sessionId\":\"S-501a20a3-057a-4fcc-8cb3-defcd3c092ed\",\"clientActionId\":\"D-e9f3327d-f514-41c2-93e3-75d476226b68:submit\"},\"lastFallback\":{\"schemaVersion\":1,\"semanticDigest\":\"de12d618182b7db05ff1680e9f4b0c9f910716c91b88508329e8fd89cae842ad\",\"actorId\":\"tangseng\",\"observedSeq\":\"96\",\"actionEventRange\":null,\"status\":\"Accepted\",\"code\":\"NO_CHANGE\",\"result\":{},\"sessionId\":\"S-501a20a3-057a-4fcc-8cb3-defcd3c092ed\",\"clientActionId\":\"D-18a170ad-29da-46de-aee6-89c3cf6d3632:fallback\"},\"error\":null},{\"actorId\":\"wukong\",\"calls\":33,\"sessionId\":\"S-501a20a3-057a-4fcc-8cb3-defcd3c092ed\",\"phase\":\"Submitting\",\"pendingWake\":true,\"decisionId\":\"D-e0afd0d2-80bc-4398-9b66-61d7a67b5aa5\",\"lastReceipt\":{\"schemaVersion\":1,\"semanticDigest\":\"235f4e7e508f70eea1fb47f1fce6888c054c0c215d5dcfc33cd137bfbed83e04\",\"actorId\":\"wukong\",\"observedSeq\":\"318\",\"actionEventRange\":{\"first\":\"311\",\"last\":\"318\"},\"status\":\"Accepted\",\"code\":\"OK\",\"result\":{},\"sessionId\":\"S-501a20a3-057a-4fcc-8cb3-defcd3c092ed\",\"clientActionId\":\"D-e0afd0d2-80bc-4398-9b66-61d7a67b5aa5:submit\"},\"lastFallback\":{\"schemaVersion\":1,\"semanticDigest\":\"0e51c70adc8a8c6ce6d9fc877cd661c86351e84839ac4211adf9efd8810b90f8\",\"actorId\":\"wukong\",\"observedSeq\":\"96\",\"actionEventRange\":null,\"status\":\"Accepted\",\"code\":\"NO_CHANGE\",\"result\":{},\"sessionId\":\"S-501a20a3-057a-4fcc-8cb3-defcd3c092ed\",\"clientActionId\":\"D-c6efac57-5e3c-4e9e-b48c-7a410e992e38:fallback\"},\"error\":null}]",
+      "sha256": "7f7cfa8bc16c2051b2d77c8f2cc5b70aa85f98e4dea252c48689553108c9a89e"
+    },
+    {
+      "file": "priority-probe-second-window.json",
+      "status": "INCONCLUSIVE",
+      "rawStatus": "PROBE_ERROR",
+      "reason": "阶段未收束：五人提供合法核验来源并请求悟空前往通路口 [{\"actorId\":\"tangseng\",\"calls\":52,\"sessionId\":\"S-50a4d1f0-311f-48c6-ba48-aee5a4c24789\",\"phase\":\"Submitting\",\"pendingWake\":true,\"decisionId\":\"D-af31bc2e-34e4-4dd4-baf9-8258532a45f3\",\"lastReceipt\":{\"schemaVersion\":1,\"semanticDigest\":\"1ffeb8efe0c73e553b7005cd5cc54132ccde2f2343909344a7c2304734c8a4dc\",\"actorId\":\"tangseng\",\"observedSeq\":\"474\",\"actionEventRange\":{\"first\":\"471\",\"last\":\"474\"},\"status\":\"Accepted\",\"code\":\"OK\",\"result\":{},\"sessionId\":\"S-50a4d1f0-311f-48c6-ba48-aee5a4c24789\",\"clientActionId\":\"D-af31bc2e-34e4-4dd4-baf9-8258532a45f3:submit\"},\"lastFallback\":{\"schemaVersion\":1,\"semanticDigest\":\"04a074017c6adda152343a15c31ee9c5e6a5c46b41d5cd523675e1307888a21b\",\"actorId\":\"tangseng\",\"observedSeq\":\"96\",\"actionEventRange\":null,\"status\":\"Accepted\",\"code\":\"NO_CHANGE\",\"result\":{},\"sessionId\":\"S-50a4d1f0-311f-48c6-ba48-aee5a4c24789\",\"clientActionId\":\"D-7c25e21e-471b-4323-8468-aaf5109cbbf3:fallback\"},\"error\":null},{\"actorId\":\"wukong\",\"calls\":52,\"sessionId\":\"S-50a4d1f0-311f-48c6-ba48-aee5a4c24789\",\"phase\":\"Submitting\",\"pendingWake\":true,\"decisionId\":\"D-bcf982d2-f34b-4ebd-8411-2d29ab5392c6\",\"lastReceipt\":{\"schemaVersion\":1,\"semanticDigest\":\"4b5d698e7bbea32ad6a8d38e8332200d06c0b5bcf4afae9e49402ebe058f863b\",\"actorId\":\"wukong\",\"observedSeq\":\"478\",\"actionEventRange\":{\"first\":\"475\",\"last\":\"478\"},\"status\":\"Accepted\",\"code\":\"OK\",\"result\":{},\"sessionId\":\"S-50a4d1f0-311f-48c6-ba48-aee5a4c24789\",\"clientActionId\":\"D-bcf982d2-f34b-4ebd-8411-2d29ab5392c6:submit\"},\"lastFallback\":{\"schemaVersion\":1,\"semanticDigest\":\"5519a82e7b27ae7575d4dfdd66662f047d770b56419dc9d19a8337782f6426b0\",\"actorId\":\"wukong\",\"observedSeq\":\"95\",\"actionEventRange\":null,\"status\":\"Accepted\",\"code\":\"NO_CHANGE\",\"result\":{},\"sessionId\":\"S-50a4d1f0-311f-48c6-ba48-aee5a4c24789\",\"clientActionId\":\"D-517234fd-7bf3-4d49-8890-2aabdec123a7:fallback\"},\"error\":null}]",
+      "sha256": "e2dc0617d30cac0208f0b91d7dfa1d0e910d6cce71db0ef73e18d1054f734888"
+    }
+  ],
+  "files": {
+    "targeted.log": "1a4eb7ca05d0ec38b426a294ef4dc814430561a5b23d1319c7d7bef1fd79bd54",
+    "policy-evidence.json": "e6e18e6051ea99da64b7f3611514dd9fa567a5659254f3db5d3c0613d42da9a9",
+    "author-evidence-audit.json": "d3b8af8b8965e736c23a69872e8c1026f4e511f46a97d865409f6c7460c28e61",
+    "priority-probe.mjs": "f3a8fddf8f4e19e63322f9343623fd3c389e7f2cb04cc94a0302c23eb66fd3b7",
+    "priority-probe.json": "0d14fded261fe3e168041e82b574d931e1474c490f12dd8e6868f76ecf3cce05",
+    "priority-probe.log": "924879d830b09ae9296d579b02843af1e7cc947bc5aa826ad7dbe87c61e703ff",
+    "route-replay-probe.mjs": "6113f651637aefc23860098730419075a8c8914a26b022bda601e24d4a006455",
+    "route-replay-probe.json": "df332a77c9089efb512ca5f19c434713f519a4284f89b9b0bf66b4f4135a5a1e",
+    "route-replay-probe.log": "9e73d04b3c144a69ea85f757d7ca03c09ee28513dd365ed63b32b632a216d844"
+  }
+}

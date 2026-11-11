@@ -1,0 +1,17 @@
+{
+  "name": "typecheck",
+  "command": [
+    "npm",
+    "--prefix",
+    "frontend",
+    "run",
+    "typecheck"
+  ],
+  "startedAt": "2026-11-11T12:57:44.683057+00:00",
+  "finishedAt": "2026-11-11T12:57:46.731657+00:00",
+  "elapsedSeconds": 2.048612206999678,
+  "exitCode": 0,
+  "gitHead": "b221ab89784b197431cf682b0c9036e46bb03932",
+  "gitTree": "4f330795548d03f93ae38366a98d6ddf162eb97e",
+  "gitStatus": ""
+}

@@ -1,0 +1,237 @@
+{
+  "scope": "独立标准探针：真实双Session唤醒隔离、终态不调用及最新不可见路线不退回旧请求",
+  "profile": "mock-20261111",
+  "clock": "真实Runtime时钟；唤醒样本minIntervalMs=25，不计60秒窗口",
+  "checks": [
+    {
+      "name": "私人Claim与仅真人取得的Observation均不唤醒核心角色",
+      "assessment": "PASS",
+      "callsBefore": [
+        {
+          "actor_id": "tangseng",
+          "count": 5
+        },
+        {
+          "actor_id": "wukong",
+          "count": 7
+        }
+      ],
+      "callsAfter": [
+        {
+          "actor_id": "tangseng",
+          "count": 5
+        },
+        {
+          "actor_id": "wukong",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "name": "另一Session的合法唤醒不消耗本局持久预算",
+      "assessment": "PASS",
+      "otherBefore": [
+        {
+          "actor_id": "tangseng",
+          "count": 5
+        },
+        {
+          "actor_id": "wukong",
+          "count": 4
+        }
+      ],
+      "otherAfter": [
+        {
+          "actor_id": "tangseng",
+          "count": 6
+        },
+        {
+          "actor_id": "wukong",
+          "count": 4
+        }
+      ],
+      "firstUnchanged": true
+    },
+    {
+      "name": "空闲角色终态后没有新provider调用，两个Gateway外部调用为0",
+      "assessment": "PASS"
+    },
+    {
+      "name": "最新不可见出口阻止旧合法请求复活：14次真实Decision/预留/提交均无移动",
+      "assessment": "PASS",
+      "calls": 14,
+      "latestRoute": "not_visible_exit",
+      "previousRoute": "store",
+      "finalRegion": "side_path"
+    }
+  ],
+  "decisions": [
+    {
+      "decisionId": "D-050ba7fe-c7fa-40af-ba71-9c30fd4eff4e",
+      "contextDigest": "916bed3a180d31e434d5425378c698363117b926ba7160239a88cadd0006128b",
+      "outputSha256": "f782cbd4bae3411c3c534404af69c9002304e9b3a168ac85810aa1693c6dc245",
+      "tools": [
+        "make_claim",
+        "inspect"
+      ],
+      "receiptStatus": "Accepted",
+      "eventRange": {
+        "first": "27",
+        "last": "30"
+      }
+    },
+    {
+      "decisionId": "D-a7fdfe98-6003-4187-9a98-38f4fcd118e4",
+      "contextDigest": "529466421df93fd2eed845eb3cc3e793fb8fe3cf7336ae52b5a4e1b43a32415d",
+      "outputSha256": "e7f82ca09d0b076bc3a20b33efbdf47661a309182111aaeafcb994893eb76425",
+      "tools": [
+        "make_claim",
+        "inspect"
+      ],
+      "receiptStatus": "Accepted",
+      "eventRange": {
+        "first": "31",
+        "last": "35"
+      }
+    },
+    {
+      "decisionId": "D-a16acb7a-5721-4681-9199-371fc84f305a",
+      "contextDigest": "85b445b69014feca2e197f922890a3c8691345a4fa58176fd37364ebc574a0f7",
+      "outputSha256": "4482090c2a03996cebab43b0dc146c852ea3e38b2b864b970446e45481905fcc",
+      "tools": [
+        "make_claim",
+        "share_evidence"
+      ],
+      "receiptStatus": "Accepted",
+      "eventRange": {
+        "first": "37",
+        "last": "40"
+      }
+    },
+    {
+      "decisionId": "D-07fc5a4d-a002-4301-8484-f8db44c09839",
+      "contextDigest": "643ec4703598326e8e0a706bc122e67b084682d53c517ca850da773ffb08e4a8",
+      "outputSha256": "ebc71818ed07bc286d8a4e016b271af716787995ebbb6b8b2c4d2565cb7b7b74",
+      "tools": [
+        "make_claim",
+        "share_evidence"
+      ],
+      "receiptStatus": "Accepted",
+      "eventRange": {
+        "first": "41",
+        "last": "44"
+      }
+    },
+    {
+      "decisionId": "D-1d23ca28-1c06-4acf-a42f-e15979ed0ca9",
+      "contextDigest": "4a61a58d6cea4cdbd75a49b99c2554007b88c6dadebf06362925d0587f57b3a0",
+      "outputSha256": "e809289129b67c15238e40c3ad25fd99173d70c07d1df75416a45257aa59e185",
+      "tools": [
+        "make_claim",
+        "share_evidence"
+      ],
+      "receiptStatus": "Accepted",
+      "eventRange": {
+        "first": "45",
+        "last": "48"
+      }
+    },
+    {
+      "decisionId": "D-41e6971b-c944-4de1-b37d-22e70e62dd61",
+      "contextDigest": "672441b4566283184098b2f860ad81038e92ae514e7629ccb925372f65396d86",
+      "outputSha256": "fa9febb2e84a362ad05ea2f4ccb398c0657b3330e43717fc96d795147cd5d188",
+      "tools": [
+        "make_claim"
+      ],
+      "receiptStatus": "Accepted",
+      "eventRange": {
+        "first": "49",
+        "last": "51"
+      }
+    },
+    {
+      "decisionId": "D-394a6c1e-007f-4356-883b-f78f9d515d47",
+      "contextDigest": "e35b5bf2187be110997c24547a757816f94b6c2700bdc37bfa8cf8590951d9a3",
+      "outputSha256": "e383aa53d7ee7600cc23eadb225d4789f495448475f298dfbb87bcf74c39cf18",
+      "tools": [
+        "wait"
+      ],
+      "receiptStatus": "Accepted",
+      "eventRange": null
+    },
+    {
+      "decisionId": "D-2ca677cf-38ec-414f-bae6-c7690c9c2651",
+      "contextDigest": "b4474119fdd80eed34d06c779c65c060c88064131e66f54f55b50fbcd3fa1433",
+      "outputSha256": "e4abaf88badd80927d193f15ffa8a15fa37e0927e7d8f6d9ac3a9b152d51a97b",
+      "tools": [
+        "wait"
+      ],
+      "receiptStatus": "Accepted",
+      "eventRange": null
+    },
+    {
+      "decisionId": "D-6e9b3c0e-3128-4e52-944c-04b68b9c44c1",
+      "contextDigest": "a94e9a8962ad5688326823789fb1bb0afbd24800ffc37c35aa3f5f2a18590446",
+      "outputSha256": "e020c28f6d5f1dfc9317ee7fb9c13a80edf235c5a309aa557f9410f16ea1b49c",
+      "tools": [
+        "wait"
+      ],
+      "receiptStatus": "Accepted",
+      "eventRange": null
+    },
+    {
+      "decisionId": "D-0038fe0b-69b1-4a00-bbe5-18c7dc7de5b8",
+      "contextDigest": "bd6c84b007d52317063d9e299fdd491a147ef3ba03687162df0ae8ea550157de",
+      "outputSha256": "b86b27f51bcd6fffed86b7e8b558017fc236f5686c16e55f6d1895ada29d3f92",
+      "tools": [
+        "wait"
+      ],
+      "receiptStatus": "Accepted",
+      "eventRange": null
+    },
+    {
+      "decisionId": "D-a920a66b-6d1b-4657-9c59-548076404302",
+      "contextDigest": "b791ef0abe393ac4d57f99153021dc13d71a719a630fc9f2a28b09b280a7c73d",
+      "outputSha256": "1896ae28d69412806de6b99e1b72b9e4e472ab7b9514e8d4ef2e66cbe58db766",
+      "tools": [
+        "wait"
+      ],
+      "receiptStatus": "Accepted",
+      "eventRange": null
+    },
+    {
+      "decisionId": "D-8ff9163c-6dd7-4692-949b-1a2ba97cfe96",
+      "contextDigest": "76c4c251b95ae8553ea92130e3a04ace499667c20c3170f9ab259aaa50c4c8b7",
+      "outputSha256": "4e25fb1a4e17d43f46d39a110208853ca6dd4a2e4534775c84a8558b9fc963ed",
+      "tools": [
+        "wait"
+      ],
+      "receiptStatus": "Accepted",
+      "eventRange": null
+    },
+    {
+      "decisionId": "D-cfd7b497-78bb-4a48-9a36-b79929fab4bd",
+      "contextDigest": "d5aff8ab889664da951d98bc78b2caf57cdb602f915b2897102dfd10b32ddff6",
+      "outputSha256": "b9c5a132c8e00d72f6ed3cc11cc7b7ce5869affb534a0d387bf7168777067b56",
+      "tools": [
+        "wait"
+      ],
+      "receiptStatus": "Accepted",
+      "eventRange": null
+    },
+    {
+      "decisionId": "D-36aaa368-a10c-439a-9618-8619c88b3306",
+      "contextDigest": "57a1c06335e394d078bec5dcf2eb35529243d859a3e5b16fd6df47204900e542",
+      "outputSha256": "01922cc0adfc51b6027e411a25ac25ae60ae3b4925b03afdc9ca4600c3a6c918",
+      "tools": [
+        "wait"
+      ],
+      "receiptStatus": "Accepted",
+      "eventRange": null
+    }
+  ],
+  "status": "PASS",
+  "startedAt": "2026-11-11T13:09:18.311Z",
+  "elapsedMs": 3292.587577,
+  "resourcesClosed": true
+}

@@ -1,0 +1,27 @@
+{
+  "kind": "audit_tool_correction",
+  "productChanged": false,
+  "initialResult": "archive-audit-initial.json",
+  "initialScript": "audit-final-initial.py",
+  "reason": [
+    "摘要以traceIdentity命名原trace去file字段，并增加archiveScope/sourceResultSha256元数据；原始运行结果未改变。",
+    "浏览器checks含15个status=PASS检查和2个screenshot对象，不能把checks总长17误当15。"
+  ],
+  "requiredFinalCheck": [
+    "逐值匹配全部原结果字段、traceIdentity和原结果摘要；仅允许两项说明元数据。",
+    "分别验证15个PASS和2张截图哈希。"
+  ],
+  "bundleRefresh": {
+    "observedAt": "2026-11-11T13:33:40.914621+00:00",
+    "kind": "concurrent_prepublication_update",
+    "productChanged": false,
+    "originalIndexEntries": 95,
+    "changedFile": "archive-plan.json",
+    "observedSha256": "cb290b2162f80b2e7b9e20dd20d39aa633fe110c3d82630bec910e8929ea5ce5",
+    "observedBytes": 28818,
+    "resolution": "总控完成新增最终需求轴11附件及索引后冻结：106文件、2523933字节；本审查重核21项全部PASS，43份另一轴文件仍未读取。",
+    "localDiagnostic": "archive-audit-wip-index.json",
+    "localDiagnosticSha256": "b22fafafbbc570d10249f0dbc86d381330dbacdac6e634d95b21a1562802007c",
+    "frozenIndexSha256": "857b1def21d5f1c437a468df77a42007bb3f7090b44daba8ba98e3ac8ec1733a"
+  }
+}

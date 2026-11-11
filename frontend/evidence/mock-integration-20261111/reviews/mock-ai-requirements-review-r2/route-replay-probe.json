@@ -1,0 +1,1530 @@
+{
+  "candidate": "71aad48878c532521919c72511c023285785d7e7",
+  "scope": "真实PG、原始Gateway上下文和未修改provider；两次合法路线输入后，检查旧请求是否复活并产生反复移动。逐次驱动真实Decision/预留/提交，未启用自动调度，不计为60秒观察。",
+  "actions": [
+    {
+      "action": {
+        "kind": "move",
+        "regionId": "side_path"
+      },
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "18",
+          "last": "18"
+        }
+      }
+    },
+    {
+      "action": {
+        "kind": "speak",
+        "text": "出口 store",
+        "channel": "public",
+        "recipientIds": []
+      },
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "19",
+          "last": "21"
+        }
+      }
+    },
+    {
+      "action": {
+        "kind": "move",
+        "regionId": "store"
+      },
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "28",
+          "last": "28"
+        }
+      }
+    },
+    {
+      "action": {
+        "kind": "speak",
+        "text": "出口 side_path",
+        "channel": "public",
+        "recipientIds": []
+      },
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "29",
+          "last": "32"
+        }
+      }
+    }
+  ],
+  "decisions": [
+    {
+      "decisionId": "D-3b18ef09-40bd-4ace-a884-79c9933020ef",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我按当前可见的出口 store 前往核验或通行，实际效果仍由通路规则决定。"
+        },
+        {
+          "kind": "move",
+          "regionId": "store"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "24",
+          "last": "27"
+        }
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-7b3384a9-1854-4685-b733-fb15e13c34fe",
+      "region": "store",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我按当前可见的出口 side_path 前往核验或通行，实际效果仍由通路规则决定。"
+        },
+        {
+          "kind": "move",
+          "regionId": "side_path"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "34",
+          "last": "38"
+        }
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-d5cf9da0-8682-4063-866c-feec7ad3c962",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我先亲自检查原材料，查找材料和现场来源；仅凭口头说法不能定责。我不会替玩家最终修复。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "original_material"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "39",
+          "last": "41"
+        }
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-933fe06e-5aff-4065-a5e6-48620422b134",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "我先亲自检查临时存放处，查找材料和现场来源；仅凭口头说法不能定责。我不会替玩家最终修复。"
+        },
+        {
+          "kind": "inspect",
+          "targetId": "material_cache"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "42",
+          "last": "45"
+        }
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-b1bbc16e-1094-41fd-b986-e74b64a68dd1",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "make_claim",
+          "channel": "public",
+          "recipientIds": [],
+          "text": "此处可见现场已检查。请把登记、痕迹等原来源分享过来，或明确一个当前可见出口，我再前往核验；不凭转述定责。"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": {
+          "first": "47",
+          "last": "48"
+        }
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-e788685f-bc9c-4b5d-9d11-7d98938d1732",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-4c5afbee-cf8c-4a69-b778-9bee08b1e937",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-13ba820c-517c-49ee-9532-41186916c16b",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-71f76362-009a-4646-87e3-b7cb05bc0f8d",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-79874cdd-c734-4344-bb64-27c8737be084",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-9c18979f-b4cd-4c32-8fa5-e723d6edba45",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-228ff437-5d14-44e0-b2f0-04da4282b608",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-dfe59bde-e7aa-40bf-a868-178eb877c907",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-b0d36daf-a53d-4e37-8229-154a83363bb9",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-2ace7255-2d83-4dd1-bf33-7e2779381648",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-63c81a10-57a3-4829-8dd1-751b43a8eed6",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-1a6174c9-8800-4756-a5db-7c4022117314",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-45185bb6-a974-463d-aae1-64005440bbe7",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-d3da53e9-90ce-414f-9c78-816fb43e3b70",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-493fe707-60dc-4203-82c3-df9bcd06e296",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-d5d5de4b-43cd-4a98-8bc8-6d6f385ee29b",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-6a2e3e0d-02c8-4f83-9be6-c26aca8f1491",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-3e794e92-23f6-488f-b36a-f181615dfbc9",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-d07494ca-7212-4cc7-a68d-154beec98310",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-946f6abf-4522-45d8-b215-fe921cf8de8a",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-0f519b58-c868-4fcb-9c15-ba73e16f7322",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-5d5bfb5f-f5cf-43d6-8963-d7aa6d32e2dd",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-5c817f85-9dd3-4c84-9258-b9d0d7256aa0",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-0d3354dc-382d-45ec-a1a1-a6163922f985",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-4c2425ba-a2f3-4d67-bfbc-6ca2b900ee83",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-99498c48-3547-4bd9-b013-34767f2e2e63",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-a348c5c2-dde5-4acb-beea-7d77dfe8a996",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-3813207f-a4ad-481a-8ba9-8cb53ae208ae",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-7891958d-183a-4078-a73e-3c1cdbbe85c1",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-64bdc429-ed0a-4eac-820d-89f054727669",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-9dcde23c-b45d-4a4d-ac28-efee78dc7afd",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-c466a0e0-f679-45c5-84a8-badf91230955",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-b752b756-0d6a-48c3-8e72-4b73099ebed1",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-7641d79b-5501-4607-a7b5-6ebbab0dbe76",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-c84dac49-2e50-4777-b2da-8b277e8eb90c",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-93e3be8e-5d0f-4708-85f7-067fa19f204f",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-87b499a4-fbe0-4f2e-b64c-2603788da82f",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-c43a299f-2cd6-42e8-bf79-b91ece85feba",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-e39a4e41-bd58-42da-a5a0-c5aed64ee79d",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-f406c68c-57ec-4112-b6d7-ca9d96ce6af5",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-3c71373c-88e7-4ed4-b446-04412636ae3f",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-5a13f52f-10fc-425d-9ec0-d33485b95c2b",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-e7afe5ae-6990-47e2-9fc1-6269d9369255",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-acaf5bfd-2292-4dac-bf97-5e204b605d6a",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-97c9ad8e-3129-445a-b9bf-1aee944fb8f6",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-15cbc3ff-da00-4bee-9341-957c5cf1da12",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-bf7c9c36-3e38-4ad1-bd9f-5cadbddfda60",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-f86cc5df-8fea-428d-8c8f-c4cc6db6d47d",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-81487b09-4f34-43a0-9c9a-a04f5766ec52",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-fb4547d9-f7b8-4027-b90a-dc7ee381f326",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-2bd052fb-d283-4251-9753-bc48259b713e",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-0e39ac4e-7857-4840-a9d4-78a5118b903a",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-c6c0db5f-566d-46c5-92d7-7e27821c6857",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-71795e95-74c0-4c84-95a2-e6aa4635a3f6",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-1b5d7887-7f8b-4c20-a62f-8591519136f3",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    },
+    {
+      "decisionId": "D-061668fb-3847-46db-9aea-1c18c3798e69",
+      "region": "side_path",
+      "tools": [
+        {
+          "kind": "wait"
+        }
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "range": null
+      },
+      "routeClaims": [
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q19",
+          "text": "出口 store"
+        },
+        {
+          "claimId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86:Q29",
+          "text": "出口 side_path"
+        }
+      ]
+    }
+  ],
+  "moves": [
+    {
+      "from": "side_path",
+      "to": "store",
+      "decisionId": "D-3b18ef09-40bd-4ace-a884-79c9933020ef",
+      "humanInputs": 2
+    },
+    {
+      "from": "store",
+      "to": "side_path",
+      "decisionId": "D-7b3384a9-1854-4685-b733-fb15e13c34fe",
+      "humanInputs": 4
+    }
+  ],
+  "sessionId": "S-0d4a2070-4db3-4b0e-947b-0735cff70c86",
+  "final": {
+    "phase": "Running",
+    "region": "side_path"
+  },
+  "replayedWithoutNewInput": false,
+  "status": "OBSERVED"
+}
