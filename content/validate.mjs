@@ -1,4 +1,5 @@
 import { canonicalize, parseStrictJSON } from '../protocol/index.mjs';
+import { contractSchema } from '../protocol/schema.mjs';
 import { contentSchema } from './schema.mjs';
 
 export class ContentError extends Error {
@@ -95,6 +96,12 @@ export function validateContent(input) {
   for (const group of Object.values(content.partyRoles)) {
     const assigned = group.flat();
     requireCondition(assigned.length === roles.size && new Set(assigned).size === roles.size && assigned.every(id => roles.has(id)), '开局职责必须完整且不重复');
+    for (const roleIds of group) {
+      const selected = roleIds.map(id => roles.get(id));
+      // 直接消费共享投影字段的约束；不能让各职责单独合法却在合并后产生不可传输的角色。
+      check(contractSchema.$defs.SelfView.properties.name, selected.map(role => role.name).join('兼'), '$.partyRoles.<assembledName>');
+      check(contractSchema.$defs.SelfView.properties.capabilities, [...new Set([...content.humanCapabilities, ...selected.flatMap(role => role.capabilities)])], '$.partyRoles.<assembledCapabilities>');
+    }
   }
   for (const role of content.roles) {
     reference(regions, role.initialRegionId);
