@@ -8,6 +8,7 @@ import { authorizedProjection } from '../game/projection.mjs';
 import { applyAction, evaluateEnding, endingFacts, RuleError } from '../game/rules.mjs';
 import { RuntimeError } from './errors.mjs';
 import * as decisions from './decisions.mjs';
+import { ownRecord } from '../game/records.mjs';
 
 const digest = value => createHash('sha256').update(typeof value === 'string' ? value : canonicalize(value)).digest('hex');
 const id = prefix => `${prefix}-${randomUUID()}`;
@@ -43,7 +44,20 @@ export class AuthorityRuntime extends EventEmitter {
     } catch (error) { await client.query('ROLLBACK').catch(() => {}); throw error; }
     finally { client.release(); }
   }
-  async close() { this.#views.clear(); this.#handles.clear(); this.removeAllListeners(); }
+  retireView(view, notify = false) {
+    if (!view) return;
+    const wasActive = view.active;
+    view.active = false;
+    const connectionId = view.handle.connectionId;
+    // 在途任务可持有旧 view，但不能删除或撤销同一连接的新订阅。
+    if (this.#views.get(connectionId) !== view) return;
+    this.#views.delete(connectionId);
+    if (notify && wasActive) this.emit('view-revoked', { connectionId, sessionId: view.sessionId });
+  }
+  async close() {
+    for (const view of this.#views.values()) this.retireView(view);
+    this.#handles.clear(); this.removeAllListeners();
+  }
   async guest({ name }) {
     if (typeof name !== 'string' || !name.trim() || name.length > 120) throw new RuntimeError('INVALID_MESSAGE', '姓名必须为一至一百二十个字符。');
     const token = randomBytes(32).toString('base64url');
@@ -66,12 +80,15 @@ export class AuthorityRuntime extends EventEmitter {
   buildTransaction(client, row, cause) {
     const runtime = this;
     const tx = {
-      client, row, content: row.content_snapshot, state: structuredClone(row.state), events: [], invalidated: new Set(), cause,
+      client, row, content: row.content_snapshot, state: structuredClone(row.state), events: [], invalidated: new Map(), cause,
       time: new Date(Math.max(runtime.now(), new Date(row.logical_time).getTime())).toISOString(), clockTouched: false,
       emit(kind, payload, audience = everyone(tx.state), eventCause = tx.cause) {
         if (kind === 'control.changed') {
-          const oldConnection = tx.state.characters[payload.actorId]?.activeConnectionId;
-          if (oldConnection && oldConnection !== payload.activeConnectionId) tx.invalidated.add(oldConnection);
+          const oldActor = ownRecord(tx.state.characters, payload.actorId);
+          const oldConnection = oldActor?.activeConnectionId;
+          if (oldConnection && oldConnection !== payload.activeConnectionId) tx.invalidated.set(oldConnection, {
+            actorId: payload.actorId, controlEpoch: oldActor.controlEpoch, viewId: runtime.#views.get(oldConnection)?.viewId,
+          });
         }
         const sessionSeq = increment(tx.state.sessionSeq);
         const event = validateContract('WorldEvent', { schemaVersion: 1, sessionId: row.session_id, sessionSeq, eventId: `${row.session_id}:E${sessionSeq}`, causedBy: eventCause, serverTime: tx.time, audience, kind, payload });
@@ -106,20 +123,7 @@ export class AuthorityRuntime extends EventEmitter {
       await this.hooks.beforeCommit?.({ command: command.kind, sessionId, events: tx.events });
       committing = true; await client.query('COMMIT'); committed = true;
       await this.hooks.afterCommit?.({ command: command.kind, sessionId, events: tx.events });
-      for (const event of tx.events) if (event.kind === 'control.changed' && event.payload.mode === 'HumanControlled') {
-        const { activeConnectionId, controlEpoch } = event.payload;
-        const handle = this.#handles.get(activeConnectionId);
-        if (handle) {
-          const grants = this.connection(handle).grants;
-          if (!grants.has(sessionId) || BigInt(grants.get(sessionId)) < BigInt(controlEpoch)) grants.set(sessionId, controlEpoch);
-        }
-        const view = this.#views.get(activeConnectionId);
-        if (view?.sessionId === sessionId) view.ownedEpoch = controlEpoch;
-      }
-      for (const connectionId of tx.invalidated) {
-        const view = this.#views.get(connectionId);
-        if (view?.sessionId === sessionId) { view.active = false; this.emit('view-revoked', { connectionId, sessionId }); }
-      }
+      await this.applyControlEffects(tx);
       if (tx.events.length) this.emit('commit', { sessionId, events: tx.events });
     } catch (error) {
       if (!committed) await client.query('ROLLBACK').catch(() => {});
@@ -128,6 +132,37 @@ export class AuthorityRuntime extends EventEmitter {
     } finally { client.release(); }
     if (deferredError) throw deferredError;
     return result;
+  }
+  async applyControlEffects(tx) {
+    const actorIds = new Set(tx.events.filter(event => event.kind === 'control.changed').map(event => event.payload.actorId));
+    if (!actorIds.size) return;
+    const sessionId = tx.row.session_id;
+    // 钩子期间不持锁；只在副作用执行时短暂重读当前绑定，避免检查与撤销之间再发生接管。
+    await tx.client.query('BEGIN');
+    try {
+      const row = (await tx.client.query('SELECT state FROM sessions WHERE session_id=$1 FOR UPDATE', [sessionId])).rows[0];
+      if (row) {
+        for (const actorId of actorIds) {
+          const actor = ownRecord(row.state.characters, actorId);
+          if (terminal(row.state) || actor?.mode !== 'HumanControlled') continue;
+          const handle = this.#handles.get(actor.activeConnectionId);
+          if (handle) this.connection(handle).grants.set(sessionId, actor.controlEpoch);
+          const view = this.#views.get(actor.activeConnectionId);
+          if (view?.active && view.sessionId === sessionId && view.actorId === actorId) view.ownedEpoch = actor.controlEpoch;
+        }
+      }
+      for (const [connectionId, previous] of tx.invalidated) {
+        const current = ownRecord(row?.state.characters, previous.actorId);
+        // 重新获权、终局后的合法读取及新订阅，都不属于旧事务可撤销的绑定。
+        if (row && (terminal(row.state) || current?.activeConnectionId === connectionId)) continue;
+        const view = this.#views.get(connectionId);
+        if (view?.active && view.sessionId === sessionId && view.viewId === previous.viewId
+          && (view.ownedEpoch === null || BigInt(view.ownedEpoch) <= BigInt(previous.controlEpoch))) {
+          this.retireView(view, true);
+        }
+      }
+      await tx.client.query('COMMIT');
+    } catch (error) { await tx.client.query('ROLLBACK').catch(() => {}); throw error; }
   }
   async deadline(tx) {
     tx.clockTouched = true;
@@ -258,7 +293,8 @@ export class AuthorityRuntime extends EventEmitter {
       const user = await this.access(tx.client, tx.row, connection.token);
       if (!await this.liveConnection(tx, handle)) throw new RuntimeError('UNAUTHENTICATED', '当前连接已经失效。');
       const viewId = id('view');
-      const actor = tx.state.characters[user.actorId];
+      const actor = ownRecord(tx.state.characters, user.actorId);
+      this.retireView(this.#views.get(handle.connectionId));
       this.#views.set(handle.connectionId, { active: true, sessionId, actorId: user.actorId, userId: user.userId, viewId, cursor: tx.state.sessionSeq, handle, ownedEpoch: actor.activeConnectionId === handle.connectionId ? actor.controlEpoch : null });
       return validateContract('AuthorizedSnapshot', { schemaVersion: 1, type: 'world.snapshot', sessionId, viewId, snapshotSeq: tx.state.sessionSeq, projection: authorizedProjection(tx.state, tx.content, user.actorId, { connectionId: handle.connectionId }) });
     });
@@ -279,16 +315,16 @@ export class AuthorityRuntime extends EventEmitter {
       const user = await this.access(tx.client, tx.row, connection.token);
       const view = this.#views.get(handle.connectionId);
       if (!view?.active || view.sessionId !== request.sessionId || view.viewId !== request.viewId || view.actorId !== user.actorId || BigInt(request.cursor) > BigInt(tx.state.sessionSeq)) throw new RuntimeError('RESYNC_REQUIRED', '请重新取得当前连接的授权快照。');
-      const current = tx.state.characters[user.actorId];
+      const current = ownRecord(tx.state.characters, user.actorId);
       if (!terminal(tx.state) && view.ownedEpoch !== null && (current.activeConnectionId !== handle.connectionId || current.controlEpoch !== view.ownedEpoch)) {
-        view.active = false; throw new RuntimeError('RESYNC_REQUIRED', '原连接的控制绑定已经失效。');
+        this.retireView(view); throw new RuntimeError('RESYNC_REQUIRED', '原连接的控制绑定已经失效。');
       }
       const throughSeq = String(BigInt(request.cursor) + 256n < BigInt(tx.state.sessionSeq) ? BigInt(request.cursor) + 256n : BigInt(tx.state.sessionSeq));
       const before = await this.stateAt(tx, request.cursor);
       const after = await this.stateAt(tx, throughSeq);
       const options = { connectionId: handle.connectionId };
-      const beforeProjection = before.characters[user.actorId] ? authorizedProjection(before, tx.content, user.actorId, options) : null;
-      const afterProjection = after.characters[user.actorId] ? authorizedProjection(after, tx.content, user.actorId, options) : null;
+      const beforeProjection = ownRecord(before.characters, user.actorId) ? authorizedProjection(before, tx.content, user.actorId, options) : null;
+      const afterProjection = ownRecord(after.characters, user.actorId) ? authorizedProjection(after, tx.content, user.actorId, options) : null;
       const events = afterProjection && canonicalize(beforeProjection) !== canonicalize(afterProjection)
         ? [{ sessionSeq: throughSeq, eventId: `${request.sessionId}:E${throughSeq}`, kind: 'projection.replace', payload: { projection: afterProjection } }] : [];
       return validateContract('WorldBatch', { schemaVersion: 1, type: 'world.batch', sessionId: request.sessionId, viewId: view.viewId, fromExclusive: request.cursor, throughSeq, events });
@@ -305,6 +341,7 @@ export class AuthorityRuntime extends EventEmitter {
           if (!view.active || view.sessionId !== record.session_id) continue;
           try {
             for (;;) {
+              if (!view.active) break;
               const batch = await this.sync(view.handle, JSON.stringify({ schemaVersion: 1, type: 'sync.request', sessionId: view.sessionId, viewId: view.viewId, cursor: view.cursor }));
               if (batch.throughSeq === view.cursor) break;
               if (!view.active) break;
@@ -313,7 +350,7 @@ export class AuthorityRuntime extends EventEmitter {
               if (BigInt(batch.throughSeq) >= BigInt(record.through_seq)) break;
             }
           } catch (error) {
-            if (['FORBIDDEN', 'UNAUTHENTICATED', 'RESYNC_REQUIRED', 'SESSION_GONE'].includes(error.code)) { view.active = false; this.emit('view-revoked', { connectionId: view.handle.connectionId, sessionId: view.sessionId }); }
+            if (['FORBIDDEN', 'UNAUTHENTICATED', 'RESYNC_REQUIRED', 'SESSION_GONE'].includes(error.code)) this.retireView(view, true);
             else throw error;
           }
         }
@@ -354,7 +391,7 @@ export class AuthorityRuntime extends EventEmitter {
       const prior = await this.knownNonce(tx, user.principalId, request.nonce, semantic); if (prior) return prior;
       await this.deadline(tx);
       tx.cause = { principalId: user.principalId, actionId: request.nonce, actorId: user.actorId };
-      let actor = tx.state.characters[user.actorId];
+      let actor = ownRecord(tx.state.characters, user.actorId);
       let response;
       if (terminal(tx.state)) response = { schemaVersion: 1, code: 'FORBIDDEN', message: '本局已经结束，当前连接仅可读取。' };
       else if (!await this.liveConnection(tx, handle)) response = { schemaVersion: 1, code: 'UNAUTHENTICATED', message: '当前连接已经失效。' };
@@ -364,7 +401,7 @@ export class AuthorityRuntime extends EventEmitter {
           tx.emit('control.changed', { actorId: user.actorId, mode: 'HumanControlled', controlEpoch: increment(actor.controlEpoch), activeConnectionId: handle.connectionId, graceDeadlineAt: null });
           await tx.client.query("UPDATE decisions SET record=jsonb_set(record,'{status}','\"Cancelled\"') WHERE session_id=$1 AND actor_id=$2 AND record->>'status'='Pending'", [request.sessionId, user.actorId]);
         }
-        actor = tx.state.characters[user.actorId];
+        actor = ownRecord(tx.state.characters, user.actorId);
         response = validateContract('ControlResponse', { schemaVersion: 1, sessionId: request.sessionId, actorId: user.actorId, nonce: request.nonce, controlEpoch: actor.controlEpoch, mode: actor.mode, observedSeq: tx.state.sessionSeq });
       }
       return this.saveNonce(tx, user.principalId, request.nonce, semantic, response);
@@ -379,7 +416,7 @@ export class AuthorityRuntime extends EventEmitter {
         await this.deadline(tx);
         await tx.client.query('UPDATE connections SET active=false WHERE connection_id=$1', [handle.connectionId]);
         const member = tx.state.members.find(m => m.userId === connection.userId);
-        const actor = member && tx.state.characters[member.characterId];
+        const actor = member && ownRecord(tx.state.characters, member.characterId);
         if (!terminal(tx.state) && actor?.mode === 'HumanControlled' && actor.activeConnectionId === handle.connectionId && actor.controlEpoch === epoch) {
           tx.emit('control.changed', { actorId: actor.characterId, mode: 'GracePeriod', controlEpoch: increment(actor.controlEpoch), activeConnectionId: null, graceDeadlineAt: new Date(Date.parse(tx.time) + tx.content.timing.gracePeriodSeconds * 1000).toISOString() });
         }
@@ -387,7 +424,7 @@ export class AuthorityRuntime extends EventEmitter {
     }
     if (!grants.length) await this.pool.query('UPDATE connections SET active=false WHERE connection_id=$1', [handle.connectionId]);
     this.#handles.delete(handle.connectionId);
-    const view = this.#views.get(handle.connectionId); if (view) view.active = false;
+    this.retireView(this.#views.get(handle.connectionId));
   }
   async heartbeat(handle) {
     const connection = this.connection(handle);
@@ -433,13 +470,21 @@ export class AuthorityRuntime extends EventEmitter {
       const user = await this.access(tx.client, tx.row, connection.token);
       if (request.actorId !== user.actorId) throw new RuntimeError('FORBIDDEN', '当前账号没有该角色的结果读取权限。');
       return this.executeAction(tx, request, semanticDigest, { ...user, principalKind: 'human' }, async actor => actor.mode === 'HumanControlled' && actor.activeConnectionId === handle.connectionId && await this.liveConnection(tx, handle));
-    }), () => this.receipt(connection.token, request.sessionId, request.clientActionId));
+    }), () => this.receipt(connection.token, request.sessionId, request.clientActionId), () => semanticDigest);
   }
-  async confirmOutcome(operation, lookup) {
+  async confirmOutcome(operation, lookup, expectedDigest) {
     try { return await operation(); }
     catch (error) {
       if (error.code === 'OUTCOME_UNKNOWN') {
-        try { const found = await lookup(); if (found) return found; }
+        try {
+          // lookup 先重新验证当前读权；同键结果还必须对应本次原始语义载荷。
+          const found = await lookup();
+          const semanticDigest = expectedDigest();
+          if (found && semanticDigest) {
+            if (found.semanticDigest !== semanticDigest) return { schemaVersion: 1, code: 'ACTION_ID_REUSE', message: '该动作身份已经用于其他内容。' };
+            return found;
+          }
+        }
         catch (lookupError) { if (['FORBIDDEN', 'UNAUTHENTICATED', 'SESSION_GONE'].includes(lookupError.code)) throw lookupError; }
       }
       throw error;
@@ -468,7 +513,7 @@ export class AuthorityRuntime extends EventEmitter {
     const principal = this.internal(handle);
     return this.locked(principal.sessionId, { kind: 'internal-observation' }, async tx => {
       await this.authorizeInternal(tx, principal);
-      const actor = tx.state.characters[principal.actorId];
+      const actor = ownRecord(tx.state.characters, principal.actorId);
       if (!actor || actor.mode !== (principal.principalKind === 'core_npc' ? 'CoreNPCControlled' : 'AIProxyControlled')) throw new RuntimeError('FORBIDDEN', '该角色当前没有内部控制授权。');
       return {
         sessionId: principal.sessionId, snapshotSeq: tx.state.sessionSeq,
@@ -484,7 +529,7 @@ export class AuthorityRuntime extends EventEmitter {
     return principal;
   }
   async authorizeInternal(tx, principal) {
-    const actor = tx.state.characters[principal.actorId];
+    const actor = ownRecord(tx.state.characters, principal.actorId);
     if (principal.sessionId !== tx.row.session_id || !actor || (principal.principalKind === 'core_npc' ? actor.kind !== 'core_npc' : actor.kind !== 'human')) throw new RuntimeError('FORBIDDEN', '内部主体绑定失效。');
     if (principal.principalKind === 'proxy') {
       const access = await tx.client.query('SELECT 1 FROM session_access a JOIN runtime_users u ON u.user_id=a.user_id WHERE a.session_id=$1 AND a.actor_id=$2 AND a.active AND u.active', [principal.sessionId, principal.actorId]);
@@ -505,7 +550,7 @@ export class AuthorityRuntime extends EventEmitter {
     let code = 'OK'; let status = 'Accepted';
     try {
       if (tx.state.phase !== 'Running') throw new RuleError('SESSION_NOT_RUNNING');
-      const actor = tx.state.characters[principal.actorId];
+      const actor = ownRecord(tx.state.characters, principal.actorId);
       if (actor.controlEpoch !== request.controlEpoch || !await authorized(actor)) throw new RuleError(options.authorizationCode ?? 'STALE_CONTROL');
       if (BigInt(request.baseSeq) > BigInt(tx.state.sessionSeq)) throw new RuleError('FUTURE_BASE_SEQ');
       await options.validate?.();
@@ -539,12 +584,12 @@ export class AuthorityRuntime extends EventEmitter {
       if (!member) return;
       await tx.client.query('UPDATE session_access SET active=false WHERE session_id=$1 AND user_id=$2', [sessionId, userId]);
       if (!terminal(tx.state)) {
-        const actor = tx.state.characters[member.characterId];
+        const actor = ownRecord(tx.state.characters, member.characterId);
         tx.emit('control.changed', { actorId: actor.characterId, mode: 'Revoked', controlEpoch: increment(actor.controlEpoch), activeConnectionId: null, graceDeadlineAt: null });
       }
       await tx.client.query("UPDATE decisions SET record=jsonb_set(record,'{status}','\"Cancelled\"') WHERE session_id=$1 AND actor_id=$2 AND record->>'status'='Pending'", [sessionId, member.characterId]);
     });
-    for (const view of this.#views.values()) if (view.sessionId === sessionId && view.userId === userId) { view.active = false; this.emit('view-revoked', { connectionId: view.handle.connectionId, sessionId }); }
+    for (const view of this.#views.values()) if (view.sessionId === sessionId && view.userId === userId) this.retireView(view, true);
     this.emit('authorization', { sessionId, userId });
   }
   async abortSession(sessionId, reason) {
@@ -564,11 +609,13 @@ export class AuthorityRuntime extends EventEmitter {
     });
   }
   async deleteSession(sessionId) {
-    return this.locked(sessionId, { kind: 'delete' }, async tx => {
+    const result = await this.locked(sessionId, { kind: 'delete' }, async tx => {
       await this.deadline(tx);
       if (!terminal(tx.row.state)) return new RuntimeError('FORBIDDEN', '只有已经结束的 Session 可以删除。');
       await tx.client.query('DELETE FROM sessions WHERE session_id=$1', [sessionId]);
     });
+    for (const view of this.#views.values()) if (view.sessionId === sessionId) this.retireView(view, true);
+    return result;
   }
   async replay(sessionId, throughSeq) {
     const client = await this.pool.connect();

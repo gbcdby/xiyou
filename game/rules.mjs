@@ -1,11 +1,12 @@
 import { increment, audienceFor, registerKnowledge } from './world.mjs';
 import { visibleItem } from './projection.mjs';
+import { ownRecord } from './records.mjs';
 
 export class RuleError extends Error {
   constructor(code, message = '当前条件不允许这项操作。') { super(message); this.code = code; }
 }
 const refuse = code => { throw new RuleError(code); };
-export const nearby = (state, actorId) => Object.values(state.characters).filter(c => c.regionId === state.characters[actorId].regionId).map(c => c.characterId);
+export const nearby = (state, actorId) => Object.values(state.characters).filter(c => c.regionId === ownRecord(state.characters, actorId)?.regionId).map(c => c.characterId);
 
 function observation(tx, actorId, fields, source, options = {}) {
   const record = { observationId: `${tx.state.sessionId}:O${increment(tx.state.sessionSeq)}`, observerId: actorId, category: 'WorldFact', statement: '亲自检查当前可见状态。', source, fields, shareable: true, ...options };
@@ -15,7 +16,8 @@ function observation(tx, actorId, fields, source, options = {}) {
 
 /** 所有规则在持锁后的候选状态上执行；此模块不会直接写数据库或发送消息。 */
 export function applyAction(tx, actorId, principalKind, action) {
-  const actor = tx.state.characters[actorId];
+  const actor = ownRecord(tx.state.characters, actorId);
+  if (!actor) refuse('TARGET_UNAVAILABLE');
   if (!['use_item', 'interact'].includes(action.kind) && !actor.capabilities.includes(action.kind)) refuse('RULE_VIOLATION');
   if (principalKind === 'proxy' && !['move', 'inspect', 'speak', 'wait'].includes(action.kind)) refuse('RULE_VIOLATION');
   if (action.kind === 'wait') return;
@@ -24,7 +26,7 @@ export function applyAction(tx, actorId, principalKind, action) {
     const destination = tx.content.regions.find(r => r.regionId === action.regionId);
     if (!destination || !current.exits.includes(destination.regionId)) refuse('TARGET_UNAVAILABLE');
     if (destination.entryRequirement) {
-      const target = tx.state.targets[destination.entryRequirement.targetId];
+      const target = ownRecord(tx.state.targets, destination.entryRequirement.targetId);
       if (!Object.entries(destination.entryRequirement.fields).every(([key, value]) => target.fields.some(f => f.key === key && f.value === value))) refuse('RULE_VIOLATION');
     }
     if (principalKind === 'proxy' && destination.kind === 'exit') refuse('RULE_VIOLATION');
@@ -33,8 +35,8 @@ export function applyAction(tx, actorId, principalKind, action) {
     return;
   }
   if (action.kind === 'transfer_item') {
-    const item = tx.state.items[action.itemId];
-    const target = tx.state.characters[action.targetId];
+    const item = ownRecord(tx.state.items, action.itemId);
+    const target = ownRecord(tx.state.characters, action.targetId);
     if (!item || !visibleItem(tx.state, actorId, item) || !target || target.regionId !== actor.regionId) refuse('TARGET_UNAVAILABLE');
     if (item.resourceRevision !== action.expectedItemRevision) refuse('STALE_PRECONDITION');
     if (item.location.kind !== 'character' || item.location.characterId !== actorId || !item.transferable) refuse('RULE_VIOLATION');
@@ -43,7 +45,7 @@ export function applyAction(tx, actorId, principalKind, action) {
     return;
   }
   if (action.kind === 'take_item') {
-    const item = tx.state.items[action.itemId];
+    const item = ownRecord(tx.state.items, action.itemId);
     if (!item || !visibleItem(tx.state, actorId, item)) refuse('TARGET_UNAVAILABLE');
     if (item.resourceRevision !== action.expectedItemRevision) refuse('STALE_PRECONDITION');
     const definition = tx.content.items.find(i => i.itemId === item.itemId);
@@ -52,8 +54,8 @@ export function applyAction(tx, actorId, principalKind, action) {
     return;
   }
   if (action.kind === 'inspect') {
-    const target = tx.state.targets[action.targetId];
-    const item = tx.state.items[action.targetId];
+    const target = ownRecord(tx.state.targets, action.targetId);
+    const item = ownRecord(tx.state.items, action.targetId);
     const entity = target?.regionId === actor.regionId ? target : item && visibleItem(tx.state, actorId, item) ? item : null;
     if (!entity) refuse('TARGET_UNAVAILABLE');
     observation(tx, actorId, structuredClone(entity.fields), { kind: 'inspection', sourceIds: [action.targetId], sourceSeq: increment(tx.state.sessionSeq) }, { subjectId: action.targetId });
@@ -68,7 +70,10 @@ export function applyAction(tx, actorId, principalKind, action) {
     if (principalKind !== 'human' && action.channel === 'private') refuse('RULE_VIOLATION');
     if (principalKind === 'proxy' && (action.channel !== 'public' || !/[?？]\s*$/.test(action.text))) refuse('RULE_VIOLATION');
     const recipients = action.channel === 'public' ? nearby(tx.state, actorId) : [...new Set([actorId, ...action.recipientIds])];
-    if (!recipients.every(recipient => tx.state.characters[recipient] && (action.channel === 'private' ? tx.state.characters[recipient].kind === 'human' : tx.state.characters[recipient].regionId === actor.regionId))) refuse('TARGET_UNAVAILABLE');
+    if (!recipients.every(recipient => {
+      const target = ownRecord(tx.state.characters, recipient);
+      return target && (action.channel === 'private' ? target.kind === 'human' : target.regionId === actor.regionId);
+    })) refuse('TARGET_UNAVAILABLE');
     const audience = audienceFor(tx.state, recipients, { privateChannel: action.channel === 'private' });
     const claim = { claimId: `${tx.state.sessionId}:Q${increment(tx.state.sessionSeq)}`, speakerId: actorId, text: action.text, channel: action.channel, recipientIds: action.recipientIds };
     const event = tx.emit('ClaimRecorded', claim, audience);
@@ -79,10 +84,10 @@ export function applyAction(tx, actorId, principalKind, action) {
     return;
   }
   if (action.kind === 'share_evidence') {
-    const source = tx.state.observations[action.evidenceId];
+    const source = ownRecord(tx.state.observations, action.evidenceId);
     const audienceKey = principalKind === 'human' ? 'humanCharacterIds' : principalKind === 'core_npc' ? 'coreNpcCharacterIds' : 'proxyCharacterIds';
-    if (!source || source.observerId !== actorId || !source.shareable || !tx.state.observationAudiences[source.observationId][audienceKey].includes(actorId)) refuse('TARGET_UNAVAILABLE');
-    if (!action.recipientIds.every(recipient => tx.state.characters[recipient]?.regionId === actor.regionId)) refuse('TARGET_UNAVAILABLE');
+    if (!source || source.observerId !== actorId || !source.shareable || !ownRecord(tx.state.observationAudiences, source.observationId)?.[audienceKey].includes(actorId)) refuse('TARGET_UNAVAILABLE');
+    if (!action.recipientIds.every(recipient => ownRecord(tx.state.characters, recipient)?.regionId === actor.regionId)) refuse('TARGET_UNAVAILABLE');
     for (const recipient of action.recipientIds) {
       const record = { ...structuredClone(source), observationId: `${tx.state.sessionId}:O${increment(tx.state.sessionSeq)}`, observerId: recipient, source: { ...source.source, kind: 'evidence_share' } };
       tx.emit('ObservationRecorded', record, audienceFor(tx.state, [recipient]));
@@ -90,14 +95,14 @@ export function applyAction(tx, actorId, principalKind, action) {
     return;
   }
   if (action.kind === 'use_item' || action.kind === 'interact') {
-    const target = tx.state.targets[action.targetId];
+    const target = ownRecord(tx.state.targets, action.targetId);
     if (!target || target.regionId !== actor.regionId) refuse('TARGET_UNAVAILABLE');
     if (target.resourceRevision !== action.expectedTargetRevision) refuse('STALE_PRECONDITION');
     const operation = tx.content.operations.find(op => op.operationId === action.operation && op.targetId === target.targetId);
     if (!operation || !tx.content.targets.find(t => t.targetId === target.targetId).operationIds.includes(operation.operationId)) refuse('RULE_VIOLATION');
     if ((operation.humanOnly && principalKind !== 'human') || !actor.capabilities.includes(operation.requiredCapability)) refuse('RULE_VIOLATION');
     if (!Object.entries(operation.requiredTargetValues).every(([key, value]) => target.fields.some(f => f.key === key && f.value === value))) refuse('RULE_VIOLATION');
-    const items = (action.itemIds ?? []).map(itemId => tx.state.items[itemId]);
+    const items = (action.itemIds ?? []).map(itemId => ownRecord(tx.state.items, itemId));
     if (items.some(item => !item || !visibleItem(tx.state, actorId, item))) refuse('TARGET_UNAVAILABLE');
     if (items.some(item => item.resourceRevision !== action.expectedItemRevisions[item.itemId])) refuse('STALE_PRECONDITION');
     if (items.some(item => item.location.kind !== 'character' || item.location.characterId !== actorId)) refuse('RULE_VIOLATION');
@@ -123,20 +128,20 @@ export function applyAction(tx, actorId, principalKind, action) {
 /** 结局读取实际世界及两位 NPC 的合法来源，不读取对白中的成功宣称。 */
 export function endingFacts(state, content) {
   const policy = content.endingPolicy;
-  const gate = state.targets[policy.gateTargetId];
+  const gate = ownRecord(state.targets, policy.gateTargetId);
   const field = key => gate.fields.find(f => f.key === key)?.value;
   const operation = content.operations.find(op => op.targetId === gate.targetId && op.recordMaterialField);
   const materialId = operation ? field(operation.recordMaterialField) : null;
   const allEvidence = policy.requiredNpcIds.every(actorId => policy.evidenceGroups.every(group => group.knowledgeIds.every(knowledgeId => {
     const knowledge = content.knowledge.find(k => k.knowledgeId === knowledgeId);
-    return Object.values(state.observations).some(o => o.observerId === actorId && o.category === 'Evidence' && knowledge.sourceIds.every(source => o.source.sourceIds.includes(source)) && state.observationAudiences[o.observationId].coreNpcCharacterIds.includes(actorId));
+    return Object.values(state.observations).some(o => o.observerId === actorId && o.category === 'Evidence' && knowledge.sourceIds.every(source => o.source.sourceIds.includes(source)) && ownRecord(state.observationAudiences, o.observationId)?.coreNpcCharacterIds.includes(actorId));
   })));
   return [
       { key: 'safe', label: '通路安全', value: field('safe') === true },
       { key: 'permit', label: '通行许可有效', value: field('permit') === true },
-      { key: 'arrived', label: '师徒实际到达终点', value: policy.requiredNpcIds.every(id => state.characters[id]?.regionId === policy.exitRegionId) },
-      { key: 'spareConsumed', label: '备用材料实际消耗', value: materialId === policy.spareMaterialId && state.items[policy.spareMaterialId]?.location.kind === 'consumed' },
-      { key: 'originalConsumed', label: '原材料实际用于修复', value: materialId === policy.originalMaterialId && state.items[policy.originalMaterialId]?.location.kind === 'consumed' },
+      { key: 'arrived', label: '师徒实际到达终点', value: policy.requiredNpcIds.every(id => ownRecord(state.characters, id)?.regionId === policy.exitRegionId) },
+      { key: 'spareConsumed', label: '备用材料实际消耗', value: materialId === policy.spareMaterialId && ownRecord(state.items, policy.spareMaterialId)?.location.kind === 'consumed' },
+      { key: 'originalConsumed', label: '原材料实际用于修复', value: materialId === policy.originalMaterialId && ownRecord(state.items, policy.originalMaterialId)?.location.kind === 'consumed' },
       { key: 'evidenceComplete', label: '双方已取得完整核验来源', value: allEvidence },
   ];
 }

@@ -2,7 +2,7 @@
 
 本目录实现 [Ticket #6](https://github.com/gbcdby/xiyou/issues/6) 的服务端基础，依据固定 Spec `6c2a0b9f6d137ad5fbd41721659404333ad8e16d` 的 [M0 协议](../docs/specs/m0-protocol.md)、[玩法契约](../docs/specs/vertical-slice-gameplay.md)和[验证计划](../docs/specs/vertical-slice-verification.md)。
 
-这是作者实现与自查候选，独立需求／标准审查由总控另行执行。真实 AI、前端联合验收、五客户端 900 秒、两人／五人真人试玩和生产部署没有由本目录宣称完成。当前完整检查、源码摘要和历史红绿输出见 [实现结果](evidence/implementation-result.md)及[自查清单](evidence/self-check.json)。
+这是作者实现与自查候选，独立需求／标准审查由总控另行执行。真实 AI、前端联合验收、五客户端 900 秒、两人／五人真人试玩和生产部署没有由本目录宣称完成。本轮五项独立审查修正见 [修正结果](evidence/review-fix-r1/implementation-result.md)及[修正自查清单](evidence/review-fix-r1/self-check.json)，作者状态均为 `FIX_REPORTED`。初始候选 `e32c579` 的 [实现结果](evidence/implementation-result.md)及[自查清单](evidence/self-check.json)保留为历史证据。
 
 ## 技术选择与启动
 
@@ -27,7 +27,7 @@ python3 protocol/scripts/check-schema.py
 python3 content/scripts/check-schema.py
 ```
 
-后端检查使用 [真实 PostgreSQL 辅助环境](test-support/README.md)，每次新建独立集群，由检查进程在结束时关闭。测试中的可控时钟和故障回调仅通过可信构造参数注入，没有 HTTP、Socket.IO 或模型工具后门。
+后端检查使用 [真实 PostgreSQL 辅助环境](test-support/README.md)，每次新建独立集群，由检查进程在结束时关闭。测试脚本的 `--expose-gc` 只用于四个断线句柄的生命周期回归，生产启动不启用该标志。测试中的可控时钟和故障回调仅通过可信构造参数注入，没有 HTTP、Socket.IO 或模型工具后门。
 
 ## 模块与持久边界
 
@@ -40,6 +40,7 @@ python3 content/scripts/check-schema.py
 | [world.mjs](../game/world.mjs) | 固定 `world-v1` 的纯事件 reducer、开局装配和观察登记 |
 | [rules.mjs](../game/rules.mjs) | 当前对象／版本校验、内容操作、陈述与证据、结局事实 |
 | [projection.mjs](../game/projection.mjs) | 当前可见状态、合法历史知识和不同主体的过滤视图 |
+| [records.mjs](../game/records.mjs) | 只读取自有领域记录，保留合法同名 ID，排除对象原型属性 |
 
 `sessions` 保存当前世界、初始状态、连续事务计数、完整内容快照、内容摘要和 reducer 版本。`world_events` 保存不可变事件；`action_receipts` 以 `(session_id, principal_id, client_action_id)` 唯一去重；`outbox` 只引用已提交区间。`decisions`、控制 nonce、成员访问权限和连接租约分别保存运行记录。
 
@@ -47,7 +48,7 @@ python3 content/scripts/check-schema.py
 
 事务顺序为：当前读取权限 → 已知 Receipt → 截止时间 → 当前控制／领域条件 → 候选事件与 reducer → 状态、事件、Receipt、outbox → COMMIT。序号由行内计数在事务中分配，不使用 `serial` 或 PostgreSQL sequence。失败的工具包丢弃全部候选事件，拒绝只保存 Receipt；截止系统事件是允许推进 observedSeq 的例外，拒绝动作范围仍为空。
 
-COMMIT、ACK 和发布是独立阶段。提交阶段结果未知时保留原动作身份，并查询原键；查询仍未知则返回 `OUTCOME_UNKNOWN`，不伪造拒绝，也不自动生成新 ID。outbox 发布失败保持可恢复；发送完成标记不能代替客户端游标。该服务不承诺网络恰好一次送达。
+COMMIT、ACK 和发布是独立阶段。提交阶段结果未知时保留原动作身份，并在当前读权复核后查询原键、比较本次原始语义摘要；异载荷仍返回 `ACTION_ID_REUSE`，不覆盖旧 Receipt。查询仍未知则返回 `OUTCOME_UNKNOWN`，不伪造拒绝，也不自动生成新 ID。真人、内部意图和 fallback 共用这个恢复边界。outbox 发布失败保持可恢复；发送完成标记不能代替客户端游标。该服务不承诺网络恰好一次送达。
 
 本局逻辑时间保存在 `sessions.logical_time`，取服务端时钟与已记录时间的最大值。只读快照和已知收据不触发截止；所有新的 Session 命令、控制、调度及收束操作先处理已到期终局。世界事件携带已决定的 UTC 时间，回放不会重新读取时钟。正常终局在原动作事务内追加最后一条 `session.finished`，其因果和 Receipt 区间涵盖最后事件；终局撤销全部控制、取消其余 Pending，之后只能读取旧世界与维护运行记录。
 
@@ -68,6 +69,8 @@ COMMIT、ACK 和发布是独立阶段。提交阶段结果未知时保留原动�
 
 错误正文统一是协议 `ErrorResponse`。非法输入为 400，认证失败为 401，当前无权为 403，冲突／重同步为 409，未知事务结果为 503。不存在或已删除的 Session 统一为 **410／`SESSION_GONE`**，与“当前尚无 Receipt”的 404 区分。领域动作的确定拒绝使用持久 `ClientReceipt`，不会把其结果码塞进不兼容的 `ErrorResponse`。
 
+公开错误消息修复不完整 Unicode 代理对，并按码点限制在 500 字以内；转换后的 DTO 再经共享 Schema 校验。长未知字段名仍是确定的 `INVALID_MESSAGE`，不会因为错误正文超长再次破坏响应。
+
 `revokeAccess`、`abortSession`、`archiveSession`、`deleteSession` 是可信运维模块入口，没有暴露为玩家或模型接口。归档保留事件和收据；删除后的原 ID 请求返回 `SESSION_GONE`。
 
 ## Socket.IO、控制与同步
@@ -84,9 +87,13 @@ COMMIT、ACK 和发布是独立阶段。提交阶段结果未知时保留原动�
 
 服务端在真实连接建立时创建不可伪造的本地句柄。新连接只读；resume 遇另一活动控制连接返回 `CONTROL_HELD`，显式 take 才替换。控制 nonce 持久保存且不把 connectionId 纳入重新授权键；重复 nonce 只返回旧响应。服务端断开代次取自已提交控制事件，不能被旧 nonce 响应回退。旧连接的迟到断开不能撤销新绑定。
 
+控制事务 COMMIT 后的副作用还要短暂重取 Session 行锁，按当前数据库中的角色、连接和 epoch 更新本地绑定，撤销时同时限定原 viewId。该复核在 `afterCommit` 故障／暂停钩子返回后执行，钩子期间不持有 Session 锁；后续接管可以正常完成，旧回调不能断开再次获权的连接或回退当前视图代次。
+
 离线检测后进入固定内容中的 30 秒 Grace，再进入受限 proxy；重连交还推进 epoch 并取消旧决策。真实断开立即处理；进程异常消失时由 60 秒连接租约检测，维护器每秒检查。租约是传输存活信息，不能单独授予角色写权。数据库中的 mode、epoch、活动连接和当前访问权须同时匹配。
 
 视图绑定只由服务端创建。控制成功保留当前连接已有 view，使前端可直接 sync；被替换连接的旧订阅停止。身份撤销同样停止旧订阅。每批覆盖至多 256 个**全局**序号，返回的 `projection.replace` 对应那个确切前缀；全隐藏区间允许 `events: []` 并推进 throughSeq。未来游标、错误 view 或旧绑定要求重新同步。
+
+断线、撤权、订阅替换和 Session 删除会从活动 Map 中删除相应视图；旧在途任务只持有已停用的对象，不能删除或撤销同连接的新订阅。终局仍保留当前合法只读订阅，直到该订阅自身结束，以便读取结果和历史。
 
 快照与批次不携带内部受众、UserId、凭据、他人信念或完整内容。历史 Observation／Claim 使用发生时保存的受众，离开区域保留合法知识，后来进入区域不会补发旧私聊。当前可见物品随区域变化增删。jsonb 会重排对象键，投影数组使用稳定顺序，避免重放前缀与当前行产生伪差异。
 
