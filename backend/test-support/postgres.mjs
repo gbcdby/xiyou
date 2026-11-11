@@ -47,17 +47,25 @@ export async function startTestPostgres(label = 'runtime') {
   await server.start();
   const connection = { host: '127.0.0.1', port, user: 'xiyou_test', password, database: 'postgres' };
   const pool = new pg.Pool({ ...connection, max: 12 });
-  let stopped = false;
+  const connectionEnds = new Set();
+  pool.on('connect', client => {
+    const ended = new Promise(resolve => client.once('end', resolve));
+    connectionEnds.add(ended);
+    ended.then(() => connectionEnds.delete(ended));
+  });
+  let stopping;
   return {
     pool,
     connection,
     output,
-    async stop() {
-      if (stopped) return;
-      stopped = true;
-      await pool.end();
-      await server.stop();
-      await pendingLogs;
+    stop() {
+      return stopping ??= (async () => {
+        await pool.end();
+        // pg-pool 先移出 client 再等待底层关闭；Pool 兑现不能替代真实连接结束。
+        await Promise.all([...connectionEnds]);
+        await server.stop();
+        await pendingLogs;
+      })();
     },
   };
 }
