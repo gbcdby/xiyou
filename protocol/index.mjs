@@ -133,8 +133,14 @@ export function canonicalize(value) {
     seen.add(item);
     let result;
     if (Array.isArray(item)) {
-      if (Object.keys(item).length !== item.length) fail('数组不能含稀疏项或额外属性', path);
-      result = '[' + item.map((child, i) => encode(child, `${path}[${i}]`, depth + 1)).join(',') + ']';
+      if (Reflect.ownKeys(item).length !== item.length + 1) fail('数组不能含稀疏项或额外属性', path);
+      const values = [];
+      for (let i = 0; i < item.length; i++) {
+        const descriptor = Object.getOwnPropertyDescriptor(item, String(i));
+        if (!descriptor || !descriptor.enumerable || !('value' in descriptor)) fail('数组必须只包含连续的自有数据项', path + '[' + i + ']');
+        values.push(encode(descriptor.value, path + '[' + i + ']', depth + 1));
+      }
+      result = '[' + values.join(',') + ']';
     } else {
       if (Object.getOwnPropertySymbols(item).length) fail('JSON 对象不能含 Symbol 键', path);
       result = '{' + Object.keys(item).sort().map(key => {
@@ -241,6 +247,15 @@ function checkEventIdentity(event, sessionId, path) {
   if (event.eventId !== sessionId + ':E' + event.sessionSeq) fail('事件标识与 Session/序号不一致', path + '.eventId');
 }
 
+function checkObservationSource(observation, throughSeq, path) {
+  if (compareDecimal(observation.source.sourceSeq, throughSeq) > 0) fail('观察不能携带未来来源', path + '.source.sourceSeq');
+}
+
+function checkEventPayload(event, path) {
+  if (event.kind === 'ClaimRecorded') checkDialogue(event.payload, path + '.payload');
+  if (event.kind === 'ObservationRecorded') checkObservationSource(event.payload, event.sessionSeq, path + '.payload');
+}
+
 function checkReceipt(value) {
   const range = value.actionEventRange;
   if (range && (compareDecimal(range.first, range.last) > 0 || compareDecimal(range.last, value.observedSeq) > 0)) fail('动作事件区间超出收据观察游标', '$.actionEventRange');
@@ -265,7 +280,7 @@ function checkRelations(name, value) {
   if (name === 'WorldEvent') {
     checkEventIdentity(value, value.sessionId, '$');
     if (value.causedBy.toolCallIndex !== undefined && !value.causedBy.decisionId) fail('工具下标必须关联决策', '$.causedBy');
-    if (value.kind === 'ClaimRecorded') checkDialogue(value.payload, '$.payload');
+    checkEventPayload(value, '$');
     if (value.kind === 'control.changed') {
       const p = value.payload;
       if ((p.mode === 'HumanControlled') !== (p.activeConnectionId !== null)) fail('真人控制模式与当前连接不匹配', '$.payload');
@@ -275,7 +290,7 @@ function checkRelations(name, value) {
   if (name === 'AuthorizedProjection') checkProjection(value, '$');
   if (name === 'AuthorizedSnapshot') {
     checkProjection(value.projection, '$.projection');
-    if (value.projection.observations.some(item => compareDecimal(item.source.sourceSeq, value.snapshotSeq) > 0)) fail('快照携带未来来源', '$.projection.observations');
+    value.projection.observations.forEach((item, index) => checkObservationSource(item, value.snapshotSeq, '$.projection.observations[' + index + ']'));
   }
   if (name === 'WorldBatch') {
     if (compareDecimal(value.fromExclusive, value.throughSeq) > 0 || BigInt(value.throughSeq) - BigInt(value.fromExclusive) > 256n) fail('批次完整区间无效或超过 256 个序号', '$');
@@ -283,11 +298,12 @@ function checkRelations(name, value) {
     for (let i = 0; i < value.events.length; i++) {
       const event = value.events[i];
       checkEventIdentity(event, value.sessionId, '$.events[' + i + ']');
+      checkEventPayload(event, '$.events[' + i + ']');
       if (compareDecimal(event.sessionSeq, previous) <= 0 || compareDecimal(event.sessionSeq, value.throughSeq) > 0) fail('批次事件必须在区间内严格递增', '$.events[' + i + ']');
       previous = event.sessionSeq;
       if (event.kind === 'projection.replace') {
         checkProjection(event.payload.projection, '$.events[' + i + '].payload.projection');
-        if (event.payload.projection.observations.some(item => compareDecimal(item.source.sourceSeq, event.sessionSeq) > 0)) fail('投影效果携带未来来源', '$.events[' + i + ']');
+        event.payload.projection.observations.forEach((item, index) => checkObservationSource(item, event.sessionSeq, '$.events[' + i + '].payload.projection.observations[' + index + ']'));
       }
     }
   }

@@ -81,7 +81,9 @@ M0 §7/§11 及玩法中的内容操作细化为以下 wire 字段，不增加�
 
 `canonicalIntentPayload` 覆盖整个有序 ProposedIntent。缺失可选字段不自动注入默认值；省略、显式空数组与显式空值保持不同表达（不允许的空值会先拒绝）。重试必须保留原包，不根据当前 epoch、cursor 或连接改写旧请求。令牌、连接和重试次数不进入动作语义摘要。
 
-JSON 入口检查解码后的重复键、完整 Unicode 代理对及十进制数字的精确整数值。不能先把 `1e-400` 或 `1.00000000000000001` 舍入后再接受；协议中的数字必须能精确表示为安全整数，序号仍必须为字符串。
+JSON 入口检查解码后的重复键、完整 Unicode 代理对及十进制数字的精确整数值。不能先把 `1e-400` 或 `1.00000000000000001` 舍入后再接受；协议中的数字必须能精确表示为安全整数，序号仍必须为字符串。对象入口中的数组必须具有连续的自有数据索引，不能用额外属性抵消空洞。
+
+身份、序号、摘要与时间的字符串模式使用跨 JavaScript/Python 一致的绝对结尾断言，避免 Python `$` 在最后一个换行符之前匹配的差异；固定反样本同时经过两个消费入口。
 
 ## JSON Schema 之外的关系检查
 
@@ -90,11 +92,11 @@ JSON 入口检查解码后的重复键、完整 Unicode 代理对及十进制数
 | 关系 | 检查 |
 | --- | --- |
 | 使用物品 | 物品 ID 集合与前置版本字典键集合完全相同 |
-| 频道 | public 的接收者为空，其余频道非空；AI 意图不可使用真人 private 频道 |
+| 频道 | public 的接收者为空，其余频道非空；所有 ClaimRecorded 包装一致执行，AI 意图不可使用真人 private 频道 |
 | 收据 | 事件范围 first ≤ last ≤ observedSeq；Rejected 范围必须为空 |
 | 决策 | deadlineAt 不早于 createdAt；输出 decisionId 与可信记录匹配 |
 | 控制记录 | HumanControlled 才携带活动连接，GracePeriod 才携带宽限期限 |
-| 事件/批次 | eventId 等于 Session 与序号的 `S:Eseq` 编码；有序区间不超过 256 |
+| 事件/批次 | eventId 等于 Session 与序号的 `S:Eseq` 编码；有序区间不超过 256；持久事件与批次中的 ObservationRecorded 来源不能晚于所在事件 |
 | 投影 | 标识唯一、包含本人、本人 Observation 归属和来源游标有效、定向陈述不越过接收结构、终态与结局一致 |
 | Outbox | 引用非空且有序的已提交区间 |
 | 可信上下文 | human 需要账号/角色/连接；服务主体不能带真人连接绑定 |
@@ -123,4 +125,4 @@ tsc --noEmit --strict --module nodenext --target es2022 protocol/tests/consumer.
 
 Node 测试与生成器不需要额外运行库。独立交叉检查需要 Python 的 `jsonschema`；编译检查需要 TypeScript。跨语言后端应复用固定样本、原始重复键规则、关系检查与摘要向量，不能只通过 JSON Schema 后就省略其余边界。
 
-2026-11-11 的作者自查使用 Node 24.22.1 和 TypeScript 7.0.2；16 项行为测试、15 类正样本、10 类反样本、独立 JSON Schema 与固定摘要检查、生成一致性和 TypeScript 消费编译通过。原始检查与输入摘要保存于 [自查证据](evidence/self-check.json)。这是作者自查，独立需求/标准审查、TLC、持久数据库和运行验收尚不属于本票结论。
+2026-11-11 的修正候选作者自查使用 Node 24.22.1 和 TypeScript 7.0.2；20 项行为测试、15 类正样本、16 类反样本、独立 JSON Schema 与固定摘要检查、生成一致性和 TypeScript 消费编译通过。原始检查与输入摘要保存于 [自查证据](evidence/self-check.json)，独立审查发现的来源和修正映射见 [审查修正记录](evidence/review-fixes.md)。这是作者自查，发现的最终状态等待原审查者复审；TLC、持久数据库和运行验收不属于本票结论。

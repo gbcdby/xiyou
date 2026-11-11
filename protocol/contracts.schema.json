@@ -6,7 +6,7 @@
   "$defs": {
     "Id": {
       "type": "string",
-      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}(?![\\s\\S])"
     },
     "UserId": {
       "$ref": "#/$defs/Id"
@@ -19,20 +19,20 @@
     },
     "DecimalString": {
       "type": "string",
-      "pattern": "^(0|[1-9][0-9]*)$"
+      "pattern": "^(0|[1-9][0-9]*)(?![\\s\\S])"
     },
     "PositiveDecimalString": {
       "type": "string",
-      "pattern": "^[1-9][0-9]*$"
+      "pattern": "^[1-9][0-9]*(?![\\s\\S])"
     },
     "UtcTimestamp": {
       "type": "string",
       "format": "date-time",
-      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z(?![\\s\\S])"
     },
     "Digest": {
       "type": "string",
-      "pattern": "^[0-9a-f]{64}$"
+      "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
     },
     "SessionPhase": {
       "enum": [

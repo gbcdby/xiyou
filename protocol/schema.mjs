@@ -17,14 +17,14 @@ const event = (kind, payload) => object({ kind: literal(kind), payload });
 const integer = { type: 'integer', minimum: 0, maximum: Number.MAX_SAFE_INTEGER };
 
 const defs = {
-  Id: { type: 'string', pattern: '^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$' },
+  Id: { type: 'string', pattern: '^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}(?![\\s\\S])' },
   UserId: ref('Id'),
   CharacterId: ref('Id'),
   SessionId: ref('Id'),
-  DecimalString: { type: 'string', pattern: '^(0|[1-9][0-9]*)$' },
-  PositiveDecimalString: { type: 'string', pattern: '^[1-9][0-9]*$' },
-  UtcTimestamp: { type: 'string', format: 'date-time', pattern: '^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$' },
-  Digest: { type: 'string', pattern: '^[0-9a-f]{64}$' },
+  DecimalString: { type: 'string', pattern: '^(0|[1-9][0-9]*)(?![\\s\\S])' },
+  PositiveDecimalString: { type: 'string', pattern: '^[1-9][0-9]*(?![\\s\\S])' },
+  UtcTimestamp: { type: 'string', format: 'date-time', pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z(?![\\s\\S])' },
+  Digest: { type: 'string', pattern: '^[0-9a-f]{64}(?![\\s\\S])' },
   SessionPhase: enumeration('Lobby', 'Running', 'Finished', 'Aborted'),
   ControlMode: enumeration('HumanControlled', 'GracePeriod', 'AIProxyControlled', 'CoreNPCControlled', 'Revoked'),
   DecisionStatus: enumeration('Pending', 'Committed', 'Rejected', 'Expired', 'Cancelled'),
