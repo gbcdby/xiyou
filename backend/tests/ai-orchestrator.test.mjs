@@ -8,6 +8,7 @@ import { RuntimeError } from '../errors.mjs';
 import { parseProposedIntent, intentSemanticDigestSync } from '../../protocol/node.mjs';
 import { createRunningRoom, actionRaw, deferred, until } from '../test-support/ai-room.mjs';
 import { captureAI } from '../test-support/ai-evidence.mjs';
+import { decodeStoredOutput } from '../ai/output.mjs';
 
 let database; let runtime; const gateways = [];
 function makeGateway(options) { const gateway = new ModelGateway(options); gateways.push(gateway); return gateway; }
@@ -169,8 +170,8 @@ test('真实 PostgreSQL：未知提交保留原文和摘要，新实例只恢复
     assert.equal(unused.metrics().calls, 0);
     assert.deepEqual(await restarted.replay(room.sessionId), state);
     assert.equal(await restarted.internalReceipt(again, `${decisionId}:fallback`, true), null);
-    const saved = (await database.pool.query('SELECT output_raw,semantic_digest,context FROM ai_runs WHERE session_id=$1 AND decision_id=$2', [room.sessionId, decisionId])).rows[0];
-    assert.equal(saved.output_raw, raw);
+    const saved = (await database.pool.query('SELECT output_raw,output_encoding,semantic_digest,context FROM ai_runs WHERE session_id=$1 AND decision_id=$2', [room.sessionId, decisionId])).rows[0];
+    assert.equal(decodeStoredOutput(saved), raw);
     assert.equal(saved.semantic_digest, receipt.semanticDigest);
     assert.equal(saved.context.decision.decisionId, decisionId);
   } finally { runtime.hooks = previous; await orchestrator.close(); await recovery?.close(); await restarted?.close(); }

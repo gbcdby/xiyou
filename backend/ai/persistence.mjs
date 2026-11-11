@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { canonicalize, parseProposedIntent, intentSemanticDigestSync } from '../../protocol/node.mjs';
 import { ownRecord } from '../../game/records.mjs';
 import { RuntimeError } from '../errors.mjs';
+import { encodeOutput, decodeStoredOutput, outputStringDigest } from './output.mjs';
 
 const digest = value => createHash('sha256').update(canonicalize(value)).digest('hex');
 const mode = principal => principal.principalKind === 'core_npc' ? 'CoreNPCControlled' : 'AIProxyControlled';
@@ -40,13 +41,14 @@ export async function saveOutput(runtime, handle, decisionId, output) {
     const run = (await tx.client.query('SELECT * FROM ai_runs WHERE session_id=$1 AND decision_id=$2 AND actor_id=$3 AND principal_kind=$4', [principal.sessionId, decisionId, principal.actorId, principal.principalKind])).rows[0];
     if (!run) throw new RuntimeError('FORBIDDEN', '模型调用记录不属于当前主体。');
     if (run.status !== 'Reserved') {
-      if (run.output_raw !== (output.rawText ?? null) || run.semantic_digest !== (output.semanticDigest ?? null)) throw new RuntimeError('ACTION_ID_REUSE', '该决定已保存另一份输出。');
+      if (decodeStoredOutput(run) !== (output.rawText ?? null) || run.semantic_digest !== (output.semanticDigest ?? null)) throw new RuntimeError('ACTION_ID_REUSE', '该决定已保存另一份输出。');
       return;
     }
     if (output.status === 'Valid' && intentSemanticDigestSync(parseProposedIntent(output.rawText, decisionId)) !== output.semanticDigest) throw new RuntimeError('INVALID_MESSAGE', '模型输出摘要不匹配。');
     const { rawText, ...metadata } = output;
-    const raw = typeof rawText === 'string' && rawText.isWellFormed() ? rawText : null;
-    await tx.client.query("UPDATE ai_runs SET status='Ready',output_raw=$3,semantic_digest=$4,model_result=$5 WHERE session_id=$1 AND decision_id=$2", [principal.sessionId, decisionId, raw, output.semanticDigest ?? null, metadata]);
+    const encoded = encodeOutput(rawText);
+    if (typeof rawText === 'string') metadata.outputStringDigest = outputStringDigest(rawText);
+    await tx.client.query("UPDATE ai_runs SET status='Ready',output_raw=$3,semantic_digest=$4,model_result=$5,output_encoding=$6 WHERE session_id=$1 AND decision_id=$2", [principal.sessionId, decisionId, encoded.raw, output.semanticDigest ?? null, metadata, encoded.encoding]);
   });
 }
 

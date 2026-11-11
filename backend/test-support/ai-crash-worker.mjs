@@ -27,7 +27,7 @@ process.once('message', async input => {
     const gateway = new ModelGateway({ provider: { kind: 'controlled', providerId: 'controlled-crash', async generate(request) {
       await runtime.publishPending();
       const decisionId = request.context.decision.decisionId;
-      const rawText = input.phase.includes('fallback') ? '{invalid' : JSON.stringify({ decisionId, toolCalls: [{ kind: 'inspect', targetId: 'passage_structure' }] });
+      const rawText = Object.hasOwn(input, 'rawText') ? input.rawText : input.phase.includes('fallback') ? '{invalid' : JSON.stringify({ decisionId, toolCalls: [{ kind: 'inspect', targetId: 'passage_structure' }] });
       await send({ type: 'prepared', decisionId, raw: rawText, snapshotSeq: request.context.snapshotSeq, configuration: gateway.configuration(), metrics: gateway.metrics() });
       armed = true;
       return { rawText };
