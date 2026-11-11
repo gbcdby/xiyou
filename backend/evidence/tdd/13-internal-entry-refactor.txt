@@ -1,0 +1,22 @@
+✔ 真实 PostgreSQL：创建去重、房主重复加入、固定内容开局和同水位回放 (1298.772102ms)
+✔ 真实 PostgreSQL：并发物品版本竞争、持久收据、异载荷和旧游标 (157.189958ms)
+✔ 真实 PostgreSQL：观察、陈述分型，历史受众和显式证据传播 (136.025365ms)
+✔ 真实 PostgreSQL：内容驱动修复、工具和材料真实归属、许可前置条件 (121.141396ms)
+✔ 真实 PostgreSQL：内部 NPC 同一提交入口，最终动作和终局原子化 (181.297915ms)
+✔ 真实 PostgreSQL：截止先于动作/控制，拒绝范围为空且时间不倒退 (133.285627ms)
+✔ 真实 PostgreSQL：代理看不到私人频道，禁止物品和最终许可，交还后旧意图失效 (109.959112ms)
+✔ 真实 PostgreSQL：跨 Session 读写拒绝，当前撤权先于旧收据，归档删除不重做 (186.17425ms)
+✔ 真实 PostgreSQL：服务端 view 绑定、隐藏空批次、固定水位投影和旧订阅失效 (284.83849ms)
+✔ 真实 PostgreSQL：真人与 NPC 同版本抢物，只有一个主体取得唯一物品 (98.513296ms)
+✔ 真实 PostgreSQL：内部 Decision 原子包、generation、相关版本、超时与 fallback 围栏 (158.11721ms)
+✔ 真实 PostgreSQL：控制往返、双连接、nonce 重试及迟到旧断开 (146.206299ms)
+✔ 真实 PostgreSQL：重放旧控制 nonce 不回退服务端当前断开代次 (102.4534ms)
+✔ 真实 PostgreSQL：受限代理读取旧收据也受当前成员权限约束 (123.918795ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3457.219196

@@ -1,0 +1,9 @@
+✔ 真实 HTTP/Socket.IO：前端接口、严格原文、真实连接控制和恢复查询 (1585.158381ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1843.298968

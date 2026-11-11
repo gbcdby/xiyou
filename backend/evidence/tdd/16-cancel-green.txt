@@ -1,0 +1,9 @@
+✔ 真实 PostgreSQL：Lobby 房主取消幂等，终止后不能重新开局 (1387.465021ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1544.287402
