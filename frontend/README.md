@@ -1,6 +1,6 @@
 # 同行前端 · 联机界面与授权复盘
 
-本目录提供 Vue 3 / TypeScript / Vue Router 的房间界面、授权投影视图、HTTP / Socket.IO 客户端以及恢复驱动。已接入 #6 权威运行服务；本轮以合成玩家身份执行实际 PostgreSQL、HTTP、Socket.IO 与浏览器代码。用户在 2026-11-11 明确本批使用 mock 输入，最终完整玩法与同候选五身份长测由 #10/#11/#12 继续完成。
+本目录提供 Vue 3 / TypeScript / Vue Router 的房间界面、授权投影视图、HTTP / Socket.IO 客户端以及恢复驱动。已接入 #6 权威运行服务；本轮以合成玩家身份执行实际 PostgreSQL、HTTP、Socket.IO 与浏览器代码。用户在 2026-11-11 明确本批使用 mock 输入；当前同候选完整玩法、五身份长测、浏览器检查与独立审查见[整体验证记录](evidence/mock-integration-20261111/README.md)。
 
 原候选与后续控制状态提示修正已完成独立需求、标准两轴复审；相关 finding 的历史结论为 VERIFIED。原[审查修正自查](evidence/review-fix-self-check.md)与[初始阶段自查](evidence/stage-self-check.md)保留其实际候选和范围。当前新增的 47 项行为检查、构建及实际服务浏览器短检见[模拟输入联机短检](evidence/mock-shell-20261111/README.md)。它们不冒充新同候选的 900 秒、双 NPC 或完整局验收。
 
@@ -110,9 +110,9 @@ Socket.IO 使用默认 `/socket.io` 路径和 `auth: {token}`。服务端从真�
 
 准备环境中的 TypeScript 7.0.2 与 `vue-tsc` 3.3.14 实际运行时出现 `ERR_PACKAGE_PATH_NOT_EXPORTED`，因为缺少其需要的 `typescript/lib/tsc` 入口。前端独立固定 TypeScript 6.0.3，保留同一协议类型并实际通过 SFC 类型检查。选择与 [TypeScript 7 官方发布说明](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/)对依赖 JavaScript 编译 API 的工具说明一致；不从协议本身的普通类型消费通过推定 Vue 工具链兼容。
 
-## 后续验收边界
+## 验收范围与边界
 
-- #11 的证据详情与终态回顾由本候选提供；#10 双 NPC 受控 provider 接合及全部结果仍须在同一最终候选上核对。
-- #12 在同一最终候选执行五客户端至少 900 秒、完整局、角色贡献及丢 ACK／恢复／交还控制／旧 AI 迟到的组合因果验收。历史长测保留原来源，不标作新候选执行。
+- #10 双 NPC 受控 provider、#11 证据详情与终态回顾已在同一固定候选接合；对应源码、原始结果和独立审查见[模拟切片验收](evidence/mock-integration-20261111/README.md)。
+- #12 已在该候选完成五身份实际 900907.627508 ms、七项完整局／装配／联合故障检查、五职责贡献与授权复盘。历史长测保留原来源，本轮结果单独固定；实际 PR 合并状态以 #12 记录为准。
 - 当前桌面／窄屏与具名交互检查已经实际执行，范围不等同完整平台或实际用户体验验收。
 - `mock-20261111` 使用合成玩家和模型输出；真实模型质量与真人体验属于尚未执行的 `full-real` 范围。本轮不以它们作为模拟切片的输入门槛。
