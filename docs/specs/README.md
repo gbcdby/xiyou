@@ -1,5 +1,7 @@
 # Spec 索引
 
+> **2026-11-11 本轮验收修订：** 用户要求“全部 mock，验证完毕提交 PR 并合并”。本轮采用 [mock-20261111](vertical-slice-mock.md)，以模拟输入执行实际代码并按该 profile 验收合并。下文原真人／真实模型要求保留为 `full-real` 基线，不再作为本轮阻塞条件，也不改记为已执行；领域权限与一致性约束继续适用。实际候选与结果以关联 Issue／PR 为准。
+
 ## 当前状态
 
 2026-11-11 用户启动 `auto` 后，开始将[初步产品与技术设计](../../初步设计文档.md)细化为首个可玩切片。文档候选、独立审查与实际采用状态以关联的 GitHub 任务及 PR 为准；规格存在不表示实现或运行验收通过。
@@ -7,8 +9,9 @@
 | Spec | 范围 | 权威记录 |
 | --- | --- | --- |
 | [VS-001：首个可玩切片](vertical-slice.md) | M0–M4：协议、无 AI 联机、单 AI、双 AI、第一机制关 | [汇总 #2](https://github.com/gbcdby/xiyou/issues/2)、[设计 #3](https://github.com/gbcdby/xiyou/issues/3)、[任务目录](vertical-slice-tasks.md) |
+| [VS-001：本轮模拟验收修订](vertical-slice-mock.md) | mock-20261111：模拟输入、实际实现验证、受控双NPC与授权复盘，验证后合并 | 同一汇总与任务目录，结果须同时注明 profile 和固定候选 |
 
-VS-001 的细化材料：[玩法闭环](vertical-slice-gameplay.md)、[M0 协议](m0-protocol.md)、[验证计划](vertical-slice-verification.md)。下一项技术工作是对应任务中的 M0 契约与核心模型；须先取得任务正文要求的有效修订和审查产物。
+VS-001 的细化材料：[玩法闭环](vertical-slice-gameplay.md)、[M0 协议](m0-protocol.md)、[验证计划](vertical-slice-verification.md)。后续工作按任务正文的当前依赖和本轮模拟修订继续，固定实际设计与产物身份；不从本索引推断尚未执行的验证已完成。
 
 ## 新增一份 Spec 时
 
