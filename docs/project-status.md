@@ -2,9 +2,15 @@
 
 ## 当前基线
 
-更新日期：**2026-11-11**。当前实现已包含 `game/`、`protocol/`、`formal/`、`backend/`、`frontend/` 与 `content/`：Node.js / PostgreSQL 权威服务、Vue 界面、受控双角色、第一机制关及授权复盘。用户已将本轮终点明确为[模拟输入下完成验证并合并的可玩切片](specs/vertical-slice-mock.md)，实际候选、独立审查、运行证据与合并事实统一见 [#2](https://github.com/gbcdby/xiyou/issues/2) / [#12](https://github.com/gbcdby/xiyou/issues/12)。本页不复制活动任务清单。本轮固定候选的运行结果、来源对应与未覆盖范围见[模拟切片验收](../frontend/evidence/mock-integration-20261111/README.md)。
+更新日期：**2026-11-11 UTC**。本次读取的代码基线为 [`main@5d0befff`](https://github.com/gbcdby/xiyou/tree/5d0befff3673c840756d64a982878ac76dfd0273)。当前实现已包含 `game/`、`protocol/`、`formal/`、`backend/`、`frontend/` 与 `content/`：Node.js / PostgreSQL 权威服务、Vue 界面、受控双角色、第一机制关及授权复盘。上一轮终点为[模拟输入下完成验证并合并的可玩切片](specs/vertical-slice-mock.md)，实际候选、独立审查、运行证据与合并事实见 [#2](https://github.com/gbcdby/xiyou/issues/2) / [#12](https://github.com/gbcdby/xiyou/issues/12) / [PR #22](https://github.com/gbcdby/xiyou/pull/22)。历史证据保留其对应候选身份，不代表本次重跑。本页不复制活动任务清单。
 
 模拟策略经正式 Gateway、Decision 和 Validator 执行；有限模型、数据库、HTTP / Socket.IO 与浏览器检查分别保留证据。实际供应商质量、真人体验、真实设备和公网部署仍未执行。运行入口见[仓库说明](../README.md#本机运行模拟切片)。
+
+### 当前设计阶段：可行走的无战斗冒险
+
+用户明确希望玩家能行走、交互，以故事与协作解谜完成任务，采用水墨淡彩画风，并要求先形成 Spec。新的设计候选为[ADV-001：无战斗多人叙事冒险与首章五庄观](specs/narrative-adventure.md)：六章按五庄观→平顶山→乌鸡国→车迟国→火焰山→金平府推进，首章设计包含提前和解与协作救树两条完整路线。
+
+当前移动仍为 `regionId` 区域切换，世界界面仍以区域按钮和物件卡片为主；连续行走、空间距离/遮挡和正式五庄观内容尚未实现。下一工程阶段的释放条件见[ADV-001推进阶段](specs/narrative-adventure.md#12-推进阶段与释放条件)，不能将旧M0–M4模拟结果当作新玩法或视觉验收。此次仅保存设计候选，尚未建立其实施 Tickets。
 
 ### 初始检查快照（历史）
 
@@ -30,7 +36,8 @@
 ## 已有产品与技术边界
 
 - 《西游记》多人合作叙事：唐僧与孙悟空跨关持续存在；每局最多五位真人，玩家逐关扮演当地配角。
-- 六关当前确定的是机制类型，具体原著篇章和情节尚未选定。第一机制关优先“信任与证据 + 纠纷解决”。
+- 六关原本只有机制类型；用户同意将本轮六章推荐落成[ADV-001](specs/narrative-adventure.md)。五庄观先展开，后五章逐章细化，第一章延续“信任与证据 + 纠纷解决”。
+- 用户新决定：可行走的水墨淡彩场景，无战斗，以故事、探索与协作解谜为主；具体行为和验收以ADV-001候选为准。
 - 协作依赖信息、权限与能力的差异；NPC 可以怀疑、拒绝和改变计划。世界事实、NPC 信念与角色陈述必须分开。
 - 当前前端采用 Vue 3 与 TypeScript，后端采用 Node.js 与 PostgreSQL。服务端维护权威状态与顺序事件，受控模型输入通过 Model Gateway 接入。
 - 关卡以配置复用机制，按阶段扩展。下一步无需预先完成六关剧情或全部六类能力。
@@ -39,7 +46,7 @@
 
 ## 开发路线
 
-以下承接总设计的 M0–M6，表示推进顺序，不构成工期承诺。
+以下保留总设计原 M0–M6 的路线背景，不构成工期承诺；当前新增设计按[ADV-001 A0–A5](specs/narrative-adventure.md#12-推进阶段与释放条件)承接，历史编号不重新用作新实施票。
 
 | 阶段 | 交付目标 | 验收重点 |
 | --- | --- | --- |
@@ -69,4 +76,5 @@
 
 VS-001 细化了首关试验场景、人数职责、证据传播、终局、动作与事件原子提交、受限托管及 `sessionSeq` 语义；后端语言与依赖版本留给实现任务在既定协议内确定。设计候选与正式采用分别判断，TLC、应用与真人试玩仍需各自证据。
 
-后续从[任务目录](specs/vertical-slice-tasks.md)承接 M0 契约与核心模型，再按实际产物依赖推进 M1–M4。对应模型门禁不阻挡无关准备；阶段验收与父 Spec 关闭仍以整体验收为准。`auto` 复用 `deliver` 与专业 worker，不新增第二套活动状态记录。
+当时从[任务目录](specs/vertical-slice-tasks.md)承接 M0 契约与核心模型，再按实际产物依赖推进 M1–M4；实际结果读关联记录。新的行走/剧情工作从ADV-001另行规划。对应模型门禁不阻挡无关准备；阶段验收与父 Spec 关闭仍以整体验收为准。`auto` 复用 `deliver` 与专业 worker，不新增第二套活动状态记录。
+
