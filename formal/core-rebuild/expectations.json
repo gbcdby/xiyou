@@ -1,0 +1,940 @@
+{
+  "ownership-competition": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "AtMostOneEffect",
+      "ReceiptPayloadBinding",
+      "AtomicCommitBundle",
+      "AckRequiresCommit",
+      "TerminalBlocksNewEffects",
+      "ContinuousCommittedSequence",
+      "PreconditionDiscipline",
+      "SingleEffectiveOwner"
+    ],
+    "properties": [],
+    "distinct_state_min": 200
+  },
+  "ownership-idempotence": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "AtMostOneEffect",
+      "ReceiptPayloadBinding",
+      "AtomicCommitBundle",
+      "AckRequiresCommit",
+      "TerminalBlocksNewEffects",
+      "ContinuousCommittedSequence",
+      "PreconditionDiscipline",
+      "SingleEffectiveOwner"
+    ],
+    "properties": [],
+    "distinct_state_min": 200
+  },
+  "ownership-ending": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "AtMostOneEffect",
+      "ReceiptPayloadBinding",
+      "AtomicCommitBundle",
+      "AckRequiresCommit",
+      "TerminalBlocksNewEffects",
+      "ContinuousCommittedSequence",
+      "PreconditionDiscipline",
+      "SingleEffectiveOwner"
+    ],
+    "properties": [],
+    "distinct_state_min": 200
+  },
+  "ownership-future": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "AtMostOneEffect",
+      "ReceiptPayloadBinding",
+      "AtomicCommitBundle",
+      "AckRequiresCommit",
+      "TerminalBlocksNewEffects",
+      "ContinuousCommittedSequence",
+      "PreconditionDiscipline",
+      "SingleEffectiveOwner"
+    ],
+    "properties": [],
+    "distinct_state_min": 200
+  },
+  "handoff": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "AtMostOneEffect",
+      "ReceiptPayloadBinding",
+      "AtomicCommitBundle",
+      "AckRequiresCommit",
+      "TerminalBlocksNewEffects",
+      "ContinuousCommittedSequence",
+      "PreconditionDiscipline",
+      "NoDualControl",
+      "ControlNonceIdempotent",
+      "FreshDecisionOnly",
+      "DecisionSettlesOnce"
+    ],
+    "properties": [],
+    "distinct_state_min": 500
+  },
+  "composed": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "AtMostOneEffect",
+      "ReceiptPayloadBinding",
+      "AtomicCommitBundle",
+      "AckRequiresCommit",
+      "TerminalBlocksNewEffects",
+      "ContinuousCommittedSequence",
+      "PreconditionDiscipline",
+      "SingleEffectiveOwner",
+      "NoDualControl",
+      "ControlNonceIdempotent",
+      "FreshDecisionOnly",
+      "DecisionSettlesOnce"
+    ],
+    "properties": [],
+    "distinct_state_min": 500
+  },
+  "ownership-payload": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "AtMostOneEffect",
+      "ReceiptPayloadBinding",
+      "AtomicCommitBundle",
+      "AckRequiresCommit",
+      "TerminalBlocksNewEffects",
+      "ContinuousCommittedSequence",
+      "PreconditionDiscipline",
+      "SingleEffectiveOwner"
+    ],
+    "properties": [],
+    "distinct_state_min": 200
+  },
+  "ownership-publication": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "AtMostOneEffect",
+      "ReceiptPayloadBinding",
+      "AtomicCommitBundle",
+      "AckRequiresCommit",
+      "TerminalBlocksNewEffects",
+      "ContinuousCommittedSequence",
+      "PreconditionDiscipline",
+      "SingleEffectiveOwner"
+    ],
+    "properties": [],
+    "distinct_state_min": 200
+  },
+  "handoff-ai-epoch": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "AtMostOneEffect",
+      "ReceiptPayloadBinding",
+      "AtomicCommitBundle",
+      "AckRequiresCommit",
+      "TerminalBlocksNewEffects",
+      "ContinuousCommittedSequence",
+      "PreconditionDiscipline",
+      "NoDualControl",
+      "ControlNonceIdempotent",
+      "FreshDecisionOnly",
+      "DecisionSettlesOnce"
+    ],
+    "properties": [],
+    "distinct_state_min": 500
+  },
+  "handoff-ai-generation": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "AtMostOneEffect",
+      "ReceiptPayloadBinding",
+      "AtomicCommitBundle",
+      "AckRequiresCommit",
+      "TerminalBlocksNewEffects",
+      "ContinuousCommittedSequence",
+      "PreconditionDiscipline",
+      "NoDualControl",
+      "ControlNonceIdempotent",
+      "FreshDecisionOnly",
+      "DecisionSettlesOnce"
+    ],
+    "properties": [],
+    "distinct_state_min": 500
+  },
+  "handoff-ai-revision": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "AtMostOneEffect",
+      "ReceiptPayloadBinding",
+      "AtomicCommitBundle",
+      "AckRequiresCommit",
+      "TerminalBlocksNewEffects",
+      "ContinuousCommittedSequence",
+      "PreconditionDiscipline",
+      "NoDualControl",
+      "ControlNonceIdempotent",
+      "FreshDecisionOnly",
+      "DecisionSettlesOnce"
+    ],
+    "properties": [],
+    "distinct_state_min": 500
+  },
+  "handoff-ai-unrelated": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "AtMostOneEffect",
+      "ReceiptPayloadBinding",
+      "AtomicCommitBundle",
+      "AckRequiresCommit",
+      "TerminalBlocksNewEffects",
+      "ContinuousCommittedSequence",
+      "PreconditionDiscipline",
+      "NoDualControl",
+      "ControlNonceIdempotent",
+      "FreshDecisionOnly",
+      "DecisionSettlesOnce"
+    ],
+    "properties": [],
+    "distinct_state_min": 500
+  },
+  "handoff-ai-cancel": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "AtMostOneEffect",
+      "ReceiptPayloadBinding",
+      "AtomicCommitBundle",
+      "AckRequiresCommit",
+      "TerminalBlocksNewEffects",
+      "ContinuousCommittedSequence",
+      "PreconditionDiscipline",
+      "NoDualControl",
+      "ControlNonceIdempotent",
+      "FreshDecisionOnly",
+      "DecisionSettlesOnce"
+    ],
+    "properties": [],
+    "distinct_state_min": 500
+  },
+  "handoff-ai-invalid": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "AtMostOneEffect",
+      "ReceiptPayloadBinding",
+      "AtomicCommitBundle",
+      "AckRequiresCommit",
+      "TerminalBlocksNewEffects",
+      "ContinuousCommittedSequence",
+      "PreconditionDiscipline",
+      "NoDualControl",
+      "ControlNonceIdempotent",
+      "FreshDecisionOnly",
+      "DecisionSettlesOnce"
+    ],
+    "properties": [],
+    "distinct_state_min": 500
+  },
+  "handoff-ai-package": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "AtMostOneEffect",
+      "ReceiptPayloadBinding",
+      "AtomicCommitBundle",
+      "AckRequiresCommit",
+      "TerminalBlocksNewEffects",
+      "ContinuousCommittedSequence",
+      "PreconditionDiscipline",
+      "NoDualControl",
+      "ControlNonceIdempotent",
+      "FreshDecisionOnly",
+      "DecisionSettlesOnce"
+    ],
+    "properties": [],
+    "distinct_state_min": 500
+  },
+  "handoff-ai-expiry": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "AtMostOneEffect",
+      "ReceiptPayloadBinding",
+      "AtomicCommitBundle",
+      "AckRequiresCommit",
+      "TerminalBlocksNewEffects",
+      "ContinuousCommittedSequence",
+      "PreconditionDiscipline",
+      "NoDualControl",
+      "ControlNonceIdempotent",
+      "FreshDecisionOnly",
+      "DecisionSettlesOnce"
+    ],
+    "properties": [],
+    "distinct_state_min": 500
+  },
+  "handoff-ai-terminal": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "AtMostOneEffect",
+      "ReceiptPayloadBinding",
+      "AtomicCommitBundle",
+      "AckRequiresCommit",
+      "TerminalBlocksNewEffects",
+      "ContinuousCommittedSequence",
+      "PreconditionDiscipline",
+      "NoDualControl",
+      "ControlNonceIdempotent",
+      "FreshDecisionOnly",
+      "DecisionSettlesOnce"
+    ],
+    "properties": [],
+    "distinct_state_min": 500
+  },
+  "live-ownership": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK"
+    ],
+    "properties": [
+      "AdmittedRequestResolves"
+    ],
+    "distinct_state_min": 200
+  },
+  "live-handoff": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK"
+    ],
+    "properties": [
+      "AdmittedRequestResolves",
+      "DecisionResolvesOrExpires"
+    ],
+    "distinct_state_min": 200
+  },
+  "live-composed": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK"
+    ],
+    "properties": [
+      "AdmittedRequestResolves",
+      "DecisionResolvesOrExpires"
+    ],
+    "distinct_state_min": 200
+  },
+  "negative-type": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "TypeOK"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "negative-duplicate_owner": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "SingleEffectiveOwner"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "negative-stale_item": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "SingleEffectiveOwner"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "negative-split_receipt": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "AtMostOneEffect"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "negative-payload_overwrite": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ReceiptPayloadBinding"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "negative-split_bundle": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "AtomicCommitBundle"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "negative-split_terminal": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "AtomicCommitBundle"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "negative-partial_ai": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "AtomicCommitBundle"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "negative-early_ack": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "AckRequiresCommit"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "negative-old_human": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoDualControl"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "negative-stale_disconnect": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoDualControl"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "negative-old_proxy": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoDualControl"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "negative-control_nonce": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ControlNonceIdempotent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "negative-decision_epoch": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "FreshDecisionOnly"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "negative-decision_generation": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "FreshDecisionOnly"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "negative-decision_revision": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "FreshDecisionOnly"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "negative-decision_deadline": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "FreshDecisionOnly"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "negative-decision_status": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "FreshDecisionOnly"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "negative-ai_terminal": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "FreshDecisionOnly"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "negative-post_terminal": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "TerminalBlocksNewEffects"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "negative-deadline_control": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "TerminalBlocksNewEffects"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "negative-sequence_gap": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ContinuousCommittedSequence"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "negative-sequence_repeat": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ContinuousCommittedSequence"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "negative-future_base": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "PreconditionDiscipline"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "negative-stale-item-precondition": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "PreconditionDiscipline"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "negative-decision-finality": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "DecisionSettlesOnce"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "negative-no_retry": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 13,
+    "invariants": [
+      "TypeOK"
+    ],
+    "properties": [
+      "AdmittedRequestResolves"
+    ],
+    "distinct_state_min": 1
+  },
+  "negative-no_timeout": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 13,
+    "invariants": [
+      "TypeOK"
+    ],
+    "properties": [
+      "DecisionResolvesOrExpires"
+    ],
+    "distinct_state_min": 1
+  },
+  "negative-deadlock": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 11,
+    "invariants": [
+      "TypeOK"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-take-success": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-item-conflict": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-same-receipt": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-payload-conflict": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-crash-before-commit": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-crash-after-commit": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-recovered": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-published": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-manual-ending": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-deadline-reject": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-future-reject": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-grace": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-proxy": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-returned": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-explicit-take": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-resume-held": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-control-nonce-retry": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-old-disconnect-rejected": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-control-reject": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-ai-committed": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-ai-after-unrelated": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-epoch-late-ai": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-generation-late-ai": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-revision-late-ai": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-deadline-late-ai": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-terminal-late-ai": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-atomic-package-rejected": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-decision-expired": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-invalid-ai-rejected": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-decision-cancelled": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-aborted": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-effect-crash-handoff-retry": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-effect-crash-retry-negative": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-partial-bundle-crash": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  },
+  "witness-early-ack-crash": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WitnessAbsent"
+    ],
+    "properties": [],
+    "distinct_state_min": 1
+  }
+}
