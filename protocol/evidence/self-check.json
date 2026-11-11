@@ -1,0 +1,87 @@
+{
+  "ticket": "https://github.com/gbcdby/xiyou/issues/4",
+  "spec_revision": "6c2a0b9f6d137ad5fbd41721659404333ad8e16d",
+  "base_commit": "ef6aac19b79b22d8f5a083f819bf4b8b504c69da",
+  "observed_at": "2026-11-11T04:31:04.532146+00:00",
+  "producer": "protocol_implementation 作者自查",
+  "node_version": "v24.22.1",
+  "typescript_version": "Version 7.0.2",
+  "source_sha256": {
+    "protocol/README.md": "e7f1afd9aed3826222386d63e525a31ab480b92cbe4989a02781431643c4cd1d",
+    "protocol/contracts.schema.json": "3c90e5a0c634b20f9b2b7540907665d148ec31d9e6bd088a81111ff071a25dd3",
+    "protocol/fixtures/digest-v1.json": "94d51df1125bf9c0f190421183a22a1157420c5292ec1fbbc6fca966978597f6",
+    "protocol/fixtures/invalid-v1.json": "69edc1a17a7b4855b28d696664925f47a3a6c7d597e1b49a4a7485db364b47dc",
+    "protocol/fixtures/valid-v1.json": "3ac6e8dd7f2c231da2d53b8139f6d1c1ab3a7b38bb7c389194d4392dc5c3159e",
+    "protocol/index.d.mts": "55efcc2cb7f2a5fdcce9b5ff22abbb8f7f27f14c9177f91f1c59e40a96b55805",
+    "protocol/index.mjs": "604e8f07e28c907f53ebb9fddf602f0479c3940571febd3f9afe912b6bc17851",
+    "protocol/node.d.mts": "4d7d04124dc0edde43091340398ad9bdbb09a6b35ac450503d529746383fafb9",
+    "protocol/node.mjs": "fcbf2da0fd72566e8af112dd615224bb5a18c1c9ae23fafc4739b6aa9b69754a",
+    "protocol/schema.mjs": "5771b94e484d7738250c84bdd72f39450807ea20d86248e411c9e349fc1a7925",
+    "protocol/scripts/check-schema.py": "4eaed31b31e0d2369fab2f15b7a47126fd4bf9a650d4b642ca2147f98ebc381f",
+    "protocol/scripts/generate.mjs": "8931235bc25210ac16d5d7e8a4ef0dc872ed4935f3d5569f029b493825242fb2",
+    "protocol/tests/consumer.mts": "8d56dc6d4846712bc79ca94744c365f875c4ecdd8e3d5b6d3e22337fe1755234",
+    "protocol/tests/contracts.test.mjs": "3e63761bf58ec7df7654c23f352babd90dd6e53f20a6a84bb86d0ffda7de55f1",
+    "protocol/tests/json.test.mjs": "c4303f12ba7ead0bbedb7dc5cc6f3377636f92bd727f19dddb0d13d61c88599a",
+    "protocol/tests/samples.test.mjs": "24f5e33c3899a73d3141dfdf0b2a56a1cdbee2618a58e557010fb7a32e017912",
+    "game/types.ts": "d541c0b6a6dbcf1ccd38f7de652016554313c5994038e1cbf8081d84e2aae576"
+  },
+  "checks": [
+    {
+      "check": "behavior",
+      "reproduction_command": [
+        "node",
+        "--test",
+        "protocol/tests/json.test.mjs",
+        "protocol/tests/contracts.test.mjs",
+        "protocol/tests/samples.test.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "✔ M0 原始动作示例合法且客户端不可提供可信字段 (6.092265ms)\n✔ 版本、未知动作与无前导零十进制字符串遵守固定合同 (2.367704ms)\n✔ 摘要与字段顺序无关，覆盖旧 epoch、游标、角色和完整操作 (14.353605ms)\n✔ 物品使用明确携带全部物品与目标的前置版本 (1.655372ms)\n✔ 重复键和转义后同名键在原始 JSON 入口拒绝 (2.341627ms)\n✔ JSON 入口保留精确字符串并拒绝无法精确表达的数字 (0.716619ms)\n✔ 规范编码按键名排序且不改写数组顺序或 Unicode 内容 (0.463398ms)\n✔ 全部固定正反样本使用公开入口校验 (26.477186ms)\n✔ 摘要与独立计算的固定向量一致，去重 ID 只负责定位 (9.30108ms)\n✔ 模型输出不能改写决策身份、读取版本或工具索引 (2.709885ms)\n✔ 收据状态、事件范围和观察游标不能混淆 (0.650201ms)\n✔ 过滤区间允许隐藏事件，拒绝乱序、区间外和错误 Session 身份 (3.317304ms)\n✔ 授权投影只能带本人的合法知识结构，保留超过千条的累计知识 (78.604847ms)\n✔ 事实、陈述和信念记录具有不同 payload 与来源要求 (1.75589ms)\n✔ 可信上下文的结构校验不能由客户端字段混入 (1.849907ms)\n✔ 调用方不能修改公开 schema 后放松其他请求的校验 (0.186223ms)\nℹ tests 16\nℹ suites 0\nℹ pass 16\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 282.64486\n",
+      "stderr": ""
+    },
+    {
+      "check": "generated",
+      "reproduction_command": [
+        "node",
+        "protocol/scripts/generate.mjs",
+        "--check"
+      ],
+      "exit_code": 0,
+      "stdout": "机器契约与 TypeScript 生成产物一致\n",
+      "stderr": ""
+    },
+    {
+      "check": "schema",
+      "reproduction_command": [
+        "python3",
+        "protocol/scripts/check-schema.py"
+      ],
+      "exit_code": 0,
+      "stdout": "JSON Schema 2020-12 合法；15 个正样本和 10 个反样本符合预期；独立摘要向量一致。\n",
+      "stderr": ""
+    },
+    {
+      "check": "typescript",
+      "reproduction_command": [
+        "tsc",
+        "--noEmit",
+        "--strict",
+        "--module",
+        "nodenext",
+        "--target",
+        "es2022",
+        "protocol/tests/consumer.mts"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "uncovered": [
+    "服务端认证与领域权限",
+    "数据库事务、持久去重、真实网络和回放",
+    "TLC 模型",
+    "实际模型与真人试玩",
+    "独立需求/标准审查"
+  ]
+}
