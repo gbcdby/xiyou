@@ -4,6 +4,38 @@ import { cp, mkdir, mkdtemp, readFile, rm, symlink, writeFile } from 'node:fs/pr
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import path from 'node:path';
 import { loadContent, rolesForPlayers, validateContent, contentDigest } from '../index.mjs';
+import * as contentApi from '../index.mjs';
+
+test('组合职责只装配一个出生区域，同时保留全部能力和初始知识', async () => {
+  const content = await loadContent('trust-repair-fixture-v1');
+  assert.equal(typeof contentApi.assemblePlayers, 'function');
+  const expectedRegions = {
+    2: ['passage', 'store'],
+    3: ['passage', 'store', 'passage'],
+    4: ['passage', 'store', 'passage', 'side_path'],
+    5: ['passage', 'store', 'passage', 'side_path', 'store'],
+  };
+  for (const count of [2, 3, 4, 5]) {
+    const players = contentApi.assemblePlayers(content, count);
+    assert.equal(players.length, count);
+    assert.deepEqual(players.map(player => player.initialRegionId), expectedRegions[count]);
+    assert.deepEqual(players.map(player => player.roles), rolesForPlayers(content, count));
+    assert.ok(players.every(player => player.name.length > 0 && player.capabilities.includes('move')));
+  }
+  const two = contentApi.assemblePlayers(content, 2);
+  assert.deepEqual(two[0].initialKnowledgeIds, ['structure_record', 'moving_sighting']);
+  assert.deepEqual(two[1].initialKnowledgeIds, ['missing_material_notice', 'passage_conditions', 'register_location']);
+  assert.ok(two[0].capabilities.includes('inspect_structure'));
+  assert.ok(two[0].capabilities.includes('retrieve_original'));
+  for (const capability of ['inspect_inventory', 'grant_passage', 'inspect_records']) {
+    assert.ok(two[1].capabilities.includes(capability));
+  }
+  two[0].roles.push('B');
+  two[0].capabilities.length = 0;
+  assert.deepEqual(contentApi.assemblePlayers(content, 2)[0].roles, ['A', 'D']);
+  assert.ok(contentApi.assemblePlayers(content, 2)[0].capabilities.includes('move'));
+  assert.throws(() => contentApi.assemblePlayers(content, 1), /人数/);
+});
 
 test('两至五人配置完整分配五项职责，每人始终只有一个职责组合', async () => {
   const content = await loadContent('trust-repair-fixture-v1');

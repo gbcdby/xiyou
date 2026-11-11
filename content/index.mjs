@@ -28,6 +28,23 @@ export function rolesForPlayers(content, count) {
   return structuredClone(validateContent(content).partyRoles[String(count)]);
 }
 
+/** 每个固定槽位装配一个角色；首项职责决定唯一起始场所，全部职责贡献能力与知识。 */
+export function assemblePlayers(content, count) {
+  const validated = validateContent(content);
+  const groups = rolesForPlayers(validated, count);
+  const roles = new Map(validated.roles.map(role => [role.roleId, role]));
+  return groups.map(group => {
+    const assigned = group.map(id => roles.get(id));
+    return {
+      roles: [...group],
+      name: assigned.map(role => role.name).join('兼'),
+      initialRegionId: assigned[0].initialRegionId,
+      capabilities: [...new Set([...validated.humanCapabilities, ...assigned.flatMap(role => role.capabilities)])],
+      initialKnowledgeIds: [...new Set(assigned.flatMap(role => role.initialKnowledgeIds))],
+    };
+  });
+}
+
 /** Session 保存此摘要和完整配置快照，回放不重新读取正在变化的配置文件。 */
 export function contentDigest(content) {
   return createHash('sha256').update(canonicalize(validateContent(content)), 'utf8').digest('hex');
