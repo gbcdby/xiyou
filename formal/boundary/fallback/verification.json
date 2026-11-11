@@ -1,0 +1,1724 @@
+{
+  "schema_version": 1,
+  "feature": "VS-001 #7 fallback 组合边界修正",
+  "spec_revision": "6c2a0b9f6d137ad5fbd41721659404333ad8e16d",
+  "finding": "R-vs001-p04-VIS-001",
+  "tool": {
+    "version": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "model": {
+    "root": "model",
+    "entry": "Fallback.tla"
+  },
+  "requirements": [
+    {
+      "id": "M0-AC-10/VER-01/VER-04",
+      "properties": [
+        "StableReasonKey",
+        "AtMostOneEffect",
+        "ReceiptPayloadBinding",
+        "AtomicCommitBundle",
+        "FallbackAfterSettlement",
+        "CurrentEpochOnly",
+        "CurrentToolPermission",
+        "TerminalBlocksNewEffects",
+        "NoDecisionRevival",
+        "FreshDecisionOnly",
+        "DecisionResolvesOrExpires",
+        "FallbackResolves"
+      ]
+    },
+    {
+      "id": "INV-00",
+      "properties": [
+        "TypeOK"
+      ]
+    }
+  ],
+  "profiles": {
+    "positive": {
+      "config": "positive.cfg",
+      "timeout_seconds": 1200,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "TypeOK",
+        "StableReasonKey",
+        "AtMostOneEffect",
+        "ReceiptPayloadBinding",
+        "AtomicCommitBundle",
+        "FallbackAfterSettlement",
+        "CurrentEpochOnly",
+        "CurrentToolPermission",
+        "TerminalBlocksNewEffects",
+        "NoDecisionRevival",
+        "FreshDecisionOnly"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "none",
+        "probe": "none",
+        "distinct_state_min": 100,
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "live": {
+      "config": "live.cfg",
+      "timeout_seconds": 1200,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [],
+      "expected_properties": [
+        "DecisionResolvesOrExpires",
+        "FallbackResolves"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "none",
+        "probe": "none",
+        "distinct_state_min": 100,
+        "liveness": "WF(Tick,Expire,SubmitOriginal,Recover,QueueFallback,ReceiveFallback,ValidateFallback,CommitFallback)"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "negative-type": {
+      "config": "negative-type.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "TypeOK"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "type",
+        "probe": "none",
+        "distinct_state_min": 1,
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "negative-unstable_key": {
+      "config": "negative-unstable_key.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "StableReasonKey"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "unstable_key",
+        "probe": "none",
+        "distinct_state_min": 1,
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "negative-lost_receipt": {
+      "config": "negative-lost_receipt.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "AtMostOneEffect"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "lost_receipt",
+        "probe": "none",
+        "distinct_state_min": 1,
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "negative-payload_overwrite": {
+      "config": "negative-payload_overwrite.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "ReceiptPayloadBinding"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "payload_overwrite",
+        "probe": "none",
+        "distinct_state_min": 1,
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "negative-split_bundle": {
+      "config": "negative-split_bundle.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "AtomicCommitBundle"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "split_bundle",
+        "probe": "none",
+        "distinct_state_min": 1,
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "negative-early_queue": {
+      "config": "negative-early_queue.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "FallbackAfterSettlement"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "early_queue",
+        "probe": "none",
+        "distinct_state_min": 1,
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "negative-fallback_epoch": {
+      "config": "negative-fallback_epoch.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "CurrentEpochOnly"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "fallback_epoch",
+        "probe": "none",
+        "distinct_state_min": 1,
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "negative-fallback_permission": {
+      "config": "negative-fallback_permission.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "CurrentToolPermission"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "fallback_permission",
+        "probe": "none",
+        "distinct_state_min": 1,
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "negative-fallback_terminal": {
+      "config": "negative-fallback_terminal.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "TerminalBlocksNewEffects"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "fallback_terminal",
+        "probe": "none",
+        "distinct_state_min": 1,
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "negative-fallback_deadline": {
+      "config": "negative-fallback_deadline.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "TerminalBlocksNewEffects"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "fallback_deadline",
+        "probe": "none",
+        "distinct_state_min": 1,
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "negative-revive_decision": {
+      "config": "negative-revive_decision.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NoDecisionRevival"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "revive_decision",
+        "probe": "none",
+        "distinct_state_min": 1,
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "negative-reuse_decision_id": {
+      "config": "negative-reuse_decision_id.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NoDecisionRevival"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "reuse_decision_id",
+        "probe": "none",
+        "distinct_state_min": 1,
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "negative-original_epoch": {
+      "config": "negative-original_epoch.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "FreshDecisionOnly"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "original_epoch",
+        "probe": "none",
+        "distinct_state_min": 1,
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "negative-original_permission": {
+      "config": "negative-original_permission.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "FreshDecisionOnly"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "original_permission",
+        "probe": "none",
+        "distinct_state_min": 1,
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "negative-original_deadline": {
+      "config": "negative-original_deadline.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "FreshDecisionOnly"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "original_deadline",
+        "probe": "none",
+        "distinct_state_min": 1,
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "negative-no_timeout": {
+      "config": "negative-no_timeout.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [],
+      "expected_properties": [
+        "DecisionResolvesOrExpires"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "no_timeout",
+        "probe": "none",
+        "distinct_state_min": 1,
+        "liveness": "WF(Tick,Expire,SubmitOriginal,Recover,QueueFallback,ReceiveFallback,ValidateFallback,CommitFallback)"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "negative-no_queue": {
+      "config": "negative-no_queue.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [],
+      "expected_properties": [
+        "FallbackResolves"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "no_queue",
+        "probe": "none",
+        "distinct_state_min": 1,
+        "liveness": "WF(Tick,Expire,SubmitOriginal,Recover,QueueFallback,ReceiveFallback,ValidateFallback,CommitFallback)"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "negative-no_fallback_commit": {
+      "config": "negative-no_fallback_commit.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [],
+      "expected_properties": [
+        "FallbackResolves"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "no_fallback_commit",
+        "probe": "none",
+        "distinct_state_min": 1,
+        "liveness": "WF(Tick,Expire,SubmitOriginal,Recover,QueueFallback,ReceiveFallback,ValidateFallback,CommitFallback)"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "deadlock": {
+      "config": "deadlock.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "TypeOK"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "deadlock",
+        "probe": "none",
+        "distinct_state_min": 1,
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "witness-original-committed": {
+      "config": "witness-original-committed.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NotReached"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "none",
+        "probe": "original-committed",
+        "distinct_state_min": 1,
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "witness-invalid-json-rejected": {
+      "config": "witness-invalid-json-rejected.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NotReached"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "none",
+        "probe": "invalid-json-rejected",
+        "distinct_state_min": 1,
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "witness-no-tool-rejected": {
+      "config": "witness-no-tool-rejected.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NotReached"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "none",
+        "probe": "no-tool-rejected",
+        "distinct_state_min": 1,
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "witness-decision-expired": {
+      "config": "witness-decision-expired.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NotReached"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "none",
+        "probe": "decision-expired",
+        "distinct_state_min": 1,
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "witness-fallback-from-expired": {
+      "config": "witness-fallback-from-expired.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NotReached"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "none",
+        "probe": "fallback-from-expired",
+        "distinct_state_min": 1,
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "witness-fallback-from-rejected": {
+      "config": "witness-fallback-from-rejected.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NotReached"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "none",
+        "probe": "fallback-from-rejected",
+        "distinct_state_min": 1,
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "witness-fallback-epoch-rejected": {
+      "config": "witness-fallback-epoch-rejected.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NotReached"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "none",
+        "probe": "fallback-epoch-rejected",
+        "distinct_state_min": 1,
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "witness-fallback-permission-rejected": {
+      "config": "witness-fallback-permission-rejected.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NotReached"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "none",
+        "probe": "fallback-permission-rejected",
+        "distinct_state_min": 1,
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "witness-fallback-terminal-rejected": {
+      "config": "witness-fallback-terminal-rejected.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NotReached"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "none",
+        "probe": "fallback-terminal-rejected",
+        "distinct_state_min": 1,
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "witness-fallback-session-deadline": {
+      "config": "witness-fallback-session-deadline.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NotReached"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "none",
+        "probe": "fallback-session-deadline",
+        "distinct_state_min": 1,
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "witness-fallback-repeat": {
+      "config": "witness-fallback-repeat.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NotReached"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "none",
+        "probe": "fallback-repeat",
+        "distinct_state_min": 1,
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "witness-crash-retry-fallback": {
+      "config": "witness-crash-retry-fallback.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NotReached"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "none",
+        "probe": "crash-retry-fallback",
+        "distinct_state_min": 1,
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "witness-payload-conflict-rejected": {
+      "config": "witness-payload-conflict-rejected.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NotReached"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "none",
+        "probe": "payload-conflict-rejected",
+        "distinct_state_min": 1,
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "witness-late-original-after-fallback": {
+      "config": "witness-late-original-after-fallback.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NotReached"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "none",
+        "probe": "late-original-after-fallback",
+        "distinct_state_min": 1,
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "witness-original-repeat": {
+      "config": "witness-original-repeat.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NotReached"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "none",
+        "probe": "original-repeat",
+        "distinct_state_min": 1,
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "witness-terminal-receipt-read": {
+      "config": "witness-terminal-receipt-read.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NotReached"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "none",
+        "probe": "terminal-receipt-read",
+        "distinct_state_min": 1,
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    },
+    "witness-fresh-replan-id": {
+      "config": "witness-fresh-replan-id.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NotReached"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 1,
+        "original_decisions": 1,
+        "fallback_commands": 1,
+        "processing_attempts": 2,
+        "crashes": 1,
+        "epoch_domain": [
+          0,
+          1
+        ],
+        "decision_deadline": 2,
+        "session_deadline": 3,
+        "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+        "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+        "excluded_behaviors": [
+          "多个并行或反复新决策的完整生命周期",
+          "真实 JSON 解析和供应商调用",
+          "真实 PostgreSQL/网络及认证",
+          "完整控制权往返",
+          "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+        ],
+        "fault": "none",
+        "probe": "fresh-replan-id",
+        "distinct_state_min": 1,
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+        "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+        "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+        "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+        "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+      ]
+    }
+  }
+}
