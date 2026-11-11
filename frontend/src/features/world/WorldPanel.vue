@@ -34,7 +34,7 @@ function repair(target: TargetView) {
       <div class="place-mark" aria-hidden="true"><span>山</span><i /><i /><i /></div>
     </div>
     <nav v-if="region" class="place-nav" aria-label="可前往的场所">
-      <button v-for="exit in region.exits" :key="exit" class="quiet-button" :disabled="disabled" @click="emit('action', { kind: 'move', regionId: exit })"><AppIcon name="compass" :size="16" />{{ projection.regions.find(item => item.regionId === exit)?.name || '前往相邻场所' }}<AppIcon name="arrow" :size="15" /></button>
+      <button v-for="exit in region.exits" :key="exit" class="quiet-button" :disabled="disabled" @click="emit('action', { kind: 'move', regionId: exit })"><AppIcon name="compass" :size="16" />{{ projection.regions.find(item => item.regionId === exit)?.name || `前往 ${exit}` }}<AppIcon name="arrow" :size="15" /></button>
     </nav>
     <div class="world-content">
       <div class="section-heading"><h3>眼前的事物</h3><span class="tiny muted">仅显示当前可见内容</span></div>
