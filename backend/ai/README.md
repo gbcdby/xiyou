@@ -2,7 +2,9 @@
 
 归属 [Ticket #9](https://github.com/gbcdby/xiyou/issues/9)，依据固定 Spec `6c2a0b9f6d137ad5fbd41721659404333ad8e16d` 的 [M0 §9–10](../../docs/specs/m0-protocol.md)、[玩法中的感知／目标／信念](../../docs/specs/vertical-slice-gameplay.md)和 [VER-04](../../docs/specs/vertical-slice-verification.md)。权威运行基线是 `5d3e16fa46c4719471092d0567e9bfd1e28737f7`；本目录不改变公共 HTTP／Socket.IO／ProposedIntent 契约。
 
-本候选提供受控供应商实现；2026-11-11 已完成受控范围独立需求／标准复审，并修正非法输出持久化与测试清理问题，原始反例、两次修正和复审见[本轮证据](../evidence/ai/resume-20261111/README.md)。实际供应商、endpoint、modelId、凭证及费用授权尚未提供，**实际外部模型调用为 0，真实模型验收保持 BLOCKED／NOT_RUN**。受控检查不代表模型质量、VER-04 整项完成或 `single-ai-runtime` 释放；PR #19 继续保持 draft，真实模型闭环及 #10／#11 的 AI 依赖仍待完成。初始作者自查保留其原候选，见[实现结果](../evidence/ai/implementation-result.md)及[清单](../evidence/ai/self-check.json)。
+本候选提供受控供应商实现；2026-11-11 已完成受控范围独立需求／标准复审，并修正非法输出持久化与测试清理问题，原始反例、两次修正和复审见[原归档证据](../evidence/ai/resume-20261111/README.md)。用户随后明确本批全部 mock，当前以[模拟输入验收修订](../../docs/specs/vertical-slice-mock.md) `mock-20261111` 为准：受控完整链、原问题修复与独立两轴满足后可释放 `single-ai-runtime`，供 #10／#11 消费。原证据索引中的 draft／未释放描述保留其归档时点，最新 PR、释放与合并事实见 [#9](https://github.com/gbcdby/xiyou/issues/9)／[PR #19](https://github.com/gbcdby/xiyou/pull/19)。
+
+**实际外部模型调用为 0。** 实际供应商、endpoint、modelId、凭证及费用授权尚未提供；真实模型质量与真人体验在当前 profile 为 `NOT_REQUIRED`，执行状态仍为 `NOT_RUN`，不能从受控结果推导其通过。双角色策略与显式 mock 入口继续由 #10 实现，最终同候选矩阵由 #12 汇总。初始作者自查保留其原候选，见[实现结果](../evidence/ai/implementation-result.md)及[清单](../evidence/ai/self-check.json)。
 
 ## 结构与数据归属
 

@@ -4,7 +4,7 @@
 
 Ticket #6 的原作者修正结果见 [修正结果](evidence/review-fix-r1/implementation-result.md)及[修正自查清单](evidence/review-fix-r1/self-check.json)，保留其原作者 `FIX_REPORTED` 身份；初始候选 `e32c579` 的 [实现结果](evidence/implementation-result.md)及[自查清单](evidence/self-check.json)同样保留为历史证据。后续独立审查与释放由总控记录。
 
-本轮在固定运行基线上增加 [Ticket #9 的受控 AI 运行模块](ai/README.md)。供应商／模型／凭证／费用授权尚缺，实际外部模型调用为 0；真实模型闭环、VER-04 整项、前端联合验收、真人试玩与部署均没有据此宣称完成。
+本轮在固定运行基线上增加 [Ticket #9 的受控 AI 运行模块](ai/README.md)。用户在 2026-11-11 将本批明确调整为[模拟输入验收](../docs/specs/vertical-slice-mock.md)；实际外部模型调用为 0，真实供应商与真人输入不再阻塞该 profile 的交付。单 AI 的受控实现与原两轴证据按固定来源复用，双角色、授权复盘及同候选整体验收另行执行；不能据此宣称真实模型质量、真人体验或部署完成。
 
 ## 技术选择与启动
 
