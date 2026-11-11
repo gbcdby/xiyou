@@ -2,14 +2,33 @@
   "schema_version": "work-result/v1",
   "work_id": "vs001-p08-content-preparation",
   "producer": "/root",
-  "scope": "仅内容结构、静态引用、版本固定和人数职责装配；完整局/世界提交/AI/真人均未运行",
+  "scope": "内容准备：补全一槽位一角色唯一出生区装配契约；没有运行局或AI结论",
   "outcome": "COMPLETE_SELF_CHECK",
+  "final_checks": [
+    {
+      "command": "node --test content/tests/content.test.mjs",
+      "chunk_id": "1ad7b0",
+      "wall_time_seconds": 0.368912135,
+      "exit_code": 0,
+      "original_token_count": 171,
+      "output": "✔ 组合职责只装配一个出生区域，同时保留全部能力和初始知识 (74.262561ms)\n✔ 两至五人配置完整分配五项职责，每人始终只有一个职责组合 (14.821947ms)\n✔ 已注册版本的文件被意外改写时拒绝装载 (26.622542ms)\n✔ 内容版本使用规范摘要固定，未知版本不作为文件路径读取 (17.704107ms)\n✔ 内容校验拒绝缺失职责、悬空引用、重复来源和越界配置 (29.422061ms)\n✔ 试验场景固定材料、工具、三处场所、真人操作及两组独立来源 (6.301083ms)\nℹ tests 6\nℹ suites 0\nℹ pass 6\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 334.116045\n"
+    },
+    {
+      "command": "node content/scripts/generate.mjs --check && python3 content/scripts/check-schema.py && git diff --check",
+      "chunk_id": "276938",
+      "wall_time_seconds": 0.200235903,
+      "exit_code": 0,
+      "original_token_count": 32,
+      "output": "内容 Schema 生成一致。\n内容 Schema 合法，1 个正样本与 4 个反样本符合预期，独立规范摘要一致。\n"
+    }
+  ],
+  "checked_at": "2026-11-11T06:38:04.857404+00:00",
   "identity": {
-    "base_commit": "3394ad9a699d33dcb5afcf890427a23595d1a6dc",
+    "base_commit": "b363fd4c77f76bbe9cdde5102d83b98c7b2f07a0",
     "files": [
       {
         "path": "content/README.md",
-        "sha256": "0c4196a3726ea52979ed56c63267723c9639005999e96733ba4de297c3a33d30"
+        "sha256": "f531e9ae9dcebc2e35254a589e6bbfc189af05d3d7cb9542ca1c1198ca14d24c"
       },
       {
         "path": "content/content.schema.json",
@@ -21,7 +40,7 @@
       },
       {
         "path": "content/index.mjs",
-        "sha256": "8f81e3d14edd1e5167ad78efdd7232619bf28831e676dd1bdba7857209d19962"
+        "sha256": "72744b12d494a0f365ce42136a2b072f8b0f7f0f98fe94a285015d8a5bd019f7"
       },
       {
         "path": "content/schema.mjs",
@@ -37,7 +56,7 @@
       },
       {
         "path": "content/tests/content.test.mjs",
-        "sha256": "9d2f5717e07a8f4e72f404d895008cb1a4fccc899bb781dcfc73b17bd63b14ac"
+        "sha256": "8dc793df1a12928ef575580120233a2ff1984e66fdfe2e0e1962622c22a7d4d2"
       },
       {
         "path": "content/validate.mjs",
@@ -57,89 +76,43 @@
       }
     ]
   },
-  "independent_review": "NOT_RUN",
-  "final_check": {
-    "command": "node --test content/tests/content.test.mjs && node content/scripts/generate.mjs --check && python3 content/scripts/check-schema.py && git diff --check",
-    "result": {
-      "chunk_id": "0ad9f7",
-      "wall_time_seconds": 0.852952457,
-      "exit_code": 0,
-      "original_token_count": 178,
-      "output": "✔ 两至五人配置完整分配五项职责，每人始终只有一个职责组合 (200.541743ms)\n✔ 已注册版本的文件被意外改写时拒绝装载 (227.813335ms)\n✔ 内容版本使用规范摘要固定，未知版本不作为文件路径读取 (26.241936ms)\n✔ 内容校验拒绝缺失职责、悬空引用、重复来源和越界配置 (33.798008ms)\n✔ 试验场景固定材料、工具、三处场所、真人操作及两组独立来源 (6.065052ms)\nℹ tests 5\nℹ suites 0\nℹ pass 5\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 609.204655\n内容 Schema 生成一致。\n内容 Schema 合法，1 个正样本与 4 个反样本符合预期，独立规范摘要一致。\n"
-    }
+  "finding": {
+    "id": "R-vs001-p08-REQ-001",
+    "status": "FIX_REPORTED",
+    "independent_review": "NOT_RUN_ON_THIS_REVISION"
   },
-  "historical_tdd": [
-    {
-      "step": 2,
-      "subject": "当时未提交的中间工作树；不作为最终候选通过证据",
-      "red": {
-        "chunk_id": "53d79e",
-        "wall_time_seconds": 0.203536647,
-        "exit_code": 1,
-        "original_token_count": 214,
-        "output": "✔ 两至五人配置完整分配五项职责，每人始终只有一个职责组合 (6.711296ms)\n✖ 试验场景固定材料、工具、三处场所、真人操作及两组独立来源 (1.731572ms)\nℹ tests 2\nℹ suites 0\nℹ pass 1\nℹ fail 1\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 156.897042\n\n✖ failing tests:\n\ntest at content/tests/content.test.mjs:26:1\n✖ 试验场景固定材料、工具、三处场所、真人操作及两组独立来源 (1.731572ms)\n  TypeError [Error]: Cannot read properties of undefined (reading 'durationSeconds')\n      at TestContext.<anonymous> (file:///workspace/scratch/f9401eff266e/.agent-output/content/worktree/content/tests/content.test.mjs:28:31)\n      at async Test.run (node:internal/test_runner/test:1409:7)\n      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)\n"
-      },
-      "green": {
-        "chunk_id": "f38f1c",
-        "wall_time_seconds": 0.129333445,
-        "exit_code": 0,
-        "original_token_count": 79,
-        "output": "✔ 两至五人配置完整分配五项职责，每人始终只有一个职责组合 (6.855701ms)\n✔ 试验场景固定材料、工具、三处场所、真人操作及两组独立来源 (3.909676ms)\nℹ tests 2\nℹ suites 0\nℹ pass 2\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 130.43974\n"
-      }
-    },
-    {
-      "step": 3,
-      "subject": "当时未提交的中间工作树；不作为最终候选通过证据",
-      "red": {
-        "chunk_id": "777ed9",
-        "wall_time_seconds": 0.14465426,
-        "exit_code": 1,
-        "original_token_count": 233,
-        "output": "file:///workspace/scratch/f9401eff266e/.agent-output/content/worktree/content/tests/content.test.mjs:3\nimport { loadContent, rolesForPlayers, validateContent } from '../index.mjs';\n                                       ^^^^^^^^^^^^^^^\nSyntaxError: The requested module '../index.mjs' does not provide an export named 'validateContent'\n    at #asyncInstantiate (node:internal/modules/esm/module_job:455:21)\n    at async ModuleJob.run (node:internal/modules/esm/module_job:553:5)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)\n\nNode.js v24.22.1\n✖ content/tests/content.test.mjs (110.030138ms)\nℹ tests 1\nℹ suites 0\nℹ pass 0\nℹ fail 1\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 118.707132\n\n✖ failing tests:\n\ntest at content/tests/content.test.mjs:1:1\n✖ content/tests/content.test.mjs (110.030138ms)\n  'test failed'\n"
-      },
-      "green": {
-        "chunk_id": "2ce93d",
-        "wall_time_seconds": 0.317538918,
-        "exit_code": 0,
-        "original_token_count": 110,
-        "output": "内容 Schema 已生成。\n✔ 两至五人配置完整分配五项职责，每人始终只有一个职责组合 (34.484166ms)\n✔ 内容校验拒绝缺失职责、悬空引用、重复来源和越界配置 (27.876082ms)\n✔ 试验场景固定材料、工具、三处场所、真人操作及两组独立来源 (4.279218ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 183.23244\n"
-      }
-    },
-    {
-      "step": 4,
-      "subject": "当时未提交的中间工作树；不作为最终候选通过证据",
-      "red": {
-        "chunk_id": "77574e",
-        "wall_time_seconds": 0.191270051,
-        "exit_code": 1,
-        "original_token_count": 240,
-        "output": "file:///workspace/scratch/f9401eff266e/.agent-output/content/worktree/content/tests/content.test.mjs:3\nimport { loadContent, rolesForPlayers, validateContent, contentDigest } from '../index.mjs';\n                                                        ^^^^^^^^^^^^^\nSyntaxError: The requested module '../index.mjs' does not provide an export named 'contentDigest'\n    at #asyncInstantiate (node:internal/modules/esm/module_job:455:21)\n    at async ModuleJob.run (node:internal/modules/esm/module_job:553:5)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)\n\nNode.js v24.22.1\n✖ content/tests/content.test.mjs (111.204311ms)\nℹ tests 1\nℹ suites 0\nℹ pass 0\nℹ fail 1\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 124.357601\n\n✖ failing tests:\n\ntest at content/tests/content.test.mjs:1:1\n✖ content/tests/content.test.mjs (111.204311ms)\n  'test failed'\n"
-      },
-      "green": {
-        "chunk_id": "d4d27a",
-        "wall_time_seconds": 0.210206608,
-        "exit_code": 0,
-        "original_token_count": 127,
-        "output": "✔ 两至五人配置完整分配五项职责，每人始终只有一个职责组合 (48.333491ms)\n✔ 内容版本使用规范摘要固定，未知版本不作为文件路径读取 (27.993596ms)\n✔ 内容校验拒绝缺失职责、悬空引用、重复来源和越界配置 (21.177946ms)\n✔ 试验场景固定材料、工具、三处场所、真人操作及两组独立来源 (3.592279ms)\nℹ tests 4\nℹ suites 0\nℹ pass 4\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 231.640926\n"
-      }
-    },
-    {
-      "step": 5,
-      "subject": "当时未提交的中间工作树；不作为最终候选通过证据",
-      "red": {
-        "chunk_id": "fc715f",
-        "wall_time_seconds": 0.25866422,
-        "exit_code": 1,
-        "original_token_count": 312,
-        "output": "✔ 两至五人配置完整分配五项职责，每人始终只有一个职责组合 (38.758051ms)\n✖ 已注册版本的文件被意外改写时拒绝装载 (26.342118ms)\n✔ 内容版本使用规范摘要固定，未知版本不作为文件路径读取 (19.149527ms)\n✔ 内容校验拒绝缺失职责、悬空引用、重复来源和越界配置 (22.049346ms)\n✔ 试验场景固定材料、工具、三处场所、真人操作及两组独立来源 (3.418953ms)\nℹ tests 5\nℹ suites 0\nℹ pass 4\nℹ fail 1\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 239.060059\n\n✖ failing tests:\n\ntest at content/tests/content.test.mjs:29:1\n✖ 已注册版本的文件被意外改写时拒绝装载 (26.342118ms)\n  AssertionError [ERR_ASSERTION]: Missing expected rejection.\n      at async TestContext.<anonymous> (file:///workspace/scratch/f9401eff266e/.agent-output/content/worktree/content/tests/content.test.mjs:42:5)\n      at async Test.run (node:internal/test_runner/test:1409:7)\n      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {\n    generatedMessage: false,\n    code: 'ERR_ASSERTION',\n    actual: undefined,\n    expected: { code: 'INVALID_CONTENT' },\n    operator: 'rejects',\n    diff: 'simple'\n  }\n"
-      },
-      "green": {
-        "chunk_id": "ab1b57",
-        "wall_time_seconds": 0.30784603,
-        "exit_code": 0,
-        "original_token_count": 153,
-        "output": "✔ 两至五人配置完整分配五项职责，每人始终只有一个职责组合 (26.531681ms)\n✔ 已注册版本的文件被意外改写时拒绝装载 (32.839965ms)\n✔ 内容版本使用规范摘要固定，未知版本不作为文件路径读取 (18.411602ms)\n✔ 内容校验拒绝缺失职责、悬空引用、重复来源和越界配置 (33.820872ms)\n✔ 试验场景固定材料、工具、三处场所、真人操作及两组独立来源 (8.922436ms)\nℹ tests 5\nℹ suites 0\nℹ pass 5\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 217.702899\n内容 Schema 生成一致。\n"
-      }
-    }
+  "previous_evidence": {
+    "subject_id": "b363fd4c77f76bbe9cdde5102d83b98c7b2f07a0",
+    "path": "content/evidence/self-check.json",
+    "relation": "HISTORICAL"
+  },
+  "tdd_red": {
+    "command": "node --test content/tests/content.test.mjs",
+    "exit_code": 1,
+    "tests": 6,
+    "pass": 5,
+    "fail": 1,
+    "target": "新增公开 assemblePlayers 接口缺失",
+    "observed_excerpt": [
+      "actual: 'undefined'",
+      "expected: 'function'"
+    ],
+    "full_local_output_sha256": "9816a9bdecd3c0eea8cf845bf05fba4a83324bd23fc5ade8d60ccd888db45ed9",
+    "output_scope": "仅保留目标断言摘录，未把摘录标成完整原始日志"
+  },
+  "tdd_green": {
+    "command": "node --test content/tests/content.test.mjs",
+    "exit_code": 0,
+    "output": "✔ 组合职责只装配一个出生区域，同时保留全部能力和初始知识 (85.469235ms)\n✔ 两至五人配置完整分配五项职责，每人始终只有一个职责组合 (16.461378ms)\n✔ 已注册版本的文件被意外改写时拒绝装载 (36.866645ms)\n✔ 内容版本使用规范摘要固定，未知版本不作为文件路径读取 (21.425433ms)\n✔ 内容校验拒绝缺失职责、悬空引用、重复来源和越界配置 (36.990543ms)\n✔ 试验场景固定材料、工具、三处场所、真人操作及两组独立来源 (10.062775ms)\nℹ tests 6\nℹ suites 0\nℹ pass 6\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 366.086939\n"
+  },
+  "unchanged": {
+    "fixture_and_registered_digest": true,
+    "production_protocol": true
+  },
+  "uncovered": [
+    "真实Session开始和固定人数",
+    "权威Observation登记",
+    "实际世界操作与AI",
+    "完整局、浏览器、真人试玩"
   ]
 }

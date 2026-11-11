@@ -12,11 +12,22 @@
 | `fixtures/trust-repair-fixture-v1.json` | 当前原创机制配置，包括私有调查材料和未公开事实 |
 | `validate.mjs` | 严格结构与静态引用校验，不执行世界动作 |
 | `versions.json` | 内容版本、reducer 版本及规范 SHA-256 |
-| `index.mjs` | `loadContent`、`validateContent`、`rolesForPlayers`、`contentDigest` 服务端入口 |
+| `index.mjs` | `loadContent`、`validateContent`、`rolesForPlayers`、`assemblePlayers`、`contentDigest` 服务端入口 |
 
 完整配置是**服务端资料**。浏览器、代理和 Model Gateway 只能获得各自授权投影，不能导入本目录后在界面中隐藏秘密。知识模板也不是已登记 Observation：必须由实际初始授权、检查或合法传播产生观察记录并绑定来源游标。
 
 `loadContent(version)` 只读取受控注册表中的路径，核对配置版本、规则版本与摘要，再返回深冻结副本。`rolesForPlayers(content, count)` 返回可独立使用的职责组合；仅在开局时按固定成员数装配，断线不再次按在线人数调用。未知版本不会作为文件路径使用。
+
+`assemblePlayers(content, count)` 是运行层的完整开局装配入口，每个人数槽位只返回一个角色配置。固定 `partyRoles` 数组的**首项职责决定唯一出生区域**，所有职责的能力和初始知识取保留顺序的去重并集，名称组合显示全部职责。职责中的其他 `initialRegionId` 仅是该职责单独成槽时的默认区域，不代表角色同时存在于多个位置。
+
+| 人数 | 按固定成员顺序的职责与唯一出生区域 |
+| --- | --- |
+| 2 | A+D：通路口；B+C+E：材料间 |
+| 3 | A+D：通路口；B：材料间；C+E：通路口 |
+| 4 | A：通路口；B：材料间；C+E：通路口；D：侧路 |
+| 5 | A：通路口；B：材料间；C：通路口；D：侧路；E：材料间 |
+
+开局时将每个槽位绑定到唯一 `CharacterId` 并保存装配结果。该规则补全准备阶段的消费契约，fixture 与注册摘要未改变，也不存在已运行的局需要迁移；运行中不得重算或更改，之后改变此装配语义需要新 reducer 版本。知识 ID 仍只是待授权模板，实际 Observation 必须由权威初始化事件登记。
 
 ## 配置约束与版本
 
@@ -43,3 +54,5 @@ python3 content/scripts/check-schema.py
 Node 行为检查覆盖人数装配、明确初始材料/来源、非法引用、规范摘要和文件被意外改写时拒绝装载；Python 独立检查配置结构与固定摘要。生成命令 `node content/scripts/generate.mjs` 用于有意更新结构后重新生成 Schema。
 
 作者检查原始输出及输入摘要见 [self-check.json](evidence/self-check.json)。这些结果不证明实际修复、许可、NPC 到达、三类结局或权限过滤已经实现。独立审查尚未完成；最终完整局、授权复盘和真人贡献检查仍按 #11/#12 执行。
+
+独立需求审查在原候选发现 `R-vs001-p08-REQ-001`：组合职责存在多个起始区域，但消费契约没有指定唯一位置。本次补充上述装配接口、确定性规则和2/3/4/5人固定期望矩阵；当前仅为作者 `FIX_REPORTED`，最终状态以新固定候选的独立复审为准。
