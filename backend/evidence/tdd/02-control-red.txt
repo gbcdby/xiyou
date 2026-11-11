@@ -1,0 +1,20 @@
+✔ 真实 PostgreSQL：创建去重、房主重复加入、固定内容开局和同水位回放 (1149.633169ms)
+✖ 真实 PostgreSQL：控制往返、双连接、nonce 重试及迟到旧断开 (38.490339ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 1
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1393.269821
+
+✖ failing tests:
+
+test at backend/tests/runtime.test.mjs:55:1
+✖ 真实 PostgreSQL：控制往返、双连接、nonce 重试及迟到旧断开 (38.490339ms)
+  TypeError [Error]: runtime.openConnection is not a function
+      at TestContext.<anonymous> (file:///workspace/scratch/f9401eff266e/.agent-output/runtime-implementation/worktree/backend/tests/runtime.test.mjs:58:31)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)

@@ -1,0 +1,129 @@
+▶ 真实进程崩溃：提交前、COMMIT 后 ACK 前及发布中的恢复
+  ✖ before-commit (169.096885ms)
+  ✖ after-commit (135.277205ms)
+  ✖ during-publish (134.483383ms)
+✖ 真实进程崩溃：提交前、COMMIT 后 ACK 前及发布中的恢复 (1556.437259ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 0
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1765.765455
+
+✖ failing tests:
+
+test at backend/tests/crash.test.mjs:13:13
+✖ before-commit (169.096885ms)
+  AssertionError [ERR_ASSERTION]: node:internal/modules/cjs/loader:1568
+    throw err;
+    ^
+  
+  Error: Cannot find module '/workspace/scratch/f9401eff266e/.agent-output/runtime-implementation/worktree/backend/test-support/crash-worker.mjs'
+      at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+      at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+      at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+      at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+      at Module._load (node:internal/modules/cjs/loader:1341:5)
+      at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+      at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+      at node:internal/main/run_main_module:33:47 {
+    code: 'MODULE_NOT_FOUND',
+    requireStack: []
+  }
+  
+  Node.js v24.22.1
+  
+  
+  1 !== 71
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/f9401eff266e/.agent-output/runtime-implementation/worktree/backend/tests/crash.test.mjs:26:14)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (file:///workspace/scratch/f9401eff266e/.agent-output/runtime-implementation/worktree/backend/tests/crash.test.mjs:13:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 71,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at backend/tests/crash.test.mjs:13:13
+✖ after-commit (135.277205ms)
+  AssertionError [ERR_ASSERTION]: node:internal/modules/cjs/loader:1568
+    throw err;
+    ^
+  
+  Error: Cannot find module '/workspace/scratch/f9401eff266e/.agent-output/runtime-implementation/worktree/backend/test-support/crash-worker.mjs'
+      at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+      at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+      at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+      at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+      at Module._load (node:internal/modules/cjs/loader:1341:5)
+      at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+      at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+      at node:internal/main/run_main_module:33:47 {
+    code: 'MODULE_NOT_FOUND',
+    requireStack: []
+  }
+  
+  Node.js v24.22.1
+  
+  
+  1 !== 72
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/f9401eff266e/.agent-output/runtime-implementation/worktree/backend/tests/crash.test.mjs:26:14)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (file:///workspace/scratch/f9401eff266e/.agent-output/runtime-implementation/worktree/backend/tests/crash.test.mjs:13:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 72,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at backend/tests/crash.test.mjs:13:13
+✖ during-publish (134.483383ms)
+  AssertionError [ERR_ASSERTION]: node:internal/modules/cjs/loader:1568
+    throw err;
+    ^
+  
+  Error: Cannot find module '/workspace/scratch/f9401eff266e/.agent-output/runtime-implementation/worktree/backend/test-support/crash-worker.mjs'
+      at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+      at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+      at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+      at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+      at Module._load (node:internal/modules/cjs/loader:1341:5)
+      at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+      at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+      at node:internal/main/run_main_module:33:47 {
+    code: 'MODULE_NOT_FOUND',
+    requireStack: []
+  }
+  
+  Node.js v24.22.1
+  
+  
+  1 !== 73
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/f9401eff266e/.agent-output/runtime-implementation/worktree/backend/tests/crash.test.mjs:26:14)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (file:///workspace/scratch/f9401eff266e/.agent-output/runtime-implementation/worktree/backend/tests/crash.test.mjs:13:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 73,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

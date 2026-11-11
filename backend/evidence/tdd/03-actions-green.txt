@@ -1,0 +1,11 @@
+✔ 真实 PostgreSQL：创建去重、房主重复加入、固定内容开局和同水位回放 (1161.264455ms)
+✔ 真实 PostgreSQL：并发物品版本竞争、持久收据、异载荷和旧游标 (182.764069ms)
+✔ 真实 PostgreSQL：控制往返、双连接、nonce 重试及迟到旧断开 (152.132864ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1716.750044

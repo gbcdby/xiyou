@@ -1,0 +1,217 @@
+✔ 真实 PostgreSQL：创建去重、房主重复加入、固定内容开局和同水位回放 (1275.290377ms)
+✔ 真实 PostgreSQL：并发物品版本竞争、持久收据、异载荷和旧游标 (143.836695ms)
+✔ 真实 PostgreSQL：观察、陈述分型，历史受众和显式证据传播 (149.930697ms)
+✔ 真实 PostgreSQL：内容驱动修复、工具和材料真实归属、许可前置条件 (108.294968ms)
+✔ 真实 PostgreSQL：内部 NPC 同一提交入口，最终动作和终局原子化 (176.882231ms)
+✔ 真实 PostgreSQL：截止先于动作/控制，拒绝范围为空且时间不倒退 (128.212581ms)
+✔ 真实 PostgreSQL：代理看不到私人频道，禁止物品和最终许可，交还后旧意图失效 (137.910923ms)
+✔ 真实 PostgreSQL：跨 Session 读写拒绝，当前撤权先于旧收据，归档删除不重做 (141.898349ms)
+✖ 真实 PostgreSQL：服务端 view 绑定、隐藏空批次、固定水位投影和旧订阅失效 (89.690953ms)
+✔ 真实 PostgreSQL：控制往返、双连接、nonce 重试及迟到旧断开 (133.990024ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 9
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2724.626448
+
+✖ failing tests:
+
+test at backend/tests/runtime.test.mjs:234:1
+✖ 真实 PostgreSQL：服务端 view 绑定、隐藏空批次、固定水位投影和旧订阅失效 (89.690953ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + [
+  +   {
+  +     eventId: 'S-91f6dc2e-f359-469a-bd19-f12eef52e023:E19',
+  +     kind: 'projection.replace',
+  +     payload: {
+  +       projection: {
+  +         characters: [
+  +           {
+  +             characterId: 'wukong',
+  +             mode: 'CoreNPCControlled',
+  +             name: '孙悟空',
+  +             online: true,
+  +             regionId: null,
+  +             roles: []
+  +           },
+  +           {
+  +             characterId: 'tangseng',
+  +             mode: 'CoreNPCControlled',
+  +             name: '唐僧',
+  +             online: true,
+  +             regionId: 'passage',
+  +             roles: []
+  +           },
+  +           {
+  +             characterId: 'C-10e195a0-6e61-4498-833a-39eb3a05b34c',
+  +             mode: 'HumanControlled',
+  +             name: '勘查者兼寻物者',
+  +             online: true,
+  +             regionId: 'passage',
+  +             roles: [
+  +               'A',
+  +               'D'
+  +             ]
+  +           },
+  +           {
+  +             characterId: 'C-b3611192-3f55-4ddb-87ba-bb9da5566383',
+  +             mode: 'HumanControlled',
+  +             name: '材料保管者兼通行协调者兼记事者',
+  +             online: true,
+  +             regionId: null,
+  +             roles: [
+  +               'B',
+  +               'C',
+  +               'E'
+  +             ]
+  +           }
+  +         ],
+  +         claims: [],
+  +         contentVersion: 'trust-repair-fixture-v1',
+  +         deadlineAt: '2026-11-11T10:40:29.001Z',
+  +         ending: null,
+  +         items: [],
+  +         objectives: [
+  +           {
+  +             label: '调查、修复并协助师徒通行',
+  +             objectiveId: 'passage',
+  +             status: 'active'
+  +           }
+  +         ],
+  +         observations: [
+  +           {
+  +             category: 'Evidence',
+  +             fields: [
+  +               {
+  +                 key: 'damageBeforeArrival',
+  +                 label: '损坏早于到达',
+  +                 value: true
+  +               }
+  +             ],
+  +             observationId: 'S-91f6dc2e-f359-469a-bd19-f12eef52e023:O5',
+  +             observerId: 'C-10e195a0-6e61-4498-833a-39eb3a05b34c',
+  +             shareable: true,
+  +             source: {
+  +               kind: 'initial_content',
+  +               sourceIds: [
+  +                 'structure-before-arrival'
+  +               ],
+  +               sourceSeq: '5'
+  +             },
+  +             statement: '师徒到达前留下的结构记录记有同处损坏。',
+  +             subjectId: 'passage_structure'
+  +           },
+  +           {
+  +             category: 'WorldFact',
+  +             fields: [
+  +               {
+  +                 key: 'direction',
+  +                 label: '目击方向',
+  +                 value: 'side_path'
+  +               }
+  +             ],
+  +             observationId: 'S-91f6dc2e-f359-469a-bd19-f12eef52e023:O6',
+  +             observerId: 'C-10e195a0-6e61-4498-833a-39eb3a05b34c',
+  +             shareable: true,
+  +             source: {
+  +               kind: 'initial_content',
+  +               sourceIds: [
+  +                 'witness-moving-direction'
+  +               ],
+  +               sourceSeq: '6'
+  +             },
+  +             statement: '你看见材料被搬往侧路，没有看见后续处置。',
+  +             subjectId: 'original_material'
+  +           }
+  +         ],
+  +         phase: 'Running',
+  +         reducerVersion: 'world-v1',
+  +         regions: [
+  +           {
+  +             description: '石阶受损，封闭标记仍在。需要检查、修复并取得合法通行。',
+  +             exits: [
+  +               'store',
+  +               'side_path',
+  +               'destination'
+  +             ],
+  +             name: '通路口',
+  +             regionId: 'passage'
+  +           }
+  +         ],
+  +         self: {
+  +           canControl: true,
+  +           capabilities: [
+  +             'move',
+  +             'inspect',
+  +             'speak',
+  +             'make_claim',
+  +             'share_evidence',
+  +             'take_item',
+  +             'transfer_item',
+  +             'repair',
+  +             'wait',
+  +             'inspect_structure',
+  +             'inspect_traces',
+  +             'retrieve_original'
+  +           ],
+  +           characterId: 'C-10e195a0-6e61-4498-833a-39eb3a05b34c',
+  +           controlEpoch: '2',
+  +           mode: 'HumanControlled',
+  +           name: '勘查者兼寻物者',
+  +           regionId: 'passage',
+  +           roles: [
+  +             'A',
+  +             'D'
+  +           ]
+  +         },
+  +         targets: [
+  +           {
+  +             availableOperations: [
+  +               'repair'
+  +             ],
+  +             fields: [
+  +               {
+  +                 key: 'safe',
+  +                 label: '安全',
+  +                 value: false
+  +               },
+  +               {
+  +                 key: 'permit',
+  +                 label: '通行许可',
+  +                 value: false
+  +               },
+  +               {
+  +                 key: 'repairMaterial',
+  +                 label: '实际修复材料',
+  +                 value: null
+  +               }
+  +             ],
+  +             name: '受损通路',
+  +             regionId: 'passage',
+  +             resourceRevision: '0',
+  +             targetId: 'passage_structure'
+  +           }
+  +         ]
+  +       }
+  +     },
+  +     sessionSeq: '19'
+  +   }
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/f9401eff266e/.agent-output/runtime-implementation/worktree/backend/tests/runtime.test.mjs:241:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ { sessionSeq: '19', eventId: 'S-91f6dc2e-f359-469a-bd19-f12eef52e023:E19', kind: 'projection.replace', payload: [Object] } ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

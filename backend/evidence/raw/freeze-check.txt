@@ -1,0 +1,16 @@
+源码摘要：54 文件一致，集合 2e95209c14fc6912420d3f77dfc769749db6d71cfea36cce21de3cb4ef14074f
+
+正式文档相对链接：35 个目标均存在。
+
+正式 JSON 证据解析通过。
+
+命令：node --check backend/main.mjs
+退出码：0
+
+命令：git show --format= --check 3443884069953eaf8da7ded49a520130b4d618f9
+退出码：0
+
+命令：git diff 19016f85656018064176d866f0906441077fbb1a HEAD -- docs/specs protocol game/types.ts
+退出码：0
+
+本任务 PostgreSQL 与故障服务子进程：未发现残留。

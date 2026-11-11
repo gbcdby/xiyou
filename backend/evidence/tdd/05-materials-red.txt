@@ -1,0 +1,36 @@
+✔ 真实 PostgreSQL：创建去重、房主重复加入、固定内容开局和同水位回放 (1198.798123ms)
+✔ 真实 PostgreSQL：并发物品版本竞争、持久收据、异载荷和旧游标 (149.237073ms)
+✔ 真实 PostgreSQL：观察、陈述分型，历史受众和显式证据传播 (145.270687ms)
+✖ 真实 PostgreSQL：内容驱动修复、工具和材料真实归属、许可前置条件 (72.591294ms)
+✔ 真实 PostgreSQL：控制往返、双连接、nonce 重试及迟到旧断开 (130.082574ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 4
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1892.90906
+
+✖ failing tests:
+
+test at backend/tests/runtime.test.mjs:129:1
+✖ 真实 PostgreSQL：内容驱动修复、工具和材料真实归属、许可前置条件 (72.591294ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'Rejected'
+  - 'Accepted'
+  
+      at repairAndPermit (file:///workspace/scratch/f9401eff266e/.agent-output/runtime-implementation/worktree/backend/tests/runtime.test.mjs:123:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (file:///workspace/scratch/f9401eff266e/.agent-output/runtime-implementation/worktree/backend/tests/runtime.test.mjs:133:18)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'Rejected',
+    expected: 'Accepted',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

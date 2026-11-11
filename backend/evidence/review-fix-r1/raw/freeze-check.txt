@@ -1,0 +1,17 @@
+源码及输入：56 项 SHA-256 和字节数一致；集合 3680283a4c0d776ec391304f4b545f69d7bcb9779032e9f904757640c6b6edc9。
+
+原冻结候选的 42 个正式证据文件逐字节未变。
+
+本轮说明和报告的 45 个相对链接目标均存在。
+
+正式 JSON 可解析，已有 18 份原始日志摘要一致。
+
+变更的全部 JavaScript 语法和固定源码提交空白检查通过。
+
+Spec、protocol、content、formal、生成 game/types.ts 相对原冻结候选无变化。
+
+原 runtime-implementation 工作树仍为 e32c579 且 clean。
+
+本任务 Node／PostgreSQL／initdb 进程：未发现残留；无待交接执行句柄。
+
+共享 node_modules 链接未被跟踪。
