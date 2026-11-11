@@ -6,6 +6,23 @@ import path from 'node:path';
 import { loadContent, rolesForPlayers, validateContent, contentDigest } from '../index.mjs';
 import * as contentApi from '../index.mjs';
 
+for (const [label, change] of [
+  ['组合名称超长', content => {
+    content.roles.find(role => role.roleId === 'A').name = '甲'.repeat(80);
+    content.roles.find(role => role.roleId === 'D').name = '丁'.repeat(80);
+  }],
+  ['能力并集超量', content => {
+    while (content.humanCapabilities.length < 32) content.humanCapabilities.push('extra_' + content.humanCapabilities.length);
+  }],
+]) {
+  test('内容装配拒绝无法进入共享投影协议的配置：' + label, async () => {
+    const content = structuredClone(await loadContent('trust-repair-fixture-v1'));
+    change(content);
+    assert.throws(() => validateContent(content), { code: 'INVALID_CONTENT' });
+    assert.throws(() => contentApi.assemblePlayers(content, 2), { code: 'INVALID_CONTENT' });
+  });
+}
+
 test('组合职责只装配一个出生区域，同时保留全部能力和初始知识', async () => {
   const content = await loadContent('trust-repair-fixture-v1');
   assert.equal(typeof contentApi.assemblePlayers, 'function');
@@ -35,6 +52,13 @@ test('组合职责只装配一个出生区域，同时保留全部能力和初�
   assert.deepEqual(contentApi.assemblePlayers(content, 2)[0].roles, ['A', 'D']);
   assert.ok(contentApi.assemblePlayers(content, 2)[0].capabilities.includes('move'));
   assert.throws(() => contentApi.assemblePlayers(content, 1), /人数/);
+  const boundary = structuredClone(content);
+  boundary.roles.find(role => role.roleId === 'A').name = '甲'.repeat(60);
+  boundary.roles.find(role => role.roleId === 'D').name = '丁'.repeat(59);
+  while (boundary.humanCapabilities.length < 29) boundary.humanCapabilities.push('extra_' + boundary.humanCapabilities.length);
+  const combined = contentApi.assemblePlayers(boundary, 2)[0];
+  assert.equal([...combined.name].length, 120);
+  assert.equal(combined.capabilities.length, 32);
 });
 
 test('两至五人配置完整分配五项职责，每人始终只有一个职责组合', async () => {
