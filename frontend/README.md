@@ -1,8 +1,10 @@
-# 同行前端 · #8 联机界面
+# 同行前端 · 联机界面与授权复盘
 
 本目录提供 Vue 3 / TypeScript / Vue Router 的房间界面、授权投影视图、HTTP / Socket.IO 客户端以及恢复驱动。已接入 #6 权威运行服务；本轮以合成玩家身份执行实际 PostgreSQL、HTTP、Socket.IO 与浏览器代码。用户在 2026-11-11 明确本批使用 mock 输入，最终完整玩法与同候选五身份长测由 #10/#11/#12 继续完成。
 
 原候选与后续控制状态提示修正已完成独立需求、标准两轴复审；相关 finding 的历史结论为 VERIFIED。原[审查修正自查](evidence/review-fix-self-check.md)与[初始阶段自查](evidence/stage-self-check.md)保留其实际候选和范围。当前新增的 47 项行为检查、构建及实际服务浏览器短检见[模拟输入联机短检](evidence/mock-shell-20261111/README.md)。它们不冒充新同候选的 900 秒、双 NPC 或完整局验收。
+
+#11 在此基础上加入证据结构化详情、严格独立的终态授权过程列表及其分页 / 权限生命周期。接口、语义与 #7 义务映射见[授权复盘实现说明](../backend/recap.md)，固定候选的 170 项协议／前后端检查、15 项实际浏览器检查及保留失败见[本轮作者自查](evidence/mock-recap-20261111/README.md)。新实现及作者自查与上述 #8 历史结果分开，独立审查和最终集成结论由总控维护。
 
 ## 运行与检查
 
@@ -16,7 +18,7 @@ npm run build
 npm run dev
 ```
 
-开发服务器默认仅监听本机。`/api` 和 `/socket.io` 代理到本机 `3000` 端口；已有权威服务的 `DATABASE_URL` 与 `npm start` 用法见[后端启动说明](../backend/README.md#技术选择与启动)。部署入口及正式代理尚未配置。`npm run build` 先执行 `vue-tsc --noEmit`，再生成静态产物，不发布或部署。
+开发服务器默认仅监听本机。`/api` 和 `/socket.io` 代理到本机 `3000` 端口；已有权威服务的 `DATABASE_URL` 用法见[后端启动说明](../backend/README.md#技术选择与启动)。运行本轮双 NPC 模拟切片时在根目录使用 `npm run start:mock`，策略和预算见[模拟策略说明](../backend/ai/mock.md)；`npm start` 只启动权威服务。部署入口及正式代理尚未配置。`npm run build` 先执行 `vue-tsc --noEmit`，再生成静态产物，不发布或部署。
 
 默认入口 `/` 请求真实 HTTP 服务。`/sessions/:sessionId` 通过真实 Socket.IO 订阅当前账号的授权视图。没有服务、身份失效或尚未取得合法快照时，页面明确显示未连接或不可访问，不生成房间、动作成功或世界变化。
 
@@ -45,7 +47,8 @@ npm run dev
 | 证据与对话 | 明确区分实际观察、证据记录和陈述；定向 / 私人频道要求选择接收者 |
 | 控制入口 | 先取得真实连接的快照，再请求恢复；显式点击接管才发送 `control.take` |
 | 动作结果 | 等待确认、结果未知、已提交同步中、已确认以及拒绝分别显示；未知可查询或原样重试 |
-| 回顾 | 只展示 `AuthorizedProjection.ending`，终态停用新动作，不自行推断胜负 |
+| 证据详情 | 原文、有类型的 fields、适用对象、当前接收者及来源引用；共享副本不被标成独立发现 |
+| 回顾 | 保留 `AuthorizedProjection.ending`，另按当前资格和历史受众读取授权过程；陈述与已发生行动分类，终态停用新动作 |
 
 客户端保留自己的待确认动作原文到标签页 `sessionStorage`，以登录用户和 Session 隔离。刷新后重新取得授权，再查询原动作；不会把缓存当作授权依据。只缓存待确认的原始请求，不缓存授权投影。浏览器不允许保存时提示保留当前页面，未取得收据前不要刷新。
 
@@ -63,6 +66,7 @@ HTTP 或 Socket 明确返回 `UNAUTHENTICATED` 时，身份层停止旧会话、
 | `POST /api/sessions/:id/join` | `{nonce}` | `{sessionId,actorId}`；原成员重复加入保持原角色 |
 | `POST /api/sessions/:id/start` | `{nonce}` | JSON 响应；实际 Running 状态仍须由授权流确认 |
 | `GET /api/sessions/:id` | 登录 token | 只读 `AuthorizedSnapshot`；不授予客户端连接控制 |
+| `GET /api/sessions/:id/recap?throughSeq=…[&beforeSeq=…]` | 登录 token，当前终态快照 cursor，可选上一页游标 | 严格 `AuthorizedRecap`；每页最多 100 条授权记录，固定水位递减，不改变世界投影 |
 | `GET /api/sessions/:id/actions/:actionId` | 登录 token | `ClientReceipt`；无确定收据的 404 保持未知，明确的契约失效错误继续传给恢复驱动 |
 
 Socket.IO 使用默认 `/socket.io` 路径和 `auth: {token}`。服务端从真实 Socket 获得连接身份；客户端不通过 header 或动作载荷声明 `connectionId`。
@@ -75,7 +79,15 @@ Socket.IO 使用默认 `/socket.io` 路径和 `auth: {token}`。服务端从真�
 | `control.resume` / `control.take` | 原始 JSON string | `ControlResponse` 或契约错误 |
 | `world.batch` | 服务端推送 | 同一个 Session / view 的授权批次 |
 
-握手认证失败如附带契约错误，适配器从 Socket.IO 的 `connect_error.data` 读取。`share_evidence.evidenceId` 取自当前用户可传播的 `Observation.observationId`，不把内部来源 ID 当成可任意传播的证据。修改协议含义应回到相应 Spec；新增终态回顾仍须执行其独立权限和分页验收。
+握手认证失败如附带契约错误，适配器从 Socket.IO 的 `connect_error.data` 读取。`share_evidence.evidenceId` 取自当前用户可传播的 `Observation.observationId`，不把内部来源 ID 当成可任意传播的证据。修改协议含义应回到相应 Spec。
+
+### 终态授权过程
+
+`RecapClient` 独立于世界 reducer 和动作收据。页面只在收到当前在线终态投影后请求过程；账号、房间、viewId 或授权状态变化时清空并取消，迟到回包不能写入新代次。分页失败保留已有条目并提供重试，不把缺页标作完整。旧服务器没有该端点时，列表显示暂不可用，原结局仍可查看。
+
+陈述分为“说过”“听到／获知陈述”“收到分享的陈述”，后两者的 actor 显示为接收者。对象名称只来自当前已授权投影。无公开类型的 subjectId 在复盘 DTO 中保留为普通 source 引用，界面标“相关引用”；证据卡保留“适用对象”与“来源引用”的原有区分。没有源事件读取入口，不追授原私密观察者或发言者身份，也不从文本推导信念或履约。
+
+`node frontend/tests/recap-browser-check.mjs` 在仓库根目录运行实际 PostgreSQL / HTTP / Socket.IO / Vue / Chromium 检查。它包含 2 人与 5 人页面操作链、A→C→B 假陈述、合法证据共享、历史受众、权限负例、超过一页、分页故障 / 重试和旧请求隔离。NPC 结尾使用合法受控意图，仅检查本功能，不代替 #10 策略或 #12 整局验收。复现工具环境变量与证据范围见[实现说明](../backend/recap.md#检查入口与范围)。
 
 ## 恢复与动作语义
 
@@ -100,7 +112,7 @@ Socket.IO 使用默认 `/socket.io` 路径和 `auth: {token}`。服务端从真�
 
 ## 后续验收边界
 
-- #10/#11 集成双 NPC 的受控 provider、证据详情和终态回顾；新功能另建候选并执行对应检查。
+- #11 的证据详情与终态回顾由本候选提供；#10 双 NPC 受控 provider 接合及全部结果仍须在同一最终候选上核对。
 - #12 在同一最终候选执行五客户端至少 900 秒、完整局、角色贡献及丢 ACK／恢复／交还控制／旧 AI 迟到的组合因果验收。历史长测保留原来源，不标作新候选执行。
 - 当前桌面／窄屏与具名交互检查已经实际执行，范围不等同完整平台或实际用户体验验收。
 - `mock-20261111` 使用合成玩家和模型输出；真实模型质量与真人体验属于尚未执行的 `full-real` 范围。本轮不以它们作为模拟切片的输入门槛。

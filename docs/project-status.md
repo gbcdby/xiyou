@@ -2,6 +2,12 @@
 
 ## 当前基线
 
+更新日期：**2026-11-11**。当前实现已包含 `game/`、`protocol/`、`formal/`、`backend/`、`frontend/` 与 `content/`：Node.js / PostgreSQL 权威服务、Vue 界面、受控双角色、第一机制关及授权复盘。用户已将本轮终点明确为[模拟输入下完成验证并合并的可玩切片](specs/vertical-slice-mock.md)，实际候选、独立审查、运行证据与合并事实统一见 [#2](https://github.com/gbcdby/xiyou/issues/2) / [#12](https://github.com/gbcdby/xiyou/issues/12)。本页不复制活动任务清单。
+
+模拟策略经正式 Gateway、Decision 和 Validator 执行；有限模型、数据库、HTTP / Socket.IO 与浏览器检查分别保留证据。实际供应商质量、真人体验、真实设备和公网部署仍未执行。运行入口见[仓库说明](../README.md#本机运行模拟切片)。
+
+### 初始检查快照（历史）
+
 检查日期：**2026-11-11（北京时间）**。代码基线：[main@17bcb222](https://github.com/gbcdby/xiyou/tree/17bcb222a9d84e0abd7463af06cae19081c8d12e)，对应“初始提交”。本节记录这次检查的快照；后续进度以关联的 GitHub Issue、PR 和有效 Spec 为准。
 
 | 范围 | 本次实际观察 |
@@ -47,7 +53,7 @@
 
 各阶段的实际验收由有效 Spec 与任务记录细化；此表不维护重复的任务状态。
 
-## 当前推进：首个可玩切片 Spec
+## VS-001 设计起点（历史）
 
 用户于 **2026-11-11** 要求按 `auto` 开始下一步，范围为 M0–M4 的设计、验证路径与任务拆分，优先收敛 M0 协议。正式入口为 [VS-001](specs/vertical-slice.md)，包含玩法、协议、验证与任务目录。
 

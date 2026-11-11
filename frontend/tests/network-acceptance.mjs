@@ -16,7 +16,7 @@ await mkdir(output, { recursive: true });
 const source = await sourceIdentity();
 assert.equal(source.status, '', '正式长测前必须固定干净源码候选。');
 const recorder = new NetworkRecorder(resolve(output, 'trace.jsonl'));
-const report = { scope: '五个独立自动身份的真实前端网络类 + HTTP / Socket.IO / PostgreSQL 技术验收；不是真人、真实 AI 或完整玩法结局', startedAt: new Date().toISOString(), requestedDurationMs: durationMs, source, cases: [], checkpoints: [], databaseErrors: [], cleanup: [], resourcesClosed: false, notCovered: ['真人试玩', '供应商真实 AI', '自然玩法终局', '服务端迟到旧 disconnect / 旧 AI 回调的本轮联合注入；仅引用已释放 #6 对应证据'] };
+const report = { acceptanceProfile: 'mock-20261111', scope: '最终候选五个独立自动身份的真实前端网络类 + HTTP / Socket.IO / PostgreSQL 长测分项；不是真人或完整玩法结局', startedAt: new Date().toISOString(), requestedDurationMs: durationMs, source, cases: [], checkpoints: [], roleOpportunityWindows: [], databaseErrors: [], cleanup: [], resourcesClosed: false, notCovered: ['真人试玩', '供应商真实 AI', '自然玩法终局与旧AI联合迟到由同候选mock-integration.mjs另行验证，不计作此脚本结果'] };
 let database, server, timerStart = null, tick = 0;
 const all = []; let active = []; let sessionId; let historyObservers = [];
 const mainMarkers = [];
@@ -26,6 +26,31 @@ const accepted = async (person, action) => { const draft = await person.action(a
 const stable = async label => { const result = await checkpoint({ participants: active, server, sessionId, recorder, label }); report.checkpoints.push({ label, cursor: result.cursor, comparisons: result.comparisons, stateDigest: sha256(result.state) }); return result; };
 const drainOutbox = () => until(async () => Number((await database.pool.query("SELECT count(*) AS n FROM outbox WHERE session_id=$1 AND status='Pending'", [sessionId])).rows[0].n) === 0, '已提交 outbox 发布收束');
 const moveTo = async (person, regionId) => { if (person.client.state.snapshot.projection.self.regionId !== regionId) { await accepted(person, { kind: 'move', regionId }); await until(() => person.client.state.snapshot?.projection.self.regionId === regionId, `${person.label} 到达 ${regionId}`); } };
+// 每个120秒窗口实际执行一个与职责相关的合法选择；重复核查不计作整局的有效贡献。
+async function roleOpportunities(window) {
+  const obligations = [
+    ['A', 'inspect_structure', 'passage', 'passage_structure', '核对通路安全'],
+    ['B', 'inspect_inventory', 'store', 'stock_record', '核对公共库存'],
+    ['C', 'grant_passage', 'passage', 'passage_structure', '核对许可前置条件'],
+    ['D', 'inspect_traces', 'side_path', 'material_cache', '核对原材料去向'],
+    ['E', 'inspect_records', 'store', 'stock_record', '核对登记来源'],
+  ];
+  const choices = [];
+  for (const [role, capability, regionId, targetId, purpose] of obligations) {
+    const person = active.find(person => person.client.state.snapshot?.projection.self.capabilities.includes(capability));
+    assert.ok(person, `${role} 的职责必须仍有实际控制者。`);
+    const before = person.client.state.snapshot.projection;
+    if (before.self.regionId !== regionId) assert.ok(before.regions.find(region => region.regionId === before.self.regionId).exits.includes(regionId));
+    await moveTo(person, regionId);
+    const current = person.client.state.snapshot.projection;
+    assert.ok(current.self.canControl && current.targets.some(target => target.targetId === targetId));
+    const choice = await accepted(person, { kind: 'inspect', targetId });
+    choices.push({ role, actorId: person.actorId, capability, purpose, targetId, actionId: choice.id, receipt: choice.receipt, elapsedMs: elapsed() });
+  }
+  const result = { window, fromMs: window * 120000, checkedAtMs: elapsed(), choices };
+  assert.ok(result.checkedAtMs >= result.fromMs && result.checkedAtMs < result.fromMs + 120000);
+  report.roleOpportunityWindows.push(result); recorder.write('role-opportunities', result);
+}
 async function activity(people = active) {
   tick += 1;
   for (const person of people) {
@@ -63,6 +88,8 @@ try {
   timerStart = performance.now(); report.longStartedAt = new Date().toISOString(); report.longMonotonicStartMs = timerStart; report.deadlineAt = initial.state.deadlineAt;
   report.identities = active.map(person => ({ label: person.label, userId: person.userId, actorId: person.actorId }));
   pass('五身份真实开局，固定 1200 秒期限并开始实际计时');
+  await roleOpportunities(0);
+  await stable('职责选择检查后的授权前缀');
 
   // 唯一标记独立于服务端过滤器，检查完整真实入站载荷。
   await drainOutbox();
@@ -191,9 +218,10 @@ try {
   pass('跨局、撤权、未知收据、终态读取与删除边界', { otherSession, retainedActionId: aReceipt.id });
 
   // 后续维持真实操作，不扩关卡期限；每分钟保存可核对的进度与同游标检查点。
-  let nextProgress = elapsed() + 30000; let nextCheckpoint = elapsed() + 60000;
+  let nextProgress = elapsed() + 30000; let nextCheckpoint = elapsed() + 60000; let nextRoleWindow = 1;
   while (elapsed() < durationMs) {
     assert.ok(elapsed() < 1100000, '本轮总技术时长预算被超过'); assert.deepEqual(report.databaseErrors, []);
+    if (elapsed() >= nextRoleWindow * 120000) { await roleOpportunities(nextRoleWindow); nextRoleWindow++; }
     await activity();
     if (elapsed() >= nextCheckpoint) { await stable(`持续操作 ${Math.floor(elapsed() / 1000)} 秒`); nextCheckpoint = elapsed() + 60000; }
     if (elapsed() >= nextProgress) { const progress = { elapsedMs: Math.round(elapsed()), remainingMs: Math.max(0, Math.round(durationMs - elapsed())), identities: counts() }; recorder.write('progress', progress); console.log(JSON.stringify(progress)); nextProgress = elapsed() + 30000; }
@@ -208,6 +236,7 @@ try {
   assert.equal(sequences.length, Number(final.cursor)); assert.ok(sequences.every((seq, index) => seq === String(index + 1)));
   assert.deepEqual(report.databaseErrors, []);
   report.actualDurationMs = elapsed(); assert.ok(report.actualDurationMs >= 900000);
+  assert.deepEqual(report.roleOpportunityWindows.map(window => window.window), Array.from({ length: Math.ceil(durationMs / 120000) }, (_, index) => index));
   report.final = { cursor: final.cursor, stateDigest: sha256(final.state), phase: final.state.phase, contentVersion: final.state.contentVersion, reducerVersion: final.state.reducerVersion, eventCount: sequences.length, counts: counts() };
   pass('达到实际 900 秒，连续事件与最终世界 / 各自授权前缀回放一致', report.final);
   report.assessment = 'PASS';

@@ -663,5 +663,32 @@
     "userId": "U1",
     "connectionId": "connection-1",
     "authenticatedAt": "2026-11-11T04:00:00.000Z"
+  },
+  "AuthorizedRecap": {
+    "schemaVersion": 1,
+    "type": "session.recap",
+    "sessionId": "S1",
+    "actorId": "C3",
+    "throughSeq": "1010",
+    "phase": "Finished",
+    "entries": [
+      {
+        "entryId": "R-1009",
+        "eventSeq": "1009",
+        "serverTime": "2026-11-11T12:00:00.000Z",
+        "category": "Claim",
+        "kind": "received_claim",
+        "actorId": "C3",
+        "text": "通路已经修好。",
+        "fields": [],
+        "references": [
+          {
+            "kind": "source",
+            "id": "claim-original"
+          }
+        ]
+      }
+    ],
+    "nextBeforeSeq": null
   }
 }

@@ -17,9 +17,28 @@
 
 ## 当前阶段
 
-截至 2026-11-11 检查的代码基线，仓库包含设计文档、工程约定与技能包，尚无游戏应用代码或可运行的本仓库协议模型。检查对象与证据边界见[项目现状](docs/project-status.md#当前基线)。
+截至 2026-11-11，仓库已包含 M0–M4 首个机制切片的协议、有限模型、PostgreSQL 权威服务、Vue 联机界面、受控双 NPC 策略、证据详情与终态授权复盘。当前采用 [mock-20261111 验收修订](docs/specs/vertical-slice-mock.md)：玩家与模型输入可以模拟，权限、规则、事务、事件、网络和浏览器仍实际运行。
 
-当前以 **[首个可玩切片 VS-001](docs/specs/vertical-slice.md)** 收敛 M0–M4 的玩法、协议、验证路径与任务。实际设计状态、采用修订与实现依赖见 [Spec 汇总 #2](https://github.com/gbcdby/xiyou/issues/2)及[任务目录](docs/specs/vertical-slice-tasks.md)；下一项技术工作优先 M0 契约与核心模型，之后逐步形成无 AI 联机房间、单 AI、双 AI 与第一个机制关。
+固定候选、实际检查与合并状态以 [Spec 汇总 #2](https://github.com/gbcdby/xiyou/issues/2)及[最终验收 #12](https://github.com/gbcdby/xiyou/issues/12)为准。真实模型质量、真人体验和公网部署尚未执行；模拟结果不替代这些结论。[项目现状](docs/project-status.md#当前基线)保留初始检查与当前实现的区别。
+
+## 本机运行模拟切片
+
+需要 Node.js 24 或更高版本及可连接的 PostgreSQL。先按[服务端说明](backend/README.md#技术选择与启动)配置本机 `DATABASE_URL`，在仓库根目录安装依赖并启动明确标注为“模拟角色策略”的服务：
+
+```sh
+npm ci
+npm run start:mock
+```
+
+另开终端启动前端：
+
+```sh
+cd frontend
+npm ci
+npm run dev
+```
+
+打开开发服务器显示的本机地址，以不同浏览器身份创建或加入房间，2–5 人即可开局。唐僧与悟空使用确定性受控 provider；所有行动仍经正式校验器。默认 `npm start` 只启动权威服务，双角色策略的行为与启动边界见[模拟策略说明](backend/ai/mock.md)。
 
 ## 工作记录
 
