@@ -1,12 +1,12 @@
-# 同行前端 · #8 阶段候选
+# 同行前端 · #8 联机界面
 
-本目录提供 Vue 3 / TypeScript / Vue Router 的房间界面、授权投影视图、HTTP / Socket.IO 客户端以及恢复驱动。当前是等待 #6 运行服务接入的**阶段候选**，不代表 #8 整票完成或已通过多人联机验收。
+本目录提供 Vue 3 / TypeScript / Vue Router 的房间界面、授权投影视图、HTTP / Socket.IO 客户端以及恢复驱动。已接入 #6 权威运行服务；本轮以合成玩家身份执行实际 PostgreSQL、HTTP、Socket.IO 与浏览器代码。用户在 2026-11-11 明确本批使用 mock 输入，最终完整玩法与同候选五身份长测由 #10/#11/#12 继续完成。
 
-对原候选 `40f2448` 的四项审查发现已提交作者修正，状态为 `FIX_REPORTED`，等待独立复审。当前证据见[审查修正自查](evidence/review-fix-self-check.md)；[初始阶段自查](evidence/stage-self-check.md)保留原候选的历史范围。
+原候选与后续控制状态提示修正已完成独立需求、标准两轴复审；相关 finding 的历史结论为 VERIFIED。原[审查修正自查](evidence/review-fix-self-check.md)与[初始阶段自查](evidence/stage-self-check.md)保留其实际候选和范围。当前新增的 47 项行为检查、构建及实际服务浏览器短检见[模拟输入联机短检](evidence/mock-shell-20261111/README.md)。它们不冒充新同候选的 900 秒、双 NPC 或完整局验收。
 
 ## 运行与检查
 
-需要 Node.js 24 或更高版本。本轮实际使用 Node.js 24.22.1。依赖固定在本目录的 `package.json` 和 `package-lock.json`，不依赖仓库根目录安装。
+需要 Node.js 24 或更高版本。本轮实际使用 Node.js 24.22.1。前端单元检查、类型检查与构建的依赖固定在本目录的 `package.json` 和 `package-lock.json`。连接实际服务的 `real-browser-check.mjs` 还使用根目录的后端和临时 PostgreSQL 依赖，运行前须在仓库根目录执行 `npm ci`，并在前端目录执行 `npm ci`。
 
 ```sh
 cd frontend
@@ -16,7 +16,7 @@ npm run build
 npm run dev
 ```
 
-开发服务器默认仅监听本机。`/api` 和 `/socket.io` 代理到本机 `3000` 端口；部署入口、服务运行方式及正式代理由后续运行层接入确定。`npm run build` 先执行 `vue-tsc --noEmit`，再生成静态产物，不发布或部署。
+开发服务器默认仅监听本机。`/api` 和 `/socket.io` 代理到本机 `3000` 端口；已有权威服务的 `DATABASE_URL` 与 `npm start` 用法见[后端启动说明](../backend/README.md#技术选择与启动)。部署入口及正式代理尚未配置。`npm run build` 先执行 `vue-tsc --noEmit`，再生成静态产物，不发布或部署。
 
 默认入口 `/` 请求真实 HTTP 服务。`/sessions/:sessionId` 通过真实 Socket.IO 订阅当前账号的授权视图。没有服务、身份失效或尚未取得合法快照时，页面明确显示未连接或不可访问，不生成房间、动作成功或世界变化。
 
@@ -30,7 +30,9 @@ npm run dev
 
 该脚本包括桌面 / 390 像素窄屏截图、横向溢出检查、断网后的诚实失败反馈、静态演示动作停用，以及组件夹具中的接收者选择、物品交付和移动事件。另用受控 HTTP 响应验证明确身份失效后清凭据、恢复真实登录表单、由用户显式创建新访客；此响应替身不是运行服务。浏览器输出遵循项目的临时产物规则。`tests/browser-fixture.html` 仅是开发期验证入口，生产构建只包含 `index.html`。
 
-**本轮完整浏览器脚本的 10 条限定检查通过。** 使用外置 Chromium 153.0.8010.0 与同一进程生命周期中的 Vite，实际检查桌面 1440×1000、窄屏 390×844；无横向溢出，页面脚本错误为 0。截图与结果绑定本轮源码摘要，见[修正自查](evidence/review-fix-self-check.md)和[浏览器结果摘要](evidence/browser-check-summary.json)。原候选的环境阻塞保留在[历史阶段自查](evidence/stage-self-check.md)。这些检查只覆盖前端渲染、受控故障和静态授权 DTO，真实后端与多人联机尚未执行。
+历史完整浏览器脚本的 10 条限定检查通过，具体候选与范围见[修正自查](evidence/review-fix-self-check.md)和[浏览器结果摘要](evidence/browser-check-summary.json)。原环境阻塞保留在[历史阶段自查](evidence/stage-self-check.md)，不改写为本次执行。
+
+本轮另执行 `node tests/real-browser-check.mjs`（在仓库根目录时为 `node frontend/tests/real-browser-check.mjs`），连接实际权威服务、临时 PostgreSQL 与 Socket.IO。合成身份完成登录、创建、加入、开始、控制、移动、受许可限制出口的真实拒绝、定向陈述和查看；桌面 1440×1000、窄屏 390×844 均无横向溢出。6 项具名检查通过，页面与数据库错误为空，资源已关闭；[新结果](evidence/mock-shell-20261111/result.json)与 105 项源码输入摘要绑定同一次 7.192 秒短检。
 
 ## 页面与职责
 
@@ -51,7 +53,7 @@ HTTP 或 Socket 明确返回 `UNAUTHENTICATED` 时，身份层停止旧会话、
 
 ## 与运行服务约定的最小接口
 
-这些接口经总控与 #6 实现范围对齐；本轮未做真实服务联调。
+这些接口已与 #6 实现接合；上述新短检执行了实际服务链路，覆盖范围以具名结果为准。
 
 | HTTP 路径 | 输入 | 客户端期望 |
 | --- | --- | --- |
@@ -73,7 +75,7 @@ Socket.IO 使用默认 `/socket.io` 路径和 `auth: {token}`。服务端从真�
 | `control.resume` / `control.take` | 原始 JSON string | `ControlResponse` 或契约错误 |
 | `world.batch` | 服务端推送 | 同一个 Session / view 的授权批次 |
 
-握手认证失败如附带契约错误，适配器从 Socket.IO 的 `connect_error.data` 读取。`share_evidence.evidenceId` 取自当前用户可传播的 `Observation.observationId`，不把内部来源 ID 当成可任意传播的证据。上述适配细节在 #6 联调时仍须与实际入口逐项核对；修改协议含义应回到相应 Spec。
+握手认证失败如附带契约错误，适配器从 Socket.IO 的 `connect_error.data` 读取。`share_evidence.evidenceId` 取自当前用户可传播的 `Observation.observationId`，不把内部来源 ID 当成可任意传播的证据。修改协议含义应回到相应 Spec；新增终态回顾仍须执行其独立权限和分页验收。
 
 ## 恢复与动作语义
 
@@ -98,7 +100,7 @@ Socket.IO 使用默认 `/socket.io` 路径和 `auth: {token}`。服务端从真�
 
 ## 后续验收边界
 
-- 接入已释放的真实 #6 服务，逐项验证创建 / 加入 / 开局 / 快照 / 控制 / 动作 / 收据 / 批次，核对认证失败载荷与证据引用。
-- 在真实服务场景补齐焦点、放大文字、长内容及更广的组件交互。当前桌面 / 窄屏截图与所列前端交互已经实际检查，范围不等同完整平台验收。
-- 用同一候选执行五客户端至少 900 秒技术检查、真实丢包 / 重连 / 接管 / 越权场景及服务端授权投影对照。
-- 真人试玩和真实 AI 体验分别取证；本阶段的静态演示、网络替身及形式模型均不充当此类证据。
+- #10/#11 集成双 NPC 的受控 provider、证据详情和终态回顾；新功能另建候选并执行对应检查。
+- #12 在同一最终候选执行五客户端至少 900 秒、完整局、角色贡献及丢 ACK／恢复／交还控制／旧 AI 迟到的组合因果验收。历史长测保留原来源，不标作新候选执行。
+- 当前桌面／窄屏与具名交互检查已经实际执行，范围不等同完整平台或实际用户体验验收。
+- `mock-20261111` 使用合成玩家和模型输出；真实模型质量与真人体验属于尚未执行的 `full-real` 范围。本轮不以它们作为模拟切片的输入门槛。
