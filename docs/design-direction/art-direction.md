@@ -8,31 +8,27 @@
 
 [整体总纲](guidelines/overview.md) · [视觉语法](guidelines/visual-language.md) · [色光与材质](guidelines/color-and-light.md) · [人物](guidelines/characters.md) · [环境](guidelines/environments.md) · [UI/UX 共性](guidelines/ui-and-ux.md) · [动效倾向](guidelines/motion.md) · [一致性](guidelines/consistency.md) · [出图简报](guidelines/art-brief.md)
 
-## 2026-10-23 · 进一步调优
+## 规则与证据状态
 
-本版在保持当前主画风不变的前提下，加强了**配色职责、明度／彩度／邻接／材质配合、UI 自然融合与可读性、可复现实验和证据边界**。已完成的是规则重构、源文件完整性与 10 对设计提案色值的计算检查；没有借此宣称已生成新图或做过真机／玩家 UX 测试。
+本项目继承了**配色职责、明度／彩度／邻接／材质配合、UI 自然融合与可读性、可复现实验和证据边界**等规范。现存色板包含 10 对可计算的设计提案色值；旧资料中的完整性检查、色值检查和素材迁移叙述属于历史背景，不能替代 xiyou 当前版本的检查记录。
 
-通用设计案例已经独立进入 **通用 Skill 的 20 游戏案例研究库、12 个 UI/UX 模式与决策手册**。本项目仅保留[跨游戏视觉迁移摘要](references/research/design-transfer.md)，不把其他游戏的具体页面规则与商业机制搬进本 docs。
+当前仓库没有原始参考图、总览图或 ART01 原文与配图，也没有本项目的成图、真机或玩家 UX 验证证据。本次整理保留规则，校正资料状态，不把历史审阅写成本项目已完成。
+
+通用设计方法见仓库技能包的 [游戏案例库](../../.agents/skills/worker-visual-design/references/game-case-library.md)、[UI/UX 模式](../../.agents/skills/worker-visual-design/references/game-ui-ux-patterns.md)与[决策手册](../../.agents/skills/worker-visual-design/references/ui-ux-decision-playbook.md)。本项目仅保留[跨游戏视觉迁移摘要](references/research/design-transfer.md)，不把其他游戏的具体页面规则与商业机制搬进本目录。
 
 ## 来源与更新
 
-- [原图目录](references/catalog.md)：用户提供 **72 张原始风格参考**，稳定编号 R01—R72；另附 [6 张总览](references/boards/) 便于浏览。
-- [教程补充 ART01](references/articles/ART01/review.md)：用户提供的古风视觉语法文章与 **7 张配图**，归为辅助方法参考；原文中的配色分类并非当前项目固定色板。
+- [参考目录](references/catalog.md)：旧资料记载 **72 张原始风格参考**，编号 R01—R72，以及 **6 张总览**；当前均未迁入 xiyou，不能直接打开或据此复核画面。
+- **教程补充 ART01**：旧资料记载一篇古风视觉语法文章与 **7 张配图**，用于辅助方法参考；当前原文与配图均缺失，详见[来源说明](references/provenance.md)。其中历史配色分类不作为项目固定色板。
 - [来源说明](references/provenance.md) · [媒体链接](references/media-links.md)：记载材料来源及实际覆盖边界。
 - [可选色彩关系](tokens/palette-directions.json)：仅供比较，不是从原图精确采样，也不是最终锁定色值。
 
-新增参考需先明确长期入库范围；获得用户确认后放进 `references/inbox/`，调用 `design-direction` skill 的导入与审阅流程。**放文件本身不会后台自动学习或更新。** 现行方向更新时同步修订总纲、分项原则与创作简报；用户不采纳的画法不再出现于当前方向或正向提示词。
-
-## 2026-10-23 · 纳入项目版本管理
-
-用户明确要求将既有参考图与规范一起纳入 PR #51，供后续设计复用。本次迁移保留全部 72 张原图、6 张总览图、ART01 的文字与 7 张配图，以及原有分项规范、色彩提案、来源和迭代记录；图片字节、原编号及历史审阅状态不变。
-
-由 [设计资料索引](README.md)定位本资料包，具体界面任务另读对应视觉规范。迁移只核对文件、哈希、链接和声明色对，不代表重新审阅画面、采纳每张图或完成原型／设备验证。
+新增参考需先明确长期入库范围；沿用已有有效授权，将实际素材放进 `references/inbox/`，使用 [`worker-visual-design`](../../.agents/skills/worker-visual-design/SKILL.md) 进行登记、审阅与规则更新。恢复历史资料时先核对编号与来源，不凭旧数量补造文件、哈希或审阅结论。**放文件本身不会后台自动学习或更新。** 现行方向更新时同步修订总纲、分项原则与创作简报；用户不采纳的画法不再出现于当前方向或正向提示词。
 
 ## 清楚的边界
 
 图片和来源记录可以包含各种历史素材与视觉分支，但**收录来源不代表采纳该画风**。本包不承担按钮排列、UI 模块数量、系统状态、用户资产或技术实现参数。生成图只有明确采纳的范围才作为风格依据；未采纳的候选保留在来源记录中，不与现行方向混淆。
 
-## 2026-10-23 · 统一设计资料目录
+## 资料入口
 
-按用户明确要求，本资料与项目认知、偏好、设计决定统一存于 `docs/design-direction/`。原 `docs/art-direction/README.md` 保留为本文件，其余资料维持相对子树、稳定编号、来源与图片原字节。统一入口见 [设计索引](README.md)；此次仅调整文档组织和工具默认落点，不改变当前方向或历史证据状态。
+本项目的美术方向与视觉规范统一存于 `docs/design-direction/`，入口为[设计索引](README.md)。旧资料中关于其他目录迁移、PR #51 与图片原字节保留的叙述，没有可核验的 xiyou 对应记录；其来源限制记录在[来源说明](references/provenance.md)，不作为本项目的交付证据。
