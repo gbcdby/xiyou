@@ -1,0 +1,516 @@
+TAP version 13
+# Subtest: 真实 PostgreSQL：合法检查刷新目标来源，无关动作不制造目标事件，终局不补写
+ok 1 - 真实 PostgreSQL：合法检查刷新目标来源，无关动作不制造目标事件，终局不补写
+  ---
+  duration_ms: 2544.566809
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：准备持锁期间竞争写入等待，同水位上下文后相关变更使旧决定过期
+ok 2 - 真实 PostgreSQL：准备持锁期间竞争写入等待，同水位上下文后相关变更使旧决定过期
+  ---
+  duration_ms: 226.585014
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：原子准备将合法 Memory、持久目标和 Decision 绑定同一水位
+ok 3 - 真实 PostgreSQL：原子准备将合法 Memory、持久目标和 Decision 绑定同一水位
+  ---
+  duration_ms: 164.297631
+  type: 'test'
+  ...
+# Subtest: 真实进程崩溃：模型原文、独立 fallback、原意图 ACK 与发布恢复
+    # Subtest: after-output
+    ok 1 - after-output
+      ---
+      duration_ms: 763.34371
+      type: 'test'
+      ...
+    # 真实子进程退出码 81，信号为空；恢复保留原决定及原文，未新增模型调用。
+    # Subtest: before-fallback
+    ok 2 - before-fallback
+      ---
+      duration_ms: 634.087142
+      type: 'test'
+      ...
+    # 真实子进程退出码 82，信号为空；恢复保留原决定及原文，未新增模型调用。
+    # Subtest: after-fallback
+    ok 3 - after-fallback
+      ---
+      duration_ms: 520.768776
+      type: 'test'
+      ...
+    # 真实子进程退出码 83，信号为空；恢复保留原决定及原文，未新增模型调用。
+    # Subtest: after-intent
+    ok 4 - after-intent
+      ---
+      duration_ms: 470.804139
+      type: 'test'
+      ...
+    # 真实子进程退出码 84，信号为空；恢复保留原决定及原文，未新增模型调用。
+    # Subtest: during-publish
+    ok 5 - during-publish
+      ---
+      duration_ms: 447.56631
+      type: 'test'
+      ...
+    # 真实子进程退出码 85，信号为空；恢复保留原决定及原文，未新增模型调用。
+    1..5
+ok 4 - 真实进程崩溃：模型原文、独立 fallback、原意图 ACK 与发布恢复
+  ---
+  duration_ms: 4844.905365
+  type: 'test'
+  ...
+# Subtest: Gateway：忽略 Abort 的 provider 仍会超时，关闭有界，迟到结果被吸收
+ok 5 - Gateway：忽略 Abort 的 provider 仍会超时，关闭有界，迟到结果被吸收
+  ---
+  duration_ms: 28.479867
+  type: 'test'
+  ...
+# Subtest: Gateway：严格原文拒绝重复键、未知工具与模型伪造元数据，保留有效原文摘要
+ok 6 - Gateway：严格原文拒绝重复键、未知工具与模型伪造元数据，保留有效原文摘要
+  ---
+  duration_ms: 45.717526
+  type: 'test'
+  ...
+# Subtest: 真实 HTTP/Socket.IO：Gateway 实际输入隔离跨局、他人信念和真人私聊，Claim/Belief 不改事实
+ok 7 - 真实 HTTP/Socket.IO：Gateway 实际输入隔离跨局、他人信念和真人私聊，Claim/Belief 不改事实
+  ---
+  duration_ms: 2910.774633
+  type: 'test'
+  ...
+# Subtest: 真实 HTTP/Socket.IO：合法传播生成新 Observation，离开后 Memory 保留来源而当前视野移除
+ok 8 - 真实 HTTP/Socket.IO：合法传播生成新 Observation，离开后 Memory 保留来源而当前视野移除
+  ---
+  duration_ms: 364.915968
+  type: 'test'
+  ...
+# Subtest: 真实 HTTP/Socket.IO：非法原文、未知工具、越权目标、私聊与虚构观察全部收束且没有原意图效果
+    # Subtest: 非法 JSON
+    ok 1 - 非法 JSON
+      ---
+      duration_ms: 194.427014
+      type: 'test'
+      ...
+    # Subtest: 重复键
+    ok 2 - 重复键
+      ---
+      duration_ms: 178.376096
+      type: 'test'
+      ...
+    # Subtest: 未知工具
+    ok 3 - 未知工具
+      ---
+      duration_ms: 186.882648
+      type: 'test'
+      ...
+    # Subtest: 无工具
+    ok 4 - 无工具
+      ---
+      duration_ms: 215.031287
+      type: 'test'
+      ...
+    # Subtest: 不可访问目标
+    ok 5 - 不可访问目标
+      ---
+      duration_ms: 215.506231
+      type: 'test'
+      ...
+    # Subtest: 合法原型名称
+    ok 6 - 合法原型名称
+      ---
+      duration_ms: 187.538277
+      type: 'test'
+      ...
+    # Subtest: 私人发言
+    ok 7 - 私人发言
+      ---
+      duration_ms: 170.260525
+      type: 'test'
+      ...
+    # Subtest: 虚构观察
+    ok 8 - 虚构观察
+      ---
+      duration_ms: 153.611242
+      type: 'test'
+      ...
+    # Subtest: 伪造目标权限
+    ok 9 - 伪造目标权限
+      ---
+      duration_ms: 120.186287
+      type: 'test'
+      ...
+    1..9
+ok 9 - 真实 HTTP/Socket.IO：非法原文、未知工具、越权目标、私聊与虚构观察全部收束且没有原意图效果
+  ---
+  duration_ms: 1624.797679
+  type: 'test'
+  ...
+# Subtest: 真实 HTTP/Socket.IO：取消、过期与终局后的模型结果不能执行或复活原决定
+    # Subtest: 新代次取消
+    ok 1 - 新代次取消
+      ---
+      duration_ms: 136.694564
+      type: 'test'
+      ...
+    # Subtest: 过期
+    ok 2 - 过期
+      ---
+      duration_ms: 204.142984
+      type: 'test'
+      ...
+    # Subtest: 终局
+    ok 3 - 终局
+      ---
+      duration_ms: 172.064001
+      type: 'test'
+      ...
+    1..3
+ok 10 - 真实 HTTP/Socket.IO：取消、过期与终局后的模型结果不能执行或复活原决定
+  ---
+  duration_ms: 513.678304
+  type: 'test'
+  ...
+# Subtest: 真实 HTTP/Socket.IO：真人交还使在途代理失效，受限工具不能转移、消耗或选择终局
+    # Subtest: 物品转移
+    ok 1 - 物品转移
+      ---
+      duration_ms: 32.902382
+      type: 'test'
+      ...
+    # Subtest: 物品消耗
+    ok 2 - 物品消耗
+      ---
+      duration_ms: 40.597803
+      type: 'test'
+      ...
+    # Subtest: 终局区域
+    ok 3 - 终局区域
+      ---
+      duration_ms: 31.951387
+      type: 'test'
+      ...
+    # Subtest: 擅自同意
+    ok 4 - 擅自同意
+      ---
+      duration_ms: 41.371955
+      type: 'test'
+      ...
+    1..4
+ok 11 - 真实 HTTP/Socket.IO：真人交还使在途代理失效，受限工具不能转移、消耗或选择终局
+  ---
+  duration_ms: 361.63618
+  type: 'test'
+  ...
+# Subtest: 真实 HTTP/Socket.IO：批首版本和批内版本分别校验，第二工具失败连同对白全部回滚
+    # Subtest: 第二工具失败全拒
+    ok 1 - 第二工具失败全拒
+      ---
+      duration_ms: 161.787857
+      type: 'test'
+      ...
+    # Subtest: 有序工具包全成
+    ok 2 - 有序工具包全成
+      ---
+      duration_ms: 181.512751
+      type: 'test'
+      ...
+    1..2
+ok 12 - 真实 HTTP/Socket.IO：批首版本和批内版本分别校验，第二工具失败连同对白全部回滚
+  ---
+  duration_ms: 344.021752
+  type: 'test'
+  ...
+# Subtest: 真实 HTTP/Socket.IO：推理期间相关目标真实修复使旧版本失效
+ok 13 - 真实 HTTP/Socket.IO：推理期间相关目标真实修复使旧版本失效
+  ---
+  duration_ms: 168.766972
+  type: 'test'
+  ...
+# Subtest: 真实 HTTP/Socket.IO：成员撤权阻止在途代理、新上下文和恢复读取
+ok 14 - 真实 HTTP/Socket.IO：成员撤权阻止在途代理、新上下文和恢复读取
+  ---
+  duration_ms: 208.828502
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：全局并发有界，每角色单在途；忽略 Abort 的 provider 不拖住关闭
+ok 15 - 真实 PostgreSQL：全局并发有界，每角色单在途；忽略 Abort 的 provider 不拖住关闭
+  ---
+  duration_ms: 2572.758406
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：实际模型超时产生稳定 fallback，迟到输出失效，后续规划使用新 ID
+ok 16 - 真实 PostgreSQL：实际模型超时产生稳定 fallback，迟到输出失效，后续规划使用新 ID
+  ---
+  duration_ms: 323.277441
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：显式恢复的结果仍未知时保留 Unknown，恢复成功后才标记空闲
+ok 17 - 真实 PostgreSQL：显式恢复的结果仍未知时保留 Unknown，恢复成功后才标记空闲
+  ---
+  duration_ms: 188.233604
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：合并唤醒按实际模型启动时间限流，重启仍遵守本局持久预算
+ok 18 - 真实 PostgreSQL：合并唤醒按实际模型启动时间限流，重启仍遵守本局持久预算
+  ---
+  duration_ms: 616.288558
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：未知提交保留原文和摘要，新实例只恢复旧 Receipt，不改失败或调用新模型
+ok 19 - 真实 PostgreSQL：未知提交保留原文和摘要，新实例只恢复旧 Receipt，不改失败或调用新模型
+  ---
+  duration_ms: 218.655299
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：新调度器从持久失败决定恢复 fallback，稳定原因键只产生一份收据
+ok 20 - 真实 PostgreSQL：新调度器从持久失败决定恢复 fallback，稳定原因键只产生一份收据
+  ---
+  duration_ms: 134.86852
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：模型等待在事务外，真人先取得收据，模型随后通过同一 Validator
+ok 21 - 真实 PostgreSQL：模型等待在事务外，真人先取得收据，模型随后通过同一 Validator
+  ---
+  duration_ms: 148.632431
+  type: 'test'
+  ...
+# Subtest: 真实进程崩溃：提交前、COMMIT 后 ACK 前及发布中的恢复
+    # Subtest: before-commit
+    ok 1 - before-commit
+      ---
+      duration_ms: 526.97988
+      type: 'test'
+      ...
+    # 实际子进程 315 退出码 71；回放、收据、连续序号和发布恢复均符合预期。
+    # Subtest: after-commit
+    ok 2 - after-commit
+      ---
+      duration_ms: 558.4724
+      type: 'test'
+      ...
+    # 实际子进程 372 退出码 72；回放、收据、连续序号和发布恢复均符合预期。
+    # Subtest: during-publish
+    ok 3 - during-publish
+      ---
+      duration_ms: 477.046005
+      type: 'test'
+      ...
+    # 实际子进程 401 退出码 73；回放、收据、连续序号和发布恢复均符合预期。
+    1..3
+ok 22 - 真实进程崩溃：提交前、COMMIT 后 ACK 前及发布中的恢复
+  ---
+  duration_ms: 3691.99251
+  type: 'test'
+  ...
+# Subtest: 真实 HTTP/Socket.IO：前端接口、严格原文、真实连接控制和恢复查询
+ok 23 - 真实 HTTP/Socket.IO：前端接口、严格原文、真实连接控制和恢复查询
+  ---
+  duration_ms: 2586.351517
+  type: 'test'
+  ...
+# Subtest: REQ-001：迟到的接管副作用不能断开重新获权的真实连接
+ok 24 - REQ-001：迟到的接管副作用不能断开重新获权的真实连接
+  ---
+  duration_ms: 2421.399073
+  type: 'test'
+  ...
+# Subtest: REQ-001：同一连接的迟到接管回调不能回退视图代次
+ok 25 - REQ-001：同一连接的迟到接管回调不能回退视图代次
+  ---
+  duration_ms: 311.20156
+  type: 'test'
+  ...
+# Subtest: REQ-001 邻近回归：迟到回调不能恢复撤权或终局控制
+ok 26 - REQ-001 邻近回归：迟到回调不能恢复撤权或终局控制
+  ---
+  duration_ms: 402.199985
+  type: 'test'
+  ...
+# Subtest: REQ-001 邻近回归：旧事务只撤原订阅，不撤换绑后新建的只读视图
+ok 27 - REQ-001 邻近回归：旧事务只撤原订阅，不撤换绑后新建的只读视图
+  ---
+  duration_ms: 141.56019
+  type: 'test'
+  ...
+# Subtest: STD-001：提交后响应故障仍须拒绝真人同 ID 的异载荷
+ok 28 - STD-001：提交后响应故障仍须拒绝真人同 ID 的异载荷
+  ---
+  duration_ms: 187.916078
+  type: 'test'
+  ...
+# Subtest: STD-001：内部意图恢复也绑定完整包摘要，fallback 原键恢复保持幂等
+ok 29 - STD-001：内部意图恢复也绑定完整包摘要，fallback 原键恢复保持幂等
+  ---
+  duration_ms: 215.313926
+  type: 'test'
+  ...
+# Subtest: STD-002：合法但不存在的原型属性名经真实网络得到持久目标拒绝
+ok 30 - STD-002：合法但不存在的原型属性名经真实网络得到持久目标拒绝
+  ---
+  duration_ms: 318.9165
+  type: 'test'
+  ...
+# Subtest: STD-002：合法同名自有角色与物品仍可观察，不把继承目标当真实对象
+ok 31 - STD-002：合法同名自有角色与物品仍可观察，不把继承目标当真实对象
+  ---
+  duration_ms: 1.062292
+  type: 'test'
+  ...
+# Subtest: STD-003：断开的只读订阅及时释放句柄，无需关闭整个运行层
+ok 32 - STD-003：断开的只读订阅及时释放句柄，无需关闭整个运行层
+  ---
+  duration_ms: 113.416543
+  type: 'test'
+  ...
+# Subtest: STD-003：换订阅会停止在途旧批次，旧任务不能撤销新视图
+ok 33 - STD-003：换订阅会停止在途旧批次，旧任务不能撤销新视图
+  ---
+  duration_ms: 279.878346
+  type: 'test'
+  ...
+# Subtest: STD-004：长未知字段的真实 ACK 保持有效且有界的协议错误
+ok 34 - STD-004：长未知字段的真实 ACK 保持有效且有界的协议错误
+  ---
+  duration_ms: 116.111047
+  type: 'test'
+  ...
+# Subtest: STD-004：错误正文按码点保留边界并修复不完整代理对
+ok 35 - STD-004：错误正文按码点保留边界并修复不完整代理对
+  ---
+  duration_ms: 1.080469
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：创建去重、房主重复加入、固定内容开局和同水位回放
+ok 36 - 真实 PostgreSQL：创建去重、房主重复加入、固定内容开局和同水位回放
+  ---
+  duration_ms: 2233.879253
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：并发物品版本竞争、持久收据、异载荷和旧游标
+ok 37 - 真实 PostgreSQL：并发物品版本竞争、持久收据、异载荷和旧游标
+  ---
+  duration_ms: 356.172431
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：观察、陈述分型，历史受众和显式证据传播
+ok 38 - 真实 PostgreSQL：观察、陈述分型，历史受众和显式证据传播
+  ---
+  duration_ms: 202.448678
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：内容驱动修复、工具和材料真实归属、许可前置条件
+ok 39 - 真实 PostgreSQL：内容驱动修复、工具和材料真实归属、许可前置条件
+  ---
+  duration_ms: 235.637675
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：内部 NPC 同一提交入口，最终动作和终局原子化
+ok 40 - 真实 PostgreSQL：内部 NPC 同一提交入口，最终动作和终局原子化
+  ---
+  duration_ms: 253.306652
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：截止先于动作/控制，拒绝范围为空且时间不倒退
+ok 41 - 真实 PostgreSQL：截止先于动作/控制，拒绝范围为空且时间不倒退
+  ---
+  duration_ms: 186.827427
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：代理看不到私人频道，禁止物品和最终许可，交还后旧意图失效
+ok 42 - 真实 PostgreSQL：代理看不到私人频道，禁止物品和最终许可，交还后旧意图失效
+  ---
+  duration_ms: 159.130204
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：跨 Session 读写拒绝，当前撤权先于旧收据，归档删除不重做
+ok 43 - 真实 PostgreSQL：跨 Session 读写拒绝，当前撤权先于旧收据，归档删除不重做
+  ---
+  duration_ms: 281.429278
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：服务端 view 绑定、隐藏空批次、固定水位投影和旧订阅失效
+ok 44 - 真实 PostgreSQL：服务端 view 绑定、隐藏空批次、固定水位投影和旧订阅失效
+  ---
+  duration_ms: 376.511179
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：真人与 NPC 同版本抢物，只有一个主体取得唯一物品
+ok 45 - 真实 PostgreSQL：真人与 NPC 同版本抢物，只有一个主体取得唯一物品
+  ---
+  duration_ms: 129.51164
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：内部 Decision 原子包、generation、相关版本、超时与 fallback 围栏
+ok 46 - 真实 PostgreSQL：内部 Decision 原子包、generation、相关版本、超时与 fallback 围栏
+  ---
+  duration_ms: 179.101966
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：控制往返、双连接、nonce 重试及迟到旧断开
+ok 47 - 真实 PostgreSQL：控制往返、双连接、nonce 重试及迟到旧断开
+  ---
+  duration_ms: 137.559192
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：重放旧控制 nonce 不回退服务端当前断开代次
+ok 48 - 真实 PostgreSQL：重放旧控制 nonce 不回退服务端当前断开代次
+  ---
+  duration_ms: 89.773584
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：受限代理读取旧收据也受当前成员权限约束
+ok 49 - 真实 PostgreSQL：受限代理读取旧收据也受当前成员权限约束
+  ---
+  duration_ms: 85.497414
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：分页最多 256 全局序号，投影准确对应中间前缀并移除旧可见物品
+ok 50 - 真实 PostgreSQL：分页最多 256 全局序号，投影准确对应中间前缀并移除旧可见物品
+  ---
+  duration_ms: 2344.911308
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：Decision 相关版本冲突被拒绝，Belief 不会写入世界事实
+ok 51 - 真实 PostgreSQL：Decision 相关版本冲突被拒绝，Belief 不会写入世界事实
+  ---
+  duration_ms: 127.719922
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：提交后响应异常先查询原键，不伪造拒绝或再执行
+ok 52 - 真实 PostgreSQL：提交后响应异常先查询原键，不伪造拒绝或再执行
+  ---
+  duration_ms: 79.292515
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：截止和最终动作真实竞争，提交顺序只产生一个终局
+ok 53 - 真实 PostgreSQL：截止和最终动作真实竞争，提交顺序只产生一个终局
+  ---
+  duration_ms: 269.602933
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：原材料查证通行与证据未齐通行按真实来源区分
+ok 54 - 真实 PostgreSQL：原材料查证通行与证据未齐通行按真实来源区分
+  ---
+  duration_ms: 421.034675
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：四人和五人的固定角色装配及人数上限
+ok 55 - 真实 PostgreSQL：四人和五人的固定角色装配及人数上限
+  ---
+  duration_ms: 133.09992
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：Lobby 房主取消幂等，终止后不能重新开局
+ok 56 - 真实 PostgreSQL：Lobby 房主取消幂等，终止后不能重新开局
+  ---
+  duration_ms: 40.125043
+  type: 'test'
+  ...
+1..56
+# tests 82
+# suites 0
+# pass 82
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 9166.128001

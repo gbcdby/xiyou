@@ -1,0 +1,35 @@
+{
+  "scope": "最终真实 PostgreSQL／HTTP／Socket.IO 及子进程检查中的受控供应商；不含独立 Gateway 单元检查",
+  "counters": {
+    "calls": 38,
+    "externalCalls": 0,
+    "invalid": 7,
+    "valid": 26,
+    "timeouts": 1,
+    "cancelled": 4,
+    "providerErrors": 0
+  },
+  "latencySampleCount": 37,
+  "p50Ms": 1.4,
+  "p95Ms": 39.89,
+  "invalidFormatRate": 0.18421052631578946,
+  "originalReceipts": {
+    "Accepted": 14,
+    "Rejected": 12
+  },
+  "runStatuses": {
+    "Resolved": 37,
+    "Reserved": 1
+  },
+  "latencyBoundary": "38 次受控调用有 37 条持久耗时样本；1 次调用在成员撤权后不能写入新结果元数据，取消仍由 Gateway 指标观测。分位数仅对这 37 条计算，不当作真实模型表现或 SLO。",
+  "actualModel": {
+    "status": "BLOCKED",
+    "execution": "NOT_RUN",
+    "externalCalls": 0,
+    "provider": null,
+    "endpoint": null,
+    "modelId": null,
+    "credentials": "未提供",
+    "spendingAuthorization": "未提供"
+  }
+}

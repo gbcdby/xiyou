@@ -1,0 +1,14 @@
+{
+  "name": "interval-green-01",
+  "command": [
+    "node",
+    "--test",
+    "--test-reporter=tap",
+    "--test-name-pattern=合并唤醒",
+    "backend/tests/ai-orchestrator.test.mjs"
+  ],
+  "startedAt": "2026-11-11T08:48:46.721120+00:00",
+  "durationSeconds": 2.272,
+  "exitCode": 0,
+  "signal": null
+}

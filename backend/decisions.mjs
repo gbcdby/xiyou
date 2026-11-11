@@ -5,6 +5,7 @@ import { increment, audienceFor } from '../game/world.mjs';
 import { authorizedProjection, visibleItem } from '../game/projection.mjs';
 import { RuntimeError } from './errors.mjs';
 import { ownRecord } from '../game/records.mjs';
+import { refreshGoals, buildContextBasis } from './ai/context.mjs';
 
 const currentMode = principal => principal.principalKind === 'core_npc' ? 'CoreNPCControlled' : 'AIProxyControlled';
 const entity = (state, key) => {
@@ -27,32 +28,52 @@ export async function prepareDecision(runtime, handle, options = {}) {
     await runtime.deadline(tx);
     const actor = ownRecord(tx.state.characters, principal.actorId);
     if (tx.state.phase !== 'Running' || actor?.mode !== currentMode(principal)) return new RuntimeError('FORBIDDEN', '该角色当前不能创建新决策。');
-    const projection = authorizedProjection(tx.state, tx.content, principal.actorId, { principalKind: principal.principalKind });
-    const observationIds = options.observationIds ?? projection.observations.slice(-256).map(o => o.observationId);
-    if (!Array.isArray(observationIds) || !observationIds.every(id => projection.observations.some(o => o.observationId === id))) throw new RuntimeError('FORBIDDEN', '决策包含未授权的观察引用。');
-    const permitted = (principal.principalKind === 'proxy' ? ['move', 'inspect', 'speak', 'wait'] : ['move', 'inspect', 'take_item', 'transfer_item', 'share_evidence', 'speak', 'make_claim', 'wait']).filter(tool => actor.capabilities.includes(tool));
-    const allowedTools = options.allowedTools ?? permitted;
-    if (!Array.isArray(allowedTools) || !allowedTools.every(tool => permitted.includes(tool))) throw new RuntimeError('FORBIDDEN', '决策工具超过当前角色权限。');
-    const readEntityIds = options.readEntityIds ?? [];
-    if (!Array.isArray(readEntityIds)) throw new RuntimeError('INVALID_MESSAGE', '读取对象必须为数组。');
-    const readVersions = {};
-    for (const key of readEntityIds) {
-      if (typeof key !== 'string') throw new RuntimeError('INVALID_MESSAGE', '读取对象标识格式无效。');
-      const { kind, value } = entity(tx.state, key);
-      const visible = value && (kind === 'item' ? visibleItem(tx.state, principal.actorId, value) : kind === 'target' ? value.regionId === actor.regionId : kind === 'character' ? value.characterId === actor.characterId || value.regionId === actor.regionId : value.holderId === actor.characterId);
-      if (!visible || version(value) === undefined) throw new RuntimeError('FORBIDDEN', '读取对象当前不可访问。');
-      readVersions[key] = version(value);
-    }
-    const generation = increment((await tx.client.query("SELECT COALESCE(max((record->>'generation')::numeric),0) AS generation FROM decisions WHERE session_id=$1 AND actor_id=$2", [principal.sessionId, principal.actorId])).rows[0].generation);
-    const record = validateContract('DecisionRecord', {
-      schemaVersion: 1, sessionId: principal.sessionId, actorId: principal.actorId, decisionId: `D-${randomUUID()}`,
-      controlEpoch: actor.controlEpoch, generation, observationIds, readVersions, allowedTools,
-      createdAt: tx.time, deadlineAt: new Date(Math.min(Date.parse(tx.state.deadlineAt), Date.parse(tx.time) + tx.content.timing.decisionTimeoutSeconds * 1000)).toISOString(), status: 'Pending',
-    });
-    await tx.client.query("UPDATE decisions SET record=jsonb_set(record,'{status}','\"Cancelled\"') WHERE session_id=$1 AND actor_id=$2 AND record->>'status'='Pending'", [principal.sessionId, principal.actorId]);
-    await tx.client.query('INSERT INTO decisions(session_id,decision_id,actor_id,record) VALUES($1,$2,$3,$4)', [principal.sessionId, record.decisionId, principal.actorId, record]);
-    return record;
+    return prepareRecord(tx, principal, options);
   });
+}
+
+/** 过滤、目标与决策共享本次行锁；调用者拿到返回值后才可开始推理。 */
+export async function prepareDecisionContext(runtime, handle) {
+  const principal = runtime.internal(handle);
+  return runtime.locked(principal.sessionId, { kind: 'prepare-decision-context' }, async tx => {
+    await runtime.authorizeInternal(tx, principal);
+    await runtime.deadline(tx);
+    const actor = ownRecord(tx.state.characters, principal.actorId);
+    if (tx.state.phase !== 'Running' || actor?.mode !== currentMode(principal)) return new RuntimeError('FORBIDDEN', '该角色当前不能创建新决策。');
+    const sources = await refreshGoals(tx, principal);
+    const basis = buildContextBasis(tx, principal, sources);
+    const decision = await prepareRecord(tx, principal, { observationIds: basis.observationIds, readEntityIds: basis.readEntityIds });
+    return { decision, context: { ...basis.context, decision: structuredClone(decision) } };
+  });
+}
+
+async function prepareRecord(tx, principal, options) {
+  const actor = ownRecord(tx.state.characters, principal.actorId);
+  const projection = authorizedProjection(tx.state, tx.content, principal.actorId, { principalKind: principal.principalKind });
+  const observationIds = options.observationIds ?? projection.observations.slice(-256).map(o => o.observationId);
+  if (!Array.isArray(observationIds) || !observationIds.every(id => projection.observations.some(o => o.observationId === id))) throw new RuntimeError('FORBIDDEN', '决策包含未授权的观察引用。');
+  const permitted = (principal.principalKind === 'proxy' ? ['move', 'inspect', 'speak', 'wait'] : ['move', 'inspect', 'take_item', 'transfer_item', 'share_evidence', 'speak', 'make_claim', 'wait']).filter(tool => actor.capabilities.includes(tool));
+  const allowedTools = options.allowedTools ?? permitted;
+  if (!Array.isArray(allowedTools) || !allowedTools.every(tool => permitted.includes(tool))) throw new RuntimeError('FORBIDDEN', '决策工具超过当前角色权限。');
+  const readEntityIds = options.readEntityIds ?? [];
+  if (!Array.isArray(readEntityIds)) throw new RuntimeError('INVALID_MESSAGE', '读取对象必须为数组。');
+  const readVersions = {};
+  for (const key of readEntityIds) {
+    if (typeof key !== 'string') throw new RuntimeError('INVALID_MESSAGE', '读取对象标识格式无效。');
+    const { kind, value } = entity(tx.state, key);
+    const visible = value && (kind === 'item' ? visibleItem(tx.state, principal.actorId, value) : kind === 'target' ? value.regionId === actor.regionId : kind === 'character' ? value.characterId === actor.characterId || value.regionId === actor.regionId : value.holderId === actor.characterId);
+    if (!visible || version(value) === undefined) throw new RuntimeError('FORBIDDEN', '读取对象当前不可访问。');
+    readVersions[key] = version(value);
+  }
+  const generation = increment((await tx.client.query("SELECT COALESCE(max((record->>'generation')::numeric),0) AS generation FROM decisions WHERE session_id=$1 AND actor_id=$2", [principal.sessionId, principal.actorId])).rows[0].generation);
+  const record = validateContract('DecisionRecord', {
+    schemaVersion: 1, sessionId: principal.sessionId, actorId: principal.actorId, decisionId: `D-${randomUUID()}`,
+    controlEpoch: actor.controlEpoch, generation, observationIds, readVersions, allowedTools,
+    createdAt: tx.time, deadlineAt: new Date(Math.min(Date.parse(tx.state.deadlineAt), Date.parse(tx.time) + tx.content.timing.decisionTimeoutSeconds * 1000)).toISOString(), status: 'Pending',
+  });
+  await tx.client.query("UPDATE decisions SET record=jsonb_set(record,'{status}','\"Cancelled\"') WHERE session_id=$1 AND actor_id=$2 AND record->>'status'='Pending'", [principal.sessionId, principal.actorId]);
+  await tx.client.query('INSERT INTO decisions(session_id,decision_id,actor_id,record) VALUES($1,$2,$3,$4)', [principal.sessionId, record.decisionId, principal.actorId, record]);
+  return record;
 }
 
 export async function settleDecision(runtime, handle, decisionId, status = 'Cancelled') {
@@ -68,6 +89,31 @@ export async function settleDecision(runtime, handle, decisionId, status = 'Canc
       await tx.client.query('UPDATE decisions SET record=$3 WHERE session_id=$1 AND decision_id=$2', [principal.sessionId, decisionId, record]);
     }
     return record;
+  });
+}
+
+/** 恢复待办从权威 Decision 与 Receipt 推导，不另建可漂移的队列。 */
+export async function recoverDecisions(runtime, handle) {
+  const principal = runtime.internal(handle);
+  return runtime.locked(principal.sessionId, { kind: 'recover-decisions' }, async tx => {
+    await runtime.authorizeInternal(tx, principal);
+    await runtime.deadline(tx);
+    await tx.client.query("UPDATE decisions SET record=jsonb_set(record,'{status}','\"Expired\"') WHERE session_id=$1 AND actor_id=$2 AND record->>'status'='Pending' AND (record->>'deadlineAt')::timestamptz <= $3", [principal.sessionId, principal.actorId, tx.time]);
+    const rows = (await tx.client.query(`SELECT d.record, to_jsonb(a) AS run FROM decisions d
+      LEFT JOIN ai_runs a ON a.session_id=d.session_id AND a.decision_id=d.decision_id AND a.principal_kind=$3
+      WHERE d.session_id=$1 AND d.actor_id=$2
+      AND (a.status IN ('Reserved','Ready') OR d.record->>'status'='Pending' OR (d.record->>'status' IN ('Rejected','Expired') AND NOT EXISTS
+      (SELECT 1 FROM action_receipts r WHERE r.session_id=d.session_id AND r.principal_id='system' AND r.client_action_id=d.decision_id||':fallback' AND r.actor_id=d.actor_id)))
+      ORDER BY (d.record->>'generation')::numeric`, [principal.sessionId, principal.actorId, principal.principalKind])).rows;
+    return rows.map(row => ({ decision: row.record, run: row.run }));
+  });
+}
+
+export async function decisionState(runtime, handle, decisionId) {
+  const principal = runtime.internal(handle);
+  return runtime.locked(principal.sessionId, { kind: 'decision-state' }, async tx => {
+    await runtime.authorizeInternal(tx, principal);
+    return readDecision(tx, principal, decisionId);
   });
 }
 

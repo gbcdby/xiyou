@@ -1,0 +1,16 @@
+TAP version 13
+# Subtest: 真实 HTTP/Socket.IO：Gateway 实际输入隔离跨局、他人信念和真人私聊，Claim/Belief 不改事实
+ok 1 - 真实 HTTP/Socket.IO：Gateway 实际输入隔离跨局、他人信念和真人私聊，Claim/Belief 不改事实
+  ---
+  duration_ms: 1390.571299
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1703.947751

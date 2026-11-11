@@ -1,0 +1,6 @@
+{
+  "rawEvidenceDiffExitCode": 2,
+  "sourceDiffExitCode": 0,
+  "warningCount": 76,
+  "scope": "原始 TAP 和 PostgreSQL 日志保留尾随空格／原始空行；不修改原输出，不将原始日志空白警告伪称零退出。源码范围排除版本化原始证据后通过。"
+}

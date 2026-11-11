@@ -1,0 +1,71 @@
+{
+  "finalBackend": {
+    "exitCode": 0,
+    "signal": null
+  },
+  "ownedFinalClusters": [
+    {
+      "label": "ai-context-Zp65qo",
+      "raw": "raw/postgres-ai-context-Zp65qo.log",
+      "shutdownObserved": true,
+      "postgresVersion": "18.6"
+    },
+    {
+      "label": "ai-crash-ChcwmY",
+      "raw": "raw/postgres-ai-crash-ChcwmY.log",
+      "shutdownObserved": true,
+      "postgresVersion": "18.6"
+    },
+    {
+      "label": "ai-network-KbKMUi",
+      "raw": "raw/postgres-ai-network-KbKMUi.log",
+      "shutdownObserved": true,
+      "postgresVersion": "18.6"
+    },
+    {
+      "label": "ai-orchestrator-qB9djH",
+      "raw": "raw/postgres-ai-orchestrator-qB9djH.log",
+      "shutdownObserved": true,
+      "postgresVersion": "18.6"
+    },
+    {
+      "label": "crash-gttVK0",
+      "raw": "raw/postgres-crash-gttVK0.log",
+      "shutdownObserved": true,
+      "postgresVersion": "18.6"
+    },
+    {
+      "label": "network-sG7efa",
+      "raw": "raw/postgres-network-sG7efa.log",
+      "shutdownObserved": true,
+      "postgresVersion": "18.6"
+    },
+    {
+      "label": "review-fixes-hd7xT3",
+      "raw": "raw/postgres-review-fixes-hd7xT3.log",
+      "shutdownObserved": true,
+      "postgresVersion": "18.6"
+    },
+    {
+      "label": "runtime-M6ZOQZ",
+      "raw": "raw/postgres-runtime-M6ZOQZ.log",
+      "shutdownObserved": true,
+      "postgresVersion": "18.6"
+    }
+  ],
+  "pendingExecHandles": [],
+  "interruptedEarlierCheck": {
+    "check": "context-current-02",
+    "toolSessionId": 28125,
+    "toolExitCode": 130,
+    "signal": "未捕获",
+    "reason": "测试屏障误用 kind 而非 command，手动中止后修正；不是产品失败或通过",
+    "oldPortProbe": {
+      "port": 41725,
+      "connectResult": 111,
+      "meaning": "连接拒绝"
+    },
+    "shutdownLogAvailable": false
+  },
+  "说明": "所有最终检查执行句柄已读回结束；崩溃子进程的实际退出码及空信号另见 captures/crash.json。"
+}

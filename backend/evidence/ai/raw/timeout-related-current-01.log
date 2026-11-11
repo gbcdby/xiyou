@@ -1,0 +1,22 @@
+TAP version 13
+# Subtest: 真实 HTTP/Socket.IO：推理期间相关目标真实修复使旧版本失效
+ok 1 - 真实 HTTP/Socket.IO：推理期间相关目标真实修复使旧版本失效
+  ---
+  duration_ms: 1789.467335
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：实际模型超时产生稳定 fallback，迟到输出失效，后续规划使用新 ID
+ok 2 - 真实 PostgreSQL：实际模型超时产生稳定 fallback，迟到输出失效，后续规划使用新 ID
+  ---
+  duration_ms: 1681.149285
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2044.874312

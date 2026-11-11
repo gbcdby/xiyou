@@ -1,0 +1,13 @@
+{
+  "name": "network-current-03",
+  "command": [
+    "node",
+    "--test",
+    "--test-reporter=tap",
+    "backend/tests/ai-network.test.mjs"
+  ],
+  "startedAt": "2026-11-11T08:52:31.356941+00:00",
+  "durationSeconds": 9.51,
+  "exitCode": 1,
+  "signal": null
+}

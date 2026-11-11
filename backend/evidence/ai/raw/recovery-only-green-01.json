@@ -1,0 +1,13 @@
+{
+  "name": "recovery-only-green-01",
+  "command": [
+    "node",
+    "--test",
+    "--test-reporter=tap",
+    "backend/tests/ai-crash.test.mjs"
+  ],
+  "startedAt": "2026-11-11T09:00:00.090391+00:00",
+  "durationSeconds": 3.529,
+  "exitCode": 0,
+  "signal": null
+}

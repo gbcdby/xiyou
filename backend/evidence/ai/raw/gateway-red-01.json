@@ -1,0 +1,13 @@
+{
+  "name": "gateway-red-01",
+  "command": [
+    "node",
+    "--test",
+    "--test-reporter=tap",
+    "backend/tests/ai-gateway.test.mjs"
+  ],
+  "startedAt": "2026-11-11T08:39:36.555794+00:00",
+  "durationSeconds": 0.215,
+  "exitCode": 1,
+  "signal": null
+}

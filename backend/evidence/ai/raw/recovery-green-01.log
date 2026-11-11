@@ -1,0 +1,22 @@
+TAP version 13
+# Subtest: 真实 PostgreSQL：新调度器从持久失败决定恢复 fallback，稳定原因键只产生一份收据
+ok 1 - 真实 PostgreSQL：新调度器从持久失败决定恢复 fallback，稳定原因键只产生一份收据
+  ---
+  duration_ms: 1453.25261
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：模型等待在事务外，真人先取得收据，模型随后通过同一 Validator
+ok 2 - 真实 PostgreSQL：模型等待在事务外，真人先取得收据，模型随后通过同一 Validator
+  ---
+  duration_ms: 143.977722
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1821.352451

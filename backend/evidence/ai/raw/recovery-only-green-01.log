@@ -1,0 +1,52 @@
+TAP version 13
+# Subtest: 真实进程崩溃：模型原文、独立 fallback、原意图 ACK 与发布恢复
+    # Subtest: after-output
+    ok 1 - after-output
+      ---
+      duration_ms: 441.803775
+      type: 'test'
+      ...
+    # 真实子进程退出码 81，信号为空；恢复保留原决定及原文，未新增模型调用。
+    # Subtest: before-fallback
+    ok 2 - before-fallback
+      ---
+      duration_ms: 348.747738
+      type: 'test'
+      ...
+    # 真实子进程退出码 82，信号为空；恢复保留原决定及原文，未新增模型调用。
+    # Subtest: after-fallback
+    ok 3 - after-fallback
+      ---
+      duration_ms: 408.824375
+      type: 'test'
+      ...
+    # 真实子进程退出码 83，信号为空；恢复保留原决定及原文，未新增模型调用。
+    # Subtest: after-intent
+    ok 4 - after-intent
+      ---
+      duration_ms: 306.411759
+      type: 'test'
+      ...
+    # 真实子进程退出码 84，信号为空；恢复保留原决定及原文，未新增模型调用。
+    # Subtest: during-publish
+    ok 5 - during-publish
+      ---
+      duration_ms: 349.459937
+      type: 'test'
+      ...
+    # 真实子进程退出码 85，信号为空；恢复保留原决定及原文，未新增模型调用。
+    1..5
+ok 1 - 真实进程崩溃：模型原文、独立 fallback、原意图 ACK 与发布恢复
+  ---
+  duration_ms: 3140.290952
+  type: 'test'
+  ...
+1..1
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3346.420223

@@ -1,0 +1,13 @@
+{
+  "name": "context-red-01",
+  "command": [
+    "node",
+    "--test",
+    "--test-reporter=tap",
+    "backend/tests/ai-context.test.mjs"
+  ],
+  "startedAt": "2026-11-11T08:36:20.669065+00:00",
+  "durationSeconds": 1.507,
+  "exitCode": 1,
+  "signal": null
+}

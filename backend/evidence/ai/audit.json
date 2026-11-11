@@ -1,0 +1,15 @@
+{
+  "sourceManifest": "PASS",
+  "sourceFiles": 80,
+  "sourceAggregateSha256": "4690d0fa76196fb6d44350ca380c73c25b24e42876d121bcc62f6b932b99db67",
+  "relativeLinks": "PASS",
+  "checkedLinkCount": 74,
+  "capturedContextIsolation": "PASS",
+  "capturedContexts": 38,
+  "legacyEvidenceUnchanged": "PASS",
+  "legacyEvidenceFiles": 66,
+  "protectedPathsUnchanged": "PASS",
+  "nodeModulesTracked": false,
+  "localDependencyLinkIgnored": true,
+  "scope": "只读产物审计；不替代业务回归或独立审查。"
+}

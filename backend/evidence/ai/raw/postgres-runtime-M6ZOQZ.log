@@ -1,0 +1,61 @@
+The files belonging to this database system will be owned by user "agent".
+This user must also own the server process.
+
+The database cluster will be initialized with this locale configuration:
+  locale provider:   libc
+  LC_COLLATE:  C
+  LC_CTYPE:    C
+  LC_MESSAGES: en_US.utf8
+  LC_MONETARY: C
+  LC_NUMERIC:  C
+  LC_TIME:     C
+The default text search configuration will be set to "english".
+
+Data page checksums are enabled.
+
+creating directory /workspace/scratch/f9401eff266e/.agent-output/ai-runtime/worktree/.agent-output/postgres-tests/runtime-M6ZOQZ/data ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... posix
+selecting default "max_connections" ... 
+100
+
+selecting default "shared_buffers" ... 
+128MB
+selecting default time zone ... 
+America/Los_Angeles
+
+creating configuration files ... ok
+running bootstrap script ... 
+ok
+
+performing post-bootstrap initialization ... 
+ok
+syncing data to disk ... 
+ok
+
+Success. You can now start the database server using:
+
+    '/workspace/scratch/f9401eff266e/xiyou/node_modules/@embedded-postgres/linux-x64/native/bin/pg_ctl' -D /workspace/scratch/f9401eff266e/.agent-output/ai-runtime/worktree/.agent-output/postgres-tests/runtime-M6ZOQZ/data -l logfile start
+
+
+2026-11-11 09:08:42.197 UTC [333] LOG:  starting PostgreSQL 18.6 on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0, 64-bit
+
+2026-11-11 09:08:42.198 UTC [333] LOG:  listening on IPv4 address "127.0.0.1", port 44247
+
+2026-11-11 09:08:42.206 UTC [350] LOG:  database system was shut down at 2026-11-11 09:08:41 UTC
+
+2026-11-11 09:08:42.208 UTC [333] LOG:  database system is ready to accept connections
+
+2026-11-11 09:08:48.637 UTC [333] LOG:  received fast shutdown request
+
+2026-11-11 09:08:48.637 UTC [333] LOG:  aborting any active transactions
+
+2026-11-11 09:08:48.639 UTC [333] LOG:  background worker "logical replication launcher" (PID 354) exited with exit code 1
+2026-11-11 09:08:48.639 UTC [348] LOG:  shutting down
+
+2026-11-11 09:08:48.640 UTC [348] LOG:  checkpoint starting: shutdown immediate
+
+2026-11-11 09:08:48.683 UTC [348] LOG:  checkpoint complete: wrote 541 buffers (3.3%), wrote 3 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.007 s, sync=0.034 s, total=0.044 s; sync files=101, longest=0.002 s, average=0.001 s; distance=4549 kB, estimate=4549 kB; lsn=0/1BDA390, redo lsn=0/1BDA390
+
+2026-11-11 09:08:48.688 UTC [333] LOG:  database system is shut down
+

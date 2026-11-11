@@ -1,0 +1,14 @@
+{
+  "name": "manual-unknown-red-01",
+  "command": [
+    "node",
+    "--test",
+    "--test-reporter=tap",
+    "--test-name-pattern=显式恢复",
+    "backend/tests/ai-orchestrator.test.mjs"
+  ],
+  "startedAt": "2026-11-11T09:01:45.462401+00:00",
+  "durationSeconds": 1.52,
+  "exitCode": 1,
+  "signal": null
+}

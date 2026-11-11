@@ -1,0 +1,14 @@
+{
+  "name": "recovery-only-red-01",
+  "command": [
+    "node",
+    "--test",
+    "--test-reporter=tap",
+    "--test-name-pattern=真实进程崩溃|after-output",
+    "backend/tests/ai-crash.test.mjs"
+  ],
+  "startedAt": "2026-11-11T08:58:11.061928+00:00",
+  "durationSeconds": 3.381,
+  "exitCode": 1,
+  "signal": null
+}

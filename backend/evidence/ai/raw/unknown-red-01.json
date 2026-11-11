@@ -1,0 +1,14 @@
+{
+  "name": "unknown-red-01",
+  "command": [
+    "node",
+    "--test",
+    "--test-reporter=tap",
+    "--test-name-pattern=未知提交",
+    "backend/tests/ai-orchestrator.test.mjs"
+  ],
+  "startedAt": "2026-11-11T08:44:28.951157+00:00",
+  "durationSeconds": 1.619,
+  "exitCode": 1,
+  "signal": null
+}
