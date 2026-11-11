@@ -1,0 +1,778 @@
+{
+  "model_sha256": "e2445f2a1a20cd39a2bbfb36d5802afab882312eb0bad7acddfa939bc78a0f73",
+  "relation": "historical_not_current_acceptance",
+  "reason": "首次全部检查完成，但 crash-retry-fallback 探针仅要求 crashes=1，实际最短轨迹先崩溃再第一次提交，不能支持提交后崩溃的更强顺序。加强只读见证后所有项重新运行；不迁移原 PASS 为新字节的实测。",
+  "runs": [
+    {
+      "profile": "positive",
+      "status": "PASS_WITHIN_SCOPE",
+      "raw_tlc_exit_code": 0,
+      "distinct_states": 150576,
+      "statistics": {
+        "generated_states": 4194733,
+        "distinct_states": 150576,
+        "remaining_states": 0
+      },
+      "duration_seconds": 18.359133,
+      "invariants": [
+        "TypeOK",
+        "StableReasonKey",
+        "AtMostOneEffect",
+        "ReceiptPayloadBinding",
+        "AtomicCommitBundle",
+        "FallbackAfterSettlement",
+        "CurrentEpochOnly",
+        "CurrentToolPermission",
+        "TerminalBlocksNewEffects",
+        "NoDecisionRevival",
+        "FreshDecisionOnly"
+      ],
+      "properties": [],
+      "result": "evidence/initial-01/positive/result.json",
+      "log": "evidence/initial-01/positive/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "live",
+      "status": "PASS_WITHIN_SCOPE",
+      "raw_tlc_exit_code": 0,
+      "distinct_states": 150576,
+      "statistics": {
+        "generated_states": 4194733,
+        "distinct_states": 150576,
+        "remaining_states": 0
+      },
+      "duration_seconds": 31.187015,
+      "invariants": [],
+      "properties": [
+        "DecisionResolvesOrExpires",
+        "FallbackResolves"
+      ],
+      "result": "evidence/initial-01/live/result.json",
+      "log": "evidence/initial-01/live/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "negative-type",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 9,
+      "statistics": {
+        "generated_states": 9,
+        "distinct_states": 9,
+        "remaining_states": 7
+      },
+      "duration_seconds": 0.97973,
+      "invariants": [
+        "TypeOK"
+      ],
+      "properties": [],
+      "result": "evidence/initial-01/negative-type/result.json",
+      "log": "evidence/initial-01/negative-type/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "negative-unstable_key",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 2947,
+      "statistics": {
+        "generated_states": 40317,
+        "distinct_states": 2947,
+        "remaining_states": 1242
+      },
+      "duration_seconds": 1.469478,
+      "invariants": [
+        "StableReasonKey"
+      ],
+      "properties": [],
+      "result": "evidence/initial-01/negative-unstable_key/result.json",
+      "log": "evidence/initial-01/negative-unstable_key/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "negative-lost_receipt",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 6608,
+      "statistics": {
+        "generated_states": 95431,
+        "distinct_states": 6608,
+        "remaining_states": 1850
+      },
+      "duration_seconds": 1.907927,
+      "invariants": [
+        "AtMostOneEffect"
+      ],
+      "properties": [],
+      "result": "evidence/initial-01/negative-lost_receipt/result.json",
+      "log": "evidence/initial-01/negative-lost_receipt/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "negative-payload_overwrite",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 2948,
+      "statistics": {
+        "generated_states": 40318,
+        "distinct_states": 2948,
+        "remaining_states": 1243
+      },
+      "duration_seconds": 1.491597,
+      "invariants": [
+        "ReceiptPayloadBinding"
+      ],
+      "properties": [],
+      "result": "evidence/initial-01/negative-payload_overwrite/result.json",
+      "log": "evidence/initial-01/negative-payload_overwrite/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "negative-split_bundle",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 1704,
+      "statistics": {
+        "generated_states": 21408,
+        "distinct_states": 1704,
+        "remaining_states": 817
+      },
+      "duration_seconds": 1.375679,
+      "invariants": [
+        "AtomicCommitBundle"
+      ],
+      "properties": [],
+      "result": "evidence/initial-01/negative-split_bundle/result.json",
+      "log": "evidence/initial-01/negative-split_bundle/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "negative-early_queue",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 8,
+      "statistics": {
+        "generated_states": 8,
+        "distinct_states": 8,
+        "remaining_states": 6
+      },
+      "duration_seconds": 1.150815,
+      "invariants": [
+        "FallbackAfterSettlement"
+      ],
+      "properties": [],
+      "result": "evidence/initial-01/negative-early_queue/result.json",
+      "log": "evidence/initial-01/negative-early_queue/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "negative-fallback_epoch",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 2163,
+      "statistics": {
+        "generated_states": 27698,
+        "distinct_states": 2163,
+        "remaining_states": 997
+      },
+      "duration_seconds": 1.388923,
+      "invariants": [
+        "CurrentEpochOnly"
+      ],
+      "properties": [],
+      "result": "evidence/initial-01/negative-fallback_epoch/result.json",
+      "log": "evidence/initial-01/negative-fallback_epoch/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "negative-fallback_permission",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 2197,
+      "statistics": {
+        "generated_states": 28175,
+        "distinct_states": 2197,
+        "remaining_states": 1008
+      },
+      "duration_seconds": 1.236202,
+      "invariants": [
+        "CurrentToolPermission"
+      ],
+      "properties": [],
+      "result": "evidence/initial-01/negative-fallback_permission/result.json",
+      "log": "evidence/initial-01/negative-fallback_permission/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "negative-fallback_terminal",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 2919,
+      "statistics": {
+        "generated_states": 40047,
+        "distinct_states": 2919,
+        "remaining_states": 1226
+      },
+      "duration_seconds": 1.534883,
+      "invariants": [
+        "TerminalBlocksNewEffects"
+      ],
+      "properties": [],
+      "result": "evidence/initial-01/negative-fallback_terminal/result.json",
+      "log": "evidence/initial-01/negative-fallback_terminal/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "negative-fallback_deadline",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 3739,
+      "statistics": {
+        "generated_states": 51894,
+        "distinct_states": 3739,
+        "remaining_states": 1499
+      },
+      "duration_seconds": 1.469904,
+      "invariants": [
+        "TerminalBlocksNewEffects"
+      ],
+      "properties": [],
+      "result": "evidence/initial-01/negative-fallback_deadline/result.json",
+      "log": "evidence/initial-01/negative-fallback_deadline/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "negative-revive_decision",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 1704,
+      "statistics": {
+        "generated_states": 21408,
+        "distinct_states": 1704,
+        "remaining_states": 817
+      },
+      "duration_seconds": 1.27292,
+      "invariants": [
+        "NoDecisionRevival"
+      ],
+      "properties": [],
+      "result": "evidence/initial-01/negative-revive_decision/result.json",
+      "log": "evidence/initial-01/negative-revive_decision/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "negative-reuse_decision_id",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 2950,
+      "statistics": {
+        "generated_states": 40320,
+        "distinct_states": 2950,
+        "remaining_states": 1245
+      },
+      "duration_seconds": 1.74053,
+      "invariants": [
+        "NoDecisionRevival"
+      ],
+      "properties": [],
+      "result": "evidence/initial-01/negative-reuse_decision_id/result.json",
+      "log": "evidence/initial-01/negative-reuse_decision_id/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "negative-original_epoch",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 70,
+      "statistics": {
+        "generated_states": 362,
+        "distinct_states": 70,
+        "remaining_states": 54
+      },
+      "duration_seconds": 1.181002,
+      "invariants": [
+        "FreshDecisionOnly"
+      ],
+      "properties": [],
+      "result": "evidence/initial-01/negative-original_epoch/result.json",
+      "log": "evidence/initial-01/negative-original_epoch/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "negative-original_permission",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 74,
+      "statistics": {
+        "generated_states": 386,
+        "distinct_states": 74,
+        "remaining_states": 57
+      },
+      "duration_seconds": 1.088001,
+      "invariants": [
+        "FreshDecisionOnly"
+      ],
+      "properties": [],
+      "result": "evidence/initial-01/negative-original_permission/result.json",
+      "log": "evidence/initial-01/negative-original_permission/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "negative-original_deadline",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 194,
+      "statistics": {
+        "generated_states": 1484,
+        "distinct_states": 194,
+        "remaining_states": 132
+      },
+      "duration_seconds": 1.116776,
+      "invariants": [
+        "FreshDecisionOnly"
+      ],
+      "properties": [],
+      "result": "evidence/initial-01/negative-original_deadline/result.json",
+      "log": "evidence/initial-01/negative-original_deadline/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "negative-no_timeout",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 13,
+      "distinct_states": 26345,
+      "statistics": {
+        "generated_states": 480664,
+        "distinct_states": 26345,
+        "remaining_states": 9995
+      },
+      "duration_seconds": 4.043546,
+      "invariants": [],
+      "properties": [
+        "DecisionResolvesOrExpires"
+      ],
+      "result": "evidence/initial-01/negative-no_timeout/result.json",
+      "log": "evidence/initial-01/negative-no_timeout/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "negative-no_queue",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 13,
+      "distinct_states": 4572,
+      "statistics": {
+        "generated_states": 80053,
+        "distinct_states": 4572,
+        "remaining_states": 0
+      },
+      "duration_seconds": 1.78375,
+      "invariants": [],
+      "properties": [
+        "FallbackResolves"
+      ],
+      "result": "evidence/initial-01/negative-no_queue/result.json",
+      "log": "evidence/initial-01/negative-no_queue/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "negative-no_fallback_commit",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 13,
+      "distinct_states": 14816,
+      "statistics": {
+        "generated_states": 274645,
+        "distinct_states": 14816,
+        "remaining_states": 0
+      },
+      "duration_seconds": 3.193823,
+      "invariants": [],
+      "properties": [
+        "FallbackResolves"
+      ],
+      "result": "evidence/initial-01/negative-no_fallback_commit/result.json",
+      "log": "evidence/initial-01/negative-no_fallback_commit/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "deadlock",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 11,
+      "distinct_states": 1,
+      "statistics": {
+        "generated_states": 1,
+        "distinct_states": 1,
+        "remaining_states": 0
+      },
+      "duration_seconds": 0.990849,
+      "invariants": [
+        "TypeOK"
+      ],
+      "properties": [],
+      "result": "evidence/initial-01/deadlock/result.json",
+      "log": "evidence/initial-01/deadlock/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "witness-original-committed",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 12,
+      "statistics": {
+        "generated_states": 29,
+        "distinct_states": 12,
+        "remaining_states": 9
+      },
+      "duration_seconds": 0.965742,
+      "invariants": [
+        "NotReached"
+      ],
+      "properties": [],
+      "result": "evidence/initial-01/witness-original-committed/result.json",
+      "log": "evidence/initial-01/witness-original-committed/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "witness-invalid-json-rejected",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 51,
+      "statistics": {
+        "generated_states": 218,
+        "distinct_states": 51,
+        "remaining_states": 40
+      },
+      "duration_seconds": 0.966521,
+      "invariants": [
+        "NotReached"
+      ],
+      "properties": [],
+      "result": "evidence/initial-01/witness-invalid-json-rejected/result.json",
+      "log": "evidence/initial-01/witness-invalid-json-rejected/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "witness-no-tool-rejected",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 52,
+      "statistics": {
+        "generated_states": 245,
+        "distinct_states": 52,
+        "remaining_states": 40
+      },
+      "duration_seconds": 1.117748,
+      "invariants": [
+        "NotReached"
+      ],
+      "properties": [],
+      "result": "evidence/initial-01/witness-no-tool-rejected/result.json",
+      "log": "evidence/initial-01/witness-no-tool-rejected/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "witness-decision-expired",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 80,
+      "statistics": {
+        "generated_states": 460,
+        "distinct_states": 80,
+        "remaining_states": 60
+      },
+      "duration_seconds": 1.026335,
+      "invariants": [
+        "NotReached"
+      ],
+      "properties": [],
+      "result": "evidence/initial-01/witness-decision-expired/result.json",
+      "log": "evidence/initial-01/witness-decision-expired/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "witness-fallback-from-expired",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 2370,
+      "statistics": {
+        "generated_states": 30238,
+        "distinct_states": 2370,
+        "remaining_states": 1090
+      },
+      "duration_seconds": 1.280875,
+      "invariants": [
+        "NotReached"
+      ],
+      "properties": [],
+      "result": "evidence/initial-01/witness-fallback-from-expired/result.json",
+      "log": "evidence/initial-01/witness-fallback-from-expired/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "witness-fallback-from-rejected",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 1704,
+      "statistics": {
+        "generated_states": 21408,
+        "distinct_states": 1704,
+        "remaining_states": 817
+      },
+      "duration_seconds": 1.217908,
+      "invariants": [
+        "NotReached"
+      ],
+      "properties": [],
+      "result": "evidence/initial-01/witness-fallback-from-rejected/result.json",
+      "log": "evidence/initial-01/witness-fallback-from-rejected/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "witness-fallback-epoch-rejected",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 2934,
+      "statistics": {
+        "generated_states": 40229,
+        "distinct_states": 2934,
+        "remaining_states": 1232
+      },
+      "duration_seconds": 1.703403,
+      "invariants": [
+        "NotReached"
+      ],
+      "properties": [],
+      "result": "evidence/initial-01/witness-fallback-epoch-rejected/result.json",
+      "log": "evidence/initial-01/witness-fallback-epoch-rejected/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "witness-fallback-permission-rejected",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 2938,
+      "statistics": {
+        "generated_states": 40259,
+        "distinct_states": 2938,
+        "remaining_states": 1235
+      },
+      "duration_seconds": 1.801941,
+      "invariants": [
+        "NotReached"
+      ],
+      "properties": [],
+      "result": "evidence/initial-01/witness-fallback-permission-rejected/result.json",
+      "log": "evidence/initial-01/witness-fallback-permission-rejected/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "witness-fallback-terminal-rejected",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 2941,
+      "statistics": {
+        "generated_states": 40287,
+        "distinct_states": 2941,
+        "remaining_states": 1237
+      },
+      "duration_seconds": 1.550239,
+      "invariants": [
+        "NotReached"
+      ],
+      "properties": [],
+      "result": "evidence/initial-01/witness-fallback-terminal-rejected/result.json",
+      "log": "evidence/initial-01/witness-fallback-terminal-rejected/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "witness-fallback-session-deadline",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 3739,
+      "statistics": {
+        "generated_states": 51894,
+        "distinct_states": 3739,
+        "remaining_states": 1499
+      },
+      "duration_seconds": 1.528861,
+      "invariants": [
+        "NotReached"
+      ],
+      "properties": [],
+      "result": "evidence/initial-01/witness-fallback-session-deadline/result.json",
+      "log": "evidence/initial-01/witness-fallback-session-deadline/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "witness-fallback-repeat",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 7477,
+      "statistics": {
+        "generated_states": 112794,
+        "distinct_states": 7477,
+        "remaining_states": 2732
+      },
+      "duration_seconds": 2.044859,
+      "invariants": [
+        "NotReached"
+      ],
+      "properties": [],
+      "result": "evidence/initial-01/witness-fallback-repeat/result.json",
+      "log": "evidence/initial-01/witness-fallback-repeat/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "witness-crash-retry-fallback",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 18998,
+      "statistics": {
+        "generated_states": 310209,
+        "distinct_states": 18998,
+        "remaining_states": 7423
+      },
+      "duration_seconds": 2.585653,
+      "invariants": [
+        "NotReached"
+      ],
+      "properties": [],
+      "result": "evidence/initial-01/witness-crash-retry-fallback/result.json",
+      "log": "evidence/initial-01/witness-crash-retry-fallback/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "witness-payload-conflict-rejected",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 2948,
+      "statistics": {
+        "generated_states": 40318,
+        "distinct_states": 2948,
+        "remaining_states": 1243
+      },
+      "duration_seconds": 1.846782,
+      "invariants": [
+        "NotReached"
+      ],
+      "properties": [],
+      "result": "evidence/initial-01/witness-payload-conflict-rejected/result.json",
+      "log": "evidence/initial-01/witness-payload-conflict-rejected/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "witness-late-original-after-fallback",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 5477,
+      "statistics": {
+        "generated_states": 80234,
+        "distinct_states": 5477,
+        "remaining_states": 2016
+      },
+      "duration_seconds": 2.090629,
+      "invariants": [
+        "NotReached"
+      ],
+      "properties": [],
+      "result": "evidence/initial-01/witness-late-original-after-fallback/result.json",
+      "log": "evidence/initial-01/witness-late-original-after-fallback/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "witness-original-repeat",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 57,
+      "statistics": {
+        "generated_states": 276,
+        "distinct_states": 57,
+        "remaining_states": 44
+      },
+      "duration_seconds": 1.272053,
+      "invariants": [
+        "NotReached"
+      ],
+      "properties": [],
+      "result": "evidence/initial-01/witness-original-repeat/result.json",
+      "log": "evidence/initial-01/witness-original-repeat/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "witness-terminal-receipt-read",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 12000,
+      "statistics": {
+        "generated_states": 187392,
+        "distinct_states": 12000,
+        "remaining_states": 4533
+      },
+      "duration_seconds": 2.027673,
+      "invariants": [
+        "NotReached"
+      ],
+      "properties": [],
+      "result": "evidence/initial-01/witness-terminal-receipt-read/result.json",
+      "log": "evidence/initial-01/witness-terminal-receipt-read/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    },
+    {
+      "profile": "witness-fresh-replan-id",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 2950,
+      "statistics": {
+        "generated_states": 40320,
+        "distinct_states": 2950,
+        "remaining_states": 1245
+      },
+      "duration_seconds": 1.339156,
+      "invariants": [
+        "NotReached"
+      ],
+      "properties": [],
+      "result": "evidence/initial-01/witness-fresh-replan-id/result.json",
+      "log": "evidence/initial-01/witness-fresh-replan-id/tlc.log",
+      "input": "evidence/initial-01/input",
+      "manifest": "evidence/initial-01/manifest.json"
+    }
+  ]
+}

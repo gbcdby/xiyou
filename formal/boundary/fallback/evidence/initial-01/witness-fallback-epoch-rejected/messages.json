@@ -1,0 +1,112 @@
+[
+  {
+    "code": 2262,
+    "severity": 0,
+    "text": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)"
+  },
+  {
+    "code": 2187,
+    "severity": 0,
+    "text": "Running breadth-first search Model-Checking with fp 19 and seed -4312865558350461038 with 1 worker on 9 cores with 910MB heap and 64MB offheap memory [pid: 1335] (Linux 6.18.57 amd64, Debian 21.0.13 x86_64, MSBDiskFPSet, DiskStateQueue)."
+  },
+  {
+    "code": 2220,
+    "severity": 0,
+    "text": "Starting SANY..."
+  },
+  {
+    "code": 2219,
+    "severity": 0,
+    "text": "SANY finished."
+  },
+  {
+    "code": 2185,
+    "severity": 0,
+    "text": "Starting... (2026-11-10 22:07:08)"
+  },
+  {
+    "code": 2189,
+    "severity": 0,
+    "text": "Computing initial states..."
+  },
+  {
+    "code": 2190,
+    "severity": 0,
+    "text": "Finished computing initial states: 1 distinct state generated at 2026-11-10 22:07:08."
+  },
+  {
+    "code": 2110,
+    "severity": 1,
+    "text": "Invariant NotReached is violated."
+  },
+  {
+    "code": 2121,
+    "severity": 1,
+    "text": "The behavior up to this point is:"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "1: <Initial predicate>\n/\\ d = [ status |-> \"Pending\",\n  effects |-> <<>>,\n  receipts |->\n      ( \"d1:fallback\" :>\n            [ status |-> \"None\",\n              payload |-> \"wait\",\n              reason |-> \"none\",\n              eventSeq |-> 0 ] @@\n        \"d1:fallback:retry\" :>\n            [ status |-> \"None\",\n              payload |-> \"wait\",\n              reason |-> \"none\",\n              eventSeq |-> 0 ] ),\n  phase |-> \"Running\",\n  now |-> 0,\n  epoch |-> 0,\n  allowed |-> TRUE,\n  sealed |-> \"None\",\n  originalReceipt |-> \"None\",\n  queued |-> FALSE,\n  queuedFrom |-> \"None\",\n  fallbackEpoch |-> 0,\n  events |-> <<>>,\n  outbox |-> {},\n  terminalEffects |-> 0,\n  nextId |-> \"none\" ]\n/\\ v = [ key |-> \"d1:fallback\",\n  witness |-> FALSE,\n  up |-> TRUE,\n  crashes |-> 0,\n  callback |-> \"none\",\n  handled |-> FALSE,\n  stage |-> \"Idle\",\n  attempts |-> 0,\n  cachedValid |-> FALSE,\n  conflictSeen |-> FALSE,\n  repeatedOriginal |-> FALSE ]"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "2: <Next line 225, col 2 to line 231, col 45 of module Fallback>\n/\\ d = [ status |-> \"Pending\",\n  effects |-> <<>>,\n  receipts |->\n      ( \"d1:fallback\" :>\n            [ status |-> \"None\",\n              payload |-> \"wait\",\n              reason |-> \"none\",\n              eventSeq |-> 0 ] @@\n        \"d1:fallback:retry\" :>\n            [ status |-> \"None\",\n              payload |-> \"wait\",\n              reason |-> \"none\",\n              eventSeq |-> 0 ] ),\n  phase |-> \"Running\",\n  now |-> 0,\n  epoch |-> 0,\n  allowed |-> TRUE,\n  sealed |-> \"None\",\n  originalReceipt |-> \"None\",\n  queued |-> FALSE,\n  queuedFrom |-> \"None\",\n  fallbackEpoch |-> 0,\n  events |-> <<>>,\n  outbox |-> {},\n  terminalEffects |-> 0,\n  nextId |-> \"none\" ]\n/\\ v = [ key |-> \"d1:fallback\",\n  witness |-> FALSE,\n  up |-> TRUE,\n  crashes |-> 0,\n  callback |-> \"invalid-json\",\n  handled |-> FALSE,\n  stage |-> \"Idle\",\n  attempts |-> 0,\n  cachedValid |-> FALSE,\n  conflictSeen |-> FALSE,\n  repeatedOriginal |-> FALSE ]"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "3: <Next line 225, col 2 to line 231, col 45 of module Fallback>\n/\\ d = [ status |-> \"Rejected\",\n  effects |-> <<>>,\n  receipts |->\n      ( \"d1:fallback\" :>\n            [ status |-> \"None\",\n              payload |-> \"wait\",\n              reason |-> \"none\",\n              eventSeq |-> 0 ] @@\n        \"d1:fallback:retry\" :>\n            [ status |-> \"None\",\n              payload |-> \"wait\",\n              reason |-> \"none\",\n              eventSeq |-> 0 ] ),\n  phase |-> \"Running\",\n  now |-> 0,\n  epoch |-> 0,\n  allowed |-> TRUE,\n  sealed |-> \"Rejected\",\n  originalReceipt |-> \"Rejected\",\n  queued |-> FALSE,\n  queuedFrom |-> \"None\",\n  fallbackEpoch |-> 0,\n  events |-> <<>>,\n  outbox |-> {},\n  terminalEffects |-> 0,\n  nextId |-> \"none\" ]\n/\\ v = [ key |-> \"d1:fallback\",\n  witness |-> FALSE,\n  up |-> TRUE,\n  crashes |-> 0,\n  callback |-> \"invalid-json\",\n  handled |-> TRUE,\n  stage |-> \"Idle\",\n  attempts |-> 0,\n  cachedValid |-> FALSE,\n  conflictSeen |-> FALSE,\n  repeatedOriginal |-> FALSE ]"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "4: <Next line 225, col 2 to line 231, col 45 of module Fallback>\n/\\ d = [ status |-> \"Rejected\",\n  effects |-> <<>>,\n  receipts |->\n      ( \"d1:fallback\" :>\n            [ status |-> \"None\",\n              payload |-> \"wait\",\n              reason |-> \"none\",\n              eventSeq |-> 0 ] @@\n        \"d1:fallback:retry\" :>\n            [ status |-> \"None\",\n              payload |-> \"wait\",\n              reason |-> \"none\",\n              eventSeq |-> 0 ] ),\n  phase |-> \"Running\",\n  now |-> 0,\n  epoch |-> 0,\n  allowed |-> TRUE,\n  sealed |-> \"Rejected\",\n  originalReceipt |-> \"Rejected\",\n  queued |-> TRUE,\n  queuedFrom |-> \"Rejected\",\n  fallbackEpoch |-> 0,\n  events |-> <<>>,\n  outbox |-> {},\n  terminalEffects |-> 0,\n  nextId |-> \"none\" ]\n/\\ v = [ key |-> \"d1:fallback\",\n  witness |-> FALSE,\n  up |-> TRUE,\n  crashes |-> 0,\n  callback |-> \"invalid-json\",\n  handled |-> TRUE,\n  stage |-> \"Idle\",\n  attempts |-> 0,\n  cachedValid |-> FALSE,\n  conflictSeen |-> FALSE,\n  repeatedOriginal |-> FALSE ]"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "5: <Next line 225, col 2 to line 231, col 45 of module Fallback>\n/\\ d = [ status |-> \"Rejected\",\n  effects |-> <<>>,\n  receipts |->\n      ( \"d1:fallback\" :>\n            [ status |-> \"None\",\n              payload |-> \"wait\",\n              reason |-> \"none\",\n              eventSeq |-> 0 ] @@\n        \"d1:fallback:retry\" :>\n            [ status |-> \"None\",\n              payload |-> \"wait\",\n              reason |-> \"none\",\n              eventSeq |-> 0 ] ),\n  phase |-> \"Running\",\n  now |-> 0,\n  epoch |-> 0,\n  allowed |-> TRUE,\n  sealed |-> \"Rejected\",\n  originalReceipt |-> \"Rejected\",\n  queued |-> TRUE,\n  queuedFrom |-> \"Rejected\",\n  fallbackEpoch |-> 0,\n  events |-> <<>>,\n  outbox |-> {},\n  terminalEffects |-> 0,\n  nextId |-> \"none\" ]\n/\\ v = [ key |-> \"d1:fallback\",\n  witness |-> FALSE,\n  up |-> TRUE,\n  crashes |-> 0,\n  callback |-> \"invalid-json\",\n  handled |-> TRUE,\n  stage |-> \"Received\",\n  attempts |-> 1,\n  cachedValid |-> FALSE,\n  conflictSeen |-> FALSE,\n  repeatedOriginal |-> FALSE ]"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "6: <Next line 225, col 2 to line 231, col 45 of module Fallback>\n/\\ d = [ status |-> \"Rejected\",\n  effects |-> <<>>,\n  receipts |->\n      ( \"d1:fallback\" :>\n            [ status |-> \"None\",\n              payload |-> \"wait\",\n              reason |-> \"none\",\n              eventSeq |-> 0 ] @@\n        \"d1:fallback:retry\" :>\n            [ status |-> \"None\",\n              payload |-> \"wait\",\n              reason |-> \"none\",\n              eventSeq |-> 0 ] ),\n  phase |-> \"Running\",\n  now |-> 0,\n  epoch |-> 0,\n  allowed |-> TRUE,\n  sealed |-> \"Rejected\",\n  originalReceipt |-> \"Rejected\",\n  queued |-> TRUE,\n  queuedFrom |-> \"Rejected\",\n  fallbackEpoch |-> 0,\n  events |-> <<>>,\n  outbox |-> {},\n  terminalEffects |-> 0,\n  nextId |-> \"none\" ]\n/\\ v = [ key |-> \"d1:fallback\",\n  witness |-> FALSE,\n  up |-> TRUE,\n  crashes |-> 0,\n  callback |-> \"invalid-json\",\n  handled |-> TRUE,\n  stage |-> \"Validated\",\n  attempts |-> 1,\n  cachedValid |-> TRUE,\n  conflictSeen |-> FALSE,\n  repeatedOriginal |-> FALSE ]"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "7: <Next line 225, col 2 to line 231, col 45 of module Fallback>\n/\\ d = [ status |-> \"Rejected\",\n  effects |-> <<>>,\n  receipts |->\n      ( \"d1:fallback\" :>\n            [ status |-> \"None\",\n              payload |-> \"wait\",\n              reason |-> \"none\",\n              eventSeq |-> 0 ] @@\n        \"d1:fallback:retry\" :>\n            [ status |-> \"None\",\n              payload |-> \"wait\",\n              reason |-> \"none\",\n              eventSeq |-> 0 ] ),\n  phase |-> \"Running\",\n  now |-> 0,\n  epoch |-> 1,\n  allowed |-> TRUE,\n  sealed |-> \"Rejected\",\n  originalReceipt |-> \"Rejected\",\n  queued |-> TRUE,\n  queuedFrom |-> \"Rejected\",\n  fallbackEpoch |-> 0,\n  events |-> <<>>,\n  outbox |-> {},\n  terminalEffects |-> 0,\n  nextId |-> \"none\" ]\n/\\ v = [ key |-> \"d1:fallback\",\n  witness |-> FALSE,\n  up |-> TRUE,\n  crashes |-> 0,\n  callback |-> \"invalid-json\",\n  handled |-> TRUE,\n  stage |-> \"Validated\",\n  attempts |-> 1,\n  cachedValid |-> TRUE,\n  conflictSeen |-> FALSE,\n  repeatedOriginal |-> FALSE ]"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "8: <Next line 225, col 2 to line 231, col 45 of module Fallback>\n/\\ d = [ status |-> \"Rejected\",\n  effects |-> <<>>,\n  receipts |->\n      ( \"d1:fallback\" :>\n            [ status |-> \"Rejected\",\n              payload |-> \"wait\",\n              reason |-> \"STALE_CONTROL\",\n              eventSeq |-> 0 ] @@\n        \"d1:fallback:retry\" :>\n            [ status |-> \"None\",\n              payload |-> \"wait\",\n              reason |-> \"none\",\n              eventSeq |-> 0 ] ),\n  phase |-> \"Running\",\n  now |-> 0,\n  epoch |-> 1,\n  allowed |-> TRUE,\n  sealed |-> \"Rejected\",\n  originalReceipt |-> \"Rejected\",\n  queued |-> TRUE,\n  queuedFrom |-> \"Rejected\",\n  fallbackEpoch |-> 0,\n  events |-> <<>>,\n  outbox |-> {},\n  terminalEffects |-> 0,\n  nextId |-> \"none\" ]\n/\\ v = [ key |-> \"d1:fallback\",\n  witness |-> TRUE,\n  up |-> TRUE,\n  crashes |-> 0,\n  callback |-> \"invalid-json\",\n  handled |-> TRUE,\n  stage |-> \"Done\",\n  attempts |-> 1,\n  cachedValid |-> TRUE,\n  conflictSeen |-> FALSE,\n  repeatedOriginal |-> FALSE ]"
+  },
+  {
+    "code": 2200,
+    "severity": 0,
+    "text": "Progress(8) at 2026-11-10 22:07:09: 40,229 states generated (1,952,864 s/min), 2,934 distinct states found (142,427 ds/min), 1,232 states left on queue."
+  },
+  {
+    "code": 2199,
+    "severity": 0,
+    "text": "40229 states generated, 2934 distinct states found, 1232 states left on queue."
+  },
+  {
+    "code": 2194,
+    "severity": 0,
+    "text": "The depth of the complete state graph search is 8."
+  },
+  {
+    "code": 2268,
+    "severity": 0,
+    "text": "The average outdegree of the complete state graph is 2 (minimum is 0, the maximum 10 and the 95th percentile is 5)."
+  },
+  {
+    "code": 2186,
+    "severity": 0,
+    "text": "Finished in 1242ms at (2026-11-10 22:07:09)"
+  }
+]

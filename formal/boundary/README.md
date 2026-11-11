@@ -8,14 +8,16 @@
 | `reconnect-model` | [重连模型](reconnect/README.md)：正向与 LIVE-02 各 20,278 distinct states、队列0；4个安全性质的逐项缺陷、2个活性缺陷和恢复见证 | #8 的授权投影、完整区间、恢复与终态读取 |
 | `visibility-model` | [信息边界模型](visibility/README.md)：安全与 LIVE-03 各 2,591,386 distinct states、队列0；上下文/观察/传播、原子意图、围栏和非真空证据 | #9 的感知、持久记忆、合法传播、模型意图提交 |
 
+`visibility-model` 另增 [fallback 组合边界补充](fallback/README.md)，对应独立需求 finding `R-vs001-p04-VIS-001`：同一个模型涵盖原决定收束、独立系统命令、当前 epoch/工具权限/终局、去重和迟到回调。新增 38 项配置已实测，正向安全与完整活性各 150,576 distinct states、队列0；作者状态为 `FIX_REPORTED`，仍等待独立复审关闭 finding。原 visibility 的 28 项证据与所有隔离/重连文件保持原字节，见 [基线保护记录](fallback/baseline-preservation.json)。
+
 另有独立[死锁敏感性](deadlock/README.md)，其 raw rc=11 不冒充安全性质 rc=12。全部模型采用固定 v1.7.4 / TLC 2.19、普通 BFS、1 worker、死锁检查开启；各配置保存自己的规模、下限、预算与公平性。核心所有权和完整真人控制链由 #5 承担，不能据本目录单独宣称其已完成。
 
-最终证据机械审计核对 57 个 profile 的当前模型/CFG、工具/runner 摘要、原始结果、目标违反、完整探索和预声明下限，结果见 [evidence-audit.json](evidence-audit.json)。复现审计入口为：
+最终证据机械审计核对 95 个 profile（原 57 加 fallback 补充 38） 的当前模型/CFG、工具/runner 摘要、原始结果、目标违反、完整探索和预声明下限，结果见 [evidence-audit.json](evidence-audit.json)。复现审计入口为：
 
 ```sh
 python3 formal/boundary/audit_evidence.py
 ```
 
-它只核对证据一致性，不代替需求与语义独立审查。模型实现状态均为 `NOT_ASSESSED`，独立审查尚未运行；产物释放由总控绑定审查后的固定提交决定。隔离和重连无需等待整个 #7 关闭才可独立释放。
+它只核对证据一致性，不代替需求与语义独立审查。模型实现状态均为 `NOT_ASSESSED`。原 visibility 的需求审查指出上述 fallback 缺口；本补充的独立复审状态为 `NOT_RUN`，产物释放由总控绑定审查后的固定提交决定。隔离和重连无需等待整个 #7 关闭才可独立释放。
 
 可见性活性曾有 180 秒超时与两次无最终报告的中断记录，原始结果保留在该目录的历史尝试索引。最终仅增加预算为1200秒，同一模型、性质和公平性约384秒完成；历史中途状态数没有被算作通过。

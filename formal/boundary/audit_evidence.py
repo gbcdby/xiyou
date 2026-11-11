@@ -14,7 +14,7 @@ def main():
     runner = root.parents[1] / '.agents/skills/worker-tla/scripts/run_tlc.py'
     errors = []
     checked = []
-    for name in ['isolation', 'reconnect', 'visibility', 'deadlock']:
+    for name in ['isolation', 'reconnect', 'visibility', 'deadlock', 'fallback']:
         base = root / name
         manifest = json.loads((base / 'verification.json').read_text())
         index = json.loads((base / 'results.json').read_text())
@@ -30,22 +30,24 @@ def main():
             result_path = base / row['result']
             evidence = result_path.parent
             result = json.loads(result_path.read_text())
-            original = json.loads((evidence / 'manifest.json').read_text())
+            original_path = base / row['manifest'] if 'manifest' in row else evidence / 'manifest.json'
+            inputs = base / row['input'] if 'input' in row else evidence / 'input'
+            original = json.loads(original_path.read_text())
             expected = manifest['profiles'][profile]
             log = (evidence / 'tlc.log').read_text()
             def check(condition, message):
                 if not condition:
                     errors.append(label + ': ' + message)
-            check(result['inputs']['manifest_sha256'] == digest(evidence / 'manifest.json'), '原始清单摘要不符')
+            check(result['inputs']['manifest_sha256'] == digest(original_path), '原始清单摘要不符')
             check(result['inputs']['runner_sha256'] == digest(runner), 'runner已变化')
             check(result['tool']['sha256'] == manifest['tool']['sha256'], '工具摘要不符')
             check(original['profiles'][profile] == expected, '本profile运行条件与当前清单不符')
             for entry in result['inputs']['files']:
-                source = evidence / 'input' / entry['path']
+                source = inputs / entry['path']
                 check(digest(source) == entry['sha256'], '输入快照摘要不符: ' + entry['path'])
             entry = manifest['model']['entry']
-            check((evidence / 'input' / entry).read_bytes() == (base / 'model' / entry).read_bytes(), '模型不属于当前候选')
-            check((evidence / 'input' / expected['config']).read_bytes() == (base / 'model' / expected['config']).read_bytes(), 'CFG不属于当前候选')
+            check((inputs / entry).read_bytes() == (base / 'model' / entry).read_bytes(), '模型不属于当前候选')
+            check((inputs / expected['config']).read_bytes() == (base / 'model' / expected['config']).read_bytes(), 'CFG不属于当前候选')
             check(result['checks']['configured_invariants'] == expected['expected_invariants'], '实际不变量集合不符')
             check(result['checks']['configured_properties'] == expected['expected_properties'], '实际活性集合不符')
             check(result['checks']['checks_deadlock'] is True, '未启用死锁检查')

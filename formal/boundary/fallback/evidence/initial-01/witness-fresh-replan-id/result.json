@@ -1,0 +1,331 @@
+{
+  "schema_version": 1,
+  "run_id": "7cdd969c-ef42-42f4-9203-7353c6d94f4f",
+  "status": "COUNTEREXAMPLE",
+  "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+  "mode": "modelcheck",
+  "profile": "witness-fresh-replan-id",
+  "started_at": "2026-11-11T06:07:26.900038+00:00",
+  "finished_at": "2026-11-11T06:07:28.239157+00:00",
+  "duration_seconds": 1.339156,
+  "completed": false,
+  "implementation_status": "NOT_ASSESSED",
+  "tool": {
+    "version_label": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+    "jar_snapshot": "/workspace/scratch/f9401eff266e/.agent-output/boundary-fix/worktree/.agent-output/fallback/remaining-01/witness-fresh-replan-id/tool/tla2tools.jar",
+    "java_path": "/usr/bin/java",
+    "java_version": "openjdk version \"21.0.13\" 2026-10-20\nOpenJDK Runtime Environment (build 21.0.13+9-1-deb13u2-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.13+9-1-deb13u2-Debian, mixed mode, sharing)",
+    "removed_environment_names": [],
+    "reported_version": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)"
+  },
+  "inputs": {
+    "manifest_sha256": "fdee900440536cd67524743bf7ba065525127e8f89ebe5ab6bde1f8cc7cce2d9",
+    "model_root": "/workspace/scratch/f9401eff266e/.agent-output/boundary-fix/worktree/.agent-output/fallback/remaining-01/source/model",
+    "snapshot_directory": "/workspace/scratch/f9401eff266e/.agent-output/boundary-fix/worktree/.agent-output/fallback/remaining-01/witness-fresh-replan-id/input",
+    "files": [
+      {
+        "path": "Fallback.tla",
+        "sha256": "e2445f2a1a20cd39a2bbfb36d5802afab882312eb0bad7acddfa939bc78a0f73",
+        "bytes": 13766
+      },
+      {
+        "path": "deadlock.cfg",
+        "sha256": "bf716d7baacf83addc6350e4d79dab14be26bc3a8a7951a95484d1222213b395",
+        "bytes": 87
+      },
+      {
+        "path": "live.cfg",
+        "sha256": "b5b8ed03f065b604c9d3ffa17800c80a27ff059604e7be4bfb15808095cac466",
+        "bytes": 125
+      },
+      {
+        "path": "negative-early_queue.cfg",
+        "sha256": "8967fb0916cfebff1d70f9601ba9e000fc18d692ee65c553b1c1bec63469b2fb",
+        "bytes": 107
+      },
+      {
+        "path": "negative-fallback_deadline.cfg",
+        "sha256": "61aac7d1abea085e72cf767235a6c61ba5cc4239a2d84b40ab235754a1d2b20e",
+        "bytes": 114
+      },
+      {
+        "path": "negative-fallback_epoch.cfg",
+        "sha256": "3cb0a5f8ec6b9e66bd4603d9f208c30916f0ab8c01329912a61490c6ed36be9f",
+        "bytes": 103
+      },
+      {
+        "path": "negative-fallback_permission.cfg",
+        "sha256": "00a8fe58055dc27d29940fc96177a93143131336ebe4902d58b47424fa074d56",
+        "bytes": 113
+      },
+      {
+        "path": "negative-fallback_terminal.cfg",
+        "sha256": "b1af6105bf09d4ff1615e3b6e55cd416ae7221f3fe7b13eb33f9f580e5215656",
+        "bytes": 114
+      },
+      {
+        "path": "negative-lost_receipt.cfg",
+        "sha256": "bbb066feb13d37316417773a413337b42abbb01c095f970107a6d2d72f8b43f6",
+        "bytes": 100
+      },
+      {
+        "path": "negative-no_fallback_commit.cfg",
+        "sha256": "2650f07eb4bc4234bb5eed3cd8f8988e6ec9a2a3f7a11c497f7a6f9bc6396f40",
+        "bytes": 111
+      },
+      {
+        "path": "negative-no_queue.cfg",
+        "sha256": "7ca030db5457c6902dad514c68bc457f2dcd9a6bc960b2b003d1da65df94d406",
+        "bytes": 101
+      },
+      {
+        "path": "negative-no_timeout.cfg",
+        "sha256": "b7177b09ac51236bc5729ce01706bbb36b83881cfa9db62e65a2b0b5d4560654",
+        "bytes": 112
+      },
+      {
+        "path": "negative-original_deadline.cfg",
+        "sha256": "42329119030e7603e9ae6b7000b4f8f5fb8c70832738d5f6f5c59844e6a4946a",
+        "bytes": 107
+      },
+      {
+        "path": "negative-original_epoch.cfg",
+        "sha256": "3a32c9cdf45ef9b1d2dfd229875caf3f2f6c9e2bfe7fb1253d6012f2cbe65852",
+        "bytes": 104
+      },
+      {
+        "path": "negative-original_permission.cfg",
+        "sha256": "9067a7192e3dbc0c994f547f386ca33792a42f13f8818028ab835ab8d764ba5f",
+        "bytes": 109
+      },
+      {
+        "path": "negative-payload_overwrite.cfg",
+        "sha256": "329aab4aea04f61e3cfd2b94fbc1ea863c0733233724fdc5bf8944f1536665ef",
+        "bytes": 111
+      },
+      {
+        "path": "negative-reuse_decision_id.cfg",
+        "sha256": "c429431e1f97d54a83deec2c49c6f395d7006a8d1ce827ce41e81c52fa21368f",
+        "bytes": 107
+      },
+      {
+        "path": "negative-revive_decision.cfg",
+        "sha256": "3e36933a7de04176c4a0de4a80290e8904323acace1f8add4cc7ddd634470b26",
+        "bytes": 105
+      },
+      {
+        "path": "negative-split_bundle.cfg",
+        "sha256": "2fd145e4633822cac989e40054792765a21640f0c4fe247374dec062897062ac",
+        "bytes": 103
+      },
+      {
+        "path": "negative-type.cfg",
+        "sha256": "207388097f5703bd557eaad7fd1a70f966754e33d9e61d531a4e9d09c81b67eb",
+        "bytes": 83
+      },
+      {
+        "path": "negative-unstable_key.cfg",
+        "sha256": "b0cd52b569e9bf3d30951588b1b14bebdcd9df55bddacec862f44a5310d5afb0",
+        "bytes": 100
+      },
+      {
+        "path": "positive.cfg",
+        "sha256": "d9af631ef4f34557a31d0d163851a34b6fa3528185fd9242b2e44408d91db516",
+        "bytes": 300
+      },
+      {
+        "path": "witness-crash-retry-fallback.cfg",
+        "sha256": "000a0e245519013d47bdee1fd667ae6f4a463ae48501cf3addbbbdc9dd117782",
+        "bytes": 103
+      },
+      {
+        "path": "witness-decision-expired.cfg",
+        "sha256": "a72b4b95031594405c3a30c315d99ec4a01b56ba55552fc1f5c3e86c0ef6a81c",
+        "bytes": 99
+      },
+      {
+        "path": "witness-fallback-epoch-rejected.cfg",
+        "sha256": "70605b56841c73bf066c995f6b406fa7d65689da323f658a07c8d4083c32f9af",
+        "bytes": 106
+      },
+      {
+        "path": "witness-fallback-from-expired.cfg",
+        "sha256": "b813aed8383253aff19227ccd84cf1fce2054584f03e846c912af4a8a6d8aaee",
+        "bytes": 104
+      },
+      {
+        "path": "witness-fallback-from-rejected.cfg",
+        "sha256": "1ba5976993b3b5516cc6186dc744d5db56fb637c26c027ed54a0610cddc80eff",
+        "bytes": 105
+      },
+      {
+        "path": "witness-fallback-permission-rejected.cfg",
+        "sha256": "3b93289cf7f1a444aedb11571ece4a23a56bb179ca0d3feeec7e10c63a21f7f5",
+        "bytes": 111
+      },
+      {
+        "path": "witness-fallback-repeat.cfg",
+        "sha256": "643ee786fcc9ef9cb7c9b8f7f366a9df69641bee1b4fb5c1ab6cfaf411e27036",
+        "bytes": 98
+      },
+      {
+        "path": "witness-fallback-session-deadline.cfg",
+        "sha256": "74d86c4dbf06c7676afed1bd9f413d3a1338dcb7aaf5a03d2e8934713d39de19",
+        "bytes": 108
+      },
+      {
+        "path": "witness-fallback-terminal-rejected.cfg",
+        "sha256": "0e71ebb5fe02ff13b0d760fda31f8e884f8f6bdd00cb6c1a4ef644638dc1f202",
+        "bytes": 109
+      },
+      {
+        "path": "witness-fresh-replan-id.cfg",
+        "sha256": "392e0fd010fec69b6299a28c452b2d751222db06088660cf1696cf751bb9217d",
+        "bytes": 98
+      },
+      {
+        "path": "witness-invalid-json-rejected.cfg",
+        "sha256": "75f3f00e1e34b8a0392998d4c807d4f385e42a2682bfa50d1ba2e90552de8fdd",
+        "bytes": 104
+      },
+      {
+        "path": "witness-late-original-after-fallback.cfg",
+        "sha256": "06f1d2134d4d84c36b0405b8a526a22524b087e099f103568218859229a501c5",
+        "bytes": 111
+      },
+      {
+        "path": "witness-no-tool-rejected.cfg",
+        "sha256": "de937baf1f4c89b5b57a4062b336d23ca5f79775a8c81bd167c62f5eeb9bb771",
+        "bytes": 99
+      },
+      {
+        "path": "witness-original-committed.cfg",
+        "sha256": "357771bc8ccfec1e7e65aa71df4a8c08a6af11033a934b0ce44a4211433b1160",
+        "bytes": 101
+      },
+      {
+        "path": "witness-original-repeat.cfg",
+        "sha256": "ca8415c3d433b864950650ae12e4551e421f54dbaebfe4d2f2545c6dde997fa6",
+        "bytes": 98
+      },
+      {
+        "path": "witness-payload-conflict-rejected.cfg",
+        "sha256": "aae80f57bf3090ac7b3d4821fa422da4c25584ebe6dfad8aafec7b94a3b085d5",
+        "bytes": 108
+      },
+      {
+        "path": "witness-terminal-receipt-read.cfg",
+        "sha256": "7ac73f5c9d6101a8cb9167e55fcab8c82f60648ca4488ee380a485bbffbe7695",
+        "bytes": 104
+      }
+    ],
+    "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a"
+  },
+  "checks": {
+    "expected_invariants": [
+      "NotReached"
+    ],
+    "expected_properties": [],
+    "configured_invariants": [
+      "NotReached"
+    ],
+    "configured_properties": [],
+    "checks_deadlock": true,
+    "deadlock_reason": null,
+    "behavior": {
+      "SPECIFICATION": "Spec"
+    }
+  },
+  "scope": {
+    "sessions": 1,
+    "original_decisions": 1,
+    "fallback_commands": 1,
+    "processing_attempts": 2,
+    "crashes": 1,
+    "epoch_domain": [
+      0,
+      1
+    ],
+    "decision_deadline": 2,
+    "session_deadline": 3,
+    "logical_time": "0..3；2 表示原决定 10 秒超时，3 表示更晚 Session 截止；不模拟真人 30 秒交还过程。",
+    "scope_role": "原决定收束与独立 fallback 的组合补充；原 visibility 两 NPC/两 Session 信息与有序工具包证据保持独立范围。",
+    "excluded_behaviors": [
+      "多个并行或反复新决策的完整生命周期",
+      "真实 JSON 解析和供应商调用",
+      "真实 PostgreSQL/网络及认证",
+      "完整控制权往返",
+      "Observation 内容及两有序工具内部模拟（见冻结 visibility 产物）"
+    ],
+    "fault": "none",
+    "probe": "fresh-replan-id",
+    "distinct_state_min": 1,
+    "liveness": "NOT_CHECKED"
+  },
+  "assumptions": [
+    "原决定与 fallback 共享单个 Session 权威提交入口；Receipt、效果、事件、outbox 同步提交是实现义务。",
+    "固定可信系统主体与 Session 绑定，结果读取权限在模型外已确认；此假设不授权客户端伪造系统命令。",
+    "fallback 沿用原决定的 epoch 和稳定原因键，不把旧决定偷偷换成当前 epoch。",
+    "仅一次服务进程崩溃；持久队列、Decision、Receipt、世界与日志不丢失。",
+    "安全性无公平性；活性仅使用清单所列弱公平性，不要求 LLM 返回。"
+  ],
+  "command": [
+    "/usr/bin/java",
+    "-Xmx1024m",
+    "-XX:+UseParallelGC",
+    "-Duser.language=en",
+    "-Duser.country=US",
+    "-Duser.home=/workspace/scratch/f9401eff266e/.agent-output/boundary-fix/worktree/.agent-output/fallback/remaining-01/witness-fresh-replan-id/runtime-home",
+    "-Djava.io.tmpdir=/workspace/scratch/f9401eff266e/.agent-output/boundary-fix/worktree/.agent-output/fallback/remaining-01/witness-fresh-replan-id/tmp",
+    "-DTLA-Library=/workspace/scratch/f9401eff266e/.agent-output/boundary-fix/worktree/.agent-output/fallback/remaining-01/witness-fresh-replan-id/input",
+    "-cp",
+    "/workspace/scratch/f9401eff266e/.agent-output/boundary-fix/worktree/.agent-output/fallback/remaining-01/witness-fresh-replan-id/tool/tla2tools.jar",
+    "tlc2.TLC",
+    "-tool",
+    "-modelcheck",
+    "-workers",
+    "1",
+    "-metadir",
+    "/workspace/scratch/f9401eff266e/.agent-output/boundary-fix/worktree/.agent-output/fallback/remaining-01/witness-fresh-replan-id/states",
+    "-config",
+    "/workspace/scratch/f9401eff266e/.agent-output/boundary-fix/worktree/.agent-output/fallback/remaining-01/witness-fresh-replan-id/input/witness-fresh-replan-id.cfg",
+    "/workspace/scratch/f9401eff266e/.agent-output/boundary-fix/worktree/.agent-output/fallback/remaining-01/witness-fresh-replan-id/input/Fallback.tla"
+  ],
+  "process": {
+    "exit_code": 12,
+    "timed_out": false,
+    "interrupted": false
+  },
+  "statistics": {
+    "generated_states": 40320,
+    "distinct_states": 2950,
+    "remaining_states": 1245
+  },
+  "evidence": {
+    "log": "/workspace/scratch/f9401eff266e/.agent-output/boundary-fix/worktree/.agent-output/fallback/remaining-01/witness-fresh-replan-id/tlc.log",
+    "messages": "/workspace/scratch/f9401eff266e/.agent-output/boundary-fix/worktree/.agent-output/fallback/remaining-01/witness-fresh-replan-id/messages.json"
+  },
+  "message_codes": [
+    2110,
+    2121,
+    2185,
+    2186,
+    2187,
+    2189,
+    2190,
+    2194,
+    2199,
+    2200,
+    2217,
+    2219,
+    2220,
+    2262,
+    2268
+  ],
+  "error_codes": [
+    2110,
+    2121
+  ],
+  "warning_codes": []
+}
