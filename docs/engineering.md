@@ -1,6 +1,6 @@
 # 工程约定
 
-从原 AGENTS.md 拆出，供改代码时按需读取。总入口见 [../AGENTS.md](../AGENTS.md)，产品与技术依据见 [../初步设计文档.md](../初步设计文档.md)。
+供实现与审查时按需读取。总入口见 [AGENTS.md](../AGENTS.md)，产品与技术依据见 [初步设计文档](../初步设计文档.md)，当前阶段见 [项目现状](project-status.md)。
 
 ## 技术栈
 
@@ -13,10 +13,12 @@
 
 ## 目录结构
 
+以下是目标结构，按里程碑逐步建立，不表示这些模块已经存在。M0 首批模型以总设计的 Ownership / RoleHandoff 为重点，其他模型随相关协议范围推进。
+
 ```text
 /game        领域模型、事件目录、动作目录、NPC 状态、记忆 schema、权限模型
 /protocol    HTTP API、WebSocket 事件、AI 工具 schema
-/formal      SessionLifecycle.tla、Ownership.tla、RoleHandoff.tla、Reconnect.tla、SecretVisibility.tla
+/formal      按阶段建立 SessionLifecycle、Ownership、RoleHandoff、Reconnect、SecretVisibility、Commitment 等模型
 /frontend    Vue 应用外壳、世界视图、对话面板、队伍面板、实时客户端
 /backend     session、world、规则校验器、事件日志、AI 编排器
 /content     关卡 schema、角色 schema、目标 schema、终局条件
@@ -27,13 +29,13 @@
 ## 领域命名
 
 - 三个 ID 必须分清：`UserId`（真人账号）、`CharacterId`（本关角色）、`SessionId`（本局实例）。NPC 认识 `CharacterId` 不等于认识 `UserId`。
-- 事件 `seq` 为单 session 内的全局顺序号，`eventId` 形如 `E1009`；状态推进严格为 `State[n+1] = Reduce(State[n], Event[n+1])`。
-- 角色控制权：`HumanControlled → GracePeriod → AIProxyControlled → HumanControlled`。托管 AI 继承已知内容/位置/物品/承诺，但**禁止**重大不可逆决策、泄露玩家私人频道、擅自消耗关键物品。
+- 事件顺序号在单个 Session 内全局有序；状态推进严格为 `State[n+1] = Reduce(State[n], Event[n+1])`。总设计的示例字段 `seq` 与文字中的 `sessionSeq` 表达同一概念，正式 wire schema 命名由 M0 Spec 统一，不假定已经存在两套序号。`eventId` 的示例为 `E1009`，最终唯一性范围一并写入协议。
+- 角色控制权：`HumanControlled → GracePeriod → AIProxyControlled → HumanControlled`。托管 AI 继承已知内容/位置/物品/承诺，但**禁止**重大不可逆决策、泄露玩家私人频道、擅自消耗关键物品。总设计保留的“维持游戏必需行为”例外仍需 Spec 定义可判断的范围；不能由模型临场解释该例外来绕过校验。
 - 时间：`expireAt`、`seq` 等一律以服务端为准。
 
 ## 工程边界
 
-- **先机制后故事**：关卡故事与机制实现解耦，先交付六类交互能力（纠纷化解、信任与证据、多人协同、承诺与选择、身份验证、谈判与执行），再写具体章节。
+- **机制与故事解耦**：六类交互能力是整体方向，按 [M0–M6 路线](project-status.md#开发路线)逐步实现可复用机制。先验证“信任与证据 + 纠纷解决”，第二关成立后再扩展；不要求第一关前完成全部六类能力。
 - **关卡走配置**：通过 `content/` 下的人物、场景、权限、知识、目标、终局条件配置实现，不写六套程序。
 - **不擅自引入**新框架、消息中间件或微服务拆分；确需引入时先说明动机与替代方案。
 
@@ -41,9 +43,9 @@
 
 新增并发/实时/NPC 逻辑时至少覆盖：并发抢同一物品、重复请求、中途掉线、重连与托管交还、事件乱序、AI 幻觉、提示注入、跨房间偷看、模型超时、非法 tool JSON。
 
-涉及所有权、角色交接、重连的协议改动，同步更新 `/formal` 下的 TLA+ 规格，并从极小状态空间跑 TLC。用 [`tla-verify`](../.agents/skills/tla-verify/SKILL.md) 技能执行，不要手搓验证流程。
+涉及所有权、角色交接、重连的协议改动，同步更新 `/formal` 下的 TLA+ 规格，并从极小状态空间跑 TLC。使用当前 [`worker-tla`](../.agents/skills/worker-tla/SKILL.md) 的方法，保留模型、实现对应与真实执行证据。修改协议语义时先更新相关 Spec 与模型，再使实现满足其义务；简单文档整理不要求运行无关的 TLC。
 
-**未经 TLC 验证的规格不得声称已证明；反过来，TLC 跑绿也不等于已证明。** TLC 对"前件永假"的真空不变量同样输出 `No error has been found` 并返回 0，与真正成立的不变量无法从退出码区分（已实测：真空用例只探索到 1 个状态）。因此任何"已验证"的结论必须同时报告：
+**未经 TLC 验证的规格不得声称已证明；反过来，TLC 跑绿也不等于已证明。** 本项目把可证伪性作为模型验收条件，不仅检查退出码。旧稿中的实验叙述没有随当前仓库提供原始模型与日志，不能当作本项目本轮实测。因此任何“已验证”的结论必须同时报告：
 
 - 常量规模（如 `Item = {i1, i2}`）
 - 每个不变量的**负对照**：一个必然破坏它的缺陷配置，且该配置确实报出 `rc=12`

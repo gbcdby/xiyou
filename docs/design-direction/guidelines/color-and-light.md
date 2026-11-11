@@ -32,10 +32,10 @@
 
 以上均为 **设计提案**，既非用户原图精确采样，也非玩家大众偏好的统计。它们可用于人物身份色或独立插画；仍须遵守[总纲](overview.md)的线墨、精度和空间语言。
 
-## 这轮新增的可复算检查
+## 色板的可复算检查
 
-色板数据位于 [palette-directions.json](../tokens/palette-directions.json)，声明了 10 组**明确的纯色前景／背景配对**，可由通用 skill 的 `scripts/color_check.py` 检查。其中正文按 4.5:1，必要符号按 3:1 的工作阈值；这些是指定条件下的计算，不代表真实画面全部通过 WCAG 或平台检查。
+色板数据位于 [palette-directions.json](../tokens/palette-directions.json)，声明了 10 组**明确的纯色前景／背景配对**，可由当前 `worker-visual-design` 的 [color_check.py](../../../.agents/skills/worker-visual-design/scripts/color_check.py) 检查。其中正文按 4.5:1，必要符号按 3:1 的工作阈值；这描述检查方法，不代表本次已经执行计算，也不代表真实画面全部通过 WCAG 或平台检查。
 
 色板里 `soft_gold` 等偏浅的装饰色**不能自动作为小字颜色**。如果要把它当成文字或必需状态符号，应重新选择色值并计算对比；对透明叠色、纹理、镜头运动、字体缩放仍须另做视觉／设备验证。
 
-参考源 R14、R45、R54、R69 等记录于 [catalog](../references/catalog.md)。关于明度、彩度、色彩面积、邻接与验证方法，参见独立交付的通用 skill：`references/color-systems.md`（跨压缩包引用，不作为本项目相对链接）。
+历史参考编号 R14、R45、R54、R69 等见[参考目录](../references/catalog.md)，对应原图尚未迁入。关于明度、彩度、色彩面积、邻接与验证方法，参见仓库内当前 `worker-visual-design` 的[色彩系统说明](../../../.agents/skills/worker-visual-design/references/color-systems.md)。

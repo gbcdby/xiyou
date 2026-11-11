@@ -1,44 +1,32 @@
-# Triage 标签映射
+# GitHub 标签约定
 
-`/triage` 技能使用五个状态角色与两个类别角色（canonical role name 见 [triage SKILL](../../.agents/skills/triage/SKILL.md)）。本仓库把它们映射到 Gitee 上实际存在的 label。
+本文件是按需采用的标签方案，**不代表这些标签已经在 GitHub 创建**。使用前读取当前仓库标签，复用含义相同的标签；没有标签不阻止读取、调查或处理明确任务。
 
-Gitee label 名称只允许汉字、字母、数字、`.` `_` `-` `/` `\` 与全角符号，且长度 2–20 字符，**不能含冒号**。因此 wayfinder 的 `wayfinder:<type>` 在这里写作 `wayfinder-<type>`。
+## 类型标签
 
-## 状态角色（state roles）
+| 建议名称 | 用途 |
+| --- | --- |
+| `spec` | 多任务交付的 Spec 汇总 Issue |
+| `task` | 范围明确的实施、设计或验证任务 |
+| `bug` | 已报告的行为异常 |
+| `enhancement` | 功能或体验改进 |
+| `documentation` | 文档与项目说明 |
 
-每个 triage 过的 issue 恰好带一个。
+同一 Issue 可以有多个相关类型标签，不为凑齐分类强制全部使用。
 
-| canonical role | Gitee label | 含义 |
-|---|---|---|
-| `needs-triage` | `needs-triage` | 待维护者评估 |
-| `needs-info` | `needs-info` | 等待报告者补充信息 |
-| `ready-for-agent` | `ready-for-agent` | 已完整描述，可由 AFK agent 直接执行 |
-| `ready-for-human` | `ready-for-human` | 需要人工实现 |
-| `wontfix` | `wontfix` | 不予处理（仓库已自带此 label） |
+## 辅助状态标签
 
-> 首次使用前若某 label 不存在，先执行：
-> `gitee label create --repo gbcdby/xiyou --name "<name>" --color "#hex"`
-> 用 `gitee label list --repo gbcdby/xiyou` 核对。
+| 建议名称 | 用途 |
+| --- | --- |
+| `needs-investigation` | 事实、原因或范围尚需调查 |
+| `needs-design` | 行为或协议尚需明确 |
+| `blocked` | 有具体阻塞，正文必须写出原因及解除条件 |
+| `ready` | 范围与验收清楚，前置产物达到可执行条件 |
 
-## 类别角色（category roles）
+状态按实际需要选择；清理已失效的互斥状态，保留其他有效标签。是否完成由 Issue 状态、完成条件和证据决定，不额外维护一套“完成”标签。
 
-| canonical role | Gitee label | 含义 |
-|---|---|---|
-| `bug` | `bug` | 有东西坏了（仓库已自带） |
-| `enhancement` | `enhancement` | 新功能或改进（仓库已自带） |
+## 与技能的关系
 
-## Wayfinder 标签
+按[工作流](workflow.md)把问题交给合适的 worker。标签不自动启动 Agent，也不授予实现、合并或部署权限；已明确的 Tickets 无需再走一套重复分类流程。
 
-wayfinder 的票自带类型标签，与 triage 状态并行存在，互不替代。
-
-| 用途 | Gitee label |
-|---|---|
-| 地图 | `wayfinder-map` |
-| 研究票（AFK） | `wayfinder-research` |
-| 原型票（HITL） | `wayfinder-prototype` |
-| 拷问票（HITL，默认类型） | `wayfinder-grilling` |
-| 任务票（AFK/HITL） | `wayfinder-task` |
-
-## 边界
-
-triage 只处理**不是由 `/to-tickets` 或 wayfinder 产出的** issue——即外部来的 bug 报告与功能请求。上述流程产出的票已经是 agent-ready 的，不要重新 triage。
+只有本次任务确实需要管理标签且已有授权时才创建或修改，写后核对实际生效结果。

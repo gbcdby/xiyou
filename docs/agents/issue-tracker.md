@@ -1,125 +1,45 @@
-# Issue tracker: Gitee
+# GitHub 任务与交付记录
 
-Issues live as Gitee issues on `gitee.com/gbcdby/xiyou`（私有仓库）。主力工具是 **gitee CLI**（AndersHsueh 版，内置 `--agent-help` 结构化文档），Gitee API v5 + `curl` 作兜底。
+## 平台与范围
 
-> 本文件同时适用于本仓库与同类 Gitee 个人仓库。下文凡是标「实测」的条目都已在本仓库跑过命令验证。
+用户于 **2026-11-11** 明确废弃 Gitee，后续统一使用 [gbcdby/xiyou](https://github.com/gbcdby/xiyou)。
 
-## 认证
+- [Issues](https://github.com/gbcdby/xiyou/issues)：Spec 汇总任务、Tickets、调查与待决事项。
+- [Pull requests](https://github.com/gbcdby/xiyou/pulls)：变更候选、审查、检查与合并。
+- [Actions](https://github.com/gbcdby/xiyou/actions)：实际存在并已运行的工作流结果；没有工作流时不得称 CI 已通过。
+- 版本化文档：总设计与 `docs/specs/` 中的细化 Spec，通过提交或有效修订与 Issues 关联。
 
-- 已配置 `gitee auth login`（token 存于 `~/.gitee-cli/settings.json`），`gitee auth status` 可查。
-- 覆盖顺序：`--token` 标志 > 环境变量 `GITEE_TOKEN` > 配置文件。token **不得硬编码或提交**。
-- 提取 token：`jq -r '.hosts["gitee.com"].token' ~/.gitee-cli/settings.json`。
-- 本 CLI **不会**从 git remote 推断仓库，漏写 repo 标志直接报 `--repo is required`。
+旧平台不是当前任务来源，不要求恢复旧地图后才能继续，也不自动双写或补造迁移记录。后续若引用历史证据，须保留原来源与适用范围。
 
-## 命令速查
+## Spec、Ticket 与 PR 的分工
 
-| 操作 | 命令 | 备注 |
-|---|---|---|
-| 建 issue | `gitee issue create -R gbcdby/xiyou -t "标题" -b "正文" -l "label"` | |
-| 读 issue | `gitee issue view <Ixxx> -R gbcdby/xiyou` | 表格输出会截断正文 |
-| 读全文/评论 | `gitee api GET /repos/gbcdby/xiyou/issues/<n>/comments -o json` | |
-| 列 issue | `gitee issue list --repo gbcdby/xiyou -o json` | **不接受 `-R`**，实测报 `unknown shorthand flag` |
-| 评论 | `gitee issue comment <n> -R gbcdby/xiyou --body "..."` | |
-| 建仓库标签 | `gitee label create -R gbcdby/xiyou -n <name> -c <6位hex>` | Gitee 标签用 `-n` / `-c` |
+| 记录 | 保存什么 | 关联方式 |
+| --- | --- | --- |
+| 总设计 | 产品方向、总体架构、长期边界 | [初步设计文档](../../初步设计文档.md) |
+| Spec 文档 | 一项交付的行为、约束、验收编号、任务目录入口 | 提交或有效修订可定位；状态明确 |
+| Spec 汇总 Issue | 目标、Spec 链接、Tickets 目录、整体验收与未决事项 | 大功能需要时建立，避免复制整份 Spec |
+| Ticket Issue | 本任务范围、依赖、产物、验收与完成条件 | 引用所属 Spec 和稳定验收编号 |
+| PR | 为什么改、具体变化、检查、审查与交付事实 | 关联实际覆盖的 Ticket；完成条件相符时使用关闭关系 |
 
-issue 的 `number` 是 **ident 字符串**（如 `IKU4W9`），不是纯数字。
+小型明确修改可以由现有 Issue 或 PR 承载紧凑工作单。大功能实施分派前必须有可读取的 Spec 与 Tickets，聊天中的清单不能代替已保存任务。临时规划编号必须标为草案，不能写成 GitHub 已建票。
 
-## 写操作：路径必须去掉 repo 段（最重要的一条）
+## Ticket 最少包含
 
-CLI 的 `issue edit` / `issue close` / `issue reopen` 与 `--assignees` **整条不可用**，返回 `HTTP 404: project or enterprise`。
+- 目标、`spec_ref` 及其有效修订、覆盖的 `acceptance_ids`。
+- 允许修改的范围、产物与不在本票内的内容。
+- `depends_on`：指向具体 Issue 或产物，并说明解除条件；先后编号不代表依赖。
+- 可观察验收、验证方法、完成所需终点。
+- 当前负责人或待分派能力、必要的剩余未知。
 
-**根因不是权限，是路径。** Gitee v5 读写路径分离：
+原生父子 Issue 与依赖关系只在当前工具可用时采用；否则在正文使用明确的 GitHub 链接及 `Parent:` / `Blocked by:` 文字约定。只维护一处依赖来源，其余视图引用它。
 
-- **读**：`/repos/{owner}/{repo}/issues/<n>`（带 repo 段）
-- **写**：`/repos/{owner}/issues/<n>`（**不带 repo 段**，`repo` 作 body 参数）
+## 操作原则
 
-实测（本仓库，2026-11-09）：
+1. 先确认当前连接确实能访问仓库，使用实际可用的 GitHub connector、CLI 或 API；不假设某台机器已安装、登录或具有写权限。
+2. 创建前查重；修改前重读，保留已有有效内容。文件候选使用专属分支，避免覆盖他人工作。
+3. 多行正文用结构化参数或正文文件提交。不得把凭证、下载令牌、临时文件路径写入文档或任务。
+4. 响应丢失或解析失败时先查询实际对象，防止重复创建；写后回读正文、状态、head/base 或对应证据。
+5. 只有完成条件与交付终点实际满足时，才在有效授权内关闭任务。PR 合并不自动等于运行验收或部署成功。
+6. 标签只是筛选辅助，按[标签约定](triage-labels.md)使用；标签变化不能代替正文中的依赖、验收或结果证据。
 
-```bash
-# ✅ 可用：改 assignee
-gitee api PATCH /repos/gbcdby/issues/IKU4W9 --field repo=xiyou --field assignee=gbcdby
-
-# ✅ 可用：关闭 / 重开
-gitee api PATCH /repos/gbcdby/issues/IKU4W9 --field repo=xiyou --field state=closed
-gitee api PATCH /repos/gbcdby/issues/IKU4W9 --field repo=xiyou --field state=open
-
-# ✅ 可用：改正文
-gitee api PATCH /repos/gbcdby/issues/IKU4W9 --field repo=xiyou --field body="$(cat body.md)"
-```
-
-curl 直连同理：`PATCH /repos/gbcdby/xiyou/issues/<n>` 一样 404。
-
-> 曾误判为「Gitee 个人版不支持写操作」——**那是错的**，只是漏了 `repo` 参数。不要因为 404 就改用标签绕路。
-
-### `--field` 的两个坑（实测）
-
-1. **`--field body=@file` 会把字面路径当正文写入**，静默成功（200）但正文变成 `@/tmp/x.md`。大段正文一律用 `--field body="$(cat file)"`。
-2. **写后必读回校验**，判据用本次新增的独特字符串（别用已存在的标题，会假阳性）。
-
-## 正文硬上限 ≈64KB（实测）
-
-`PATCH` 的 `body` 超过约 **64KB**（UTF-8 字节）会被拒。本仓库实测：**63,900 B 通过，66,000 B 失败**。
-
-注意失败时的错误码是 **`HTTP 403: permission denied`**（不是 500），极易误判成权限问题。按 ≤64KB 留余量使用。
-
-wayfinder 的地图 body 逼近此线就写不进去：新增内容只能按「索引长度」写，详情留在各 ticket 的结论评论里——这正是地图作为 index 的本意。**发现写不进去时，正文可能已被前一次较小的写入改坏**，务必从未污染的本地副本重建。
-
-## 关闭的 issue 禁止评论（实测）
-
-对已关闭的 issue 发评论，CLI 与 curl 都报 **`HTTP 401 authentication failed`**——**这不是凭证问题**，别去重登录。
-
-正确顺序：**先评论，后关票**。已关闭需要补评论时先重开：
-
-```bash
-gitee api PATCH /repos/gbcdby/issues/<n> --field repo=xiyou --field state=open
-# 发评论
-gitee api PATCH /repos/gbcdby/issues/<n> --field repo=xiyou --field state=closed
-```
-
-## 标签
-
-- **添加**：`PATCH` 的 `labels` 参数会被**静默忽略**（返回 200 但标签没变，实测）。用：
-
-  ```bash
-  curl -X POST "https://gitee.com/api/v5/repos/gbcdby/xiyou/issues/<n>/labels?access_token=$TOKEN" \
-       -H "Content-Type: application/json" -d '["ready-for-agent"]'
-  ```
-
-  form 格式（`labels=a,b`）报 400 "Problems parsing JSON"。
-
-- **移除单个**：`gitee issue edit --labels ""` 无效（空串被当作"不修改"）。用 **带 repo 段的读路径**：
-
-  ```bash
-  curl -X DELETE "https://gitee.com/api/v5/repos/gbcdby/xiyou/issues/<n>/labels/<name>?access_token=$TOKEN"
-  ```
-
-  注意这条是 DELETE，走的是 `{repo}` 路径（实测 204）；不带 repo 段会 404。
-
-- **标签命名**：Gitee 标签名不允许半角冒号，技能里的 `wayfinder:<type>` 落地为 `wayfinder-map` / `wayfinder-research` / `wayfinder-grilling` / `wayfinder-prototype` / `wayfinder-task`（均已建好）。triage 映射见 [triage-labels.md](triage-labels.md)。
-
-## PR 输出与读回
-
-PR 创建输出不保证服从 `-o json`；返回成功但解析失败时保存输出，用 `python3 scripts/gitee_pr_read.py --create-output <file>` 恢复编号。该工具只有读操作，不重复创建或代点审核。
-
-**PRs as a request surface: no.** 个人项目，外部 PR 不进 triage 队列。
-
-## 技能措辞对照
-
-- 「publish to the issue tracker」 → 建 Gitee issue，附对应 triage 标签。
-- 「fetch the relevant ticket」 → `gitee issue view <n>` + `gitee issue comments <n>`（全文用 API）。
-
-## Wayfinding operations
-
-Gitee 没有原生 sub-issue / blocking 链接，用**文字约定**兜底：
-
-- **Map**：一个打 `wayfinder-map` 标签的 issue，body 维护 Destination / Notes / Decisions-so-far / Not yet specified / Out of scope。
-- **Child ticket**：普通 issue，body 第一行写 `Part of #<map>`，并加进 map 的清单。
-- **Blocking**：child body 顶部写 `Blocked by: #<n>, #<n>`。所有 blocker 关闭即解除阻塞。
-- **Frontier**：列出 map 清单中 open 的 children，去掉仍有 open blocker 或已有 assignee 的，按清单顺序取第一个。
-- **Claim**：`gitee api PATCH /repos/gbcdby/issues/<n> --field repo=xiyou --field assignee=<登录名>`（不要用 CLI 的 `--assignees`）。
-- **Resolve**：先 `gitee issue comment` 写决议 → 再用 API `state=closed` 关票 → 最后把上下文指针追加到 map 的 Decisions-so-far（走 `gitee api PATCH ... --field body=`，注意 64KB 上限）。
-- **资产落点**：research/prototype 的中间文件放 `.agent-output/`；关票时把值得留的迁入 `docs/` 并清理。
-
-## 已知地图
-
-- [技术骨架：从文档到可验证的地基](https://gitee.com/gbcdby/xiyou/issues/IKU4W9)
+GitHub 编号、PR 链接与分支保护以实时平台为准。不得套用旧平台的字符串票号、API 路径、正文上限或认证故障说明。
