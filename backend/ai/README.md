@@ -2,7 +2,7 @@
 
 归属 [Ticket #9](https://github.com/gbcdby/xiyou/issues/9)，依据固定 Spec `6c2a0b9f6d137ad5fbd41721659404333ad8e16d` 的 [M0 §9–10](../../docs/specs/m0-protocol.md)、[玩法中的感知／目标／信念](../../docs/specs/vertical-slice-gameplay.md)和 [VER-04](../../docs/specs/vertical-slice-verification.md)。权威运行基线是 `5d3e16fa46c4719471092d0567e9bfd1e28737f7`；本目录不改变公共 HTTP／Socket.IO／ProposedIntent 契约。
 
-本候选提供受控供应商实现和作者自查。实际供应商、endpoint、modelId、凭证及费用授权尚未提供，**实际外部模型调用为 0，真实模型验收保持 BLOCKED／NOT_RUN**。受控检查不代表模型质量、VER-04 整项完成或 `single-ai-runtime` 释放；后续独立审查、真实模型闭环与 #10／#11 释放由总控处理。正式自查见 [实现结果](../evidence/ai/implementation-result.md)及[清单](../evidence/ai/self-check.json)。
+本候选提供受控供应商实现；2026-11-11 已完成受控范围独立需求／标准复审，并修正非法输出持久化与测试清理问题，原始反例、两次修正和复审见[本轮证据](../evidence/ai/resume-20261111/README.md)。实际供应商、endpoint、modelId、凭证及费用授权尚未提供，**实际外部模型调用为 0，真实模型验收保持 BLOCKED／NOT_RUN**。受控检查不代表模型质量、VER-04 整项完成或 `single-ai-runtime` 释放；PR #19 继续保持 draft，真实模型闭环及 #10／#11 的 AI 依赖仍待完成。初始作者自查保留其原候选，见[实现结果](../evidence/ai/implementation-result.md)及[清单](../evidence/ai/self-check.json)。
 
 ## 结构与数据归属
 
