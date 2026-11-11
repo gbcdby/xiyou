@@ -1,5 +1,7 @@
 # VS-001：任务目录与验收覆盖
 
+> **2026-11-11 本轮验收修订：** 用户要求“全部 mock，验证完毕提交 PR 并合并”。本轮采用 [mock-20261111](vertical-slice-mock.md)，以模拟输入执行实际代码并按该 profile 验收合并。下文原真人／真实模型要求保留为 `full-real` 基线，不再作为本轮阻塞条件，也不改记为已执行；领域权限与一致性约束继续适用。实际候选与结果以关联 Issue／PR 为准。
+
 本目录关联[主 Spec](vertical-slice.md)与 [Spec 汇总 #2](https://github.com/gbcdby/xiyou/issues/2)。任务状态、负责人、依赖及产物释放的**唯一来源为对应 GitHub Issue 正文**；这里不复制活动状态。
 
 设计与发布记录：[设计任务 #3](https://github.com/gbcdby/xiyou/issues/3)。每张后续票都必须绑定该设计实际发布的 Spec 提交；`PENDING_PUBLICATION` 只表示发布中的规划记录，不能据此开始相关实现。
@@ -21,6 +23,8 @@
 所有上述编号均为实际 GitHub Issues。本文的映射只声明责任，不表示相应代码、模型或验收已经完成。
 
 ## 启动与产物释放
+
+本节保留原任务拆分与 `full-real` 边界。本轮#8/#9/#10/#11/#12按[模拟修订的释放条件](vertical-slice-mock.md#6-产物释放证据与合并)和用户已授权的验证后合并终点更新Issue正文；没有实际记录与检查时不能仅凭本说明解除依赖。
 
 经审查的设计修订发布后，可先推进 [#4 协议契约](https://github.com/gbcdby/xiyou/issues/4)、[#5 核心模型](https://github.com/gbcdby/xiyou/issues/5)，以及 [#7 的相关模型](https://github.com/gbcdby/xiyou/issues/7)。优先解决 M0 的提交、所有权与控制权交错；下游按 Issue 正文中的具体产物继续。
 
