@@ -1,0 +1,583 @@
+{
+  "schema_version": 1,
+  "run_id": "95bbe81f-10ae-4b15-b565-de5b74338dcc",
+  "status": "PASS_WITHIN_SCOPE",
+  "reason": "COMPLETE_MODEL_CHECK",
+  "mode": "modelcheck",
+  "profile": "handoff-ai-revision",
+  "started_at": "2026-11-11T12:02:31.537381+00:00",
+  "finished_at": "2026-11-11T12:02:32.928833+00:00",
+  "duration_seconds": 1.391486,
+  "completed": true,
+  "implementation_status": "NOT_ASSESSED",
+  "tool": {
+    "version_label": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+    "jar_snapshot": "/workspace/scratch/17ff92cde78f/xiyou-core-rebuild/.agent-output/core-rebuild/batch-02/handoff-ai-revision/tool/tla2tools.jar",
+    "java_path": "/usr/bin/java",
+    "java_version": "openjdk version \"21.0.13\" 2026-10-20\nOpenJDK Runtime Environment (build 21.0.13+9-1-deb13u2-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.13+9-1-deb13u2-Debian, mixed mode, sharing)",
+    "removed_environment_names": [],
+    "reported_version": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)"
+  },
+  "inputs": {
+    "manifest_sha256": "bb89c6268df6e3612001d63d780602a1bf0fb3ff33dd8e43b578387a2f6d7197",
+    "model_root": "/workspace/scratch/17ff92cde78f/xiyou-core-rebuild/formal/core-rebuild/model",
+    "snapshot_directory": "/workspace/scratch/17ff92cde78f/xiyou-core-rebuild/.agent-output/core-rebuild/batch-02/handoff-ai-revision/input",
+    "files": [
+      {
+        "path": "Core.tla",
+        "sha256": "bf0838e1b920aa6bb39f99000038c593ef4fad607718cba121e534af2cabf43a",
+        "bytes": 26257
+      },
+      {
+        "path": "composed.cfg",
+        "sha256": "a6986a642bdc1c0def3a760bf869a7d93a61a410b1505d023798770e7e1c1e58",
+        "bytes": 411
+      },
+      {
+        "path": "handoff-ai-cancel.cfg",
+        "sha256": "02211f34a4324d133d620d0b4f7d4f992bbd524b59680aec44e0fcf0169bb5c6",
+        "bytes": 390
+      },
+      {
+        "path": "handoff-ai-epoch.cfg",
+        "sha256": "07a638e277cb0b6db9684755b409b28b01d67ee83fe107d9c445c744464d0e26",
+        "bytes": 389
+      },
+      {
+        "path": "handoff-ai-expiry.cfg",
+        "sha256": "2880aa79ed01432b01249b8ab7fd0ad5e7d56940ea36d778fcb225eb6f7b748f",
+        "bytes": 390
+      },
+      {
+        "path": "handoff-ai-generation.cfg",
+        "sha256": "35caa084af71ac8202cd67c14c550f935b15bcc9244eb1a7c2eda127e48bcb87",
+        "bytes": 394
+      },
+      {
+        "path": "handoff-ai-invalid.cfg",
+        "sha256": "ddffbd0d4281c005f4eb1e6b371cdd3655fee7c54704bc48f5b66d71510ad0fa",
+        "bytes": 391
+      },
+      {
+        "path": "handoff-ai-package.cfg",
+        "sha256": "94029bb45a866dd354e0f800ec7ad8fd2c4a9ca9f9830b617ed004014693aa47",
+        "bytes": 391
+      },
+      {
+        "path": "handoff-ai-revision.cfg",
+        "sha256": "ba1a83d15af93e2a55d317041a313b8bd28324ef5e4242fbb0ca8f036ddfd160",
+        "bytes": 392
+      },
+      {
+        "path": "handoff-ai-terminal.cfg",
+        "sha256": "2515586122e09bb6489537cda8eb57c1dcb0fdb46e1bde23d6afac18132c6a59",
+        "bytes": 392
+      },
+      {
+        "path": "handoff-ai-unrelated.cfg",
+        "sha256": "1559bebdc59bf299ce85288c0e41bfe563c4cea8fd2773b63fe15afcdbedf3d1",
+        "bytes": 393
+      },
+      {
+        "path": "handoff.cfg",
+        "sha256": "79382e2f4c53e7d15a82f89e32c1d3502e0aa327978171937115d1597435914b",
+        "bytes": 388
+      },
+      {
+        "path": "live-composed.cfg",
+        "sha256": "2b0b0d7c887eba71ee3329af4cbbd3680a588dda7abbbd25ce47848771b12913",
+        "bytes": 229
+      },
+      {
+        "path": "live-handoff.cfg",
+        "sha256": "c9d1d8cba71e05b867ec73b03d61ba24b1d946298591259ff8620efcd87aedb9",
+        "bytes": 229
+      },
+      {
+        "path": "live-ownership.cfg",
+        "sha256": "a31a62787c7c2475f695c20b296200e04e1e68eecd01b7bc7e84bf2b4008c961",
+        "bytes": 203
+      },
+      {
+        "path": "negative-ai_terminal.cfg",
+        "sha256": "42416293ab71f86f603e0b2260ce014d0ec000ca51e4de817227b7000e2c8afd",
+        "bytes": 184
+      },
+      {
+        "path": "negative-control_nonce.cfg",
+        "sha256": "4b37c9939d3839890c8dc7e3d43cf748e349da295f0b8c2669391140371807aa",
+        "bytes": 187
+      },
+      {
+        "path": "negative-deadline_control.cfg",
+        "sha256": "cf9a022f23194bf88a76f97c9d9900aca2ed53f4fbc921fd91b8989ce4668720",
+        "bytes": 192
+      },
+      {
+        "path": "negative-deadlock.cfg",
+        "sha256": "c2e24de51f1301eb7fcc69a6638b8309ef0f3f1aa33e08e7827a58ff97725862",
+        "bytes": 168
+      },
+      {
+        "path": "negative-decision-finality.cfg",
+        "sha256": "6ea6df4677331abc6d6c1b61b491c54e79937528e89ba983822d796de355a0a4",
+        "bytes": 188
+      },
+      {
+        "path": "negative-decision_deadline.cfg",
+        "sha256": "24bb4b6627e509f7ad69e623f94d2d011ee7d7dae9cb1efbd05c728e27797791",
+        "bytes": 188
+      },
+      {
+        "path": "negative-decision_epoch.cfg",
+        "sha256": "83980cfc5ecf660adf002ec7fa2de03b5083f974ac3ad52df184c6e11b9c39b1",
+        "bytes": 184
+      },
+      {
+        "path": "negative-decision_generation.cfg",
+        "sha256": "a16c67c9a3748f8bf881c962f99970dd576990676826c9d1f4b0a78e009429ea",
+        "bytes": 194
+      },
+      {
+        "path": "negative-decision_revision.cfg",
+        "sha256": "5b84936b97ca181baa4e2036993d4e7b55be926686a291f97b3c77a4febe5bd8",
+        "bytes": 190
+      },
+      {
+        "path": "negative-decision_status.cfg",
+        "sha256": "f733a7f656ce22b981a0d0fe60f6839b122bbe8cd8fecc4468203a678341557c",
+        "bytes": 186
+      },
+      {
+        "path": "negative-duplicate_owner.cfg",
+        "sha256": "0d231594703739c142afd0ceeb02f684477af5820e294fa7f59c948247130584",
+        "bytes": 193
+      },
+      {
+        "path": "negative-early_ack.cfg",
+        "sha256": "c764ccbe42b6efe84981e4a2958a50614a543379e65c87c87f1f98ecbfa90e7b",
+        "bytes": 180
+      },
+      {
+        "path": "negative-future_base.cfg",
+        "sha256": "5df68470140e206a4724b3070c858ea0a2f383dd2a0134cdc9659f235586fdb2",
+        "bytes": 181
+      },
+      {
+        "path": "negative-no_retry.cfg",
+        "sha256": "df5913ab7b8aa2fd05e2df69cb0959baa66b55919630a13491dfc62ce7357d38",
+        "bytes": 207
+      },
+      {
+        "path": "negative-no_timeout.cfg",
+        "sha256": "97b01e05c74c542c85da7ea02421891c1584c84a607733b64d0dd1fac2dca441",
+        "bytes": 211
+      },
+      {
+        "path": "negative-old_human.cfg",
+        "sha256": "f5db5be3d34f9b84c4800c9cea1e54ce73017d1559bcd2899bce04068a9e93cf",
+        "bytes": 174
+      },
+      {
+        "path": "negative-old_proxy.cfg",
+        "sha256": "6fe3ed901ecbed47341c85894e97aa68b07c208151b9eff837666219c1836d13",
+        "bytes": 175
+      },
+      {
+        "path": "negative-partial_ai.cfg",
+        "sha256": "f9ebf4dbfe809028ea090b959f79ffa748642de6c0bf5b775fbf688c7aa59c5e",
+        "bytes": 183
+      },
+      {
+        "path": "negative-payload_overwrite.cfg",
+        "sha256": "a9c68a70e34e704511e8bbac36b075c48107c3ddbf803906e7b6858a4d39cd03",
+        "bytes": 192
+      },
+      {
+        "path": "negative-post_terminal.cfg",
+        "sha256": "0d60d9b8dcdabf7ce45d46df32672f96d627ac12d71093f41d3a11739731a7ce",
+        "bytes": 191
+      },
+      {
+        "path": "negative-sequence_gap.cfg",
+        "sha256": "58a0e5461386cbc4b7211dd782719b7f7c69062126804c1f9802d3742fc73732",
+        "bytes": 193
+      },
+      {
+        "path": "negative-sequence_repeat.cfg",
+        "sha256": "3d6374eefccfef3f00bf229be5d75a88ec43e22ac0ed1a28839825d15b60cb1a",
+        "bytes": 196
+      },
+      {
+        "path": "negative-split_bundle.cfg",
+        "sha256": "8aed30c4145f8c35c2baf251866ac41b077001b7ddb9ea25a97c7fd5e472d438",
+        "bytes": 184
+      },
+      {
+        "path": "negative-split_receipt.cfg",
+        "sha256": "08f21af7f6e5df2acd53dda86ab69fb0054654b4e1d8ed2bba82fd1d678df102",
+        "bytes": 182
+      },
+      {
+        "path": "negative-split_terminal.cfg",
+        "sha256": "932ed3953a9a7fe6819065857b54fd1529458cb734092f015fda22452eedcb35",
+        "bytes": 180
+      },
+      {
+        "path": "negative-stale-item-precondition.cfg",
+        "sha256": "921ae110d7fd22aa7218b832ec80787ce535cb661fde75ed5c521b4317fa356a",
+        "bytes": 190
+      },
+      {
+        "path": "negative-stale_disconnect.cfg",
+        "sha256": "068230ff5bea5c59b2e0081834d8ed4a708cddad4af621db47fc7cfbc3a2f97c",
+        "bytes": 181
+      },
+      {
+        "path": "negative-stale_item.cfg",
+        "sha256": "cf46b4f5e8d4e76f0e09f8755719c16b3371c20c0526c2063af4b607cf5b3f58",
+        "bytes": 188
+      },
+      {
+        "path": "negative-type.cfg",
+        "sha256": "be6ab14d33baef4935ab644a2397ddbe13a48f6f62ba0e3072c6e37f93efb647",
+        "bytes": 164
+      },
+      {
+        "path": "ownership-competition.cfg",
+        "sha256": "a2af77b990fb349769f46f81f1dba2ca35f77cd9e6bd064b624baec5690198bd",
+        "bytes": 340
+      },
+      {
+        "path": "ownership-ending.cfg",
+        "sha256": "4c94e65a4c9defb5e949645c024272c9dd7e2864106f20234cb645617aafecf4",
+        "bytes": 330
+      },
+      {
+        "path": "ownership-future.cfg",
+        "sha256": "98f4467186624e2524dc05f33301eb32b1962568658940f5f445c04a9bda067a",
+        "bytes": 330
+      },
+      {
+        "path": "ownership-idempotence.cfg",
+        "sha256": "b21a8e496684236d7e1338eb43007c63c4e552400af886618ded143069e087da",
+        "bytes": 336
+      },
+      {
+        "path": "ownership-payload.cfg",
+        "sha256": "3e06911e68724b28fc4040b0d2e82f2569096d232f0a30ccc19e6b6cb70366dc",
+        "bytes": 336
+      },
+      {
+        "path": "ownership-publication.cfg",
+        "sha256": "b15fd7580da0e5b42bd319261e0b0411e93641e948bc246bee5e5cfb9807f019",
+        "bytes": 340
+      },
+      {
+        "path": "witness-aborted.cfg",
+        "sha256": "2619cde140aa84778aa3eacb3ebefe42aad888d0c8821ec4ea21629b0be351a9",
+        "bytes": 168
+      },
+      {
+        "path": "witness-ai-after-unrelated.cfg",
+        "sha256": "cf4d6e15df2461eb8b9cfe23706ae972f58ae9ce4ff67e7c11b99b0006fb6a88",
+        "bytes": 188
+      },
+      {
+        "path": "witness-ai-committed.cfg",
+        "sha256": "63652705ab1a9062d17a39e95c83368eec54fbd1360f67d394563d6466e404a2",
+        "bytes": 179
+      },
+      {
+        "path": "witness-atomic-package-rejected.cfg",
+        "sha256": "646dc63123be1a9081837e36cd90d1a069a83007d81744062425a08308312130",
+        "bytes": 191
+      },
+      {
+        "path": "witness-control-nonce-retry.cfg",
+        "sha256": "bda49bd839b46ade9a90aeba8a2d3993731cc5e49d8435d01d6b441761a4939b",
+        "bytes": 184
+      },
+      {
+        "path": "witness-control-reject.cfg",
+        "sha256": "19d1ce81ab8c7b7cdfe3c8251ce0becba7c327c8766ebe588bcfcb6bb04cdf70",
+        "bytes": 179
+      },
+      {
+        "path": "witness-crash-after-commit.cfg",
+        "sha256": "3c90a6ff58f2d74379831349acf53d751cba2e52d48a5b33883d1c2c6176196e",
+        "bytes": 185
+      },
+      {
+        "path": "witness-crash-before-commit.cfg",
+        "sha256": "4d0d6c5bc735a3431d74d8f2632169d615b8ffe1970b23876155f2412e9fad22",
+        "bytes": 186
+      },
+      {
+        "path": "witness-deadline-late-ai.cfg",
+        "sha256": "7ac636ea7bb709c834e7efc7f225f095131e3e7cb4f243e39cf6a96330657b80",
+        "bytes": 183
+      },
+      {
+        "path": "witness-deadline-reject.cfg",
+        "sha256": "06b9e670edacd5f127d1ed26e384cda74399c831fb7078b88031c34d44ac229e",
+        "bytes": 182
+      },
+      {
+        "path": "witness-decision-cancelled.cfg",
+        "sha256": "1904686aad5bd2fc4f5c54dd3134e00ddf719152637e5fcbe39476900ac0b39f",
+        "bytes": 185
+      },
+      {
+        "path": "witness-decision-expired.cfg",
+        "sha256": "de8f3ddf7c8ad342dbac02c11474649cf7110c834063e00b0f73e9b4f5c351f9",
+        "bytes": 183
+      },
+      {
+        "path": "witness-early-ack-crash.cfg",
+        "sha256": "85593e6a193a9f2b92e3faec9f4da9882e759c551b0c50fc8cede0ad5232f3fd",
+        "bytes": 187
+      },
+      {
+        "path": "witness-effect-crash-handoff-retry.cfg",
+        "sha256": "4e97aa9b862c3a76b5506d862662debd4a4eb7e6212de8296c80996b1d657c54",
+        "bytes": 193
+      },
+      {
+        "path": "witness-effect-crash-retry-negative.cfg",
+        "sha256": "1a86d3cbf5684f636c8fafadbcf16c10bcaf7a163bba45583eebc8d236fc7d44",
+        "bytes": 203
+      },
+      {
+        "path": "witness-epoch-late-ai.cfg",
+        "sha256": "f3498948ba6c6be3c53b86ee6851ee955bdfde1028e9609325834a1f677d2970",
+        "bytes": 179
+      },
+      {
+        "path": "witness-explicit-take.cfg",
+        "sha256": "1064c19678bb25746b52e1bc12dc1483bfed4f9f072029c6dd360395a5e914b5",
+        "bytes": 178
+      },
+      {
+        "path": "witness-future-reject.cfg",
+        "sha256": "a02ae1a89238b2d94187e97b9dd6a685f0083b9b297ac1a67c6c09a1a501d47c",
+        "bytes": 174
+      },
+      {
+        "path": "witness-generation-late-ai.cfg",
+        "sha256": "28754a50866eca0883f2dd8ff4fb085f039f117ba7e6f1bdd6bbfe6b47042004",
+        "bytes": 189
+      },
+      {
+        "path": "witness-grace.cfg",
+        "sha256": "f742d75a1b7e30ef1e2af63775afb3c1265d596be09dcc5a7d4fac0b7a7b51aa",
+        "bytes": 170
+      },
+      {
+        "path": "witness-invalid-ai-rejected.cfg",
+        "sha256": "a81db89e976b9ed16eca56553dbc1c28027d4a143bddaf41500db69e7decd06c",
+        "bytes": 187
+      },
+      {
+        "path": "witness-item-conflict.cfg",
+        "sha256": "f7b8b3300b98e010a0c0d012657699eb803f7b66fc791e2a959b0377aad1f9ca",
+        "bytes": 184
+      },
+      {
+        "path": "witness-manual-ending.cfg",
+        "sha256": "74d69cf50878496d678178bd0cdb81b43db72e9d1a1026c2121d343a92da04e2",
+        "bytes": 174
+      },
+      {
+        "path": "witness-old-disconnect-rejected.cfg",
+        "sha256": "2c866fd318d114a7a53fd9fc229cba409c4b42e13a64f4cd772f5a39a7364f72",
+        "bytes": 188
+      },
+      {
+        "path": "witness-partial-bundle-crash.cfg",
+        "sha256": "4e11371e3f6c32c8c385fbbf3f58f193b2b30b759f7d18d4097cfd925759b303",
+        "bytes": 195
+      },
+      {
+        "path": "witness-payload-conflict.cfg",
+        "sha256": "d4fda08209c57e51886323305a3e66959f3d438e233c2897eae8f9280cb3e769",
+        "bytes": 183
+      },
+      {
+        "path": "witness-proxy.cfg",
+        "sha256": "061b5d6bc72a2af4132576114cc4116b5bc28073bc535973a38a9a87ab6785b6",
+        "bytes": 170
+      },
+      {
+        "path": "witness-published.cfg",
+        "sha256": "2398630255e2ce858d807969f12228480855e5144e8834df399268a7348df750",
+        "bytes": 180
+      },
+      {
+        "path": "witness-recovered.cfg",
+        "sha256": "aec160a20aabe10921d14784c4cdf5aac80920d978c6278aedd4ea5552e030c9",
+        "bytes": 176
+      },
+      {
+        "path": "witness-resume-held.cfg",
+        "sha256": "de5ffeffb462f1d76bb11692c32dd9cdaa7212d07f8998574da8ca279ab9b177",
+        "bytes": 176
+      },
+      {
+        "path": "witness-returned.cfg",
+        "sha256": "7df5de0c38f66e907e5ff4d754e28e7ddd45413e75a021cdfa02213a0e243162",
+        "bytes": 173
+      },
+      {
+        "path": "witness-revision-late-ai.cfg",
+        "sha256": "a3c3c971c93c4171d06a6a175b747cf21d824acba54f303e15dda859b917439e",
+        "bytes": 185
+      },
+      {
+        "path": "witness-same-receipt.cfg",
+        "sha256": "6871125dc8c606dd1ede14fff2b4d1649a16b423db8bafb354d4d08506056aab",
+        "bytes": 179
+      },
+      {
+        "path": "witness-take-success.cfg",
+        "sha256": "241f02c44de17b060dd05608cf32d2f0320dbd1d822104a48b9a203273020cfb",
+        "bytes": 183
+      },
+      {
+        "path": "witness-terminal-late-ai.cfg",
+        "sha256": "9dc6047965a88c6e46c9f692c9bd415d959d27c680ab0a12055ea5d84ea24c09",
+        "bytes": 185
+      }
+    ],
+    "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a"
+  },
+  "checks": {
+    "expected_invariants": [
+      "TypeOK",
+      "AtMostOneEffect",
+      "ReceiptPayloadBinding",
+      "AtomicCommitBundle",
+      "AckRequiresCommit",
+      "TerminalBlocksNewEffects",
+      "ContinuousCommittedSequence",
+      "PreconditionDiscipline",
+      "NoDualControl",
+      "ControlNonceIdempotent",
+      "FreshDecisionOnly",
+      "DecisionSettlesOnce"
+    ],
+    "expected_properties": [],
+    "configured_invariants": [
+      "TypeOK",
+      "AtMostOneEffect",
+      "ReceiptPayloadBinding",
+      "AtomicCommitBundle",
+      "AckRequiresCommit",
+      "TerminalBlocksNewEffects",
+      "ContinuousCommittedSequence",
+      "PreconditionDiscipline",
+      "NoDualControl",
+      "ControlNonceIdempotent",
+      "FreshDecisionOnly",
+      "DecisionSettlesOnce"
+    ],
+    "configured_properties": [],
+    "checks_deadlock": true,
+    "deadlock_reason": null,
+    "behavior": {
+      "SPECIFICATION": "Spec"
+    }
+  },
+  "scope": {
+    "profile": "handoff",
+    "pattern": "idempotence",
+    "scenario": "ai-revision",
+    "fault": "none",
+    "probe": "none",
+    "actors": 2,
+    "items": 1,
+    "allocated_request_keys": 2,
+    "active_request_keys": 1,
+    "physical_connections_for_handoff_role": 2,
+    "proxy_decisions": 1,
+    "session_deadline_ticks": 120,
+    "seconds_per_tick": 10,
+    "time_advance": "事件驱动到下个grace/decision/session期限及117/119末段切点",
+    "grace_ticks": 3,
+    "decision_timeout_ticks": 1,
+    "distinct_state_min": 500,
+    "covered_interleavings_and_faults": [
+      "接收、预检、事务提交、ACK、发布各自可交错",
+      "receipt/combined场景的一次崩溃、一次丢ACK及未确认请求原样恢复",
+      "receipt/payload场景另有一次已确认请求的显式重试",
+      "同版本物品竞争、控制围栏、自然/异常/到期终局",
+      "故障隔离和可达探针按本配置常量限定"
+    ],
+    "excluded_behaviors": [
+      "任意规模、真实数据库或业务源码的形式证明",
+      "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+      "多轮无限控制往返、多次新计划与多进程调度",
+      "非本scenario的独立刺激；具体分解边界见README覆盖矩阵"
+    ],
+    "liveness": "NOT_CHECKED"
+  },
+  "assumptions": [
+    "服务端权威；合成参与者身份和有限请求集在初态固定",
+    "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+    "一逻辑tick为10秒；只推进到期限及末段切点，不调用真实时钟"
+  ],
+  "command": [
+    "/usr/bin/java",
+    "-Xmx1024m",
+    "-XX:+UseParallelGC",
+    "-Duser.language=en",
+    "-Duser.country=US",
+    "-Duser.home=/workspace/scratch/17ff92cde78f/xiyou-core-rebuild/.agent-output/core-rebuild/batch-02/handoff-ai-revision/runtime-home",
+    "-Djava.io.tmpdir=/workspace/scratch/17ff92cde78f/xiyou-core-rebuild/.agent-output/core-rebuild/batch-02/handoff-ai-revision/tmp",
+    "-DTLA-Library=/workspace/scratch/17ff92cde78f/xiyou-core-rebuild/.agent-output/core-rebuild/batch-02/handoff-ai-revision/input",
+    "-cp",
+    "/workspace/scratch/17ff92cde78f/xiyou-core-rebuild/.agent-output/core-rebuild/batch-02/handoff-ai-revision/tool/tla2tools.jar",
+    "tlc2.TLC",
+    "-tool",
+    "-modelcheck",
+    "-workers",
+    "1",
+    "-metadir",
+    "/workspace/scratch/17ff92cde78f/xiyou-core-rebuild/.agent-output/core-rebuild/batch-02/handoff-ai-revision/states",
+    "-config",
+    "/workspace/scratch/17ff92cde78f/xiyou-core-rebuild/.agent-output/core-rebuild/batch-02/handoff-ai-revision/input/handoff-ai-revision.cfg",
+    "/workspace/scratch/17ff92cde78f/xiyou-core-rebuild/.agent-output/core-rebuild/batch-02/handoff-ai-revision/input/Core.tla"
+  ],
+  "process": {
+    "exit_code": 0,
+    "timed_out": false,
+    "interrupted": false
+  },
+  "statistics": {
+    "generated_states": 14069,
+    "distinct_states": 4616,
+    "remaining_states": 0
+  },
+  "evidence": {
+    "log": "/workspace/scratch/17ff92cde78f/xiyou-core-rebuild/.agent-output/core-rebuild/batch-02/handoff-ai-revision/tlc.log",
+    "messages": "/workspace/scratch/17ff92cde78f/xiyou-core-rebuild/.agent-output/core-rebuild/batch-02/handoff-ai-revision/messages.json"
+  },
+  "message_codes": [
+    2185,
+    2186,
+    2187,
+    2189,
+    2190,
+    2193,
+    2194,
+    2199,
+    2200,
+    2219,
+    2220,
+    2262,
+    2268
+  ],
+  "error_codes": [],
+  "warning_codes": []
+}

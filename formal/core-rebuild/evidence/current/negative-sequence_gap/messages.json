@@ -1,0 +1,92 @@
+[
+  {
+    "code": 2262,
+    "severity": 0,
+    "text": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)"
+  },
+  {
+    "code": 2187,
+    "severity": 0,
+    "text": "Running breadth-first search Model-Checking with fp 122 and seed 4276341786882411387 with 1 worker on 9 cores with 910MB heap and 64MB offheap memory [pid: 2091] (Linux 6.18.57 amd64, Debian 21.0.13 x86_64, MSBDiskFPSet, DiskStateQueue)."
+  },
+  {
+    "code": 2220,
+    "severity": 0,
+    "text": "Starting SANY..."
+  },
+  {
+    "code": 2219,
+    "severity": 0,
+    "text": "SANY finished."
+  },
+  {
+    "code": 2185,
+    "severity": 0,
+    "text": "Starting... (2026-11-11 04:03:30)"
+  },
+  {
+    "code": 2189,
+    "severity": 0,
+    "text": "Computing initial states..."
+  },
+  {
+    "code": 2190,
+    "severity": 0,
+    "text": "Finished computing initial states: 1 distinct state generated at 2026-11-11 04:03:30."
+  },
+  {
+    "code": 2110,
+    "severity": 1,
+    "text": "Invariant ContinuousCommittedSequence is violated."
+  },
+  {
+    "code": 2121,
+    "severity": 1,
+    "text": "The behavior up to this point is:"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "1: <Initial predicate>\n/\\ d = [ mode |-> \"Human\",\n  graceDeadline |-> 0,\n  aiStatus |-> \"Idle\",\n  aiDeadline |-> 0,\n  now |-> 0,\n  phase |-> \"Running\",\n  epoch |-> 0,\n  connection |-> 1,\n  revision |-> <<0, 0>>,\n  item |-> <<1, 1>>,\n  owner |-> <<0, 0>>,\n  aiEpoch |-> 0,\n  aiGeneration |-> 0,\n  generation |-> 0,\n  aiRevision |-> 0,\n  holders |-> <<{0}, {0}>>,\n  effects |-> <<0, 0>>,\n  commits |-> <<>>,\n  receipts |->\n      << [status |-> \"None\", payload |-> 0, first |-> 0, last |-> 0],\n         [status |-> \"None\", payload |-> 0, first |-> 0, last |-> 0] >>,\n  boundPayload |-> <<-1, -1>>,\n  events |-> <<>>,\n  outbox |-> <<>>,\n  head |-> 0,\n  terminalSeq |-> 0,\n  terminalAction |-> 0,\n  handoffStep |-> 0,\n  controls |-> <<>>,\n  nonceWrites |-> 0,\n  nonceEpoch |-> 0,\n  aiSealed |-> \"None\",\n  aiBadPackage |-> FALSE,\n  aiEffects |-> 0,\n  aiReceipt |-> \"None\",\n  aiCommit |-> <<>> ]\n/\\ v = [ payload |-> <<0, 0>>,\n  witness |-> FALSE,\n  progress |-> 0,\n  up |-> TRUE,\n  crashed |-> FALSE,\n  stable |-> FALSE,\n  lost |-> FALSE,\n  stage |-> <<\"Idle\", \"Idle\">>,\n  response |-> <<\"None\", \"None\">>,\n  changed |-> <<FALSE, FALSE>>,\n  retried |-> <<FALSE, FALSE>>,\n  resolved |-> {},\n  acceptedAcks |-> {},\n  published |-> {},\n  callbackSeen |-> FALSE,\n  heldSeen |-> FALSE,\n  oldDisconnectSeen |-> FALSE,\n  nonceRetried |-> FALSE,\n  unrelated |-> FALSE,\n  revised |-> FALSE,\n  epochRevoked |-> FALSE ]"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "2: <Next line 409, col 9 to line 409, col 80 of module Core>\n/\\ d = [ mode |-> \"Human\",\n  graceDeadline |-> 0,\n  aiStatus |-> \"Idle\",\n  aiDeadline |-> 0,\n  now |-> 0,\n  phase |-> \"Running\",\n  epoch |-> 0,\n  connection |-> 1,\n  revision |-> <<0, 0>>,\n  item |-> <<1, 1>>,\n  owner |-> <<0, 0>>,\n  aiEpoch |-> 0,\n  aiGeneration |-> 0,\n  generation |-> 0,\n  aiRevision |-> 0,\n  holders |-> <<{0}, {0}>>,\n  effects |-> <<0, 0>>,\n  commits |-> <<>>,\n  receipts |->\n      << [status |-> \"None\", payload |-> 0, first |-> 0, last |-> 0],\n         [status |-> \"None\", payload |-> 0, first |-> 0, last |-> 0] >>,\n  boundPayload |-> <<-1, -1>>,\n  events |-> <<>>,\n  outbox |-> <<>>,\n  head |-> 0,\n  terminalSeq |-> 0,\n  terminalAction |-> 0,\n  handoffStep |-> 0,\n  controls |-> <<>>,\n  nonceWrites |-> 0,\n  nonceEpoch |-> 0,\n  aiSealed |-> \"None\",\n  aiBadPackage |-> FALSE,\n  aiEffects |-> 0,\n  aiReceipt |-> \"None\",\n  aiCommit |-> <<>> ]\n/\\ v = [ payload |-> <<0, 0>>,\n  witness |-> FALSE,\n  progress |-> 0,\n  up |-> TRUE,\n  crashed |-> FALSE,\n  stable |-> FALSE,\n  lost |-> FALSE,\n  stage |-> <<\"Received\", \"Idle\">>,\n  response |-> <<\"None\", \"None\">>,\n  changed |-> <<FALSE, FALSE>>,\n  retried |-> <<FALSE, FALSE>>,\n  resolved |-> {},\n  acceptedAcks |-> {},\n  published |-> {},\n  callbackSeen |-> FALSE,\n  heldSeen |-> FALSE,\n  oldDisconnectSeen |-> FALSE,\n  nonceRetried |-> FALSE,\n  unrelated |-> FALSE,\n  revised |-> FALSE,\n  epochRevoked |-> FALSE ]"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "3: <Next line 409, col 9 to line 409, col 80 of module Core>\n/\\ d = [ mode |-> \"Human\",\n  graceDeadline |-> 0,\n  aiStatus |-> \"Idle\",\n  aiDeadline |-> 0,\n  now |-> 0,\n  phase |-> \"Running\",\n  epoch |-> 0,\n  connection |-> 1,\n  revision |-> <<0, 0>>,\n  item |-> <<1, 1>>,\n  owner |-> <<0, 0>>,\n  aiEpoch |-> 0,\n  aiGeneration |-> 0,\n  generation |-> 0,\n  aiRevision |-> 0,\n  holders |-> <<{0}, {0}>>,\n  effects |-> <<0, 0>>,\n  commits |-> <<>>,\n  receipts |->\n      << [status |-> \"None\", payload |-> 0, first |-> 0, last |-> 0],\n         [status |-> \"None\", payload |-> 0, first |-> 0, last |-> 0] >>,\n  boundPayload |-> <<-1, -1>>,\n  events |-> <<>>,\n  outbox |-> <<>>,\n  head |-> 0,\n  terminalSeq |-> 0,\n  terminalAction |-> 0,\n  handoffStep |-> 0,\n  controls |-> <<>>,\n  nonceWrites |-> 0,\n  nonceEpoch |-> 0,\n  aiSealed |-> \"None\",\n  aiBadPackage |-> FALSE,\n  aiEffects |-> 0,\n  aiReceipt |-> \"None\",\n  aiCommit |-> <<>> ]\n/\\ v = [ payload |-> <<0, 0>>,\n  witness |-> FALSE,\n  progress |-> 0,\n  up |-> TRUE,\n  crashed |-> FALSE,\n  stable |-> FALSE,\n  lost |-> FALSE,\n  stage |-> <<\"Validated\", \"Idle\">>,\n  response |-> <<\"None\", \"None\">>,\n  changed |-> <<FALSE, FALSE>>,\n  retried |-> <<FALSE, FALSE>>,\n  resolved |-> {},\n  acceptedAcks |-> {},\n  published |-> {},\n  callbackSeen |-> FALSE,\n  heldSeen |-> FALSE,\n  oldDisconnectSeen |-> FALSE,\n  nonceRetried |-> FALSE,\n  unrelated |-> FALSE,\n  revised |-> FALSE,\n  epochRevoked |-> FALSE ]"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "4: <Next line 409, col 9 to line 409, col 80 of module Core>\n/\\ d = [ mode |-> \"Human\",\n  graceDeadline |-> 0,\n  aiStatus |-> \"Idle\",\n  aiDeadline |-> 0,\n  now |-> 0,\n  phase |-> \"Running\",\n  epoch |-> 0,\n  connection |-> 1,\n  revision |-> <<0, 0>>,\n  item |-> <<1, 1>>,\n  owner |-> <<0, 0>>,\n  aiEpoch |-> 0,\n  aiGeneration |-> 0,\n  generation |-> 0,\n  aiRevision |-> 0,\n  holders |-> <<{0}, {0}>>,\n  effects |-> <<1, 0>>,\n  commits |->\n      << [ mode |-> \"Human\",\n           payload |-> 0,\n           phase |-> \"Running\",\n           key |-> 1,\n           epoch |-> 0,\n           connection |-> 1,\n           item |-> 1,\n           kind |-> \"claim\",\n           at |-> 0,\n           base |-> 0,\n           destination |-> 1,\n           baseSeq |-> 0,\n           headBefore |-> 0,\n           revisionBefore |-> 0,\n           ownerBefore |-> 0 ] >>,\n  receipts |->\n      << [status |-> \"Accepted\", payload |-> 0, first |-> 1, last |-> 1],\n         [status |-> \"None\", payload |-> 0, first |-> 0, last |-> 0] >>,\n  boundPayload |-> <<0, -1>>,\n  events |-> <<[seq |-> 2, key |-> 1, kind |-> \"claim\", at |-> 0]>>,\n  outbox |-> <<[seq |-> 2, key |-> 1, kind |-> \"claim\", at |-> 0]>>,\n  head |-> 2,\n  terminalSeq |-> 0,\n  terminalAction |-> 0,\n  handoffStep |-> 0,\n  controls |-> <<>>,\n  nonceWrites |-> 0,\n  nonceEpoch |-> 0,\n  aiSealed |-> \"None\",\n  aiBadPackage |-> FALSE,\n  aiEffects |-> 0,\n  aiReceipt |-> \"None\",\n  aiCommit |-> <<>> ]\n/\\ v = [ payload |-> <<0, 0>>,\n  witness |-> FALSE,\n  progress |-> 0,\n  up |-> TRUE,\n  crashed |-> FALSE,\n  stable |-> FALSE,\n  lost |-> FALSE,\n  stage |-> <<\"Reply\", \"Idle\">>,\n  response |-> <<\"Accepted\", \"None\">>,\n  changed |-> <<FALSE, FALSE>>,\n  retried |-> <<FALSE, FALSE>>,\n  resolved |-> {},\n  acceptedAcks |-> {},\n  published |-> {},\n  callbackSeen |-> FALSE,\n  heldSeen |-> FALSE,\n  oldDisconnectSeen |-> FALSE,\n  nonceRetried |-> FALSE,\n  unrelated |-> FALSE,\n  revised |-> FALSE,\n  epochRevoked |-> FALSE ]"
+  },
+  {
+    "code": 2200,
+    "severity": 0,
+    "text": "Progress(4) at 2026-11-11 04:03:30: 22 states generated (2,640 s/min), 14 distinct states found (1,680 ds/min), 7 states left on queue."
+  },
+  {
+    "code": 2199,
+    "severity": 0,
+    "text": "22 states generated, 14 distinct states found, 7 states left on queue."
+  },
+  {
+    "code": 2194,
+    "severity": 0,
+    "text": "The depth of the complete state graph search is 4."
+  },
+  {
+    "code": 2268,
+    "severity": 0,
+    "text": "The average outdegree of the complete state graph is 2 (minimum is 1, the maximum 4 and the 95th percentile is 4)."
+  },
+  {
+    "code": 2186,
+    "severity": 0,
+    "text": "Finished in 504ms at (2026-11-11 04:03:30)"
+  }
+]

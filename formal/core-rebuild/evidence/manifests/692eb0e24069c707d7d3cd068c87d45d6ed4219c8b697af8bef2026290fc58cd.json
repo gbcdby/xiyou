@@ -1,0 +1,3088 @@
+{
+  "schema_version": 1,
+  "feature": "vs001-core-rebuild-20261111",
+  "tool": {
+    "version": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "model": {
+    "root": "model",
+    "entry": "Core.tla"
+  },
+  "requirements": {
+    "source": "docs/specs/m0-protocol.md",
+    "baseline": "6c2a0b9f6d137ad5fbd41721659404333ad8e16d",
+    "ids": [
+      "INV-00",
+      "INV-01",
+      "INV-02",
+      "INV-03",
+      "INV-04",
+      "INV-05",
+      "INV-06",
+      "INV-07",
+      "INV-08",
+      "INV-12",
+      "LIVE-01",
+      "LIVE-03"
+    ]
+  },
+  "profiles": {
+    "ownership-competition": {
+      "config": "ownership-competition.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "TypeOK",
+        "AtMostOneEffect",
+        "ReceiptPayloadBinding",
+        "AtomicCommitBundle",
+        "AckRequiresCommit",
+        "TerminalBlocksNewEffects",
+        "ContinuousCommittedSequence",
+        "PreconditionDiscipline",
+        "SingleEffectiveOwner"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "ownership",
+        "pattern": "competition",
+        "fault": "none",
+        "probe": "none",
+        "actors": 2,
+        "items": 2,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 0,
+        "session_deadline_ticks": 2,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 200,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "ownership-idempotence": {
+      "config": "ownership-idempotence.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "TypeOK",
+        "AtMostOneEffect",
+        "ReceiptPayloadBinding",
+        "AtomicCommitBundle",
+        "AckRequiresCommit",
+        "TerminalBlocksNewEffects",
+        "ContinuousCommittedSequence",
+        "PreconditionDiscipline",
+        "SingleEffectiveOwner"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "ownership",
+        "pattern": "idempotence",
+        "fault": "none",
+        "probe": "none",
+        "actors": 2,
+        "items": 2,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 0,
+        "session_deadline_ticks": 2,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 200,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "ownership-ending": {
+      "config": "ownership-ending.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "TypeOK",
+        "AtMostOneEffect",
+        "ReceiptPayloadBinding",
+        "AtomicCommitBundle",
+        "AckRequiresCommit",
+        "TerminalBlocksNewEffects",
+        "ContinuousCommittedSequence",
+        "PreconditionDiscipline",
+        "SingleEffectiveOwner"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "ownership",
+        "pattern": "ending",
+        "fault": "none",
+        "probe": "none",
+        "actors": 2,
+        "items": 2,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 0,
+        "session_deadline_ticks": 2,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 200,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "ownership-future": {
+      "config": "ownership-future.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "TypeOK",
+        "AtMostOneEffect",
+        "ReceiptPayloadBinding",
+        "AtomicCommitBundle",
+        "AckRequiresCommit",
+        "TerminalBlocksNewEffects",
+        "ContinuousCommittedSequence",
+        "PreconditionDiscipline",
+        "SingleEffectiveOwner"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "ownership",
+        "pattern": "future",
+        "fault": "none",
+        "probe": "none",
+        "actors": 2,
+        "items": 2,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 0,
+        "session_deadline_ticks": 2,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 200,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "handoff": {
+      "config": "handoff.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "TypeOK",
+        "AtMostOneEffect",
+        "ReceiptPayloadBinding",
+        "AtomicCommitBundle",
+        "AckRequiresCommit",
+        "TerminalBlocksNewEffects",
+        "ContinuousCommittedSequence",
+        "PreconditionDiscipline",
+        "NoDualControl",
+        "ControlNonceIdempotent",
+        "FreshDecisionOnly",
+        "DecisionSettlesOnce"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "handoff",
+        "pattern": "idempotence",
+        "fault": "none",
+        "probe": "none",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 500,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "composed": {
+      "config": "composed.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "TypeOK",
+        "AtMostOneEffect",
+        "ReceiptPayloadBinding",
+        "AtomicCommitBundle",
+        "AckRequiresCommit",
+        "TerminalBlocksNewEffects",
+        "ContinuousCommittedSequence",
+        "PreconditionDiscipline",
+        "SingleEffectiveOwner",
+        "NoDualControl",
+        "ControlNonceIdempotent",
+        "FreshDecisionOnly",
+        "DecisionSettlesOnce"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "composed",
+        "pattern": "competition",
+        "fault": "none",
+        "probe": "none",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 500,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "live-ownership": {
+      "config": "live-ownership.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "TypeOK"
+      ],
+      "expected_properties": [
+        "AdmittedRequestResolves"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "ownership",
+        "pattern": "idempotence",
+        "fault": "none",
+        "probe": "none",
+        "actors": 2,
+        "items": 2,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 0,
+        "session_deadline_ticks": 2,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 200,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": [
+          "AdmittedRequestResolves"
+        ]
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟",
+        "有限崩溃和丢ACK后稳定；恢复、接收、预检、提交、ACK、期限处理弱公平",
+        "不要求供应商返回；Pending决定依赖公平计时及到期收束"
+      ]
+    },
+    "live-handoff": {
+      "config": "live-handoff.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "TypeOK"
+      ],
+      "expected_properties": [
+        "AdmittedRequestResolves",
+        "DecisionResolvesOrExpires"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "handoff",
+        "pattern": "idempotence",
+        "fault": "none",
+        "probe": "none",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 200,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": [
+          "AdmittedRequestResolves",
+          "DecisionResolvesOrExpires"
+        ]
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟",
+        "有限崩溃和丢ACK后稳定；恢复、接收、预检、提交、ACK、期限处理弱公平",
+        "不要求供应商返回；Pending决定依赖公平计时及到期收束"
+      ]
+    },
+    "live-composed": {
+      "config": "live-composed.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "TypeOK"
+      ],
+      "expected_properties": [
+        "AdmittedRequestResolves",
+        "DecisionResolvesOrExpires"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "composed",
+        "pattern": "competition",
+        "fault": "none",
+        "probe": "none",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 200,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": [
+          "AdmittedRequestResolves",
+          "DecisionResolvesOrExpires"
+        ]
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟",
+        "有限崩溃和丢ACK后稳定；恢复、接收、预检、提交、ACK、期限处理弱公平",
+        "不要求供应商返回；Pending决定依赖公平计时及到期收束"
+      ]
+    },
+    "negative-type": {
+      "config": "negative-type.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "TypeOK"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "ownership",
+        "pattern": "idempotence",
+        "fault": "type",
+        "probe": "none",
+        "actors": 2,
+        "items": 2,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 0,
+        "session_deadline_ticks": 2,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "negative-duplicate_owner": {
+      "config": "negative-duplicate_owner.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "SingleEffectiveOwner"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "ownership",
+        "pattern": "competition",
+        "fault": "duplicate_owner",
+        "probe": "none",
+        "actors": 2,
+        "items": 2,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 0,
+        "session_deadline_ticks": 2,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "negative-stale_item": {
+      "config": "negative-stale_item.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "SingleEffectiveOwner"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "ownership",
+        "pattern": "competition",
+        "fault": "stale_item",
+        "probe": "none",
+        "actors": 2,
+        "items": 2,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 0,
+        "session_deadline_ticks": 2,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "negative-split_receipt": {
+      "config": "negative-split_receipt.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "AtMostOneEffect"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "ownership",
+        "pattern": "idempotence",
+        "fault": "split_receipt",
+        "probe": "none",
+        "actors": 2,
+        "items": 2,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 0,
+        "session_deadline_ticks": 2,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "negative-payload_overwrite": {
+      "config": "negative-payload_overwrite.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "ReceiptPayloadBinding"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "ownership",
+        "pattern": "idempotence",
+        "fault": "payload_overwrite",
+        "probe": "none",
+        "actors": 2,
+        "items": 2,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 0,
+        "session_deadline_ticks": 2,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "negative-split_bundle": {
+      "config": "negative-split_bundle.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "AtomicCommitBundle"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "ownership",
+        "pattern": "idempotence",
+        "fault": "split_bundle",
+        "probe": "none",
+        "actors": 2,
+        "items": 2,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 0,
+        "session_deadline_ticks": 2,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "negative-split_terminal": {
+      "config": "negative-split_terminal.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "AtomicCommitBundle"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "ownership",
+        "pattern": "ending",
+        "fault": "split_terminal",
+        "probe": "none",
+        "actors": 2,
+        "items": 2,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 0,
+        "session_deadline_ticks": 2,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "negative-partial_ai": {
+      "config": "negative-partial_ai.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "AtomicCommitBundle"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "handoff",
+        "pattern": "idempotence",
+        "fault": "partial_ai",
+        "probe": "none",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "negative-early_ack": {
+      "config": "negative-early_ack.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "AckRequiresCommit"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "ownership",
+        "pattern": "idempotence",
+        "fault": "early_ack",
+        "probe": "none",
+        "actors": 2,
+        "items": 2,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 0,
+        "session_deadline_ticks": 2,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "negative-old_human": {
+      "config": "negative-old_human.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NoDualControl"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "handoff",
+        "pattern": "idempotence",
+        "fault": "old_human",
+        "probe": "none",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "negative-stale_disconnect": {
+      "config": "negative-stale_disconnect.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NoDualControl"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "handoff",
+        "pattern": "idempotence",
+        "fault": "stale_disconnect",
+        "probe": "none",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "negative-old_proxy": {
+      "config": "negative-old_proxy.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NoDualControl"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "handoff",
+        "pattern": "idempotence",
+        "fault": "old_proxy",
+        "probe": "none",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "negative-control_nonce": {
+      "config": "negative-control_nonce.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "ControlNonceIdempotent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "handoff",
+        "pattern": "idempotence",
+        "fault": "control_nonce",
+        "probe": "none",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "negative-decision_epoch": {
+      "config": "negative-decision_epoch.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "FreshDecisionOnly"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "handoff",
+        "pattern": "idempotence",
+        "fault": "decision_epoch",
+        "probe": "none",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "negative-decision_generation": {
+      "config": "negative-decision_generation.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "FreshDecisionOnly"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "handoff",
+        "pattern": "idempotence",
+        "fault": "decision_generation",
+        "probe": "none",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "negative-decision_revision": {
+      "config": "negative-decision_revision.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "FreshDecisionOnly"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "handoff",
+        "pattern": "idempotence",
+        "fault": "decision_revision",
+        "probe": "none",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "negative-decision_deadline": {
+      "config": "negative-decision_deadline.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "FreshDecisionOnly"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "handoff",
+        "pattern": "idempotence",
+        "fault": "decision_deadline",
+        "probe": "none",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "negative-decision_status": {
+      "config": "negative-decision_status.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "FreshDecisionOnly"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "handoff",
+        "pattern": "idempotence",
+        "fault": "decision_status",
+        "probe": "none",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "negative-ai_terminal": {
+      "config": "negative-ai_terminal.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "FreshDecisionOnly"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "handoff",
+        "pattern": "idempotence",
+        "fault": "ai_terminal",
+        "probe": "none",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "negative-post_terminal": {
+      "config": "negative-post_terminal.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "TerminalBlocksNewEffects"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "ownership",
+        "pattern": "idempotence",
+        "fault": "post_terminal",
+        "probe": "none",
+        "actors": 2,
+        "items": 2,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 0,
+        "session_deadline_ticks": 2,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "negative-deadline_control": {
+      "config": "negative-deadline_control.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "TerminalBlocksNewEffects"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "handoff",
+        "pattern": "idempotence",
+        "fault": "deadline_control",
+        "probe": "none",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "negative-sequence_gap": {
+      "config": "negative-sequence_gap.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "ContinuousCommittedSequence"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "ownership",
+        "pattern": "idempotence",
+        "fault": "sequence_gap",
+        "probe": "none",
+        "actors": 2,
+        "items": 2,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 0,
+        "session_deadline_ticks": 2,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "negative-sequence_repeat": {
+      "config": "negative-sequence_repeat.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "ContinuousCommittedSequence"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "ownership",
+        "pattern": "idempotence",
+        "fault": "sequence_repeat",
+        "probe": "none",
+        "actors": 2,
+        "items": 2,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 0,
+        "session_deadline_ticks": 2,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "negative-future_base": {
+      "config": "negative-future_base.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "PreconditionDiscipline"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "ownership",
+        "pattern": "future",
+        "fault": "future_base",
+        "probe": "none",
+        "actors": 2,
+        "items": 2,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 0,
+        "session_deadline_ticks": 2,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "negative-stale-item-precondition": {
+      "config": "negative-stale-item-precondition.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "PreconditionDiscipline"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "ownership",
+        "pattern": "competition",
+        "fault": "stale_item",
+        "probe": "none",
+        "actors": 2,
+        "items": 2,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 0,
+        "session_deadline_ticks": 2,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "negative-decision-finality": {
+      "config": "negative-decision-finality.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "DecisionSettlesOnce"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "handoff",
+        "pattern": "idempotence",
+        "fault": "decision_status",
+        "probe": "none",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "negative-no_retry": {
+      "config": "negative-no_retry.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "TypeOK"
+      ],
+      "expected_properties": [
+        "AdmittedRequestResolves"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "ownership",
+        "pattern": "idempotence",
+        "fault": "no_retry",
+        "probe": "none",
+        "actors": 2,
+        "items": 2,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 0,
+        "session_deadline_ticks": 2,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": [
+          "AdmittedRequestResolves"
+        ]
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟",
+        "有限崩溃和丢ACK后稳定；恢复、接收、预检、提交、ACK、期限处理弱公平",
+        "不要求供应商返回；Pending决定依赖公平计时及到期收束"
+      ]
+    },
+    "negative-no_timeout": {
+      "config": "negative-no_timeout.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "TypeOK"
+      ],
+      "expected_properties": [
+        "DecisionResolvesOrExpires"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "handoff",
+        "pattern": "idempotence",
+        "fault": "no_timeout",
+        "probe": "none",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": [
+          "DecisionResolvesOrExpires"
+        ]
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟",
+        "有限崩溃和丢ACK后稳定；恢复、接收、预检、提交、ACK、期限处理弱公平",
+        "不要求供应商返回；Pending决定依赖公平计时及到期收束"
+      ]
+    },
+    "negative-deadlock": {
+      "config": "negative-deadlock.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "TypeOK"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "ownership",
+        "pattern": "idempotence",
+        "fault": "deadlock",
+        "probe": "none",
+        "actors": 2,
+        "items": 2,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 0,
+        "session_deadline_ticks": 2,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "witness-take-success": {
+      "config": "witness-take-success.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "WitnessAbsent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "ownership",
+        "pattern": "competition",
+        "fault": "none",
+        "probe": "take-success",
+        "actors": 2,
+        "items": 2,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 0,
+        "session_deadline_ticks": 2,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "witness-item-conflict": {
+      "config": "witness-item-conflict.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "WitnessAbsent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "ownership",
+        "pattern": "competition",
+        "fault": "none",
+        "probe": "item-conflict",
+        "actors": 2,
+        "items": 2,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 0,
+        "session_deadline_ticks": 2,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "witness-same-receipt": {
+      "config": "witness-same-receipt.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "WitnessAbsent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "ownership",
+        "pattern": "idempotence",
+        "fault": "none",
+        "probe": "same-receipt",
+        "actors": 2,
+        "items": 2,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 0,
+        "session_deadline_ticks": 2,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "witness-payload-conflict": {
+      "config": "witness-payload-conflict.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "WitnessAbsent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "ownership",
+        "pattern": "idempotence",
+        "fault": "none",
+        "probe": "payload-conflict",
+        "actors": 2,
+        "items": 2,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 0,
+        "session_deadline_ticks": 2,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "witness-crash-before-commit": {
+      "config": "witness-crash-before-commit.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "WitnessAbsent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "ownership",
+        "pattern": "idempotence",
+        "fault": "none",
+        "probe": "crash-before-commit",
+        "actors": 2,
+        "items": 2,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 0,
+        "session_deadline_ticks": 2,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "witness-crash-after-commit": {
+      "config": "witness-crash-after-commit.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "WitnessAbsent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "ownership",
+        "pattern": "idempotence",
+        "fault": "none",
+        "probe": "crash-after-commit",
+        "actors": 2,
+        "items": 2,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 0,
+        "session_deadline_ticks": 2,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "witness-recovered": {
+      "config": "witness-recovered.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "WitnessAbsent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "ownership",
+        "pattern": "idempotence",
+        "fault": "none",
+        "probe": "recovered",
+        "actors": 2,
+        "items": 2,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 0,
+        "session_deadline_ticks": 2,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "witness-published": {
+      "config": "witness-published.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "WitnessAbsent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "ownership",
+        "pattern": "idempotence",
+        "fault": "none",
+        "probe": "published",
+        "actors": 2,
+        "items": 2,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 0,
+        "session_deadline_ticks": 2,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "witness-manual-ending": {
+      "config": "witness-manual-ending.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "WitnessAbsent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "ownership",
+        "pattern": "ending",
+        "fault": "none",
+        "probe": "manual-ending",
+        "actors": 2,
+        "items": 2,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 0,
+        "session_deadline_ticks": 2,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "witness-deadline-reject": {
+      "config": "witness-deadline-reject.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "WitnessAbsent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "ownership",
+        "pattern": "idempotence",
+        "fault": "none",
+        "probe": "deadline-reject",
+        "actors": 2,
+        "items": 2,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 0,
+        "session_deadline_ticks": 2,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "witness-future-reject": {
+      "config": "witness-future-reject.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "WitnessAbsent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "ownership",
+        "pattern": "future",
+        "fault": "none",
+        "probe": "future-reject",
+        "actors": 2,
+        "items": 2,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 0,
+        "session_deadline_ticks": 2,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "witness-grace": {
+      "config": "witness-grace.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "WitnessAbsent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "handoff",
+        "pattern": "idempotence",
+        "fault": "none",
+        "probe": "grace",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "witness-proxy": {
+      "config": "witness-proxy.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "WitnessAbsent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "handoff",
+        "pattern": "idempotence",
+        "fault": "none",
+        "probe": "proxy",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "witness-returned": {
+      "config": "witness-returned.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "WitnessAbsent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "handoff",
+        "pattern": "idempotence",
+        "fault": "none",
+        "probe": "returned",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "witness-explicit-take": {
+      "config": "witness-explicit-take.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "WitnessAbsent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "handoff",
+        "pattern": "idempotence",
+        "fault": "none",
+        "probe": "explicit-take",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "witness-resume-held": {
+      "config": "witness-resume-held.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "WitnessAbsent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "handoff",
+        "pattern": "idempotence",
+        "fault": "none",
+        "probe": "resume-held",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "witness-control-nonce-retry": {
+      "config": "witness-control-nonce-retry.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "WitnessAbsent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "handoff",
+        "pattern": "idempotence",
+        "fault": "none",
+        "probe": "control-nonce-retry",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "witness-old-disconnect-rejected": {
+      "config": "witness-old-disconnect-rejected.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "WitnessAbsent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "handoff",
+        "pattern": "idempotence",
+        "fault": "none",
+        "probe": "old-disconnect-rejected",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "witness-control-reject": {
+      "config": "witness-control-reject.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "WitnessAbsent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "handoff",
+        "pattern": "idempotence",
+        "fault": "none",
+        "probe": "control-reject",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "witness-ai-committed": {
+      "config": "witness-ai-committed.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "WitnessAbsent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "handoff",
+        "pattern": "idempotence",
+        "fault": "none",
+        "probe": "ai-committed",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "witness-ai-after-unrelated": {
+      "config": "witness-ai-after-unrelated.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "WitnessAbsent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "handoff",
+        "pattern": "idempotence",
+        "fault": "none",
+        "probe": "ai-after-unrelated",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "witness-epoch-late-ai": {
+      "config": "witness-epoch-late-ai.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "WitnessAbsent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "handoff",
+        "pattern": "idempotence",
+        "fault": "none",
+        "probe": "epoch-late-ai",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "witness-generation-late-ai": {
+      "config": "witness-generation-late-ai.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "WitnessAbsent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "handoff",
+        "pattern": "idempotence",
+        "fault": "none",
+        "probe": "generation-late-ai",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "witness-revision-late-ai": {
+      "config": "witness-revision-late-ai.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "WitnessAbsent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "handoff",
+        "pattern": "idempotence",
+        "fault": "none",
+        "probe": "revision-late-ai",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "witness-deadline-late-ai": {
+      "config": "witness-deadline-late-ai.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "WitnessAbsent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "handoff",
+        "pattern": "idempotence",
+        "fault": "none",
+        "probe": "deadline-late-ai",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "witness-terminal-late-ai": {
+      "config": "witness-terminal-late-ai.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "WitnessAbsent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "handoff",
+        "pattern": "idempotence",
+        "fault": "none",
+        "probe": "terminal-late-ai",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "witness-atomic-package-rejected": {
+      "config": "witness-atomic-package-rejected.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "WitnessAbsent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "handoff",
+        "pattern": "idempotence",
+        "fault": "none",
+        "probe": "atomic-package-rejected",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "witness-decision-expired": {
+      "config": "witness-decision-expired.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "WitnessAbsent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "handoff",
+        "pattern": "idempotence",
+        "fault": "none",
+        "probe": "decision-expired",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "witness-invalid-ai-rejected": {
+      "config": "witness-invalid-ai-rejected.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "WitnessAbsent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "handoff",
+        "pattern": "idempotence",
+        "fault": "none",
+        "probe": "invalid-ai-rejected",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "witness-effect-crash-handoff-retry": {
+      "config": "witness-effect-crash-handoff-retry.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "WitnessAbsent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "composed",
+        "pattern": "competition",
+        "fault": "none",
+        "probe": "effect-crash-handoff-retry",
+        "actors": 2,
+        "items": 1,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 1,
+        "session_deadline_ticks": 5,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    },
+    "witness-effect-crash-retry-negative": {
+      "config": "witness-effect-crash-retry-negative.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "WitnessAbsent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "profile": "ownership",
+        "pattern": "idempotence",
+        "fault": "split_receipt",
+        "probe": "effect-crash-retry-negative",
+        "actors": 2,
+        "items": 2,
+        "request_keys": 2,
+        "physical_connections_for_handoff_role": 2,
+        "proxy_decisions": 0,
+        "session_deadline_ticks": 2,
+        "grace_ticks": 3,
+        "decision_timeout_ticks": 1,
+        "distinct_state_min": 1,
+        "covered_interleavings_and_faults": [
+          "接收、预检、事务提交、ACK、发布各自可交错",
+          "一次进程崩溃及一次ACK丢失，原键原载荷重试",
+          "同版本物品竞争、控制围栏、自然/异常/到期终局",
+          "故障隔离和可达探针按本配置常量限定"
+        ],
+        "excluded_behaviors": [
+          "任意规模、真实数据库或业务源码的形式证明",
+          "任意自然语言、秘密可见性、跨Session及完整fallback（独立#7负责）",
+          "多轮无限控制往返、多次新计划与多进程调度"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "服务端权威；合成参与者身份和有限请求集在初态固定",
+        "正确事务一步写入世界、事件、Receipt和outbox；这是实现义务",
+        "时间为有限逻辑切点，不调用真实时钟"
+      ]
+    }
+  }
+}
