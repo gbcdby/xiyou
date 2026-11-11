@@ -1,0 +1,2910 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/gbcdby/xiyou/protocol/contracts-v1",
+  "title": "xiyou VS-001 v1 契约",
+  "description": "仅检验结构和确定性编码，不授予权限或提交世界事实。",
+  "$defs": {
+    "Id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+    },
+    "UserId": {
+      "$ref": "#/$defs/Id"
+    },
+    "CharacterId": {
+      "$ref": "#/$defs/Id"
+    },
+    "SessionId": {
+      "$ref": "#/$defs/Id"
+    },
+    "DecimalString": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$"
+    },
+    "PositiveDecimalString": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]*$"
+    },
+    "UtcTimestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+    },
+    "Digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "SessionPhase": {
+      "enum": [
+        "Lobby",
+        "Running",
+        "Finished",
+        "Aborted"
+      ]
+    },
+    "ControlMode": {
+      "enum": [
+        "HumanControlled",
+        "GracePeriod",
+        "AIProxyControlled",
+        "CoreNPCControlled",
+        "Revoked"
+      ]
+    },
+    "DecisionStatus": {
+      "enum": [
+        "Pending",
+        "Committed",
+        "Rejected",
+        "Expired",
+        "Cancelled"
+      ]
+    },
+    "ActionKind": {
+      "enum": [
+        "move",
+        "inspect",
+        "take_item",
+        "transfer_item",
+        "use_item",
+        "interact",
+        "share_evidence",
+        "speak",
+        "make_claim",
+        "wait"
+      ]
+    },
+    "Scalar": {
+      "oneOf": [
+        {
+          "type": "string",
+          "maxLength": 2000
+        },
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "FactField": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/Id"
+        },
+        "label": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "value": {
+          "$ref": "#/$defs/Scalar"
+        }
+      },
+      "required": [
+        "key",
+        "label",
+        "value"
+      ],
+      "additionalProperties": false
+    },
+    "ItemLocation": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "character"
+            },
+            "characterId": {
+              "$ref": "#/$defs/CharacterId"
+            }
+          },
+          "required": [
+            "kind",
+            "characterId"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "region"
+            },
+            "regionId": {
+              "$ref": "#/$defs/Id"
+            }
+          },
+          "required": [
+            "kind",
+            "regionId"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "consumed"
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "Dialogue": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "maxLength": 2000,
+          "minLength": 1
+        },
+        "channel": {
+          "enum": [
+            "public",
+            "directed",
+            "private"
+          ]
+        },
+        "recipientIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Id"
+          },
+          "uniqueItems": true,
+          "maxItems": 7
+        }
+      },
+      "required": [
+        "text",
+        "channel",
+        "recipientIds"
+      ],
+      "additionalProperties": false
+    },
+    "PublicDialogue": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "maxLength": 2000,
+          "minLength": 1
+        },
+        "channel": {
+          "enum": [
+            "public",
+            "directed"
+          ]
+        },
+        "recipientIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Id"
+          },
+          "uniqueItems": true,
+          "maxItems": 7
+        }
+      },
+      "required": [
+        "text",
+        "channel",
+        "recipientIds"
+      ],
+      "additionalProperties": false
+    },
+    "Action": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "move"
+            },
+            "regionId": {
+              "$ref": "#/$defs/Id"
+            }
+          },
+          "required": [
+            "kind",
+            "regionId"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "inspect"
+            },
+            "targetId": {
+              "$ref": "#/$defs/Id"
+            }
+          },
+          "required": [
+            "kind",
+            "targetId"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "take_item"
+            },
+            "itemId": {
+              "$ref": "#/$defs/Id"
+            },
+            "expectedItemRevision": {
+              "$ref": "#/$defs/DecimalString"
+            }
+          },
+          "required": [
+            "kind",
+            "itemId",
+            "expectedItemRevision"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "transfer_item"
+            },
+            "itemId": {
+              "$ref": "#/$defs/Id"
+            },
+            "targetId": {
+              "$ref": "#/$defs/CharacterId"
+            },
+            "expectedItemRevision": {
+              "$ref": "#/$defs/DecimalString"
+            }
+          },
+          "required": [
+            "kind",
+            "itemId",
+            "targetId",
+            "expectedItemRevision"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "use_item"
+            },
+            "itemIds": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Id"
+              },
+              "uniqueItems": true,
+              "minItems": 1,
+              "maxItems": 16
+            },
+            "expectedItemRevisions": {
+              "type": "object",
+              "propertyNames": {
+                "$ref": "#/$defs/Id"
+              },
+              "additionalProperties": {
+                "$ref": "#/$defs/DecimalString"
+              }
+            },
+            "targetId": {
+              "$ref": "#/$defs/Id"
+            },
+            "expectedTargetRevision": {
+              "$ref": "#/$defs/DecimalString"
+            },
+            "operation": {
+              "$ref": "#/$defs/Id"
+            }
+          },
+          "required": [
+            "kind",
+            "itemIds",
+            "expectedItemRevisions",
+            "targetId",
+            "expectedTargetRevision",
+            "operation"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "interact"
+            },
+            "targetId": {
+              "$ref": "#/$defs/Id"
+            },
+            "operation": {
+              "$ref": "#/$defs/Id"
+            },
+            "expectedTargetRevision": {
+              "$ref": "#/$defs/DecimalString"
+            }
+          },
+          "required": [
+            "kind",
+            "targetId",
+            "operation",
+            "expectedTargetRevision"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "share_evidence"
+            },
+            "evidenceId": {
+              "$ref": "#/$defs/Id"
+            },
+            "recipientIds": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Id"
+              },
+              "uniqueItems": true,
+              "minItems": 1,
+              "maxItems": 7
+            }
+          },
+          "required": [
+            "kind",
+            "evidenceId",
+            "recipientIds"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "speak"
+            },
+            "text": {
+              "type": "string",
+              "maxLength": 2000,
+              "minLength": 1
+            },
+            "channel": {
+              "enum": [
+                "public",
+                "directed",
+                "private"
+              ]
+            },
+            "recipientIds": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Id"
+              },
+              "uniqueItems": true,
+              "maxItems": 7
+            }
+          },
+          "required": [
+            "kind",
+            "text",
+            "channel",
+            "recipientIds"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "make_claim"
+            },
+            "text": {
+              "type": "string",
+              "maxLength": 2000,
+              "minLength": 1
+            },
+            "channel": {
+              "enum": [
+                "public",
+                "directed",
+                "private"
+              ]
+            },
+            "recipientIds": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Id"
+              },
+              "uniqueItems": true,
+              "maxItems": 7
+            }
+          },
+          "required": [
+            "kind",
+            "text",
+            "channel",
+            "recipientIds"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "wait"
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "ClientAction": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "sessionId": {
+          "$ref": "#/$defs/SessionId"
+        },
+        "actorId": {
+          "$ref": "#/$defs/CharacterId"
+        },
+        "clientActionId": {
+          "$ref": "#/$defs/Id"
+        },
+        "controlEpoch": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "baseSeq": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "action": {
+          "$ref": "#/$defs/Action"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "sessionId",
+        "actorId",
+        "clientActionId",
+        "controlEpoch",
+        "baseSeq",
+        "action"
+      ],
+      "additionalProperties": false
+    },
+    "DedupeKey": {
+      "type": "object",
+      "properties": {
+        "sessionId": {
+          "$ref": "#/$defs/SessionId"
+        },
+        "principalId": {
+          "$ref": "#/$defs/Id"
+        },
+        "clientActionId": {
+          "$ref": "#/$defs/Id"
+        }
+      },
+      "required": [
+        "sessionId",
+        "principalId",
+        "clientActionId"
+      ],
+      "additionalProperties": false
+    },
+    "EventRange": {
+      "type": "object",
+      "properties": {
+        "first": {
+          "$ref": "#/$defs/PositiveDecimalString"
+        },
+        "last": {
+          "$ref": "#/$defs/PositiveDecimalString"
+        }
+      },
+      "required": [
+        "first",
+        "last"
+      ],
+      "additionalProperties": false
+    },
+    "ReceiptResult": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "observationIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Id"
+          },
+          "uniqueItems": true,
+          "maxItems": 32
+        },
+        "changedEntityIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Id"
+          },
+          "uniqueItems": true,
+          "maxItems": 32
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "AcceptedCode": {
+      "enum": [
+        "OK",
+        "NO_CHANGE"
+      ]
+    },
+    "RejectedCode": {
+      "enum": [
+        "SESSION_NOT_RUNNING",
+        "STALE_CONTROL",
+        "TARGET_UNAVAILABLE",
+        "STALE_PRECONDITION",
+        "ACTION_ID_REUSE",
+        "DECISION_STALE",
+        "DECISION_EXPIRED",
+        "FUTURE_BASE_SEQ",
+        "CONTROL_HELD",
+        "RULE_VIOLATION",
+        "NOT_READY",
+        "ROOM_FULL"
+      ]
+    },
+    "ErrorCode": {
+      "enum": [
+        "INVALID_MESSAGE",
+        "UNAUTHENTICATED",
+        "FORBIDDEN",
+        "SESSION_GONE",
+        "RESYNC_REQUIRED",
+        "OUTCOME_UNKNOWN",
+        "CONTROL_HELD",
+        "ACTION_ID_REUSE"
+      ]
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "code": {
+          "$ref": "#/$defs/ErrorCode"
+        },
+        "message": {
+          "type": "string",
+          "maxLength": 500
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "code"
+      ],
+      "additionalProperties": false
+    },
+    "TrustedExecutionContext": {
+      "type": "object",
+      "properties": {
+        "principalId": {
+          "$ref": "#/$defs/Id"
+        },
+        "principalKind": {
+          "enum": [
+            "human",
+            "core_npc",
+            "proxy",
+            "system"
+          ]
+        },
+        "sessionId": {
+          "$ref": "#/$defs/SessionId"
+        },
+        "actorId": {
+          "$ref": "#/$defs/CharacterId"
+        },
+        "userId": {
+          "$ref": "#/$defs/UserId"
+        },
+        "connectionId": {
+          "$ref": "#/$defs/Id"
+        },
+        "authenticatedAt": {
+          "$ref": "#/$defs/UtcTimestamp"
+        }
+      },
+      "required": [
+        "principalId",
+        "principalKind",
+        "sessionId",
+        "authenticatedAt"
+      ],
+      "additionalProperties": false
+    },
+    "ObservationSource": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "enum": [
+            "initial_content",
+            "inspection",
+            "event",
+            "speech",
+            "evidence_share"
+          ]
+        },
+        "sourceIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Id"
+          },
+          "uniqueItems": true,
+          "minItems": 1,
+          "maxItems": 32
+        },
+        "sourceSeq": {
+          "$ref": "#/$defs/DecimalString"
+        }
+      },
+      "required": [
+        "kind",
+        "sourceIds",
+        "sourceSeq"
+      ],
+      "additionalProperties": false
+    },
+    "Observation": {
+      "type": "object",
+      "properties": {
+        "observationId": {
+          "$ref": "#/$defs/Id"
+        },
+        "observerId": {
+          "$ref": "#/$defs/CharacterId"
+        },
+        "category": {
+          "enum": [
+            "WorldFact",
+            "Claim",
+            "Evidence"
+          ]
+        },
+        "source": {
+          "$ref": "#/$defs/ObservationSource"
+        },
+        "statement": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "subjectId": {
+          "$ref": "#/$defs/Id"
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FactField"
+          },
+          "maxItems": 32
+        },
+        "shareable": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "observationId",
+        "observerId",
+        "category",
+        "source",
+        "statement",
+        "fields",
+        "shareable"
+      ],
+      "additionalProperties": false
+    },
+    "Claim": {
+      "type": "object",
+      "properties": {
+        "claimId": {
+          "$ref": "#/$defs/Id"
+        },
+        "speakerId": {
+          "$ref": "#/$defs/CharacterId"
+        },
+        "text": {
+          "type": "string",
+          "maxLength": 2000,
+          "minLength": 1
+        },
+        "channel": {
+          "enum": [
+            "public",
+            "directed",
+            "private"
+          ]
+        },
+        "recipientIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Id"
+          },
+          "uniqueItems": true,
+          "maxItems": 7
+        }
+      },
+      "required": [
+        "claimId",
+        "speakerId",
+        "text",
+        "channel",
+        "recipientIds"
+      ],
+      "additionalProperties": false
+    },
+    "Belief": {
+      "type": "object",
+      "properties": {
+        "beliefId": {
+          "$ref": "#/$defs/Id"
+        },
+        "holderId": {
+          "$ref": "#/$defs/CharacterId"
+        },
+        "statement": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "confidence": {
+          "enum": [
+            "uncertain",
+            "likely",
+            "confident"
+          ]
+        },
+        "basedOnObservationIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Id"
+          },
+          "uniqueItems": true,
+          "minItems": 1,
+          "maxItems": 32
+        },
+        "revision": {
+          "$ref": "#/$defs/DecimalString"
+        }
+      },
+      "required": [
+        "beliefId",
+        "holderId",
+        "statement",
+        "confidence",
+        "basedOnObservationIds",
+        "revision"
+      ],
+      "additionalProperties": false
+    },
+    "BeliefProposal": {
+      "type": "object",
+      "properties": {
+        "beliefId": {
+          "$ref": "#/$defs/Id"
+        },
+        "statement": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "confidence": {
+          "enum": [
+            "uncertain",
+            "likely",
+            "confident"
+          ]
+        },
+        "basedOnObservationIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Id"
+          },
+          "uniqueItems": true,
+          "minItems": 1,
+          "maxItems": 32
+        }
+      },
+      "required": [
+        "beliefId",
+        "statement",
+        "confidence",
+        "basedOnObservationIds"
+      ],
+      "additionalProperties": false
+    },
+    "Goal": {
+      "type": "object",
+      "properties": {
+        "goalId": {
+          "$ref": "#/$defs/Id"
+        },
+        "holderId": {
+          "$ref": "#/$defs/CharacterId"
+        },
+        "label": {
+          "type": "string",
+          "maxLength": 240
+        },
+        "status": {
+          "enum": [
+            "active",
+            "completed",
+            "abandoned"
+          ]
+        },
+        "revision": {
+          "$ref": "#/$defs/DecimalString"
+        }
+      },
+      "required": [
+        "goalId",
+        "holderId",
+        "label",
+        "status",
+        "revision"
+      ],
+      "additionalProperties": false
+    },
+    "ProposedIntent": {
+      "type": "object",
+      "properties": {
+        "decisionId": {
+          "$ref": "#/$defs/Id"
+        },
+        "toolCalls": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Action"
+          },
+          "maxItems": 8
+        },
+        "dialogue": {
+          "$ref": "#/$defs/PublicDialogue"
+        },
+        "beliefUpdates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/BeliefProposal"
+          },
+          "maxItems": 16
+        }
+      },
+      "required": [
+        "decisionId",
+        "toolCalls"
+      ],
+      "additionalProperties": false
+    },
+    "DecisionRecord": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "sessionId": {
+          "$ref": "#/$defs/SessionId"
+        },
+        "actorId": {
+          "$ref": "#/$defs/CharacterId"
+        },
+        "decisionId": {
+          "$ref": "#/$defs/Id"
+        },
+        "controlEpoch": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "generation": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "observationIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Id"
+          },
+          "uniqueItems": true,
+          "maxItems": 256
+        },
+        "readVersions": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/Id"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/DecimalString"
+          }
+        },
+        "allowedTools": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ActionKind"
+          },
+          "uniqueItems": true,
+          "maxItems": 10
+        },
+        "createdAt": {
+          "$ref": "#/$defs/UtcTimestamp"
+        },
+        "deadlineAt": {
+          "$ref": "#/$defs/UtcTimestamp"
+        },
+        "status": {
+          "$ref": "#/$defs/DecisionStatus"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "sessionId",
+        "actorId",
+        "decisionId",
+        "controlEpoch",
+        "generation",
+        "observationIds",
+        "readVersions",
+        "allowedTools",
+        "createdAt",
+        "deadlineAt",
+        "status"
+      ],
+      "additionalProperties": false
+    },
+    "Audience": {
+      "type": "object",
+      "properties": {
+        "humanCharacterIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Id"
+          },
+          "uniqueItems": true,
+          "maxItems": 5
+        },
+        "coreNpcCharacterIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Id"
+          },
+          "uniqueItems": true,
+          "maxItems": 2
+        },
+        "proxyCharacterIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Id"
+          },
+          "uniqueItems": true,
+          "maxItems": 5
+        }
+      },
+      "required": [
+        "humanCharacterIds",
+        "coreNpcCharacterIds",
+        "proxyCharacterIds"
+      ],
+      "additionalProperties": false
+    },
+    "EventCause": {
+      "type": "object",
+      "properties": {
+        "principalId": {
+          "$ref": "#/$defs/Id"
+        },
+        "actionId": {
+          "$ref": "#/$defs/Id"
+        },
+        "actorId": {
+          "$ref": "#/$defs/CharacterId"
+        },
+        "decisionId": {
+          "$ref": "#/$defs/Id"
+        },
+        "toolCallIndex": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 7
+        }
+      },
+      "required": [
+        "principalId",
+        "actionId"
+      ],
+      "additionalProperties": false
+    },
+    "CharacterView": {
+      "type": "object",
+      "properties": {
+        "characterId": {
+          "$ref": "#/$defs/CharacterId"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "regionId": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/Id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Id"
+          },
+          "uniqueItems": true,
+          "maxItems": 5
+        },
+        "mode": {
+          "$ref": "#/$defs/ControlMode"
+        },
+        "online": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "characterId",
+        "name",
+        "regionId",
+        "roles",
+        "mode",
+        "online"
+      ],
+      "additionalProperties": false
+    },
+    "SelfView": {
+      "type": "object",
+      "properties": {
+        "characterId": {
+          "$ref": "#/$defs/CharacterId"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "regionId": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/Id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Id"
+          },
+          "uniqueItems": true,
+          "maxItems": 5
+        },
+        "mode": {
+          "$ref": "#/$defs/ControlMode"
+        },
+        "controlEpoch": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "canControl": {
+          "type": "boolean"
+        },
+        "capabilities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Id"
+          },
+          "uniqueItems": true,
+          "maxItems": 32
+        }
+      },
+      "required": [
+        "characterId",
+        "name",
+        "regionId",
+        "roles",
+        "mode",
+        "controlEpoch",
+        "canControl",
+        "capabilities"
+      ],
+      "additionalProperties": false
+    },
+    "RegionView": {
+      "type": "object",
+      "properties": {
+        "regionId": {
+          "$ref": "#/$defs/Id"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "exits": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Id"
+          },
+          "uniqueItems": true,
+          "maxItems": 16
+        }
+      },
+      "required": [
+        "regionId",
+        "name",
+        "description",
+        "exits"
+      ],
+      "additionalProperties": false
+    },
+    "ItemView": {
+      "type": "object",
+      "properties": {
+        "itemId": {
+          "$ref": "#/$defs/Id"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "location": {
+          "$ref": "#/$defs/ItemLocation"
+        },
+        "resourceRevision": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "transferable": {
+          "type": "boolean"
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FactField"
+          },
+          "maxItems": 32
+        }
+      },
+      "required": [
+        "itemId",
+        "name",
+        "location",
+        "resourceRevision",
+        "transferable",
+        "fields"
+      ],
+      "additionalProperties": false
+    },
+    "TargetView": {
+      "type": "object",
+      "properties": {
+        "targetId": {
+          "$ref": "#/$defs/Id"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "regionId": {
+          "$ref": "#/$defs/Id"
+        },
+        "resourceRevision": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "availableOperations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Id"
+          },
+          "uniqueItems": true,
+          "maxItems": 32
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FactField"
+          },
+          "maxItems": 32
+        }
+      },
+      "required": [
+        "targetId",
+        "name",
+        "regionId",
+        "resourceRevision",
+        "availableOperations",
+        "fields"
+      ],
+      "additionalProperties": false
+    },
+    "ObjectiveView": {
+      "type": "object",
+      "properties": {
+        "objectiveId": {
+          "$ref": "#/$defs/Id"
+        },
+        "label": {
+          "type": "string",
+          "maxLength": 240
+        },
+        "status": {
+          "enum": [
+            "active",
+            "completed",
+            "blocked"
+          ]
+        },
+        "detail": {
+          "type": "string",
+          "maxLength": 500
+        }
+      },
+      "required": [
+        "objectiveId",
+        "label",
+        "status"
+      ],
+      "additionalProperties": false
+    },
+    "EndingView": {
+      "type": "object",
+      "properties": {
+        "endingCode": {
+          "$ref": "#/$defs/Id"
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "summary": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "facts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FactField"
+          },
+          "maxItems": 32
+        },
+        "unresolved": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "maxItems": 16
+        }
+      },
+      "required": [
+        "endingCode",
+        "title",
+        "summary",
+        "facts",
+        "unresolved"
+      ],
+      "additionalProperties": false
+    },
+    "AuthorizedProjection": {
+      "type": "object",
+      "properties": {
+        "phase": {
+          "$ref": "#/$defs/SessionPhase"
+        },
+        "contentVersion": {
+          "$ref": "#/$defs/Id"
+        },
+        "reducerVersion": {
+          "$ref": "#/$defs/Id"
+        },
+        "self": {
+          "$ref": "#/$defs/SelfView"
+        },
+        "characters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CharacterView"
+          },
+          "maxItems": 7
+        },
+        "regions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/RegionView"
+          },
+          "maxItems": 32
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ItemView"
+          },
+          "maxItems": 256
+        },
+        "targets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TargetView"
+          },
+          "maxItems": 256
+        },
+        "observations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Observation"
+          }
+        },
+        "claims": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Claim"
+          }
+        },
+        "objectives": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ObjectiveView"
+          },
+          "maxItems": 32
+        },
+        "ending": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/EndingView"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "deadlineAt": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/UtcTimestamp"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "phase",
+        "contentVersion",
+        "reducerVersion",
+        "self",
+        "characters",
+        "regions",
+        "items",
+        "targets",
+        "observations",
+        "claims",
+        "objectives",
+        "ending",
+        "deadlineAt"
+      ],
+      "additionalProperties": false
+    },
+    "AuthorizedSnapshot": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "type": {
+          "const": "world.snapshot"
+        },
+        "sessionId": {
+          "$ref": "#/$defs/SessionId"
+        },
+        "viewId": {
+          "$ref": "#/$defs/Id"
+        },
+        "snapshotSeq": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "projection": {
+          "$ref": "#/$defs/AuthorizedProjection"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "type",
+        "sessionId",
+        "viewId",
+        "snapshotSeq",
+        "projection"
+      ],
+      "additionalProperties": false
+    },
+    "SyncRequest": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "type": {
+          "const": "sync.request"
+        },
+        "sessionId": {
+          "$ref": "#/$defs/SessionId"
+        },
+        "viewId": {
+          "$ref": "#/$defs/Id"
+        },
+        "cursor": {
+          "$ref": "#/$defs/DecimalString"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "type",
+        "sessionId",
+        "viewId",
+        "cursor"
+      ],
+      "additionalProperties": false
+    },
+    "ControlRequest": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "type": {
+          "enum": [
+            "control.resume",
+            "control.take"
+          ]
+        },
+        "sessionId": {
+          "$ref": "#/$defs/SessionId"
+        },
+        "actorId": {
+          "$ref": "#/$defs/CharacterId"
+        },
+        "nonce": {
+          "$ref": "#/$defs/Id"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "type",
+        "sessionId",
+        "actorId",
+        "nonce"
+      ],
+      "additionalProperties": false
+    },
+    "ControlResponse": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "sessionId": {
+          "$ref": "#/$defs/SessionId"
+        },
+        "actorId": {
+          "$ref": "#/$defs/CharacterId"
+        },
+        "nonce": {
+          "$ref": "#/$defs/Id"
+        },
+        "controlEpoch": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "mode": {
+          "$ref": "#/$defs/ControlMode"
+        },
+        "observedSeq": {
+          "$ref": "#/$defs/DecimalString"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "sessionId",
+        "actorId",
+        "nonce",
+        "controlEpoch",
+        "mode",
+        "observedSeq"
+      ],
+      "additionalProperties": false
+    },
+    "OutboxRecord": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "sessionId": {
+          "$ref": "#/$defs/SessionId"
+        },
+        "fromExclusive": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "throughSeq": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "status": {
+          "enum": [
+            "Pending",
+            "Published"
+          ]
+        },
+        "attempts": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "sessionId",
+        "fromExclusive",
+        "throughSeq",
+        "status",
+        "attempts"
+      ],
+      "additionalProperties": false
+    },
+    "ActionReceipt": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 1
+            },
+            "semanticDigest": {
+              "$ref": "#/$defs/Digest"
+            },
+            "actorId": {
+              "$ref": "#/$defs/CharacterId"
+            },
+            "observedSeq": {
+              "$ref": "#/$defs/DecimalString"
+            },
+            "actionEventRange": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/EventRange"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "result": {
+              "$ref": "#/$defs/ReceiptResult"
+            },
+            "key": {
+              "$ref": "#/$defs/DedupeKey"
+            },
+            "status": {
+              "const": "Accepted"
+            },
+            "code": {
+              "$ref": "#/$defs/AcceptedCode"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "semanticDigest",
+            "actorId",
+            "observedSeq",
+            "actionEventRange",
+            "result",
+            "key",
+            "status",
+            "code"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 1
+            },
+            "semanticDigest": {
+              "$ref": "#/$defs/Digest"
+            },
+            "actorId": {
+              "$ref": "#/$defs/CharacterId"
+            },
+            "observedSeq": {
+              "$ref": "#/$defs/DecimalString"
+            },
+            "actionEventRange": {
+              "type": "null"
+            },
+            "result": {
+              "$ref": "#/$defs/ReceiptResult"
+            },
+            "key": {
+              "$ref": "#/$defs/DedupeKey"
+            },
+            "status": {
+              "const": "Rejected"
+            },
+            "code": {
+              "$ref": "#/$defs/RejectedCode"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "semanticDigest",
+            "actorId",
+            "observedSeq",
+            "actionEventRange",
+            "result",
+            "key",
+            "status",
+            "code"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "ClientReceipt": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 1
+            },
+            "semanticDigest": {
+              "$ref": "#/$defs/Digest"
+            },
+            "actorId": {
+              "$ref": "#/$defs/CharacterId"
+            },
+            "observedSeq": {
+              "$ref": "#/$defs/DecimalString"
+            },
+            "actionEventRange": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/EventRange"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "result": {
+              "$ref": "#/$defs/ReceiptResult"
+            },
+            "sessionId": {
+              "$ref": "#/$defs/SessionId"
+            },
+            "clientActionId": {
+              "$ref": "#/$defs/Id"
+            },
+            "status": {
+              "const": "Accepted"
+            },
+            "code": {
+              "$ref": "#/$defs/AcceptedCode"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "semanticDigest",
+            "actorId",
+            "observedSeq",
+            "actionEventRange",
+            "result",
+            "sessionId",
+            "clientActionId",
+            "status",
+            "code"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 1
+            },
+            "semanticDigest": {
+              "$ref": "#/$defs/Digest"
+            },
+            "actorId": {
+              "$ref": "#/$defs/CharacterId"
+            },
+            "observedSeq": {
+              "$ref": "#/$defs/DecimalString"
+            },
+            "actionEventRange": {
+              "type": "null"
+            },
+            "result": {
+              "$ref": "#/$defs/ReceiptResult"
+            },
+            "sessionId": {
+              "$ref": "#/$defs/SessionId"
+            },
+            "clientActionId": {
+              "$ref": "#/$defs/Id"
+            },
+            "status": {
+              "const": "Rejected"
+            },
+            "code": {
+              "$ref": "#/$defs/RejectedCode"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "semanticDigest",
+            "actorId",
+            "observedSeq",
+            "actionEventRange",
+            "result",
+            "sessionId",
+            "clientActionId",
+            "status",
+            "code"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "WorldEvent": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 1
+            },
+            "sessionId": {
+              "$ref": "#/$defs/SessionId"
+            },
+            "sessionSeq": {
+              "$ref": "#/$defs/PositiveDecimalString"
+            },
+            "eventId": {
+              "type": "string",
+              "maxLength": 260
+            },
+            "causedBy": {
+              "$ref": "#/$defs/EventCause"
+            },
+            "serverTime": {
+              "$ref": "#/$defs/UtcTimestamp"
+            },
+            "audience": {
+              "$ref": "#/$defs/Audience"
+            },
+            "kind": {
+              "const": "session.created"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "contentVersion": {
+                  "$ref": "#/$defs/Id"
+                },
+                "reducerVersion": {
+                  "$ref": "#/$defs/Id"
+                },
+                "hostUserId": {
+                  "$ref": "#/$defs/UserId"
+                },
+                "seed": {
+                  "$ref": "#/$defs/Id"
+                }
+              },
+              "required": [
+                "contentVersion",
+                "reducerVersion",
+                "hostUserId",
+                "seed"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "sessionId",
+            "sessionSeq",
+            "eventId",
+            "causedBy",
+            "serverTime",
+            "audience",
+            "kind",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 1
+            },
+            "sessionId": {
+              "$ref": "#/$defs/SessionId"
+            },
+            "sessionSeq": {
+              "$ref": "#/$defs/PositiveDecimalString"
+            },
+            "eventId": {
+              "type": "string",
+              "maxLength": 260
+            },
+            "causedBy": {
+              "$ref": "#/$defs/EventCause"
+            },
+            "serverTime": {
+              "$ref": "#/$defs/UtcTimestamp"
+            },
+            "audience": {
+              "$ref": "#/$defs/Audience"
+            },
+            "kind": {
+              "const": "session.member_joined"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "$ref": "#/$defs/UserId"
+                },
+                "characterId": {
+                  "$ref": "#/$defs/CharacterId"
+                },
+                "name": {
+                  "type": "string",
+                  "maxLength": 120
+                }
+              },
+              "required": [
+                "userId",
+                "characterId",
+                "name"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "sessionId",
+            "sessionSeq",
+            "eventId",
+            "causedBy",
+            "serverTime",
+            "audience",
+            "kind",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 1
+            },
+            "sessionId": {
+              "$ref": "#/$defs/SessionId"
+            },
+            "sessionSeq": {
+              "$ref": "#/$defs/PositiveDecimalString"
+            },
+            "eventId": {
+              "type": "string",
+              "maxLength": 260
+            },
+            "causedBy": {
+              "$ref": "#/$defs/EventCause"
+            },
+            "serverTime": {
+              "$ref": "#/$defs/UtcTimestamp"
+            },
+            "audience": {
+              "$ref": "#/$defs/Audience"
+            },
+            "kind": {
+              "const": "session.started"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "deadlineAt": {
+                  "$ref": "#/$defs/UtcTimestamp"
+                },
+                "characterIds": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/Id"
+                  },
+                  "uniqueItems": true,
+                  "minItems": 2,
+                  "maxItems": 7
+                }
+              },
+              "required": [
+                "deadlineAt",
+                "characterIds"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "sessionId",
+            "sessionSeq",
+            "eventId",
+            "causedBy",
+            "serverTime",
+            "audience",
+            "kind",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 1
+            },
+            "sessionId": {
+              "$ref": "#/$defs/SessionId"
+            },
+            "sessionSeq": {
+              "$ref": "#/$defs/PositiveDecimalString"
+            },
+            "eventId": {
+              "type": "string",
+              "maxLength": 260
+            },
+            "causedBy": {
+              "$ref": "#/$defs/EventCause"
+            },
+            "serverTime": {
+              "$ref": "#/$defs/UtcTimestamp"
+            },
+            "audience": {
+              "$ref": "#/$defs/Audience"
+            },
+            "kind": {
+              "const": "session.finished"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "endingCode": {
+                  "$ref": "#/$defs/Id"
+                },
+                "facts": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/FactField"
+                  },
+                  "maxItems": 32
+                }
+              },
+              "required": [
+                "endingCode",
+                "facts"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "sessionId",
+            "sessionSeq",
+            "eventId",
+            "causedBy",
+            "serverTime",
+            "audience",
+            "kind",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 1
+            },
+            "sessionId": {
+              "$ref": "#/$defs/SessionId"
+            },
+            "sessionSeq": {
+              "$ref": "#/$defs/PositiveDecimalString"
+            },
+            "eventId": {
+              "type": "string",
+              "maxLength": 260
+            },
+            "causedBy": {
+              "$ref": "#/$defs/EventCause"
+            },
+            "serverTime": {
+              "$ref": "#/$defs/UtcTimestamp"
+            },
+            "audience": {
+              "$ref": "#/$defs/Audience"
+            },
+            "kind": {
+              "const": "session.aborted"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "reason": {
+                  "type": "string",
+                  "maxLength": 500
+                }
+              },
+              "required": [
+                "reason"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "sessionId",
+            "sessionSeq",
+            "eventId",
+            "causedBy",
+            "serverTime",
+            "audience",
+            "kind",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 1
+            },
+            "sessionId": {
+              "$ref": "#/$defs/SessionId"
+            },
+            "sessionSeq": {
+              "$ref": "#/$defs/PositiveDecimalString"
+            },
+            "eventId": {
+              "type": "string",
+              "maxLength": 260
+            },
+            "causedBy": {
+              "$ref": "#/$defs/EventCause"
+            },
+            "serverTime": {
+              "$ref": "#/$defs/UtcTimestamp"
+            },
+            "audience": {
+              "$ref": "#/$defs/Audience"
+            },
+            "kind": {
+              "const": "control.changed"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "actorId": {
+                  "$ref": "#/$defs/CharacterId"
+                },
+                "mode": {
+                  "$ref": "#/$defs/ControlMode"
+                },
+                "controlEpoch": {
+                  "$ref": "#/$defs/DecimalString"
+                },
+                "activeConnectionId": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/$defs/Id"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "graceDeadlineAt": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/$defs/UtcTimestamp"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "actorId",
+                "mode",
+                "controlEpoch",
+                "activeConnectionId",
+                "graceDeadlineAt"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "sessionId",
+            "sessionSeq",
+            "eventId",
+            "causedBy",
+            "serverTime",
+            "audience",
+            "kind",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 1
+            },
+            "sessionId": {
+              "$ref": "#/$defs/SessionId"
+            },
+            "sessionSeq": {
+              "$ref": "#/$defs/PositiveDecimalString"
+            },
+            "eventId": {
+              "type": "string",
+              "maxLength": 260
+            },
+            "causedBy": {
+              "$ref": "#/$defs/EventCause"
+            },
+            "serverTime": {
+              "$ref": "#/$defs/UtcTimestamp"
+            },
+            "audience": {
+              "$ref": "#/$defs/Audience"
+            },
+            "kind": {
+              "const": "character.moved"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "actorId": {
+                  "$ref": "#/$defs/CharacterId"
+                },
+                "from": {
+                  "$ref": "#/$defs/Id"
+                },
+                "to": {
+                  "$ref": "#/$defs/Id"
+                },
+                "resourceRevision": {
+                  "$ref": "#/$defs/DecimalString"
+                }
+              },
+              "required": [
+                "actorId",
+                "from",
+                "to",
+                "resourceRevision"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "sessionId",
+            "sessionSeq",
+            "eventId",
+            "causedBy",
+            "serverTime",
+            "audience",
+            "kind",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 1
+            },
+            "sessionId": {
+              "$ref": "#/$defs/SessionId"
+            },
+            "sessionSeq": {
+              "$ref": "#/$defs/PositiveDecimalString"
+            },
+            "eventId": {
+              "type": "string",
+              "maxLength": 260
+            },
+            "causedBy": {
+              "$ref": "#/$defs/EventCause"
+            },
+            "serverTime": {
+              "$ref": "#/$defs/UtcTimestamp"
+            },
+            "audience": {
+              "$ref": "#/$defs/Audience"
+            },
+            "kind": {
+              "const": "item.taken"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "itemId": {
+                  "$ref": "#/$defs/Id"
+                },
+                "from": {
+                  "$ref": "#/$defs/ItemLocation"
+                },
+                "to": {
+                  "$ref": "#/$defs/CharacterId"
+                },
+                "resourceRevision": {
+                  "$ref": "#/$defs/DecimalString"
+                }
+              },
+              "required": [
+                "itemId",
+                "from",
+                "to",
+                "resourceRevision"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "sessionId",
+            "sessionSeq",
+            "eventId",
+            "causedBy",
+            "serverTime",
+            "audience",
+            "kind",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 1
+            },
+            "sessionId": {
+              "$ref": "#/$defs/SessionId"
+            },
+            "sessionSeq": {
+              "$ref": "#/$defs/PositiveDecimalString"
+            },
+            "eventId": {
+              "type": "string",
+              "maxLength": 260
+            },
+            "causedBy": {
+              "$ref": "#/$defs/EventCause"
+            },
+            "serverTime": {
+              "$ref": "#/$defs/UtcTimestamp"
+            },
+            "audience": {
+              "$ref": "#/$defs/Audience"
+            },
+            "kind": {
+              "const": "item.transferred"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "itemId": {
+                  "$ref": "#/$defs/Id"
+                },
+                "from": {
+                  "$ref": "#/$defs/CharacterId"
+                },
+                "to": {
+                  "$ref": "#/$defs/CharacterId"
+                },
+                "resourceRevision": {
+                  "$ref": "#/$defs/DecimalString"
+                }
+              },
+              "required": [
+                "itemId",
+                "from",
+                "to",
+                "resourceRevision"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "sessionId",
+            "sessionSeq",
+            "eventId",
+            "causedBy",
+            "serverTime",
+            "audience",
+            "kind",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 1
+            },
+            "sessionId": {
+              "$ref": "#/$defs/SessionId"
+            },
+            "sessionSeq": {
+              "$ref": "#/$defs/PositiveDecimalString"
+            },
+            "eventId": {
+              "type": "string",
+              "maxLength": 260
+            },
+            "causedBy": {
+              "$ref": "#/$defs/EventCause"
+            },
+            "serverTime": {
+              "$ref": "#/$defs/UtcTimestamp"
+            },
+            "audience": {
+              "$ref": "#/$defs/Audience"
+            },
+            "kind": {
+              "const": "item.used"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "itemId": {
+                  "$ref": "#/$defs/Id"
+                },
+                "actorId": {
+                  "$ref": "#/$defs/CharacterId"
+                },
+                "targetId": {
+                  "$ref": "#/$defs/Id"
+                },
+                "operation": {
+                  "$ref": "#/$defs/Id"
+                },
+                "consumed": {
+                  "type": "boolean"
+                },
+                "resourceRevision": {
+                  "$ref": "#/$defs/DecimalString"
+                }
+              },
+              "required": [
+                "itemId",
+                "actorId",
+                "targetId",
+                "operation",
+                "consumed",
+                "resourceRevision"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "sessionId",
+            "sessionSeq",
+            "eventId",
+            "causedBy",
+            "serverTime",
+            "audience",
+            "kind",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 1
+            },
+            "sessionId": {
+              "$ref": "#/$defs/SessionId"
+            },
+            "sessionSeq": {
+              "$ref": "#/$defs/PositiveDecimalString"
+            },
+            "eventId": {
+              "type": "string",
+              "maxLength": 260
+            },
+            "causedBy": {
+              "$ref": "#/$defs/EventCause"
+            },
+            "serverTime": {
+              "$ref": "#/$defs/UtcTimestamp"
+            },
+            "audience": {
+              "$ref": "#/$defs/Audience"
+            },
+            "kind": {
+              "const": "target.updated"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "targetId": {
+                  "$ref": "#/$defs/Id"
+                },
+                "resourceRevision": {
+                  "$ref": "#/$defs/DecimalString"
+                },
+                "fields": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/FactField"
+                  },
+                  "maxItems": 32
+                }
+              },
+              "required": [
+                "targetId",
+                "resourceRevision",
+                "fields"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "sessionId",
+            "sessionSeq",
+            "eventId",
+            "causedBy",
+            "serverTime",
+            "audience",
+            "kind",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 1
+            },
+            "sessionId": {
+              "$ref": "#/$defs/SessionId"
+            },
+            "sessionSeq": {
+              "$ref": "#/$defs/PositiveDecimalString"
+            },
+            "eventId": {
+              "type": "string",
+              "maxLength": 260
+            },
+            "causedBy": {
+              "$ref": "#/$defs/EventCause"
+            },
+            "serverTime": {
+              "$ref": "#/$defs/UtcTimestamp"
+            },
+            "audience": {
+              "$ref": "#/$defs/Audience"
+            },
+            "kind": {
+              "const": "ClaimRecorded"
+            },
+            "payload": {
+              "$ref": "#/$defs/Claim"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "sessionId",
+            "sessionSeq",
+            "eventId",
+            "causedBy",
+            "serverTime",
+            "audience",
+            "kind",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 1
+            },
+            "sessionId": {
+              "$ref": "#/$defs/SessionId"
+            },
+            "sessionSeq": {
+              "$ref": "#/$defs/PositiveDecimalString"
+            },
+            "eventId": {
+              "type": "string",
+              "maxLength": 260
+            },
+            "causedBy": {
+              "$ref": "#/$defs/EventCause"
+            },
+            "serverTime": {
+              "$ref": "#/$defs/UtcTimestamp"
+            },
+            "audience": {
+              "$ref": "#/$defs/Audience"
+            },
+            "kind": {
+              "const": "ObservationRecorded"
+            },
+            "payload": {
+              "$ref": "#/$defs/Observation"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "sessionId",
+            "sessionSeq",
+            "eventId",
+            "causedBy",
+            "serverTime",
+            "audience",
+            "kind",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 1
+            },
+            "sessionId": {
+              "$ref": "#/$defs/SessionId"
+            },
+            "sessionSeq": {
+              "$ref": "#/$defs/PositiveDecimalString"
+            },
+            "eventId": {
+              "type": "string",
+              "maxLength": 260
+            },
+            "causedBy": {
+              "$ref": "#/$defs/EventCause"
+            },
+            "serverTime": {
+              "$ref": "#/$defs/UtcTimestamp"
+            },
+            "audience": {
+              "$ref": "#/$defs/Audience"
+            },
+            "kind": {
+              "const": "BeliefUpdated"
+            },
+            "payload": {
+              "$ref": "#/$defs/Belief"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "sessionId",
+            "sessionSeq",
+            "eventId",
+            "causedBy",
+            "serverTime",
+            "audience",
+            "kind",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 1
+            },
+            "sessionId": {
+              "$ref": "#/$defs/SessionId"
+            },
+            "sessionSeq": {
+              "$ref": "#/$defs/PositiveDecimalString"
+            },
+            "eventId": {
+              "type": "string",
+              "maxLength": 260
+            },
+            "causedBy": {
+              "$ref": "#/$defs/EventCause"
+            },
+            "serverTime": {
+              "$ref": "#/$defs/UtcTimestamp"
+            },
+            "audience": {
+              "$ref": "#/$defs/Audience"
+            },
+            "kind": {
+              "const": "GoalUpdated"
+            },
+            "payload": {
+              "$ref": "#/$defs/Goal"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "sessionId",
+            "sessionSeq",
+            "eventId",
+            "causedBy",
+            "serverTime",
+            "audience",
+            "kind",
+            "payload"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "ClientEvent": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "sessionSeq": {
+              "$ref": "#/$defs/PositiveDecimalString"
+            },
+            "eventId": {
+              "type": "string",
+              "maxLength": 260
+            },
+            "kind": {
+              "const": "projection.replace"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "projection": {
+                  "$ref": "#/$defs/AuthorizedProjection"
+                }
+              },
+              "required": [
+                "projection"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "sessionSeq",
+            "eventId",
+            "kind",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "sessionSeq": {
+              "$ref": "#/$defs/PositiveDecimalString"
+            },
+            "eventId": {
+              "type": "string",
+              "maxLength": 260
+            },
+            "kind": {
+              "const": "ClaimRecorded"
+            },
+            "payload": {
+              "$ref": "#/$defs/Claim"
+            }
+          },
+          "required": [
+            "sessionSeq",
+            "eventId",
+            "kind",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "sessionSeq": {
+              "$ref": "#/$defs/PositiveDecimalString"
+            },
+            "eventId": {
+              "type": "string",
+              "maxLength": 260
+            },
+            "kind": {
+              "const": "ObservationRecorded"
+            },
+            "payload": {
+              "$ref": "#/$defs/Observation"
+            }
+          },
+          "required": [
+            "sessionSeq",
+            "eventId",
+            "kind",
+            "payload"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "WorldBatch": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "type": {
+          "const": "world.batch"
+        },
+        "sessionId": {
+          "$ref": "#/$defs/SessionId"
+        },
+        "viewId": {
+          "$ref": "#/$defs/Id"
+        },
+        "fromExclusive": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "throughSeq": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ClientEvent"
+          },
+          "maxItems": 256
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "type",
+        "sessionId",
+        "viewId",
+        "fromExclusive",
+        "throughSeq",
+        "events"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/ClientAction"
+    },
+    {
+      "$ref": "#/$defs/ActionReceipt"
+    },
+    {
+      "$ref": "#/$defs/ClientReceipt"
+    },
+    {
+      "$ref": "#/$defs/WorldEvent"
+    },
+    {
+      "$ref": "#/$defs/DecisionRecord"
+    },
+    {
+      "$ref": "#/$defs/ProposedIntent"
+    },
+    {
+      "$ref": "#/$defs/AuthorizedSnapshot"
+    },
+    {
+      "$ref": "#/$defs/WorldBatch"
+    },
+    {
+      "$ref": "#/$defs/SyncRequest"
+    },
+    {
+      "$ref": "#/$defs/ControlRequest"
+    },
+    {
+      "$ref": "#/$defs/ControlResponse"
+    },
+    {
+      "$ref": "#/$defs/ErrorResponse"
+    },
+    {
+      "$ref": "#/$defs/OutboxRecord"
+    },
+    {
+      "$ref": "#/$defs/TrustedExecutionContext"
+    },
+    {
+      "$ref": "#/$defs/AuthorizedProjection"
+    }
+  ]
+}
