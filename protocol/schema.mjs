@@ -122,6 +122,19 @@ const defs = {
   TargetView: object({ targetId: ref('Id'), name: text(120), regionId: ref('Id'), resourceRevision: ref('DecimalString'), availableOperations: ids({ maxItems: 32 }), fields: array(ref('FactField'), { maxItems: 32 }) }),
   ObjectiveView: object({ objectiveId: ref('Id'), label: text(240), status: enumeration('active', 'completed', 'blocked'), detail: text(500) }, ['detail']),
   EndingView: object({ endingCode: ref('Id'), title: text(120), summary: text(2000), facts: array(ref('FactField'), { maxItems: 32 }), unresolved: array(text(500), { maxItems: 16 }) }),
+  RecapReference: object({ kind: enumeration('observation', 'claim', 'character', 'item', 'target', 'region', 'source'), id: ref('Id') }),
+  RecapEntry: object({
+    entryId: ref('Id'), eventSeq: ref('PositiveDecimalString'), serverTime: ref('UtcTimestamp'),
+    category: enumeration('Observation', 'Claim', 'WorldFact'),
+    kind: enumeration('observed', 'received_evidence', 'heard_claim', 'received_claim', 'said', 'moved', 'took', 'transferred', 'used', 'updated', 'finished', 'aborted'),
+    actorId: nullable(ref('CharacterId')), text: text(2000), fields: array(ref('FactField'), { maxItems: 32 }),
+    references: array(ref('RecapReference'), { maxItems: 40 }),
+  }),
+  AuthorizedRecap: object({
+    schemaVersion: literal(1), type: literal('session.recap'), sessionId: ref('SessionId'), actorId: ref('CharacterId'),
+    throughSeq: ref('DecimalString'), phase: enumeration('Finished', 'Aborted'),
+    entries: array(ref('RecapEntry'), { maxItems: 100 }), nextBeforeSeq: nullable(ref('PositiveDecimalString')),
+  }),
   AuthorizedProjection: object({
     phase: ref('SessionPhase'), contentVersion: ref('Id'), reducerVersion: ref('Id'),
     self: ref('SelfView'), characters: array(ref('CharacterView'), { maxItems: 7 }),
@@ -205,7 +218,7 @@ defs.WorldBatch = object({
 export const contractNames = Object.freeze([
   'ClientAction', 'ActionReceipt', 'ClientReceipt', 'WorldEvent', 'DecisionRecord', 'ProposedIntent',
   'AuthorizedSnapshot', 'WorldBatch', 'SyncRequest', 'ControlRequest', 'ControlResponse', 'ErrorResponse',
-  'OutboxRecord', 'TrustedExecutionContext', 'AuthorizedProjection',
+  'OutboxRecord', 'TrustedExecutionContext', 'AuthorizedProjection', 'AuthorizedRecap',
 ]);
 
 const freeze = value => {

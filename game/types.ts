@@ -87,6 +87,12 @@ export type ObjectiveView = { "objectiveId": Id; "label": string; "status": "act
 
 export type EndingView = { "endingCode": Id; "title": string; "summary": string; "facts": Array<FactField>; "unresolved": Array<string>; };
 
+export type RecapReference = { "kind": "observation" | "claim" | "character" | "item" | "target" | "region" | "source"; "id": Id; };
+
+export type RecapEntry = { "entryId": Id; "eventSeq": PositiveDecimalString; "serverTime": UtcTimestamp; "category": "Observation" | "Claim" | "WorldFact"; "kind": "observed" | "received_evidence" | "heard_claim" | "received_claim" | "said" | "moved" | "took" | "transferred" | "used" | "updated" | "finished" | "aborted"; "actorId": (CharacterId) | (null); "text": string; "fields": Array<FactField>; "references": Array<RecapReference>; };
+
+export type AuthorizedRecap = { "schemaVersion": 1; "type": "session.recap"; "sessionId": SessionId; "actorId": CharacterId; "throughSeq": DecimalString; "phase": "Finished" | "Aborted"; "entries": Array<RecapEntry>; "nextBeforeSeq": (PositiveDecimalString) | (null); };
+
 export type AuthorizedProjection = { "phase": SessionPhase; "contentVersion": Id; "reducerVersion": Id; "self": SelfView; "characters": Array<CharacterView>; "regions": Array<RegionView>; "items": Array<ItemView>; "targets": Array<TargetView>; "observations": Array<Observation>; "claims": Array<Claim>; "objectives": Array<ObjectiveView>; "ending": (EndingView) | (null); "deadlineAt": (UtcTimestamp) | (null); };
 
 export type AuthorizedSnapshot = { "schemaVersion": 1; "type": "world.snapshot"; "sessionId": SessionId; "viewId": Id; "snapshotSeq": DecimalString; "projection": AuthorizedProjection; };

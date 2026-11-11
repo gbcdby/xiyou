@@ -49,6 +49,7 @@ validateContract('TrustedExecutionContext', serverBuiltContext);
 | `DecisionRecord` | 服务端保存的 generation、epoch、读取版本、Observation 引用、允许工具和期限 |
 | `ProposedIntent` | 模型候选：有序动作数组、可选对白、候选信念；没有可信版本与工具权限字段 |
 | `AuthorizedSnapshot` / `WorldBatch` | 角色授权投影和完整区间；不包含持久事件内部受众、凭据或全量决策 |
+| `AuthorizedRecap` | 终态独立只读历史页；100 条以内的授权条目、固定 throughSeq 与下一页 beforeSeq，不扩展原投影或同步批次 |
 | `OutboxRecord` | 指向已提交区间的发布记录，不含另一份可任意修改的世界状态 |
 
 `WorldEvent` 的 payload 按 kind 区分生命周期、控制、位置、物品、目标变化、`ClaimRecorded`、`ObservationRecorded`、`BeliefUpdated` 和 `GoalUpdated`。陈述、信念与物品/目标效果不能混用同一个 payload；信念记录必须携带 Observation 来源。服务端还必须验证这些来源确实存在且该角色有权读取。
@@ -56,6 +57,8 @@ validateContract('TrustedExecutionContext', serverBuiltContext);
 `AuthorizedProjection` 明确包含当前场所、本人能力与控制状态、公开队伍、可见物品/目标、本人已登记观察、可读陈述、目标和结局。可扩展的事实字段仅允许标识、标签和标量，不能嵌入任意完整世界 JSON。字段形状并不证明其中内容有权公开，投影仍由服务端生成。
 
 合法累计 Observation 和 Claim 不设千条等任意历史截断。客户端投影消息也不在本层施加会截断知识的固定总字节上限；网络层可分帧或选择等价传输方案，但不能静默丢弃合法历史。外部动作、模型输出等原始输入默认限制为 64 KiB、32 层嵌套。
+
+`AuthorizedRecap`、`RecapEntry`、`RecapReference` 来自 [模拟输入修订 §4](../docs/specs/vertical-slice-mock.md)，采用独立严格对象。已有 `AuthorizedProjection`、`AuthorizedSnapshot`、`WorldBatch` 定义不变。复盘单页最多 100 条，单条原文最多 2000 码点、fields 最多 32、references 最多 40；合法最大字段组合可能超过 64 KiB，解析不以该外部输入预算截断服务响应。`Claim/heard_claim` 与 `Claim/received_claim` 的 actor 是接收者，`Claim/said` 才表示发言者；严格关系检查防止把陈述型观察误归为事实。服务端映射和当前资格 / 历史受众义务见[授权复盘实现](../backend/recap.md)。
 
 ## 确定性同步
 
@@ -98,6 +101,7 @@ JSON 入口检查解码后的重复键、完整 Unicode 代理对及十进制数
 | 控制记录 | HumanControlled 才携带活动连接，GracePeriod 才携带宽限期限 |
 | 事件/批次 | eventId 等于 Session 与序号的 `S:Eseq` 编码；有序区间不超过 256；持久事件与批次中的 ObservationRecorded 来源不能晚于所在事件 |
 | 投影 | 标识唯一、包含本人、本人 Observation 归属和来源游标有效、定向陈述不越过接收结构、终态与结局一致 |
+| 授权复盘 | 条目标识唯一，序号严格递减且不越过 throughSeq；category / kind 匹配，系统变化 actor 为 null；nextBeforeSeq 是最后可见条目序号或 null |
 | Outbox | 引用非空且有序的已提交区间 |
 | 可信上下文 | human 需要账号/角色/连接；服务主体不能带真人连接绑定 |
 
