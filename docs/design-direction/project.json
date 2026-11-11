@@ -6,8 +6,18 @@
   "reference_id_prefix": "R",
   "reference_id_width": 2,
   "scope": "overall visual direction only",
-  "source_reference_count": 72,
-  "article_image_count": 7,
-  "boards_count": 6,
+  "source_reference_count": 0,
+  "article_image_count": 0,
+  "boards_count": 0,
+  "reference_inventory_status": "historical_materials_not_imported",
+  "historical_reference_inventory": {
+    "status": "unverified_not_present_in_repository",
+    "source": "https://github.com/gbcdby/xiyou/blob/17bcb222a9d84e0abd7463af06cae19081c8d12e/docs/design-direction/art-direction.md",
+    "source_reference_count": 72,
+    "reference_id_range": "R01-R72",
+    "article_id": "ART01",
+    "article_image_count": 7,
+    "boards_count": 6
+  },
   "page_specific_specs_included": false
 }
