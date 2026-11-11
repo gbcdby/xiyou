@@ -552,5 +552,141 @@
       "clientActionId": "A-7b8d",
       "principalId": "human:U1"
     }
+  },
+  {
+    "name": "R-vs001-p01-REQ-002：baseSeq 不得有换行后缀",
+    "contract": "ClientAction",
+    "value": {
+      "schemaVersion": 1,
+      "sessionId": "S1",
+      "actorId": "C3",
+      "clientActionId": "A-7b8d",
+      "controlEpoch": "4",
+      "baseSeq": "1\n",
+      "action": {
+        "kind": "transfer_item",
+        "itemId": "I7",
+        "targetId": "C4",
+        "expectedItemRevision": "2"
+      }
+    }
+  },
+  {
+    "name": "R-vs001-p01-REQ-002：controlEpoch 不得有换行后缀",
+    "contract": "ClientAction",
+    "value": {
+      "schemaVersion": 1,
+      "sessionId": "S1",
+      "actorId": "C3",
+      "clientActionId": "A-7b8d",
+      "controlEpoch": "0\n",
+      "baseSeq": "1008",
+      "action": {
+        "kind": "transfer_item",
+        "itemId": "I7",
+        "targetId": "C4",
+        "expectedItemRevision": "2"
+      }
+    }
+  },
+  {
+    "name": "R-vs001-p01-REQ-002：sessionId 不得有换行后缀",
+    "contract": "ClientAction",
+    "value": {
+      "schemaVersion": 1,
+      "sessionId": "S1\n",
+      "actorId": "C3",
+      "clientActionId": "A-7b8d",
+      "controlEpoch": "4",
+      "baseSeq": "1008",
+      "action": {
+        "kind": "transfer_item",
+        "itemId": "I7",
+        "targetId": "C4",
+        "expectedItemRevision": "2"
+      }
+    }
+  },
+  {
+    "name": "R-vs001-p01-REQ-002：摘要不得有换行后缀",
+    "contract": "ClientReceipt",
+    "value": {
+      "schemaVersion": 1,
+      "semanticDigest": "cc520129c4a56e590d9ab6ede27f442465a0ee23a9bb0a3a35558a9930f2139a\n",
+      "actorId": "C3",
+      "status": "Accepted",
+      "code": "OK",
+      "observedSeq": "1009",
+      "actionEventRange": {
+        "first": "1009",
+        "last": "1009"
+      },
+      "result": {
+        "changedEntityIds": [
+          "I7"
+        ]
+      },
+      "sessionId": "S1",
+      "clientActionId": "A-7b8d"
+    }
+  },
+  {
+    "name": "R-vs001-p01-STD-001：正事件序号不得有换行后缀",
+    "contract": "WorldEvent",
+    "value": {
+      "schemaVersion": 1,
+      "sessionId": "S1",
+      "sessionSeq": "1009\n",
+      "eventId": "S1:E1009\n",
+      "causedBy": {
+        "principalId": "human:U1",
+        "actionId": "A-7b8d",
+        "actorId": "C3"
+      },
+      "serverTime": "2026-11-11T04:00:00.000Z",
+      "kind": "item.transferred",
+      "payload": {
+        "itemId": "I7",
+        "from": "C3",
+        "to": "C4",
+        "resourceRevision": "3"
+      },
+      "audience": {
+        "humanCharacterIds": [
+          "C3",
+          "C4"
+        ],
+        "coreNpcCharacterIds": [
+          "tang"
+        ],
+        "proxyCharacterIds": []
+      }
+    }
+  },
+  {
+    "name": "R-vs001-p01-STD-001：持久收据摘要不得有换行后缀",
+    "contract": "ActionReceipt",
+    "value": {
+      "schemaVersion": 1,
+      "key": {
+        "sessionId": "S1",
+        "principalId": "human:U1",
+        "clientActionId": "A-7b8d"
+      },
+      "semanticDigest": "cc520129c4a56e590d9ab6ede27f442465a0ee23a9bb0a3a35558a9930f2139a\n",
+      "actorId": "C3",
+      "status": "Accepted",
+      "code": "OK",
+      "observedSeq": "1009",
+      "actionEventRange": {
+        "first": "1009",
+        "last": "1009"
+      },
+      "result": {
+        "changedEntityIds": [
+          "I7"
+        ]
+      }
+    }
   }
 ]

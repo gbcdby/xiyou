@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { parseStrictJSON, canonicalize, ContractError } from '../index.mjs';
+import { parseStrictJSON, canonicalize, validateContract, ContractError } from '../index.mjs';
 
 test('重复键和转义后同名键在原始 JSON 入口拒绝', () => {
   for (const raw of ['{"a":1,"a":2}', '{"a":{"x":1,"\\u0078":2}}']) {
@@ -21,4 +21,16 @@ test('规范编码按键名排序且不改写数组顺序或 Unicode 内容', ()
   assert.equal(canonicalize({ z: [2, 1], a: { y: true, x: '甲' } }), '{"a":{"x":"甲","y":true},"z":[2,1]}');
   assert.throws(() => canonicalize({ missing: undefined }), ContractError);
   assert.throws(() => canonicalize({ n: NaN }), ContractError);
+});
+
+test('R-vs001-p01-STD-002：空洞与额外属性不能抵消而通过数组检查', () => {
+  const recipients = [];
+  recipients.length = 1;
+  recipients.extra = 'C4';
+  assert.throws(() => canonicalize(recipients), ContractError);
+  const request = { schemaVersion: 1, sessionId: 'S1', actorId: 'C3', clientActionId: 'A1', controlEpoch: '1', baseSeq: '0', action: { kind: 'speak', text: '检验接收者', channel: 'directed', recipientIds: recipients } };
+  assert.throws(() => validateContract('ClientAction', request), ContractError);
+  request.action.recipientIds = ['C4'];
+  validateContract('ClientAction', request);
+  validateContract('ClientAction', parseStrictJSON(canonicalize(request)));
 });
