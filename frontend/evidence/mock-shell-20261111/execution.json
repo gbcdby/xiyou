@@ -1,0 +1,44 @@
+{
+  "sourceLocal": "61b12dd078a2058a8f459279434c1643bd34fb10",
+  "scope": "新一轮合成身份下的正式前端与实际服务接合，不含旧trace",
+  "checks": [
+    {
+      "name": "frontend-unit",
+      "command": [
+        "npm",
+        "test",
+        "--prefix",
+        "frontend"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 0.735,
+      "log": "frontend-unit.txt",
+      "sha256": "0eaac01c27ccf81ebe6f85a73e4e301a55cc1b4b0680d1c1718168aba0133718"
+    },
+    {
+      "name": "frontend-build",
+      "command": [
+        "npm",
+        "run",
+        "build",
+        "--prefix",
+        "frontend"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 2.293,
+      "log": "frontend-build.txt",
+      "sha256": "f18af70f0d38b457ad0111690a4e2d6a59c5960d1166c91e00d50366ee240e09"
+    },
+    {
+      "name": "browser",
+      "command": [
+        "node",
+        "frontend/tests/real-browser-check.mjs"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 7.42,
+      "log": "browser.txt",
+      "sha256": "0172d59cff43f84352317ae85de8ed9088e5e3b8509fb8cde38db0ee1c81e15d"
+    }
+  ]
+}

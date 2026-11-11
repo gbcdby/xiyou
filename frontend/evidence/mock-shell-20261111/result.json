@@ -1,0 +1,56 @@
+{
+  "scope": "新的合成身份下前端与实际服务短检；不包括完整玩法/900秒集成/双AI",
+  "sourceLocal": "61b12dd078a2058a8f459279434c1643bd34fb10",
+  "sourceTree": "8fb8b0223ffa309b921cbf6cb4c86d3af77bc1cc",
+  "sourceInputCount": 105,
+  "sourceInputsUnchanged": true,
+  "frontendSourceRemote": "e93acd6d791abb899fb777f89a2a9fe865f23b74",
+  "aiSourceRemote": "37c35784ce77d4d3f43dbad6e34f4fd01ccc96a0",
+  "startedAt": "2026-11-11T11:47:21.329Z",
+  "finishedAt": "2026-11-11T11:47:28.521Z",
+  "elapsedMs": 7191.988215,
+  "nodeVersion": "v24.22.1",
+  "postgresVersion": "18.6",
+  "browserVersion": "153.0.8010.0",
+  "assessment": "PASS",
+  "checks": [
+    {
+      "name": "真实页面登录、创建、两人加入、开始与控制",
+      "status": "PASS"
+    },
+    {
+      "name": "真实多出口可辨认并到达对应区域",
+      "status": "PASS"
+    },
+    {
+      "name": "未满足许可的出口收到真实拒绝，位置不提前改变",
+      "status": "PASS"
+    },
+    {
+      "name": "定向接收者、真实陈述与查看记录",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop 无横向溢出",
+      "status": "PASS"
+    },
+    {
+      "screenshot": "real-session-desktop.png",
+      "sha256": "bf037d2b3416fe9e2c888d17b2fd4c7ea11c03845f5b614023c76ba837ed9b06"
+    },
+    {
+      "name": "mobile 无横向溢出",
+      "status": "PASS"
+    },
+    {
+      "screenshot": "real-session-mobile.png",
+      "sha256": "daa1b12c9e7c5ba2ce34d086a999db704157d9b903e46f1b0a59a2cf7744248c"
+    }
+  ],
+  "pageErrors": [],
+  "databaseErrors": [],
+  "resourcesClosed": true,
+  "participants": "合成自动身份",
+  "externalModelCalls": 0,
+  "publicationBoundary": "本目录是本轮新执行的最小结果；不包含此前拒绝外发的完整trace或从中摘取的载荷。"
+}
