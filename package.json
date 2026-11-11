@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node backend/main.mjs",
     "test:backend": "node --expose-gc --test backend/tests/*.test.mjs",
+    "test:ai": "node --test backend/tests/ai-*.test.mjs",
     "test:protocol": "node --test protocol/tests/*.test.mjs",
     "test:content": "node --test content/tests/*.test.mjs"
   },

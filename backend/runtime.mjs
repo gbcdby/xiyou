@@ -40,6 +40,7 @@ export class AuthorityRuntime extends EventEmitter {
       await client.query('BEGIN');
       await client.query('SELECT pg_advisory_xact_lock(617248302)');
       await client.query(await readFile(new URL('./migrations/001-authority.sql', import.meta.url), 'utf8'));
+      await client.query(await readFile(new URL('./migrations/002-ai.sql', import.meta.url), 'utf8'));
       await client.query('COMMIT');
     } catch (error) { await client.query('ROLLBACK').catch(() => {}); throw error; }
     finally { client.release(); }
@@ -447,6 +448,9 @@ export class AuthorityRuntime extends EventEmitter {
     });
   }
   prepareDecision(handle, options) { return decisions.prepareDecision(this, handle, options); }
+  prepareDecisionContext(handle) { return decisions.prepareDecisionContext(this, handle); }
+  recoverDecisions(handle) { return decisions.recoverDecisions(this, handle); }
+  decisionState(handle, decisionId) { return decisions.decisionState(this, handle, decisionId); }
   submitIntent(handle, decisionId, raw) { return decisions.submitIntent(this, handle, decisionId, raw); }
   settleDecision(handle, decisionId, status) { return decisions.settleDecision(this, handle, decisionId, status); }
   submitFallback(handle, decisionId) { return decisions.submitFallback(this, handle, decisionId); }
