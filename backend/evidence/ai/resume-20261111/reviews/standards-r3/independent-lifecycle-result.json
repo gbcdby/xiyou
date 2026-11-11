@@ -1,0 +1,19 @@
+{
+  "node": "v24.22.1",
+  "events": [
+    "client.0.end.requested",
+    "client.1.end.requested",
+    "pool.end.resolved",
+    "client.1.end",
+    "client.0.end",
+    "postgres.stop.begin",
+    "postgres.stop.end"
+  ],
+  "errors": [],
+  "poolEndCalls": 1,
+  "concurrentStopSamePromise": true,
+  "completedStopSamePromise": true,
+  "waitedForBothClients": true,
+  "postgresOutput": "/workspace/scratch/17ff92cde78f/xiyou-ai-fix/.agent-output/ai-standards-r3/postgres/independent-lifecycle-hH5RGl",
+  "actualExternalModelCalls": 0
+}

@@ -1,0 +1,16 @@
+TAP version 13
+# Subtest: 真实 HTTP/Socket.IO：成员撤权阻止在途代理、新上下文和恢复读取
+ok 1 - 真实 HTTP/Socket.IO：成员撤权阻止在途代理、新上下文和恢复读取
+  ---
+  duration_ms: 1478.51476
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1762.232135

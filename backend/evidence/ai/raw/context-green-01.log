@@ -1,0 +1,16 @@
+TAP version 13
+# Subtest: 真实 PostgreSQL：原子准备将合法 Memory、持久目标和 Decision 绑定同一水位
+ok 1 - 真实 PostgreSQL：原子准备将合法 Memory、持久目标和 Decision 绑定同一水位
+  ---
+  duration_ms: 1335.14431
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1552.503528

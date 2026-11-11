@@ -1,0 +1,16 @@
+TAP version 13
+# Subtest: 真实 PostgreSQL：模型等待在事务外，真人先取得收据，模型随后通过同一 Validator
+ok 1 - 真实 PostgreSQL：模型等待在事务外，真人先取得收据，模型随后通过同一 Validator
+  ---
+  duration_ms: 1163.257633
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1333.25806

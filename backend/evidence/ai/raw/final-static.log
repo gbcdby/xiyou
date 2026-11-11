@@ -1,0 +1,14 @@
+执行：node protocol/scripts/generate.mjs --check
+机器契约与 TypeScript 生成产物一致
+退出码：0
+执行：node content/scripts/generate.mjs --check
+内容 Schema 生成一致。
+退出码：0
+执行：python3 protocol/scripts/check-schema.py
+JSON Schema 2020-12 合法；15 个正样本和 17 个反样本符合预期；23 个 UTC 日历边界与独立摘要向量一致。
+退出码：0
+执行：python3 content/scripts/check-schema.py
+内容 Schema 合法，1 个正样本与 4 个反样本符合预期，独立规范摘要一致。
+退出码：0
+执行：git diff --check
+退出码：0

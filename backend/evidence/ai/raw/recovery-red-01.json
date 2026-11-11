@@ -1,0 +1,14 @@
+{
+  "name": "recovery-red-01",
+  "command": [
+    "node",
+    "--test",
+    "--test-reporter=tap",
+    "--test-name-pattern=新调度器",
+    "backend/tests/ai-orchestrator.test.mjs"
+  ],
+  "startedAt": "2026-11-11T08:43:24.265211+00:00",
+  "durationSeconds": 1.572,
+  "exitCode": 1,
+  "signal": null
+}

@@ -1,0 +1,42 @@
+▶ 真实进程崩溃：模型原文、独立 fallback、原意图 ACK 与发布恢复
+  ✔ after-output (531.492961ms)
+  ℹ 真实子进程退出码 81，信号为空；恢复保留原决定及原文，未新增模型调用。
+  ✔ before-fallback (488.197158ms)
+  ℹ 真实子进程退出码 82，信号为空；恢复保留原决定及原文，未新增模型调用。
+  ✔ after-fallback (342.764852ms)
+  ℹ 真实子进程退出码 83，信号为空；恢复保留原决定及原文，未新增模型调用。
+  ✔ after-intent (317.523368ms)
+  ℹ 真实子进程退出码 84，信号为空；恢复保留原决定及原文，未新增模型调用。
+  ✔ during-publish (270.134227ms)
+  ℹ 真实子进程退出码 85，信号为空；恢复保留原决定及原文，未新增模型调用。
+✔ 真实进程崩溃：模型原文、独立 fallback、原意图 ACK 与发布恢复 (3422.236467ms)
+✔ 真实 PostgreSQL：全局并发有界，每角色单在途；忽略 Abort 的 provider 不拖住关闭 (1831.818692ms)
+✔ 真实 PostgreSQL：实际模型超时产生稳定 fallback，迟到输出失效，后续规划使用新 ID (221.860993ms)
+✔ 真实 PostgreSQL：显式恢复的结果仍未知时保留 Unknown，恢复成功后才标记空闲 (78.139406ms)
+✔ 真实 PostgreSQL：合并唤醒按实际模型启动时间限流，重启仍遵守本局持久预算 (519.090475ms)
+✔ 真实 PostgreSQL：未知提交保留原文和摘要，新实例只恢复旧 Receipt，不改失败或调用新模型 (176.120816ms)
+✔ 真实 PostgreSQL：新调度器从持久失败决定恢复 fallback，稳定原因键只产生一份收据 (96.472277ms)
+✔ 真实 PostgreSQL：模型等待在事务外，真人先取得收据，模型随后通过同一 Validator (93.98156ms)
+✖ backend/tests/ai-orchestrator.test.mjs (3268.889882ms)
+✔ 真实 PostgreSQL：含 NUL 的非法模型原文无损保存，并按原决定拒绝和 fallback (1695.163629ms)
+▶ 真实子进程退出：孤立 surrogate 原文跨重启不替换，失败恢复只落一次 fallback
+  ✔ 非法码元 d800 (494.392573ms)
+  ✔ 非法码元 dc00 (378.359437ms)
+✔ 真实子进程退出：孤立 surrogate 原文跨重启不替换，失败恢复只落一次 fallback (873.611405ms)
+✔ 真实 PostgreSQL：旧版普通 text 原文仍按原文、原摘要恢复，迁移可重复启动 (157.984288ms)
+✔ 真实 PostgreSQL：旧版 Ready 的 NUL 原文恢复先查询结果，再拒绝并保持原摘要 (115.946478ms)
+✔ 真实 PostgreSQL：共享协议允许的 NUL 对白在 AI 边界拒绝，原包没有局部效果 (110.132971ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 20
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3597.3382
+
+✖ failing tests:
+
+test at backend/tests/ai-orchestrator.test.mjs:1:1
+✖ backend/tests/ai-orchestrator.test.mjs (3268.889882ms)
+  'test failed'

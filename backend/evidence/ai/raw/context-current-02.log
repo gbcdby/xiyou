@@ -1,0 +1,7 @@
+TAP version 13
+# Subtest: 真实 PostgreSQL：合法检查刷新目标来源，无关动作不制造目标事件，终局不补写
+ok 1 - 真实 PostgreSQL：合法检查刷新目标来源，无关动作不制造目标事件，终局不补写
+  ---
+  duration_ms: 1458.639241
+  type: 'test'
+  ...

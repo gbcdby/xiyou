@@ -1,0 +1,14 @@
+{
+  "name": "network-current-04",
+  "command": [
+    "node",
+    "--test",
+    "--test-reporter=tap",
+    "--test-name-pattern=合法传播|非法原文|真人交还",
+    "backend/tests/ai-network.test.mjs"
+  ],
+  "startedAt": "2026-11-11T08:53:07.180886+00:00",
+  "durationSeconds": 3.935,
+  "exitCode": 0,
+  "signal": null
+}

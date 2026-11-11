@@ -1,0 +1,3099 @@
+{
+  "sourceCommit": "726e96edff61f71caa2123494f2e9f6795e4a6ca",
+  "kind": "受控供应商实际检查",
+  "actualExternalModelCalls": 0,
+  "sessions": [
+    {
+      "session_id": "S-19acf4d6-4377-49ac-ac66-c9a05654190c",
+      "content_digest": "6ce56fd79c320b23fff565db9f1df5e631ab099d5ffbb91264acafaaedd6972d",
+      "reducer_version": "world-v1"
+    },
+    {
+      "session_id": "S-3c145d05-4626-4a12-842a-05862efbeb99",
+      "content_digest": "6ce56fd79c320b23fff565db9f1df5e631ab099d5ffbb91264acafaaedd6972d",
+      "reducer_version": "world-v1"
+    },
+    {
+      "session_id": "S-543fa2ca-14ce-44e6-adfe-ac09955f3bcf",
+      "content_digest": "6ce56fd79c320b23fff565db9f1df5e631ab099d5ffbb91264acafaaedd6972d",
+      "reducer_version": "world-v1"
+    },
+    {
+      "session_id": "S-6c48707c-551c-458c-88c1-1fb6d6a75969",
+      "content_digest": "6ce56fd79c320b23fff565db9f1df5e631ab099d5ffbb91264acafaaedd6972d",
+      "reducer_version": "world-v1"
+    },
+    {
+      "session_id": "S-710cd8fa-9f5a-404a-add0-f1fcf3adaf4a",
+      "content_digest": "6ce56fd79c320b23fff565db9f1df5e631ab099d5ffbb91264acafaaedd6972d",
+      "reducer_version": "world-v1"
+    },
+    {
+      "session_id": "S-8540b8db-73bd-4c90-9758-615fda6eb2cc",
+      "content_digest": "6ce56fd79c320b23fff565db9f1df5e631ab099d5ffbb91264acafaaedd6972d",
+      "reducer_version": "world-v1"
+    }
+  ],
+  "runs": [
+    {
+      "session_id": "S-19acf4d6-4377-49ac-ac66-c9a05654190c",
+      "actor_id": "tangseng",
+      "principal_kind": "core_npc",
+      "decision_id": "D-4949a7f1-e43c-4dd4-8e67-b3c148e0ab24",
+      "context": {
+        "memory": {
+          "goals": [
+            {
+              "label": "调查、修复并协助师徒通行",
+              "goalId": "G-0b6b33145c8175c6b5f83e0f868d0403",
+              "status": "active",
+              "holderId": "tangseng",
+              "revision": "0"
+            },
+            {
+              "label": "核查受损通路的当前状态",
+              "goalId": "G-4ddd65a45a986f512e987f2227db5207",
+              "status": "active",
+              "holderId": "tangseng",
+              "revision": "0"
+            }
+          ],
+          "claims": [],
+          "beliefs": [
+            {
+              "beliefId": "initial-responsibility",
+              "holderId": "tangseng",
+              "revision": "0",
+              "statement": "同伴可能造成了损失，需要先核实并避免强迫别人承担。",
+              "confidence": "uncertain",
+              "basedOnObservationIds": [
+                "S-19acf4d6-4377-49ac-ac66-c9a05654190c:O12"
+              ]
+            }
+          ],
+          "goalSources": [
+            {
+              "kind": "objective",
+              "value": {
+                "label": "调查、修复并协助师徒通行",
+                "status": "active",
+                "objectiveId": "passage"
+              },
+              "goalId": "G-0b6b33145c8175c6b5f83e0f868d0403",
+              "sourceId": "passage",
+              "goalRevision": "0",
+              "policyVersion": "visible-objectives-v1",
+              "principalKind": "core_npc",
+              "observationIds": [],
+              "semanticDigest": "fe5de63b37622820c508f8f8d52bb13f4dc5847f5a458acd9bf7b65f7994f87a",
+              "sourceSnapshotSeq": "18"
+            },
+            {
+              "kind": "inspection",
+              "goalId": "G-4ddd65a45a986f512e987f2227db5207",
+              "sourceId": "passage_structure",
+              "fieldsDigest": "5dd927a07c805df1e7e8c9d075faa72c3ec37d7e4dc1a6f1eb00356f40f3e402",
+              "goalRevision": "0",
+              "policyVersion": "visible-objectives-v1",
+              "principalKind": "core_npc",
+              "observationIds": [],
+              "semanticDigest": "e805a7d1503b5f448dbee07340c79efebc683e8feea8a39559fa53877c045466",
+              "sourceRevision": "0",
+              "sourceSnapshotSeq": "19"
+            }
+          ],
+          "observations": [
+            {
+              "fields": [
+                {
+                  "key": "safe",
+                  "label": "安全",
+                  "value": false
+                }
+              ],
+              "source": {
+                "kind": "initial_content",
+                "sourceIds": [
+                  "initial-public-obstacle"
+                ],
+                "sourceSeq": "12"
+              },
+              "category": "WorldFact",
+              "shareable": true,
+              "statement": "公开的封闭告示说明通路受损且暂未获得通行许可。",
+              "subjectId": "passage_structure",
+              "observerId": "tangseng",
+              "observationId": "S-19acf4d6-4377-49ac-ac66-c9a05654190c:O12"
+            }
+          ]
+        },
+        "actorId": "tangseng",
+        "current": {
+          "self": {
+            "mode": "CoreNPCControlled",
+            "name": "唐僧",
+            "roles": [],
+            "regionId": "passage",
+            "canControl": false,
+            "characterId": "tangseng",
+            "capabilities": [
+              "move",
+              "inspect",
+              "speak",
+              "make_claim",
+              "share_evidence",
+              "take_item",
+              "transfer_item",
+              "wait",
+              "inspect_structure",
+              "inspect_inventory",
+              "inspect_records",
+              "inspect_traces",
+              "retrieve_original"
+            ],
+            "controlEpoch": "1"
+          },
+          "items": [],
+          "phase": "Running",
+          "ending": null,
+          "regions": [
+            {
+              "name": "通路口",
+              "exits": [
+                "store",
+                "side_path",
+                "destination"
+              ],
+              "regionId": "passage",
+              "description": "石阶受损，封闭标记仍在。需要检查、修复并取得合法通行。"
+            }
+          ],
+          "targets": [
+            {
+              "name": "受损通路",
+              "fields": [
+                {
+                  "key": "safe",
+                  "label": "安全",
+                  "value": false
+                },
+                {
+                  "key": "permit",
+                  "label": "通行许可",
+                  "value": false
+                },
+                {
+                  "key": "repairMaterial",
+                  "label": "实际修复材料",
+                  "value": null
+                }
+              ],
+              "regionId": "passage",
+              "targetId": "passage_structure",
+              "resourceRevision": "0",
+              "availableOperations": []
+            }
+          ],
+          "characters": [
+            {
+              "mode": "CoreNPCControlled",
+              "name": "孙悟空",
+              "roles": [],
+              "online": true,
+              "regionId": null,
+              "characterId": "wukong"
+            },
+            {
+              "mode": "CoreNPCControlled",
+              "name": "唐僧",
+              "roles": [],
+              "online": true,
+              "regionId": "passage",
+              "characterId": "tangseng"
+            },
+            {
+              "mode": "HumanControlled",
+              "name": "材料保管者兼通行协调者兼记事者",
+              "roles": [
+                "B",
+                "C",
+                "E"
+              ],
+              "online": true,
+              "regionId": null,
+              "characterId": "C-17c60023-2b14-448d-a5f3-6242faf3f4cc"
+            },
+            {
+              "mode": "HumanControlled",
+              "name": "勘查者兼寻物者",
+              "roles": [
+                "A",
+                "D"
+              ],
+              "online": true,
+              "regionId": "passage",
+              "characterId": "C-df21a95c-de4a-47bb-84c0-78e3f325eccc"
+            }
+          ],
+          "deadlineAt": "2026-11-11T09:28:44.194Z",
+          "objectives": [
+            {
+              "label": "调查、修复并协助师徒通行",
+              "status": "active",
+              "objectiveId": "passage"
+            }
+          ],
+          "contentVersion": "trust-repair-fixture-v1",
+          "reducerVersion": "world-v1"
+        },
+        "decision": {
+          "status": "Pending",
+          "actorId": "tangseng",
+          "createdAt": "2026-11-11T09:08:44.259Z",
+          "sessionId": "S-19acf4d6-4377-49ac-ac66-c9a05654190c",
+          "deadlineAt": "2026-11-11T09:08:54.259Z",
+          "decisionId": "D-4949a7f1-e43c-4dd4-8e67-b3c148e0ab24",
+          "generation": "1",
+          "allowedTools": [
+            "move",
+            "inspect",
+            "take_item",
+            "transfer_item",
+            "share_evidence",
+            "speak",
+            "make_claim",
+            "wait"
+          ],
+          "controlEpoch": "1",
+          "readVersions": {
+            "character:tangseng": "0",
+            "target:passage_structure": "0",
+            "belief:tangseng:initial-responsibility": "0",
+            "character:C-df21a95c-de4a-47bb-84c0-78e3f325eccc": "0",
+            "goal:tangseng:G-0b6b33145c8175c6b5f83e0f868d0403": "0",
+            "goal:tangseng:G-4ddd65a45a986f512e987f2227db5207": "0"
+          },
+          "schemaVersion": 1,
+          "observationIds": [
+            "S-19acf4d6-4377-49ac-ac66-c9a05654190c:O12"
+          ]
+        },
+        "sessionId": "S-19acf4d6-4377-49ac-ac66-c9a05654190c",
+        "snapshotSeq": "19",
+        "principalKind": "core_npc",
+        "contextVersion": "legal-memory-v1"
+      },
+      "context_digest": "c71d9a34018b68af46ffdc018dfba962cf7f03030ba170c6e40da4e218fd688d",
+      "configuration": {
+        "modelId": "wait-v1",
+        "timeoutMs": 10000,
+        "providerId": "controlled-test",
+        "providerKind": "controlled",
+        "gatewayVersion": "intent-gateway-v1",
+        "maxContextBytes": 262144
+      },
+      "status": "Resolved",
+      "output_raw": "{\"decisionId\":\"D-4949a7f1-e43c-4dd4-8e67-b3c148e0ab24\",\"toolCalls\":[{\"kind\":\"wait\"}]}",
+      "semantic_digest": "569f9f17f05c1a7e30b87db36697317bd6e663427d43944e9f425e2c02c99400",
+      "model_result": {
+        "status": "Valid",
+        "durationMs": 15.534,
+        "outputDigest": "569f9f17f05c1a7e30b87db36697317bd6e663427d43944e9f425e2c02c99400",
+        "configuration": {
+          "modelId": "wait-v1",
+          "timeoutMs": 10000,
+          "providerId": "controlled-test",
+          "providerKind": "controlled",
+          "gatewayVersion": "intent-gateway-v1",
+          "maxContextBytes": 262144
+        },
+        "contextDigest": "c71d9a34018b68af46ffdc018dfba962cf7f03030ba170c6e40da4e218fd688d",
+        "semanticDigest": "569f9f17f05c1a7e30b87db36697317bd6e663427d43944e9f425e2c02c99400"
+      },
+      "outcome": {
+        "receipt": {
+          "code": "NO_CHANGE",
+          "result": {},
+          "status": "Accepted",
+          "actorId": "tangseng",
+          "sessionId": "S-19acf4d6-4377-49ac-ac66-c9a05654190c",
+          "observedSeq": "22",
+          "schemaVersion": 1,
+          "clientActionId": "D-4949a7f1-e43c-4dd4-8e67-b3c148e0ab24:submit",
+          "semanticDigest": "569f9f17f05c1a7e30b87db36697317bd6e663427d43944e9f425e2c02c99400",
+          "actionEventRange": null
+        },
+        "fallback": null,
+        "decisionStatus": "Committed"
+      },
+      "decision": {
+        "status": "Committed",
+        "actorId": "tangseng",
+        "createdAt": "2026-11-11T09:08:44.259Z",
+        "sessionId": "S-19acf4d6-4377-49ac-ac66-c9a05654190c",
+        "deadlineAt": "2026-11-11T09:08:54.259Z",
+        "decisionId": "D-4949a7f1-e43c-4dd4-8e67-b3c148e0ab24",
+        "generation": "1",
+        "allowedTools": [
+          "move",
+          "inspect",
+          "take_item",
+          "transfer_item",
+          "share_evidence",
+          "speak",
+          "make_claim",
+          "wait"
+        ],
+        "controlEpoch": "1",
+        "readVersions": {
+          "character:tangseng": "0",
+          "target:passage_structure": "0",
+          "belief:tangseng:initial-responsibility": "0",
+          "character:C-df21a95c-de4a-47bb-84c0-78e3f325eccc": "0",
+          "goal:tangseng:G-0b6b33145c8175c6b5f83e0f868d0403": "0",
+          "goal:tangseng:G-4ddd65a45a986f512e987f2227db5207": "0"
+        },
+        "schemaVersion": 1,
+        "observationIds": [
+          "S-19acf4d6-4377-49ac-ac66-c9a05654190c:O12"
+        ]
+      }
+    },
+    {
+      "session_id": "S-3c145d05-4626-4a12-842a-05862efbeb99",
+      "actor_id": "tangseng",
+      "principal_kind": "core_npc",
+      "decision_id": "D-ee86462f-b3e7-477e-aa15-02f8148da1d3",
+      "context": {
+        "memory": {
+          "goals": [
+            {
+              "label": "调查、修复并协助师徒通行",
+              "goalId": "G-0b6b33145c8175c6b5f83e0f868d0403",
+              "status": "active",
+              "holderId": "tangseng",
+              "revision": "0"
+            },
+            {
+              "label": "核查受损通路的当前状态",
+              "goalId": "G-4ddd65a45a986f512e987f2227db5207",
+              "status": "active",
+              "holderId": "tangseng",
+              "revision": "0"
+            }
+          ],
+          "claims": [],
+          "beliefs": [
+            {
+              "beliefId": "initial-responsibility",
+              "holderId": "tangseng",
+              "revision": "0",
+              "statement": "同伴可能造成了损失，需要先核实并避免强迫别人承担。",
+              "confidence": "uncertain",
+              "basedOnObservationIds": [
+                "S-3c145d05-4626-4a12-842a-05862efbeb99:O12"
+              ]
+            }
+          ],
+          "goalSources": [
+            {
+              "kind": "objective",
+              "value": {
+                "label": "调查、修复并协助师徒通行",
+                "status": "active",
+                "objectiveId": "passage"
+              },
+              "goalId": "G-0b6b33145c8175c6b5f83e0f868d0403",
+              "sourceId": "passage",
+              "goalRevision": "0",
+              "policyVersion": "visible-objectives-v1",
+              "principalKind": "core_npc",
+              "observationIds": [],
+              "semanticDigest": "fe5de63b37622820c508f8f8d52bb13f4dc5847f5a458acd9bf7b65f7994f87a",
+              "sourceSnapshotSeq": "18"
+            },
+            {
+              "kind": "inspection",
+              "goalId": "G-4ddd65a45a986f512e987f2227db5207",
+              "sourceId": "passage_structure",
+              "fieldsDigest": "5dd927a07c805df1e7e8c9d075faa72c3ec37d7e4dc1a6f1eb00356f40f3e402",
+              "goalRevision": "0",
+              "policyVersion": "visible-objectives-v1",
+              "principalKind": "core_npc",
+              "observationIds": [],
+              "semanticDigest": "e805a7d1503b5f448dbee07340c79efebc683e8feea8a39559fa53877c045466",
+              "sourceRevision": "0",
+              "sourceSnapshotSeq": "19"
+            }
+          ],
+          "observations": [
+            {
+              "fields": [
+                {
+                  "key": "safe",
+                  "label": "安全",
+                  "value": false
+                }
+              ],
+              "source": {
+                "kind": "initial_content",
+                "sourceIds": [
+                  "initial-public-obstacle"
+                ],
+                "sourceSeq": "12"
+              },
+              "category": "WorldFact",
+              "shareable": true,
+              "statement": "公开的封闭告示说明通路受损且暂未获得通行许可。",
+              "subjectId": "passage_structure",
+              "observerId": "tangseng",
+              "observationId": "S-3c145d05-4626-4a12-842a-05862efbeb99:O12"
+            }
+          ]
+        },
+        "actorId": "tangseng",
+        "current": {
+          "self": {
+            "mode": "CoreNPCControlled",
+            "name": "唐僧",
+            "roles": [],
+            "regionId": "passage",
+            "canControl": false,
+            "characterId": "tangseng",
+            "capabilities": [
+              "move",
+              "inspect",
+              "speak",
+              "make_claim",
+              "share_evidence",
+              "take_item",
+              "transfer_item",
+              "wait",
+              "inspect_structure",
+              "inspect_inventory",
+              "inspect_records",
+              "inspect_traces",
+              "retrieve_original"
+            ],
+            "controlEpoch": "1"
+          },
+          "items": [],
+          "phase": "Running",
+          "ending": null,
+          "regions": [
+            {
+              "name": "通路口",
+              "exits": [
+                "store",
+                "side_path",
+                "destination"
+              ],
+              "regionId": "passage",
+              "description": "石阶受损，封闭标记仍在。需要检查、修复并取得合法通行。"
+            }
+          ],
+          "targets": [
+            {
+              "name": "受损通路",
+              "fields": [
+                {
+                  "key": "safe",
+                  "label": "安全",
+                  "value": false
+                },
+                {
+                  "key": "permit",
+                  "label": "通行许可",
+                  "value": false
+                },
+                {
+                  "key": "repairMaterial",
+                  "label": "实际修复材料",
+                  "value": null
+                }
+              ],
+              "regionId": "passage",
+              "targetId": "passage_structure",
+              "resourceRevision": "0",
+              "availableOperations": []
+            }
+          ],
+          "characters": [
+            {
+              "mode": "CoreNPCControlled",
+              "name": "孙悟空",
+              "roles": [],
+              "online": true,
+              "regionId": null,
+              "characterId": "wukong"
+            },
+            {
+              "mode": "CoreNPCControlled",
+              "name": "唐僧",
+              "roles": [],
+              "online": true,
+              "regionId": "passage",
+              "characterId": "tangseng"
+            },
+            {
+              "mode": "HumanControlled",
+              "name": "勘查者兼寻物者",
+              "roles": [
+                "A",
+                "D"
+              ],
+              "online": true,
+              "regionId": "passage",
+              "characterId": "C-3b71b0e7-81a7-4cd7-915b-ee9993c090fe"
+            },
+            {
+              "mode": "HumanControlled",
+              "name": "材料保管者兼通行协调者兼记事者",
+              "roles": [
+                "B",
+                "C",
+                "E"
+              ],
+              "online": true,
+              "regionId": null,
+              "characterId": "C-977292ad-402c-49e1-84ea-8d84794d7b18"
+            }
+          ],
+          "deadlineAt": "2026-11-11T09:28:43.847Z",
+          "objectives": [
+            {
+              "label": "调查、修复并协助师徒通行",
+              "status": "active",
+              "objectiveId": "passage"
+            }
+          ],
+          "contentVersion": "trust-repair-fixture-v1",
+          "reducerVersion": "world-v1"
+        },
+        "decision": {
+          "status": "Pending",
+          "actorId": "tangseng",
+          "createdAt": "2026-11-11T09:08:43.925Z",
+          "sessionId": "S-3c145d05-4626-4a12-842a-05862efbeb99",
+          "deadlineAt": "2026-11-11T09:08:53.925Z",
+          "decisionId": "D-ee86462f-b3e7-477e-aa15-02f8148da1d3",
+          "generation": "1",
+          "allowedTools": [
+            "move",
+            "inspect",
+            "take_item",
+            "transfer_item",
+            "share_evidence",
+            "speak",
+            "make_claim",
+            "wait"
+          ],
+          "controlEpoch": "1",
+          "readVersions": {
+            "character:tangseng": "0",
+            "target:passage_structure": "0",
+            "belief:tangseng:initial-responsibility": "0",
+            "character:C-3b71b0e7-81a7-4cd7-915b-ee9993c090fe": "0",
+            "goal:tangseng:G-0b6b33145c8175c6b5f83e0f868d0403": "0",
+            "goal:tangseng:G-4ddd65a45a986f512e987f2227db5207": "0"
+          },
+          "schemaVersion": 1,
+          "observationIds": [
+            "S-3c145d05-4626-4a12-842a-05862efbeb99:O12"
+          ]
+        },
+        "sessionId": "S-3c145d05-4626-4a12-842a-05862efbeb99",
+        "snapshotSeq": "19",
+        "principalKind": "core_npc",
+        "contextVersion": "legal-memory-v1"
+      },
+      "context_digest": "5342b802aac46ced67dc34c2e46ac7c97bdd5cde46227a5872479d0c341beea0",
+      "configuration": {
+        "modelId": "unknown-v1",
+        "timeoutMs": 10000,
+        "providerId": "controlled-test",
+        "providerKind": "controlled",
+        "gatewayVersion": "intent-gateway-v1",
+        "maxContextBytes": 262144
+      },
+      "status": "Resolved",
+      "output_raw": "{ \"decisionId\": \"D-ee86462f-b3e7-477e-aa15-02f8148da1d3\", \"toolCalls\": [{\"kind\":\"wait\"}], \"dialogue\":{\"channel\":\"public\",\"text\":\"我们再核对一下？\",\"recipientIds\":[]} }",
+      "semantic_digest": "1582254169e220e82cb6978d6f5ca3e0d9cbeff3ef796d9ba2eee1e225bcbc21",
+      "model_result": {
+        "status": "Valid",
+        "durationMs": 1.175,
+        "outputDigest": "090dc55f433ae07a3b2b129e03dd443d0f3715383e4026b479e14c6079eb6390",
+        "configuration": {
+          "modelId": "unknown-v1",
+          "timeoutMs": 10000,
+          "providerId": "controlled-test",
+          "providerKind": "controlled",
+          "gatewayVersion": "intent-gateway-v1",
+          "maxContextBytes": 262144
+        },
+        "contextDigest": "5342b802aac46ced67dc34c2e46ac7c97bdd5cde46227a5872479d0c341beea0",
+        "semanticDigest": "1582254169e220e82cb6978d6f5ca3e0d9cbeff3ef796d9ba2eee1e225bcbc21"
+      },
+      "outcome": {
+        "receipt": {
+          "code": "OK",
+          "result": {},
+          "status": "Accepted",
+          "actorId": "tangseng",
+          "sessionId": "S-3c145d05-4626-4a12-842a-05862efbeb99",
+          "observedSeq": "22",
+          "schemaVersion": 1,
+          "clientActionId": "D-ee86462f-b3e7-477e-aa15-02f8148da1d3:submit",
+          "semanticDigest": "1582254169e220e82cb6978d6f5ca3e0d9cbeff3ef796d9ba2eee1e225bcbc21",
+          "actionEventRange": {
+            "last": "22",
+            "first": "20"
+          }
+        },
+        "fallback": null,
+        "decisionStatus": "Committed"
+      },
+      "decision": {
+        "status": "Committed",
+        "actorId": "tangseng",
+        "createdAt": "2026-11-11T09:08:43.925Z",
+        "sessionId": "S-3c145d05-4626-4a12-842a-05862efbeb99",
+        "deadlineAt": "2026-11-11T09:08:53.925Z",
+        "decisionId": "D-ee86462f-b3e7-477e-aa15-02f8148da1d3",
+        "generation": "1",
+        "allowedTools": [
+          "move",
+          "inspect",
+          "take_item",
+          "transfer_item",
+          "share_evidence",
+          "speak",
+          "make_claim",
+          "wait"
+        ],
+        "controlEpoch": "1",
+        "readVersions": {
+          "character:tangseng": "0",
+          "target:passage_structure": "0",
+          "belief:tangseng:initial-responsibility": "0",
+          "character:C-3b71b0e7-81a7-4cd7-915b-ee9993c090fe": "0",
+          "goal:tangseng:G-0b6b33145c8175c6b5f83e0f868d0403": "0",
+          "goal:tangseng:G-4ddd65a45a986f512e987f2227db5207": "0"
+        },
+        "schemaVersion": 1,
+        "observationIds": [
+          "S-3c145d05-4626-4a12-842a-05862efbeb99:O12"
+        ]
+      }
+    },
+    {
+      "session_id": "S-543fa2ca-14ce-44e6-adfe-ac09955f3bcf",
+      "actor_id": "tangseng",
+      "principal_kind": "core_npc",
+      "decision_id": "D-766c060f-13f8-46ef-bb93-5a50ca814ce2",
+      "context": {
+        "memory": {
+          "goals": [
+            {
+              "label": "调查、修复并协助师徒通行",
+              "goalId": "G-0b6b33145c8175c6b5f83e0f868d0403",
+              "status": "active",
+              "holderId": "tangseng",
+              "revision": "0"
+            },
+            {
+              "label": "核查受损通路的当前状态",
+              "goalId": "G-4ddd65a45a986f512e987f2227db5207",
+              "status": "active",
+              "holderId": "tangseng",
+              "revision": "0"
+            }
+          ],
+          "claims": [],
+          "beliefs": [
+            {
+              "beliefId": "initial-responsibility",
+              "holderId": "tangseng",
+              "revision": "0",
+              "statement": "同伴可能造成了损失，需要先核实并避免强迫别人承担。",
+              "confidence": "uncertain",
+              "basedOnObservationIds": [
+                "S-543fa2ca-14ce-44e6-adfe-ac09955f3bcf:O12"
+              ]
+            }
+          ],
+          "goalSources": [
+            {
+              "kind": "objective",
+              "value": {
+                "label": "调查、修复并协助师徒通行",
+                "status": "active",
+                "objectiveId": "passage"
+              },
+              "goalId": "G-0b6b33145c8175c6b5f83e0f868d0403",
+              "sourceId": "passage",
+              "goalRevision": "0",
+              "policyVersion": "visible-objectives-v1",
+              "principalKind": "core_npc",
+              "observationIds": [],
+              "semanticDigest": "fe5de63b37622820c508f8f8d52bb13f4dc5847f5a458acd9bf7b65f7994f87a",
+              "sourceSnapshotSeq": "18"
+            },
+            {
+              "kind": "inspection",
+              "goalId": "G-4ddd65a45a986f512e987f2227db5207",
+              "sourceId": "passage_structure",
+              "fieldsDigest": "5dd927a07c805df1e7e8c9d075faa72c3ec37d7e4dc1a6f1eb00356f40f3e402",
+              "goalRevision": "0",
+              "policyVersion": "visible-objectives-v1",
+              "principalKind": "core_npc",
+              "observationIds": [],
+              "semanticDigest": "e805a7d1503b5f448dbee07340c79efebc683e8feea8a39559fa53877c045466",
+              "sourceRevision": "0",
+              "sourceSnapshotSeq": "19"
+            }
+          ],
+          "observations": [
+            {
+              "fields": [
+                {
+                  "key": "safe",
+                  "label": "安全",
+                  "value": false
+                }
+              ],
+              "source": {
+                "kind": "initial_content",
+                "sourceIds": [
+                  "initial-public-obstacle"
+                ],
+                "sourceSeq": "12"
+              },
+              "category": "WorldFact",
+              "shareable": true,
+              "statement": "公开的封闭告示说明通路受损且暂未获得通行许可。",
+              "subjectId": "passage_structure",
+              "observerId": "tangseng",
+              "observationId": "S-543fa2ca-14ce-44e6-adfe-ac09955f3bcf:O12"
+            }
+          ]
+        },
+        "actorId": "tangseng",
+        "current": {
+          "self": {
+            "mode": "CoreNPCControlled",
+            "name": "唐僧",
+            "roles": [],
+            "regionId": "passage",
+            "canControl": false,
+            "characterId": "tangseng",
+            "capabilities": [
+              "move",
+              "inspect",
+              "speak",
+              "make_claim",
+              "share_evidence",
+              "take_item",
+              "transfer_item",
+              "wait",
+              "inspect_structure",
+              "inspect_inventory",
+              "inspect_records",
+              "inspect_traces",
+              "retrieve_original"
+            ],
+            "controlEpoch": "1"
+          },
+          "items": [],
+          "phase": "Running",
+          "ending": null,
+          "regions": [
+            {
+              "name": "通路口",
+              "exits": [
+                "store",
+                "side_path",
+                "destination"
+              ],
+              "regionId": "passage",
+              "description": "石阶受损，封闭标记仍在。需要检查、修复并取得合法通行。"
+            }
+          ],
+          "targets": [
+            {
+              "name": "受损通路",
+              "fields": [
+                {
+                  "key": "safe",
+                  "label": "安全",
+                  "value": false
+                },
+                {
+                  "key": "permit",
+                  "label": "通行许可",
+                  "value": false
+                },
+                {
+                  "key": "repairMaterial",
+                  "label": "实际修复材料",
+                  "value": null
+                }
+              ],
+              "regionId": "passage",
+              "targetId": "passage_structure",
+              "resourceRevision": "0",
+              "availableOperations": []
+            }
+          ],
+          "characters": [
+            {
+              "mode": "CoreNPCControlled",
+              "name": "孙悟空",
+              "roles": [],
+              "online": true,
+              "regionId": null,
+              "characterId": "wukong"
+            },
+            {
+              "mode": "CoreNPCControlled",
+              "name": "唐僧",
+              "roles": [],
+              "online": true,
+              "regionId": "passage",
+              "characterId": "tangseng"
+            },
+            {
+              "mode": "HumanControlled",
+              "name": "勘查者兼寻物者",
+              "roles": [
+                "A",
+                "D"
+              ],
+              "online": true,
+              "regionId": "passage",
+              "characterId": "C-591a474d-95b5-4ac0-9388-c2ca86192051"
+            },
+            {
+              "mode": "HumanControlled",
+              "name": "材料保管者兼通行协调者兼记事者",
+              "roles": [
+                "B",
+                "C",
+                "E"
+              ],
+              "online": true,
+              "regionId": null,
+              "characterId": "C-a3544fe3-b8ab-4c83-8f47-4e8a87b0d9d4"
+            }
+          ],
+          "deadlineAt": "2026-11-11T09:28:42.245Z",
+          "objectives": [
+            {
+              "label": "调查、修复并协助师徒通行",
+              "status": "active",
+              "objectiveId": "passage"
+            }
+          ],
+          "contentVersion": "trust-repair-fixture-v1",
+          "reducerVersion": "world-v1"
+        },
+        "decision": {
+          "status": "Pending",
+          "actorId": "tangseng",
+          "createdAt": "2026-11-11T09:08:42.561Z",
+          "sessionId": "S-543fa2ca-14ce-44e6-adfe-ac09955f3bcf",
+          "deadlineAt": "2026-11-11T09:08:52.561Z",
+          "decisionId": "D-766c060f-13f8-46ef-bb93-5a50ca814ce2",
+          "generation": "1",
+          "allowedTools": [
+            "move",
+            "inspect",
+            "take_item",
+            "transfer_item",
+            "share_evidence",
+            "speak",
+            "make_claim",
+            "wait"
+          ],
+          "controlEpoch": "1",
+          "readVersions": {
+            "character:tangseng": "0",
+            "target:passage_structure": "0",
+            "belief:tangseng:initial-responsibility": "0",
+            "character:C-591a474d-95b5-4ac0-9388-c2ca86192051": "0",
+            "goal:tangseng:G-0b6b33145c8175c6b5f83e0f868d0403": "0",
+            "goal:tangseng:G-4ddd65a45a986f512e987f2227db5207": "0"
+          },
+          "schemaVersion": 1,
+          "observationIds": [
+            "S-543fa2ca-14ce-44e6-adfe-ac09955f3bcf:O12"
+          ]
+        },
+        "sessionId": "S-543fa2ca-14ce-44e6-adfe-ac09955f3bcf",
+        "snapshotSeq": "19",
+        "principalKind": "core_npc",
+        "contextVersion": "legal-memory-v1"
+      },
+      "context_digest": "1b690146de24c83cbab303dff0bfc9ebd1581de3b7c70b805744c51056369661",
+      "configuration": {
+        "modelId": "lifecycle-v1",
+        "timeoutMs": 10000,
+        "providerId": "controlled-test",
+        "providerKind": "controlled",
+        "gatewayVersion": "intent-gateway-v1",
+        "maxContextBytes": 262144
+      },
+      "status": "Resolved",
+      "output_raw": null,
+      "semantic_digest": null,
+      "model_result": {
+        "status": "Cancelled",
+        "durationMs": 1.242,
+        "configuration": {
+          "modelId": "lifecycle-v1",
+          "timeoutMs": 10000,
+          "providerId": "controlled-test",
+          "providerKind": "controlled",
+          "gatewayVersion": "intent-gateway-v1",
+          "maxContextBytes": 262144
+        },
+        "contextDigest": "1b690146de24c83cbab303dff0bfc9ebd1581de3b7c70b805744c51056369661"
+      },
+      "outcome": {
+        "receipt": null,
+        "fallback": null,
+        "decisionStatus": "Cancelled"
+      },
+      "decision": {
+        "status": "Cancelled",
+        "actorId": "tangseng",
+        "createdAt": "2026-11-11T09:08:42.561Z",
+        "sessionId": "S-543fa2ca-14ce-44e6-adfe-ac09955f3bcf",
+        "deadlineAt": "2026-11-11T09:08:52.561Z",
+        "decisionId": "D-766c060f-13f8-46ef-bb93-5a50ca814ce2",
+        "generation": "1",
+        "allowedTools": [
+          "move",
+          "inspect",
+          "take_item",
+          "transfer_item",
+          "share_evidence",
+          "speak",
+          "make_claim",
+          "wait"
+        ],
+        "controlEpoch": "1",
+        "readVersions": {
+          "character:tangseng": "0",
+          "target:passage_structure": "0",
+          "belief:tangseng:initial-responsibility": "0",
+          "character:C-591a474d-95b5-4ac0-9388-c2ca86192051": "0",
+          "goal:tangseng:G-0b6b33145c8175c6b5f83e0f868d0403": "0",
+          "goal:tangseng:G-4ddd65a45a986f512e987f2227db5207": "0"
+        },
+        "schemaVersion": 1,
+        "observationIds": [
+          "S-543fa2ca-14ce-44e6-adfe-ac09955f3bcf:O12"
+        ]
+      }
+    },
+    {
+      "session_id": "S-6c48707c-551c-458c-88c1-1fb6d6a75969",
+      "actor_id": "tangseng",
+      "principal_kind": "core_npc",
+      "decision_id": "D-1065c624-4078-4542-b7ca-127b8d99ab1e",
+      "context": {
+        "memory": {
+          "goals": [
+            {
+              "label": "调查、修复并协助师徒通行",
+              "goalId": "G-0b6b33145c8175c6b5f83e0f868d0403",
+              "status": "active",
+              "holderId": "tangseng",
+              "revision": "0"
+            },
+            {
+              "label": "核查受损通路的当前状态",
+              "goalId": "G-4ddd65a45a986f512e987f2227db5207",
+              "status": "active",
+              "holderId": "tangseng",
+              "revision": "0"
+            }
+          ],
+          "claims": [],
+          "beliefs": [
+            {
+              "beliefId": "initial-responsibility",
+              "holderId": "tangseng",
+              "revision": "0",
+              "statement": "同伴可能造成了损失，需要先核实并避免强迫别人承担。",
+              "confidence": "uncertain",
+              "basedOnObservationIds": [
+                "S-6c48707c-551c-458c-88c1-1fb6d6a75969:O12"
+              ]
+            }
+          ],
+          "goalSources": [
+            {
+              "kind": "objective",
+              "value": {
+                "label": "调查、修复并协助师徒通行",
+                "status": "active",
+                "objectiveId": "passage"
+              },
+              "goalId": "G-0b6b33145c8175c6b5f83e0f868d0403",
+              "sourceId": "passage",
+              "goalRevision": "0",
+              "policyVersion": "visible-objectives-v1",
+              "principalKind": "core_npc",
+              "observationIds": [],
+              "semanticDigest": "fe5de63b37622820c508f8f8d52bb13f4dc5847f5a458acd9bf7b65f7994f87a",
+              "sourceSnapshotSeq": "18"
+            },
+            {
+              "kind": "inspection",
+              "goalId": "G-4ddd65a45a986f512e987f2227db5207",
+              "sourceId": "passage_structure",
+              "fieldsDigest": "5dd927a07c805df1e7e8c9d075faa72c3ec37d7e4dc1a6f1eb00356f40f3e402",
+              "goalRevision": "0",
+              "policyVersion": "visible-objectives-v1",
+              "principalKind": "core_npc",
+              "observationIds": [],
+              "semanticDigest": "e805a7d1503b5f448dbee07340c79efebc683e8feea8a39559fa53877c045466",
+              "sourceRevision": "0",
+              "sourceSnapshotSeq": "19"
+            }
+          ],
+          "observations": [
+            {
+              "fields": [
+                {
+                  "key": "safe",
+                  "label": "安全",
+                  "value": false
+                }
+              ],
+              "source": {
+                "kind": "initial_content",
+                "sourceIds": [
+                  "initial-public-obstacle"
+                ],
+                "sourceSeq": "12"
+              },
+              "category": "WorldFact",
+              "shareable": true,
+              "statement": "公开的封闭告示说明通路受损且暂未获得通行许可。",
+              "subjectId": "passage_structure",
+              "observerId": "tangseng",
+              "observationId": "S-6c48707c-551c-458c-88c1-1fb6d6a75969:O12"
+            }
+          ]
+        },
+        "actorId": "tangseng",
+        "current": {
+          "self": {
+            "mode": "CoreNPCControlled",
+            "name": "唐僧",
+            "roles": [],
+            "regionId": "passage",
+            "canControl": false,
+            "characterId": "tangseng",
+            "capabilities": [
+              "move",
+              "inspect",
+              "speak",
+              "make_claim",
+              "share_evidence",
+              "take_item",
+              "transfer_item",
+              "wait",
+              "inspect_structure",
+              "inspect_inventory",
+              "inspect_records",
+              "inspect_traces",
+              "retrieve_original"
+            ],
+            "controlEpoch": "1"
+          },
+          "items": [],
+          "phase": "Running",
+          "ending": null,
+          "regions": [
+            {
+              "name": "通路口",
+              "exits": [
+                "store",
+                "side_path",
+                "destination"
+              ],
+              "regionId": "passage",
+              "description": "石阶受损，封闭标记仍在。需要检查、修复并取得合法通行。"
+            }
+          ],
+          "targets": [
+            {
+              "name": "受损通路",
+              "fields": [
+                {
+                  "key": "safe",
+                  "label": "安全",
+                  "value": false
+                },
+                {
+                  "key": "permit",
+                  "label": "通行许可",
+                  "value": false
+                },
+                {
+                  "key": "repairMaterial",
+                  "label": "实际修复材料",
+                  "value": null
+                }
+              ],
+              "regionId": "passage",
+              "targetId": "passage_structure",
+              "resourceRevision": "0",
+              "availableOperations": []
+            }
+          ],
+          "characters": [
+            {
+              "mode": "CoreNPCControlled",
+              "name": "孙悟空",
+              "roles": [],
+              "online": true,
+              "regionId": null,
+              "characterId": "wukong"
+            },
+            {
+              "mode": "CoreNPCControlled",
+              "name": "唐僧",
+              "roles": [],
+              "online": true,
+              "regionId": "passage",
+              "characterId": "tangseng"
+            },
+            {
+              "mode": "HumanControlled",
+              "name": "勘查者兼寻物者",
+              "roles": [
+                "A",
+                "D"
+              ],
+              "online": true,
+              "regionId": "passage",
+              "characterId": "C-4b330d55-32b0-4aea-bd08-7f64f51ab3ba"
+            },
+            {
+              "mode": "HumanControlled",
+              "name": "材料保管者兼通行协调者兼记事者",
+              "roles": [
+                "B",
+                "C",
+                "E"
+              ],
+              "online": true,
+              "regionId": null,
+              "characterId": "C-a9127864-e6e5-4222-a317-e109cd7e380b"
+            }
+          ],
+          "deadlineAt": "2026-11-11T09:28:42.082Z",
+          "objectives": [
+            {
+              "label": "调查、修复并协助师徒通行",
+              "status": "active",
+              "objectiveId": "passage"
+            }
+          ],
+          "contentVersion": "trust-repair-fixture-v1",
+          "reducerVersion": "world-v1"
+        },
+        "decision": {
+          "status": "Pending",
+          "actorId": "tangseng",
+          "createdAt": "2026-11-11T09:08:42.428Z",
+          "sessionId": "S-6c48707c-551c-458c-88c1-1fb6d6a75969",
+          "deadlineAt": "2026-11-11T09:08:52.428Z",
+          "decisionId": "D-1065c624-4078-4542-b7ca-127b8d99ab1e",
+          "generation": "1",
+          "allowedTools": [
+            "move",
+            "inspect",
+            "take_item",
+            "transfer_item",
+            "share_evidence",
+            "speak",
+            "make_claim",
+            "wait"
+          ],
+          "controlEpoch": "1",
+          "readVersions": {
+            "character:tangseng": "0",
+            "target:passage_structure": "0",
+            "belief:tangseng:initial-responsibility": "0",
+            "character:C-4b330d55-32b0-4aea-bd08-7f64f51ab3ba": "0",
+            "goal:tangseng:G-0b6b33145c8175c6b5f83e0f868d0403": "0",
+            "goal:tangseng:G-4ddd65a45a986f512e987f2227db5207": "0"
+          },
+          "schemaVersion": 1,
+          "observationIds": [
+            "S-6c48707c-551c-458c-88c1-1fb6d6a75969:O12"
+          ]
+        },
+        "sessionId": "S-6c48707c-551c-458c-88c1-1fb6d6a75969",
+        "snapshotSeq": "19",
+        "principalKind": "core_npc",
+        "contextVersion": "legal-memory-v1"
+      },
+      "context_digest": "17ebfb134ee16bd9f1648ef416d5fd15a1a6e9938d812c6c0f55d9271ffe0a55",
+      "configuration": {
+        "modelId": "lifecycle-v1",
+        "timeoutMs": 10000,
+        "providerId": "controlled-test",
+        "providerKind": "controlled",
+        "gatewayVersion": "intent-gateway-v1",
+        "maxContextBytes": 262144
+      },
+      "status": "Resolved",
+      "output_raw": "{\"decisionId\":\"D-1065c624-4078-4542-b7ca-127b8d99ab1e\",\"toolCalls\":[{\"kind\":\"wait\"}]}",
+      "semantic_digest": "6e375719463795c650ecc6a2e83190bda971072ca10ae092dab363e1d639675d",
+      "model_result": {
+        "status": "Valid",
+        "durationMs": 2.021,
+        "outputDigest": "6e375719463795c650ecc6a2e83190bda971072ca10ae092dab363e1d639675d",
+        "configuration": {
+          "modelId": "lifecycle-v1",
+          "timeoutMs": 10000,
+          "providerId": "controlled-test",
+          "providerKind": "controlled",
+          "gatewayVersion": "intent-gateway-v1",
+          "maxContextBytes": 262144
+        },
+        "contextDigest": "17ebfb134ee16bd9f1648ef416d5fd15a1a6e9938d812c6c0f55d9271ffe0a55",
+        "semanticDigest": "6e375719463795c650ecc6a2e83190bda971072ca10ae092dab363e1d639675d"
+      },
+      "outcome": {
+        "receipt": {
+          "code": "NO_CHANGE",
+          "result": {},
+          "status": "Accepted",
+          "actorId": "tangseng",
+          "sessionId": "S-6c48707c-551c-458c-88c1-1fb6d6a75969",
+          "observedSeq": "19",
+          "schemaVersion": 1,
+          "clientActionId": "D-1065c624-4078-4542-b7ca-127b8d99ab1e:submit",
+          "semanticDigest": "6e375719463795c650ecc6a2e83190bda971072ca10ae092dab363e1d639675d",
+          "actionEventRange": null
+        },
+        "fallback": null,
+        "decisionStatus": "Committed"
+      },
+      "decision": {
+        "status": "Committed",
+        "actorId": "tangseng",
+        "createdAt": "2026-11-11T09:08:42.428Z",
+        "sessionId": "S-6c48707c-551c-458c-88c1-1fb6d6a75969",
+        "deadlineAt": "2026-11-11T09:08:52.428Z",
+        "decisionId": "D-1065c624-4078-4542-b7ca-127b8d99ab1e",
+        "generation": "1",
+        "allowedTools": [
+          "move",
+          "inspect",
+          "take_item",
+          "transfer_item",
+          "share_evidence",
+          "speak",
+          "make_claim",
+          "wait"
+        ],
+        "controlEpoch": "1",
+        "readVersions": {
+          "character:tangseng": "0",
+          "target:passage_structure": "0",
+          "belief:tangseng:initial-responsibility": "0",
+          "character:C-4b330d55-32b0-4aea-bd08-7f64f51ab3ba": "0",
+          "goal:tangseng:G-0b6b33145c8175c6b5f83e0f868d0403": "0",
+          "goal:tangseng:G-4ddd65a45a986f512e987f2227db5207": "0"
+        },
+        "schemaVersion": 1,
+        "observationIds": [
+          "S-6c48707c-551c-458c-88c1-1fb6d6a75969:O12"
+        ]
+      }
+    },
+    {
+      "session_id": "S-710cd8fa-9f5a-404a-add0-f1fcf3adaf4a",
+      "actor_id": "tangseng",
+      "principal_kind": "core_npc",
+      "decision_id": "D-309ab57d-3b73-4aec-96a6-10421da89272",
+      "context": {
+        "memory": {
+          "goals": [
+            {
+              "label": "调查、修复并协助师徒通行",
+              "goalId": "G-0b6b33145c8175c6b5f83e0f868d0403",
+              "status": "active",
+              "holderId": "tangseng",
+              "revision": "0"
+            },
+            {
+              "label": "核查受损通路的当前状态",
+              "goalId": "G-4ddd65a45a986f512e987f2227db5207",
+              "status": "active",
+              "holderId": "tangseng",
+              "revision": "0"
+            }
+          ],
+          "claims": [],
+          "beliefs": [
+            {
+              "beliefId": "initial-responsibility",
+              "holderId": "tangseng",
+              "revision": "0",
+              "statement": "同伴可能造成了损失，需要先核实并避免强迫别人承担。",
+              "confidence": "uncertain",
+              "basedOnObservationIds": [
+                "S-710cd8fa-9f5a-404a-add0-f1fcf3adaf4a:O12"
+              ]
+            }
+          ],
+          "goalSources": [
+            {
+              "kind": "objective",
+              "value": {
+                "label": "调查、修复并协助师徒通行",
+                "status": "active",
+                "objectiveId": "passage"
+              },
+              "goalId": "G-0b6b33145c8175c6b5f83e0f868d0403",
+              "sourceId": "passage",
+              "goalRevision": "0",
+              "policyVersion": "visible-objectives-v1",
+              "principalKind": "core_npc",
+              "observationIds": [],
+              "semanticDigest": "fe5de63b37622820c508f8f8d52bb13f4dc5847f5a458acd9bf7b65f7994f87a",
+              "sourceSnapshotSeq": "18"
+            },
+            {
+              "kind": "inspection",
+              "goalId": "G-4ddd65a45a986f512e987f2227db5207",
+              "sourceId": "passage_structure",
+              "fieldsDigest": "5dd927a07c805df1e7e8c9d075faa72c3ec37d7e4dc1a6f1eb00356f40f3e402",
+              "goalRevision": "0",
+              "policyVersion": "visible-objectives-v1",
+              "principalKind": "core_npc",
+              "observationIds": [],
+              "semanticDigest": "e805a7d1503b5f448dbee07340c79efebc683e8feea8a39559fa53877c045466",
+              "sourceRevision": "0",
+              "sourceSnapshotSeq": "19"
+            }
+          ],
+          "observations": [
+            {
+              "fields": [
+                {
+                  "key": "safe",
+                  "label": "安全",
+                  "value": false
+                }
+              ],
+              "source": {
+                "kind": "initial_content",
+                "sourceIds": [
+                  "initial-public-obstacle"
+                ],
+                "sourceSeq": "12"
+              },
+              "category": "WorldFact",
+              "shareable": true,
+              "statement": "公开的封闭告示说明通路受损且暂未获得通行许可。",
+              "subjectId": "passage_structure",
+              "observerId": "tangseng",
+              "observationId": "S-710cd8fa-9f5a-404a-add0-f1fcf3adaf4a:O12"
+            }
+          ]
+        },
+        "actorId": "tangseng",
+        "current": {
+          "self": {
+            "mode": "CoreNPCControlled",
+            "name": "唐僧",
+            "roles": [],
+            "regionId": "passage",
+            "canControl": false,
+            "characterId": "tangseng",
+            "capabilities": [
+              "move",
+              "inspect",
+              "speak",
+              "make_claim",
+              "share_evidence",
+              "take_item",
+              "transfer_item",
+              "wait",
+              "inspect_structure",
+              "inspect_inventory",
+              "inspect_records",
+              "inspect_traces",
+              "retrieve_original"
+            ],
+            "controlEpoch": "1"
+          },
+          "items": [],
+          "phase": "Running",
+          "ending": null,
+          "regions": [
+            {
+              "name": "通路口",
+              "exits": [
+                "store",
+                "side_path",
+                "destination"
+              ],
+              "regionId": "passage",
+              "description": "石阶受损，封闭标记仍在。需要检查、修复并取得合法通行。"
+            }
+          ],
+          "targets": [
+            {
+              "name": "受损通路",
+              "fields": [
+                {
+                  "key": "safe",
+                  "label": "安全",
+                  "value": false
+                },
+                {
+                  "key": "permit",
+                  "label": "通行许可",
+                  "value": false
+                },
+                {
+                  "key": "repairMaterial",
+                  "label": "实际修复材料",
+                  "value": null
+                }
+              ],
+              "regionId": "passage",
+              "targetId": "passage_structure",
+              "resourceRevision": "0",
+              "availableOperations": []
+            }
+          ],
+          "characters": [
+            {
+              "mode": "CoreNPCControlled",
+              "name": "孙悟空",
+              "roles": [],
+              "online": true,
+              "regionId": null,
+              "characterId": "wukong"
+            },
+            {
+              "mode": "CoreNPCControlled",
+              "name": "唐僧",
+              "roles": [],
+              "online": true,
+              "regionId": "passage",
+              "characterId": "tangseng"
+            },
+            {
+              "mode": "HumanControlled",
+              "name": "勘查者兼寻物者",
+              "roles": [
+                "A",
+                "D"
+              ],
+              "online": true,
+              "regionId": "passage",
+              "characterId": "C-8ae83ee5-4b36-49cb-a7bb-dbb13b111ec7"
+            },
+            {
+              "mode": "HumanControlled",
+              "name": "材料保管者兼通行协调者兼记事者",
+              "roles": [
+                "B",
+                "C",
+                "E"
+              ],
+              "online": true,
+              "regionId": null,
+              "characterId": "C-be76c4e3-a770-45b5-82ad-94073c091ae6"
+            }
+          ],
+          "deadlineAt": "2026-11-11T09:28:43.229Z",
+          "objectives": [
+            {
+              "label": "调查、修复并协助师徒通行",
+              "status": "active",
+              "objectiveId": "passage"
+            }
+          ],
+          "contentVersion": "trust-repair-fixture-v1",
+          "reducerVersion": "world-v1"
+        },
+        "decision": {
+          "status": "Pending",
+          "actorId": "tangseng",
+          "createdAt": "2026-11-11T09:08:43.314Z",
+          "sessionId": "S-710cd8fa-9f5a-404a-add0-f1fcf3adaf4a",
+          "deadlineAt": "2026-11-11T09:08:53.314Z",
+          "decisionId": "D-309ab57d-3b73-4aec-96a6-10421da89272",
+          "generation": "1",
+          "allowedTools": [
+            "move",
+            "inspect",
+            "take_item",
+            "transfer_item",
+            "share_evidence",
+            "speak",
+            "make_claim",
+            "wait"
+          ],
+          "controlEpoch": "1",
+          "readVersions": {
+            "character:tangseng": "0",
+            "target:passage_structure": "0",
+            "belief:tangseng:initial-responsibility": "0",
+            "character:C-8ae83ee5-4b36-49cb-a7bb-dbb13b111ec7": "0",
+            "goal:tangseng:G-0b6b33145c8175c6b5f83e0f868d0403": "0",
+            "goal:tangseng:G-4ddd65a45a986f512e987f2227db5207": "0"
+          },
+          "schemaVersion": 1,
+          "observationIds": [
+            "S-710cd8fa-9f5a-404a-add0-f1fcf3adaf4a:O12"
+          ]
+        },
+        "sessionId": "S-710cd8fa-9f5a-404a-add0-f1fcf3adaf4a",
+        "snapshotSeq": "19",
+        "principalKind": "core_npc",
+        "contextVersion": "legal-memory-v1"
+      },
+      "context_digest": "51230ff6ae348661a85bc50a5a279593beb8aeac41940e8cb8992d151329df97",
+      "configuration": {
+        "modelId": "interval-v1",
+        "timeoutMs": 10000,
+        "providerId": "controlled-test",
+        "providerKind": "controlled",
+        "gatewayVersion": "intent-gateway-v1",
+        "maxContextBytes": 262144
+      },
+      "status": "Resolved",
+      "output_raw": "{\"decisionId\":\"D-309ab57d-3b73-4aec-96a6-10421da89272\",\"toolCalls\":[{\"kind\":\"inspect\",\"targetId\":\"passage_structure\"}]}",
+      "semantic_digest": "cecfbbcdff2a585342daa79e1ca5094c30ebc492bdd5e71075deef2c630882ea",
+      "model_result": {
+        "status": "Valid",
+        "durationMs": 1.139,
+        "outputDigest": "cecfbbcdff2a585342daa79e1ca5094c30ebc492bdd5e71075deef2c630882ea",
+        "configuration": {
+          "modelId": "interval-v1",
+          "timeoutMs": 10000,
+          "providerId": "controlled-test",
+          "providerKind": "controlled",
+          "gatewayVersion": "intent-gateway-v1",
+          "maxContextBytes": 262144
+        },
+        "contextDigest": "51230ff6ae348661a85bc50a5a279593beb8aeac41940e8cb8992d151329df97",
+        "semanticDigest": "cecfbbcdff2a585342daa79e1ca5094c30ebc492bdd5e71075deef2c630882ea"
+      },
+      "outcome": {
+        "receipt": {
+          "code": "OK",
+          "result": {},
+          "status": "Accepted",
+          "actorId": "tangseng",
+          "sessionId": "S-710cd8fa-9f5a-404a-add0-f1fcf3adaf4a",
+          "observedSeq": "21",
+          "schemaVersion": 1,
+          "clientActionId": "D-309ab57d-3b73-4aec-96a6-10421da89272:submit",
+          "semanticDigest": "cecfbbcdff2a585342daa79e1ca5094c30ebc492bdd5e71075deef2c630882ea",
+          "actionEventRange": {
+            "last": "21",
+            "first": "20"
+          }
+        },
+        "fallback": null,
+        "decisionStatus": "Committed"
+      },
+      "decision": {
+        "status": "Committed",
+        "actorId": "tangseng",
+        "createdAt": "2026-11-11T09:08:43.314Z",
+        "sessionId": "S-710cd8fa-9f5a-404a-add0-f1fcf3adaf4a",
+        "deadlineAt": "2026-11-11T09:08:53.314Z",
+        "decisionId": "D-309ab57d-3b73-4aec-96a6-10421da89272",
+        "generation": "1",
+        "allowedTools": [
+          "move",
+          "inspect",
+          "take_item",
+          "transfer_item",
+          "share_evidence",
+          "speak",
+          "make_claim",
+          "wait"
+        ],
+        "controlEpoch": "1",
+        "readVersions": {
+          "character:tangseng": "0",
+          "target:passage_structure": "0",
+          "belief:tangseng:initial-responsibility": "0",
+          "character:C-8ae83ee5-4b36-49cb-a7bb-dbb13b111ec7": "0",
+          "goal:tangseng:G-0b6b33145c8175c6b5f83e0f868d0403": "0",
+          "goal:tangseng:G-4ddd65a45a986f512e987f2227db5207": "0"
+        },
+        "schemaVersion": 1,
+        "observationIds": [
+          "S-710cd8fa-9f5a-404a-add0-f1fcf3adaf4a:O12"
+        ]
+      }
+    },
+    {
+      "session_id": "S-710cd8fa-9f5a-404a-add0-f1fcf3adaf4a",
+      "actor_id": "tangseng",
+      "principal_kind": "core_npc",
+      "decision_id": "D-dc3c588c-d2a2-4259-83df-f7ae8fd12231",
+      "context": {
+        "memory": {
+          "goals": [
+            {
+              "label": "调查、修复并协助师徒通行",
+              "goalId": "G-0b6b33145c8175c6b5f83e0f868d0403",
+              "status": "active",
+              "holderId": "tangseng",
+              "revision": "0"
+            },
+            {
+              "label": "核查受损通路的当前状态",
+              "goalId": "G-4ddd65a45a986f512e987f2227db5207",
+              "status": "completed",
+              "holderId": "tangseng",
+              "revision": "1"
+            }
+          ],
+          "claims": [],
+          "beliefs": [
+            {
+              "beliefId": "initial-responsibility",
+              "holderId": "tangseng",
+              "revision": "0",
+              "statement": "同伴可能造成了损失，需要先核实并避免强迫别人承担。",
+              "confidence": "uncertain",
+              "basedOnObservationIds": [
+                "S-710cd8fa-9f5a-404a-add0-f1fcf3adaf4a:O12"
+              ]
+            }
+          ],
+          "goalSources": [
+            {
+              "kind": "objective",
+              "value": {
+                "label": "调查、修复并协助师徒通行",
+                "status": "active",
+                "objectiveId": "passage"
+              },
+              "goalId": "G-0b6b33145c8175c6b5f83e0f868d0403",
+              "sourceId": "passage",
+              "goalRevision": "0",
+              "policyVersion": "visible-objectives-v1",
+              "principalKind": "core_npc",
+              "observationIds": [],
+              "semanticDigest": "fe5de63b37622820c508f8f8d52bb13f4dc5847f5a458acd9bf7b65f7994f87a",
+              "sourceSnapshotSeq": "18"
+            },
+            {
+              "kind": "inspection",
+              "goalId": "G-4ddd65a45a986f512e987f2227db5207",
+              "sourceId": "passage_structure",
+              "fieldsDigest": "5dd927a07c805df1e7e8c9d075faa72c3ec37d7e4dc1a6f1eb00356f40f3e402",
+              "goalRevision": "1",
+              "policyVersion": "visible-objectives-v1",
+              "principalKind": "core_npc",
+              "observationIds": [
+                "S-710cd8fa-9f5a-404a-add0-f1fcf3adaf4a:O20"
+              ],
+              "semanticDigest": "05376a259f691e34fb1f7fc690474fc983b47938a51f227bc9e4224733c7c671",
+              "sourceRevision": "0",
+              "sourceSnapshotSeq": "22"
+            }
+          ],
+          "observations": [
+            {
+              "fields": [
+                {
+                  "key": "safe",
+                  "label": "安全",
+                  "value": false
+                }
+              ],
+              "source": {
+                "kind": "initial_content",
+                "sourceIds": [
+                  "initial-public-obstacle"
+                ],
+                "sourceSeq": "12"
+              },
+              "category": "WorldFact",
+              "shareable": true,
+              "statement": "公开的封闭告示说明通路受损且暂未获得通行许可。",
+              "subjectId": "passage_structure",
+              "observerId": "tangseng",
+              "observationId": "S-710cd8fa-9f5a-404a-add0-f1fcf3adaf4a:O12"
+            },
+            {
+              "fields": [
+                {
+                  "key": "safe",
+                  "label": "安全",
+                  "value": false
+                },
+                {
+                  "key": "permit",
+                  "label": "通行许可",
+                  "value": false
+                },
+                {
+                  "key": "repairMaterial",
+                  "label": "实际修复材料",
+                  "value": null
+                }
+              ],
+              "source": {
+                "kind": "inspection",
+                "sourceIds": [
+                  "passage_structure"
+                ],
+                "sourceSeq": "20"
+              },
+              "category": "WorldFact",
+              "shareable": true,
+              "statement": "亲自检查当前可见状态。",
+              "subjectId": "passage_structure",
+              "observerId": "tangseng",
+              "observationId": "S-710cd8fa-9f5a-404a-add0-f1fcf3adaf4a:O20"
+            },
+            {
+              "fields": [
+                {
+                  "key": "recordMatchesTrace",
+                  "label": "痕迹与旧记录相符",
+                  "value": true
+                }
+              ],
+              "source": {
+                "kind": "inspection",
+                "sourceIds": [
+                  "structure-current-trace"
+                ],
+                "sourceSeq": "21"
+              },
+              "category": "Evidence",
+              "shareable": true,
+              "statement": "现场旧损痕迹与到达前结构记录相符。",
+              "subjectId": "passage_structure",
+              "observerId": "tangseng",
+              "observationId": "S-710cd8fa-9f5a-404a-add0-f1fcf3adaf4a:O21"
+            }
+          ]
+        },
+        "actorId": "tangseng",
+        "current": {
+          "self": {
+            "mode": "CoreNPCControlled",
+            "name": "唐僧",
+            "roles": [],
+            "regionId": "passage",
+            "canControl": false,
+            "characterId": "tangseng",
+            "capabilities": [
+              "move",
+              "inspect",
+              "speak",
+              "make_claim",
+              "share_evidence",
+              "take_item",
+              "transfer_item",
+              "wait",
+              "inspect_structure",
+              "inspect_inventory",
+              "inspect_records",
+              "inspect_traces",
+              "retrieve_original"
+            ],
+            "controlEpoch": "1"
+          },
+          "items": [],
+          "phase": "Running",
+          "ending": null,
+          "regions": [
+            {
+              "name": "通路口",
+              "exits": [
+                "store",
+                "side_path",
+                "destination"
+              ],
+              "regionId": "passage",
+              "description": "石阶受损，封闭标记仍在。需要检查、修复并取得合法通行。"
+            }
+          ],
+          "targets": [
+            {
+              "name": "受损通路",
+              "fields": [
+                {
+                  "key": "safe",
+                  "label": "安全",
+                  "value": false
+                },
+                {
+                  "key": "permit",
+                  "label": "通行许可",
+                  "value": false
+                },
+                {
+                  "key": "repairMaterial",
+                  "label": "实际修复材料",
+                  "value": null
+                }
+              ],
+              "regionId": "passage",
+              "targetId": "passage_structure",
+              "resourceRevision": "0",
+              "availableOperations": []
+            }
+          ],
+          "characters": [
+            {
+              "mode": "CoreNPCControlled",
+              "name": "孙悟空",
+              "roles": [],
+              "online": true,
+              "regionId": null,
+              "characterId": "wukong"
+            },
+            {
+              "mode": "CoreNPCControlled",
+              "name": "唐僧",
+              "roles": [],
+              "online": true,
+              "regionId": "passage",
+              "characterId": "tangseng"
+            },
+            {
+              "mode": "HumanControlled",
+              "name": "勘查者兼寻物者",
+              "roles": [
+                "A",
+                "D"
+              ],
+              "online": true,
+              "regionId": "passage",
+              "characterId": "C-8ae83ee5-4b36-49cb-a7bb-dbb13b111ec7"
+            },
+            {
+              "mode": "HumanControlled",
+              "name": "材料保管者兼通行协调者兼记事者",
+              "roles": [
+                "B",
+                "C",
+                "E"
+              ],
+              "online": true,
+              "regionId": null,
+              "characterId": "C-be76c4e3-a770-45b5-82ad-94073c091ae6"
+            }
+          ],
+          "deadlineAt": "2026-11-11T09:28:43.229Z",
+          "objectives": [
+            {
+              "label": "调查、修复并协助师徒通行",
+              "status": "active",
+              "objectiveId": "passage"
+            }
+          ],
+          "contentVersion": "trust-repair-fixture-v1",
+          "reducerVersion": "world-v1"
+        },
+        "decision": {
+          "status": "Pending",
+          "actorId": "tangseng",
+          "createdAt": "2026-11-11T09:08:43.749Z",
+          "sessionId": "S-710cd8fa-9f5a-404a-add0-f1fcf3adaf4a",
+          "deadlineAt": "2026-11-11T09:08:53.749Z",
+          "decisionId": "D-dc3c588c-d2a2-4259-83df-f7ae8fd12231",
+          "generation": "2",
+          "allowedTools": [
+            "move",
+            "inspect",
+            "take_item",
+            "transfer_item",
+            "share_evidence",
+            "speak",
+            "make_claim",
+            "wait"
+          ],
+          "controlEpoch": "1",
+          "readVersions": {
+            "character:tangseng": "0",
+            "target:passage_structure": "0",
+            "belief:tangseng:initial-responsibility": "0",
+            "character:C-8ae83ee5-4b36-49cb-a7bb-dbb13b111ec7": "0",
+            "goal:tangseng:G-0b6b33145c8175c6b5f83e0f868d0403": "0",
+            "goal:tangseng:G-4ddd65a45a986f512e987f2227db5207": "1"
+          },
+          "schemaVersion": 1,
+          "observationIds": [
+            "S-710cd8fa-9f5a-404a-add0-f1fcf3adaf4a:O12",
+            "S-710cd8fa-9f5a-404a-add0-f1fcf3adaf4a:O20",
+            "S-710cd8fa-9f5a-404a-add0-f1fcf3adaf4a:O21"
+          ]
+        },
+        "sessionId": "S-710cd8fa-9f5a-404a-add0-f1fcf3adaf4a",
+        "snapshotSeq": "22",
+        "principalKind": "core_npc",
+        "contextVersion": "legal-memory-v1"
+      },
+      "context_digest": "a174ad5228775059800f50636bfce5754249cd21f03a824e8dab8874a72c3ec6",
+      "configuration": {
+        "modelId": "interval-v1",
+        "timeoutMs": 10000,
+        "providerId": "controlled-test",
+        "providerKind": "controlled",
+        "gatewayVersion": "intent-gateway-v1",
+        "maxContextBytes": 262144
+      },
+      "status": "Resolved",
+      "output_raw": "{\"decisionId\":\"D-dc3c588c-d2a2-4259-83df-f7ae8fd12231\",\"toolCalls\":[{\"kind\":\"wait\"}]}",
+      "semantic_digest": "afea70dca9dcf0c6716431682830eeccfa7e358acdcc33f6285358a93070f7cc",
+      "model_result": {
+        "status": "Valid",
+        "durationMs": 1.71,
+        "outputDigest": "afea70dca9dcf0c6716431682830eeccfa7e358acdcc33f6285358a93070f7cc",
+        "configuration": {
+          "modelId": "interval-v1",
+          "timeoutMs": 10000,
+          "providerId": "controlled-test",
+          "providerKind": "controlled",
+          "gatewayVersion": "intent-gateway-v1",
+          "maxContextBytes": 262144
+        },
+        "contextDigest": "a174ad5228775059800f50636bfce5754249cd21f03a824e8dab8874a72c3ec6",
+        "semanticDigest": "afea70dca9dcf0c6716431682830eeccfa7e358acdcc33f6285358a93070f7cc"
+      },
+      "outcome": {
+        "receipt": {
+          "code": "NO_CHANGE",
+          "result": {},
+          "status": "Accepted",
+          "actorId": "tangseng",
+          "sessionId": "S-710cd8fa-9f5a-404a-add0-f1fcf3adaf4a",
+          "observedSeq": "22",
+          "schemaVersion": 1,
+          "clientActionId": "D-dc3c588c-d2a2-4259-83df-f7ae8fd12231:submit",
+          "semanticDigest": "afea70dca9dcf0c6716431682830eeccfa7e358acdcc33f6285358a93070f7cc",
+          "actionEventRange": null
+        },
+        "fallback": null,
+        "decisionStatus": "Committed"
+      },
+      "decision": {
+        "status": "Committed",
+        "actorId": "tangseng",
+        "createdAt": "2026-11-11T09:08:43.749Z",
+        "sessionId": "S-710cd8fa-9f5a-404a-add0-f1fcf3adaf4a",
+        "deadlineAt": "2026-11-11T09:08:53.749Z",
+        "decisionId": "D-dc3c588c-d2a2-4259-83df-f7ae8fd12231",
+        "generation": "2",
+        "allowedTools": [
+          "move",
+          "inspect",
+          "take_item",
+          "transfer_item",
+          "share_evidence",
+          "speak",
+          "make_claim",
+          "wait"
+        ],
+        "controlEpoch": "1",
+        "readVersions": {
+          "character:tangseng": "0",
+          "target:passage_structure": "0",
+          "belief:tangseng:initial-responsibility": "0",
+          "character:C-8ae83ee5-4b36-49cb-a7bb-dbb13b111ec7": "0",
+          "goal:tangseng:G-0b6b33145c8175c6b5f83e0f868d0403": "0",
+          "goal:tangseng:G-4ddd65a45a986f512e987f2227db5207": "1"
+        },
+        "schemaVersion": 1,
+        "observationIds": [
+          "S-710cd8fa-9f5a-404a-add0-f1fcf3adaf4a:O12",
+          "S-710cd8fa-9f5a-404a-add0-f1fcf3adaf4a:O20",
+          "S-710cd8fa-9f5a-404a-add0-f1fcf3adaf4a:O21"
+        ]
+      }
+    },
+    {
+      "session_id": "S-8540b8db-73bd-4c90-9758-615fda6eb2cc",
+      "actor_id": "tangseng",
+      "principal_kind": "core_npc",
+      "decision_id": "D-9214a2cc-3123-4d8b-b329-d242ce2c684f",
+      "context": {
+        "memory": {
+          "goals": [
+            {
+              "label": "调查、修复并协助师徒通行",
+              "goalId": "G-0b6b33145c8175c6b5f83e0f868d0403",
+              "status": "active",
+              "holderId": "tangseng",
+              "revision": "0"
+            },
+            {
+              "label": "核查受损通路的当前状态",
+              "goalId": "G-4ddd65a45a986f512e987f2227db5207",
+              "status": "active",
+              "holderId": "tangseng",
+              "revision": "0"
+            }
+          ],
+          "claims": [],
+          "beliefs": [
+            {
+              "beliefId": "initial-responsibility",
+              "holderId": "tangseng",
+              "revision": "0",
+              "statement": "同伴可能造成了损失，需要先核实并避免强迫别人承担。",
+              "confidence": "uncertain",
+              "basedOnObservationIds": [
+                "S-8540b8db-73bd-4c90-9758-615fda6eb2cc:O12"
+              ]
+            }
+          ],
+          "goalSources": [
+            {
+              "kind": "objective",
+              "value": {
+                "label": "调查、修复并协助师徒通行",
+                "status": "active",
+                "objectiveId": "passage"
+              },
+              "goalId": "G-0b6b33145c8175c6b5f83e0f868d0403",
+              "sourceId": "passage",
+              "goalRevision": "0",
+              "policyVersion": "visible-objectives-v1",
+              "principalKind": "core_npc",
+              "observationIds": [],
+              "semanticDigest": "fe5de63b37622820c508f8f8d52bb13f4dc5847f5a458acd9bf7b65f7994f87a",
+              "sourceSnapshotSeq": "18"
+            },
+            {
+              "kind": "inspection",
+              "goalId": "G-4ddd65a45a986f512e987f2227db5207",
+              "sourceId": "passage_structure",
+              "fieldsDigest": "5dd927a07c805df1e7e8c9d075faa72c3ec37d7e4dc1a6f1eb00356f40f3e402",
+              "goalRevision": "0",
+              "policyVersion": "visible-objectives-v1",
+              "principalKind": "core_npc",
+              "observationIds": [],
+              "semanticDigest": "e805a7d1503b5f448dbee07340c79efebc683e8feea8a39559fa53877c045466",
+              "sourceRevision": "0",
+              "sourceSnapshotSeq": "19"
+            }
+          ],
+          "observations": [
+            {
+              "fields": [
+                {
+                  "key": "safe",
+                  "label": "安全",
+                  "value": false
+                }
+              ],
+              "source": {
+                "kind": "initial_content",
+                "sourceIds": [
+                  "initial-public-obstacle"
+                ],
+                "sourceSeq": "12"
+              },
+              "category": "WorldFact",
+              "shareable": true,
+              "statement": "公开的封闭告示说明通路受损且暂未获得通行许可。",
+              "subjectId": "passage_structure",
+              "observerId": "tangseng",
+              "observationId": "S-8540b8db-73bd-4c90-9758-615fda6eb2cc:O12"
+            }
+          ]
+        },
+        "actorId": "tangseng",
+        "current": {
+          "self": {
+            "mode": "CoreNPCControlled",
+            "name": "唐僧",
+            "roles": [],
+            "regionId": "passage",
+            "canControl": false,
+            "characterId": "tangseng",
+            "capabilities": [
+              "move",
+              "inspect",
+              "speak",
+              "make_claim",
+              "share_evidence",
+              "take_item",
+              "transfer_item",
+              "wait",
+              "inspect_structure",
+              "inspect_inventory",
+              "inspect_records",
+              "inspect_traces",
+              "retrieve_original"
+            ],
+            "controlEpoch": "1"
+          },
+          "items": [],
+          "phase": "Running",
+          "ending": null,
+          "regions": [
+            {
+              "name": "通路口",
+              "exits": [
+                "store",
+                "side_path",
+                "destination"
+              ],
+              "regionId": "passage",
+              "description": "石阶受损，封闭标记仍在。需要检查、修复并取得合法通行。"
+            }
+          ],
+          "targets": [
+            {
+              "name": "受损通路",
+              "fields": [
+                {
+                  "key": "safe",
+                  "label": "安全",
+                  "value": false
+                },
+                {
+                  "key": "permit",
+                  "label": "通行许可",
+                  "value": false
+                },
+                {
+                  "key": "repairMaterial",
+                  "label": "实际修复材料",
+                  "value": null
+                }
+              ],
+              "regionId": "passage",
+              "targetId": "passage_structure",
+              "resourceRevision": "0",
+              "availableOperations": []
+            }
+          ],
+          "characters": [
+            {
+              "mode": "CoreNPCControlled",
+              "name": "孙悟空",
+              "roles": [],
+              "online": true,
+              "regionId": null,
+              "characterId": "wukong"
+            },
+            {
+              "mode": "CoreNPCControlled",
+              "name": "唐僧",
+              "roles": [],
+              "online": true,
+              "regionId": "passage",
+              "characterId": "tangseng"
+            },
+            {
+              "mode": "HumanControlled",
+              "name": "材料保管者兼通行协调者兼记事者",
+              "roles": [
+                "B",
+                "C",
+                "E"
+              ],
+              "online": true,
+              "regionId": null,
+              "characterId": "C-3a7d8f5d-bca5-4cd5-9c4d-bee648f7837c"
+            },
+            {
+              "mode": "HumanControlled",
+              "name": "勘查者兼寻物者",
+              "roles": [
+                "A",
+                "D"
+              ],
+              "online": true,
+              "regionId": "passage",
+              "characterId": "C-dc11fe99-a06a-473c-be8e-a2971bb090cc"
+            }
+          ],
+          "deadlineAt": "2026-11-11T09:28:42.749Z",
+          "objectives": [
+            {
+              "label": "调查、修复并协助师徒通行",
+              "status": "active",
+              "objectiveId": "passage"
+            }
+          ],
+          "contentVersion": "trust-repair-fixture-v1",
+          "reducerVersion": "world-v1"
+        },
+        "decision": {
+          "status": "Pending",
+          "actorId": "tangseng",
+          "createdAt": "2026-11-11T09:08:42.834Z",
+          "sessionId": "S-8540b8db-73bd-4c90-9758-615fda6eb2cc",
+          "deadlineAt": "2026-11-11T09:08:52.834Z",
+          "decisionId": "D-9214a2cc-3123-4d8b-b329-d242ce2c684f",
+          "generation": "1",
+          "allowedTools": [
+            "move",
+            "inspect",
+            "take_item",
+            "transfer_item",
+            "share_evidence",
+            "speak",
+            "make_claim",
+            "wait"
+          ],
+          "controlEpoch": "1",
+          "readVersions": {
+            "character:tangseng": "0",
+            "target:passage_structure": "0",
+            "belief:tangseng:initial-responsibility": "0",
+            "character:C-dc11fe99-a06a-473c-be8e-a2971bb090cc": "0",
+            "goal:tangseng:G-0b6b33145c8175c6b5f83e0f868d0403": "0",
+            "goal:tangseng:G-4ddd65a45a986f512e987f2227db5207": "0"
+          },
+          "schemaVersion": 1,
+          "observationIds": [
+            "S-8540b8db-73bd-4c90-9758-615fda6eb2cc:O12"
+          ]
+        },
+        "sessionId": "S-8540b8db-73bd-4c90-9758-615fda6eb2cc",
+        "snapshotSeq": "19",
+        "principalKind": "core_npc",
+        "contextVersion": "legal-memory-v1"
+      },
+      "context_digest": "f7ae789c922f0e38d56e15817cc029ee08951af24041ac0f3450c588ba71cecf",
+      "configuration": {
+        "modelId": "timeout-v1",
+        "timeoutMs": 30,
+        "providerId": "controlled-test",
+        "providerKind": "controlled",
+        "gatewayVersion": "intent-gateway-v1",
+        "maxContextBytes": 262144
+      },
+      "status": "Resolved",
+      "output_raw": null,
+      "semantic_digest": null,
+      "model_result": {
+        "status": "Timeout",
+        "durationMs": 30.392,
+        "configuration": {
+          "modelId": "timeout-v1",
+          "timeoutMs": 30,
+          "providerId": "controlled-test",
+          "providerKind": "controlled",
+          "gatewayVersion": "intent-gateway-v1",
+          "maxContextBytes": 262144
+        },
+        "contextDigest": "f7ae789c922f0e38d56e15817cc029ee08951af24041ac0f3450c588ba71cecf"
+      },
+      "outcome": {
+        "receipt": null,
+        "fallback": {
+          "code": "NO_CHANGE",
+          "result": {},
+          "status": "Accepted",
+          "actorId": "tangseng",
+          "sessionId": "S-8540b8db-73bd-4c90-9758-615fda6eb2cc",
+          "observedSeq": "19",
+          "schemaVersion": 1,
+          "clientActionId": "D-9214a2cc-3123-4d8b-b329-d242ce2c684f:fallback",
+          "semanticDigest": "4c0bde94320a40691bb793939f201435ea6c8b128a6f95423f7d28ee3ce2398d",
+          "actionEventRange": null
+        },
+        "decisionStatus": "Rejected"
+      },
+      "decision": {
+        "status": "Rejected",
+        "actorId": "tangseng",
+        "createdAt": "2026-11-11T09:08:42.834Z",
+        "sessionId": "S-8540b8db-73bd-4c90-9758-615fda6eb2cc",
+        "deadlineAt": "2026-11-11T09:08:52.834Z",
+        "decisionId": "D-9214a2cc-3123-4d8b-b329-d242ce2c684f",
+        "generation": "1",
+        "allowedTools": [
+          "move",
+          "inspect",
+          "take_item",
+          "transfer_item",
+          "share_evidence",
+          "speak",
+          "make_claim",
+          "wait"
+        ],
+        "controlEpoch": "1",
+        "readVersions": {
+          "character:tangseng": "0",
+          "target:passage_structure": "0",
+          "belief:tangseng:initial-responsibility": "0",
+          "character:C-dc11fe99-a06a-473c-be8e-a2971bb090cc": "0",
+          "goal:tangseng:G-0b6b33145c8175c6b5f83e0f868d0403": "0",
+          "goal:tangseng:G-4ddd65a45a986f512e987f2227db5207": "0"
+        },
+        "schemaVersion": 1,
+        "observationIds": [
+          "S-8540b8db-73bd-4c90-9758-615fda6eb2cc:O12"
+        ]
+      }
+    },
+    {
+      "session_id": "S-8540b8db-73bd-4c90-9758-615fda6eb2cc",
+      "actor_id": "tangseng",
+      "principal_kind": "core_npc",
+      "decision_id": "D-26dcc375-83b1-4b86-a640-4250b1790566",
+      "context": {
+        "memory": {
+          "goals": [
+            {
+              "label": "调查、修复并协助师徒通行",
+              "goalId": "G-0b6b33145c8175c6b5f83e0f868d0403",
+              "status": "active",
+              "holderId": "tangseng",
+              "revision": "0"
+            },
+            {
+              "label": "核查受损通路的当前状态",
+              "goalId": "G-4ddd65a45a986f512e987f2227db5207",
+              "status": "active",
+              "holderId": "tangseng",
+              "revision": "0"
+            }
+          ],
+          "claims": [],
+          "beliefs": [
+            {
+              "beliefId": "initial-responsibility",
+              "holderId": "tangseng",
+              "revision": "0",
+              "statement": "同伴可能造成了损失，需要先核实并避免强迫别人承担。",
+              "confidence": "uncertain",
+              "basedOnObservationIds": [
+                "S-8540b8db-73bd-4c90-9758-615fda6eb2cc:O12"
+              ]
+            }
+          ],
+          "goalSources": [
+            {
+              "kind": "objective",
+              "value": {
+                "label": "调查、修复并协助师徒通行",
+                "status": "active",
+                "objectiveId": "passage"
+              },
+              "goalId": "G-0b6b33145c8175c6b5f83e0f868d0403",
+              "sourceId": "passage",
+              "goalRevision": "0",
+              "policyVersion": "visible-objectives-v1",
+              "principalKind": "core_npc",
+              "observationIds": [],
+              "semanticDigest": "fe5de63b37622820c508f8f8d52bb13f4dc5847f5a458acd9bf7b65f7994f87a",
+              "sourceSnapshotSeq": "18"
+            },
+            {
+              "kind": "inspection",
+              "goalId": "G-4ddd65a45a986f512e987f2227db5207",
+              "sourceId": "passage_structure",
+              "fieldsDigest": "5dd927a07c805df1e7e8c9d075faa72c3ec37d7e4dc1a6f1eb00356f40f3e402",
+              "goalRevision": "0",
+              "policyVersion": "visible-objectives-v1",
+              "principalKind": "core_npc",
+              "observationIds": [],
+              "semanticDigest": "e805a7d1503b5f448dbee07340c79efebc683e8feea8a39559fa53877c045466",
+              "sourceRevision": "0",
+              "sourceSnapshotSeq": "19"
+            }
+          ],
+          "observations": [
+            {
+              "fields": [
+                {
+                  "key": "safe",
+                  "label": "安全",
+                  "value": false
+                }
+              ],
+              "source": {
+                "kind": "initial_content",
+                "sourceIds": [
+                  "initial-public-obstacle"
+                ],
+                "sourceSeq": "12"
+              },
+              "category": "WorldFact",
+              "shareable": true,
+              "statement": "公开的封闭告示说明通路受损且暂未获得通行许可。",
+              "subjectId": "passage_structure",
+              "observerId": "tangseng",
+              "observationId": "S-8540b8db-73bd-4c90-9758-615fda6eb2cc:O12"
+            }
+          ]
+        },
+        "actorId": "tangseng",
+        "current": {
+          "self": {
+            "mode": "CoreNPCControlled",
+            "name": "唐僧",
+            "roles": [],
+            "regionId": "passage",
+            "canControl": false,
+            "characterId": "tangseng",
+            "capabilities": [
+              "move",
+              "inspect",
+              "speak",
+              "make_claim",
+              "share_evidence",
+              "take_item",
+              "transfer_item",
+              "wait",
+              "inspect_structure",
+              "inspect_inventory",
+              "inspect_records",
+              "inspect_traces",
+              "retrieve_original"
+            ],
+            "controlEpoch": "1"
+          },
+          "items": [],
+          "phase": "Running",
+          "ending": null,
+          "regions": [
+            {
+              "name": "通路口",
+              "exits": [
+                "store",
+                "side_path",
+                "destination"
+              ],
+              "regionId": "passage",
+              "description": "石阶受损，封闭标记仍在。需要检查、修复并取得合法通行。"
+            }
+          ],
+          "targets": [
+            {
+              "name": "受损通路",
+              "fields": [
+                {
+                  "key": "safe",
+                  "label": "安全",
+                  "value": false
+                },
+                {
+                  "key": "permit",
+                  "label": "通行许可",
+                  "value": false
+                },
+                {
+                  "key": "repairMaterial",
+                  "label": "实际修复材料",
+                  "value": null
+                }
+              ],
+              "regionId": "passage",
+              "targetId": "passage_structure",
+              "resourceRevision": "0",
+              "availableOperations": []
+            }
+          ],
+          "characters": [
+            {
+              "mode": "CoreNPCControlled",
+              "name": "孙悟空",
+              "roles": [],
+              "online": true,
+              "regionId": null,
+              "characterId": "wukong"
+            },
+            {
+              "mode": "CoreNPCControlled",
+              "name": "唐僧",
+              "roles": [],
+              "online": true,
+              "regionId": "passage",
+              "characterId": "tangseng"
+            },
+            {
+              "mode": "HumanControlled",
+              "name": "材料保管者兼通行协调者兼记事者",
+              "roles": [
+                "B",
+                "C",
+                "E"
+              ],
+              "online": true,
+              "regionId": null,
+              "characterId": "C-3a7d8f5d-bca5-4cd5-9c4d-bee648f7837c"
+            },
+            {
+              "mode": "HumanControlled",
+              "name": "勘查者兼寻物者",
+              "roles": [
+                "A",
+                "D"
+              ],
+              "online": true,
+              "regionId": "passage",
+              "characterId": "C-dc11fe99-a06a-473c-be8e-a2971bb090cc"
+            }
+          ],
+          "deadlineAt": "2026-11-11T09:28:42.749Z",
+          "objectives": [
+            {
+              "label": "调查、修复并协助师徒通行",
+              "status": "active",
+              "objectiveId": "passage"
+            }
+          ],
+          "contentVersion": "trust-repair-fixture-v1",
+          "reducerVersion": "world-v1"
+        },
+        "decision": {
+          "status": "Pending",
+          "actorId": "tangseng",
+          "createdAt": "2026-11-11T09:08:42.966Z",
+          "sessionId": "S-8540b8db-73bd-4c90-9758-615fda6eb2cc",
+          "deadlineAt": "2026-11-11T09:08:52.966Z",
+          "decisionId": "D-26dcc375-83b1-4b86-a640-4250b1790566",
+          "generation": "2",
+          "allowedTools": [
+            "move",
+            "inspect",
+            "take_item",
+            "transfer_item",
+            "share_evidence",
+            "speak",
+            "make_claim",
+            "wait"
+          ],
+          "controlEpoch": "1",
+          "readVersions": {
+            "character:tangseng": "0",
+            "target:passage_structure": "0",
+            "belief:tangseng:initial-responsibility": "0",
+            "character:C-dc11fe99-a06a-473c-be8e-a2971bb090cc": "0",
+            "goal:tangseng:G-0b6b33145c8175c6b5f83e0f868d0403": "0",
+            "goal:tangseng:G-4ddd65a45a986f512e987f2227db5207": "0"
+          },
+          "schemaVersion": 1,
+          "observationIds": [
+            "S-8540b8db-73bd-4c90-9758-615fda6eb2cc:O12"
+          ]
+        },
+        "sessionId": "S-8540b8db-73bd-4c90-9758-615fda6eb2cc",
+        "snapshotSeq": "19",
+        "principalKind": "core_npc",
+        "contextVersion": "legal-memory-v1"
+      },
+      "context_digest": "b035ec596bcc6b4d22ba9ead7d1c655ce3af2917020989736d53fbea62cc4427",
+      "configuration": {
+        "modelId": "timeout-v1",
+        "timeoutMs": 30,
+        "providerId": "controlled-test",
+        "providerKind": "controlled",
+        "gatewayVersion": "intent-gateway-v1",
+        "maxContextBytes": 262144
+      },
+      "status": "Resolved",
+      "output_raw": "{\"decisionId\":\"D-26dcc375-83b1-4b86-a640-4250b1790566\",\"toolCalls\":[{\"kind\":\"wait\"}]}",
+      "semantic_digest": "c2be004bacac21b92095bd6376b6008a038fdabb961bdcfec7b84b2e2d72441d",
+      "model_result": {
+        "status": "Valid",
+        "durationMs": 1.606,
+        "outputDigest": "c2be004bacac21b92095bd6376b6008a038fdabb961bdcfec7b84b2e2d72441d",
+        "configuration": {
+          "modelId": "timeout-v1",
+          "timeoutMs": 30,
+          "providerId": "controlled-test",
+          "providerKind": "controlled",
+          "gatewayVersion": "intent-gateway-v1",
+          "maxContextBytes": 262144
+        },
+        "contextDigest": "b035ec596bcc6b4d22ba9ead7d1c655ce3af2917020989736d53fbea62cc4427",
+        "semanticDigest": "c2be004bacac21b92095bd6376b6008a038fdabb961bdcfec7b84b2e2d72441d"
+      },
+      "outcome": {
+        "receipt": {
+          "code": "NO_CHANGE",
+          "result": {},
+          "status": "Accepted",
+          "actorId": "tangseng",
+          "sessionId": "S-8540b8db-73bd-4c90-9758-615fda6eb2cc",
+          "observedSeq": "19",
+          "schemaVersion": 1,
+          "clientActionId": "D-26dcc375-83b1-4b86-a640-4250b1790566:submit",
+          "semanticDigest": "c2be004bacac21b92095bd6376b6008a038fdabb961bdcfec7b84b2e2d72441d",
+          "actionEventRange": null
+        },
+        "fallback": null,
+        "decisionStatus": "Committed"
+      },
+      "decision": {
+        "status": "Committed",
+        "actorId": "tangseng",
+        "createdAt": "2026-11-11T09:08:42.966Z",
+        "sessionId": "S-8540b8db-73bd-4c90-9758-615fda6eb2cc",
+        "deadlineAt": "2026-11-11T09:08:52.966Z",
+        "decisionId": "D-26dcc375-83b1-4b86-a640-4250b1790566",
+        "generation": "2",
+        "allowedTools": [
+          "move",
+          "inspect",
+          "take_item",
+          "transfer_item",
+          "share_evidence",
+          "speak",
+          "make_claim",
+          "wait"
+        ],
+        "controlEpoch": "1",
+        "readVersions": {
+          "character:tangseng": "0",
+          "target:passage_structure": "0",
+          "belief:tangseng:initial-responsibility": "0",
+          "character:C-dc11fe99-a06a-473c-be8e-a2971bb090cc": "0",
+          "goal:tangseng:G-0b6b33145c8175c6b5f83e0f868d0403": "0",
+          "goal:tangseng:G-4ddd65a45a986f512e987f2227db5207": "0"
+        },
+        "schemaVersion": 1,
+        "observationIds": [
+          "S-8540b8db-73bd-4c90-9758-615fda6eb2cc:O12"
+        ]
+      }
+    }
+  ],
+  "events": [
+    {
+      "kind": "ClaimRecorded",
+      "eventId": "S-3c145d05-4626-4a12-842a-05862efbeb99:E20",
+      "payload": {
+        "text": "我们再核对一下？",
+        "channel": "public",
+        "claimId": "S-3c145d05-4626-4a12-842a-05862efbeb99:Q20",
+        "speakerId": "tangseng",
+        "recipientIds": []
+      },
+      "audience": {
+        "humanCharacterIds": [
+          "C-3b71b0e7-81a7-4cd7-915b-ee9993c090fe"
+        ],
+        "proxyCharacterIds": [
+          "C-3b71b0e7-81a7-4cd7-915b-ee9993c090fe"
+        ],
+        "coreNpcCharacterIds": [
+          "tangseng"
+        ]
+      },
+      "causedBy": {
+        "actorId": "tangseng",
+        "actionId": "D-ee86462f-b3e7-477e-aa15-02f8148da1d3:submit",
+        "decisionId": "D-ee86462f-b3e7-477e-aa15-02f8148da1d3",
+        "principalId": "core_npc:tangseng"
+      },
+      "sessionId": "S-3c145d05-4626-4a12-842a-05862efbeb99",
+      "serverTime": "2026-11-11T09:08:43.948Z",
+      "sessionSeq": "20",
+      "schemaVersion": 1
+    },
+    {
+      "kind": "ObservationRecorded",
+      "eventId": "S-3c145d05-4626-4a12-842a-05862efbeb99:E21",
+      "payload": {
+        "fields": [],
+        "source": {
+          "kind": "speech",
+          "sourceIds": [
+            "S-3c145d05-4626-4a12-842a-05862efbeb99:Q20"
+          ],
+          "sourceSeq": "20"
+        },
+        "category": "Claim",
+        "shareable": true,
+        "statement": "我们再核对一下？",
+        "subjectId": "tangseng",
+        "observerId": "tangseng",
+        "observationId": "S-3c145d05-4626-4a12-842a-05862efbeb99:O21"
+      },
+      "audience": {
+        "humanCharacterIds": [],
+        "proxyCharacterIds": [],
+        "coreNpcCharacterIds": [
+          "tangseng"
+        ]
+      },
+      "causedBy": {
+        "actorId": "tangseng",
+        "actionId": "D-ee86462f-b3e7-477e-aa15-02f8148da1d3:submit",
+        "decisionId": "D-ee86462f-b3e7-477e-aa15-02f8148da1d3",
+        "principalId": "core_npc:tangseng"
+      },
+      "sessionId": "S-3c145d05-4626-4a12-842a-05862efbeb99",
+      "serverTime": "2026-11-11T09:08:43.948Z",
+      "sessionSeq": "21",
+      "schemaVersion": 1
+    },
+    {
+      "kind": "ObservationRecorded",
+      "eventId": "S-3c145d05-4626-4a12-842a-05862efbeb99:E22",
+      "payload": {
+        "fields": [],
+        "source": {
+          "kind": "speech",
+          "sourceIds": [
+            "S-3c145d05-4626-4a12-842a-05862efbeb99:Q20"
+          ],
+          "sourceSeq": "20"
+        },
+        "category": "Claim",
+        "shareable": true,
+        "statement": "我们再核对一下？",
+        "subjectId": "tangseng",
+        "observerId": "C-3b71b0e7-81a7-4cd7-915b-ee9993c090fe",
+        "observationId": "S-3c145d05-4626-4a12-842a-05862efbeb99:O22"
+      },
+      "audience": {
+        "humanCharacterIds": [
+          "C-3b71b0e7-81a7-4cd7-915b-ee9993c090fe"
+        ],
+        "proxyCharacterIds": [
+          "C-3b71b0e7-81a7-4cd7-915b-ee9993c090fe"
+        ],
+        "coreNpcCharacterIds": []
+      },
+      "causedBy": {
+        "actorId": "tangseng",
+        "actionId": "D-ee86462f-b3e7-477e-aa15-02f8148da1d3:submit",
+        "decisionId": "D-ee86462f-b3e7-477e-aa15-02f8148da1d3",
+        "principalId": "core_npc:tangseng"
+      },
+      "sessionId": "S-3c145d05-4626-4a12-842a-05862efbeb99",
+      "serverTime": "2026-11-11T09:08:43.948Z",
+      "sessionSeq": "22",
+      "schemaVersion": 1
+    },
+    {
+      "kind": "ObservationRecorded",
+      "eventId": "S-710cd8fa-9f5a-404a-add0-f1fcf3adaf4a:E20",
+      "payload": {
+        "fields": [
+          {
+            "key": "safe",
+            "label": "安全",
+            "value": false
+          },
+          {
+            "key": "permit",
+            "label": "通行许可",
+            "value": false
+          },
+          {
+            "key": "repairMaterial",
+            "label": "实际修复材料",
+            "value": null
+          }
+        ],
+        "source": {
+          "kind": "inspection",
+          "sourceIds": [
+            "passage_structure"
+          ],
+          "sourceSeq": "20"
+        },
+        "category": "WorldFact",
+        "shareable": true,
+        "statement": "亲自检查当前可见状态。",
+        "subjectId": "passage_structure",
+        "observerId": "tangseng",
+        "observationId": "S-710cd8fa-9f5a-404a-add0-f1fcf3adaf4a:O20"
+      },
+      "audience": {
+        "humanCharacterIds": [],
+        "proxyCharacterIds": [],
+        "coreNpcCharacterIds": [
+          "tangseng"
+        ]
+      },
+      "causedBy": {
+        "actorId": "tangseng",
+        "actionId": "D-309ab57d-3b73-4aec-96a6-10421da89272:submit",
+        "decisionId": "D-309ab57d-3b73-4aec-96a6-10421da89272",
+        "principalId": "core_npc:tangseng",
+        "toolCallIndex": 0
+      },
+      "sessionId": "S-710cd8fa-9f5a-404a-add0-f1fcf3adaf4a",
+      "serverTime": "2026-11-11T09:08:43.607Z",
+      "sessionSeq": "20",
+      "schemaVersion": 1
+    },
+    {
+      "kind": "ObservationRecorded",
+      "eventId": "S-710cd8fa-9f5a-404a-add0-f1fcf3adaf4a:E21",
+      "payload": {
+        "fields": [
+          {
+            "key": "recordMatchesTrace",
+            "label": "痕迹与旧记录相符",
+            "value": true
+          }
+        ],
+        "source": {
+          "kind": "inspection",
+          "sourceIds": [
+            "structure-current-trace"
+          ],
+          "sourceSeq": "21"
+        },
+        "category": "Evidence",
+        "shareable": true,
+        "statement": "现场旧损痕迹与到达前结构记录相符。",
+        "subjectId": "passage_structure",
+        "observerId": "tangseng",
+        "observationId": "S-710cd8fa-9f5a-404a-add0-f1fcf3adaf4a:O21"
+      },
+      "audience": {
+        "humanCharacterIds": [],
+        "proxyCharacterIds": [],
+        "coreNpcCharacterIds": [
+          "tangseng"
+        ]
+      },
+      "causedBy": {
+        "actorId": "tangseng",
+        "actionId": "D-309ab57d-3b73-4aec-96a6-10421da89272:submit",
+        "decisionId": "D-309ab57d-3b73-4aec-96a6-10421da89272",
+        "principalId": "core_npc:tangseng",
+        "toolCallIndex": 0
+      },
+      "sessionId": "S-710cd8fa-9f5a-404a-add0-f1fcf3adaf4a",
+      "serverTime": "2026-11-11T09:08:43.607Z",
+      "sessionSeq": "21",
+      "schemaVersion": 1
+    }
+  ],
+  "gateways": [
+    {
+      "configuration": {
+        "gatewayVersion": "intent-gateway-v1",
+        "providerId": "controlled-test",
+        "providerKind": "controlled",
+        "modelId": "lifecycle-v1",
+        "timeoutMs": 10000,
+        "maxContextBytes": 262144
+      },
+      "metrics": {
+        "calls": 2,
+        "externalCalls": 0,
+        "valid": 1,
+        "invalid": 0,
+        "timeouts": 0,
+        "cancelled": 1,
+        "providerErrors": 0,
+        "active": 0,
+        "p50Ms": 1.242,
+        "p95Ms": 2.021,
+        "invalidRate": 0
+      }
+    },
+    {
+      "configuration": {
+        "gatewayVersion": "intent-gateway-v1",
+        "providerId": "controlled-test",
+        "providerKind": "controlled",
+        "modelId": "timeout-v1",
+        "timeoutMs": 30,
+        "maxContextBytes": 262144
+      },
+      "metrics": {
+        "calls": 2,
+        "externalCalls": 0,
+        "valid": 1,
+        "invalid": 0,
+        "timeouts": 1,
+        "cancelled": 0,
+        "providerErrors": 0,
+        "active": 0,
+        "p50Ms": 1.606,
+        "p95Ms": 30.392,
+        "invalidRate": 0
+      }
+    },
+    {
+      "configuration": {
+        "gatewayVersion": "intent-gateway-v1",
+        "providerId": "controlled-test",
+        "providerKind": "controlled",
+        "modelId": "unused-v1",
+        "timeoutMs": 10000,
+        "maxContextBytes": 262144
+      },
+      "metrics": {
+        "calls": 0,
+        "externalCalls": 0,
+        "valid": 0,
+        "invalid": 0,
+        "timeouts": 0,
+        "cancelled": 0,
+        "providerErrors": 0,
+        "active": 0,
+        "p50Ms": null,
+        "p95Ms": null,
+        "invalidRate": 0
+      }
+    },
+    {
+      "configuration": {
+        "gatewayVersion": "intent-gateway-v1",
+        "providerId": "controlled-test",
+        "providerKind": "controlled",
+        "modelId": "interval-v1",
+        "timeoutMs": 10000,
+        "maxContextBytes": 262144
+      },
+      "metrics": {
+        "calls": 2,
+        "externalCalls": 0,
+        "valid": 2,
+        "invalid": 0,
+        "timeouts": 0,
+        "cancelled": 0,
+        "providerErrors": 0,
+        "active": 0,
+        "p50Ms": 1.139,
+        "p95Ms": 1.71,
+        "invalidRate": 0
+      }
+    },
+    {
+      "configuration": {
+        "gatewayVersion": "intent-gateway-v1",
+        "providerId": "controlled-test",
+        "providerKind": "controlled",
+        "modelId": "interval-v1",
+        "timeoutMs": 10000,
+        "maxContextBytes": 262144
+      },
+      "metrics": {
+        "calls": 0,
+        "externalCalls": 0,
+        "valid": 0,
+        "invalid": 0,
+        "timeouts": 0,
+        "cancelled": 0,
+        "providerErrors": 0,
+        "active": 0,
+        "p50Ms": null,
+        "p95Ms": null,
+        "invalidRate": 0
+      }
+    },
+    {
+      "configuration": {
+        "gatewayVersion": "intent-gateway-v1",
+        "providerId": "controlled-test",
+        "providerKind": "controlled",
+        "modelId": "unknown-v1",
+        "timeoutMs": 10000,
+        "maxContextBytes": 262144
+      },
+      "metrics": {
+        "calls": 1,
+        "externalCalls": 0,
+        "valid": 1,
+        "invalid": 0,
+        "timeouts": 0,
+        "cancelled": 0,
+        "providerErrors": 0,
+        "active": 0,
+        "p50Ms": 1.175,
+        "p95Ms": 1.175,
+        "invalidRate": 0
+      }
+    },
+    {
+      "configuration": {
+        "gatewayVersion": "intent-gateway-v1",
+        "providerId": "controlled-test",
+        "providerKind": "controlled",
+        "modelId": "unused-v1",
+        "timeoutMs": 10000,
+        "maxContextBytes": 262144
+      },
+      "metrics": {
+        "calls": 0,
+        "externalCalls": 0,
+        "valid": 0,
+        "invalid": 0,
+        "timeouts": 0,
+        "cancelled": 0,
+        "providerErrors": 0,
+        "active": 0,
+        "p50Ms": null,
+        "p95Ms": null,
+        "invalidRate": 0
+      }
+    },
+    {
+      "configuration": {
+        "gatewayVersion": "intent-gateway-v1",
+        "providerId": "controlled-test",
+        "providerKind": "controlled",
+        "modelId": "unused-v1",
+        "timeoutMs": 10000,
+        "maxContextBytes": 262144
+      },
+      "metrics": {
+        "calls": 0,
+        "externalCalls": 0,
+        "valid": 0,
+        "invalid": 0,
+        "timeouts": 0,
+        "cancelled": 0,
+        "providerErrors": 0,
+        "active": 0,
+        "p50Ms": null,
+        "p95Ms": null,
+        "invalidRate": 0
+      }
+    },
+    {
+      "configuration": {
+        "gatewayVersion": "intent-gateway-v1",
+        "providerId": "controlled-test",
+        "providerKind": "controlled",
+        "modelId": "wait-v1",
+        "timeoutMs": 10000,
+        "maxContextBytes": 262144
+      },
+      "metrics": {
+        "calls": 1,
+        "externalCalls": 0,
+        "valid": 1,
+        "invalid": 0,
+        "timeouts": 0,
+        "cancelled": 0,
+        "providerErrors": 0,
+        "active": 0,
+        "p50Ms": 15.534,
+        "p95Ms": 15.534,
+        "invalidRate": 0
+      }
+    }
+  ]
+}

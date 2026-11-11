@@ -1,0 +1,1 @@
+{"name":"fixed","result":"PASS","events":["pool.end.begin","client.end.requested","client.end.requested","pool.end.resolved","client.end","client.end","postgres.stop.begin","postgres.stop.end"]}

@@ -1,0 +1,13 @@
+{
+  "name": "crash-current-01",
+  "command": [
+    "node",
+    "--test",
+    "--test-reporter=tap",
+    "backend/tests/ai-crash.test.mjs"
+  ],
+  "startedAt": "2026-11-11T08:56:13.457641+00:00",
+  "durationSeconds": 3.687,
+  "exitCode": 1,
+  "signal": null
+}

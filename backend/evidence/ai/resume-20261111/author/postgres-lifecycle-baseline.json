@@ -1,0 +1,44 @@
+{
+  "name": "baseline",
+  "events": [
+    {
+      "kind": "pool.end.begin",
+      "elapsedMs": 1281.439684
+    },
+    {
+      "kind": "client.end.requested",
+      "elapsedMs": 1281.554765,
+      "index": 0
+    },
+    {
+      "kind": "client.end.requested",
+      "elapsedMs": 1281.577109,
+      "index": 1
+    },
+    {
+      "kind": "pool.end.resolved",
+      "elapsedMs": 1281.580974
+    },
+    {
+      "kind": "postgres.stop.begin",
+      "elapsedMs": 1281.757326
+    },
+    {
+      "kind": "client.end",
+      "elapsedMs": 1283.145801,
+      "index": 0
+    },
+    {
+      "kind": "client.end",
+      "elapsedMs": 1283.840634,
+      "index": 1
+    },
+    {
+      "kind": "postgres.stop.end",
+      "elapsedMs": 1299.007716
+    }
+  ],
+  "errors": [],
+  "databaseOutput": "/workspace/scratch/17ff92cde78f/xiyou-ai-fix/.agent-output/postgres-tests/lifecycle-baseline-2Q89Sh",
+  "pgShutdownComplete": true
+}

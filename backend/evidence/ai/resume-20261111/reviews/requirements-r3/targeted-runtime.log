@@ -1,0 +1,143 @@
+TAP version 13
+# Subtest: 真实进程崩溃：模型原文、独立 fallback、原意图 ACK 与发布恢复
+    # Subtest: after-output
+    ok 1 - after-output
+      ---
+      duration_ms: 420.235448
+      type: 'test'
+      ...
+    # 真实子进程退出码 81，信号为空；恢复保留原决定及原文，未新增模型调用。
+    # Subtest: before-fallback
+    ok 2 - before-fallback
+      ---
+      duration_ms: 324.442441
+      type: 'test'
+      ...
+    # 真实子进程退出码 82，信号为空；恢复保留原决定及原文，未新增模型调用。
+    # Subtest: after-fallback
+    ok 3 - after-fallback
+      ---
+      duration_ms: 274.644975
+      type: 'test'
+      ...
+    # 真实子进程退出码 83，信号为空；恢复保留原决定及原文，未新增模型调用。
+    # Subtest: after-intent
+    ok 4 - after-intent
+      ---
+      duration_ms: 324.933138
+      type: 'test'
+      ...
+    # 真实子进程退出码 84，信号为空；恢复保留原决定及原文，未新增模型调用。
+    # Subtest: during-publish
+    ok 5 - during-publish
+      ---
+      duration_ms: 283.718587
+      type: 'test'
+      ...
+    # 真实子进程退出码 85，信号为空；恢复保留原决定及原文，未新增模型调用。
+    1..5
+ok 1 - 真实进程崩溃：模型原文、独立 fallback、原意图 ACK 与发布恢复
+  ---
+  duration_ms: 3156.497924
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：全局并发有界，每角色单在途；忽略 Abort 的 provider 不拖住关闭
+ok 2 - 真实 PostgreSQL：全局并发有界，每角色单在途；忽略 Abort 的 provider 不拖住关闭
+  ---
+  duration_ms: 1790.380285
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：实际模型超时产生稳定 fallback，迟到输出失效，后续规划使用新 ID
+ok 3 - 真实 PostgreSQL：实际模型超时产生稳定 fallback，迟到输出失效，后续规划使用新 ID
+  ---
+  duration_ms: 196.381788
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：显式恢复的结果仍未知时保留 Unknown，恢复成功后才标记空闲
+ok 4 - 真实 PostgreSQL：显式恢复的结果仍未知时保留 Unknown，恢复成功后才标记空闲
+  ---
+  duration_ms: 79.153745
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：合并唤醒按实际模型启动时间限流，重启仍遵守本局持久预算
+ok 5 - 真实 PostgreSQL：合并唤醒按实际模型启动时间限流，重启仍遵守本局持久预算
+  ---
+  duration_ms: 510.582592
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：未知提交保留原文和摘要，新实例只恢复旧 Receipt，不改失败或调用新模型
+ok 6 - 真实 PostgreSQL：未知提交保留原文和摘要，新实例只恢复旧 Receipt，不改失败或调用新模型
+  ---
+  duration_ms: 171.169889
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：新调度器从持久失败决定恢复 fallback，稳定原因键只产生一份收据
+ok 7 - 真实 PostgreSQL：新调度器从持久失败决定恢复 fallback，稳定原因键只产生一份收据
+  ---
+  duration_ms: 72.46272
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：模型等待在事务外，真人先取得收据，模型随后通过同一 Validator
+ok 8 - 真实 PostgreSQL：模型等待在事务外，真人先取得收据，模型随后通过同一 Validator
+  ---
+  duration_ms: 74.207444
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：含 NUL 的非法模型原文无损保存，并按原决定拒绝和 fallback
+ok 9 - 真实 PostgreSQL：含 NUL 的非法模型原文无损保存，并按原决定拒绝和 fallback
+  ---
+  duration_ms: 1604.570371
+  type: 'test'
+  ...
+# Subtest: 真实子进程退出：孤立 surrogate 原文跨重启不替换，失败恢复只落一次 fallback
+    # Subtest: 非法码元 d800
+    ok 1 - 非法码元 d800
+      ---
+      duration_ms: 303.130708
+      type: 'test'
+      ...
+    # Subtest: 非法码元 dc00
+    ok 2 - 非法码元 dc00
+      ---
+      duration_ms: 312.830267
+      type: 'test'
+      ...
+    1..2
+ok 10 - 真实子进程退出：孤立 surrogate 原文跨重启不替换，失败恢复只落一次 fallback
+  ---
+  duration_ms: 616.739523
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：旧版普通 text 原文仍按原文、原摘要恢复，迁移可重复启动
+ok 11 - 真实 PostgreSQL：旧版普通 text 原文仍按原文、原摘要恢复，迁移可重复启动
+  ---
+  duration_ms: 89.246072
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：旧版 Ready 的 NUL 原文恢复先查询结果，再拒绝并保持原摘要
+ok 12 - 真实 PostgreSQL：旧版 Ready 的 NUL 原文恢复先查询结果，再拒绝并保持原摘要
+  ---
+  duration_ms: 103.818342
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：共享协议允许的 NUL 对白在 AI 边界拒绝，原包没有局部效果
+ok 13 - 真实 PostgreSQL：共享协议允许的 NUL 对白在 AI 边界拒绝，原包没有局部效果
+  ---
+  duration_ms: 93.577602
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：Pool 已兑现但连接尚未结束时，清理必须等待真实连接再停库
+ok 14 - 真实 PostgreSQL：Pool 已兑现但连接尚未结束时，清理必须等待真实连接再停库
+  ---
+  duration_ms: 1523.383279
+  type: 'test'
+  ...
+1..14
+# tests 21
+# suites 0
+# pass 21
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3318.986209
