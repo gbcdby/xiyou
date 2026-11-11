@@ -15,6 +15,7 @@ export interface SessionState {
   controlBusy: boolean;
 }
 interface ReceiptReader { receipt(sessionId: string, actionId: string): Promise<ClientReceipt | null> }
+type RecoveryNotice = { kind: 'control'; observedSeq: string } | { kind: 'sync' };
 interface Options {
   onChange?: (state: SessionState) => void;
   onUnauthenticated?: (token: string) => void;
@@ -50,6 +51,8 @@ export class SessionClient {
   #token = '';
   #connection: ConnectionState = 'idle';
   #message = '';
+  #recoveryNotice: RecoveryNotice | null = null;
+  #errorRevision = 0;
   #actions: ActionDraft[] = [];
   #controlBusy = false;
   #pendingControl: { request: ControlRequest; raw: string; serial: number } | null = null;
@@ -65,8 +68,16 @@ export class SessionClient {
     const snapshot = this.#view.snapshot;
     return { connection: this.#connection, snapshot, actions: [...this.#actions], message: this.#message, controlBusy: this.#controlBusy };
   }
+  #setMessage(message: string, recovery: RecoveryNotice | null = null) {
+    this.#message = message; this.#recoveryNotice = recovery;
+  }
+  #setFailure(message: string, recovery: RecoveryNotice | null = null) {
+    this.#errorRevision += 1; this.#setMessage(message, recovery);
+  }
   #publish() {
     const cursor = this.#view.snapshot?.snapshotSeq;
+    // ACK 只提供等待水位，实际权限仍由已校验的授权投影决定。
+    if (cursor && this.#recoveryNotice?.kind === 'control' && compareDecimal(cursor, this.#recoveryNotice.observedSeq) >= 0) this.#setMessage('');
     this.#actions = this.#actions.map(action => action.status === 'accepted' && action.receipt ? { ...action, detail: cursor && compareDecimal(cursor, action.receipt.observedSeq) >= 0 ? (action.receipt.result.message || '服务器已确认，状态已同步。') : '服务器已确认，状态同步中。' } : action);
     this.#options.onChange(this.state);
   }
@@ -102,7 +113,7 @@ export class SessionClient {
     this.#retryTimer = null;
     const serial = ++this.#serial; const generation = this.#view.begin(this.#sessionId);
     const old = this.#link; this.#link = null; old?.close();
-    this.#connection = 'connecting'; this.#message = ''; this.#controlBusy = false; this.#pendingControl = null; this.#syncSerial = null;
+    this.#connection = 'connecting'; this.#setMessage(''); this.#controlBusy = false; this.#pendingControl = null; this.#syncSerial = null;
     this.#actions = this.#actions.map(action => action.status === 'waiting' ? { ...action, status: 'unknown', detail: '连接发生变化，动作结果待确认。' } : action);
     this.#publish();
     if (serial !== this.#serial || generation !== this.#view.generation || !this.#sessionId || !this.#token) return;
@@ -126,7 +137,7 @@ export class SessionClient {
     if (this.#retryTimer) clearTimeout(this.#retryTimer);
     this.#retryTimer = null;
     const link = this.#link; this.#link = null; link?.close();
-    this.#view.begin(this.#sessionId); this.#connection = 'offline'; this.#message = message; this.#controlBusy = false; this.#pendingControl = null; this.#syncSerial = null;
+    this.#view.begin(this.#sessionId); this.#connection = 'offline'; this.#setMessage(message); this.#controlBusy = false; this.#pendingControl = null; this.#syncSerial = null;
     this.#actions = this.#actions.map(action => action.status === 'waiting' ? { ...action, status: 'unknown', detail: '尚未确认结果。连接恢复后可查询或原样重试。' } : action);
     this.#publish();
     // 只保留一个有延迟的恢复任务。发布状态期间也可能发生关闭或换绑。
@@ -139,7 +150,7 @@ export class SessionClient {
   #handleError(value: unknown): boolean {
     const error = asError(value); if (!error) return false;
     const rejectedToken = this.#token;
-    this.#message = error.message || errorLabels[error.code] || '当前请求未能完成。';
+    this.#setFailure(error.message || errorLabels[error.code] || '当前请求未能完成。');
     if (['UNAUTHENTICATED', 'FORBIDDEN', 'SESSION_GONE'].includes(error.code)) {
       this.#serial += 1; this.#view.begin(this.#sessionId); this.#connection = 'forbidden';
       this.#controlBusy = false; this.#pendingControl = null;
@@ -161,14 +172,19 @@ export class SessionClient {
       if (this.#view.acceptSnapshot(value, generation) !== 'applied') { this.#disconnected(serial, '授权视图校验未通过，请重新连接。', false); return; }
       const actorId = this.#view.snapshot!.projection.self.characterId;
       this.#actions = this.#actions.filter(action => action.actorId === actorId);
-      this.#connection = 'online'; this.#message = ''; this.#publish();
+      this.#connection = 'online'; this.#setMessage(''); this.#publish();
       void this.sync();
       for (const action of this.#actions.filter(action => action.status === 'unknown')) void this.query(action.id);
     } catch { if (serial === this.#serial) this.#disconnected(serial); }
   }
-  #batch(value: unknown, generation: number): boolean {
+  #batch(value: unknown, generation: number, fromSync = false): boolean {
     if (this.#handleError(value)) return false;
     const result = this.#view.applyBatch(value, generation);
+    // 同游标空批是成功的补发响应；错局、错视图或无效响应不能解除重试提示。
+    if (fromSync && (result === 'applied' || result === 'duplicate') && this.#recoveryNotice?.kind === 'sync') {
+      this.#setMessage('');
+      if (result === 'duplicate') this.#publish();
+    }
     if (result === 'applied') { this.#publish(); return true; }
     if (result === 'refetch') void this.sync();
     if (result === 'resync') this.#openConnection();
@@ -177,6 +193,7 @@ export class SessionClient {
   async sync(): Promise<void> {
     const link = this.#link; const serial = this.#serial; const generation = this.#view.generation;
     if (!link?.connected || !this.#view.snapshot || this.#syncSerial === serial) return;
+    const errorRevision = this.#errorRevision;
     this.#syncSerial = serial;
     try {
       // 单轮有界补发；持续心跳兜底修复最后一个丢失批次。
@@ -184,9 +201,9 @@ export class SessionClient {
         const request = this.#view.syncRequest(); if (!request) break;
         const value = await link.request('sync.request', canonicalize(validateContract('SyncRequest', request)));
         if (serial !== this.#serial || generation !== this.#view.generation) return;
-        if (!this.#batch(value, generation)) break;
+        if (!this.#batch(value, generation, true)) break;
       }
-    } catch { if (serial === this.#serial) { this.#message = '状态同步尚未完成，正在保留当前确认位置重试。'; this.#publish(); } }
+    } catch { if (serial === this.#serial && errorRevision === this.#errorRevision) { this.#setFailure('状态同步尚未完成，正在保留当前确认位置重试。', { kind: 'sync' }); this.#publish(); } }
     finally { if (this.#syncSerial === serial) this.#syncSerial = null; }
   }
   async send(action: Action): Promise<void> {
@@ -237,6 +254,7 @@ export class SessionClient {
   async control(kind: 'resume' | 'take'): Promise<void> {
     const snapshot = this.#view.snapshot; const link = this.#link; const serial = this.#serial;
     if (!snapshot || !link?.connected || this.#controlBusy || snapshot.projection.phase !== 'Running') return;
+    const errorRevision = this.#errorRevision;
     const type = kind === 'take' ? 'control.take' : 'control.resume';
     const old = this.#pendingControl;
     const request = old?.serial === serial && old.request.type === type ? old.request : validateContract('ControlRequest', { schemaVersion: 1, type, sessionId: snapshot.sessionId, actorId: snapshot.projection.self.characterId, nonce: this.#options.id() });
@@ -252,8 +270,11 @@ export class SessionClient {
       }
       const response = validateContract('ControlResponse', value);
       if (response.sessionId !== request.sessionId || response.actorId !== request.actorId || response.nonce !== request.nonce) throw new Error('Control identity mismatch');
-      this.#pendingControl = null; this.#message = '控制请求已确认，正在同步当前授权。'; void this.sync();
-    } catch { if (serial === this.#serial) this.#message = '控制请求结果待确认。再次点击会重试本连接上的原请求。'; }
+      this.#pendingControl = null;
+      // 旧请求的 ACK 或暂态超时不能覆盖等待期间出现的新错误。
+      if (errorRevision === this.#errorRevision) this.#setMessage('控制请求已确认，正在同步当前授权。', { kind: 'control', observedSeq: response.observedSeq });
+      void this.sync();
+    } catch { if (serial === this.#serial && errorRevision === this.#errorRevision) this.#setFailure('控制请求结果待确认。再次点击会重试本连接上的原请求。'); }
     finally { if (serial === this.#serial) { this.#controlBusy = false; this.#publish(); } }
   }
 }
