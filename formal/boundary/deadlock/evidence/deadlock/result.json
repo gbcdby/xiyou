@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "run_id": "b6ee94d2-af20-43d4-9922-661fe614a625",
+  "status": "COUNTEREXAMPLE",
+  "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+  "mode": "modelcheck",
+  "profile": "deadlock",
+  "started_at": "2026-11-11T04:30:47.019876+00:00",
+  "finished_at": "2026-11-11T04:30:48.034455+00:00",
+  "duration_seconds": 1.014613,
+  "completed": false,
+  "implementation_status": "NOT_ASSESSED",
+  "tool": {
+    "version_label": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+    "jar_snapshot": "/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/deadlock-v1/deadlock/tool/tla2tools.jar",
+    "java_path": "/usr/bin/java",
+    "java_version": "openjdk version \"21.0.13\" 2026-10-20\nOpenJDK Runtime Environment (build 21.0.13+9-1-deb13u2-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.13+9-1-deb13u2-Debian, mixed mode, sharing)",
+    "removed_environment_names": [],
+    "reported_version": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)"
+  },
+  "inputs": {
+    "manifest_sha256": "2a9bd63f8ce971342eb1953c7eff685170aad175913d36cf87bd198c242a9b15",
+    "model_root": "/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/formal/boundary/deadlock/model",
+    "snapshot_directory": "/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/deadlock-v1/deadlock/input",
+    "files": [
+      {
+        "path": "BoundaryDeadlock.tla",
+        "sha256": "fccdd1186a5b0acbfd7a1925e4c9714ef9d20d6ad13b89c38b34770cda22555e",
+        "bytes": 2825
+      },
+      {
+        "path": "deadlock.cfg",
+        "sha256": "23bde2b701fc5bcf09369bb7a813a21e4a64172d8fe270e048b1c2fda195f789",
+        "bytes": 60
+      }
+    ],
+    "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a"
+  },
+  "checks": {
+    "expected_invariants": [
+      "TypeOK"
+    ],
+    "expected_properties": [],
+    "configured_invariants": [
+      "TypeOK"
+    ],
+    "configured_properties": [],
+    "checks_deadlock": true,
+    "deadlock_reason": null,
+    "behavior": {
+      "SPECIFICATION": "Spec"
+    }
+  },
+  "scope": {
+    "sessions": 2,
+    "local_object_ids_per_session": 1,
+    "requests": 4,
+    "distinct_state_min": 0,
+    "covered_interleavings_and_faults": [
+      "接收与提交可交错",
+      "两局同名对象",
+      "可信主体绑定与输入目标分离"
+    ],
+    "excluded_behaviors": [
+      "真实认证实现",
+      "数据库事务和恢复",
+      "多物品规则"
+    ],
+    "liveness": "NOT_CHECKED",
+    "expected_outcome": "故意禁止接收/处理，使非终态无动作，必须检测死锁；不是业务通过配置"
+  },
+  "assumptions": [
+    "可信主体及其Session绑定由已认证上下文提供",
+    "一次领域提交原子写入目标状态与记录"
+  ],
+  "command": [
+    "/usr/bin/java",
+    "-Xmx512m",
+    "-XX:+UseParallelGC",
+    "-Duser.language=en",
+    "-Duser.country=US",
+    "-Duser.home=/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/deadlock-v1/deadlock/runtime-home",
+    "-Djava.io.tmpdir=/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/deadlock-v1/deadlock/tmp",
+    "-DTLA-Library=/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/deadlock-v1/deadlock/input",
+    "-cp",
+    "/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/deadlock-v1/deadlock/tool/tla2tools.jar",
+    "tlc2.TLC",
+    "-tool",
+    "-modelcheck",
+    "-workers",
+    "1",
+    "-metadir",
+    "/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/deadlock-v1/deadlock/states",
+    "-config",
+    "/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/deadlock-v1/deadlock/input/deadlock.cfg",
+    "/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/deadlock-v1/deadlock/input/BoundaryDeadlock.tla"
+  ],
+  "process": {
+    "exit_code": 11,
+    "timed_out": false,
+    "interrupted": false
+  },
+  "statistics": {
+    "generated_states": 1,
+    "distinct_states": 1,
+    "remaining_states": 0
+  },
+  "evidence": {
+    "log": "/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/deadlock-v1/deadlock/tlc.log",
+    "messages": "/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/deadlock-v1/deadlock/messages.json"
+  },
+  "message_codes": [
+    2114,
+    2121,
+    2185,
+    2186,
+    2187,
+    2189,
+    2190,
+    2194,
+    2199,
+    2200,
+    2217,
+    2219,
+    2220,
+    2262,
+    2268
+  ],
+  "error_codes": [
+    2114,
+    2121
+  ],
+  "warning_codes": []
+}

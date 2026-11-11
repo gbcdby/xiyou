@@ -1,0 +1,107 @@
+[
+  {
+    "code": 2262,
+    "severity": 0,
+    "text": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)"
+  },
+  {
+    "code": 2187,
+    "severity": 0,
+    "text": "Running breadth-first search Model-Checking with fp 81 and seed -3475343509731708072 with 1 worker on 9 cores with 910MB heap and 64MB offheap memory [pid: 281] (Linux 6.18.57 amd64, Debian 21.0.13 x86_64, MSBDiskFPSet, DiskStateQueue)."
+  },
+  {
+    "code": 2220,
+    "severity": 0,
+    "text": "Starting SANY..."
+  },
+  {
+    "code": 2219,
+    "severity": 0,
+    "text": "SANY finished."
+  },
+  {
+    "code": 2185,
+    "severity": 0,
+    "text": "Starting... (2026-11-10 20:29:18)"
+  },
+  {
+    "code": 2189,
+    "severity": 0,
+    "text": "Computing initial states..."
+  },
+  {
+    "code": 2190,
+    "severity": 0,
+    "text": "Finished computing initial states: 2 distinct states generated at 2026-11-10 20:29:19."
+  },
+  {
+    "code": 2110,
+    "severity": 1,
+    "text": "Invariant NoUnauthorizedObservation is violated."
+  },
+  {
+    "code": 2121,
+    "severity": 1,
+    "text": "The behavior up to this point is:"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "1: <Initial predicate>\n/\\ phase = \"Running\"\n/\\ dropUsed = FALSE\n/\\ resyncUsed = FALSE\n/\\ authorized = TRUE\n/\\ homeSession = \"S1\"\n/\\ projection = <<>>\n/\\ stage = \"need\"\n/\\ mayRevoke = TRUE\n/\\ view = \"A\"\n/\\ marker = \"initial\"\n/\\ invalidDelivery = FALSE\n/\\ cursor = 0\n/\\ version = 0\n/\\ terminalHead = 0\n/\\ snapshot = 0\n/\\ head = 0"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "2: <CommitEvent line 28, col 16 to line 31, col 118 of module Reconnect>\n/\\ phase = \"Running\"\n/\\ dropUsed = FALSE\n/\\ resyncUsed = FALSE\n/\\ authorized = TRUE\n/\\ homeSession = \"S1\"\n/\\ projection = <<>>\n/\\ stage = \"need\"\n/\\ mayRevoke = TRUE\n/\\ view = \"A\"\n/\\ marker = \"committed\"\n/\\ invalidDelivery = FALSE\n/\\ cursor = 0\n/\\ version = 0\n/\\ terminalHead = 0\n/\\ snapshot = 0\n/\\ head = 1"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "3: <Rebind line 87, col 11 to line 91, col 119 of module Reconnect>\n/\\ phase = \"Running\"\n/\\ dropUsed = FALSE\n/\\ resyncUsed = FALSE\n/\\ authorized = TRUE\n/\\ homeSession = \"S1\"\n/\\ projection = <<>>\n/\\ stage = \"need\"\n/\\ mayRevoke = TRUE\n/\\ view = \"B\"\n/\\ marker = \"view-rebound\"\n/\\ invalidDelivery = FALSE\n/\\ cursor = 0\n/\\ version = 1\n/\\ terminalHead = 0\n/\\ snapshot = 0\n/\\ head = 1"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "4: <StartSnapshot line 33, col 18 to line 37, col 111 of module Reconnect>\n/\\ phase = \"Running\"\n/\\ dropUsed = FALSE\n/\\ resyncUsed = FALSE\n/\\ authorized = TRUE\n/\\ homeSession = \"S1\"\n/\\ projection = <<>>\n/\\ stage = \"waiting\"\n/\\ mayRevoke = TRUE\n/\\ view = \"B\"\n/\\ marker = \"snapshot-captured\"\n/\\ invalidDelivery = FALSE\n/\\ cursor = 0\n/\\ version = 1\n/\\ terminalHead = 0\n/\\ snapshot = 1\n/\\ head = 1"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "5: <CommitEvent line 28, col 16 to line 31, col 118 of module Reconnect>\n/\\ phase = \"Running\"\n/\\ dropUsed = FALSE\n/\\ resyncUsed = FALSE\n/\\ authorized = TRUE\n/\\ homeSession = \"S1\"\n/\\ projection = <<>>\n/\\ stage = \"waiting\"\n/\\ mayRevoke = TRUE\n/\\ view = \"B\"\n/\\ marker = \"committed\"\n/\\ invalidDelivery = FALSE\n/\\ cursor = 0\n/\\ version = 1\n/\\ terminalHead = 0\n/\\ snapshot = 1\n/\\ head = 2"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "6: <DeliverSnapshot line 40, col 5 to line 47, col 86 of module Reconnect>\n/\\ phase = \"Running\"\n/\\ dropUsed = FALSE\n/\\ resyncUsed = FALSE\n/\\ authorized = TRUE\n/\\ homeSession = \"S1\"\n/\\ projection = <<<<\"S1\", 1>>>>\n/\\ stage = \"ready\"\n/\\ mayRevoke = TRUE\n/\\ view = \"B\"\n/\\ marker = \"snapshot-behind\"\n/\\ invalidDelivery = FALSE\n/\\ cursor = 1\n/\\ version = 1\n/\\ terminalHead = 0\n/\\ snapshot = 1\n/\\ head = 2"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "7: <Repair line 79, col 11 to line 80, col 58 of module Reconnect>\n/\\ phase = \"Running\"\n/\\ dropUsed = FALSE\n/\\ resyncUsed = FALSE\n/\\ authorized = TRUE\n/\\ homeSession = \"S1\"\n/\\ projection = <<<<\"S1\", 1>>, <<\"S1\", 2>>>>\n/\\ stage = \"ready\"\n/\\ mayRevoke = TRUE\n/\\ view = \"B\"\n/\\ marker = \"hidden-advanced\"\n/\\ invalidDelivery = FALSE\n/\\ cursor = 2\n/\\ version = 1\n/\\ terminalHead = 0\n/\\ snapshot = 1\n/\\ head = 2"
+  },
+  {
+    "code": 2200,
+    "severity": 0,
+    "text": "Progress(7) at 2026-11-10 20:29:19: 8,242 states generated (771,482 s/min), 1,420 distinct states found (132,917 ds/min), 732 states left on queue."
+  },
+  {
+    "code": 2199,
+    "severity": 0,
+    "text": "8242 states generated, 1420 distinct states found, 732 states left on queue."
+  },
+  {
+    "code": 2194,
+    "severity": 0,
+    "text": "The depth of the complete state graph search is 7."
+  },
+  {
+    "code": 2268,
+    "severity": 0,
+    "text": "The average outdegree of the complete state graph is 2 (minimum is 0, the maximum 10 and the 95th percentile is 6)."
+  },
+  {
+    "code": 2186,
+    "severity": 0,
+    "text": "Finished in 647ms at (2026-11-10 20:29:19)"
+  }
+]

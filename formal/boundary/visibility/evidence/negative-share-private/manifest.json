@@ -1,0 +1,1043 @@
+{
+  "schema_version": 1,
+  "feature": "VS-001 #7 M2-visibility",
+  "tool": {
+    "version": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "model": {
+    "root": "model",
+    "entry": "Visibility.tla"
+  },
+  "requirements": [
+    {
+      "id": "INV-00",
+      "properties": [
+        "TypeOK"
+      ]
+    },
+    {
+      "id": "INV-04",
+      "properties": [
+        "AtomicCommitBundle"
+      ]
+    },
+    {
+      "id": "INV-07",
+      "properties": [
+        "FreshDecisionOnly"
+      ]
+    },
+    {
+      "id": "INV-08",
+      "properties": [
+        "TerminalBlocksNewEffects"
+      ]
+    },
+    {
+      "id": "INV-10",
+      "properties": [
+        "NoUnauthorizedObservation"
+      ]
+    },
+    {
+      "id": "INV-11",
+      "properties": [
+        "IntentCannotWriteFact"
+      ]
+    },
+    {
+      "id": "LIVE-03",
+      "properties": [
+        "DecisionResolvesOrExpires"
+      ]
+    }
+  ],
+  "profiles": {
+    "positive": {
+      "config": "positive.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "TypeOK",
+        "NoUnauthorizedObservation",
+        "IntentCannotWriteFact",
+        "AtomicCommitBundle",
+        "FreshDecisionOnly",
+        "TerminalBlocksNewEffects"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "npcs": 2,
+        "original_observations": 4,
+        "derived_observations": 2,
+        "decisions": 1,
+        "ordered_tools": 2,
+        "logical_time": "0..2，2表示10秒截止；不建模真人30秒交还过程，只保留交还epoch围栏",
+        "distinct_state_min": 100,
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意自然语言真假及推理质量",
+          "真实模型/数据库/网络",
+          "完整真人控制链由#5负责",
+          "完整fallback动作与持久去重由#5/#9负责"
+        ]
+      },
+      "assumptions": [
+        "可信NPC绑定S1，S2观察拥有不同Session元数据",
+        "原始观察资格和传播许可由服务端固定",
+        "合法传播建立新Observation，不能改写旧受众",
+        "提交原子保存两工具效果、收据、outbox和Decision收束",
+        "逻辑时间与处理器公平调度仅用于活性"
+      ]
+    },
+    "live": {
+      "config": "live.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [],
+      "expected_properties": [
+        "DecisionResolvesOrExpires"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "npcs": 2,
+        "original_observations": 4,
+        "derived_observations": 2,
+        "decisions": 1,
+        "ordered_tools": 2,
+        "logical_time": "0..2，2表示10秒截止；不建模真人30秒交还过程，只保留交还epoch围栏",
+        "distinct_state_min": 100,
+        "liveness": "WF(Tick)/WF(Expire)/WF(Submit)，不要求模型返回",
+        "excluded_behaviors": [
+          "任意自然语言真假及推理质量",
+          "真实模型/数据库/网络",
+          "完整真人控制链由#5负责",
+          "完整fallback动作与持久去重由#5/#9负责"
+        ]
+      },
+      "assumptions": [
+        "可信NPC绑定S1，S2观察拥有不同Session元数据",
+        "原始观察资格和传播许可由服务端固定",
+        "合法传播建立新Observation，不能改写旧受众",
+        "提交原子保存两工具效果、收据、outbox和Decision收束",
+        "逻辑时间与处理器公平调度仅用于活性"
+      ]
+    },
+    "negative-type": {
+      "config": "negative-type.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "TypeOK"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "npcs": 2,
+        "original_observations": 4,
+        "derived_observations": 2,
+        "decisions": 1,
+        "ordered_tools": 2,
+        "logical_time": "0..2，2表示10秒截止；不建模真人30秒交还过程，只保留交还epoch围栏",
+        "distinct_state_min": 0,
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意自然语言真假及推理质量",
+          "真实模型/数据库/网络",
+          "完整真人控制链由#5负责",
+          "完整fallback动作与持久去重由#5/#9负责"
+        ]
+      },
+      "assumptions": [
+        "可信NPC绑定S1，S2观察拥有不同Session元数据",
+        "原始观察资格和传播许可由服务端固定",
+        "合法传播建立新Observation，不能改写旧受众",
+        "提交原子保存两工具效果、收据、outbox和Decision收束",
+        "逻辑时间与处理器公平调度仅用于活性"
+      ]
+    },
+    "negative-observation-filter": {
+      "config": "negative-observation-filter.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NoUnauthorizedObservation"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "npcs": 2,
+        "original_observations": 4,
+        "derived_observations": 2,
+        "decisions": 1,
+        "ordered_tools": 2,
+        "logical_time": "0..2，2表示10秒截止；不建模真人30秒交还过程，只保留交还epoch围栏",
+        "distinct_state_min": 0,
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意自然语言真假及推理质量",
+          "真实模型/数据库/网络",
+          "完整真人控制链由#5负责",
+          "完整fallback动作与持久去重由#5/#9负责"
+        ]
+      },
+      "assumptions": [
+        "可信NPC绑定S1，S2观察拥有不同Session元数据",
+        "原始观察资格和传播许可由服务端固定",
+        "合法传播建立新Observation，不能改写旧受众",
+        "提交原子保存两工具效果、收据、outbox和Decision收束",
+        "逻辑时间与处理器公平调度仅用于活性"
+      ]
+    },
+    "negative-session-filter": {
+      "config": "negative-session-filter.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NoUnauthorizedObservation"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "npcs": 2,
+        "original_observations": 4,
+        "derived_observations": 2,
+        "decisions": 1,
+        "ordered_tools": 2,
+        "logical_time": "0..2，2表示10秒截止；不建模真人30秒交还过程，只保留交还epoch围栏",
+        "distinct_state_min": 0,
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意自然语言真假及推理质量",
+          "真实模型/数据库/网络",
+          "完整真人控制链由#5负责",
+          "完整fallback动作与持久去重由#5/#9负责"
+        ]
+      },
+      "assumptions": [
+        "可信NPC绑定S1，S2观察拥有不同Session元数据",
+        "原始观察资格和传播许可由服务端固定",
+        "合法传播建立新Observation，不能改写旧受众",
+        "提交原子保存两工具效果、收据、outbox和Decision收束",
+        "逻辑时间与处理器公平调度仅用于活性"
+      ]
+    },
+    "negative-human-private": {
+      "config": "negative-human-private.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NoUnauthorizedObservation"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "npcs": 2,
+        "original_observations": 4,
+        "derived_observations": 2,
+        "decisions": 1,
+        "ordered_tools": 2,
+        "logical_time": "0..2，2表示10秒截止；不建模真人30秒交还过程，只保留交还epoch围栏",
+        "distinct_state_min": 0,
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意自然语言真假及推理质量",
+          "真实模型/数据库/网络",
+          "完整真人控制链由#5负责",
+          "完整fallback动作与持久去重由#5/#9负责"
+        ]
+      },
+      "assumptions": [
+        "可信NPC绑定S1，S2观察拥有不同Session元数据",
+        "原始观察资格和传播许可由服务端固定",
+        "合法传播建立新Observation，不能改写旧受众",
+        "提交原子保存两工具效果、收据、outbox和Decision收束",
+        "逻辑时间与处理器公平调度仅用于活性"
+      ]
+    },
+    "negative-share-private": {
+      "config": "negative-share-private.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NoUnauthorizedObservation"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "npcs": 2,
+        "original_observations": 4,
+        "derived_observations": 2,
+        "decisions": 1,
+        "ordered_tools": 2,
+        "logical_time": "0..2，2表示10秒截止；不建模真人30秒交还过程，只保留交还epoch围栏",
+        "distinct_state_min": 0,
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意自然语言真假及推理质量",
+          "真实模型/数据库/网络",
+          "完整真人控制链由#5负责",
+          "完整fallback动作与持久去重由#5/#9负责"
+        ]
+      },
+      "assumptions": [
+        "可信NPC绑定S1，S2观察拥有不同Session元数据",
+        "原始观察资格和传播许可由服务端固定",
+        "合法传播建立新Observation，不能改写旧受众",
+        "提交原子保存两工具效果、收据、outbox和Decision收束",
+        "逻辑时间与处理器公平调度仅用于活性"
+      ]
+    },
+    "negative-belief-source": {
+      "config": "negative-belief-source.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NoUnauthorizedObservation"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "npcs": 2,
+        "original_observations": 4,
+        "derived_observations": 2,
+        "decisions": 1,
+        "ordered_tools": 2,
+        "logical_time": "0..2，2表示10秒截止；不建模真人30秒交还过程，只保留交还epoch围栏",
+        "distinct_state_min": 0,
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意自然语言真假及推理质量",
+          "真实模型/数据库/网络",
+          "完整真人控制链由#5负责",
+          "完整fallback动作与持久去重由#5/#9负责"
+        ]
+      },
+      "assumptions": [
+        "可信NPC绑定S1，S2观察拥有不同Session元数据",
+        "原始观察资格和传播许可由服务端固定",
+        "合法传播建立新Observation，不能改写旧受众",
+        "提交原子保存两工具效果、收据、outbox和Decision收束",
+        "逻辑时间与处理器公平调度仅用于活性"
+      ]
+    },
+    "negative-context-filter": {
+      "config": "negative-context-filter.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NoUnauthorizedObservation"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "npcs": 2,
+        "original_observations": 4,
+        "derived_observations": 2,
+        "decisions": 1,
+        "ordered_tools": 2,
+        "logical_time": "0..2，2表示10秒截止；不建模真人30秒交还过程，只保留交还epoch围栏",
+        "distinct_state_min": 0,
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意自然语言真假及推理质量",
+          "真实模型/数据库/网络",
+          "完整真人控制链由#5负责",
+          "完整fallback动作与持久去重由#5/#9负责"
+        ]
+      },
+      "assumptions": [
+        "可信NPC绑定S1，S2观察拥有不同Session元数据",
+        "原始观察资格和传播许可由服务端固定",
+        "合法传播建立新Observation，不能改写旧受众",
+        "提交原子保存两工具效果、收据、outbox和Decision收束",
+        "逻辑时间与处理器公平调度仅用于活性"
+      ]
+    },
+    "negative-claim-fact": {
+      "config": "negative-claim-fact.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "IntentCannotWriteFact"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "npcs": 2,
+        "original_observations": 4,
+        "derived_observations": 2,
+        "decisions": 1,
+        "ordered_tools": 2,
+        "logical_time": "0..2，2表示10秒截止；不建模真人30秒交还过程，只保留交还epoch围栏",
+        "distinct_state_min": 0,
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意自然语言真假及推理质量",
+          "真实模型/数据库/网络",
+          "完整真人控制链由#5负责",
+          "完整fallback动作与持久去重由#5/#9负责"
+        ]
+      },
+      "assumptions": [
+        "可信NPC绑定S1，S2观察拥有不同Session元数据",
+        "原始观察资格和传播许可由服务端固定",
+        "合法传播建立新Observation，不能改写旧受众",
+        "提交原子保存两工具效果、收据、outbox和Decision收束",
+        "逻辑时间与处理器公平调度仅用于活性"
+      ]
+    },
+    "negative-belief-fact": {
+      "config": "negative-belief-fact.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "IntentCannotWriteFact"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "npcs": 2,
+        "original_observations": 4,
+        "derived_observations": 2,
+        "decisions": 1,
+        "ordered_tools": 2,
+        "logical_time": "0..2，2表示10秒截止；不建模真人30秒交还过程，只保留交还epoch围栏",
+        "distinct_state_min": 0,
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意自然语言真假及推理质量",
+          "真实模型/数据库/网络",
+          "完整真人控制链由#5负责",
+          "完整fallback动作与持久去重由#5/#9负责"
+        ]
+      },
+      "assumptions": [
+        "可信NPC绑定S1，S2观察拥有不同Session元数据",
+        "原始观察资格和传播许可由服务端固定",
+        "合法传播建立新Observation，不能改写旧受众",
+        "提交原子保存两工具效果、收据、outbox和Decision收束",
+        "逻辑时间与处理器公平调度仅用于活性"
+      ]
+    },
+    "negative-intent-fact": {
+      "config": "negative-intent-fact.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "IntentCannotWriteFact"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "npcs": 2,
+        "original_observations": 4,
+        "derived_observations": 2,
+        "decisions": 1,
+        "ordered_tools": 2,
+        "logical_time": "0..2，2表示10秒截止；不建模真人30秒交还过程，只保留交还epoch围栏",
+        "distinct_state_min": 0,
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意自然语言真假及推理质量",
+          "真实模型/数据库/网络",
+          "完整真人控制链由#5负责",
+          "完整fallback动作与持久去重由#5/#9负责"
+        ]
+      },
+      "assumptions": [
+        "可信NPC绑定S1，S2观察拥有不同Session元数据",
+        "原始观察资格和传播许可由服务端固定",
+        "合法传播建立新Observation，不能改写旧受众",
+        "提交原子保存两工具效果、收据、outbox和Decision收束",
+        "逻辑时间与处理器公平调度仅用于活性"
+      ]
+    },
+    "negative-partial-tools": {
+      "config": "negative-partial-tools.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "AtomicCommitBundle"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "npcs": 2,
+        "original_observations": 4,
+        "derived_observations": 2,
+        "decisions": 1,
+        "ordered_tools": 2,
+        "logical_time": "0..2，2表示10秒截止；不建模真人30秒交还过程，只保留交还epoch围栏",
+        "distinct_state_min": 0,
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意自然语言真假及推理质量",
+          "真实模型/数据库/网络",
+          "完整真人控制链由#5负责",
+          "完整fallback动作与持久去重由#5/#9负责"
+        ]
+      },
+      "assumptions": [
+        "可信NPC绑定S1，S2观察拥有不同Session元数据",
+        "原始观察资格和传播许可由服务端固定",
+        "合法传播建立新Observation，不能改写旧受众",
+        "提交原子保存两工具效果、收据、outbox和Decision收束",
+        "逻辑时间与处理器公平调度仅用于活性"
+      ]
+    },
+    "negative-early-speech": {
+      "config": "negative-early-speech.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "AtomicCommitBundle"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "npcs": 2,
+        "original_observations": 4,
+        "derived_observations": 2,
+        "decisions": 1,
+        "ordered_tools": 2,
+        "logical_time": "0..2，2表示10秒截止；不建模真人30秒交还过程，只保留交还epoch围栏",
+        "distinct_state_min": 0,
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意自然语言真假及推理质量",
+          "真实模型/数据库/网络",
+          "完整真人控制链由#5负责",
+          "完整fallback动作与持久去重由#5/#9负责"
+        ]
+      },
+      "assumptions": [
+        "可信NPC绑定S1，S2观察拥有不同Session元数据",
+        "原始观察资格和传播许可由服务端固定",
+        "合法传播建立新Observation，不能改写旧受众",
+        "提交原子保存两工具效果、收据、outbox和Decision收束",
+        "逻辑时间与处理器公平调度仅用于活性"
+      ]
+    },
+    "negative-epoch": {
+      "config": "negative-epoch.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "FreshDecisionOnly"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "npcs": 2,
+        "original_observations": 4,
+        "derived_observations": 2,
+        "decisions": 1,
+        "ordered_tools": 2,
+        "logical_time": "0..2，2表示10秒截止；不建模真人30秒交还过程，只保留交还epoch围栏",
+        "distinct_state_min": 0,
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意自然语言真假及推理质量",
+          "真实模型/数据库/网络",
+          "完整真人控制链由#5负责",
+          "完整fallback动作与持久去重由#5/#9负责"
+        ]
+      },
+      "assumptions": [
+        "可信NPC绑定S1，S2观察拥有不同Session元数据",
+        "原始观察资格和传播许可由服务端固定",
+        "合法传播建立新Observation，不能改写旧受众",
+        "提交原子保存两工具效果、收据、outbox和Decision收束",
+        "逻辑时间与处理器公平调度仅用于活性"
+      ]
+    },
+    "negative-generation": {
+      "config": "negative-generation.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "FreshDecisionOnly"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "npcs": 2,
+        "original_observations": 4,
+        "derived_observations": 2,
+        "decisions": 1,
+        "ordered_tools": 2,
+        "logical_time": "0..2，2表示10秒截止；不建模真人30秒交还过程，只保留交还epoch围栏",
+        "distinct_state_min": 0,
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意自然语言真假及推理质量",
+          "真实模型/数据库/网络",
+          "完整真人控制链由#5负责",
+          "完整fallback动作与持久去重由#5/#9负责"
+        ]
+      },
+      "assumptions": [
+        "可信NPC绑定S1，S2观察拥有不同Session元数据",
+        "原始观察资格和传播许可由服务端固定",
+        "合法传播建立新Observation，不能改写旧受众",
+        "提交原子保存两工具效果、收据、outbox和Decision收束",
+        "逻辑时间与处理器公平调度仅用于活性"
+      ]
+    },
+    "negative-revision": {
+      "config": "negative-revision.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "FreshDecisionOnly"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "npcs": 2,
+        "original_observations": 4,
+        "derived_observations": 2,
+        "decisions": 1,
+        "ordered_tools": 2,
+        "logical_time": "0..2，2表示10秒截止；不建模真人30秒交还过程，只保留交还epoch围栏",
+        "distinct_state_min": 0,
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意自然语言真假及推理质量",
+          "真实模型/数据库/网络",
+          "完整真人控制链由#5负责",
+          "完整fallback动作与持久去重由#5/#9负责"
+        ]
+      },
+      "assumptions": [
+        "可信NPC绑定S1，S2观察拥有不同Session元数据",
+        "原始观察资格和传播许可由服务端固定",
+        "合法传播建立新Observation，不能改写旧受众",
+        "提交原子保存两工具效果、收据、outbox和Decision收束",
+        "逻辑时间与处理器公平调度仅用于活性"
+      ]
+    },
+    "negative-deadline": {
+      "config": "negative-deadline.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "FreshDecisionOnly"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "npcs": 2,
+        "original_observations": 4,
+        "derived_observations": 2,
+        "decisions": 1,
+        "ordered_tools": 2,
+        "logical_time": "0..2，2表示10秒截止；不建模真人30秒交还过程，只保留交还epoch围栏",
+        "distinct_state_min": 0,
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意自然语言真假及推理质量",
+          "真实模型/数据库/网络",
+          "完整真人控制链由#5负责",
+          "完整fallback动作与持久去重由#5/#9负责"
+        ]
+      },
+      "assumptions": [
+        "可信NPC绑定S1，S2观察拥有不同Session元数据",
+        "原始观察资格和传播许可由服务端固定",
+        "合法传播建立新Observation，不能改写旧受众",
+        "提交原子保存两工具效果、收据、outbox和Decision收束",
+        "逻辑时间与处理器公平调度仅用于活性"
+      ]
+    },
+    "negative-cancelled": {
+      "config": "negative-cancelled.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "FreshDecisionOnly"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "npcs": 2,
+        "original_observations": 4,
+        "derived_observations": 2,
+        "decisions": 1,
+        "ordered_tools": 2,
+        "logical_time": "0..2，2表示10秒截止；不建模真人30秒交还过程，只保留交还epoch围栏",
+        "distinct_state_min": 0,
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意自然语言真假及推理质量",
+          "真实模型/数据库/网络",
+          "完整真人控制链由#5负责",
+          "完整fallback动作与持久去重由#5/#9负责"
+        ]
+      },
+      "assumptions": [
+        "可信NPC绑定S1，S2观察拥有不同Session元数据",
+        "原始观察资格和传播许可由服务端固定",
+        "合法传播建立新Observation，不能改写旧受众",
+        "提交原子保存两工具效果、收据、outbox和Decision收束",
+        "逻辑时间与处理器公平调度仅用于活性"
+      ]
+    },
+    "negative-terminal": {
+      "config": "negative-terminal.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "TerminalBlocksNewEffects"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "npcs": 2,
+        "original_observations": 4,
+        "derived_observations": 2,
+        "decisions": 1,
+        "ordered_tools": 2,
+        "logical_time": "0..2，2表示10秒截止；不建模真人30秒交还过程，只保留交还epoch围栏",
+        "distinct_state_min": 0,
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意自然语言真假及推理质量",
+          "真实模型/数据库/网络",
+          "完整真人控制链由#5负责",
+          "完整fallback动作与持久去重由#5/#9负责"
+        ]
+      },
+      "assumptions": [
+        "可信NPC绑定S1，S2观察拥有不同Session元数据",
+        "原始观察资格和传播许可由服务端固定",
+        "合法传播建立新Observation，不能改写旧受众",
+        "提交原子保存两工具效果、收据、outbox和Decision收束",
+        "逻辑时间与处理器公平调度仅用于活性"
+      ]
+    },
+    "negative-no-timeout": {
+      "config": "negative-no-timeout.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [],
+      "expected_properties": [
+        "DecisionResolvesOrExpires"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "npcs": 2,
+        "original_observations": 4,
+        "derived_observations": 2,
+        "decisions": 1,
+        "ordered_tools": 2,
+        "logical_time": "0..2，2表示10秒截止；不建模真人30秒交还过程，只保留交还epoch围栏",
+        "distinct_state_min": 0,
+        "liveness": "WF(Tick)/WF(Expire)/WF(Submit)，不要求模型返回",
+        "excluded_behaviors": [
+          "任意自然语言真假及推理质量",
+          "真实模型/数据库/网络",
+          "完整真人控制链由#5负责",
+          "完整fallback动作与持久去重由#5/#9负责"
+        ]
+      },
+      "assumptions": [
+        "可信NPC绑定S1，S2观察拥有不同Session元数据",
+        "原始观察资格和传播许可由服务端固定",
+        "合法传播建立新Observation，不能改写旧受众",
+        "提交原子保存两工具效果、收据、outbox和Decision收束",
+        "逻辑时间与处理器公平调度仅用于活性"
+      ]
+    },
+    "witness-legalshare": {
+      "config": "witness-legalshare.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NotLegalShare"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "npcs": 2,
+        "original_observations": 4,
+        "derived_observations": 2,
+        "decisions": 1,
+        "ordered_tools": 2,
+        "logical_time": "0..2，2表示10秒截止；不建模真人30秒交还过程，只保留交还epoch围栏",
+        "distinct_state_min": 0,
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意自然语言真假及推理质量",
+          "真实模型/数据库/网络",
+          "完整真人控制链由#5负责",
+          "完整fallback动作与持久去重由#5/#9负责"
+        ]
+      },
+      "assumptions": [
+        "可信NPC绑定S1，S2观察拥有不同Session元数据",
+        "原始观察资格和传播许可由服务端固定",
+        "合法传播建立新Observation，不能改写旧受众",
+        "提交原子保存两工具效果、收据、outbox和Decision收束",
+        "逻辑时间与处理器公平调度仅用于活性"
+      ]
+    },
+    "witness-permissionrejection": {
+      "config": "witness-permissionrejection.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NotPermissionRejection"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "npcs": 2,
+        "original_observations": 4,
+        "derived_observations": 2,
+        "decisions": 1,
+        "ordered_tools": 2,
+        "logical_time": "0..2，2表示10秒截止；不建模真人30秒交还过程，只保留交还epoch围栏",
+        "distinct_state_min": 0,
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意自然语言真假及推理质量",
+          "真实模型/数据库/网络",
+          "完整真人控制链由#5负责",
+          "完整fallback动作与持久去重由#5/#9负责"
+        ]
+      },
+      "assumptions": [
+        "可信NPC绑定S1，S2观察拥有不同Session元数据",
+        "原始观察资格和传播许可由服务端固定",
+        "合法传播建立新Observation，不能改写旧受众",
+        "提交原子保存两工具效果、收据、outbox和Decision收束",
+        "逻辑时间与处理器公平调度仅用于活性"
+      ]
+    },
+    "witness-twotools": {
+      "config": "witness-twotools.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NotTwoTools"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "npcs": 2,
+        "original_observations": 4,
+        "derived_observations": 2,
+        "decisions": 1,
+        "ordered_tools": 2,
+        "logical_time": "0..2，2表示10秒截止；不建模真人30秒交还过程，只保留交还epoch围栏",
+        "distinct_state_min": 0,
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意自然语言真假及推理质量",
+          "真实模型/数据库/网络",
+          "完整真人控制链由#5负责",
+          "完整fallback动作与持久去重由#5/#9负责"
+        ]
+      },
+      "assumptions": [
+        "可信NPC绑定S1，S2观察拥有不同Session元数据",
+        "原始观察资格和传播许可由服务端固定",
+        "合法传播建立新Observation，不能改写旧受众",
+        "提交原子保存两工具效果、收据、outbox和Decision收束",
+        "逻辑时间与处理器公平调度仅用于活性"
+      ]
+    },
+    "witness-failedsecond": {
+      "config": "witness-failedsecond.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NotFailedSecond"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "npcs": 2,
+        "original_observations": 4,
+        "derived_observations": 2,
+        "decisions": 1,
+        "ordered_tools": 2,
+        "logical_time": "0..2，2表示10秒截止；不建模真人30秒交还过程，只保留交还epoch围栏",
+        "distinct_state_min": 0,
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意自然语言真假及推理质量",
+          "真实模型/数据库/网络",
+          "完整真人控制链由#5负责",
+          "完整fallback动作与持久去重由#5/#9负责"
+        ]
+      },
+      "assumptions": [
+        "可信NPC绑定S1，S2观察拥有不同Session元数据",
+        "原始观察资格和传播许可由服务端固定",
+        "合法传播建立新Observation，不能改写旧受众",
+        "提交原子保存两工具效果、收据、outbox和Decision收束",
+        "逻辑时间与处理器公平调度仅用于活性"
+      ]
+    },
+    "witness-laterejection": {
+      "config": "witness-laterejection.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NotLateRejection"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "npcs": 2,
+        "original_observations": 4,
+        "derived_observations": 2,
+        "decisions": 1,
+        "ordered_tools": 2,
+        "logical_time": "0..2，2表示10秒截止；不建模真人30秒交还过程，只保留交还epoch围栏",
+        "distinct_state_min": 0,
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意自然语言真假及推理质量",
+          "真实模型/数据库/网络",
+          "完整真人控制链由#5负责",
+          "完整fallback动作与持久去重由#5/#9负责"
+        ]
+      },
+      "assumptions": [
+        "可信NPC绑定S1，S2观察拥有不同Session元数据",
+        "原始观察资格和传播许可由服务端固定",
+        "合法传播建立新Observation，不能改写旧受众",
+        "提交原子保存两工具效果、收据、outbox和Decision收束",
+        "逻辑时间与处理器公平调度仅用于活性"
+      ]
+    },
+    "witness-unrelatedsuccess": {
+      "config": "witness-unrelatedsuccess.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NotUnrelatedSuccess"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "npcs": 2,
+        "original_observations": 4,
+        "derived_observations": 2,
+        "decisions": 1,
+        "ordered_tools": 2,
+        "logical_time": "0..2，2表示10秒截止；不建模真人30秒交还过程，只保留交还epoch围栏",
+        "distinct_state_min": 0,
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意自然语言真假及推理质量",
+          "真实模型/数据库/网络",
+          "完整真人控制链由#5负责",
+          "完整fallback动作与持久去重由#5/#9负责"
+        ]
+      },
+      "assumptions": [
+        "可信NPC绑定S1，S2观察拥有不同Session元数据",
+        "原始观察资格和传播许可由服务端固定",
+        "合法传播建立新Observation，不能改写旧受众",
+        "提交原子保存两工具效果、收据、outbox和Decision收束",
+        "逻辑时间与处理器公平调度仅用于活性"
+      ]
+    },
+    "witness-falseclaim": {
+      "config": "witness-falseclaim.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NotFalseClaim"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "npcs": 2,
+        "original_observations": 4,
+        "derived_observations": 2,
+        "decisions": 1,
+        "ordered_tools": 2,
+        "logical_time": "0..2，2表示10秒截止；不建模真人30秒交还过程，只保留交还epoch围栏",
+        "distinct_state_min": 0,
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意自然语言真假及推理质量",
+          "真实模型/数据库/网络",
+          "完整真人控制链由#5负责",
+          "完整fallback动作与持久去重由#5/#9负责"
+        ]
+      },
+      "assumptions": [
+        "可信NPC绑定S1，S2观察拥有不同Session元数据",
+        "原始观察资格和传播许可由服务端固定",
+        "合法传播建立新Observation，不能改写旧受众",
+        "提交原子保存两工具效果、收据、outbox和Decision收束",
+        "逻辑时间与处理器公平调度仅用于活性"
+      ]
+    }
+  }
+}

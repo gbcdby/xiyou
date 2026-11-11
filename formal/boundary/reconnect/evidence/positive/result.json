@@ -1,0 +1,250 @@
+{
+  "schema_version": 1,
+  "run_id": "43eb1f09-e9f9-4355-a0bf-341ae701ca9c",
+  "status": "PASS_WITHIN_SCOPE",
+  "reason": "COMPLETE_MODEL_CHECK",
+  "mode": "modelcheck",
+  "profile": "positive",
+  "started_at": "2026-11-11T04:29:02.941186+00:00",
+  "finished_at": "2026-11-11T04:29:07.969794+00:00",
+  "duration_seconds": 5.028643,
+  "completed": true,
+  "implementation_status": "NOT_ASSESSED",
+  "tool": {
+    "version_label": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+    "jar_snapshot": "/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/reconnect-v4/positive/tool/tla2tools.jar",
+    "java_path": "/usr/bin/java",
+    "java_version": "openjdk version \"21.0.13\" 2026-10-20\nOpenJDK Runtime Environment (build 21.0.13+9-1-deb13u2-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.13+9-1-deb13u2-Debian, mixed mode, sharing)",
+    "removed_environment_names": [],
+    "reported_version": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)"
+  },
+  "inputs": {
+    "manifest_sha256": "fc5106ee308b65aa943e301ff5620b75286f13937271568fc7858b131b566820",
+    "model_root": "/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/formal/boundary/reconnect/model",
+    "snapshot_directory": "/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/reconnect-v4/positive/input",
+    "files": [
+      {
+        "path": "Reconnect.tla",
+        "sha256": "35a91cc61174930132bd6b4b0d13eb76631616b993ef068b3dd01dc70f3adf1c",
+        "bytes": 8799
+      },
+      {
+        "path": "live.cfg",
+        "sha256": "e2343e54a08e7f0f851f149e4dff5e8a5897daa1ba0360adb586163977673175",
+        "bytes": 89
+      },
+      {
+        "path": "negative-hidden-block.cfg",
+        "sha256": "d759684ca0c51f70617b23285d920e1f5e7ef2c700b0f907a2bee2b3c690a0a4",
+        "bytes": 97
+      },
+      {
+        "path": "negative-no-retry.cfg",
+        "sha256": "f4013cf549c27fd5542b1bc6af1091a9202c8ba0f19c64cfcb73057aa7b87593",
+        "bytes": 93
+      },
+      {
+        "path": "negative-order.cfg",
+        "sha256": "59cd99667ff9678027dcea7bcd849b3a72e8b5a1127f72bb0293572876696f27",
+        "bytes": 88
+      },
+      {
+        "path": "negative-partial.cfg",
+        "sha256": "9a8feee23d23838702d889b558bcce3918a2f4e84b5e3ed66ebc4cd067aa658a",
+        "bytes": 89
+      },
+      {
+        "path": "negative-revoked.cfg",
+        "sha256": "b4bdfa5df0e733dd40fb96ba44d8bc55e7aecbfcff7760dbd9bb1527ce54f368",
+        "bytes": 85
+      },
+      {
+        "path": "negative-session-filter.cfg",
+        "sha256": "b28abdaba87ac7378e67b5549d243ce2097a5dd502aef32edb29c61676678ed5",
+        "bytes": 92
+      },
+      {
+        "path": "negative-snapshot-filter.cfg",
+        "sha256": "b1ce7640b7541f68947898c4c511185f0f19579e2658062d4b838bdeac5138fa",
+        "bytes": 93
+      },
+      {
+        "path": "negative-stream-filter.cfg",
+        "sha256": "8e01b58a7e202c01aee41b561398704a2091e5876051707dde9e78d226091657",
+        "bytes": 91
+      },
+      {
+        "path": "negative-terminal.cfg",
+        "sha256": "21b528ba409ac9a67802b0ad36a1226822173d03a330a54f68470fc1235d14ce",
+        "bytes": 89
+      },
+      {
+        "path": "negative-type.cfg",
+        "sha256": "f95b353ea3937716297b402371f1cfcb098d5f96edb4459b7bf2fc2696eb44e2",
+        "bytes": 63
+      },
+      {
+        "path": "negative-version-filter.cfg",
+        "sha256": "b389330a1f79bcd7e6f8bb69d734c983dbb152b84113c920c1a37132e0de3686",
+        "bytes": 89
+      },
+      {
+        "path": "negative-view-filter.cfg",
+        "sha256": "f6e1e5fe54ffe7739829addbed1662f061a1c57c0875b72d44a106c17ead81c5",
+        "bytes": 89
+      },
+      {
+        "path": "positive.cfg",
+        "sha256": "2e33bfc59d055646099f19a14923b85f533d95bc1242cf9087ccae28d0348b9e",
+        "bytes": 144
+      },
+      {
+        "path": "witness-drop.cfg",
+        "sha256": "78dc8bf052fe2cec7b6fc0ac38779864b7cf83b5765a2b1bcaee4296d42cedae",
+        "bytes": 64
+      },
+      {
+        "path": "witness-duplicate.cfg",
+        "sha256": "8c28f482418f7f43705083e08724e2a490c7245a3d42d3f128463dd2bb0b1c23",
+        "bytes": 69
+      },
+      {
+        "path": "witness-future.cfg",
+        "sha256": "032070c8322cb6f364a8e6f6dc097943461df71251eebb75f2a6882f80016915",
+        "bytes": 66
+      },
+      {
+        "path": "witness-hiddenadvance.cfg",
+        "sha256": "25fa496a6d8ceea06fce0b2f8c55adb3c29c40de2462f32c19a7e4a1e150578e",
+        "bytes": 73
+      },
+      {
+        "path": "witness-identityrejection.cfg",
+        "sha256": "ba8f32255919cd7c5e0ab34eccbaae12153d0f727e95b4fa07a3a83de616a6c3",
+        "bytes": 77
+      },
+      {
+        "path": "witness-overlap.cfg",
+        "sha256": "63e0f61fcad735b2a06a1811b629a1dffd94deeb1ad4b29ef9509e1e4b9c537d",
+        "bytes": 67
+      },
+      {
+        "path": "witness-resync.cfg",
+        "sha256": "4a27da3bffc792e797580d4410cbd3179d47efc430249bb360da85f1b8e0327a",
+        "bytes": 66
+      },
+      {
+        "path": "witness-snapshotbehind.cfg",
+        "sha256": "0c0658ce21bb49d4f046497d7d2949cd69a4c66c5636fa1c62419a274c7078c6",
+        "bytes": 74
+      },
+      {
+        "path": "witness-terminalread.cfg",
+        "sha256": "a556990f8f5b790dc7dbf50713fb5b93a72ef51fe1c8f18b06e2fa973e2f8469",
+        "bytes": 69
+      }
+    ],
+    "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a"
+  },
+  "checks": {
+    "expected_invariants": [
+      "TypeOK",
+      "ProjectionMatchesCursor",
+      "NoUnauthorizedObservation",
+      "TerminalBlocksNewEffects"
+    ],
+    "expected_properties": [],
+    "configured_invariants": [
+      "TypeOK",
+      "ProjectionMatchesCursor",
+      "NoUnauthorizedObservation",
+      "TerminalBlocksNewEffects"
+    ],
+    "configured_properties": [],
+    "checks_deadlock": true,
+    "deadlock_reason": null,
+    "behavior": {
+      "SPECIFICATION": "Spec"
+    }
+  },
+  "scope": {
+    "sessions": 2,
+    "events_per_session": 4,
+    "views": 2,
+    "view_generations": 2,
+    "revocation_restore_cycles": 1,
+    "resync_cycles": 1,
+    "distinct_state_min": 100,
+    "network": "任意已提交完整区间的丢失/重复/乱序/重叠；记录可见性固定于事件发生时",
+    "projection": "有序授权效果前缀，包含新增/移除字段与知识来源效果；真实reducer待实现",
+    "liveness": "NOT_CHECKED",
+    "excluded_behaviors": [
+      "真实WebSocket/认证/持久数据库",
+      "全局计数或流量节奏保密",
+      "无限新事件与无限身份变更"
+    ],
+    "terminal_states": [
+      "Finished",
+      "Aborted"
+    ]
+  },
+  "assumptions": [
+    "事件与前缀提交原子且日志持久，另由#5/#6验证",
+    "快照数据和snapshotSeq一次捕获，投影和cursor一次应用",
+    "活性只要求有限身份故障、有限日志、补发与快照最终得到处理；安全性无公平条件"
+  ],
+  "command": [
+    "/usr/bin/java",
+    "-Xmx1024m",
+    "-XX:+UseParallelGC",
+    "-Duser.language=en",
+    "-Duser.country=US",
+    "-Duser.home=/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/reconnect-v4/positive/runtime-home",
+    "-Djava.io.tmpdir=/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/reconnect-v4/positive/tmp",
+    "-DTLA-Library=/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/reconnect-v4/positive/input",
+    "-cp",
+    "/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/reconnect-v4/positive/tool/tla2tools.jar",
+    "tlc2.TLC",
+    "-tool",
+    "-modelcheck",
+    "-workers",
+    "1",
+    "-metadir",
+    "/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/reconnect-v4/positive/states",
+    "-config",
+    "/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/reconnect-v4/positive/input/positive.cfg",
+    "/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/reconnect-v4/positive/input/Reconnect.tla"
+  ],
+  "process": {
+    "exit_code": 0,
+    "timed_out": false,
+    "interrupted": false
+  },
+  "statistics": {
+    "generated_states": 1167742,
+    "distinct_states": 20278,
+    "remaining_states": 0
+  },
+  "evidence": {
+    "log": "/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/reconnect-v4/positive/tlc.log",
+    "messages": "/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/reconnect-v4/positive/messages.json"
+  },
+  "message_codes": [
+    2185,
+    2186,
+    2187,
+    2189,
+    2190,
+    2193,
+    2194,
+    2199,
+    2200,
+    2219,
+    2220,
+    2262,
+    2268
+  ],
+  "error_codes": [],
+  "warning_codes": []
+}

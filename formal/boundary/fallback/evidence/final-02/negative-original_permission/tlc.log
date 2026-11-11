@@ -1,0 +1,227 @@
+@!@!@STARTMSG 2262:0 @!@!@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+@!@!@ENDMSG 2262 @!@!@
+@!@!@STARTMSG 2187:0 @!@!@
+Running breadth-first search Model-Checking with fp 93 and seed 3282604028611960980 with 1 worker on 9 cores with 910MB heap and 64MB offheap memory [pid: 787] (Linux 6.18.57 amd64, Debian 21.0.13 x86_64, MSBDiskFPSet, DiskStateQueue).
+@!@!@ENDMSG 2187 @!@!@
+@!@!@STARTMSG 2220:0 @!@!@
+Starting SANY...
+@!@!@ENDMSG 2220 @!@!@
+Parsing file /workspace/scratch/f9401eff266e/.agent-output/boundary-fix/worktree/.agent-output/fallback/final-02/negative-original_permission/input/Fallback.tla
+Parsing file /workspace/scratch/f9401eff266e/.agent-output/boundary-fix/worktree/.agent-output/fallback/final-02/negative-original_permission/tmp/Naturals.tla
+Parsing file /workspace/scratch/f9401eff266e/.agent-output/boundary-fix/worktree/.agent-output/fallback/final-02/negative-original_permission/tmp/Sequences.tla
+Parsing file /workspace/scratch/f9401eff266e/.agent-output/boundary-fix/worktree/.agent-output/fallback/final-02/negative-original_permission/tmp/FiniteSets.tla
+Semantic processing of module Naturals
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module Fallback
+@!@!@STARTMSG 2219:0 @!@!@
+SANY finished.
+@!@!@ENDMSG 2219 @!@!@
+@!@!@STARTMSG 2185:0 @!@!@
+Starting... (2026-11-10 22:10:22)
+@!@!@ENDMSG 2185 @!@!@
+@!@!@STARTMSG 2189:0 @!@!@
+Computing initial states...
+@!@!@ENDMSG 2189 @!@!@
+@!@!@STARTMSG 2190:0 @!@!@
+Finished computing initial states: 1 distinct state generated at 2026-11-10 22:10:22.
+@!@!@ENDMSG 2190 @!@!@
+@!@!@STARTMSG 2110:1 @!@!@
+Invariant FreshDecisionOnly is violated.
+@!@!@ENDMSG 2110 @!@!@
+@!@!@STARTMSG 2121:1 @!@!@
+The behavior up to this point is:
+@!@!@ENDMSG 2121 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+1: <Initial predicate>
+/\ d = [ status |-> "Pending",
+  effects |-> <<>>,
+  receipts |->
+      ( "d1:fallback" :>
+            [ status |-> "None",
+              payload |-> "wait",
+              reason |-> "none",
+              eventSeq |-> 0 ] @@
+        "d1:fallback:retry" :>
+            [ status |-> "None",
+              payload |-> "wait",
+              reason |-> "none",
+              eventSeq |-> 0 ] ),
+  phase |-> "Running",
+  now |-> 0,
+  epoch |-> 0,
+  allowed |-> TRUE,
+  sealed |-> "None",
+  originalReceipt |-> "None",
+  queued |-> FALSE,
+  queuedFrom |-> "None",
+  fallbackEpoch |-> 0,
+  events |-> <<>>,
+  outbox |-> {},
+  terminalEffects |-> 0,
+  nextId |-> "none" ]
+/\ v = [ key |-> "d1:fallback",
+  witness |-> FALSE,
+  up |-> TRUE,
+  crashes |-> 0,
+  callback |-> "none",
+  handled |-> FALSE,
+  stage |-> "Idle",
+  attempts |-> 0,
+  cachedValid |-> FALSE,
+  conflictSeen |-> FALSE,
+  repeatedOriginal |-> FALSE,
+  crashAfterFallback |-> FALSE ]
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+2: <Next line 226, col 2 to line 232, col 45 of module Fallback>
+/\ d = [ status |-> "Pending",
+  effects |-> <<>>,
+  receipts |->
+      ( "d1:fallback" :>
+            [ status |-> "None",
+              payload |-> "wait",
+              reason |-> "none",
+              eventSeq |-> 0 ] @@
+        "d1:fallback:retry" :>
+            [ status |-> "None",
+              payload |-> "wait",
+              reason |-> "none",
+              eventSeq |-> 0 ] ),
+  phase |-> "Running",
+  now |-> 0,
+  epoch |-> 0,
+  allowed |-> TRUE,
+  sealed |-> "None",
+  originalReceipt |-> "None",
+  queued |-> FALSE,
+  queuedFrom |-> "None",
+  fallbackEpoch |-> 0,
+  events |-> <<>>,
+  outbox |-> {},
+  terminalEffects |-> 0,
+  nextId |-> "none" ]
+/\ v = [ key |-> "d1:fallback",
+  witness |-> FALSE,
+  up |-> TRUE,
+  crashes |-> 0,
+  callback |-> "valid",
+  handled |-> FALSE,
+  stage |-> "Idle",
+  attempts |-> 0,
+  cachedValid |-> FALSE,
+  conflictSeen |-> FALSE,
+  repeatedOriginal |-> FALSE,
+  crashAfterFallback |-> FALSE ]
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+3: <Next line 226, col 2 to line 232, col 45 of module Fallback>
+/\ d = [ status |-> "Pending",
+  effects |-> <<>>,
+  receipts |->
+      ( "d1:fallback" :>
+            [ status |-> "None",
+              payload |-> "wait",
+              reason |-> "none",
+              eventSeq |-> 0 ] @@
+        "d1:fallback:retry" :>
+            [ status |-> "None",
+              payload |-> "wait",
+              reason |-> "none",
+              eventSeq |-> 0 ] ),
+  phase |-> "Running",
+  now |-> 0,
+  epoch |-> 0,
+  allowed |-> FALSE,
+  sealed |-> "None",
+  originalReceipt |-> "None",
+  queued |-> FALSE,
+  queuedFrom |-> "None",
+  fallbackEpoch |-> 0,
+  events |-> <<>>,
+  outbox |-> {},
+  terminalEffects |-> 0,
+  nextId |-> "none" ]
+/\ v = [ key |-> "d1:fallback",
+  witness |-> FALSE,
+  up |-> TRUE,
+  crashes |-> 0,
+  callback |-> "valid",
+  handled |-> FALSE,
+  stage |-> "Idle",
+  attempts |-> 0,
+  cachedValid |-> FALSE,
+  conflictSeen |-> FALSE,
+  repeatedOriginal |-> FALSE,
+  crashAfterFallback |-> FALSE ]
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+4: <Next line 226, col 2 to line 232, col 45 of module Fallback>
+/\ d = [ status |-> "Committed",
+  effects |->
+      << [ payload |-> "wait",
+           kind |-> "original",
+           key |-> "d1:submit",
+           at |-> 0,
+           requestEpoch |-> 0,
+           currentEpoch |-> 0,
+           allowedAt |-> FALSE,
+           phaseAt |-> "Running",
+           decisionAt |-> "Pending" ] >>,
+  receipts |->
+      ( "d1:fallback" :>
+            [ status |-> "None",
+              payload |-> "wait",
+              reason |-> "none",
+              eventSeq |-> 0 ] @@
+        "d1:fallback:retry" :>
+            [ status |-> "None",
+              payload |-> "wait",
+              reason |-> "none",
+              eventSeq |-> 0 ] ),
+  phase |-> "Running",
+  now |-> 0,
+  epoch |-> 0,
+  allowed |-> FALSE,
+  sealed |-> "Committed",
+  originalReceipt |-> "Committed",
+  queued |-> FALSE,
+  queuedFrom |-> "None",
+  fallbackEpoch |-> 0,
+  events |-> <<"d1:submit">>,
+  outbox |-> {1},
+  terminalEffects |-> 0,
+  nextId |-> "none" ]
+/\ v = [ key |-> "d1:fallback",
+  witness |-> FALSE,
+  up |-> TRUE,
+  crashes |-> 0,
+  callback |-> "valid",
+  handled |-> TRUE,
+  stage |-> "Idle",
+  attempts |-> 0,
+  cachedValid |-> FALSE,
+  conflictSeen |-> FALSE,
+  repeatedOriginal |-> FALSE,
+  crashAfterFallback |-> FALSE ]
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2200:0 @!@!@
+Progress(4) at 2026-11-10 22:10:22: 386 states generated (41,654 s/min), 74 distinct states found (7,985 ds/min), 57 states left on queue.
+@!@!@ENDMSG 2200 @!@!@
+@!@!@STARTMSG 2199:0 @!@!@
+386 states generated, 74 distinct states found, 57 states left on queue.
+@!@!@ENDMSG 2199 @!@!@
+@!@!@STARTMSG 2194:0 @!@!@
+The depth of the complete state graph search is 4.
+@!@!@ENDMSG 2194 @!@!@
+@!@!@STARTMSG 2268:0 @!@!@
+The average outdegree of the complete state graph is 5 (minimum is 1, the maximum 10 and the 95th percentile is 10).
+@!@!@ENDMSG 2268 @!@!@
+@!@!@STARTMSG 2186:0 @!@!@
+Finished in 566ms at (2026-11-10 22:10:22)
+@!@!@ENDMSG 2186 @!@!@

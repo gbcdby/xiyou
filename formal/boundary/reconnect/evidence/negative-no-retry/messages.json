@@ -1,0 +1,137 @@
+[
+  {
+    "code": 2262,
+    "severity": 0,
+    "text": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)"
+  },
+  {
+    "code": 2187,
+    "severity": 0,
+    "text": "Running breadth-first search Model-Checking with fp 79 and seed -5165978661026344106 with 1 worker on 9 cores with 910MB heap and 64MB offheap memory [pid: 521] (Linux 6.18.57 amd64, Debian 21.0.13 x86_64, MSBDiskFPSet, DiskStateQueue)."
+  },
+  {
+    "code": 2220,
+    "severity": 0,
+    "text": "Starting SANY..."
+  },
+  {
+    "code": 2219,
+    "severity": 0,
+    "text": "SANY finished."
+  },
+  {
+    "code": 2185,
+    "severity": 0,
+    "text": "Starting... (2026-11-10 20:29:24)"
+  },
+  {
+    "code": 2212,
+    "severity": 0,
+    "text": "Implied-temporal checking--satisfiability problem has 1 branches."
+  },
+  {
+    "code": 2189,
+    "severity": 0,
+    "text": "Computing initial states..."
+  },
+  {
+    "code": 2190,
+    "severity": 0,
+    "text": "Finished computing initial states: 2 distinct states generated at 2026-11-10 20:29:24."
+  },
+  {
+    "code": 2192,
+    "severity": 0,
+    "text": "Checking temporal properties for the current state space with 12580 total distinct states at (2026-11-10 20:29:27)"
+  },
+  {
+    "code": 2116,
+    "severity": 1,
+    "text": "Temporal properties were violated."
+  },
+  {
+    "code": 2264,
+    "severity": 1,
+    "text": "The following behavior constitutes a counter-example:"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "1: <Initial predicate>\n/\\ phase = \"Running\"\n/\\ dropUsed = FALSE\n/\\ resyncUsed = FALSE\n/\\ authorized = TRUE\n/\\ homeSession = \"S1\"\n/\\ projection = <<>>\n/\\ stage = \"need\"\n/\\ mayRevoke = TRUE\n/\\ view = \"A\"\n/\\ marker = \"initial\"\n/\\ invalidDelivery = FALSE\n/\\ cursor = 0\n/\\ version = 0\n/\\ terminalHead = 0\n/\\ snapshot = 0\n/\\ head = 0"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "2: <Revoke line 93, col 11 to line 97, col 111 of module Reconnect>\n/\\ phase = \"Running\"\n/\\ dropUsed = FALSE\n/\\ resyncUsed = FALSE\n/\\ authorized = FALSE\n/\\ homeSession = \"S1\"\n/\\ projection = <<>>\n/\\ stage = \"need\"\n/\\ mayRevoke = FALSE\n/\\ view = \"A\"\n/\\ marker = \"revoked\"\n/\\ invalidDelivery = FALSE\n/\\ cursor = 0\n/\\ version = 0\n/\\ terminalHead = 0\n/\\ snapshot = 0\n/\\ head = 0"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "3: <Restore line 99, col 12 to line 101, col 103 of module Reconnect>\n/\\ phase = \"Running\"\n/\\ dropUsed = FALSE\n/\\ resyncUsed = FALSE\n/\\ authorized = TRUE\n/\\ homeSession = \"S1\"\n/\\ projection = <<>>\n/\\ stage = \"need\"\n/\\ mayRevoke = FALSE\n/\\ view = \"A\"\n/\\ marker = \"restored\"\n/\\ invalidDelivery = FALSE\n/\\ cursor = 0\n/\\ version = 0\n/\\ terminalHead = 0\n/\\ snapshot = 0\n/\\ head = 0"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "4: <Rebind line 87, col 11 to line 91, col 119 of module Reconnect>\n/\\ phase = \"Running\"\n/\\ dropUsed = FALSE\n/\\ resyncUsed = FALSE\n/\\ authorized = TRUE\n/\\ homeSession = \"S1\"\n/\\ projection = <<>>\n/\\ stage = \"need\"\n/\\ mayRevoke = FALSE\n/\\ view = \"B\"\n/\\ marker = \"view-rebound\"\n/\\ invalidDelivery = FALSE\n/\\ cursor = 0\n/\\ version = 1\n/\\ terminalHead = 0\n/\\ snapshot = 0\n/\\ head = 0"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "5: <StartSnapshot line 33, col 18 to line 37, col 111 of module Reconnect>\n/\\ phase = \"Running\"\n/\\ dropUsed = FALSE\n/\\ resyncUsed = FALSE\n/\\ authorized = TRUE\n/\\ homeSession = \"S1\"\n/\\ projection = <<>>\n/\\ stage = \"waiting\"\n/\\ mayRevoke = FALSE\n/\\ view = \"B\"\n/\\ marker = \"snapshot-captured\"\n/\\ invalidDelivery = FALSE\n/\\ cursor = 0\n/\\ version = 1\n/\\ terminalHead = 0\n/\\ snapshot = 0\n/\\ head = 0"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "6: <DeliverSnapshot line 40, col 5 to line 47, col 86 of module Reconnect>\n/\\ phase = \"Running\"\n/\\ dropUsed = FALSE\n/\\ resyncUsed = FALSE\n/\\ authorized = TRUE\n/\\ homeSession = \"S1\"\n/\\ projection = <<>>\n/\\ stage = \"ready\"\n/\\ mayRevoke = FALSE\n/\\ view = \"B\"\n/\\ marker = \"snapshot-applied\"\n/\\ invalidDelivery = FALSE\n/\\ cursor = 0\n/\\ version = 1\n/\\ terminalHead = 0\n/\\ snapshot = 0\n/\\ head = 0"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "7: <Resync line 103, col 11 to line 106, col 121 of module Reconnect>\n/\\ phase = \"Running\"\n/\\ dropUsed = FALSE\n/\\ resyncUsed = TRUE\n/\\ authorized = TRUE\n/\\ homeSession = \"S1\"\n/\\ projection = <<>>\n/\\ stage = \"need\"\n/\\ mayRevoke = FALSE\n/\\ view = \"B\"\n/\\ marker = \"resync-required\"\n/\\ invalidDelivery = FALSE\n/\\ cursor = 0\n/\\ version = 1\n/\\ terminalHead = 0\n/\\ snapshot = 0\n/\\ head = 0"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "8: <StartSnapshot line 33, col 18 to line 37, col 111 of module Reconnect>\n/\\ phase = \"Running\"\n/\\ dropUsed = FALSE\n/\\ resyncUsed = TRUE\n/\\ authorized = TRUE\n/\\ homeSession = \"S1\"\n/\\ projection = <<>>\n/\\ stage = \"waiting\"\n/\\ mayRevoke = FALSE\n/\\ view = \"B\"\n/\\ marker = \"snapshot-captured\"\n/\\ invalidDelivery = FALSE\n/\\ cursor = 0\n/\\ version = 1\n/\\ terminalHead = 0\n/\\ snapshot = 0\n/\\ head = 0"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "9: <CommitEvent line 28, col 16 to line 31, col 118 of module Reconnect>\n/\\ phase = \"Running\"\n/\\ dropUsed = FALSE\n/\\ resyncUsed = TRUE\n/\\ authorized = TRUE\n/\\ homeSession = \"S1\"\n/\\ projection = <<>>\n/\\ stage = \"waiting\"\n/\\ mayRevoke = FALSE\n/\\ view = \"B\"\n/\\ marker = \"committed\"\n/\\ invalidDelivery = FALSE\n/\\ cursor = 0\n/\\ version = 1\n/\\ terminalHead = 0\n/\\ snapshot = 0\n/\\ head = 1"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "10: <Finish line 113, col 14 to line 116, col 97 of module Reconnect>\n/\\ phase = \"Aborted\"\n/\\ dropUsed = FALSE\n/\\ resyncUsed = TRUE\n/\\ authorized = TRUE\n/\\ homeSession = \"S1\"\n/\\ projection = <<>>\n/\\ stage = \"waiting\"\n/\\ mayRevoke = FALSE\n/\\ view = \"B\"\n/\\ marker = \"terminal\"\n/\\ invalidDelivery = FALSE\n/\\ cursor = 0\n/\\ version = 1\n/\\ terminalHead = 1\n/\\ snapshot = 0\n/\\ head = 1"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "11: <DeliverSnapshot line 40, col 5 to line 47, col 86 of module Reconnect>\n/\\ phase = \"Aborted\"\n/\\ dropUsed = FALSE\n/\\ resyncUsed = TRUE\n/\\ authorized = TRUE\n/\\ homeSession = \"S1\"\n/\\ projection = <<>>\n/\\ stage = \"ready\"\n/\\ mayRevoke = FALSE\n/\\ view = \"B\"\n/\\ marker = \"snapshot-behind\"\n/\\ invalidDelivery = FALSE\n/\\ cursor = 0\n/\\ version = 1\n/\\ terminalHead = 1\n/\\ snapshot = 0\n/\\ head = 1"
+  },
+  {
+    "code": 2218,
+    "severity": 4,
+    "text": "12: Stuttering"
+  },
+  {
+    "code": 2267,
+    "severity": 0,
+    "text": "Finished checking temporal properties in 00s at 2026-11-10 20:29:27"
+  },
+  {
+    "code": 2200,
+    "severity": 0,
+    "text": "Progress(13) at 2026-11-10 20:29:27: 606,917 states generated (10,310,028 s/min), 15,261 distinct states found (259,246 ds/min), 2,681 states left on queue."
+  },
+  {
+    "code": 2199,
+    "severity": 0,
+    "text": "606917 states generated, 15261 distinct states found, 2681 states left on queue."
+  },
+  {
+    "code": 2186,
+    "severity": 0,
+    "text": "Finished in 3536ms at (2026-11-10 20:29:27)"
+  }
+]

@@ -1,0 +1,97 @@
+[
+  {
+    "code": 2262,
+    "severity": 0,
+    "text": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)"
+  },
+  {
+    "code": 2187,
+    "severity": 0,
+    "text": "Running breadth-first search Model-Checking with fp 119 and seed 6301496218607951669 with 1 worker on 9 cores with 455MB heap and 64MB offheap memory [pid: 159] (Linux 6.18.57 amd64, Debian 21.0.13 x86_64, MSBDiskFPSet, DiskStateQueue)."
+  },
+  {
+    "code": 2220,
+    "severity": 0,
+    "text": "Starting SANY..."
+  },
+  {
+    "code": 2219,
+    "severity": 0,
+    "text": "SANY finished."
+  },
+  {
+    "code": 2185,
+    "severity": 0,
+    "text": "Starting... (2026-11-10 20:21:51)"
+  },
+  {
+    "code": 2189,
+    "severity": 0,
+    "text": "Computing initial states..."
+  },
+  {
+    "code": 2190,
+    "severity": 0,
+    "text": "Finished computing initial states: 1 distinct state generated at 2026-11-10 20:21:52."
+  },
+  {
+    "code": 2110,
+    "severity": 1,
+    "text": "Invariant NotBothSessionsWritten is violated."
+  },
+  {
+    "code": 2121,
+    "severity": 1,
+    "text": "The behavior up to this point is:"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "1: <Initial predicate>\n/\\ pending = {\"local1\", \"local2\", \"cross1\", \"cross2\"}\n/\\ result = [ local1 |-> \"Pending\",\n  local2 |-> \"Pending\",\n  cross1 |-> \"Pending\",\n  cross2 |-> \"Pending\" ]\n/\\ versions = [S1 |-> 0, S2 |-> 0]\n/\\ prepared = \"none\"\n/\\ marker = \"initial\"\n/\\ writes = {}"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "2: <Receive line 21, col 15 to line 24, col 55 of module SessionIsolation>\n/\\ pending = {\"local2\", \"cross1\", \"cross2\"}\n/\\ result = [ local1 |-> \"Pending\",\n  local2 |-> \"Pending\",\n  cross1 |-> \"Pending\",\n  cross2 |-> \"Pending\" ]\n/\\ versions = [S1 |-> 0, S2 |-> 0]\n/\\ prepared = \"local1\"\n/\\ marker = \"received\"\n/\\ writes = {}"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "3: <Commit line 27, col 5 to line 41, col 24 of module SessionIsolation>\n/\\ pending = {\"local2\", \"cross1\", \"cross2\"}\n/\\ result = [ local1 |-> \"Accepted\",\n  local2 |-> \"Pending\",\n  cross1 |-> \"Pending\",\n  cross2 |-> \"Pending\" ]\n/\\ versions = [S1 |-> 1, S2 |-> 0]\n/\\ prepared = \"none\"\n/\\ marker = \"legal-write\"\n/\\ writes = { [ request |-> \"local1\",\n    authority |-> \"S1\",\n    target |-> \"S1\",\n    localId |-> \"item\" ] }"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "4: <Receive line 21, col 15 to line 24, col 55 of module SessionIsolation>\n/\\ pending = {\"cross1\", \"cross2\"}\n/\\ result = [ local1 |-> \"Accepted\",\n  local2 |-> \"Pending\",\n  cross1 |-> \"Pending\",\n  cross2 |-> \"Pending\" ]\n/\\ versions = [S1 |-> 1, S2 |-> 0]\n/\\ prepared = \"local2\"\n/\\ marker = \"received\"\n/\\ writes = { [ request |-> \"local1\",\n    authority |-> \"S1\",\n    target |-> \"S1\",\n    localId |-> \"item\" ] }"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "5: <Commit line 27, col 5 to line 41, col 24 of module SessionIsolation>\n/\\ pending = {\"cross1\", \"cross2\"}\n/\\ result = [ local1 |-> \"Accepted\",\n  local2 |-> \"Accepted\",\n  cross1 |-> \"Pending\",\n  cross2 |-> \"Pending\" ]\n/\\ versions = [S1 |-> 1, S2 |-> 1]\n/\\ prepared = \"none\"\n/\\ marker = \"legal-write\"\n/\\ writes = { [ request |-> \"local1\",\n    authority |-> \"S1\",\n    target |-> \"S1\",\n    localId |-> \"item\" ],\n  [ request |-> \"local2\",\n    authority |-> \"S2\",\n    target |-> \"S2\",\n    localId |-> \"item\" ] }"
+  },
+  {
+    "code": 2200,
+    "severity": 0,
+    "text": "Progress(5) at 2026-11-10 20:21:52: 22 states generated (2,059 s/min), 22 distinct states found (2,059 ds/min), 11 states left on queue."
+  },
+  {
+    "code": 2199,
+    "severity": 0,
+    "text": "22 states generated, 22 distinct states found, 11 states left on queue."
+  },
+  {
+    "code": 2194,
+    "severity": 0,
+    "text": "The depth of the complete state graph search is 5."
+  },
+  {
+    "code": 2268,
+    "severity": 0,
+    "text": "The average outdegree of the complete state graph is 2 (minimum is 1, the maximum 4 and the 95th percentile is 4)."
+  },
+  {
+    "code": 2186,
+    "severity": 0,
+    "text": "Finished in 650ms at (2026-11-10 20:21:52)"
+  }
+]

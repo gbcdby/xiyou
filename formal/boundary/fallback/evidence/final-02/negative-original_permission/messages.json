@@ -1,0 +1,92 @@
+[
+  {
+    "code": 2262,
+    "severity": 0,
+    "text": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)"
+  },
+  {
+    "code": 2187,
+    "severity": 0,
+    "text": "Running breadth-first search Model-Checking with fp 93 and seed 3282604028611960980 with 1 worker on 9 cores with 910MB heap and 64MB offheap memory [pid: 787] (Linux 6.18.57 amd64, Debian 21.0.13 x86_64, MSBDiskFPSet, DiskStateQueue)."
+  },
+  {
+    "code": 2220,
+    "severity": 0,
+    "text": "Starting SANY..."
+  },
+  {
+    "code": 2219,
+    "severity": 0,
+    "text": "SANY finished."
+  },
+  {
+    "code": 2185,
+    "severity": 0,
+    "text": "Starting... (2026-11-10 22:10:22)"
+  },
+  {
+    "code": 2189,
+    "severity": 0,
+    "text": "Computing initial states..."
+  },
+  {
+    "code": 2190,
+    "severity": 0,
+    "text": "Finished computing initial states: 1 distinct state generated at 2026-11-10 22:10:22."
+  },
+  {
+    "code": 2110,
+    "severity": 1,
+    "text": "Invariant FreshDecisionOnly is violated."
+  },
+  {
+    "code": 2121,
+    "severity": 1,
+    "text": "The behavior up to this point is:"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "1: <Initial predicate>\n/\\ d = [ status |-> \"Pending\",\n  effects |-> <<>>,\n  receipts |->\n      ( \"d1:fallback\" :>\n            [ status |-> \"None\",\n              payload |-> \"wait\",\n              reason |-> \"none\",\n              eventSeq |-> 0 ] @@\n        \"d1:fallback:retry\" :>\n            [ status |-> \"None\",\n              payload |-> \"wait\",\n              reason |-> \"none\",\n              eventSeq |-> 0 ] ),\n  phase |-> \"Running\",\n  now |-> 0,\n  epoch |-> 0,\n  allowed |-> TRUE,\n  sealed |-> \"None\",\n  originalReceipt |-> \"None\",\n  queued |-> FALSE,\n  queuedFrom |-> \"None\",\n  fallbackEpoch |-> 0,\n  events |-> <<>>,\n  outbox |-> {},\n  terminalEffects |-> 0,\n  nextId |-> \"none\" ]\n/\\ v = [ key |-> \"d1:fallback\",\n  witness |-> FALSE,\n  up |-> TRUE,\n  crashes |-> 0,\n  callback |-> \"none\",\n  handled |-> FALSE,\n  stage |-> \"Idle\",\n  attempts |-> 0,\n  cachedValid |-> FALSE,\n  conflictSeen |-> FALSE,\n  repeatedOriginal |-> FALSE,\n  crashAfterFallback |-> FALSE ]"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "2: <Next line 226, col 2 to line 232, col 45 of module Fallback>\n/\\ d = [ status |-> \"Pending\",\n  effects |-> <<>>,\n  receipts |->\n      ( \"d1:fallback\" :>\n            [ status |-> \"None\",\n              payload |-> \"wait\",\n              reason |-> \"none\",\n              eventSeq |-> 0 ] @@\n        \"d1:fallback:retry\" :>\n            [ status |-> \"None\",\n              payload |-> \"wait\",\n              reason |-> \"none\",\n              eventSeq |-> 0 ] ),\n  phase |-> \"Running\",\n  now |-> 0,\n  epoch |-> 0,\n  allowed |-> TRUE,\n  sealed |-> \"None\",\n  originalReceipt |-> \"None\",\n  queued |-> FALSE,\n  queuedFrom |-> \"None\",\n  fallbackEpoch |-> 0,\n  events |-> <<>>,\n  outbox |-> {},\n  terminalEffects |-> 0,\n  nextId |-> \"none\" ]\n/\\ v = [ key |-> \"d1:fallback\",\n  witness |-> FALSE,\n  up |-> TRUE,\n  crashes |-> 0,\n  callback |-> \"valid\",\n  handled |-> FALSE,\n  stage |-> \"Idle\",\n  attempts |-> 0,\n  cachedValid |-> FALSE,\n  conflictSeen |-> FALSE,\n  repeatedOriginal |-> FALSE,\n  crashAfterFallback |-> FALSE ]"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "3: <Next line 226, col 2 to line 232, col 45 of module Fallback>\n/\\ d = [ status |-> \"Pending\",\n  effects |-> <<>>,\n  receipts |->\n      ( \"d1:fallback\" :>\n            [ status |-> \"None\",\n              payload |-> \"wait\",\n              reason |-> \"none\",\n              eventSeq |-> 0 ] @@\n        \"d1:fallback:retry\" :>\n            [ status |-> \"None\",\n              payload |-> \"wait\",\n              reason |-> \"none\",\n              eventSeq |-> 0 ] ),\n  phase |-> \"Running\",\n  now |-> 0,\n  epoch |-> 0,\n  allowed |-> FALSE,\n  sealed |-> \"None\",\n  originalReceipt |-> \"None\",\n  queued |-> FALSE,\n  queuedFrom |-> \"None\",\n  fallbackEpoch |-> 0,\n  events |-> <<>>,\n  outbox |-> {},\n  terminalEffects |-> 0,\n  nextId |-> \"none\" ]\n/\\ v = [ key |-> \"d1:fallback\",\n  witness |-> FALSE,\n  up |-> TRUE,\n  crashes |-> 0,\n  callback |-> \"valid\",\n  handled |-> FALSE,\n  stage |-> \"Idle\",\n  attempts |-> 0,\n  cachedValid |-> FALSE,\n  conflictSeen |-> FALSE,\n  repeatedOriginal |-> FALSE,\n  crashAfterFallback |-> FALSE ]"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "4: <Next line 226, col 2 to line 232, col 45 of module Fallback>\n/\\ d = [ status |-> \"Committed\",\n  effects |->\n      << [ payload |-> \"wait\",\n           kind |-> \"original\",\n           key |-> \"d1:submit\",\n           at |-> 0,\n           requestEpoch |-> 0,\n           currentEpoch |-> 0,\n           allowedAt |-> FALSE,\n           phaseAt |-> \"Running\",\n           decisionAt |-> \"Pending\" ] >>,\n  receipts |->\n      ( \"d1:fallback\" :>\n            [ status |-> \"None\",\n              payload |-> \"wait\",\n              reason |-> \"none\",\n              eventSeq |-> 0 ] @@\n        \"d1:fallback:retry\" :>\n            [ status |-> \"None\",\n              payload |-> \"wait\",\n              reason |-> \"none\",\n              eventSeq |-> 0 ] ),\n  phase |-> \"Running\",\n  now |-> 0,\n  epoch |-> 0,\n  allowed |-> FALSE,\n  sealed |-> \"Committed\",\n  originalReceipt |-> \"Committed\",\n  queued |-> FALSE,\n  queuedFrom |-> \"None\",\n  fallbackEpoch |-> 0,\n  events |-> <<\"d1:submit\">>,\n  outbox |-> {1},\n  terminalEffects |-> 0,\n  nextId |-> \"none\" ]\n/\\ v = [ key |-> \"d1:fallback\",\n  witness |-> FALSE,\n  up |-> TRUE,\n  crashes |-> 0,\n  callback |-> \"valid\",\n  handled |-> TRUE,\n  stage |-> \"Idle\",\n  attempts |-> 0,\n  cachedValid |-> FALSE,\n  conflictSeen |-> FALSE,\n  repeatedOriginal |-> FALSE,\n  crashAfterFallback |-> FALSE ]"
+  },
+  {
+    "code": 2200,
+    "severity": 0,
+    "text": "Progress(4) at 2026-11-10 22:10:22: 386 states generated (41,654 s/min), 74 distinct states found (7,985 ds/min), 57 states left on queue."
+  },
+  {
+    "code": 2199,
+    "severity": 0,
+    "text": "386 states generated, 74 distinct states found, 57 states left on queue."
+  },
+  {
+    "code": 2194,
+    "severity": 0,
+    "text": "The depth of the complete state graph search is 4."
+  },
+  {
+    "code": 2268,
+    "severity": 0,
+    "text": "The average outdegree of the complete state graph is 5 (minimum is 1, the maximum 10 and the 95th percentile is 10)."
+  },
+  {
+    "code": 2186,
+    "severity": 0,
+    "text": "Finished in 566ms at (2026-11-10 22:10:22)"
+  }
+]

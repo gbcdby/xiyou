@@ -1,0 +1,242 @@
+@!@!@STARTMSG 2262:0 @!@!@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+@!@!@ENDMSG 2262 @!@!@
+@!@!@STARTMSG 2187:0 @!@!@
+Running breadth-first search Model-Checking with fp 37 and seed 2258242558296828330 with 1 worker on 9 cores with 910MB heap and 64MB offheap memory [pid: 832] (Linux 6.18.57 amd64, Debian 21.0.13 x86_64, MSBDiskFPSet, DiskStateQueue).
+@!@!@ENDMSG 2187 @!@!@
+@!@!@STARTMSG 2220:0 @!@!@
+Starting SANY...
+@!@!@ENDMSG 2220 @!@!@
+Parsing file /workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/visibility-v3/negative-terminal/input/Visibility.tla
+Parsing file /workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/visibility-v3/negative-terminal/tmp/Naturals.tla
+Parsing file /workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/visibility-v3/negative-terminal/tmp/FiniteSets.tla
+Parsing file /workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/visibility-v3/negative-terminal/tmp/Sequences.tla
+Semantic processing of module Naturals
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module Visibility
+@!@!@STARTMSG 2219:0 @!@!@
+SANY finished.
+@!@!@ENDMSG 2219 @!@!@
+@!@!@STARTMSG 2185:0 @!@!@
+Starting... (2026-11-10 20:29:48)
+@!@!@ENDMSG 2185 @!@!@
+@!@!@STARTMSG 2189:0 @!@!@
+Computing initial states...
+@!@!@ENDMSG 2189 @!@!@
+@!@!@STARTMSG 2190:0 @!@!@
+Finished computing initial states: 1 distinct state generated at 2026-11-10 20:29:48.
+@!@!@ENDMSG 2190 @!@!@
+@!@!@STARTMSG 2110:1 @!@!@
+Invariant TerminalBlocksNewEffects is violated.
+@!@!@ENDMSG 2110 @!@!@
+@!@!@STARTMSG 2121:1 @!@!@
+The behavior up to this point is:
+@!@!@ENDMSG 2121 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+1: <Initial predicate>
+/\ phase = "Running"
+/\ epoch = 0
+/\ handled = FALSE
+/\ repaired = 0
+/\ shares = {}
+/\ beliefSources = [Tang |-> {}, Wukong |-> {}]
+/\ mode = "none"
+/\ unrelated = FALSE
+/\ now = 0
+/\ chosenNPC = "Tang"
+/\ receipt = "none"
+/\ callback = FALSE
+/\ outbox = 0
+/\ marker = "initial"
+/\ claims = {}
+/\ generation = 0
+/\ terminalEffects = 0
+/\ speech = 0
+/\ known = [Tang |-> {}, Wukong |-> {}]
+/\ recordedEpoch = 0
+/\ recordedGeneration = 0
+/\ invalidCommit = FALSE
+/\ status = "Idle"
+/\ material = 1
+/\ context = {}
+/\ revision = 0
+/\ recordedRevision = 0
+/\ effects = 0
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+2: <Observe line 38, col 5 to line 48, col 103 of module Visibility>
+/\ phase = "Running"
+/\ epoch = 0
+/\ handled = FALSE
+/\ repaired = 0
+/\ shares = {}
+/\ beliefSources = [Tang |-> {}, Wukong |-> {}]
+/\ mode = "none"
+/\ unrelated = FALSE
+/\ now = 0
+/\ chosenNPC = "Tang"
+/\ receipt = "none"
+/\ callback = FALSE
+/\ outbox = 0
+/\ marker = "observed"
+/\ claims = {}
+/\ generation = 0
+/\ terminalEffects = 0
+/\ speech = 0
+/\ known = [Tang |-> {"evidenceA"}, Wukong |-> {}]
+/\ recordedEpoch = 0
+/\ recordedGeneration = 0
+/\ invalidCommit = FALSE
+/\ status = "Idle"
+/\ material = 1
+/\ context = {}
+/\ revision = 0
+/\ recordedRevision = 0
+/\ effects = 0
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+3: <Begin line 85, col 13 to line 92, col 89 of module Visibility>
+/\ phase = "Running"
+/\ epoch = 0
+/\ handled = FALSE
+/\ repaired = 0
+/\ shares = {}
+/\ beliefSources = [Tang |-> {}, Wukong |-> {}]
+/\ mode = "none"
+/\ unrelated = FALSE
+/\ now = 0
+/\ chosenNPC = "Tang"
+/\ receipt = "none"
+/\ callback = FALSE
+/\ outbox = 0
+/\ marker = "decision-started"
+/\ claims = {}
+/\ generation = 0
+/\ terminalEffects = 0
+/\ speech = 0
+/\ known = [Tang |-> {"evidenceA"}, Wukong |-> {}]
+/\ recordedEpoch = 0
+/\ recordedGeneration = 0
+/\ invalidCommit = FALSE
+/\ status = "Pending"
+/\ material = 1
+/\ context = {"evidenceA"}
+/\ revision = 0
+/\ recordedRevision = 0
+/\ effects = 0
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+4: <Callback line 94, col 16 to line 99, col 103 of module Visibility>
+/\ phase = "Running"
+/\ epoch = 0
+/\ handled = FALSE
+/\ repaired = 0
+/\ shares = {}
+/\ beliefSources = [Tang |-> {}, Wukong |-> {}]
+/\ mode = "two-valid"
+/\ unrelated = FALSE
+/\ now = 0
+/\ chosenNPC = "Tang"
+/\ receipt = "none"
+/\ callback = TRUE
+/\ outbox = 0
+/\ marker = "callback"
+/\ claims = {}
+/\ generation = 0
+/\ terminalEffects = 0
+/\ speech = 0
+/\ known = [Tang |-> {"evidenceA"}, Wukong |-> {}]
+/\ recordedEpoch = 0
+/\ recordedGeneration = 0
+/\ invalidCommit = FALSE
+/\ status = "Pending"
+/\ material = 1
+/\ context = {"evidenceA"}
+/\ revision = 0
+/\ recordedRevision = 0
+/\ effects = 0
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+5: <Finish line 178, col 14 to line 183, col 89 of module Visibility>
+/\ phase = "Finished"
+/\ epoch = 0
+/\ handled = FALSE
+/\ repaired = 0
+/\ shares = {}
+/\ beliefSources = [Tang |-> {}, Wukong |-> {}]
+/\ mode = "two-valid"
+/\ unrelated = FALSE
+/\ now = 0
+/\ chosenNPC = "Tang"
+/\ receipt = "none"
+/\ callback = TRUE
+/\ outbox = 0
+/\ marker = "terminal"
+/\ claims = {}
+/\ generation = 0
+/\ terminalEffects = 0
+/\ speech = 0
+/\ known = [Tang |-> {"evidenceA"}, Wukong |-> {}]
+/\ recordedEpoch = 0
+/\ recordedGeneration = 0
+/\ invalidCommit = FALSE
+/\ status = "Pending"
+/\ material = 1
+/\ context = {"evidenceA"}
+/\ revision = 0
+/\ recordedRevision = 0
+/\ effects = 0
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+6: <Submit line 112, col 5 to line 137, col 80 of module Visibility>
+/\ phase = "Finished"
+/\ epoch = 0
+/\ handled = TRUE
+/\ repaired = 1
+/\ shares = {}
+/\ beliefSources = [Tang |-> {}, Wukong |-> {}]
+/\ mode = "two-valid"
+/\ unrelated = FALSE
+/\ now = 0
+/\ chosenNPC = "Tang"
+/\ receipt = "Accepted"
+/\ callback = TRUE
+/\ outbox = 2
+/\ marker = "two-tools-committed"
+/\ claims = {}
+/\ generation = 0
+/\ terminalEffects = 0
+/\ speech = 1
+/\ known = [Tang |-> {"evidenceA"}, Wukong |-> {}]
+/\ recordedEpoch = 0
+/\ recordedGeneration = 0
+/\ invalidCommit = TRUE
+/\ status = "Committed"
+/\ material = 0
+/\ context = {"evidenceA"}
+/\ revision = 2
+/\ recordedRevision = 0
+/\ effects = 2
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2200:0 @!@!@
+Progress(6) at 2026-11-10 20:29:48: 10,251 states generated (806,107 s/min), 2,950 distinct states found (231,979 ds/min), 2,503 states left on queue.
+@!@!@ENDMSG 2200 @!@!@
+@!@!@STARTMSG 2199:0 @!@!@
+10251 states generated, 2950 distinct states found, 2503 states left on queue.
+@!@!@ENDMSG 2199 @!@!@
+@!@!@STARTMSG 2194:0 @!@!@
+The depth of the complete state graph search is 6.
+@!@!@ENDMSG 2194 @!@!@
+@!@!@STARTMSG 2268:0 @!@!@
+The average outdegree of the complete state graph is 7 (minimum is 0, the maximum 20 and the 95th percentile is 19).
+@!@!@ENDMSG 2268 @!@!@
+@!@!@STARTMSG 2186:0 @!@!@
+Finished in 768ms at (2026-11-10 20:29:48)
+@!@!@ENDMSG 2186 @!@!@
