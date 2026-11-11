@@ -1,0 +1,130 @@
+{
+  "status": "design_proposal_only_not_exact_source_sampling",
+  "rules": [
+    "颜色先分配对象职责后选色值",
+    "保留明亮大面与局部浓色",
+    "冷暖在衣装环境和材质间回应",
+    "文字优先读取实际前景背景对比"
+  ],
+  "color_roles": {
+    "light_warm_surface": "#F6F2E9",
+    "light_cool_surface": "#F3F6F5",
+    "deep_ink": "#283C44",
+    "stone_blue": "#709DB3",
+    "jade_green": "#83A997",
+    "cinnabar": "#B54D3C",
+    "soft_gold": "#C19A52",
+    "apricot": "#D99B69",
+    "mist_violet": "#9380A9"
+  },
+  "optional_relationships": [
+    {
+      "name": "晴青配暖杏",
+      "environment": "#B7D7E4",
+      "hero_color": "#B56E43",
+      "support": "#F6F2E9",
+      "ink": "#2A4254"
+    },
+    {
+      "name": "朱衣配玉山",
+      "environment": "#8FB7AA",
+      "hero_color": "#AA4940",
+      "support": "#F7F3E9",
+      "ink": "#2C3B41"
+    },
+    {
+      "name": "松绿配金光",
+      "environment": "#86A995",
+      "hero_color": "#5B7B6A",
+      "support": "#F4F2EA",
+      "accent": "#D09A57",
+      "ink": "#314047"
+    },
+    {
+      "name": "烟紫配浅金",
+      "environment": "#C6C9DA",
+      "hero_color": "#8270A3",
+      "support": "#F5F3F7",
+      "accent": "#D1A665",
+      "ink": "#303748"
+    }
+  ],
+  "readability_pairs": [
+    {
+      "name": "晴青配暖杏·基础文字",
+      "foreground": "#2A4254",
+      "background": "#F6F2E9",
+      "kind": "text",
+      "scope": "design_proposal_only"
+    },
+    {
+      "name": "朱衣配玉山·基础文字",
+      "foreground": "#2C3B41",
+      "background": "#F7F3E9",
+      "kind": "text",
+      "scope": "design_proposal_only"
+    },
+    {
+      "name": "松绿配金光·基础文字",
+      "foreground": "#314047",
+      "background": "#F4F2EA",
+      "kind": "text",
+      "scope": "design_proposal_only"
+    },
+    {
+      "name": "烟紫配浅金·基础文字",
+      "foreground": "#303748",
+      "background": "#F5F3F7",
+      "kind": "text",
+      "scope": "design_proposal_only"
+    },
+    {
+      "name": "暖白·正文",
+      "foreground": "#283C44",
+      "background": "#F6F2E9",
+      "kind": "text",
+      "scope": "design_proposal_only"
+    },
+    {
+      "name": "冷白·正文",
+      "foreground": "#283C44",
+      "background": "#F3F6F5",
+      "kind": "text",
+      "scope": "design_proposal_only"
+    },
+    {
+      "name": "朱砂·暖白高亮文字",
+      "foreground": "#B54D3C",
+      "background": "#F6F2E9",
+      "kind": "text",
+      "scope": "design_proposal_only"
+    },
+    {
+      "name": "朱砂·暖白状态符号",
+      "foreground": "#B54D3C",
+      "background": "#F6F2E9",
+      "kind": "non_text",
+      "scope": "design_proposal_only"
+    },
+    {
+      "name": "深墨·暖白小图标",
+      "foreground": "#283C44",
+      "background": "#F6F2E9",
+      "kind": "non_text",
+      "scope": "design_proposal_only"
+    },
+    {
+      "name": "深墨·冷白选中边界",
+      "foreground": "#283C44",
+      "background": "#F3F6F5",
+      "kind": "non_text",
+      "scope": "design_proposal_only"
+    }
+  ],
+  "readability_pair_notice": "These are DESIGN-PROPOSAL opaque sRGB samples only; passing does not establish rendered art, user settings, dynamic content, touch targets, or regulatory/platform compliance.",
+  "area_guidance": {
+    "quiet_bright_fields": "Prefer sufficiently large calm zones when actual reading is required; no mandatory area percentages.",
+    "colored_subjects": "Allow saturated color planes for identities; distinguish them from status colors.",
+    "material_highlights": "Reserve sharp reflectance for selected material-specific details, not every object."
+  }
+}

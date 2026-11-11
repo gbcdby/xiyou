@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "project_id": "guofeng-ink-art-direction",
+  "display_name": "国风水墨淡彩 · 总体美术方向",
+  "profile_status": "art-direction-guidelines",
+  "reference_id_prefix": "R",
+  "reference_id_width": 2,
+  "scope": "overall visual direction only",
+  "source_reference_count": 72,
+  "article_image_count": 7,
+  "boards_count": 6,
+  "page_specific_specs_included": false
+}

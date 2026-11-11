@@ -1,0 +1,82 @@
+# 《西游记》多人 AI 协作游戏 —— 忽略规则
+# 原则：只提交可复现的源码、配置、文档与文本清单；运行时产物、密钥、体积大的素材不进库。
+
+# ---------- Agent 临时产物 ----------
+# AGENTS.md 规定：临时文件、日志、截图只写 .agent-output/，且不得引用
+.agent-output/
+.claude/
+.codex/
+.cursor/
+.kimi/
+.aider*
+
+# ---------- 系统与编辑器 ----------
+.DS_Store
+._*
+*.swp
+*.swo
+*~
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# ---------- 环境变量与密钥 ----------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# ---------- 日志与临时文件 ----------
+*.log
+npm-debug.log*
+pnpm-debug.log*
+tmp/
+temp/
+*.tmp
+
+# ---------- Node / 前端 ----------
+node_modules/
+dist/
+dist-ssr/
+build/
+coverage/
+.nyc_output/
+*.tsbuildinfo
+.nuxt/
+.output/
+.vite/
+.eslintcache
+.stylelintcache
+
+# ---------- Python（.agents/skills 下的脚本会生成） ----------
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# ---------- 美术素材：只提交文本清单，图片二进制走外链/网盘 ----------
+# 保留 catalog.md、manifest.json、README.md、media-links.md 等文本
+docs/design-direction/references/images/
+docs/design-direction/references/inbox/*
+!docs/design-direction/references/inbox/README.md
+*.psd
+*.ai
+*.xcf
+*.blend
+*.blend1
+
+# ---------- TLA+ 工具产物 ----------
+# 保留 /formal 下的 .tla 规格与 .cfg 配置，忽略 TLC 输出
+states/
+*.out
+
+# TLA+ 工具二进制，由 tla-verify 技能按需下载
+tla2tools.jar
