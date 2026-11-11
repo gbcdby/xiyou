@@ -19,3 +19,10 @@ test('不可达服务会明确失败，不生成房间、身份或成功回执',
   await assert.rejects(api.guest('青禾'), error => error.code === 'NETWORK_UNAVAILABLE');
   await assert.rejects(api.rooms(), error => error.code === 'NETWORK_UNAVAILABLE');
 });
+
+test('R-vs001-p05-REQ-002：收据 404 中明确的房间、权限或身份失效不得转成空收据', async () => {
+  for (const code of ['SESSION_GONE', 'UNAUTHENTICATED', 'FORBIDDEN']) {
+    const api = new HttpApi(() => '原身份', async () => new Response(JSON.stringify({ schemaVersion: 1, code }), { status: 404 }));
+    await assert.rejects(api.receipt('session-one', 'original-action'), error => error.status === 404 && error.code === code);
+  }
+});

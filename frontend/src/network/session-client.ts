@@ -17,6 +17,7 @@ export interface SessionState {
 interface ReceiptReader { receipt(sessionId: string, actionId: string): Promise<ClientReceipt | null> }
 interface Options {
   onChange?: (state: SessionState) => void;
+  onUnauthenticated?: (token: string) => void;
   id?: () => string;
   heartbeatMs?: number;
   reconnectDelayMs?: number;
@@ -58,7 +59,7 @@ export class SessionClient {
 
   constructor(api: ReceiptReader, connectLink: ConnectLink, options: Options = {}) {
     this.#api = api; this.#connectLink = connectLink;
-    this.#options = { onChange: options.onChange || (() => {}), id: options.id || (() => crypto.randomUUID()), heartbeatMs: options.heartbeatMs ?? 1500, reconnectDelayMs: options.reconnectDelayMs ?? 1000 };
+    this.#options = { onChange: options.onChange || (() => {}), onUnauthenticated: options.onUnauthenticated || (() => {}), id: options.id || (() => crypto.randomUUID()), heartbeatMs: options.heartbeatMs ?? 1500, reconnectDelayMs: options.reconnectDelayMs ?? 1000 };
   }
   get state(): SessionState {
     const snapshot = this.#view.snapshot;
@@ -81,8 +82,8 @@ export class SessionClient {
   open(sessionId: string, token: string, drafts: ActionDraft[] = []) {
     this.close(); this.#sessionId = sessionId; this.#token = token;
     this.#actions = drafts.filter(action => action.sessionId === sessionId).map(action => ({ ...action, status: 'unknown', receipt: null, detail: '保留的原动作等待服务器确认。' }));
-    this.#openConnection();
     if (this.#options.heartbeatMs > 0) this.#heartbeat = setInterval(() => { if (this.#connection === 'online') void this.sync(); }, this.#options.heartbeatMs);
+    this.#openConnection();
   }
   close() {
     this.#serial += 1;
@@ -104,24 +105,40 @@ export class SessionClient {
     this.#connection = 'connecting'; this.#message = ''; this.#controlBusy = false; this.#pendingControl = null; this.#syncSerial = null;
     this.#actions = this.#actions.map(action => action.status === 'waiting' ? { ...action, status: 'unknown', detail: '连接发生变化，动作结果待确认。' } : action);
     this.#publish();
+    if (serial !== this.#serial || generation !== this.#view.generation || !this.#sessionId || !this.#token) return;
     this.#link = this.#connectLink(this.#token, {
       connected: () => { if (serial === this.#serial) void this.#subscribe(serial, generation); },
       disconnected: () => this.#disconnected(serial),
-      failed: value => { if (serial === this.#serial && !this.#handleError(value)) this.#disconnected(serial); },
+      failed: value => this.#initialFailure(value, serial),
       batch: value => { if (serial === this.#serial) this.#batch(value, generation); },
     });
   }
-  #disconnected(serial: number) {
+  #initialFailure(value: unknown, serial: number) {
     if (serial !== this.#serial) return;
-    this.#serial += 1;
+    const error = asError(value);
+    if (error && ['UNAUTHENTICATED', 'FORBIDDEN', 'SESSION_GONE'].includes(error.code)) { this.#handleError(error); return; }
+    const retry = !error || ['OUTCOME_UNKNOWN', 'RESYNC_REQUIRED'].includes(error.code);
+    this.#disconnected(serial, error?.message || (retry ? '连接尚未完成，稍后会重新获取授权视图。' : '连接请求未完成，请核对后手动重连。'), retry);
+  }
+  #disconnected(serial: number, message = '连接已断开，正在等待重新连接。', retry = true) {
+    if (serial !== this.#serial) return;
+    const recoverySerial = ++this.#serial;
+    if (this.#retryTimer) clearTimeout(this.#retryTimer);
+    this.#retryTimer = null;
     const link = this.#link; this.#link = null; link?.close();
-    this.#view.begin(this.#sessionId); this.#connection = 'offline'; this.#message = '连接已断开，正在等待重新连接。'; this.#controlBusy = false; this.#pendingControl = null; this.#syncSerial = null;
+    this.#view.begin(this.#sessionId); this.#connection = 'offline'; this.#message = message; this.#controlBusy = false; this.#pendingControl = null; this.#syncSerial = null;
     this.#actions = this.#actions.map(action => action.status === 'waiting' ? { ...action, status: 'unknown', detail: '尚未确认结果。连接恢复后可查询或原样重试。' } : action);
     this.#publish();
-    if (this.#sessionId && this.#options.reconnectDelayMs > 0) this.#retryTimer = setTimeout(() => this.#openConnection(), this.#options.reconnectDelayMs);
+    // 只保留一个有延迟的恢复任务。发布状态期间也可能发生关闭或换绑。
+    if (retry && recoverySerial === this.#serial && this.#sessionId && this.#token && this.#options.reconnectDelayMs > 0) {
+      this.#retryTimer = setTimeout(() => {
+        if (recoverySerial === this.#serial && this.#connection === 'offline' && this.#sessionId && this.#token) this.#openConnection();
+      }, this.#options.reconnectDelayMs);
+    }
   }
   #handleError(value: unknown): boolean {
     const error = asError(value); if (!error) return false;
+    const rejectedToken = this.#token;
     this.#message = error.message || errorLabels[error.code] || '当前请求未能完成。';
     if (['UNAUTHENTICATED', 'FORBIDDEN', 'SESSION_GONE'].includes(error.code)) {
       this.#serial += 1; this.#view.begin(this.#sessionId); this.#connection = 'forbidden';
@@ -130,7 +147,9 @@ export class SessionClient {
       if (this.#retryTimer) clearTimeout(this.#retryTimer);
       this.#retryTimer = null;
     } else if (error.code === 'RESYNC_REQUIRED') { this.#openConnection(); return true; }
-    this.#publish(); return true;
+    this.#publish();
+    if (error.code === 'UNAUTHENTICATED' && rejectedToken) this.#options.onUnauthenticated(rejectedToken);
+    return true;
   }
   async #subscribe(serial: number, generation: number) {
     const link = this.#link; if (!link) return;
@@ -138,8 +157,8 @@ export class SessionClient {
     try {
       const value = await link.request('session.subscribe', { sessionId: this.#sessionId });
       if (serial !== this.#serial || generation !== this.#view.generation) return;
-      if (this.#handleError(value)) return;
-      if (this.#view.acceptSnapshot(value, generation) !== 'applied') { this.#message = '授权视图校验未通过，请重新连接。'; this.#connection = 'offline'; this.#publish(); return; }
+      if (asError(value)) { this.#initialFailure(value, serial); return; }
+      if (this.#view.acceptSnapshot(value, generation) !== 'applied') { this.#disconnected(serial, '授权视图校验未通过，请重新连接。', false); return; }
       const actorId = this.#view.snapshot!.projection.self.characterId;
       this.#actions = this.#actions.filter(action => action.actorId === actorId);
       this.#connection = 'online'; this.#message = ''; this.#publish();

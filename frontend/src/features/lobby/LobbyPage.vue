@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import type { RoomSummary } from '../../domain/world.ts';
-import { api, identity, signIn, storageNotice } from '../../state/app-store.ts';
+import { api, authNotice, identity, signIn, storageNotice } from '../../state/app-store.ts';
 import AppIcon from '../../components/AppIcon.vue';
 
 const router = useRouter();
@@ -60,6 +60,7 @@ onMounted(refresh);
     <div class="lobby-grid">
       <section class="panel entry-panel" aria-labelledby="entry-heading">
         <div class="section-heading"><h2 id="entry-heading"><AppIcon name="leaf" />{{ identity ? '准备好同行了吗' : '先留下你的称呼' }}</h2></div>
+        <p v-if="authNotice" class="notice warning" role="status">{{ authNotice }}</p>
         <template v-if="!identity"><p class="section-intro">用这个名字与伙伴相见。登录后即可创建或加入房间。</p><form class="entry-form" @submit.prevent="login"><label class="field-label" for="guest-name">你的称呼</label><input id="guest-name" v-model="name" maxlength="24" autocomplete="nickname" placeholder="例如：青禾" required :disabled="busy" /><button class="primary-button wide-button" :disabled="busy || !name.trim()">{{ busy ? '正在连接…' : '以此名同行' }}<AppIcon name="arrow" :size="17" /></button></form></template>
         <template v-else><p class="welcome-name">{{ identity.name }}，你好。</p><p class="section-intro">新开一局，或用伙伴给你的房间号相聚。</p><button class="primary-button wide-button" :disabled="busy" @click="create"><AppIcon name="group" :size="18" />{{ busy ? '请求处理中…' : '创建同行房间' }}</button><div class="form-divider"><span>已有房间号</span></div><form class="join-form" @submit.prevent="join(roomId)"><label class="field-label" for="room-id">房间号</label><div class="input-button-row"><input id="room-id" v-model="roomId" maxlength="128" placeholder="输入伙伴发来的房间号" :disabled="busy" required /><button class="secondary-button" :disabled="busy || !roomId.trim()">加入</button></div></form></template>
         <p v-if="notice" class="notice warning" role="alert"><AppIcon name="warn" :size="18" />{{ notice }}</p>
