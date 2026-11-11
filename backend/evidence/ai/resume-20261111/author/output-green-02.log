@@ -1,0 +1,22 @@
+TAP version 13
+# Subtest: 真实 PostgreSQL：含 NUL 的非法模型原文无损保存，并按原决定拒绝和 fallback
+ok 1 - 真实 PostgreSQL：含 NUL 的非法模型原文无损保存，并按原决定拒绝和 fallback
+  ---
+  duration_ms: 1154.989071
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：共享协议允许的 NUL 对白在 AI 边界拒绝，原包没有局部效果
+ok 2 - 真实 PostgreSQL：共享协议允许的 NUL 对白在 AI 边界拒绝，原包没有局部效果
+  ---
+  duration_ms: 108.897681
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1431.297327

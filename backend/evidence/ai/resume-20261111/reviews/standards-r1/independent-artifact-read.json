@@ -1,0 +1,908 @@
+{
+  "changed_files_read": 107,
+  "source_manifest_files": 80,
+  "source_mismatches": [],
+  "changed": [
+    {
+      "path": "backend/README.md",
+      "bytes": 15618,
+      "sha256": "35bb42103d8e905393cf073e497e6eba72a68241212230fdf09e9e442840a58b"
+    },
+    {
+      "path": "backend/ai/README.md",
+      "bytes": 12158,
+      "sha256": "2639f63450e20abb811cc7a0eeed1bc14da297164c6b190e1372eed69c17d268"
+    },
+    {
+      "path": "backend/ai/context.mjs",
+      "bytes": 5349,
+      "sha256": "412d707040edaf596353ae0163a13cfac7bef4b7121cd0cbb91bdf499a7af8c0"
+    },
+    {
+      "path": "backend/ai/gateway.mjs",
+      "bytes": 6007,
+      "sha256": "db4c4f7a93742b99dd0830f80429b5f5700533db7001a76610ba56ccc8811f5b"
+    },
+    {
+      "path": "backend/ai/orchestrator.mjs",
+      "bytes": 10096,
+      "sha256": "bf836e4f3792ba31fa1dd0c9bee9dac2264cc5dcb1378c66b57c43c77b84d581"
+    },
+    {
+      "path": "backend/ai/persistence.mjs",
+      "bytes": 4955,
+      "sha256": "f17dd3d98596a9f02b9aecf8d73f005d0f9fded5d31a97235ffe41e31499f820"
+    },
+    {
+      "path": "backend/decisions.mjs",
+      "bytes": 13679,
+      "sha256": "9b58d538223728c5d4bfb7cdeda6417bf54104c9074a6c3a5c99796da7bb5a0d"
+    },
+    {
+      "path": "backend/evidence/ai/audit.json",
+      "bytes": 511,
+      "sha256": "60b438958b650286a045e791fc3abf04a82218f521a61769aaeadec70e57a2ff",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/captures/crash.json",
+      "bytes": 68920,
+      "sha256": "9992aef75e464dd9d6a418e1b06e1d3288382fa1b2736de99b67cac73c3047c7",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/captures/network.json",
+      "bytes": 329912,
+      "sha256": "0f17fa4bbe4d0496f47d5dc80c9de76482e6857b57fb341c3a96106bfeba49a3",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/captures/orchestrator.json",
+      "bytes": 102976,
+      "sha256": "e624965e788e3461f0e04b6e418279e0b0296f6409abb50015e71d38143361f4",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/evidence-manifest.json",
+      "bytes": 14359,
+      "sha256": "d9021b03ec7a97fad96145a8bb38e969e1876453abf60a14332a6c3993cd626c",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/implementation-result.md",
+      "bytes": 13885,
+      "sha256": "b5b5955ac7e4029ffca443c1abcd37ad827218f2b439071750a64e3166be4adf"
+    },
+    {
+      "path": "backend/evidence/ai/metrics.json",
+      "bytes": 1014,
+      "sha256": "5090e261f1b28f95eb8c2bea00dfc0f0e017194b571a7e2eab0e06a4bd808f75",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/process-lifecycle.json",
+      "bytes": 1967,
+      "sha256": "323a39cd38fbf602cf73bd677d59caf8b5aa1d467ff503a794865db04c056b63",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/raw/context-current-02.log",
+      "bytes": 297,
+      "sha256": "454365a24cca4e0013527f805752efdbfa507b88bba2a15263672f436ef5c1dc",
+      "tail": [
+        "# Subtest: 真实 PostgreSQL：合法检查刷新目标来源，无关动作不制造目标事件，终局不补写",
+        "ok 1 - 真实 PostgreSQL：合法检查刷新目标来源，无关动作不制造目标事件，终局不补写",
+        "  ---",
+        "  duration_ms: 1458.639241",
+        "  type: 'test'",
+        "  ..."
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/context-current-03.json",
+      "bytes": 262,
+      "sha256": "4bca52fad3ed3111804078b3ecd4c17684e2e9fabf5eec87e7eddc4f025c34c4",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/raw/context-current-03.log",
+      "bytes": 955,
+      "sha256": "38a06a611aee01cd923a3168b20cea94671f59de8d261fb6ecc4898d89cc0ee1",
+      "tail": [
+        "# pass 3",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 2105.654853"
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/context-green-01.json",
+      "bytes": 260,
+      "sha256": "b6869851b0b0cce38f43fac265617447ae7d40e497a2eab38e082488ba29416c",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/raw/context-green-01.log",
+      "bytes": 381,
+      "sha256": "947609c344bbe1d382c3a1b8db3c1387f9bb17d43b8dd667c285914d4a81f605",
+      "tail": [
+        "# pass 1",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 1552.503528"
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/context-red-01.json",
+      "bytes": 258,
+      "sha256": "b4ffc7ab44382b84a64d69e6080ccf49c50bdd2f686c1ae4797e17dbaae408d9",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/raw/context-red-01.log",
+      "bytes": 1018,
+      "sha256": "8ca861cac3defddebb0061124b209894bffcd91fca407e966f24a375200f061e",
+      "tail": [
+        "# pass 0",
+        "# fail 1",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 1428.938109"
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/crash-current-01.json",
+      "bytes": 258,
+      "sha256": "295e2698323f6da544501843efa4a311d85b55b0ddbdd919ccacc38282eaea34",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/raw/crash-current-01.log",
+      "bytes": 2631,
+      "sha256": "0ca62d59e181ed136196a43f26aa108d866e1930de1febd00dba007fc5a6f7b9",
+      "tail": [
+        "# pass 4",
+        "# fail 2",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 3594.987476"
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/evidence-audit.json",
+      "bytes": 5601,
+      "sha256": "15bfc2eb9fe42736a5af48ddb3cd5b300c91e915a1fcd8198d9357f3912d690a",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/raw/evidence-audit.log",
+      "bytes": 511,
+      "sha256": "b125fdbdd843638a64b5e764883400cd5f3582ca814423649090df5bb9ebbd54",
+      "tail": [
+        "  \"legacyEvidenceFiles\": 66,",
+        "  \"protectedPathsUnchanged\": \"PASS\",",
+        "  \"nodeModulesTracked\": false,",
+        "  \"localDependencyLinkIgnored\": true,",
+        "  \"scope\": \"只读产物审计；不替代业务回归或独立审查。\"",
+        "}"
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/evidence-contract-audit.json",
+      "bytes": 5609,
+      "sha256": "fa63a5d2c2eed6d03b59b65cac419d6db84e6dc98ca7eaaf21e48947c0cae2d1",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/raw/evidence-contract-audit.log",
+      "bytes": 60,
+      "sha256": "d7daa5094eaa69b5068d590afc073efd60f61fd3ea936f6e3b8380e04cc59cfc",
+      "tail": [
+        "{\"status\":\"PASS\",\"原文摘要\":26,\"事件\":18,\"收据\":45}"
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/evidence-whitespace-check.json",
+      "bytes": 287,
+      "sha256": "ddcc3133bfd9a9b55a1f637656cb461979759b4bd15eea574ca51cc5f939a272",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/raw/evidence-whitespace-check.log",
+      "bytes": 8223,
+      "sha256": "500b5a1c5d2ac6238b317811034723f5d3f958c5164a26557ab4534716e07694",
+      "tail": [
+        "+syncing data to disk ... ",
+        "backend/evidence/ai/raw/postgres-runtime-M6ZOQZ.log:61: new blank line at EOF.",
+        "backend/evidence/ai/raw/unknown-red-01.log:12: trailing whitespace.",
+        "+    ",
+        "backend/evidence/ai/raw/unknown-red-01.log:15: trailing whitespace.",
+        "+    "
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/final-backend.json",
+      "bytes": 5979,
+      "sha256": "00c126db16855b4082115463881df186fc73b0e678646a6e2489ef87827b494f",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/raw/final-backend.log",
+      "bytes": 18482,
+      "sha256": "c9b7d9d5ec1ca68e21cf1d470d8ac282a1578ab219b18c19f5b39d23726deb71",
+      "tail": [
+        "# pass 82",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 9166.128001"
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/final-content.json",
+      "bytes": 5586,
+      "sha256": "06e928ee93de670ee44b1d76c523a60d1abd1df478e9e720a06e78a69e73f37d",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/raw/final-content.log",
+      "bytes": 1043,
+      "sha256": "4f4ae785a48c5e83961df0631c7a88af73070a268f8a993614b9511e3603109e",
+      "tail": [
+        "ℹ pass 8",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ todo 0",
+        "ℹ duration_ms 771.102499"
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/final-protocol.json",
+      "bytes": 5588,
+      "sha256": "0a9c1fa78798c77838e92c2374ae5c111437342dbbe64385beccb759ebef8187",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/raw/final-protocol.log",
+      "bytes": 2081,
+      "sha256": "b63f8ef92edeb0c284c00af65880627fb56c72341881c2b02dafb594391eb766",
+      "tail": [
+        "ℹ pass 21",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ todo 0",
+        "ℹ duration_ms 755.199494"
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/final-static.json",
+      "bytes": 5597,
+      "sha256": "a55a3425024fd4986e945695170fc6cf055d72e1ea686b9a67bdcaaf1a5fd857",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/raw/final-static.log",
+      "bytes": 604,
+      "sha256": "68dd468b62a3c18e54297c4c68081d946047e9e915dd86db888100a153b40918",
+      "tail": [
+        "退出码：0",
+        "执行：python3 content/scripts/check-schema.py",
+        "内容 Schema 合法，1 个正样本与 4 个反样本符合预期，独立规范摘要一致。",
+        "退出码：0",
+        "执行：git diff --check",
+        "退出码：0"
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/gateway-green-01.json",
+      "bytes": 260,
+      "sha256": "18232a86738d759c451f637fdc0abbe1160c3c83a6b6c3aa5737fe071e75fe8c",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/raw/gateway-green-01.log",
+      "bytes": 365,
+      "sha256": "4119e8de825c22b33121c73123c8b5c3678b456840e3027129aa0ce3027bce79",
+      "tail": [
+        "# pass 1",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 177.875046"
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/gateway-red-01.json",
+      "bytes": 258,
+      "sha256": "63be1cb7862ec92bfb26c2353a965753f319e3eec630e2d7655e31c3a29128b5",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/raw/gateway-red-01.log",
+      "bytes": 1734,
+      "sha256": "aa69abcd907f00d020e611672e373cc69ae853df175e68df19abe89a6545b1cd",
+      "tail": [
+        "# pass 0",
+        "# fail 1",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 89.918694"
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/interval-green-01.json",
+      "bytes": 306,
+      "sha256": "423509fe1b2899c49bbe49ff1f938d2c76d50e7aa4e76b08812613198be12e1e",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/raw/interval-green-01.log",
+      "bytes": 396,
+      "sha256": "3d6c03a64008069a2a19cfd4e276ec9e8801caebdff60af3f459c68b91028b8b",
+      "tail": [
+        "# pass 1",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 2158.510253"
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/interval-red-01.json",
+      "bytes": 304,
+      "sha256": "bf876ddc74e56859d1320f9e29debc6a377a0dd5745f75a6d54a46c1542c6e41",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/raw/interval-red-01.log",
+      "bytes": 1009,
+      "sha256": "63d8aa459e612b1cedee822f110fcd60459c4918790cc8e77ad9f489a62cfc73",
+      "tail": [
+        "# pass 0",
+        "# fail 1",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 1973.66631"
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/lifecycle-current-01.json",
+      "bytes": 308,
+      "sha256": "9e2ca12e463ce328d1994256ce2f8424770a8e691a1f2cb601614e707ddd1a11",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/raw/lifecycle-current-01.log",
+      "bytes": 400,
+      "sha256": "23ea09788ba08725acb40bbef8d465bb499ce2fdfcee7696db214b0d750873a9",
+      "tail": [
+        "# pass 1",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 1588.445233"
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/manual-unknown-green-01.json",
+      "bytes": 312,
+      "sha256": "0a4de7ed2393a254782f2d7d790095c889fdaf6e6e5fd474815994d5cf02dedb",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/raw/manual-unknown-green-01.log",
+      "bytes": 394,
+      "sha256": "8c31074201153078d65a69540435c16e4cf2761fdf37056c061269db6a29b9a6",
+      "tail": [
+        "# pass 1",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 1662.992432"
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/manual-unknown-red-01.json",
+      "bytes": 309,
+      "sha256": "181140d6d78a9b97317088d3250d45afb3f75feaf15d148d658cf12532188ca6",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/raw/manual-unknown-red-01.log",
+      "bytes": 1136,
+      "sha256": "33d053571e329a5f1226a82b9caa5b6b2c59954a6fe79de296c842bd4f71c817",
+      "tail": [
+        "# pass 0",
+        "# fail 1",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 1389.165616"
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/network-current-01.json",
+      "bytes": 262,
+      "sha256": "cf12287a0fb4a6830cf448e159969b4e917c1e793dc51cccd7436147c647cf9d",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/raw/network-current-01.log",
+      "bytes": 422,
+      "sha256": "eb777e81b36e155b40eaf6a89b6a74238e89ebe34da1d3c0bbc954573d5fa0cb",
+      "tail": [
+        "# pass 1",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 1703.947751"
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/network-current-02.json",
+      "bytes": 262,
+      "sha256": "08e26a1409f3e53bb1d327f4970700db8a8b774cc388e5866b00da78f9128b93",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/raw/network-current-02.log",
+      "bytes": 3969,
+      "sha256": "80ac54df9a0842ce61103a48b92389daf3d966ee681ada1de655fa6485a9a718",
+      "tail": [
+        "# pass 9",
+        "# fail 3",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 3721.632458"
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/network-current-03.json",
+      "bytes": 261,
+      "sha256": "f8ecd39d3f0841ab092a484e445298583cf6f6b801a12c322c6b87fe08a51178",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/raw/network-current-03.log",
+      "bytes": 6596,
+      "sha256": "739c1ecbe74297009fa5e1b7129c0a046645126a6dfa95c7a04f436591395f5e",
+      "tail": [
+        "# pass 20",
+        "# fail 4",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 9328.313398"
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/network-current-04.json",
+      "bytes": 328,
+      "sha256": "0b5ec91065ec5e0099e2d8814b1784731bff9b52007d5d8e4ad6cd513226744d",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/raw/network-current-04.log",
+      "bytes": 2638,
+      "sha256": "1c7c6c18e0a29489f0783bc86c354acb86c89903997d23bebb4e684fc6306b57",
+      "tail": [
+        "# pass 16",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 3809.592707"
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/orchestrator-green-01.json",
+      "bytes": 270,
+      "sha256": "87be2b9d84966eb7c8f5e0e032998c513343cdad7c8ae95aec3c9c6763deb25c",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/raw/orchestrator-green-01.log",
+      "bytes": 403,
+      "sha256": "33a13861a255685d7a6521f2447e1a1905c1173b52ae1853407c882cc3431ac8",
+      "tail": [
+        "# pass 1",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 1333.25806"
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/orchestrator-red-01.json",
+      "bytes": 268,
+      "sha256": "ca4a07c004e00774def926f5dfc73d977028acc00b3804732ffa95f01ef9c976",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/raw/orchestrator-red-01.log",
+      "bytes": 1766,
+      "sha256": "2a86a853775aa7302628c609986a1243d81bca0c75a9907c86a842c8cdaf2de5",
+      "tail": [
+        "# pass 0",
+        "# fail 1",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 141.918877"
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/postgres-ai-context-Zp65qo.log",
+      "bytes": 2473,
+      "sha256": "2e03fe1b25049f26d8df7db785d053e62239e88ce26bfda3a70503b44f793214",
+      "tail": [
+        "2026-11-11 09:08:42.820 UTC [282] LOG:  checkpoint starting: shutdown immediate",
+        "",
+        "2026-11-11 09:08:42.902 UTC [282] LOG:  checkpoint complete: wrote 154 buffers (0.9%), wrote 3 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.006 s, sync=0.073 s, total=0.084 s; sync files=96, longest=0.005 s, average=0.001 s; distance=936 kB, estimate=936 kB; lsn=0/1853338, redo lsn=0/1853338",
+        "",
+        "2026-11-11 09:08:42.910 UTC [268] LOG:  database system is shut down",
+        ""
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/postgres-ai-crash-ChcwmY.log",
+      "bytes": 2573,
+      "sha256": "f900865e8e57485555797f5c5593cd3432f7eade22440558093f81de1141b3d6",
+      "tail": [
+        "2026-11-11 09:08:44.822 UTC [256] LOG:  checkpoint starting: shutdown immediate",
+        "",
+        "2026-11-11 09:08:44.862 UTC [256] LOG:  checkpoint complete: wrote 180 buffers (1.1%), wrote 3 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.004 s, sync=0.035 s, total=0.042 s; sync files=99, longest=0.002 s, average=0.001 s; distance=1259 kB, estimate=1259 kB; lsn=0/18A3DF0, redo lsn=0/18A3DF0",
+        "",
+        "2026-11-11 09:08:44.868 UTC [242] LOG:  database system is shut down",
+        ""
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/postgres-ai-network-KbKMUi.log",
+      "bytes": 2477,
+      "sha256": "b342bde9e459da46100b99887c1de10207f5c43b97fb101748b693eba3fae353",
+      "tail": [
+        "2026-11-11 09:08:46.792 UTC [308] LOG:  checkpoint starting: shutdown immediate",
+        "",
+        "2026-11-11 09:08:46.841 UTC [308] LOG:  checkpoint complete: wrote 435 buffers (2.7%), wrote 3 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.008 s, sync=0.039 s, total=0.051 s; sync files=103, longest=0.001 s, average=0.001 s; distance=3686 kB, estimate=3686 kB; lsn=0/1B02B30, redo lsn=0/1B02B30",
+        "",
+        "2026-11-11 09:08:46.847 UTC [304] LOG:  database system is shut down",
+        ""
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/postgres-ai-orchestrator-qB9djH.log",
+      "bytes": 2487,
+      "sha256": "6dcea5e4d48961b60da324efbddc92fe4b068c04f4c93357bba3d4bc30fd965b",
+      "tail": [
+        "2026-11-11 09:08:44.321 UTC [272] LOG:  checkpoint starting: shutdown immediate",
+        "",
+        "2026-11-11 09:08:44.410 UTC [272] LOG:  checkpoint complete: wrote 209 buffers (1.3%), wrote 3 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.006 s, sync=0.080 s, total=0.091 s; sync files=100, longest=0.004 s, average=0.001 s; distance=1552 kB, estimate=1552 kB; lsn=0/18ED040, redo lsn=0/18ED040",
+        "",
+        "2026-11-11 09:08:44.417 UTC [265] LOG:  database system is shut down",
+        ""
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/postgres-crash-gttVK0.log",
+      "bytes": 2565,
+      "sha256": "a4cace7f0fb33b5e693be9f868577e39bf9d36e7d1e1ffc2eee17ba568d32548",
+      "tail": [
+        "2026-11-11 09:08:43.530 UTC [246] LOG:  checkpoint starting: shutdown immediate",
+        "",
+        "2026-11-11 09:08:43.593 UTC [246] LOG:  checkpoint complete: wrote 144 buffers (0.9%), wrote 3 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.003 s, sync=0.056 s, total=0.064 s; sync files=95, longest=0.003 s, average=0.001 s; distance=862 kB, estimate=862 kB; lsn=0/1840A30, redo lsn=0/1840A30",
+        "",
+        "2026-11-11 09:08:43.604 UTC [239] LOG:  database system is shut down",
+        ""
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/postgres-network-sG7efa.log",
+      "bytes": 2468,
+      "sha256": "e06ffddc71ac0df4d40e06a4c420fae91ddd94803a98e91b38cf5f1fe84defaf",
+      "tail": [
+        "2026-11-11 09:08:42.784 UTC [338] LOG:  checkpoint starting: shutdown immediate",
+        "",
+        "2026-11-11 09:08:42.867 UTC [338] LOG:  checkpoint complete: wrote 134 buffers (0.8%), wrote 3 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.003 s, sync=0.078 s, total=0.085 s; sync files=95, longest=0.005 s, average=0.001 s; distance=758 kB, estimate=758 kB; lsn=0/1826A00, redo lsn=0/1826A00",
+        "",
+        "2026-11-11 09:08:42.875 UTC [331] LOG:  database system is shut down",
+        ""
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/postgres-review-fixes-hd7xT3.log",
+      "bytes": 2481,
+      "sha256": "8d4a384db284ae1e2f4a8d96b2c2c6e674a7bd6f1eb0065c6cfd1203251488f0",
+      "tail": [
+        "2026-11-11 09:08:44.564 UTC [295] LOG:  checkpoint starting: shutdown immediate",
+        "",
+        "2026-11-11 09:08:44.634 UTC [295] LOG:  checkpoint complete: wrote 197 buffers (1.2%), wrote 3 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.003 s, sync=0.064 s, total=0.070 s; sync files=98, longest=0.004 s, average=0.001 s; distance=1334 kB, estimate=1334 kB; lsn=0/18B67F8, redo lsn=0/18B67F8",
+        "",
+        "2026-11-11 09:08:44.643 UTC [291] LOG:  database system is shut down",
+        ""
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/postgres-runtime-M6ZOQZ.log",
+      "bytes": 2469,
+      "sha256": "9fc7a5eca8d91068d83a2fa761f91ba76d2733e95d020a42e0b72faf5ef03386",
+      "tail": [
+        "2026-11-11 09:08:48.640 UTC [348] LOG:  checkpoint starting: shutdown immediate",
+        "",
+        "2026-11-11 09:08:48.683 UTC [348] LOG:  checkpoint complete: wrote 541 buffers (3.3%), wrote 3 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.007 s, sync=0.034 s, total=0.044 s; sync files=101, longest=0.002 s, average=0.001 s; distance=4549 kB, estimate=4549 kB; lsn=0/1BDA390, redo lsn=0/1BDA390",
+        "",
+        "2026-11-11 09:08:48.688 UTC [333] LOG:  database system is shut down",
+        ""
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/recovery-green-01.json",
+      "bytes": 266,
+      "sha256": "d17c2cbd8151cf80f96cd20a72240e81b19b9f5ab53b6e4e6841a095440a392a",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/raw/recovery-green-01.log",
+      "bytes": 690,
+      "sha256": "b7ce4c390c80ba279a8df497e9b39d5bee1d1ae93e702ff83dadb4360026eefb",
+      "tail": [
+        "# pass 2",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 1821.352451"
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/recovery-only-green-01.json",
+      "bytes": 264,
+      "sha256": "0a0916508efea51cfa8cbe26149699fcbdff9e2720f9ce83574000ad439d8e84",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/raw/recovery-only-green-01.log",
+      "bytes": 1533,
+      "sha256": "8ea021efbba4cc73bb5d77722474e20f4e77df7a4e6e0a2aa2529999dff80c7e",
+      "tail": [
+        "# pass 6",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 3346.420223"
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/recovery-only-red-01.json",
+      "bytes": 321,
+      "sha256": "878556e29565be67af7bed12ead74e09618bfae0477b3910ba01e5a3b4235683",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/raw/recovery-only-red-01.log",
+      "bytes": 2630,
+      "sha256": "aacedc58d82a1c755436bfea3b2e8cffb41ba6d6cdf026095c8f90e61afea826",
+      "tail": [
+        "# pass 4",
+        "# fail 2",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 3265.278631"
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/recovery-red-01.json",
+      "bytes": 304,
+      "sha256": "bbc4a0ce14883cbd790d608a964d1244cc10848f42448909ceaa3e98e034b273",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/raw/recovery-red-01.log",
+      "bytes": 1044,
+      "sha256": "0c0340a1f31d887b207e145592d0e8fa2c6af5ab5e67a5f86ed2529d4ca58801",
+      "tail": [
+        "# pass 0",
+        "# fail 1",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 1474.102069"
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/revoke-current-01.json",
+      "bytes": 301,
+      "sha256": "1d44de21ee6ab13e7aa7daab3733d1c2927e8868f6e8ede990d053648435f81b",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/raw/revoke-current-01.log",
+      "bytes": 361,
+      "sha256": "e68c7b35c9e295d120f5286c26df63d0d656ef3df5cc4ace3a9760703084797c",
+      "tail": [
+        "# pass 1",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 1762.232135"
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/timeout-related-current-01.json",
+      "bytes": 387,
+      "sha256": "fba3e656c166e88a68afc19c3a20399af00caa212f49980dbf4b8f64dc37af66",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/raw/timeout-related-current-01.log",
+      "bytes": 638,
+      "sha256": "9055662327d231039e43426903eceda71443f449a35a21a0ba024596901718a3",
+      "tail": [
+        "# pass 2",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 2044.874312"
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/unknown-green-01.json",
+      "bytes": 265,
+      "sha256": "3d3079a837b1d57ed04ea0d48c859a4ef73abe8c4add60195b8423f3c9fe937d",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/raw/unknown-green-01.log",
+      "bytes": 999,
+      "sha256": "4a81bb2f9b53c34e38843267a44220ee64fe158c239f34930f5b76548cada10d",
+      "tail": [
+        "# pass 3",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 2019.632558"
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/raw/unknown-red-01.json",
+      "bytes": 303,
+      "sha256": "46bc5cedab624fa62626f58b2d1c35656bfd58674e24370fbaf0ffdead5fb4bf",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/raw/unknown-red-01.log",
+      "bytes": 1262,
+      "sha256": "79ad21158c49992e68f46ff0add4e18b64c47db1cd40cde21490a3a7709d2a05",
+      "tail": [
+        "# pass 0",
+        "# fail 1",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 1498.375937"
+      ]
+    },
+    {
+      "path": "backend/evidence/ai/self-check.json",
+      "bytes": 4443,
+      "sha256": "ff9a4b48c53c952759e6c4a21e73570e5c4243e8f32f38d56eeb6ecf4d4b3790",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/source-manifest.json",
+      "bytes": 12226,
+      "sha256": "7916972e893b0d008ae04ac025794f6f16ea1c506d8edf7e9261b576d3ddc05c",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/ticket-input.json",
+      "bytes": 5493,
+      "sha256": "4a4520de75e888d248f6456997ff12f055c716bf2a041ffa3ebc2d2cb04131c7",
+      "json_valid": true
+    },
+    {
+      "path": "backend/evidence/ai/tooling/assemble-evidence.py",
+      "bytes": 8621,
+      "sha256": "fd822d04f6f7ca08d9de4fc438545ddb651bef17bec65194df3943fdd3c3a2f2"
+    },
+    {
+      "path": "backend/evidence/ai/tooling/audit-contracts.mjs",
+      "bytes": 1043,
+      "sha256": "de4c6f92d5335ed20e4138e4e7c0bcc044c5f4146d8e924be7ff002ad63fe686"
+    },
+    {
+      "path": "backend/evidence/ai/tooling/audit-evidence.py",
+      "bytes": 3387,
+      "sha256": "f2fb1b7f4d3478090992c0d7d4dad9972a95b41936d94f84598d76e6f6e9c5c0"
+    },
+    {
+      "path": "backend/evidence/ai/tooling/check-static.py",
+      "bytes": 551,
+      "sha256": "13779b0a217139d53a1d9c31da2a976cd41602c52eb08925205c8763336215df"
+    },
+    {
+      "path": "backend/evidence/ai/tooling/run-check.py",
+      "bytes": 1775,
+      "sha256": "4cec5d769dc9de781ad73fcfd0079d0278619b9e48794aa5322789a8c0517922"
+    },
+    {
+      "path": "backend/migrations/002-ai.sql",
+      "bytes": 1181,
+      "sha256": "763c2c84d4df8698b1d3cb204c99c8a6125987275724d6a7a3a103e7390be2f6"
+    },
+    {
+      "path": "backend/runtime.mjs",
+      "bytes": 44596,
+      "sha256": "3f07e9025aafaf4bdf6ee7545fc8c53518b075619df4f19f616360cf74e8ce4a"
+    },
+    {
+      "path": "backend/test-support/ai-crash-worker.mjs",
+      "bytes": 2966,
+      "sha256": "5fb027cd619bd9cbc9d92c92ff3a3498969dc60768819cb935e8252079a9e1b3"
+    },
+    {
+      "path": "backend/test-support/ai-evidence.mjs",
+      "bytes": 1385,
+      "sha256": "ad112d2153bd23e9eb38a447c011e379996ae87e022491f09ecdf2ab519d9e8d"
+    },
+    {
+      "path": "backend/test-support/ai-room.mjs",
+      "bytes": 2003,
+      "sha256": "47b4ba8c38370b7ee87da1733fdd265f01a55a31a27f0139dddfcc6ae9df0e7f"
+    },
+    {
+      "path": "backend/tests/ai-context.test.mjs",
+      "bytes": 6286,
+      "sha256": "48aedb4293630399b692bdc02e2ebfcfdb3718ab9d062c7f627187700fb08fa4"
+    },
+    {
+      "path": "backend/tests/ai-crash.test.mjs",
+      "bytes": 5768,
+      "sha256": "4eb50f652d30740cdf77e6c57daeea55eee0e619000f958927fc8e1c5226a43f"
+    },
+    {
+      "path": "backend/tests/ai-gateway.test.mjs",
+      "bytes": 2653,
+      "sha256": "07fe533454585db4d0d6c4ff2485e0dca4fc5ad46f733392950fcf5395bee824"
+    },
+    {
+      "path": "backend/tests/ai-network.test.mjs",
+      "bytes": 25763,
+      "sha256": "1f1c76b585ae3ba1324856ce671855d47862604f59afc836dd82e8556dd1b6ac"
+    },
+    {
+      "path": "backend/tests/ai-orchestrator.test.mjs",
+      "bytes": 15603,
+      "sha256": "48d9d5e37e31badd37f2032b07b71c43973906569460d99c52dbfee1b91b8708"
+    },
+    {
+      "path": "package.json",
+      "bytes": 609,
+      "sha256": "a8f44486a17c20854d3d916369da9a88b4d901b424e4dbc429ebb4dad1c4ee8d",
+      "json_valid": true
+    }
+  ]
+}

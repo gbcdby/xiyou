@@ -1,0 +1,44 @@
+{
+  "name": "fixed",
+  "events": [
+    {
+      "kind": "pool.end.begin",
+      "elapsedMs": 1120.599696
+    },
+    {
+      "kind": "client.end.requested",
+      "elapsedMs": 1120.688638,
+      "index": 0
+    },
+    {
+      "kind": "client.end.requested",
+      "elapsedMs": 1120.708848,
+      "index": 1
+    },
+    {
+      "kind": "pool.end.resolved",
+      "elapsedMs": 1120.712714
+    },
+    {
+      "kind": "client.end",
+      "elapsedMs": 1122.464918,
+      "index": 0
+    },
+    {
+      "kind": "client.end",
+      "elapsedMs": 1123.618392,
+      "index": 1
+    },
+    {
+      "kind": "postgres.stop.begin",
+      "elapsedMs": 1123.652162
+    },
+    {
+      "kind": "postgres.stop.end",
+      "elapsedMs": 1137.254738
+    }
+  ],
+  "errors": [],
+  "databaseOutput": "/workspace/scratch/17ff92cde78f/xiyou-ai-fix/.agent-output/postgres-tests/lifecycle-fixed-WxkHoY",
+  "pgShutdownComplete": true
+}

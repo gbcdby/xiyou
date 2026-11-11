@@ -1,0 +1,38 @@
+TAP version 13
+# Subtest: 真实 PostgreSQL：含 NUL 的非法模型原文无损保存，并按原决定拒绝和 fallback
+ok 1 - 真实 PostgreSQL：含 NUL 的非法模型原文无损保存，并按原决定拒绝和 fallback
+  ---
+  duration_ms: 1564.20678
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：共享协议允许的 NUL 对白在 AI 边界拒绝，原包没有局部效果
+not ok 2 - 真实 PostgreSQL：共享协议允许的 NUL 对白在 AI 边界拒绝，原包没有局部效果
+  ---
+  duration_ms: 152.718637
+  type: 'test'
+  location: '/workspace/scratch/17ff92cde78f/xiyou-ai-fix/backend/tests/ai-output.test.mjs:44:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    '22P05' !== null
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: ~
+  actual: '22P05'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/scratch/17ff92cde78f/xiyou-ai-fix/backend/tests/ai-output.test.mjs:58:12)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 1
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1986.214342

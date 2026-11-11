@@ -1,0 +1,52 @@
+TAP version 13
+# Subtest: 真实 PostgreSQL：全局并发有界，每角色单在途；忽略 Abort 的 provider 不拖住关闭
+ok 1 - 真实 PostgreSQL：全局并发有界，每角色单在途；忽略 Abort 的 provider 不拖住关闭
+  ---
+  duration_ms: 2133.650487
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：实际模型超时产生稳定 fallback，迟到输出失效，后续规划使用新 ID
+ok 2 - 真实 PostgreSQL：实际模型超时产生稳定 fallback，迟到输出失效，后续规划使用新 ID
+  ---
+  duration_ms: 177.943369
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：显式恢复的结果仍未知时保留 Unknown，恢复成功后才标记空闲
+ok 3 - 真实 PostgreSQL：显式恢复的结果仍未知时保留 Unknown，恢复成功后才标记空闲
+  ---
+  duration_ms: 90.83844
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：合并唤醒按实际模型启动时间限流，重启仍遵守本局持久预算
+ok 4 - 真实 PostgreSQL：合并唤醒按实际模型启动时间限流，重启仍遵守本局持久预算
+  ---
+  duration_ms: 519.606548
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：未知提交保留原文和摘要，新实例只恢复旧 Receipt，不改失败或调用新模型
+ok 5 - 真实 PostgreSQL：未知提交保留原文和摘要，新实例只恢复旧 Receipt，不改失败或调用新模型
+  ---
+  duration_ms: 120.411363
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：新调度器从持久失败决定恢复 fallback，稳定原因键只产生一份收据
+ok 6 - 真实 PostgreSQL：新调度器从持久失败决定恢复 fallback，稳定原因键只产生一份收据
+  ---
+  duration_ms: 73.674894
+  type: 'test'
+  ...
+# Subtest: 真实 PostgreSQL：模型等待在事务外，真人先取得收据，模型随后通过同一 Validator
+ok 7 - 真实 PostgreSQL：模型等待在事务外，真人先取得收据，模型随后通过同一 Validator
+  ---
+  duration_ms: 82.107854
+  type: 'test'
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3467.221417

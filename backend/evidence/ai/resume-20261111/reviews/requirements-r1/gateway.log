@@ -1,0 +1,10 @@
+✔ Gateway：忽略 Abort 的 provider 仍会超时，关闭有界，迟到结果被吸收 (28.025086ms)
+✔ Gateway：严格原文拒绝重复键、未知工具与模型伪造元数据，保留有效原文摘要 (11.946743ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 159.288762

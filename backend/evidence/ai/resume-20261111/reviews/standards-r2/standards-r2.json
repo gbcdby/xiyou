@@ -1,0 +1,121 @@
+{
+  "schema_version": "work-result/v1",
+  "work_id": "vs001-p06",
+  "skill": "worker-review",
+  "outcome": "PASS",
+  "axis": "standards",
+  "scope": "受控单AI实现；R1累计覆盖加R2完整12文件增量",
+  "reviewer": "/root/ai_standards",
+  "independence": "independent",
+  "subject": {
+    "kind": "pull_request",
+    "id": "gbcdby/xiyou#19@9ec1bf552dd9701826c00d53e3a40916e4e7bc2c",
+    "head_id": "9ec1bf552dd9701826c00d53e3a40916e4e7bc2c",
+    "local_id": "652c16be96367838de18938a9cb8d88dbf8b89bd",
+    "tree_id": "df7762628a7a5f37c57ca415b625d892676dd66a",
+    "base_id": "1c2dac4162ea7ae49535221a1c995c1af4f4692c",
+    "previous_head_id": "0ad722b8a6780c3ff8218395ef0a3f41947ed242",
+    "previous_tree_id": "172f832627eb46ead24740ef2e59f6494549205f",
+    "contract_id": "6c2a0b9f6d137ad5fbd41721659404333ad8e16d"
+  },
+  "findings": [
+    {
+      "id": "R-vs001-p06-STD-001",
+      "axis": "standards",
+      "severity": "medium",
+      "priority": "P2",
+      "status": "VERIFIED",
+      "blocking": false,
+      "original_blocking": true,
+      "original_subject_id": "gbcdby/xiyou#19@0ad722b8a6780c3ff8218395ef0a3f41947ed242",
+      "verified_subject_id": "gbcdby/xiyou#19@9ec1bf552dd9701826c00d53e3a40916e4e7bc2c",
+      "evidence_ids": [
+        "E-STD-R2-01",
+        "E-STD-R2-02",
+        "E-STD-R2-03",
+        "E-STD-R2-04",
+        "E-STD-R2-05"
+      ],
+      "assessment": "非法NUL原文已无损存储并按原决定拒绝及唯一fallback；旧text/Ready兼容、Unknown保持、代理项码元保真与取证消费者独立验证通过。"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E-STD-R2-01",
+      "kind": "source_inspection",
+      "status": "OBSERVED",
+      "assessment": "PASS",
+      "scope": "完整12文件增量、全部输出消费者与累计110路径",
+      "artifact": "coverage.json"
+    },
+    {
+      "id": "E-STD-R2-02",
+      "kind": "execution",
+      "status": "OBSERVED",
+      "assessment": "PASS",
+      "scope": "原三个反例/对照样本",
+      "raw_status": {
+        "exitCode": 0
+      },
+      "artifact": "invalid-output-result.json"
+    },
+    {
+      "id": "E-STD-R2-03",
+      "kind": "execution",
+      "status": "OBSERVED",
+      "assessment": "PASS",
+      "scope": "真实旧版schema及3类持久记录升级、重复迁移、旧Ready/Receipt/Unknown恢复",
+      "raw_status": {
+        "exitCode": 0
+      },
+      "artifact": "compatibility-result.json"
+    },
+    {
+      "id": "E-STD-R2-04",
+      "kind": "execution",
+      "status": "OBSERVED",
+      "assessment": "PASS",
+      "scope": "D800/DC00两次真实子进程退出后原文/摘要保真及稳定fallback",
+      "raw_status": {
+        "childExitCodes": [
+          81,
+          81
+        ],
+        "signals": [
+          null,
+          null
+        ]
+      },
+      "artifact": "compatibility-result.json"
+    },
+    {
+      "id": "E-STD-R2-05",
+      "kind": "execution",
+      "status": "OBSERVED",
+      "assessment": "PASS",
+      "scope": "5条取证导出原文相等，未知编码/非字符串/码元摘要损坏拒绝",
+      "artifact": "captures/review.json"
+    },
+    {
+      "id": "E-STD-R2-06",
+      "kind": "execution",
+      "status": "OBSERVED",
+      "assessment": "PASS",
+      "scope": "2个自有PG集群正常shutdown，执行句柄全部完成"
+    }
+  ],
+  "counts": {
+    "independentControlledProviderCalls": 5,
+    "actualExternalModelCalls": 0,
+    "legacySeededRows": 3,
+    "recoveryProviderCalls": 0
+  },
+  "unresolved": [
+    "真实供应商、模型、凭证及费用授权仍BLOCKED/NOT_RUN；不释放single-ai-runtime，不表示全Ticket/VER-04通过"
+  ],
+  "changed_assumptions": [
+    "AI内部输出存储新增json-string-v1，兼容旧NULL编码；共享公共协议与世界存储未改"
+  ],
+  "next_action": "总控将本固定候选的标准轴PASS及finding VERIFIED与独立需求轴汇总；保留真实模型未覆盖条件。",
+  "report": "standards-r2.md"
+}

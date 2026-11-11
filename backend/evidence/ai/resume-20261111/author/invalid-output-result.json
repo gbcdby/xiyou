@@ -1,0 +1,225 @@
+{
+  "node": "v24.22.1",
+  "databaseOutput": "/workspace/scratch/17ff92cde78f/xiyou-ai-fix/.agent-output/postgres-tests/invalid-output-upSYxi",
+  "results": [
+    {
+      "name": "普通非法 JSON 对照",
+      "beforeRecovery": {
+        "status": {
+          "phase": "Idle",
+          "calls": 1,
+          "pendingWake": false,
+          "decisionId": "D-f2727f15-acd4-4bb3-bcf5-03774ddbb722",
+          "lastReceipt": null,
+          "lastFallback": {
+            "schemaVersion": 1,
+            "semanticDigest": "261fe307bac77206dbd2a962a77fb9e2f23e7bbfe5c2b0d4399c46061ec76ef3",
+            "actorId": "tangseng",
+            "observedSeq": "19",
+            "actionEventRange": null,
+            "status": "Accepted",
+            "code": "NO_CHANGE",
+            "result": {},
+            "sessionId": "S-a0e0a6f6-5643-489e-a22e-a11a71c09f3c",
+            "clientActionId": "D-f2727f15-acd4-4bb3-bcf5-03774ddbb722:fallback"
+          },
+          "error": null
+        },
+        "decision": "Rejected",
+        "run": {
+          "status": "Resolved",
+          "model_result": {
+            "reason": "INVALID_INTENT",
+            "status": "Invalid",
+            "durationMs": 0.986,
+            "outputDigest": "17eed55d881c0dd5fe0935a98d89dd9e52d62aed941f3fb7d17bd490e5aa3e8f",
+            "configuration": {
+              "modelId": "invalid-output-probe",
+              "timeoutMs": 10000,
+              "providerId": "review-local",
+              "providerKind": "controlled",
+              "gatewayVersion": "intent-gateway-v1",
+              "maxContextBytes": 262144
+            },
+            "contextDigest": "d162fc3cad69e6b65c3bcfb21511493b743889428948d3ab544b5f88b32b8958"
+          },
+          "has_raw": true
+        },
+        "fallback": {
+          "code": "NO_CHANGE",
+          "result": {},
+          "status": "Accepted",
+          "actorId": "tangseng",
+          "observedSeq": "19",
+          "schemaVersion": 1,
+          "semanticDigest": "261fe307bac77206dbd2a962a77fb9e2f23e7bbfe5c2b0d4399c46061ec76ef3",
+          "actionEventRange": null,
+          "sessionId": "S-a0e0a6f6-5643-489e-a22e-a11a71c09f3c",
+          "clientActionId": "D-f2727f15-acd4-4bb3-bcf5-03774ddbb722:fallback"
+        }
+      },
+      "recoveryError": null,
+      "afterRecovery": {
+        "status": {
+          "phase": "Idle",
+          "calls": 1,
+          "pendingWake": false,
+          "decisionId": "D-f2727f15-acd4-4bb3-bcf5-03774ddbb722",
+          "lastReceipt": null,
+          "lastFallback": {
+            "schemaVersion": 1,
+            "semanticDigest": "261fe307bac77206dbd2a962a77fb9e2f23e7bbfe5c2b0d4399c46061ec76ef3",
+            "actorId": "tangseng",
+            "observedSeq": "19",
+            "actionEventRange": null,
+            "status": "Accepted",
+            "code": "NO_CHANGE",
+            "result": {},
+            "sessionId": "S-a0e0a6f6-5643-489e-a22e-a11a71c09f3c",
+            "clientActionId": "D-f2727f15-acd4-4bb3-bcf5-03774ddbb722:fallback"
+          },
+          "error": null
+        },
+        "decision": "Rejected",
+        "fallback": {
+          "code": "NO_CHANGE",
+          "result": {},
+          "status": "Accepted",
+          "actorId": "tangseng",
+          "observedSeq": "19",
+          "schemaVersion": 1,
+          "semanticDigest": "261fe307bac77206dbd2a962a77fb9e2f23e7bbfe5c2b0d4399c46061ec76ef3",
+          "actionEventRange": null,
+          "sessionId": "S-a0e0a6f6-5643-489e-a22e-a11a71c09f3c",
+          "clientActionId": "D-f2727f15-acd4-4bb3-bcf5-03774ddbb722:fallback"
+        }
+      },
+      "gatewayMetrics": {
+        "calls": 1,
+        "externalCalls": 0,
+        "valid": 0,
+        "invalid": 1,
+        "timeouts": 0,
+        "cancelled": 0,
+        "providerErrors": 0,
+        "active": 0,
+        "p50Ms": 0.986,
+        "p95Ms": 0.986,
+        "invalidRate": 1
+      }
+    },
+    {
+      "name": "含 U+0000 的非法 JSON",
+      "beforeRecovery": {
+        "status": {
+          "phase": "Unavailable",
+          "calls": 1,
+          "pendingWake": false,
+          "decisionId": "D-a56cb077-be3c-40d4-9461-035cefda5a7f",
+          "lastReceipt": null,
+          "lastFallback": null,
+          "error": "22021"
+        },
+        "decision": "Pending",
+        "run": {
+          "status": "Reserved",
+          "model_result": null,
+          "has_raw": false
+        },
+        "fallback": null
+      },
+      "recoveryError": null,
+      "afterRecovery": {
+        "status": {
+          "phase": "Idle",
+          "calls": 1,
+          "pendingWake": false,
+          "decisionId": "D-a56cb077-be3c-40d4-9461-035cefda5a7f",
+          "lastReceipt": null,
+          "lastFallback": null,
+          "error": null
+        },
+        "decision": "Cancelled",
+        "fallback": null
+      },
+      "gatewayMetrics": {
+        "calls": 1,
+        "externalCalls": 0,
+        "valid": 0,
+        "invalid": 1,
+        "timeouts": 0,
+        "cancelled": 0,
+        "providerErrors": 0,
+        "active": 0,
+        "p50Ms": 1.535,
+        "p95Ms": 1.535,
+        "invalidRate": 1
+      }
+    },
+    {
+      "name": "合法 JSON 中的 U+0000 对白",
+      "beforeRecovery": {
+        "status": {
+          "phase": "Unavailable",
+          "calls": 1,
+          "pendingWake": false,
+          "decisionId": "D-8798759f-7bbf-4f0c-83c4-25df940e67bc",
+          "lastReceipt": null,
+          "lastFallback": null,
+          "error": "22P05"
+        },
+        "decision": "Pending",
+        "run": {
+          "status": "Ready",
+          "model_result": {
+            "status": "Valid",
+            "durationMs": 1.175,
+            "outputDigest": "f29067f3df40d9acc633202ed763b1cd03e20b05532af661a89dda924e15f4c3",
+            "configuration": {
+              "modelId": "invalid-output-probe",
+              "timeoutMs": 10000,
+              "providerId": "review-local",
+              "providerKind": "controlled",
+              "gatewayVersion": "intent-gateway-v1",
+              "maxContextBytes": 262144
+            },
+            "contextDigest": "fcad969724a5796221bc60868f85525b461173d4cbd5fd73c31833868d3fce22",
+            "semanticDigest": "c90bc55e08b819e63b45f4b81283aea6baed39755bf014acf59ef3e6f2692bed"
+          },
+          "has_raw": true
+        },
+        "fallback": null
+      },
+      "recoveryError": {
+        "code": "22P05",
+        "message": "unsupported Unicode escape sequence"
+      },
+      "afterRecovery": {
+        "status": {
+          "phase": "Unavailable",
+          "calls": 1,
+          "pendingWake": false,
+          "decisionId": "D-8798759f-7bbf-4f0c-83c4-25df940e67bc",
+          "lastReceipt": null,
+          "lastFallback": null,
+          "error": "22P05"
+        },
+        "decision": "Pending",
+        "fallback": null
+      },
+      "gatewayMetrics": {
+        "calls": 1,
+        "externalCalls": 0,
+        "valid": 1,
+        "invalid": 0,
+        "timeouts": 0,
+        "cancelled": 0,
+        "providerErrors": 0,
+        "active": 0,
+        "p50Ms": 1.175,
+        "p95Ms": 1.175,
+        "invalidRate": 0
+      }
+    }
+  ]
+}

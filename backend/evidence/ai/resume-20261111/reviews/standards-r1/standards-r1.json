@@ -1,0 +1,103 @@
+{
+  "schema_version": "work-result/v1",
+  "work_id": "vs001-p06",
+  "skill": "worker-review",
+  "outcome": "FAIL",
+  "axis": "standards",
+  "reviewer": "/root/ai_standards",
+  "independence": "independent",
+  "subject": {
+    "kind": "pull_request",
+    "id": "gbcdby/xiyou#19@0ad722b8a6780c3ff8218395ef0a3f41947ed242",
+    "base_id": "1c2dac4162ea7ae49535221a1c995c1af4f4692c",
+    "head_id": "0ad722b8a6780c3ff8218395ef0a3f41947ed242",
+    "tree_id": "172f832627eb46ead24740ef2e59f6494549205f",
+    "local_id": "29322b4ef355060556ee73f21678274140662bc6",
+    "contract_id": "6c2a0b9f6d137ad5fbd41721659404333ad8e16d"
+  },
+  "findings": [
+    {
+      "id": "R-vs001-p06-STD-001",
+      "axis": "standards",
+      "severity": "medium",
+      "priority": "P2",
+      "blocking": true,
+      "status": "OPEN",
+      "subject_id": "gbcdby/xiyou#19@0ad722b8a6780c3ff8218395ef0a3f41947ed242",
+      "location": [
+        "backend/ai/persistence.mjs:48-49",
+        "backend/ai/gateway.mjs:60-64",
+        "backend/ai/orchestrator.mjs:123-137"
+      ],
+      "rule_or_acceptance": "AGENTS铁律7；工程约定非法tool JSON；M0§10；Ticket#9非法输出及fallback",
+      "trigger": "受控provider返回'{bad'+String.fromCharCode(0)",
+      "impact": "Gateway已判Invalid，但诊断原文写PG text报22021；角色Unavailable，DecisionPending、runReserved，没有fallback；显式恢复仅Cancelled。",
+      "evidence_ids": [
+        "E-STD-02",
+        "E-STD-03"
+      ],
+      "recommended_action": "使非法原文保存对PG不可表示字符安全，并保持确定失败状态、原稳定fallback及恢复；补真实PG回归。"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E-STD-01",
+      "kind": "source_inspection",
+      "status": "OBSERVED",
+      "scope": "107文件实际差异及固定tree/远端head/base"
+    },
+    {
+      "id": "E-STD-03",
+      "kind": "execution",
+      "status": "OBSERVED",
+      "raw_status": {
+        "exitCode": 0,
+        "meaning": "诊断取证完成；不是产品PASS"
+      },
+      "artifacts": [
+        "invalid-output-probe.mjs",
+        "invalid-output-probe.log",
+        "invalid-output-result.json"
+      ],
+      "external_calls": 0
+    },
+    {
+      "id": "E-STD-04",
+      "kind": "artifact_audit",
+      "status": "OBSERVED",
+      "assessment": "PASS",
+      "scope": "80源码/输入与88证据文件摘要"
+    },
+    {
+      "id": "E-STD-05",
+      "kind": "execution",
+      "status": "OBSERVED",
+      "assessment": "PASS",
+      "scope": "历史capture共享契约审计",
+      "counts": {
+        "outputs": 26,
+        "events": 18,
+        "receipts": 45
+      },
+      "artifact": "audit-contracts-relocated.log"
+    },
+    {
+      "id": "E-STD-06",
+      "kind": "historical",
+      "status": "HISTORICAL",
+      "raw_status": {
+        "exitCode": 0,
+        "signal": null
+      },
+      "original_subject_id": "726e96edff61f71caa2123494f2e9f6795e4a6ca",
+      "scope": "作者全量检查原始记录；本轮未重新执行"
+    }
+  ],
+  "unresolved": [
+    "R-vs001-p06-STD-001",
+    "真实外部模型配置/调用及授权费用预算BLOCKED/NOT_RUN"
+  ],
+  "changed_assumptions": [],
+  "next_action": "对固定修正候选做标准轴增量复审，沿用finding ID并确认真实PG故障/恢复回归；仍不宣称全Ticket完成。",
+  "report": "standards-r1.md"
+}

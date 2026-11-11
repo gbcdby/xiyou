@@ -1,0 +1,95 @@
+{
+  "schema_version": "work-result/v1",
+  "work_id": "vs001-p06",
+  "skill": "worker-review",
+  "axis": "standards",
+  "outcome": "PASS",
+  "scope": "测试PostgreSQL生命周期两文件增量；保留R2受控AI标准结论",
+  "reviewer": "/root/ai_standards",
+  "independence": "independent",
+  "subject": {
+    "kind": "commit",
+    "id": "bf1a9c8df89538183f19fead1055f869d4d081f6",
+    "remote_id": "1c49c249296dfe7ea2dff76051f863416f1f04e7",
+    "tree_id": "6b0bf762701d2d776044d2b32aa45794aaf6b751",
+    "previous_id": "652c16be96367838de18938a9cb8d88dbf8b89bd",
+    "previous_remote_id": "9ec1bf552dd9701826c00d53e3a40916e4e7bc2c",
+    "previous_tree_id": "df7762628a7a5f37c57ca415b625d892676dd66a",
+    "pr": "gbcdby/xiyou#19",
+    "base_id": "1c2dac4162ea7ae49535221a1c995c1af4f4692c",
+    "contract_id": "6c2a0b9f6d137ad5fbd41721659404333ad8e16d"
+  },
+  "findings": [],
+  "retained_findings": [
+    {
+      "id": "R-vs001-p06-STD-001",
+      "status": "VERIFIED",
+      "verified_subject_id": "gbcdby/xiyou#19@9ec1bf552dd9701826c00d53e3a40916e4e7bc2c",
+      "applicability": "本增量仅改测试helper和测试；相关AI源码未变，原证据保留原身份"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E-STD-R3-01",
+      "kind": "source_inspection",
+      "status": "OBSERVED",
+      "assessment": "PASS",
+      "scope": "2文件diff、pg8.23.1/pg-pool3.14.0生命周期与固定身份"
+    },
+    {
+      "id": "E-STD-R3-02",
+      "kind": "execution",
+      "status": "OBSERVED",
+      "assessment": "PASS",
+      "scope": "新回归＋当前helper",
+      "raw_status": {
+        "exitCode": 0,
+        "tests": 1,
+        "pass": 1,
+        "fail": 0
+      },
+      "artifact": "lifecycle-fixed.log"
+    },
+    {
+      "id": "E-STD-R3-03",
+      "kind": "execution",
+      "status": "OBSERVED",
+      "assessment": "COUNTEREXAMPLE",
+      "scope": "同回归＋旧helper；目标关闭顺序断言",
+      "raw_status": {
+        "exitCode": 1,
+        "tests": 1,
+        "pass": 0,
+        "fail": 1
+      },
+      "artifact": "lifecycle-baseline.log"
+    },
+    {
+      "id": "E-STD-R3-04",
+      "kind": "execution",
+      "status": "OBSERVED",
+      "assessment": "PASS",
+      "scope": "双门闩分别释放、等待全部连接、stop Promise复用、pool.end一次/errors空",
+      "raw_status": {
+        "exitCode": 0
+      },
+      "artifact": "independent-lifecycle-result.json"
+    },
+    {
+      "id": "E-STD-R3-05",
+      "kind": "execution",
+      "status": "OBSERVED",
+      "assessment": "PASS",
+      "scope": "3个PG集群正常shutdown、无在途执行句柄"
+    }
+  ],
+  "execution_adaptation": "只调整helper临时输出目录与测试import路径；生命周期逻辑/断言未改，source SHA记录于execution-inputs.json",
+  "unresolved": [
+    "历史20pass/1filefail唯一根因仍INCONCLUSIVE",
+    "实际外部模型配置/授权/运行仍BLOCKED/NOT_RUN"
+  ],
+  "changed_assumptions": [],
+  "actualExternalModelCalls": 0,
+  "next_action": "总控汇总固定候选的局部标准PASS；保留STD001 VERIFIED、真实模型边界与历史异常未定，不把测试helper问题认定为历史唯一根因。",
+  "report": "standards-r3.md"
+}
