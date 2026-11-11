@@ -1,0 +1,77 @@
+[
+  {
+    "code": 2262,
+    "severity": 0,
+    "text": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)"
+  },
+  {
+    "code": 2187,
+    "severity": 0,
+    "text": "Running breadth-first search Model-Checking with fp 27 and seed 6765316808480605612 with 1 worker on 9 cores with 910MB heap and 64MB offheap memory [pid: 1172] (Linux 6.18.57 amd64, Debian 21.0.13 x86_64, MSBDiskFPSet, DiskStateQueue)."
+  },
+  {
+    "code": 2220,
+    "severity": 0,
+    "text": "Starting SANY..."
+  },
+  {
+    "code": 2219,
+    "severity": 0,
+    "text": "SANY finished."
+  },
+  {
+    "code": 2185,
+    "severity": 0,
+    "text": "Starting... (2026-11-10 20:29:56)"
+  },
+  {
+    "code": 2189,
+    "severity": 0,
+    "text": "Computing initial states..."
+  },
+  {
+    "code": 2190,
+    "severity": 0,
+    "text": "Finished computing initial states: 1 distinct state generated at 2026-11-10 20:29:56."
+  },
+  {
+    "code": 2110,
+    "severity": 1,
+    "text": "Invariant NotFalseClaim is violated."
+  },
+  {
+    "code": 2121,
+    "severity": 1,
+    "text": "The behavior up to this point is:"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "1: <Initial predicate>\n/\\ phase = \"Running\"\n/\\ epoch = 0\n/\\ handled = FALSE\n/\\ repaired = 0\n/\\ shares = {}\n/\\ beliefSources = [Tang |-> {}, Wukong |-> {}]\n/\\ mode = \"none\"\n/\\ unrelated = FALSE\n/\\ now = 0\n/\\ chosenNPC = \"Tang\"\n/\\ receipt = \"none\"\n/\\ callback = FALSE\n/\\ outbox = 0\n/\\ marker = \"initial\"\n/\\ claims = {}\n/\\ generation = 0\n/\\ terminalEffects = 0\n/\\ speech = 0\n/\\ known = [Tang |-> {}, Wukong |-> {}]\n/\\ recordedEpoch = 0\n/\\ recordedGeneration = 0\n/\\ invalidCommit = FALSE\n/\\ status = \"Idle\"\n/\\ material = 1\n/\\ context = {}\n/\\ revision = 0\n/\\ recordedRevision = 0\n/\\ effects = 0"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "2: <Claim line 77, col 13 to line 83, col 94 of module Visibility>\n/\\ phase = \"Running\"\n/\\ epoch = 0\n/\\ handled = FALSE\n/\\ repaired = 0\n/\\ shares = {}\n/\\ beliefSources = [Tang |-> {}, Wukong |-> {}]\n/\\ mode = \"none\"\n/\\ unrelated = FALSE\n/\\ now = 0\n/\\ chosenNPC = \"Tang\"\n/\\ receipt = \"none\"\n/\\ callback = FALSE\n/\\ outbox = 0\n/\\ marker = \"claimed-repaired\"\n/\\ claims = {\"Tang\"}\n/\\ generation = 0\n/\\ terminalEffects = 0\n/\\ speech = 0\n/\\ known = [Tang |-> {}, Wukong |-> {}]\n/\\ recordedEpoch = 0\n/\\ recordedGeneration = 0\n/\\ invalidCommit = FALSE\n/\\ status = \"Idle\"\n/\\ material = 1\n/\\ context = {}\n/\\ revision = 0\n/\\ recordedRevision = 0\n/\\ effects = 0"
+  },
+  {
+    "code": 2200,
+    "severity": 0,
+    "text": "Progress(2) at 2026-11-10 20:29:56: 10 states generated (1,115 s/min), 5 distinct states found (557 ds/min), 3 states left on queue."
+  },
+  {
+    "code": 2199,
+    "severity": 0,
+    "text": "10 states generated, 5 distinct states found, 3 states left on queue."
+  },
+  {
+    "code": 2194,
+    "severity": 0,
+    "text": "The depth of the complete state graph search is 2."
+  },
+  {
+    "code": 2186,
+    "severity": 0,
+    "text": "Finished in 543ms at (2026-11-10 20:29:56)"
+  }
+]

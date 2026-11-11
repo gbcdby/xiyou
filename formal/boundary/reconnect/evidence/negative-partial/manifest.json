@@ -1,0 +1,900 @@
+{
+  "schema_version": 1,
+  "feature": "VS-001 #7 M1-reconnect",
+  "tool": {
+    "version": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "model": {
+    "root": "model",
+    "entry": "Reconnect.tla"
+  },
+  "requirements": [
+    {
+      "id": "INV-00",
+      "properties": [
+        "TypeOK"
+      ]
+    },
+    {
+      "id": "INV-09",
+      "properties": [
+        "ProjectionMatchesCursor"
+      ]
+    },
+    {
+      "id": "INV-10",
+      "properties": [
+        "NoUnauthorizedObservation"
+      ]
+    },
+    {
+      "id": "LIVE-02",
+      "properties": [
+        "ConnectedProjectionCatchesUp"
+      ]
+    },
+    {
+      "id": "INV-08",
+      "properties": [
+        "TerminalBlocksNewEffects"
+      ]
+    }
+  ],
+  "profiles": {
+    "positive": {
+      "config": "positive.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "TypeOK",
+        "ProjectionMatchesCursor",
+        "NoUnauthorizedObservation",
+        "TerminalBlocksNewEffects"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "events_per_session": 4,
+        "views": 2,
+        "view_generations": 2,
+        "revocation_restore_cycles": 1,
+        "resync_cycles": 1,
+        "distinct_state_min": 100,
+        "network": "任意已提交完整区间的丢失/重复/乱序/重叠；记录可见性固定于事件发生时",
+        "projection": "有序授权效果前缀，包含新增/移除字段与知识来源效果；真实reducer待实现",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "真实WebSocket/认证/持久数据库",
+          "全局计数或流量节奏保密",
+          "无限新事件与无限身份变更"
+        ],
+        "terminal_states": [
+          "Finished",
+          "Aborted"
+        ]
+      },
+      "assumptions": [
+        "事件与前缀提交原子且日志持久，另由#5/#6验证",
+        "快照数据和snapshotSeq一次捕获，投影和cursor一次应用",
+        "活性只要求有限身份故障、有限日志、补发与快照最终得到处理；安全性无公平条件"
+      ]
+    },
+    "live": {
+      "config": "live.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [],
+      "expected_properties": [
+        "ConnectedProjectionCatchesUp"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "events_per_session": 4,
+        "views": 2,
+        "view_generations": 2,
+        "revocation_restore_cycles": 1,
+        "resync_cycles": 1,
+        "distinct_state_min": 100,
+        "network": "任意已提交完整区间的丢失/重复/乱序/重叠；记录可见性固定于事件发生时",
+        "projection": "有序授权效果前缀，包含新增/移除字段与知识来源效果；真实reducer待实现",
+        "liveness": "WF(提交/快照捕获/快照交付/恢复/正确补发/终态)，终态后授权读取仍继续",
+        "excluded_behaviors": [
+          "真实WebSocket/认证/持久数据库",
+          "全局计数或流量节奏保密",
+          "无限新事件与无限身份变更"
+        ],
+        "terminal_states": [
+          "Finished",
+          "Aborted"
+        ]
+      },
+      "assumptions": [
+        "事件与前缀提交原子且日志持久，另由#5/#6验证",
+        "快照数据和snapshotSeq一次捕获，投影和cursor一次应用",
+        "活性只要求有限身份故障、有限日志、补发与快照最终得到处理；安全性无公平条件"
+      ]
+    },
+    "negative-type": {
+      "config": "negative-type.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "TypeOK"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "events_per_session": 4,
+        "views": 2,
+        "view_generations": 2,
+        "revocation_restore_cycles": 1,
+        "resync_cycles": 1,
+        "distinct_state_min": 0,
+        "network": "任意已提交完整区间的丢失/重复/乱序/重叠；记录可见性固定于事件发生时",
+        "projection": "有序授权效果前缀，包含新增/移除字段与知识来源效果；真实reducer待实现",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "真实WebSocket/认证/持久数据库",
+          "全局计数或流量节奏保密",
+          "无限新事件与无限身份变更"
+        ],
+        "terminal_states": [
+          "Finished",
+          "Aborted"
+        ]
+      },
+      "assumptions": [
+        "事件与前缀提交原子且日志持久，另由#5/#6验证",
+        "快照数据和snapshotSeq一次捕获，投影和cursor一次应用",
+        "活性只要求有限身份故障、有限日志、补发与快照最终得到处理；安全性无公平条件"
+      ]
+    },
+    "negative-partial": {
+      "config": "negative-partial.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "ProjectionMatchesCursor"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "events_per_session": 4,
+        "views": 2,
+        "view_generations": 2,
+        "revocation_restore_cycles": 1,
+        "resync_cycles": 1,
+        "distinct_state_min": 0,
+        "network": "任意已提交完整区间的丢失/重复/乱序/重叠；记录可见性固定于事件发生时",
+        "projection": "有序授权效果前缀，包含新增/移除字段与知识来源效果；真实reducer待实现",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "真实WebSocket/认证/持久数据库",
+          "全局计数或流量节奏保密",
+          "无限新事件与无限身份变更"
+        ],
+        "terminal_states": [
+          "Finished",
+          "Aborted"
+        ]
+      },
+      "assumptions": [
+        "事件与前缀提交原子且日志持久，另由#5/#6验证",
+        "快照数据和snapshotSeq一次捕获，投影和cursor一次应用",
+        "活性只要求有限身份故障、有限日志、补发与快照最终得到处理；安全性无公平条件"
+      ]
+    },
+    "negative-order": {
+      "config": "negative-order.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "ProjectionMatchesCursor"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "events_per_session": 4,
+        "views": 2,
+        "view_generations": 2,
+        "revocation_restore_cycles": 1,
+        "resync_cycles": 1,
+        "distinct_state_min": 0,
+        "network": "任意已提交完整区间的丢失/重复/乱序/重叠；记录可见性固定于事件发生时",
+        "projection": "有序授权效果前缀，包含新增/移除字段与知识来源效果；真实reducer待实现",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "真实WebSocket/认证/持久数据库",
+          "全局计数或流量节奏保密",
+          "无限新事件与无限身份变更"
+        ],
+        "terminal_states": [
+          "Finished",
+          "Aborted"
+        ]
+      },
+      "assumptions": [
+        "事件与前缀提交原子且日志持久，另由#5/#6验证",
+        "快照数据和snapshotSeq一次捕获，投影和cursor一次应用",
+        "活性只要求有限身份故障、有限日志、补发与快照最终得到处理；安全性无公平条件"
+      ]
+    },
+    "negative-stream-filter": {
+      "config": "negative-stream-filter.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NoUnauthorizedObservation"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "events_per_session": 4,
+        "views": 2,
+        "view_generations": 2,
+        "revocation_restore_cycles": 1,
+        "resync_cycles": 1,
+        "distinct_state_min": 0,
+        "network": "任意已提交完整区间的丢失/重复/乱序/重叠；记录可见性固定于事件发生时",
+        "projection": "有序授权效果前缀，包含新增/移除字段与知识来源效果；真实reducer待实现",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "真实WebSocket/认证/持久数据库",
+          "全局计数或流量节奏保密",
+          "无限新事件与无限身份变更"
+        ],
+        "terminal_states": [
+          "Finished",
+          "Aborted"
+        ]
+      },
+      "assumptions": [
+        "事件与前缀提交原子且日志持久，另由#5/#6验证",
+        "快照数据和snapshotSeq一次捕获，投影和cursor一次应用",
+        "活性只要求有限身份故障、有限日志、补发与快照最终得到处理；安全性无公平条件"
+      ]
+    },
+    "negative-snapshot-filter": {
+      "config": "negative-snapshot-filter.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NoUnauthorizedObservation"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "events_per_session": 4,
+        "views": 2,
+        "view_generations": 2,
+        "revocation_restore_cycles": 1,
+        "resync_cycles": 1,
+        "distinct_state_min": 0,
+        "network": "任意已提交完整区间的丢失/重复/乱序/重叠；记录可见性固定于事件发生时",
+        "projection": "有序授权效果前缀，包含新增/移除字段与知识来源效果；真实reducer待实现",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "真实WebSocket/认证/持久数据库",
+          "全局计数或流量节奏保密",
+          "无限新事件与无限身份变更"
+        ],
+        "terminal_states": [
+          "Finished",
+          "Aborted"
+        ]
+      },
+      "assumptions": [
+        "事件与前缀提交原子且日志持久，另由#5/#6验证",
+        "快照数据和snapshotSeq一次捕获，投影和cursor一次应用",
+        "活性只要求有限身份故障、有限日志、补发与快照最终得到处理；安全性无公平条件"
+      ]
+    },
+    "negative-session-filter": {
+      "config": "negative-session-filter.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NoUnauthorizedObservation"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "events_per_session": 4,
+        "views": 2,
+        "view_generations": 2,
+        "revocation_restore_cycles": 1,
+        "resync_cycles": 1,
+        "distinct_state_min": 0,
+        "network": "任意已提交完整区间的丢失/重复/乱序/重叠；记录可见性固定于事件发生时",
+        "projection": "有序授权效果前缀，包含新增/移除字段与知识来源效果；真实reducer待实现",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "真实WebSocket/认证/持久数据库",
+          "全局计数或流量节奏保密",
+          "无限新事件与无限身份变更"
+        ],
+        "terminal_states": [
+          "Finished",
+          "Aborted"
+        ]
+      },
+      "assumptions": [
+        "事件与前缀提交原子且日志持久，另由#5/#6验证",
+        "快照数据和snapshotSeq一次捕获，投影和cursor一次应用",
+        "活性只要求有限身份故障、有限日志、补发与快照最终得到处理；安全性无公平条件"
+      ]
+    },
+    "negative-view-filter": {
+      "config": "negative-view-filter.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NoUnauthorizedObservation"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "events_per_session": 4,
+        "views": 2,
+        "view_generations": 2,
+        "revocation_restore_cycles": 1,
+        "resync_cycles": 1,
+        "distinct_state_min": 0,
+        "network": "任意已提交完整区间的丢失/重复/乱序/重叠；记录可见性固定于事件发生时",
+        "projection": "有序授权效果前缀，包含新增/移除字段与知识来源效果；真实reducer待实现",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "真实WebSocket/认证/持久数据库",
+          "全局计数或流量节奏保密",
+          "无限新事件与无限身份变更"
+        ],
+        "terminal_states": [
+          "Finished",
+          "Aborted"
+        ]
+      },
+      "assumptions": [
+        "事件与前缀提交原子且日志持久，另由#5/#6验证",
+        "快照数据和snapshotSeq一次捕获，投影和cursor一次应用",
+        "活性只要求有限身份故障、有限日志、补发与快照最终得到处理；安全性无公平条件"
+      ]
+    },
+    "negative-revoked": {
+      "config": "negative-revoked.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NoUnauthorizedObservation"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "events_per_session": 4,
+        "views": 2,
+        "view_generations": 2,
+        "revocation_restore_cycles": 1,
+        "resync_cycles": 1,
+        "distinct_state_min": 0,
+        "network": "任意已提交完整区间的丢失/重复/乱序/重叠；记录可见性固定于事件发生时",
+        "projection": "有序授权效果前缀，包含新增/移除字段与知识来源效果；真实reducer待实现",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "真实WebSocket/认证/持久数据库",
+          "全局计数或流量节奏保密",
+          "无限新事件与无限身份变更"
+        ],
+        "terminal_states": [
+          "Finished",
+          "Aborted"
+        ]
+      },
+      "assumptions": [
+        "事件与前缀提交原子且日志持久，另由#5/#6验证",
+        "快照数据和snapshotSeq一次捕获，投影和cursor一次应用",
+        "活性只要求有限身份故障、有限日志、补发与快照最终得到处理；安全性无公平条件"
+      ]
+    },
+    "negative-no-retry": {
+      "config": "negative-no-retry.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [],
+      "expected_properties": [
+        "ConnectedProjectionCatchesUp"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "events_per_session": 4,
+        "views": 2,
+        "view_generations": 2,
+        "revocation_restore_cycles": 1,
+        "resync_cycles": 1,
+        "distinct_state_min": 0,
+        "network": "任意已提交完整区间的丢失/重复/乱序/重叠；记录可见性固定于事件发生时",
+        "projection": "有序授权效果前缀，包含新增/移除字段与知识来源效果；真实reducer待实现",
+        "liveness": "WF(提交/快照捕获/快照交付/恢复/正确补发/终态)，终态后授权读取仍继续",
+        "excluded_behaviors": [
+          "真实WebSocket/认证/持久数据库",
+          "全局计数或流量节奏保密",
+          "无限新事件与无限身份变更"
+        ],
+        "terminal_states": [
+          "Finished",
+          "Aborted"
+        ]
+      },
+      "assumptions": [
+        "事件与前缀提交原子且日志持久，另由#5/#6验证",
+        "快照数据和snapshotSeq一次捕获，投影和cursor一次应用",
+        "活性只要求有限身份故障、有限日志、补发与快照最终得到处理；安全性无公平条件"
+      ]
+    },
+    "negative-hidden-block": {
+      "config": "negative-hidden-block.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [],
+      "expected_properties": [
+        "ConnectedProjectionCatchesUp"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "events_per_session": 4,
+        "views": 2,
+        "view_generations": 2,
+        "revocation_restore_cycles": 1,
+        "resync_cycles": 1,
+        "distinct_state_min": 0,
+        "network": "任意已提交完整区间的丢失/重复/乱序/重叠；记录可见性固定于事件发生时",
+        "projection": "有序授权效果前缀，包含新增/移除字段与知识来源效果；真实reducer待实现",
+        "liveness": "WF(提交/快照捕获/快照交付/恢复/正确补发/终态)，终态后授权读取仍继续",
+        "excluded_behaviors": [
+          "真实WebSocket/认证/持久数据库",
+          "全局计数或流量节奏保密",
+          "无限新事件与无限身份变更"
+        ],
+        "terminal_states": [
+          "Finished",
+          "Aborted"
+        ]
+      },
+      "assumptions": [
+        "事件与前缀提交原子且日志持久，另由#5/#6验证",
+        "快照数据和snapshotSeq一次捕获，投影和cursor一次应用",
+        "活性只要求有限身份故障、有限日志、补发与快照最终得到处理；安全性无公平条件"
+      ]
+    },
+    "witness-future": {
+      "config": "witness-future.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NotFuture"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "events_per_session": 4,
+        "views": 2,
+        "view_generations": 2,
+        "revocation_restore_cycles": 1,
+        "resync_cycles": 1,
+        "distinct_state_min": 0,
+        "network": "任意已提交完整区间的丢失/重复/乱序/重叠；记录可见性固定于事件发生时",
+        "projection": "有序授权效果前缀，包含新增/移除字段与知识来源效果；真实reducer待实现",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "真实WebSocket/认证/持久数据库",
+          "全局计数或流量节奏保密",
+          "无限新事件与无限身份变更"
+        ],
+        "terminal_states": [
+          "Finished",
+          "Aborted"
+        ]
+      },
+      "assumptions": [
+        "事件与前缀提交原子且日志持久，另由#5/#6验证",
+        "快照数据和snapshotSeq一次捕获，投影和cursor一次应用",
+        "活性只要求有限身份故障、有限日志、补发与快照最终得到处理；安全性无公平条件"
+      ]
+    },
+    "witness-overlap": {
+      "config": "witness-overlap.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NotOverlap"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "events_per_session": 4,
+        "views": 2,
+        "view_generations": 2,
+        "revocation_restore_cycles": 1,
+        "resync_cycles": 1,
+        "distinct_state_min": 0,
+        "network": "任意已提交完整区间的丢失/重复/乱序/重叠；记录可见性固定于事件发生时",
+        "projection": "有序授权效果前缀，包含新增/移除字段与知识来源效果；真实reducer待实现",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "真实WebSocket/认证/持久数据库",
+          "全局计数或流量节奏保密",
+          "无限新事件与无限身份变更"
+        ],
+        "terminal_states": [
+          "Finished",
+          "Aborted"
+        ]
+      },
+      "assumptions": [
+        "事件与前缀提交原子且日志持久，另由#5/#6验证",
+        "快照数据和snapshotSeq一次捕获，投影和cursor一次应用",
+        "活性只要求有限身份故障、有限日志、补发与快照最终得到处理；安全性无公平条件"
+      ]
+    },
+    "witness-duplicate": {
+      "config": "witness-duplicate.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NotDuplicate"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "events_per_session": 4,
+        "views": 2,
+        "view_generations": 2,
+        "revocation_restore_cycles": 1,
+        "resync_cycles": 1,
+        "distinct_state_min": 0,
+        "network": "任意已提交完整区间的丢失/重复/乱序/重叠；记录可见性固定于事件发生时",
+        "projection": "有序授权效果前缀，包含新增/移除字段与知识来源效果；真实reducer待实现",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "真实WebSocket/认证/持久数据库",
+          "全局计数或流量节奏保密",
+          "无限新事件与无限身份变更"
+        ],
+        "terminal_states": [
+          "Finished",
+          "Aborted"
+        ]
+      },
+      "assumptions": [
+        "事件与前缀提交原子且日志持久，另由#5/#6验证",
+        "快照数据和snapshotSeq一次捕获，投影和cursor一次应用",
+        "活性只要求有限身份故障、有限日志、补发与快照最终得到处理；安全性无公平条件"
+      ]
+    },
+    "witness-hiddenadvance": {
+      "config": "witness-hiddenadvance.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NotHiddenAdvance"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "events_per_session": 4,
+        "views": 2,
+        "view_generations": 2,
+        "revocation_restore_cycles": 1,
+        "resync_cycles": 1,
+        "distinct_state_min": 0,
+        "network": "任意已提交完整区间的丢失/重复/乱序/重叠；记录可见性固定于事件发生时",
+        "projection": "有序授权效果前缀，包含新增/移除字段与知识来源效果；真实reducer待实现",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "真实WebSocket/认证/持久数据库",
+          "全局计数或流量节奏保密",
+          "无限新事件与无限身份变更"
+        ],
+        "terminal_states": [
+          "Finished",
+          "Aborted"
+        ]
+      },
+      "assumptions": [
+        "事件与前缀提交原子且日志持久，另由#5/#6验证",
+        "快照数据和snapshotSeq一次捕获，投影和cursor一次应用",
+        "活性只要求有限身份故障、有限日志、补发与快照最终得到处理；安全性无公平条件"
+      ]
+    },
+    "witness-snapshotbehind": {
+      "config": "witness-snapshotbehind.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NotSnapshotBehind"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "events_per_session": 4,
+        "views": 2,
+        "view_generations": 2,
+        "revocation_restore_cycles": 1,
+        "resync_cycles": 1,
+        "distinct_state_min": 0,
+        "network": "任意已提交完整区间的丢失/重复/乱序/重叠；记录可见性固定于事件发生时",
+        "projection": "有序授权效果前缀，包含新增/移除字段与知识来源效果；真实reducer待实现",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "真实WebSocket/认证/持久数据库",
+          "全局计数或流量节奏保密",
+          "无限新事件与无限身份变更"
+        ],
+        "terminal_states": [
+          "Finished",
+          "Aborted"
+        ]
+      },
+      "assumptions": [
+        "事件与前缀提交原子且日志持久，另由#5/#6验证",
+        "快照数据和snapshotSeq一次捕获，投影和cursor一次应用",
+        "活性只要求有限身份故障、有限日志、补发与快照最终得到处理；安全性无公平条件"
+      ]
+    },
+    "witness-drop": {
+      "config": "witness-drop.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NotDrop"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "events_per_session": 4,
+        "views": 2,
+        "view_generations": 2,
+        "revocation_restore_cycles": 1,
+        "resync_cycles": 1,
+        "distinct_state_min": 0,
+        "network": "任意已提交完整区间的丢失/重复/乱序/重叠；记录可见性固定于事件发生时",
+        "projection": "有序授权效果前缀，包含新增/移除字段与知识来源效果；真实reducer待实现",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "真实WebSocket/认证/持久数据库",
+          "全局计数或流量节奏保密",
+          "无限新事件与无限身份变更"
+        ],
+        "terminal_states": [
+          "Finished",
+          "Aborted"
+        ]
+      },
+      "assumptions": [
+        "事件与前缀提交原子且日志持久，另由#5/#6验证",
+        "快照数据和snapshotSeq一次捕获，投影和cursor一次应用",
+        "活性只要求有限身份故障、有限日志、补发与快照最终得到处理；安全性无公平条件"
+      ]
+    },
+    "witness-identityrejection": {
+      "config": "witness-identityrejection.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NotIdentityRejection"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "events_per_session": 4,
+        "views": 2,
+        "view_generations": 2,
+        "revocation_restore_cycles": 1,
+        "resync_cycles": 1,
+        "distinct_state_min": 0,
+        "network": "任意已提交完整区间的丢失/重复/乱序/重叠；记录可见性固定于事件发生时",
+        "projection": "有序授权效果前缀，包含新增/移除字段与知识来源效果；真实reducer待实现",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "真实WebSocket/认证/持久数据库",
+          "全局计数或流量节奏保密",
+          "无限新事件与无限身份变更"
+        ],
+        "terminal_states": [
+          "Finished",
+          "Aborted"
+        ]
+      },
+      "assumptions": [
+        "事件与前缀提交原子且日志持久，另由#5/#6验证",
+        "快照数据和snapshotSeq一次捕获，投影和cursor一次应用",
+        "活性只要求有限身份故障、有限日志、补发与快照最终得到处理；安全性无公平条件"
+      ]
+    },
+    "witness-resync": {
+      "config": "witness-resync.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NotResync"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "events_per_session": 4,
+        "views": 2,
+        "view_generations": 2,
+        "revocation_restore_cycles": 1,
+        "resync_cycles": 1,
+        "distinct_state_min": 0,
+        "network": "任意已提交完整区间的丢失/重复/乱序/重叠；记录可见性固定于事件发生时",
+        "projection": "有序授权效果前缀，包含新增/移除字段与知识来源效果；真实reducer待实现",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "真实WebSocket/认证/持久数据库",
+          "全局计数或流量节奏保密",
+          "无限新事件与无限身份变更"
+        ],
+        "terminal_states": [
+          "Finished",
+          "Aborted"
+        ]
+      },
+      "assumptions": [
+        "事件与前缀提交原子且日志持久，另由#5/#6验证",
+        "快照数据和snapshotSeq一次捕获，投影和cursor一次应用",
+        "活性只要求有限身份故障、有限日志、补发与快照最终得到处理；安全性无公平条件"
+      ]
+    },
+    "negative-terminal": {
+      "config": "negative-terminal.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "TerminalBlocksNewEffects"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "events_per_session": 4,
+        "views": 2,
+        "view_generations": 2,
+        "revocation_restore_cycles": 1,
+        "resync_cycles": 1,
+        "distinct_state_min": 0,
+        "network": "任意已提交完整区间的丢失/重复/乱序/重叠；记录可见性固定于事件发生时",
+        "projection": "有序授权效果前缀，包含新增/移除字段与知识来源效果；真实reducer待实现",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "真实WebSocket/认证/持久数据库",
+          "全局计数或流量节奏保密",
+          "无限新事件与无限身份变更"
+        ],
+        "terminal_states": [
+          "Finished",
+          "Aborted"
+        ]
+      },
+      "assumptions": [
+        "事件与前缀提交原子且日志持久，另由#5/#6验证",
+        "快照数据和snapshotSeq一次捕获，投影和cursor一次应用",
+        "活性只要求有限身份故障、有限日志、补发与快照最终得到处理；安全性无公平条件"
+      ]
+    },
+    "negative-version-filter": {
+      "config": "negative-version-filter.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NoUnauthorizedObservation"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "events_per_session": 4,
+        "views": 2,
+        "view_generations": 2,
+        "revocation_restore_cycles": 1,
+        "resync_cycles": 1,
+        "distinct_state_min": 0,
+        "network": "任意已提交完整区间的丢失/重复/乱序/重叠；记录可见性固定于事件发生时",
+        "projection": "有序授权效果前缀，包含新增/移除字段与知识来源效果；真实reducer待实现",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "真实WebSocket/认证/持久数据库",
+          "全局计数或流量节奏保密",
+          "无限新事件与无限身份变更"
+        ],
+        "terminal_states": [
+          "Finished",
+          "Aborted"
+        ]
+      },
+      "assumptions": [
+        "事件与前缀提交原子且日志持久，另由#5/#6验证",
+        "快照数据和snapshotSeq一次捕获，投影和cursor一次应用",
+        "活性只要求有限身份故障、有限日志、补发与快照最终得到处理；安全性无公平条件"
+      ]
+    },
+    "witness-terminalread": {
+      "config": "witness-terminalread.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "NotTerminalRead"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "sessions": 2,
+        "events_per_session": 4,
+        "views": 2,
+        "view_generations": 2,
+        "revocation_restore_cycles": 1,
+        "resync_cycles": 1,
+        "distinct_state_min": 0,
+        "network": "任意已提交完整区间的丢失/重复/乱序/重叠；记录可见性固定于事件发生时",
+        "projection": "有序授权效果前缀，包含新增/移除字段与知识来源效果；真实reducer待实现",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "真实WebSocket/认证/持久数据库",
+          "全局计数或流量节奏保密",
+          "无限新事件与无限身份变更"
+        ],
+        "terminal_states": [
+          "Finished",
+          "Aborted"
+        ]
+      },
+      "assumptions": [
+        "事件与前缀提交原子且日志持久，另由#5/#6验证",
+        "快照数据和snapshotSeq一次捕获，投影和cursor一次应用",
+        "活性只要求有限身份故障、有限日志、补发与快照最终得到处理；安全性无公平条件"
+      ]
+    }
+  }
+}

@@ -1,0 +1,299 @@
+@!@!@STARTMSG 2262:0 @!@!@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+@!@!@ENDMSG 2262 @!@!@
+@!@!@STARTMSG 2187:0 @!@!@
+Running breadth-first search Model-Checking with fp 88 and seed 875401960986213649 with 1 worker on 9 cores with 910MB heap and 64MB offheap memory [pid: 577] (Linux 6.18.57 amd64, Debian 21.0.13 x86_64, MSBDiskFPSet, DiskStateQueue).
+@!@!@ENDMSG 2187 @!@!@
+@!@!@STARTMSG 2220:0 @!@!@
+Starting SANY...
+@!@!@ENDMSG 2220 @!@!@
+Parsing file /workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/reconnect-v4/negative-hidden-block/input/Reconnect.tla
+Parsing file /workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/reconnect-v4/negative-hidden-block/tmp/Naturals.tla
+Parsing file /workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/reconnect-v4/negative-hidden-block/tmp/Sequences.tla
+Parsing file /workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/reconnect-v4/negative-hidden-block/tmp/FiniteSets.tla
+Semantic processing of module Naturals
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module Reconnect
+@!@!@STARTMSG 2219:0 @!@!@
+SANY finished.
+@!@!@ENDMSG 2219 @!@!@
+@!@!@STARTMSG 2185:0 @!@!@
+Starting... (2026-11-10 20:29:28)
+@!@!@ENDMSG 2185 @!@!@
+@!@!@STARTMSG 2212:0 @!@!@
+Implied-temporal checking--satisfiability problem has 1 branches.
+@!@!@ENDMSG 2212 @!@!@
+@!@!@STARTMSG 2189:0 @!@!@
+Computing initial states...
+@!@!@ENDMSG 2189 @!@!@
+@!@!@STARTMSG 2190:0 @!@!@
+Finished computing initial states: 2 distinct states generated at 2026-11-10 20:29:28.
+@!@!@ENDMSG 2190 @!@!@
+@!@!@STARTMSG 2192:0 @!@!@
+Checking temporal properties for the current state space with 8355 total distinct states at (2026-11-10 20:29:31)
+@!@!@ENDMSG 2192 @!@!@
+@!@!@STARTMSG 2116:1 @!@!@
+Temporal properties were violated.
+
+@!@!@ENDMSG 2116 @!@!@
+@!@!@STARTMSG 2264:1 @!@!@
+The following behavior constitutes a counter-example:
+
+@!@!@ENDMSG 2264 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+1: <Initial predicate>
+/\ phase = "Running"
+/\ dropUsed = FALSE
+/\ resyncUsed = FALSE
+/\ authorized = TRUE
+/\ homeSession = "S1"
+/\ projection = <<>>
+/\ stage = "need"
+/\ mayRevoke = TRUE
+/\ view = "A"
+/\ marker = "initial"
+/\ invalidDelivery = FALSE
+/\ cursor = 0
+/\ version = 0
+/\ terminalHead = 0
+/\ snapshot = 0
+/\ head = 0
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+2: <CommitEvent line 28, col 16 to line 31, col 118 of module Reconnect>
+/\ phase = "Running"
+/\ dropUsed = FALSE
+/\ resyncUsed = FALSE
+/\ authorized = TRUE
+/\ homeSession = "S1"
+/\ projection = <<>>
+/\ stage = "need"
+/\ mayRevoke = TRUE
+/\ view = "A"
+/\ marker = "committed"
+/\ invalidDelivery = FALSE
+/\ cursor = 0
+/\ version = 0
+/\ terminalHead = 0
+/\ snapshot = 0
+/\ head = 1
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+3: <Revoke line 93, col 11 to line 97, col 111 of module Reconnect>
+/\ phase = "Running"
+/\ dropUsed = FALSE
+/\ resyncUsed = FALSE
+/\ authorized = FALSE
+/\ homeSession = "S1"
+/\ projection = <<>>
+/\ stage = "need"
+/\ mayRevoke = FALSE
+/\ view = "A"
+/\ marker = "revoked"
+/\ invalidDelivery = FALSE
+/\ cursor = 0
+/\ version = 0
+/\ terminalHead = 0
+/\ snapshot = 0
+/\ head = 1
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+4: <Restore line 99, col 12 to line 101, col 103 of module Reconnect>
+/\ phase = "Running"
+/\ dropUsed = FALSE
+/\ resyncUsed = FALSE
+/\ authorized = TRUE
+/\ homeSession = "S1"
+/\ projection = <<>>
+/\ stage = "need"
+/\ mayRevoke = FALSE
+/\ view = "A"
+/\ marker = "restored"
+/\ invalidDelivery = FALSE
+/\ cursor = 0
+/\ version = 0
+/\ terminalHead = 0
+/\ snapshot = 0
+/\ head = 1
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+5: <Rebind line 87, col 11 to line 91, col 119 of module Reconnect>
+/\ phase = "Running"
+/\ dropUsed = FALSE
+/\ resyncUsed = FALSE
+/\ authorized = TRUE
+/\ homeSession = "S1"
+/\ projection = <<>>
+/\ stage = "need"
+/\ mayRevoke = FALSE
+/\ view = "B"
+/\ marker = "view-rebound"
+/\ invalidDelivery = FALSE
+/\ cursor = 0
+/\ version = 1
+/\ terminalHead = 0
+/\ snapshot = 0
+/\ head = 1
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+6: <StartSnapshot line 33, col 18 to line 37, col 111 of module Reconnect>
+/\ phase = "Running"
+/\ dropUsed = FALSE
+/\ resyncUsed = FALSE
+/\ authorized = TRUE
+/\ homeSession = "S1"
+/\ projection = <<>>
+/\ stage = "waiting"
+/\ mayRevoke = FALSE
+/\ view = "B"
+/\ marker = "snapshot-captured"
+/\ invalidDelivery = FALSE
+/\ cursor = 0
+/\ version = 1
+/\ terminalHead = 0
+/\ snapshot = 1
+/\ head = 1
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+7: <CommitEvent line 28, col 16 to line 31, col 118 of module Reconnect>
+/\ phase = "Running"
+/\ dropUsed = FALSE
+/\ resyncUsed = FALSE
+/\ authorized = TRUE
+/\ homeSession = "S1"
+/\ projection = <<>>
+/\ stage = "waiting"
+/\ mayRevoke = FALSE
+/\ view = "B"
+/\ marker = "committed"
+/\ invalidDelivery = FALSE
+/\ cursor = 0
+/\ version = 1
+/\ terminalHead = 0
+/\ snapshot = 1
+/\ head = 2
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+8: <DeliverSnapshot line 40, col 5 to line 47, col 86 of module Reconnect>
+/\ phase = "Running"
+/\ dropUsed = FALSE
+/\ resyncUsed = FALSE
+/\ authorized = TRUE
+/\ homeSession = "S1"
+/\ projection = <<<<"S1", 1>>>>
+/\ stage = "ready"
+/\ mayRevoke = FALSE
+/\ view = "B"
+/\ marker = "snapshot-behind"
+/\ invalidDelivery = FALSE
+/\ cursor = 1
+/\ version = 1
+/\ terminalHead = 0
+/\ snapshot = 1
+/\ head = 2
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+9: <Finish line 113, col 14 to line 116, col 97 of module Reconnect>
+/\ phase = "Aborted"
+/\ dropUsed = FALSE
+/\ resyncUsed = FALSE
+/\ authorized = TRUE
+/\ homeSession = "S1"
+/\ projection = <<<<"S1", 1>>>>
+/\ stage = "ready"
+/\ mayRevoke = FALSE
+/\ view = "B"
+/\ marker = "terminal"
+/\ invalidDelivery = FALSE
+/\ cursor = 1
+/\ version = 1
+/\ terminalHead = 2
+/\ snapshot = 1
+/\ head = 2
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+10: <Receive line 52, col 5 to line 77, col 70 of module Reconnect>
+/\ phase = "Aborted"
+/\ dropUsed = FALSE
+/\ resyncUsed = FALSE
+/\ authorized = TRUE
+/\ homeSession = "S1"
+/\ projection = <<<<"S1", 1>>>>
+/\ stage = "ready"
+/\ mayRevoke = FALSE
+/\ view = "B"
+/\ marker = "identity-rejected"
+/\ invalidDelivery = FALSE
+/\ cursor = 1
+/\ version = 1
+/\ terminalHead = 2
+/\ snapshot = 1
+/\ head = 2
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+11: <Receive line 52, col 5 to line 77, col 70 of module Reconnect>
+/\ phase = "Aborted"
+/\ dropUsed = FALSE
+/\ resyncUsed = FALSE
+/\ authorized = TRUE
+/\ homeSession = "S1"
+/\ projection = <<<<"S1", 1>>>>
+/\ stage = "ready"
+/\ mayRevoke = FALSE
+/\ view = "B"
+/\ marker = "overlap-rejected"
+/\ invalidDelivery = FALSE
+/\ cursor = 1
+/\ version = 1
+/\ terminalHead = 2
+/\ snapshot = 1
+/\ head = 2
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+12: <Repair line 79, col 11 to line 80, col 58 of module Reconnect>
+/\ phase = "Aborted"
+/\ dropUsed = FALSE
+/\ resyncUsed = FALSE
+/\ authorized = TRUE
+/\ homeSession = "S1"
+/\ projection = <<<<"S1", 1>>>>
+/\ stage = "ready"
+/\ mayRevoke = FALSE
+/\ view = "B"
+/\ marker = "hidden-blocked"
+/\ invalidDelivery = FALSE
+/\ cursor = 1
+/\ version = 1
+/\ terminalHead = 2
+/\ snapshot = 1
+/\ head = 2
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2122:4 @!@!@
+10: Back to state: <Receive line 52, col 5 to line 77, col 70 of module Reconnect>
+
+@!@!@ENDMSG 2122 @!@!@
+@!@!@STARTMSG 2267:0 @!@!@
+Finished checking temporal properties in 00s at 2026-11-10 20:29:31
+@!@!@ENDMSG 2267 @!@!@
+@!@!@STARTMSG 2200:0 @!@!@
+Progress(12) at 2026-11-10 20:29:31: 342,681 states generated (5,415,027 s/min), 10,873 distinct states found (171,814 ds/min), 2,518 states left on queue.
+@!@!@ENDMSG 2200 @!@!@
+@!@!@STARTMSG 2199:0 @!@!@
+342681 states generated, 10873 distinct states found, 2518 states left on queue.
+@!@!@ENDMSG 2199 @!@!@
+@!@!@STARTMSG 2186:0 @!@!@
+Finished in 3803ms at (2026-11-10 20:29:31)
+@!@!@ENDMSG 2186 @!@!@

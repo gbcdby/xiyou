@@ -1,0 +1,309 @@
+{
+  "spec_revision": "6c2a0b9f6d137ad5fbd41721659404333ad8e16d",
+  "implementation_status": "NOT_ASSESSED",
+  "independent_review": "NOT_RUN",
+  "runs": [
+    {
+      "profile": "positive",
+      "kind": "positive",
+      "status": "PASS_WITHIN_SCOPE",
+      "raw_tlc_exit_code": 0,
+      "distinct_states": 20278,
+      "invariants": [
+        "TypeOK",
+        "ProjectionMatchesCursor",
+        "NoUnauthorizedObservation",
+        "TerminalBlocksNewEffects"
+      ],
+      "properties": [],
+      "result": "evidence/positive/result.json",
+      "log": "evidence/positive/tlc.log"
+    },
+    {
+      "profile": "live",
+      "kind": "positive",
+      "status": "PASS_WITHIN_SCOPE",
+      "raw_tlc_exit_code": 0,
+      "distinct_states": 20278,
+      "invariants": [],
+      "properties": [
+        "ConnectedProjectionCatchesUp"
+      ],
+      "result": "evidence/live/result.json",
+      "log": "evidence/live/tlc.log"
+    },
+    {
+      "profile": "negative-type",
+      "kind": "negative_invariant",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 7,
+      "invariants": [
+        "TypeOK"
+      ],
+      "properties": [],
+      "result": "evidence/negative-type/result.json",
+      "log": "evidence/negative-type/tlc.log"
+    },
+    {
+      "profile": "negative-partial",
+      "kind": "negative_invariant",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 318,
+      "invariants": [
+        "ProjectionMatchesCursor"
+      ],
+      "properties": [],
+      "result": "evidence/negative-partial/result.json",
+      "log": "evidence/negative-partial/tlc.log"
+    },
+    {
+      "profile": "negative-order",
+      "kind": "negative_invariant",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 634,
+      "invariants": [
+        "ProjectionMatchesCursor"
+      ],
+      "properties": [],
+      "result": "evidence/negative-order/result.json",
+      "log": "evidence/negative-order/tlc.log"
+    },
+    {
+      "profile": "negative-stream-filter",
+      "kind": "negative_invariant",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 1420,
+      "invariants": [
+        "NoUnauthorizedObservation"
+      ],
+      "properties": [],
+      "result": "evidence/negative-stream-filter/result.json",
+      "log": "evidence/negative-stream-filter/tlc.log"
+    },
+    {
+      "profile": "negative-snapshot-filter",
+      "kind": "negative_invariant",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 596,
+      "invariants": [
+        "NoUnauthorizedObservation"
+      ],
+      "properties": [],
+      "result": "evidence/negative-snapshot-filter/result.json",
+      "log": "evidence/negative-snapshot-filter/tlc.log"
+    },
+    {
+      "profile": "negative-session-filter",
+      "kind": "negative_invariant",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 116,
+      "invariants": [
+        "NoUnauthorizedObservation"
+      ],
+      "properties": [],
+      "result": "evidence/negative-session-filter/result.json",
+      "log": "evidence/negative-session-filter/tlc.log"
+    },
+    {
+      "profile": "negative-view-filter",
+      "kind": "negative_invariant",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 323,
+      "invariants": [
+        "NoUnauthorizedObservation"
+      ],
+      "properties": [],
+      "result": "evidence/negative-view-filter/result.json",
+      "log": "evidence/negative-view-filter/tlc.log"
+    },
+    {
+      "profile": "negative-revoked",
+      "kind": "negative_invariant",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 101,
+      "invariants": [
+        "NoUnauthorizedObservation"
+      ],
+      "properties": [],
+      "result": "evidence/negative-revoked/result.json",
+      "log": "evidence/negative-revoked/tlc.log"
+    },
+    {
+      "profile": "negative-no-retry",
+      "kind": "negative_temporal",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 13,
+      "distinct_states": 15261,
+      "invariants": [],
+      "properties": [
+        "ConnectedProjectionCatchesUp"
+      ],
+      "result": "evidence/negative-no-retry/result.json",
+      "log": "evidence/negative-no-retry/tlc.log"
+    },
+    {
+      "profile": "negative-hidden-block",
+      "kind": "negative_temporal",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 13,
+      "distinct_states": 10873,
+      "invariants": [],
+      "properties": [
+        "ConnectedProjectionCatchesUp"
+      ],
+      "result": "evidence/negative-hidden-block/result.json",
+      "log": "evidence/negative-hidden-block/tlc.log"
+    },
+    {
+      "profile": "witness-future",
+      "kind": "reachability_probe",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 733,
+      "invariants": [
+        "NotFuture"
+      ],
+      "properties": [],
+      "result": "evidence/witness-future/result.json",
+      "log": "evidence/witness-future/tlc.log"
+    },
+    {
+      "profile": "witness-overlap",
+      "kind": "reachability_probe",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 634,
+      "invariants": [
+        "NotOverlap"
+      ],
+      "properties": [],
+      "result": "evidence/witness-overlap/result.json",
+      "log": "evidence/witness-overlap/tlc.log"
+    },
+    {
+      "profile": "witness-duplicate",
+      "kind": "reachability_probe",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 258,
+      "invariants": [
+        "NotDuplicate"
+      ],
+      "properties": [],
+      "result": "evidence/witness-duplicate/result.json",
+      "log": "evidence/witness-duplicate/tlc.log"
+    },
+    {
+      "profile": "witness-hiddenadvance",
+      "kind": "reachability_probe",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 1420,
+      "invariants": [
+        "NotHiddenAdvance"
+      ],
+      "properties": [],
+      "result": "evidence/witness-hiddenadvance/result.json",
+      "log": "evidence/witness-hiddenadvance/tlc.log"
+    },
+    {
+      "profile": "witness-snapshotbehind",
+      "kind": "reachability_probe",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 108,
+      "invariants": [
+        "NotSnapshotBehind"
+      ],
+      "properties": [],
+      "result": "evidence/witness-snapshotbehind/result.json",
+      "log": "evidence/witness-snapshotbehind/tlc.log"
+    },
+    {
+      "profile": "witness-drop",
+      "kind": "reachability_probe",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 17,
+      "invariants": [
+        "NotDrop"
+      ],
+      "properties": [],
+      "result": "evidence/witness-drop/result.json",
+      "log": "evidence/witness-drop/tlc.log"
+    },
+    {
+      "profile": "witness-identityrejection",
+      "kind": "reachability_probe",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 116,
+      "invariants": [
+        "NotIdentityRejection"
+      ],
+      "properties": [],
+      "result": "evidence/witness-identityrejection/result.json",
+      "log": "evidence/witness-identityrejection/tlc.log"
+    },
+    {
+      "profile": "witness-resync",
+      "kind": "reachability_probe",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 113,
+      "invariants": [
+        "NotResync"
+      ],
+      "properties": [],
+      "result": "evidence/witness-resync/result.json",
+      "log": "evidence/witness-resync/tlc.log"
+    },
+    {
+      "profile": "negative-terminal",
+      "kind": "negative_invariant",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 36,
+      "invariants": [
+        "TerminalBlocksNewEffects"
+      ],
+      "properties": [],
+      "result": "evidence/negative-terminal/result.json",
+      "log": "evidence/negative-terminal/tlc.log"
+    },
+    {
+      "profile": "negative-version-filter",
+      "kind": "negative_invariant",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 323,
+      "invariants": [
+        "NoUnauthorizedObservation"
+      ],
+      "properties": [],
+      "result": "evidence/negative-version-filter/result.json",
+      "log": "evidence/negative-version-filter/tlc.log"
+    },
+    {
+      "profile": "witness-terminalread",
+      "kind": "reachability_probe",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 256,
+      "invariants": [
+        "NotTerminalRead"
+      ],
+      "properties": [],
+      "result": "evidence/witness-terminalread/result.json",
+      "log": "evidence/witness-terminalread/tlc.log"
+    }
+  ]
+}

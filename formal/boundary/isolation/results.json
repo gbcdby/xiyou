@@ -1,0 +1,47 @@
+{
+  "spec_revision": "6c2a0b9f6d137ad5fbd41721659404333ad8e16d",
+  "implementation_status": "NOT_ASSESSED",
+  "independent_review": "NOT_RUN",
+  "runs": [
+    {
+      "profile": "negative-isolation",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 8,
+      "result": "evidence/negative-isolation/result.json",
+      "log": "evidence/negative-isolation/tlc.log"
+    },
+    {
+      "profile": "negative-type",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 6,
+      "result": "evidence/negative-type/result.json",
+      "log": "evidence/negative-type/tlc.log"
+    },
+    {
+      "profile": "positive",
+      "status": "PASS_WITHIN_SCOPE",
+      "raw_tlc_exit_code": 0,
+      "distinct_states": 57,
+      "result": "evidence/positive/result.json",
+      "log": "evidence/positive/tlc.log"
+    },
+    {
+      "profile": "witness-both-sessions",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 22,
+      "result": "evidence/witness-both-sessions/result.json",
+      "log": "evidence/witness-both-sessions/tlc.log"
+    },
+    {
+      "profile": "witness-cross-rejection",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 29,
+      "result": "evidence/witness-cross-rejection/result.json",
+      "log": "evidence/witness-cross-rejection/tlc.log"
+    }
+  ]
+}

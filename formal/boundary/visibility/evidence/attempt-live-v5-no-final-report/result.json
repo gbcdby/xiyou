@@ -1,0 +1,248 @@
+{
+  "schema_version": 1,
+  "run_id": "8a2e1f54-422f-4ad2-814f-a42e697f571c",
+  "status": "INCONCLUSIVE",
+  "reason": "RUNNING_OR_TERMINATED_BEFORE_FINAL_REPORT",
+  "mode": "modelcheck",
+  "profile": "live",
+  "started_at": "2026-11-11T04:45:50.319979+00:00",
+  "finished_at": null,
+  "duration_seconds": null,
+  "completed": false,
+  "implementation_status": "NOT_ASSESSED",
+  "tool": {
+    "version_label": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+    "jar_snapshot": "/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/visibility-v5/live/tool/tla2tools.jar",
+    "java_path": "/usr/bin/java",
+    "java_version": "openjdk version \"21.0.13\" 2026-10-20\nOpenJDK Runtime Environment (build 21.0.13+9-1-deb13u2-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.13+9-1-deb13u2-Debian, mixed mode, sharing)",
+    "removed_environment_names": []
+  },
+  "inputs": {
+    "manifest_sha256": "59dc28cd5cf223574e59bb84a9d56dd0d45137daf1d689a7c1ee9797a5a5c21c",
+    "model_root": "/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/formal/boundary/visibility/model",
+    "snapshot_directory": "/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/visibility-v5/live/input",
+    "files": [
+      {
+        "path": "Visibility.tla",
+        "sha256": "10d0a98e918fd5798f53006795e559e4ad613a4728f6fb69bd73bcd3963f14e7",
+        "bytes": 15629
+      },
+      {
+        "path": "live.cfg",
+        "sha256": "007d5f25b42dea76d5f1fa15082115861c351036335dc8d527f970c53906069f",
+        "bytes": 86
+      },
+      {
+        "path": "negative-belief-fact.cfg",
+        "sha256": "8e0ab25c7768d9fb923958a027ba21d6698f470171d673bb94f3ae3b4befc47e",
+        "bytes": 85
+      },
+      {
+        "path": "negative-belief-source.cfg",
+        "sha256": "9ca19fbb427f7edd9990d17c1d37c25ca374ffd5113739bb6e7d9ed8f3965bbf",
+        "bytes": 91
+      },
+      {
+        "path": "negative-cancelled.cfg",
+        "sha256": "133472f1125abdfc669733e694c753508ca78d3b3dc306e9164214a61ad498e4",
+        "bytes": 79
+      },
+      {
+        "path": "negative-claim-fact.cfg",
+        "sha256": "9aaed26142fc52a6aee59c062218d50277489b8a6bf3c1c4937c1e800e928c42",
+        "bytes": 84
+      },
+      {
+        "path": "negative-context-filter.cfg",
+        "sha256": "b9653242af8eb7d3b8fc6bb399f2b6b14fc7058337dcc5ee731e60e6cb9122b4",
+        "bytes": 92
+      },
+      {
+        "path": "negative-deadline.cfg",
+        "sha256": "bfe175eb3bb0af4cb7c9bd18ef190775da9627fa49148eb80c46d51b4fd17294",
+        "bytes": 78
+      },
+      {
+        "path": "negative-early-speech.cfg",
+        "sha256": "20e47fbdc3283c0943376ef9178b315eb066c70a9eec2ba6b5bbac4407282785",
+        "bytes": 83
+      },
+      {
+        "path": "negative-epoch.cfg",
+        "sha256": "2b79de58274a179cb3d7d98cd2676f59dcd17e1646c9cd626fa15cde16bfdcb8",
+        "bytes": 75
+      },
+      {
+        "path": "negative-generation.cfg",
+        "sha256": "13b4c700e1dc1ebcdbac662591fc16dff586a4578cb21416203bbad4310adfd5",
+        "bytes": 80
+      },
+      {
+        "path": "negative-human-private.cfg",
+        "sha256": "c457c67535f4dee39394a99333ff6e4b39903f2b9e03c22d9ff953574c2db44a",
+        "bytes": 91
+      },
+      {
+        "path": "negative-intent-fact.cfg",
+        "sha256": "7e75bdbee39604eba643c729cfe59910a29790e2d705c1dbb94c17f7259d1855",
+        "bytes": 85
+      },
+      {
+        "path": "negative-no-timeout.cfg",
+        "sha256": "9d8b182586cedc31edf8a826282b44cfdf83fffd88e1288058a528e29bf741d9",
+        "bytes": 92
+      },
+      {
+        "path": "negative-observation-filter.cfg",
+        "sha256": "f3d449afd128351e0cf2b83d4ec89bf25a2a7c520376385f97f7af2516d19bdd",
+        "bytes": 96
+      },
+      {
+        "path": "negative-partial-tools.cfg",
+        "sha256": "5852a6b2d22e6ad02750d2be2ee0ec3be363e939f0deade7651c8bd6bc415253",
+        "bytes": 84
+      },
+      {
+        "path": "negative-revision.cfg",
+        "sha256": "122937b9a35f4a462c2804377a5cb3a274ee7fdb1b5c53ca8e97f017af990051",
+        "bytes": 78
+      },
+      {
+        "path": "negative-session-filter.cfg",
+        "sha256": "b28abdaba87ac7378e67b5549d243ce2097a5dd502aef32edb29c61676678ed5",
+        "bytes": 92
+      },
+      {
+        "path": "negative-share-private.cfg",
+        "sha256": "35cfc0a6cc2b6e76c2906de81a26ef8f14d4417d60f8348009175c947d456f5c",
+        "bytes": 91
+      },
+      {
+        "path": "negative-terminal.cfg",
+        "sha256": "92eee050e1171492130500d92c70b301e4f135b437473d145625669e0e9828d3",
+        "bytes": 85
+      },
+      {
+        "path": "negative-type.cfg",
+        "sha256": "f95b353ea3937716297b402371f1cfcb098d5f96edb4459b7bf2fc2696eb44e2",
+        "bytes": 63
+      },
+      {
+        "path": "positive.cfg",
+        "sha256": "c1e4d1e43aa173217b42e92b10043ad5b4fe2fcdae053b29932108405c251fb3",
+        "bytes": 183
+      },
+      {
+        "path": "witness-failedsecond.cfg",
+        "sha256": "0293daf7193ee092f4bda5d3860382fd7b778181f69a0fa812ff1652604589b3",
+        "bytes": 72
+      },
+      {
+        "path": "witness-falseclaim.cfg",
+        "sha256": "ff37587a442d99b024185878eac88241e2a82c48064cdbe2fcdb8126ff1da772",
+        "bytes": 70
+      },
+      {
+        "path": "witness-laterejection.cfg",
+        "sha256": "567695d120908b4abfc65b5d939c16f2fba73f3eac7463a46a44c0c2d3cc9389",
+        "bytes": 73
+      },
+      {
+        "path": "witness-legalshare.cfg",
+        "sha256": "d903b5881ebefa71246a44889bc22ed44f158a525355237a46078dac796f105c",
+        "bytes": 70
+      },
+      {
+        "path": "witness-permissionrejection.cfg",
+        "sha256": "d47ef5cd0f7870762a72724f534ebde07d13d11ed4c4e348f08299c10b89fd76",
+        "bytes": 79
+      },
+      {
+        "path": "witness-twotools.cfg",
+        "sha256": "a607f6ecceff1ebeec3f747ce408b893959b29fa2bdd8b06b61d59888231cfef",
+        "bytes": 68
+      },
+      {
+        "path": "witness-unrelatedsuccess.cfg",
+        "sha256": "e4020a78f466a556c340f43cfa0b82b9f6b587ec3fef8094c9a7c2b2c5660ff6",
+        "bytes": 76
+      }
+    ],
+    "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a"
+  },
+  "checks": {
+    "expected_invariants": [],
+    "expected_properties": [
+      "DecisionResolvesOrExpires"
+    ],
+    "configured_invariants": [],
+    "configured_properties": [
+      "DecisionResolvesOrExpires"
+    ],
+    "checks_deadlock": true,
+    "deadlock_reason": null,
+    "behavior": {
+      "SPECIFICATION": "LiveSpec"
+    }
+  },
+  "scope": {
+    "sessions": 2,
+    "npcs": 2,
+    "original_observations": 4,
+    "derived_observations": 2,
+    "decisions": 1,
+    "ordered_tools": 2,
+    "logical_time": "0..2，2表示10秒截止；不建模真人30秒交还过程，只保留交还epoch围栏",
+    "distinct_state_min": 100,
+    "liveness": "WF(Tick)/WF(Expire)/WF(Submit)，不要求模型返回",
+    "excluded_behaviors": [
+      "任意自然语言真假及推理质量",
+      "真实模型/数据库/网络",
+      "完整真人控制链由#5负责",
+      "完整fallback动作与持久去重由#5/#9负责"
+    ]
+  },
+  "assumptions": [
+    "可信NPC绑定S1，S2观察拥有不同Session元数据",
+    "原始观察资格和传播许可由服务端固定",
+    "合法传播建立新Observation，不能改写旧受众",
+    "提交原子保存两工具效果、收据、outbox和Decision收束",
+    "逻辑时间与处理器公平调度仅用于活性"
+  ],
+  "command": [
+    "/usr/bin/java",
+    "-Xmx1024m",
+    "-XX:+UseParallelGC",
+    "-Duser.language=en",
+    "-Duser.country=US",
+    "-Duser.home=/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/visibility-v5/live/runtime-home",
+    "-Djava.io.tmpdir=/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/visibility-v5/live/tmp",
+    "-DTLA-Library=/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/visibility-v5/live/input",
+    "-cp",
+    "/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/visibility-v5/live/tool/tla2tools.jar",
+    "tlc2.TLC",
+    "-tool",
+    "-modelcheck",
+    "-workers",
+    "1",
+    "-metadir",
+    "/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/visibility-v5/live/states",
+    "-config",
+    "/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/visibility-v5/live/input/live.cfg",
+    "/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/visibility-v5/live/input/Visibility.tla"
+  ],
+  "process": {
+    "exit_code": null,
+    "timed_out": false,
+    "interrupted": false
+  },
+  "statistics": {},
+  "evidence": {
+    "log": "/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/visibility-v5/live/tlc.log",
+    "messages": "/workspace/scratch/f9401eff266e/.agent-output/boundary-models/worktree/.agent-output/boundary/visibility-v5/live/messages.json"
+  },
+  "message_codes": [],
+  "error_codes": [],
+  "warning_codes": []
+}

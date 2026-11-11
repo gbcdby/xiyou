@@ -1,0 +1,413 @@
+{
+  "spec_revision": "6c2a0b9f6d137ad5fbd41721659404333ad8e16d",
+  "implementation_status": "NOT_ASSESSED",
+  "independent_review": "NOT_RUN",
+  "runs": [
+    {
+      "profile": "positive",
+      "kind": "positive",
+      "status": "PASS_WITHIN_SCOPE",
+      "raw_tlc_exit_code": 0,
+      "distinct_states": 2591386,
+      "invariants": [
+        "TypeOK",
+        "NoUnauthorizedObservation",
+        "IntentCannotWriteFact",
+        "AtomicCommitBundle",
+        "FreshDecisionOnly",
+        "TerminalBlocksNewEffects"
+      ],
+      "properties": [],
+      "result": "evidence/positive/result.json",
+      "log": "evidence/positive/tlc.log"
+    },
+    {
+      "profile": "negative-type",
+      "kind": "negative_invariant",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 10,
+      "invariants": [
+        "TypeOK"
+      ],
+      "properties": [],
+      "result": "evidence/negative-type/result.json",
+      "log": "evidence/negative-type/tlc.log"
+    },
+    {
+      "profile": "negative-observation-filter",
+      "kind": "negative_invariant",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 4,
+      "invariants": [
+        "NoUnauthorizedObservation"
+      ],
+      "properties": [],
+      "result": "evidence/negative-observation-filter/result.json",
+      "log": "evidence/negative-observation-filter/tlc.log"
+    },
+    {
+      "profile": "negative-session-filter",
+      "kind": "negative_invariant",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 5,
+      "invariants": [
+        "NoUnauthorizedObservation"
+      ],
+      "properties": [],
+      "result": "evidence/negative-session-filter/result.json",
+      "log": "evidence/negative-session-filter/tlc.log"
+    },
+    {
+      "profile": "negative-human-private",
+      "kind": "negative_invariant",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 5,
+      "invariants": [
+        "NoUnauthorizedObservation"
+      ],
+      "properties": [],
+      "result": "evidence/negative-human-private/result.json",
+      "log": "evidence/negative-human-private/tlc.log"
+    },
+    {
+      "profile": "negative-share-private",
+      "kind": "negative_invariant",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 22,
+      "invariants": [
+        "NoUnauthorizedObservation"
+      ],
+      "properties": [],
+      "result": "evidence/negative-share-private/result.json",
+      "log": "evidence/negative-share-private/tlc.log"
+    },
+    {
+      "profile": "negative-belief-source",
+      "kind": "negative_invariant",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 7,
+      "invariants": [
+        "NoUnauthorizedObservation"
+      ],
+      "properties": [],
+      "result": "evidence/negative-belief-source/result.json",
+      "log": "evidence/negative-belief-source/tlc.log"
+    },
+    {
+      "profile": "negative-context-filter",
+      "kind": "negative_invariant",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 14,
+      "invariants": [
+        "NoUnauthorizedObservation"
+      ],
+      "properties": [],
+      "result": "evidence/negative-context-filter/result.json",
+      "log": "evidence/negative-context-filter/tlc.log"
+    },
+    {
+      "profile": "negative-claim-fact",
+      "kind": "negative_invariant",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 5,
+      "invariants": [
+        "IntentCannotWriteFact"
+      ],
+      "properties": [],
+      "result": "evidence/negative-claim-fact/result.json",
+      "log": "evidence/negative-claim-fact/tlc.log"
+    },
+    {
+      "profile": "negative-belief-fact",
+      "kind": "negative_invariant",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 16,
+      "invariants": [
+        "IntentCannotWriteFact"
+      ],
+      "properties": [],
+      "result": "evidence/negative-belief-fact/result.json",
+      "log": "evidence/negative-belief-fact/tlc.log"
+    },
+    {
+      "profile": "negative-intent-fact",
+      "kind": "negative_invariant",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 471,
+      "invariants": [
+        "IntentCannotWriteFact"
+      ],
+      "properties": [],
+      "result": "evidence/negative-intent-fact/result.json",
+      "log": "evidence/negative-intent-fact/tlc.log"
+    },
+    {
+      "profile": "negative-partial-tools",
+      "kind": "negative_invariant",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 455,
+      "invariants": [
+        "AtomicCommitBundle"
+      ],
+      "properties": [],
+      "result": "evidence/negative-partial-tools/result.json",
+      "log": "evidence/negative-partial-tools/tlc.log"
+    },
+    {
+      "profile": "negative-early-speech",
+      "kind": "negative_invariant",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 455,
+      "invariants": [
+        "AtomicCommitBundle"
+      ],
+      "properties": [],
+      "result": "evidence/negative-early-speech/result.json",
+      "log": "evidence/negative-early-speech/tlc.log"
+    },
+    {
+      "profile": "negative-epoch",
+      "kind": "negative_invariant",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 2869,
+      "invariants": [
+        "FreshDecisionOnly"
+      ],
+      "properties": [],
+      "result": "evidence/negative-epoch/result.json",
+      "log": "evidence/negative-epoch/tlc.log"
+    },
+    {
+      "profile": "negative-generation",
+      "kind": "negative_invariant",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 2884,
+      "invariants": [
+        "FreshDecisionOnly"
+      ],
+      "properties": [],
+      "result": "evidence/negative-generation/result.json",
+      "log": "evidence/negative-generation/tlc.log"
+    },
+    {
+      "profile": "negative-revision",
+      "kind": "negative_invariant",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 2899,
+      "invariants": [
+        "FreshDecisionOnly"
+      ],
+      "properties": [],
+      "result": "evidence/negative-revision/result.json",
+      "log": "evidence/negative-revision/tlc.log"
+    },
+    {
+      "profile": "negative-deadline",
+      "kind": "negative_invariant",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 16305,
+      "invariants": [
+        "FreshDecisionOnly"
+      ],
+      "properties": [],
+      "result": "evidence/negative-deadline/result.json",
+      "log": "evidence/negative-deadline/tlc.log"
+    },
+    {
+      "profile": "negative-cancelled",
+      "kind": "negative_invariant",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 2945,
+      "invariants": [
+        "FreshDecisionOnly"
+      ],
+      "properties": [],
+      "result": "evidence/negative-cancelled/result.json",
+      "log": "evidence/negative-cancelled/tlc.log"
+    },
+    {
+      "profile": "negative-terminal",
+      "kind": "negative_invariant",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 2950,
+      "invariants": [
+        "TerminalBlocksNewEffects"
+      ],
+      "properties": [],
+      "result": "evidence/negative-terminal/result.json",
+      "log": "evidence/negative-terminal/tlc.log"
+    },
+    {
+      "profile": "negative-no-timeout",
+      "kind": "negative_temporal",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 13,
+      "distinct_states": 44248,
+      "invariants": [],
+      "properties": [
+        "DecisionResolvesOrExpires"
+      ],
+      "result": "evidence/negative-no-timeout/result.json",
+      "log": "evidence/negative-no-timeout/tlc.log"
+    },
+    {
+      "profile": "witness-legalshare",
+      "kind": "reachability_probe",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 12,
+      "invariants": [
+        "NotLegalShare"
+      ],
+      "properties": [],
+      "result": "evidence/witness-legalshare/result.json",
+      "log": "evidence/witness-legalshare/tlc.log"
+    },
+    {
+      "profile": "witness-permissionrejection",
+      "kind": "reachability_probe",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 3,
+      "invariants": [
+        "NotPermissionRejection"
+      ],
+      "properties": [],
+      "result": "evidence/witness-permissionrejection/result.json",
+      "log": "evidence/witness-permissionrejection/tlc.log"
+    },
+    {
+      "profile": "witness-twotools",
+      "kind": "reachability_probe",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 439,
+      "invariants": [
+        "NotTwoTools"
+      ],
+      "properties": [],
+      "result": "evidence/witness-twotools/result.json",
+      "log": "evidence/witness-twotools/tlc.log"
+    },
+    {
+      "profile": "witness-failedsecond",
+      "kind": "reachability_probe",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 455,
+      "invariants": [
+        "NotFailedSecond"
+      ],
+      "properties": [],
+      "result": "evidence/witness-failedsecond/result.json",
+      "log": "evidence/witness-failedsecond/tlc.log"
+    },
+    {
+      "profile": "witness-laterejection",
+      "kind": "reachability_probe",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 2869,
+      "invariants": [
+        "NotLateRejection"
+      ],
+      "properties": [],
+      "result": "evidence/witness-laterejection/result.json",
+      "log": "evidence/witness-laterejection/tlc.log"
+    },
+    {
+      "profile": "witness-unrelatedsuccess",
+      "kind": "reachability_probe",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 2914,
+      "invariants": [
+        "NotUnrelatedSuccess"
+      ],
+      "properties": [],
+      "result": "evidence/witness-unrelatedsuccess/result.json",
+      "log": "evidence/witness-unrelatedsuccess/tlc.log"
+    },
+    {
+      "profile": "witness-falseclaim",
+      "kind": "reachability_probe",
+      "status": "COUNTEREXAMPLE",
+      "raw_tlc_exit_code": 12,
+      "distinct_states": 5,
+      "invariants": [
+        "NotFalseClaim"
+      ],
+      "properties": [],
+      "result": "evidence/witness-falseclaim/result.json",
+      "log": "evidence/witness-falseclaim/tlc.log"
+    },
+    {
+      "profile": "live",
+      "kind": "positive_temporal",
+      "status": "PASS_WITHIN_SCOPE",
+      "raw_tlc_exit_code": 0,
+      "distinct_states": 2591386,
+      "invariants": [],
+      "properties": [
+        "DecisionResolvesOrExpires"
+      ],
+      "result": "evidence/live/result.json",
+      "log": "evidence/live/tlc.log"
+    }
+  ],
+  "historical_attempts": [
+    {
+      "profile": "live",
+      "timeout_seconds": 180,
+      "status": "INCONCLUSIVE",
+      "reason": "TIMEOUT",
+      "result": "evidence/attempt-live-180/result.json",
+      "log": "evidence/attempt-live-180/tlc.log"
+    },
+    {
+      "profile": "live",
+      "timeout_seconds": 600,
+      "status": "INCONCLUSIVE",
+      "reason": "RUNNING_OR_TERMINATED_BEFORE_FINAL_REPORT",
+      "result": "evidence/attempt-live-no-final-report/result.json",
+      "log": "evidence/attempt-live-no-final-report/tlc.log",
+      "missing_outputs": [
+        "messages.json"
+      ],
+      "observation": "恢复turn后原exec句柄不可用；本次进程列表未发现对应运行，原始结果无finished_at与退出码，不能判为完成或推测退出码。"
+    },
+    {
+      "profile": "live",
+      "timeout_seconds": 600,
+      "status": "INCONCLUSIVE",
+      "reason": "RUNNING_OR_TERMINATED_BEFORE_FINAL_REPORT",
+      "result": "evidence/attempt-live-v5-no-final-report/result.json",
+      "log": "evidence/attempt-live-v5-no-final-report/tlc.log",
+      "missing_outputs": [
+        "messages.json"
+      ],
+      "observation": "前轮执行被中断后没有最终报告；保留原始占位和输入，不推测退出码。"
+    }
+  ],
+  "outstanding": [],
+  "model_status": "PASS_WITHIN_SCOPE",
+  "release_status": "NOT_RELEASED_REVIEW_PENDING"
+}

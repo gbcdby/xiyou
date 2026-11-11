@@ -1,0 +1,77 @@
+[
+  {
+    "code": 2262,
+    "severity": 0,
+    "text": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)"
+  },
+  {
+    "code": 2187,
+    "severity": 0,
+    "text": "Running breadth-first search Model-Checking with fp 1 and seed 5251325966444503853 with 1 worker on 9 cores with 455MB heap and 64MB offheap memory [pid: 69] (Linux 6.18.57 amd64, Debian 21.0.13 x86_64, MSBDiskFPSet, DiskStateQueue)."
+  },
+  {
+    "code": 2220,
+    "severity": 0,
+    "text": "Starting SANY..."
+  },
+  {
+    "code": 2219,
+    "severity": 0,
+    "text": "SANY finished."
+  },
+  {
+    "code": 2185,
+    "severity": 0,
+    "text": "Starting... (2026-11-10 20:21:49)"
+  },
+  {
+    "code": 2189,
+    "severity": 0,
+    "text": "Computing initial states..."
+  },
+  {
+    "code": 2190,
+    "severity": 0,
+    "text": "Finished computing initial states: 1 distinct state generated at 2026-11-10 20:21:49."
+  },
+  {
+    "code": 2110,
+    "severity": 1,
+    "text": "Invariant TypeOK is violated."
+  },
+  {
+    "code": 2121,
+    "severity": 1,
+    "text": "The behavior up to this point is:"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "1: <Initial predicate>\n/\\ pending = {\"local1\", \"local2\", \"cross1\", \"cross2\"}\n/\\ result = [ local1 |-> \"Pending\",\n  local2 |-> \"Pending\",\n  cross1 |-> \"Pending\",\n  cross2 |-> \"Pending\" ]\n/\\ versions = [S1 |-> 0, S2 |-> 0]\n/\\ prepared = \"none\"\n/\\ marker = \"initial\"\n/\\ writes = {}"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "2: <TypeFault line 43, col 14 to line 46, col 63 of module SessionIsolation>\n/\\ pending = {\"local1\", \"local2\", \"cross1\", \"cross2\"}\n/\\ result = [ local1 |-> \"Pending\",\n  local2 |-> \"Pending\",\n  cross1 |-> \"Pending\",\n  cross2 |-> \"Pending\" ]\n/\\ versions = [S1 |-> 5, S2 |-> 0]\n/\\ prepared = \"none\"\n/\\ marker = \"out-of-domain\"\n/\\ writes = {}"
+  },
+  {
+    "code": 2200,
+    "severity": 0,
+    "text": "Progress(2) at 2026-11-10 20:21:49: 6 states generated (595 s/min), 6 distinct states found (595 ds/min), 4 states left on queue."
+  },
+  {
+    "code": 2199,
+    "severity": 0,
+    "text": "6 states generated, 6 distinct states found, 4 states left on queue."
+  },
+  {
+    "code": 2194,
+    "severity": 0,
+    "text": "The depth of the complete state graph search is 2."
+  },
+  {
+    "code": 2186,
+    "severity": 0,
+    "text": "Finished in 644ms at (2026-11-10 20:21:49)"
+  }
+]

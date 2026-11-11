@@ -1,0 +1,87 @@
+[
+  {
+    "code": 2262,
+    "severity": 0,
+    "text": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)"
+  },
+  {
+    "code": 2187,
+    "severity": 0,
+    "text": "Running breadth-first search Model-Checking with fp 69 and seed -7948981522526934141 with 1 worker on 9 cores with 910MB heap and 64MB offheap memory [pid: 204] (Linux 6.18.57 amd64, Debian 21.0.13 x86_64, MSBDiskFPSet, DiskStateQueue)."
+  },
+  {
+    "code": 2220,
+    "severity": 0,
+    "text": "Starting SANY..."
+  },
+  {
+    "code": 2219,
+    "severity": 0,
+    "text": "SANY finished."
+  },
+  {
+    "code": 2185,
+    "severity": 0,
+    "text": "Starting... (2026-11-10 20:29:32)"
+  },
+  {
+    "code": 2189,
+    "severity": 0,
+    "text": "Computing initial states..."
+  },
+  {
+    "code": 2190,
+    "severity": 0,
+    "text": "Finished computing initial states: 1 distinct state generated at 2026-11-10 20:29:32."
+  },
+  {
+    "code": 2110,
+    "severity": 1,
+    "text": "Invariant NoUnauthorizedObservation is violated."
+  },
+  {
+    "code": 2121,
+    "severity": 1,
+    "text": "The behavior up to this point is:"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "1: <Initial predicate>\n/\\ phase = \"Running\"\n/\\ epoch = 0\n/\\ handled = FALSE\n/\\ repaired = 0\n/\\ shares = {}\n/\\ beliefSources = [Tang |-> {}, Wukong |-> {}]\n/\\ mode = \"none\"\n/\\ unrelated = FALSE\n/\\ now = 0\n/\\ chosenNPC = \"Tang\"\n/\\ receipt = \"none\"\n/\\ callback = FALSE\n/\\ outbox = 0\n/\\ marker = \"initial\"\n/\\ claims = {}\n/\\ generation = 0\n/\\ terminalEffects = 0\n/\\ speech = 0\n/\\ known = [Tang |-> {}, Wukong |-> {}]\n/\\ recordedEpoch = 0\n/\\ recordedGeneration = 0\n/\\ invalidCommit = FALSE\n/\\ status = \"Idle\"\n/\\ material = 1\n/\\ context = {}\n/\\ revision = 0\n/\\ recordedRevision = 0\n/\\ effects = 0"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "2: <Observe line 38, col 5 to line 48, col 103 of module Visibility>\n/\\ phase = \"Running\"\n/\\ epoch = 0\n/\\ handled = FALSE\n/\\ repaired = 0\n/\\ shares = {}\n/\\ beliefSources = [Tang |-> {}, Wukong |-> {}]\n/\\ mode = \"none\"\n/\\ unrelated = FALSE\n/\\ now = 0\n/\\ chosenNPC = \"Tang\"\n/\\ receipt = \"none\"\n/\\ callback = FALSE\n/\\ outbox = 0\n/\\ marker = \"observed\"\n/\\ claims = {}\n/\\ generation = 0\n/\\ terminalEffects = 0\n/\\ speech = 0\n/\\ known = [Tang |-> {}, Wukong |-> {\"privateB\"}]\n/\\ recordedEpoch = 0\n/\\ recordedGeneration = 0\n/\\ invalidCommit = FALSE\n/\\ status = \"Idle\"\n/\\ material = 1\n/\\ context = {}\n/\\ revision = 0\n/\\ recordedRevision = 0\n/\\ effects = 0"
+  },
+  {
+    "code": 2217,
+    "severity": 4,
+    "text": "3: <Share line 51, col 5 to line 63, col 103 of module Visibility>\n/\\ phase = \"Running\"\n/\\ epoch = 0\n/\\ handled = FALSE\n/\\ repaired = 0\n/\\ shares = {\"sharedB\"}\n/\\ beliefSources = [Tang |-> {}, Wukong |-> {}]\n/\\ mode = \"none\"\n/\\ unrelated = FALSE\n/\\ now = 0\n/\\ chosenNPC = \"Tang\"\n/\\ receipt = \"none\"\n/\\ callback = FALSE\n/\\ outbox = 0\n/\\ marker = \"legally-shared\"\n/\\ claims = {}\n/\\ generation = 0\n/\\ terminalEffects = 0\n/\\ speech = 0\n/\\ known = [Tang |-> {\"sharedB\"}, Wukong |-> {\"privateB\"}]\n/\\ recordedEpoch = 0\n/\\ recordedGeneration = 0\n/\\ invalidCommit = FALSE\n/\\ status = \"Idle\"\n/\\ material = 1\n/\\ context = {}\n/\\ revision = 0\n/\\ recordedRevision = 0\n/\\ effects = 0"
+  },
+  {
+    "code": 2200,
+    "severity": 0,
+    "text": "Progress(3) at 2026-11-10 20:29:32: 83 states generated (8,150 s/min), 22 distinct states found (2,160 ds/min), 17 states left on queue."
+  },
+  {
+    "code": 2199,
+    "severity": 0,
+    "text": "83 states generated, 22 distinct states found, 17 states left on queue."
+  },
+  {
+    "code": 2194,
+    "severity": 0,
+    "text": "The depth of the complete state graph search is 3."
+  },
+  {
+    "code": 2268,
+    "severity": 0,
+    "text": "The average outdegree of the complete state graph is 6 (minimum is 0, the maximum 10 and the 95th percentile is 10)."
+  },
+  {
+    "code": 2186,
+    "severity": 0,
+    "text": "Finished in 617ms at (2026-11-10 20:29:32)"
+  }
+]
