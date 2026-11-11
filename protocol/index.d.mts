@@ -1,5 +1,5 @@
 // 本文件由 protocol/scripts/generate.mjs 从 schema.mjs 生成，请修改唯一字段源后重新生成。
-import type { ClientAction, ProposedIntent, ActionReceipt, ClientReceipt, WorldEvent, DecisionRecord, AuthorizedSnapshot, WorldBatch, SyncRequest, ControlRequest, ControlResponse, ErrorResponse, OutboxRecord, TrustedExecutionContext, AuthorizedProjection } from '../game/types.js';
+import type { ClientAction, ProposedIntent, ActionReceipt, ClientReceipt, WorldEvent, DecisionRecord, AuthorizedSnapshot, WorldBatch, SyncRequest, ControlRequest, ControlResponse, ErrorResponse, OutboxRecord, TrustedExecutionContext, AuthorizedProjection, AuthorizedRecap } from '../game/types.js';
 export type * from '../game/types.js';
 export interface ContractMap {
   ClientAction: ClientAction;
@@ -17,6 +17,7 @@ export interface ContractMap {
   OutboxRecord: OutboxRecord;
   TrustedExecutionContext: TrustedExecutionContext;
   AuthorizedProjection: AuthorizedProjection;
+  AuthorizedRecap: AuthorizedRecap;
 }
 export type ContractName = keyof ContractMap;
 export class ContractError extends Error {

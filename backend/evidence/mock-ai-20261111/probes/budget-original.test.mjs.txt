@@ -1,0 +1,121 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import path from 'node:path';
+import { startTestPostgres } from '../test-support/postgres.mjs';
+import { createRunningRoom, actionRaw, until } from '../test-support/ai-room.mjs';
+import { createRuntime } from '../runtime.mjs';
+import { ModelGateway } from '../ai/gateway.mjs';
+import { AIOrchestrator } from '../ai/orchestrator.mjs';
+import { createMockProvider, mockPolicies } from '../ai/mock-provider.mjs';
+import { decodeStoredOutput } from '../ai/output.mjs';
+import { canonicalize } from '../../protocol/node.mjs';
+
+const digest = value => createHash('sha256').update(canonicalize(value)).digest('hex');
+
+test('五人合法完整链：明确通行目标不能被普遍分享耗尽整局预算', { timeout: 120_000 }, async () => {
+  const database = await startTestPostgres('ai-mock-progress');
+  const runtime = await createRuntime({ pool: database.pool });
+  const workers = new Map();
+  const report = { status: 'RUNNING', clock: '真实 Runtime 时钟；显式单轮唤醒、调度间隔1ms用于有界策略回归，不计60秒主动窗口', maxCallsPerSession: 120, inputs: '五个新合成身份；所有物品、证据、修复与许可经实际 Runtime/Validator', providerDigest: createHash('sha256').update(await readFile(new URL('../ai/mock-provider.mjs', import.meta.url))).digest('hex'), steps: [] };
+  const began = performance.now();
+  try {
+    const room = await createRunningRoom(runtime, 5);
+    report.sessionId = room.sessionId;
+    async function view(index) { return (await runtime.snapshot(room.users[index].token, room.sessionId)).projection; }
+    async function human(index, action) {
+      const receipt = await runtime.submit(room.connections[index], actionRaw(room, index, action));
+      assert.equal(receipt.status, 'Accepted'); return receipt;
+    }
+    async function move(index, regionId) {
+      if ((await view(index)).self.regionId !== regionId) await human(index, { kind: 'move', regionId });
+    }
+    for (const role of ['tangseng', 'wukong']) {
+      const handle = await runtime.bindInternal(room.sessionId, role, 'core_npc');
+      const gateway = new ModelGateway({ provider: createMockProvider(role), modelId: mockPolicies[role].modelId });
+      const orchestrator = new AIOrchestrator({ runtime, gateway, minIntervalMs: 1, maxCallsPerSession: 120 });
+      orchestrator.watch(handle, { wake: false, autoWake: false });
+      workers.set(role, { handle, gateway, orchestrator });
+    }
+    async function step(role) {
+      const { handle, orchestrator } = workers.get(role);
+      const before = orchestrator.status(handle).calls;
+      orchestrator.wake(handle);
+      await until(() => {
+        const current = orchestrator.status(handle);
+        if (current.error) throw new Error(`角色调度失败：${current.error}`);
+        return current.phase === 'BudgetExhausted' || (current.calls > before && current.phase === 'Idle');
+      }, '单轮实际策略没有收束', 20_000);
+      if (orchestrator.status(handle).calls === before) return null;
+      const run = (await database.pool.query("SELECT * FROM ai_runs WHERE session_id=$1 AND actor_id=$2 ORDER BY (context->'decision'->>'generation')::numeric DESC LIMIT 1", [room.sessionId, role])).rows[0];
+      const intent = JSON.parse(decodeStoredOutput(run));
+      assert.equal(run.outcome?.receipt?.status, 'Accepted');
+      const gate = run.context.current.targets.find(target => target.targetId === 'passage_structure');
+      report.steps.push({ actorId: role, decisionId: run.decision_id, contextDigest: run.context_digest, inputObservationIds: run.context.decision.observationIds, outputDigest: digest(intent), tools: intent.toolCalls, gateFields: gate?.fields ?? null, receivedRoute: run.context.memory.claims.some(claim => claim.text === '出口 destination'), receipt: run.outcome.receipt });
+      return intent;
+    }
+
+    // 五职责分别通过公开角色动作取得原材料、工具和完整独立来源。
+    await human(0, { kind: 'inspect', targetId: 'passage_structure' });
+    await human(1, { kind: 'inspect', targetId: 'stock_record' });
+    await human(4, { kind: 'inspect', targetId: 'stock_record' });
+    await human(3, { kind: 'inspect', targetId: 'material_cache' });
+    await human(3, { kind: 'take_item', itemId: 'original_material', expectedItemRevision: '0' });
+    await human(3, { kind: 'speak', channel: 'public', recipientIds: [], text: '出口 passage' });
+    for (const index of [1, 3, 4]) await move(index, 'passage');
+    for (let index = 0; index < 12 && (await runtime.replay(room.sessionId)).characters.wukong.regionId !== 'passage'; index++) await step('wukong');
+    assert.equal((await runtime.replay(room.sessionId)).characters.wukong.regionId, 'passage');
+    await human(1, { kind: 'transfer_item', itemId: 'repair_tool', targetId: room.actors[0], expectedItemRevision: '0' });
+    await human(3, { kind: 'transfer_item', itemId: 'original_material', targetId: room.actors[0], expectedItemRevision: '1' });
+    for (const index of [0, 1, 3, 4]) for (const observation of (await view(index)).observations.filter(o => o.category === 'Evidence')) {
+      await human(index, { kind: 'share_evidence', evidenceId: observation.observationId, recipientIds: ['tangseng', 'wukong'] });
+    }
+    for (const role of workers.keys()) {
+      let checked = false;
+      for (let index = 0; index < 4 && !checked; index++) checked = (await step(role)).toolCalls.some(tool => tool.kind === 'inspect' && tool.targetId === 'passage_structure');
+      assert.equal(checked, true, '修复前必须先完成来源解释和通路检查');
+    }
+    await human(0, { kind: 'use_item', itemIds: ['original_material', 'repair_tool'], expectedItemRevisions: { original_material: '2', repair_tool: '1' }, targetId: 'passage_structure', expectedTargetRevision: '0', operation: 'repair' });
+    for (const role of workers.keys()) assert.ok((await step(role)).toolCalls.some(tool => tool.kind === 'inspect' && tool.targetId === 'passage_structure'));
+    await human(2, { kind: 'interact', targetId: 'passage_structure', expectedTargetRevision: '1', operation: 'grant_passage' });
+    for (const role of workers.keys()) assert.ok((await step(role)).toolCalls.some(tool => tool.kind === 'inspect' && tool.targetId === 'passage_structure'));
+    const route = await human(2, { kind: 'speak', channel: 'public', recipientIds: [], text: '出口 destination' });
+    report.routeReceipt = route;
+    report.callsAtRoute = report.steps.length;
+
+    // 不增加默认120预算，不改变1200秒领域时限。所有后续输出均由实际策略决定。
+    while ((await runtime.replay(room.sessionId)).phase === 'Running' && report.steps.length < 120) {
+      for (const role of workers.keys()) {
+        if ((await runtime.replay(room.sessionId)).phase !== 'Running' || report.steps.length >= 120) break;
+        if (!await step(role)) break;
+      }
+    }
+    const state = await runtime.replay(room.sessionId);
+    report.phase = state.phase; report.ending = state.ending; report.totalCalls = report.steps.length;
+    report.callsAfterRoute = report.steps.length - report.callsAtRoute;
+    report.npcRegions = Object.fromEntries(['tangseng', 'wukong'].map(role => [role, state.characters[role].regionId]));
+    report.routeAwareShares = report.steps.slice(report.callsAtRoute).filter(run => run.receivedRoute && run.tools.some(tool => tool.kind === 'share_evidence') && !run.tools.some(tool => tool.kind === 'move')).length;
+    if (state.phase === 'Running') for (const role of workers.keys()) await step(role);
+    report.scheduler = Object.fromEntries([...workers].map(([role, worker]) => [role, worker.orchestrator.status(worker.handle)]));
+    assert.equal(state.phase, 'Finished', '已核实、已许可且已有明确合法路线，不能用普遍分享耗尽整局预算');
+    assert.equal(state.ending.endingCode, 'clarified_passage');
+    assert.equal(state.items.original_material.location.kind, 'consumed');
+    assert.deepEqual(report.npcRegions, { tangseng: 'destination', wukong: 'destination' });
+    const moved = report.steps.slice(report.callsAtRoute).filter(run => run.tools.some(tool => tool.kind === 'move'));
+    assert.equal(moved.length, 2);
+    assert.ok(moved.every(run => run.receivedRoute), '实际抵达必须依据本角色收到的合法路线建议');
+    report.status = 'PASS';
+  } catch (error) {
+    report.status = 'FAIL'; report.failure = { name: error.name, message: error.message }; throw error;
+  } finally {
+    await Promise.all([...workers.values()].map(worker => worker.orchestrator.close()));
+    await runtime.close(); await database.stop();
+    report.elapsedMs = performance.now() - began;
+    report.resourcesClosed = true;
+    if (process.env.XIYOU_MOCK_EVIDENCE_DIR) {
+      await mkdir(process.env.XIYOU_MOCK_EVIDENCE_DIR, { recursive: true });
+      await writeFile(path.join(process.env.XIYOU_MOCK_EVIDENCE_DIR, 'progress-evidence.json'), JSON.stringify(report, null, 2) + '\n');
+    }
+  }
+});

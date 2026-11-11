@@ -1,0 +1,9 @@
+✔ 实际 HTTP 终态复盘只读，并沿用当前认证与终态水位 (1062.482139ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1273.723935

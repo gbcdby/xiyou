@@ -308,6 +308,21 @@ function checkRelations(name, value) {
     }
   }
   if (name === 'OutboxRecord' && compareDecimal(value.fromExclusive, value.throughSeq) >= 0) fail('outbox 必须引用非空已提交区间', '$');
+  if (name === 'AuthorizedRecap') {
+    const categories = { observed: 'Observation', received_evidence: 'Observation', heard_claim: 'Claim', received_claim: 'Claim', said: 'Claim', moved: 'WorldFact', took: 'WorldFact', transferred: 'WorldFact', used: 'WorldFact', updated: 'WorldFact', finished: 'WorldFact', aborted: 'WorldFact' };
+    const seen = new Set();
+    let previous = null;
+    for (const [index, entry] of value.entries.entries()) {
+      const path = '$.entries[' + index + ']';
+      if (seen.has(entry.entryId)) fail('复盘条目标识重复', path);
+      seen.add(entry.entryId);
+      if (compareDecimal(entry.eventSeq, value.throughSeq) > 0 || (previous !== null && compareDecimal(entry.eventSeq, previous) >= 0)) fail('复盘条目必须在固定水位内严格递减', path);
+      if (categories[entry.kind] !== entry.category) fail('复盘类别与取得方式不一致', path);
+      if (['updated', 'finished', 'aborted'].includes(entry.kind) !== (entry.actorId === null)) fail('复盘条目角色归属无效', path);
+      previous = entry.eventSeq;
+    }
+    if (value.nextBeforeSeq !== null && value.nextBeforeSeq !== previous) fail('复盘下一页游标必须是最后可见条目的序号', '$.nextBeforeSeq');
+  }
 }
 
 /** 只检查结构与内部关系；认证、可见性和提交规则仍由服务端执行。 */
@@ -321,7 +336,7 @@ export function validateContract(name, value) {
 
 export function parseContract(name, raw) {
   // 累积知识不按任意消息大小截断；传输层可分帧，但不能静默丢失合法历史。
-  const maxBytes = ['AuthorizedSnapshot', 'AuthorizedProjection', 'WorldBatch'].includes(name) ? Infinity : 65536;
+  const maxBytes = ['AuthorizedSnapshot', 'AuthorizedProjection', 'WorldBatch', 'AuthorizedRecap'].includes(name) ? Infinity : 65536;
   return validateContract(name, parseStrictJSON(raw, { maxBytes }));
 }
 

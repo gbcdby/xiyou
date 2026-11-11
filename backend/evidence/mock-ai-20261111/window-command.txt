@@ -1,0 +1,7 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> xiyou@0.1.0 verify:mock
+> node backend/scripts/verify-mock-ai.mjs
+
+真实 60 秒主动观察窗口已开始；窗口内不发送新的玩家输入。
+真实观察 60017 ms；两角色均有合法目标行为；总调用 9；进程及连接完整关闭。

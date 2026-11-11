@@ -5,8 +5,10 @@
   "type": "module",
   "scripts": {
     "start": "node backend/main.mjs",
+    "start:mock": "node backend/mock-main.mjs",
     "test:backend": "node --expose-gc --test backend/tests/*.test.mjs",
     "test:ai": "node --test backend/tests/ai-*.test.mjs",
+    "verify:mock": "node backend/scripts/verify-mock-ai.mjs",
     "test:protocol": "node --test protocol/tests/*.test.mjs",
     "test:content": "node --test content/tests/*.test.mjs"
   },

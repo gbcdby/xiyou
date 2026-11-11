@@ -1,4 +1,5 @@
 import { createServer } from 'node:http';
+import { parseRecapQuery } from './recap.mjs';
 import { Server as SocketServer } from 'socket.io';
 import { parseStrictJSON } from '../protocol/index.mjs';
 import { createRuntime } from './runtime.mjs';
@@ -43,10 +44,11 @@ export async function createAuthorityServer({ pool, now, hooks, log = () => {} }
         const token = tokenOf(request);
         if (path === '/api/sessions' && request.method === 'GET') return respond(response, 200, await runtime.listSessions(token));
         if (path === '/api/sessions' && request.method === 'POST') return respond(response, 200, await runtime.create(token, await readBody(request, ['nonce', 'contentVersion'])));
-        const match = path.match(/^\/api\/sessions\/([A-Za-z0-9_.:-]+)(?:\/(join|start|cancel|actions)(?:\/([A-Za-z0-9_.:-]+))?)?$/);
+        const match = path.match(/^\/api\/sessions\/([A-Za-z0-9_.:-]+)(?:\/(join|start|cancel|actions|recap)(?:\/([A-Za-z0-9_.:-]+))?)?$/);
         if (!match) throw new RuntimeError('INVALID_MESSAGE', '接口不存在。');
         const [, sessionId, operation, actionId] = match;
         if (request.method === 'GET' && !operation) return respond(response, 200, await runtime.snapshot(token, sessionId));
+        if (request.method === 'GET' && operation === 'recap' && !actionId) return respond(response, 200, await runtime.recap(token, sessionId, parseRecapQuery(url.searchParams)));
         if (request.method === 'GET' && operation === 'actions' && actionId) {
           const receipt = await runtime.receipt(token, sessionId, actionId);
           return respond(response, receipt ? 200 : 404, receipt ?? { schemaVersion: 1, code: 'OUTCOME_UNKNOWN', message: '尚无确定收据，请保留原动作身份继续查询或重试。' });

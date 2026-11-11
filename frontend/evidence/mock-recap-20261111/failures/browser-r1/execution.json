@@ -1,0 +1,8 @@
+{
+  "command": [
+    "node",
+    "frontend/tests/recap-browser-check.mjs"
+  ],
+  "exitCode": 1,
+  "elapsedSeconds": 29.526230699000735
+}

@@ -1,0 +1,43 @@
+✖ 独立终态复盘契约保留分享陈述、严格字段与完整原文 (1.406262ms)
+✖ 复盘序号严格递减、限于固定水位，下一页游标只能是最后可见条目 (0.156033ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 101.124013
+
+✖ failing tests:
+
+test at protocol/tests/recap.test.mjs:8:1
+✖ 独立终态复盘契约保留分享陈述、严格字段与完整原文 (1.406262ms)
+  Error [ContractError]: 未知契约名称（$）
+      at fail (file:///workspace/scratch/17ff92cde78f/xiyou-mock-ui/protocol/index.mjs:10:41)
+      at validateContract (file:///workspace/scratch/17ff92cde78f/xiyou-mock-ui/protocol/index.mjs:315:38)
+      at parseContract (file:///workspace/scratch/17ff92cde78f/xiyou-mock-ui/protocol/index.mjs:325:10)
+      at TestContext.<anonymous> (file:///workspace/scratch/17ff92cde78f/xiyou-mock-ui/protocol/tests/recap.test.mjs:9:20)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    code: 'INVALID_MESSAGE',
+    path: '$'
+  }
+
+test at protocol/tests/recap.test.mjs:18:1
+✖ 复盘序号严格递减、限于固定水位，下一页游标只能是最后可见条目 (0.156033ms)
+  Error [ContractError]: 未知契约名称（$）
+      at fail (file:///workspace/scratch/17ff92cde78f/xiyou-mock-ui/protocol/index.mjs:10:41)
+      at validateContract (file:///workspace/scratch/17ff92cde78f/xiyou-mock-ui/protocol/index.mjs:315:38)
+      at TestContext.<anonymous> (file:///workspace/scratch/17ff92cde78f/xiyou-mock-ui/protocol/tests/recap.test.mjs:20:3)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    code: 'INVALID_MESSAGE',
+    path: '$'
+  }

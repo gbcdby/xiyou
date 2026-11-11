@@ -300,3 +300,19 @@ legend { font-weight: 500; font-size: 13px; margin-bottom: 8px; }
 .pending-action.accepted { color: #507346; }
 @keyframes spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
+
+/* 证据和复盘只展示授权字段；长稳定引用保持可换行。 */
+.value-type { color: var(--muted); font-size: .7rem; font-weight: 400; white-space: nowrap; }
+.record-context { margin: 12px 0; display: grid; gap: 7px; }
+.record-context > div { display: grid; grid-template-columns: 6em minmax(0, 1fr); gap: 6px; }
+.record-context dt { color: var(--muted); }
+.record-context dd { margin: 0; overflow-wrap: anywhere; }
+.record-reference { display: block; }
+.authorized-recap { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--line); }
+.recap-events { list-style: none; padding: 0; margin: 16px 0; display: grid; gap: 16px; }
+.recap-entry { border-left: 3px solid #98b8a7; padding: 4px 0 4px 16px; min-width: 0; }
+.recap-entry[data-category="Claim"] { border-left-color: #bb9664; }
+.recap-entry .evidence-meta { flex-wrap: wrap; }
+.recap-text, .recap-references { overflow-wrap: anywhere; }
+.recap-references { padding-left: 18px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 24px; }
+.recap-references li { max-width: 100%; }

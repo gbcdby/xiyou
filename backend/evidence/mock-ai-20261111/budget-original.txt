@@ -1,0 +1,15 @@
+✖ 五人合法完整链：明确通行目标不能被普遍分享耗尽整局预算 (120003.398063ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 0
+ℹ cancelled 1
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 156029.701475
+
+✖ failing tests:
+
+test at backend/tests/ai-mock-progress.test.mjs:17:1
+✖ 五人合法完整链：明确通行目标不能被普遍分享耗尽整局预算 (120003.398063ms)
+  'test timed out after 120000ms'

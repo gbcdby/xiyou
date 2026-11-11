@@ -1,0 +1,95 @@
+✖ 最新路线已完成后不复活旧请求，无新玩家输入时不在两个出口间往返 (3139.165267ms)
+✔ 双策略只读取本角色合法上下文，各自主动检查并提出不同方案 (88.991776ms)
+✔ 相同口头指责：旧记录单源及重复分享不足，独立现场痕迹改变唐僧公开判断与证据行动 (144.490583ms)
+✔ 相同口头指责：登记单源不足，真实现场标记改变材料建议；悟空仅在合法分享后调整 (199.167332ms)
+✔ 口头修复与路线请求不能通行；玩家真实修复和许可后，公开方案改变并实际移动 (505.543109ms)
+✔ 私人说法与跨局唯一标记不进入完整 provider 输入，核心策略不接受代理主体 (102.048461ms)
+✖ 五人合法完整链：明确通行目标不能被普遍分享耗尽整局预算 (2749.28443ms)
+✖ 未向核心角色授权的观察不唤醒策略，不消耗其他区域等待角色的共享预算 (2083.991268ms)
+✔ 显式入口自动登记新开局，关闭全部角色任务；重启恢复已有局且预算不重置 (279.884552ms)
+✔ 入口恢复两份已保存的旧意图，每项只提交一次，不消耗新的模型调用 (227.869409ms)
+✔ 双角色组合：验证适配器超时和非法 JSON 各只收束一次，等待时玩家仍有 Receipt (634.533571ms)
+✔ 双角色组合：终局取消在途输出，两个迟到合法意图均不能提交 (119.697202ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 9
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4386.093309
+
+✖ failing tests:
+
+test at backend/tests/ai-mock-policy.test.mjs:59:1
+✖ 最新路线已完成后不复活旧请求，无新玩家输入时不在两个出口间往返 (3139.165267ms)
+  AssertionError [ERR_ASSERTION]: 最新请求已抵达，旧store建议不能再次成为移动意图
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/17ff92cde78f/xiyou-mock-ai/backend/tests/ai-mock-policy.test.mjs:76:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at backend/tests/ai-mock-progress.test.mjs:17:1
+✖ 五人合法完整链：明确通行目标不能被普遍分享耗尽整局预算 (2749.28443ms)
+  AssertionError [ERR_ASSERTION]: 来源与通路条件已核实，下一轮应执行明确合法路线，不能继续普遍分享
+      at TestContext.<anonymous> (file:///workspace/scratch/17ff92cde78f/xiyou-mock-ai/backend/tests/ai-mock-progress.test.mjs:90:14)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at backend/tests/ai-mock-runtime.test.mjs:18:1
+✖ 未向核心角色授权的观察不唤醒策略，不消耗其他区域等待角色的共享预算 (2083.991268ms)
+  AssertionError [ERR_ASSERTION]: 只向真人授权的检查不能唤醒两位NPC
+  + actual - expected
+  ... Skipped lines
+  
+    [
+      {
+        actorId: 'tangseng',
+        calls: 7,
+        decisionId: 'D-d0139086-0109-4192-a434-c88f685a9175',
+  ...
+        pendingWake: false,
+  +     phase: 'Preparing',
+  -     phase: 'Idle',
+        sessionId: 'S-1debf480-dce8-47d8-b79d-806e4be6b703'
+      },
+      {
+        actorId: 'wukong',
+        calls: 7,
+  ...
+        pendingWake: false,
+  +     phase: 'Preparing',
+  -     phase: 'Idle',
+        sessionId: 'S-1debf480-dce8-47d8-b79d-806e4be6b703'
+      }
+    ]
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/17ff92cde78f/xiyou-mock-ai/backend/tests/ai-mock-runtime.test.mjs:27:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: [ { actorId: 'tangseng', sessionId: 'S-1debf480-dce8-47d8-b79d-806e4be6b703', phase: 'Preparing', calls: 7, pendingWake: false, decisionId: 'D-d0139086-0109-4192-a434-c88f685a9175', lastReceipt: [Object], lastFallback: null, error: null }, { actorId: 'wukong', sessionId: 'S-1debf480-dce8-47d8-b79d-806e4be6b703', phase: 'Preparing', calls: 7, pendingWake: false, decisionId: 'D-ded1b3ac-96ad-4280-8ef0-f813b8838d28', lastReceipt: [Object], lastFallback: null, error: null } ],
+    expected: [ { actorId: 'tangseng', sessionId: 'S-1debf480-dce8-47d8-b79d-806e4be6b703', phase: 'Idle', calls: 7, pendingWake: false, decisionId: 'D-d0139086-0109-4192-a434-c88f685a9175', lastReceipt: [Object], lastFallback: null, error: null }, { actorId: 'wukong', sessionId: 'S-1debf480-dce8-47d8-b79d-806e4be6b703', phase: 'Idle', calls: 7, pendingWake: false, decisionId: 'D-ded1b3ac-96ad-4280-8ef0-f813b8838d28', lastReceipt: [Object], lastFallback: null, error: null } ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

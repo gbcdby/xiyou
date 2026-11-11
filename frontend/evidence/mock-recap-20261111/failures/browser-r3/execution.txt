@@ -1,0 +1,22 @@
+{"stage":"2个独立浏览器身份经页面创建、加入、开局和恢复控制","elapsedMs":4255}
+{"stage":"2人实际页面完成查看、拿取、交付、修复、许可、终局与只读复盘","elapsedMs":7134}
+{"stage":"5个独立浏览器身份经页面创建、加入、开局和恢复控制","elapsedMs":11617}
+{"stage":"5人实际页面完成查看、拿取、交付、修复、许可、终局与只读复盘","elapsedMs":14182}
+{"stage":"3个独立浏览器身份经页面创建、加入、开局和恢复控制","elapsedMs":18159}
+AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert.ok(await a.page.locator('.recap-entry[data-kind="observed"]').count())
+
+    at file:///workspace/scratch/17ff92cde78f/xiyou-mock-ui/frontend/tests/recap-browser-check.mjs:256:10 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 0,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+{"cleanup":"browser","state":"closed"}
+{"cleanup":"vite","state":"closed"}
+{"cleanup":"server","state":"closed"}
+{"cleanup":"postgres","state":"closed"}
+{"assessment":"FAIL","elapsedMs":19729,"checks":5,"resourcesClosed":true}

@@ -1,0 +1,10 @@
+✔ 复盘 HTTP 使用独立只读端点、固定水位和可取消信号 (6.71787ms)
+✔ 换账号、房间、视图与撤权会清空并取消，迟到旧响应不能填回 (4.071154ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 214.202859

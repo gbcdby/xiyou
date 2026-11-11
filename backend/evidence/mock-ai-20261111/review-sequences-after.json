@@ -1,0 +1,251 @@
+{
+  "producer": "作者复跑需求审查者提供的两个合法输入序列；不作为独立复审结论",
+  "priority": {
+    "status": "PASS",
+    "schedulingIntervalMs": 10,
+    "maxCallsPerSession": 120,
+    "totalCalls": 76,
+    "final": {
+      "phase": "Finished",
+      "locations": {
+        "tangseng": "destination",
+        "wukong": "destination"
+      },
+      "gate": [
+        {
+          "key": "safe",
+          "label": "安全",
+          "value": true
+        },
+        {
+          "key": "permit",
+          "label": "通行许可",
+          "value": true
+        },
+        {
+          "key": "repairMaterial",
+          "label": "实际修复材料",
+          "value": "original_material"
+        }
+      ],
+      "ending": {
+        "facts": [
+          {
+            "key": "safe",
+            "label": "通路安全",
+            "value": true
+          },
+          {
+            "key": "permit",
+            "label": "通行许可有效",
+            "value": true
+          },
+          {
+            "key": "arrived",
+            "label": "师徒实际到达终点",
+            "value": true
+          },
+          {
+            "key": "spareConsumed",
+            "label": "备用材料实际消耗",
+            "value": false
+          },
+          {
+            "key": "originalConsumed",
+            "label": "原材料实际用于修复",
+            "value": true
+          },
+          {
+            "key": "evidenceComplete",
+            "label": "双方已取得完整核验来源",
+            "value": true
+          }
+        ],
+        "endingCode": "clarified_passage"
+      }
+    },
+    "inputScriptSha256": "77d9c3667f4417109081f405afa40aa6f84606a886092c210b99bf253a21e1db",
+    "phases": [
+      {
+        "label": "五身份开局主动行为",
+        "calls": 12,
+        "phase": "Running",
+        "locations": {
+          "tangseng": "passage",
+          "wukong": "side_path"
+        },
+        "gate": [
+          {
+            "key": "safe",
+            "label": "安全",
+            "value": false
+          },
+          {
+            "key": "permit",
+            "label": "通行许可",
+            "value": false
+          },
+          {
+            "key": "repairMaterial",
+            "label": "实际修复材料",
+            "value": null
+          }
+        ]
+      },
+      {
+        "label": "五人提供合法核验来源并请求悟空前往通路口",
+        "calls": 38,
+        "phase": "Running",
+        "locations": {
+          "tangseng": "passage",
+          "wukong": "passage"
+        },
+        "gate": [
+          {
+            "key": "safe",
+            "label": "安全",
+            "value": false
+          },
+          {
+            "key": "permit",
+            "label": "通行许可",
+            "value": false
+          },
+          {
+            "key": "repairMaterial",
+            "label": "实际修复材料",
+            "value": null
+          }
+        ]
+      },
+      {
+        "label": "五人携材料与工具在通路口会合",
+        "calls": 62,
+        "phase": "Running",
+        "locations": {
+          "tangseng": "passage",
+          "wukong": "passage"
+        },
+        "gate": [
+          {
+            "key": "safe",
+            "label": "安全",
+            "value": false
+          },
+          {
+            "key": "permit",
+            "label": "通行许可",
+            "value": false
+          },
+          {
+            "key": "repairMaterial",
+            "label": "实际修复材料",
+            "value": null
+          }
+        ]
+      },
+      {
+        "label": "工具已合法交接",
+        "calls": 64,
+        "phase": "Running",
+        "locations": {
+          "tangseng": "passage",
+          "wukong": "passage"
+        },
+        "gate": [
+          {
+            "key": "safe",
+            "label": "安全",
+            "value": false
+          },
+          {
+            "key": "permit",
+            "label": "通行许可",
+            "value": false
+          },
+          {
+            "key": "repairMaterial",
+            "label": "实际修复材料",
+            "value": null
+          }
+        ]
+      },
+      {
+        "label": "玩家实际修复后",
+        "calls": 70,
+        "phase": "Running",
+        "locations": {
+          "tangseng": "passage",
+          "wukong": "passage"
+        },
+        "gate": [
+          {
+            "key": "safe",
+            "label": "安全",
+            "value": true
+          },
+          {
+            "key": "permit",
+            "label": "通行许可",
+            "value": false
+          },
+          {
+            "key": "repairMaterial",
+            "label": "实际修复材料",
+            "value": "original_material"
+          }
+        ]
+      },
+      {
+        "label": "实际安全与许可均满足且公开明确终点后",
+        "calls": 76,
+        "phase": "Finished",
+        "locations": {
+          "tangseng": "destination",
+          "wukong": "destination"
+        },
+        "gate": [
+          {
+            "key": "safe",
+            "label": "安全",
+            "value": true
+          },
+          {
+            "key": "permit",
+            "label": "通行许可",
+            "value": true
+          },
+          {
+            "key": "repairMaterial",
+            "label": "实际修复材料",
+            "value": "original_material"
+          }
+        ]
+      }
+    ]
+  },
+  "route": {
+    "status": "PASS",
+    "inputScriptSha256": "bf16c11e51486fd49bd3570e5dca9d94ac7acbb9fced385a559d30e961fa42b8",
+    "decisions": 61,
+    "moves": [
+      {
+        "from": "side_path",
+        "to": "store",
+        "decisionId": "D-ec0f9265-2ede-4938-aae6-5a704e2b133c",
+        "humanInputs": 2
+      },
+      {
+        "from": "store",
+        "to": "side_path",
+        "decisionId": "D-70de2cda-f40d-4a57-9787-63afcfc45dba",
+        "humanInputs": 4
+      }
+    ],
+    "final": {
+      "phase": "Running",
+      "region": "side_path"
+    },
+    "replayedWithoutNewInput": false
+  }
+}

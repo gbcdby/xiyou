@@ -1,0 +1,12 @@
+{"stage":"2个独立浏览器身份经页面创建、加入、开局和恢复控制","elapsedMs":5673}
+{"stage":"2人实际页面完成查看、拿取、交付、修复、许可、终局与只读复盘","elapsedMs":7782}
+{"stage":"5个独立浏览器身份经页面创建、加入、开局和恢复控制","elapsedMs":12803}
+Error: 等待超时：实际许可生效（15000 ms）
+    at until (file:///workspace/scratch/17ff92cde78f/xiyou-mock-ui/frontend/tests/network-support.mjs:19:9)
+    at async fullChain (file:///workspace/scratch/17ff92cde78f/xiyou-mock-ui/frontend/tests/recap-browser-check.mjs:118:3)
+    at async file:///workspace/scratch/17ff92cde78f/xiyou-mock-ui/frontend/tests/recap-browser-check.mjs:143:36
+{"cleanup":"browser","state":"closed"}
+{"cleanup":"vite","state":"closed"}
+{"cleanup":"server","state":"closed"}
+{"cleanup":"postgres","state":"closed"}
+{"assessment":"FAIL","elapsedMs":29208,"checks":3,"resourcesClosed":true}

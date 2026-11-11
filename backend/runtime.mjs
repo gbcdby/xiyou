@@ -9,6 +9,7 @@ import { applyAction, evaluateEnding, endingFacts, RuleError } from '../game/rul
 import { RuntimeError } from './errors.mjs';
 import * as decisions from './decisions.mjs';
 import { ownRecord } from '../game/records.mjs';
+import { readRecap } from './recap.mjs';
 
 const digest = value => createHash('sha256').update(typeof value === 'string' ? value : canonicalize(value)).digest('hex');
 const id = prefix => `${prefix}-${randomUUID()}`;
@@ -288,6 +289,7 @@ export class AuthorityRuntime extends EventEmitter {
       return validateContract('AuthorizedSnapshot', { schemaVersion: 1, type: 'world.snapshot', sessionId, viewId: `${user.actorId}:http-v1`, snapshotSeq: tx.state.sessionSeq, projection: authorizedProjection(tx.state, tx.content, user.actorId) });
     });
   }
+  recap(token, sessionId, query) { return readRecap(this, token, sessionId, query); }
   async subscribe(handle, sessionId) {
     const connection = this.connection(handle);
     await this.authenticate(connection.token);

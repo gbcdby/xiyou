@@ -1,5 +1,5 @@
 import { validateContract } from '../../../protocol/index.mjs';
-import type { AuthorizedSnapshot, ClientReceipt, GuestIdentity, RoomMembership, RoomSummary } from '../domain/world.ts';
+import type { AuthorizedSnapshot, AuthorizedRecap, ClientReceipt, GuestIdentity, RoomMembership, RoomSummary } from '../domain/world.ts';
 
 export class ApiFailure extends Error {
   readonly status: number;
@@ -27,7 +27,7 @@ export class HttpApi {
     this.#token = token; this.#fetch = fetcher; this.#onUnauthenticated = onUnauthenticated;
   }
 
-  async #request(path: string, body?: unknown): Promise<unknown> {
+  async #request(path: string, body?: unknown, signal?: AbortSignal): Promise<unknown> {
     let response: Response;
     const token = this.#token();
     const headers: Record<string, string> = { Accept: 'application/json' };
@@ -36,8 +36,12 @@ export class HttpApi {
     try {
       // 浏览器原生 fetch 不接受 HttpApi 作为 this；提取后按普通函数调用。
       const fetcher = this.#fetch;
-      response = await fetcher(`/api${path}`, { method: body === undefined ? 'GET' : 'POST', headers, ...(body === undefined ? {} : { body: JSON.stringify(body) }), signal: AbortSignal.timeout(10000) });
-    } catch { throw new ApiFailure('尚未连接到服务，请确认服务已启动后重试。'); }
+      const timeout = AbortSignal.timeout(10000);
+      response = await fetcher(`/api${path}`, { method: body === undefined ? 'GET' : 'POST', headers, ...(body === undefined ? {} : { body: JSON.stringify(body) }), signal: signal ? AbortSignal.any([timeout, signal]) : timeout });
+    } catch {
+      if (signal?.aborted) throw new ApiFailure('读取已取消。', 0, 'ABORTED');
+      throw new ApiFailure('尚未连接到服务，请确认服务已启动后重试。');
+    }
     let data: unknown;
     try { data = await response.json(); }
     catch { throw new ApiFailure(response.ok ? '服务器返回的内容无法读取。' : '服务暂时不可用，请稍后重试。', response.status, response.ok ? 'INVALID_RESPONSE' : 'NETWORK_UNAVAILABLE'); }
@@ -76,6 +80,11 @@ export class HttpApi {
   }
   async snapshot(sessionId: string): Promise<AuthorizedSnapshot> {
     return validateContract('AuthorizedSnapshot', await this.#request(`/sessions/${encodeURIComponent(sessionId)}`));
+  }
+  async recap(sessionId: string, throughSeq: string, beforeSeq?: string, signal?: AbortSignal): Promise<AuthorizedRecap> {
+    const query = new URLSearchParams({ throughSeq });
+    if (beforeSeq !== undefined) query.set('beforeSeq', beforeSeq);
+    return validateContract('AuthorizedRecap', await this.#request(`/sessions/${encodeURIComponent(sessionId)}/recap?${query}`, undefined, signal));
   }
   async receipt(sessionId: string, actionId: string): Promise<ClientReceipt | null> {
     try { return validateContract('ClientReceipt', await this.#request(`/sessions/${encodeURIComponent(sessionId)}/actions/${encodeURIComponent(actionId)}`)); }

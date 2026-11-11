@@ -1,0 +1,286 @@
+{
+  "acceptanceProfile": "mock-20261111",
+  "specRef": "3690b481d1805f6a7b535584c80a8574c5103d97",
+  "status": "PASS",
+  "clock": "real-monotonic",
+  "input": "本轮新建两个合成账号和标准内容房间；正式 HTTP/Socket.IO 输入及独立模拟服务进程",
+  "externalModelCalls": 0,
+  "initialVerifierPids": [
+    59
+  ],
+  "startedAt": "2026-11-11T12:58:51.538Z",
+  "sessionId": "S-b09ce314-e5ef-4cf8-be57-3969caf7a5e6",
+  "observedMs": 60016.968272,
+  "proposals": [
+    {
+      "actorId": "wukong",
+      "decisionId": "D-efd8aa97-78ac-4173-bf8c-82277a38c7e6",
+      "contextDigest": "823352faadd8a7b0950d0c4cf6b30f0d248b3d6529186a4bdbdc06a3e6ede6d3",
+      "configuration": {
+        "modelId": "wukong-inspection-v2",
+        "timeoutMs": 10000,
+        "providerId": "controlled-wukong",
+        "providerKind": "controlled",
+        "gatewayVersion": "intent-gateway-v1",
+        "maxContextBytes": 262144
+      },
+      "outputDigest": "baf82bcee5381d015e8527a36eee5bbfc4ea2d4a72081c6793878a31ad63e4c0",
+      "status": "Resolved",
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "last": "22",
+          "first": "20"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-3d36cac0-db46-4230-ac19-bf133a9d0c23",
+      "contextDigest": "a98078e891bc80b0010a2aa9b3f4a0872ffecec390f09ddb163bf883b2bf7a34",
+      "configuration": {
+        "modelId": "tangseng-safety-v2",
+        "timeoutMs": 10000,
+        "providerId": "controlled-tangseng",
+        "providerKind": "controlled",
+        "gatewayVersion": "intent-gateway-v1",
+        "maxContextBytes": 262144
+      },
+      "outputDigest": "9477787d4c363caa9a9812cbbfe346f159595a0f982fe2faafa50bab5964dbcb",
+      "status": "Resolved",
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "last": "27",
+          "first": "23"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-54384742-65a8-4b8d-a63d-62b5428c7e72",
+      "contextDigest": "eb0a0247fb937cc43d3f445fad7d689f414a9cbe973e0ec93121cb07cc08c85f",
+      "configuration": {
+        "modelId": "wukong-inspection-v2",
+        "timeoutMs": 10000,
+        "providerId": "controlled-wukong",
+        "providerKind": "controlled",
+        "gatewayVersion": "intent-gateway-v1",
+        "maxContextBytes": 262144
+      },
+      "outputDigest": "9588ebfc5199dac796e480decd15f21ee37ea9d8499424d7023159a2701f7c79",
+      "status": "Resolved",
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "last": "31",
+          "first": "28"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-a283c003-ad8e-4d3f-a08c-aa19b7f93d24",
+      "contextDigest": "2b27d4a0aeb01e89a66d534073b96ecb6c182020a3d175afab6a2eccaadfcfaa",
+      "configuration": {
+        "modelId": "tangseng-safety-v2",
+        "timeoutMs": 10000,
+        "providerId": "controlled-tangseng",
+        "providerKind": "controlled",
+        "gatewayVersion": "intent-gateway-v1",
+        "maxContextBytes": 262144
+      },
+      "outputDigest": "bea135e7e78a428e4cd963c8c927969274d4d6f698e1eca6cb9546321938a4f4",
+      "status": "Resolved",
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "last": "36",
+          "first": "33"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-60759d93-c77f-4b1d-b24b-a89dff072ad8",
+      "contextDigest": "b90372e9b6979629bcda8f4473c0c7502ef0397267046984075e3189a7a625a8",
+      "configuration": {
+        "modelId": "wukong-inspection-v2",
+        "timeoutMs": 10000,
+        "providerId": "controlled-wukong",
+        "providerKind": "controlled",
+        "gatewayVersion": "intent-gateway-v1",
+        "maxContextBytes": 262144
+      },
+      "outputDigest": "56143bfa84912cc00497a9c1494bb76b2faf3f373f83475b88dd9e16f99c9061",
+      "status": "Resolved",
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "last": "39",
+          "first": "38"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-7141ebab-f02a-40a7-84bc-ffd079fbd642",
+      "contextDigest": "a6756b99d1ba53936515a01420eb21495674d0a2900950061e0411d3fcaab1be",
+      "configuration": {
+        "modelId": "tangseng-safety-v2",
+        "timeoutMs": 10000,
+        "providerId": "controlled-tangseng",
+        "providerKind": "controlled",
+        "gatewayVersion": "intent-gateway-v1",
+        "maxContextBytes": 262144
+      },
+      "outputDigest": "d64c6b2f2383eb1bb750a75956a5d06e304171c13ab3d919fb275fac21050d8e",
+      "status": "Resolved",
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "last": "43",
+          "first": "40"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-ecfd2cd6-a103-44a1-b01d-5c162fa58496",
+      "contextDigest": "11a0a1593c4dde8a28f4d19124c8242047d1f5cf52476c13bc42cdb9b1e59446",
+      "configuration": {
+        "modelId": "wukong-inspection-v2",
+        "timeoutMs": 10000,
+        "providerId": "controlled-wukong",
+        "providerKind": "controlled",
+        "gatewayVersion": "intent-gateway-v1",
+        "maxContextBytes": 262144
+      },
+      "outputDigest": "1b5f348bfa0ea9d542b2f856713c1844f5283464b910e5c26d3f659ee0b59895",
+      "status": "Resolved",
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "actionEventRange": null
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-594c11ce-2c41-4af2-9bf5-dcfdda5400f5",
+      "contextDigest": "afa407315b648f10dc814a39585a19d39d11b9d3beb6e7e2a9cb02d3a3941b41",
+      "configuration": {
+        "modelId": "tangseng-safety-v2",
+        "timeoutMs": 10000,
+        "providerId": "controlled-tangseng",
+        "providerKind": "controlled",
+        "gatewayVersion": "intent-gateway-v1",
+        "maxContextBytes": 262144
+      },
+      "outputDigest": "07b2e15a6b6956363a7724d1da6b1f6a6bf455087bab178cb58e4c2fa6f24ce8",
+      "status": "Resolved",
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "last": "46",
+          "first": "44"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-cce50350-1cba-467a-a47e-d21c3bdabe92",
+      "contextDigest": "e0bcbb414beddaf411ed3342c8290c6730da866416163d9f86fdc1b8754a7e25",
+      "configuration": {
+        "modelId": "tangseng-safety-v2",
+        "timeoutMs": 10000,
+        "providerId": "controlled-tangseng",
+        "providerKind": "controlled",
+        "gatewayVersion": "intent-gateway-v1",
+        "maxContextBytes": 262144
+      },
+      "outputDigest": "8134ddb77d8fad2f1aed194a9bf9692a369205c2760b53559017a643cc8f6c1d",
+      "status": "Resolved",
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "actionEventRange": null
+      }
+    }
+  ],
+  "behaviors": {
+    "tangseng": [
+      {
+        "eventSeq": "26",
+        "kind": "ObservationRecorded",
+        "decisionId": "D-3d36cac0-db46-4230-ac19-bf133a9d0c23",
+        "sourceKind": "inspection",
+        "subjectId": "passage_structure"
+      },
+      {
+        "eventSeq": "27",
+        "kind": "ObservationRecorded",
+        "decisionId": "D-3d36cac0-db46-4230-ac19-bf133a9d0c23",
+        "sourceKind": "inspection",
+        "subjectId": "passage_structure"
+      },
+      {
+        "eventSeq": "36",
+        "kind": "ObservationRecorded",
+        "decisionId": "D-a283c003-ad8e-4d3f-a08c-aa19b7f93d24",
+        "sourceKind": "evidence_share",
+        "subjectId": "passage_structure"
+      },
+      {
+        "eventSeq": "43",
+        "kind": "ObservationRecorded",
+        "decisionId": "D-7141ebab-f02a-40a7-84bc-ffd079fbd642",
+        "sourceKind": "evidence_share",
+        "subjectId": "passage_structure"
+      }
+    ],
+    "wukong": [
+      {
+        "eventSeq": "22",
+        "kind": "ObservationRecorded",
+        "decisionId": "D-efd8aa97-78ac-4173-bf8c-82277a38c7e6",
+        "sourceKind": "inspection",
+        "subjectId": "original_material"
+      },
+      {
+        "eventSeq": "30",
+        "kind": "ObservationRecorded",
+        "decisionId": "D-54384742-65a8-4b8d-a63d-62b5428c7e72",
+        "sourceKind": "inspection",
+        "subjectId": "material_cache"
+      },
+      {
+        "eventSeq": "31",
+        "kind": "ObservationRecorded",
+        "decisionId": "D-54384742-65a8-4b8d-a63d-62b5428c7e72",
+        "sourceKind": "inspection",
+        "subjectId": "original_material"
+      }
+    ]
+  },
+  "playerActionsDuringWindow": 0,
+  "totalCalls": 9,
+  "process": {
+    "code": 0,
+    "signal": null
+  },
+  "remainingDatabasePids": [
+    75
+  ],
+  "finalVerifierPids": [
+    59,
+    75
+  ],
+  "databaseConnectionsClosed": true
+}

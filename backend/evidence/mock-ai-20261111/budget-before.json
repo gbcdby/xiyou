@@ -1,0 +1,301 @@
+{
+  "subject": {
+    "base": "c2511f4a81d29502aed4c122cd701d3c3632d237",
+    "providerSha256": "5b0b8eb5b321bd9616fcbf5cf66b3473e3c34f554b529787625084c7c5ff1770",
+    "probeSha256": "d4f0b4509f41abd00a2acbcdd6c18a50d576e2a861d7de819c6cb65fc42d1f75"
+  },
+  "status": "FAIL",
+  "clock": "真实 Runtime 时钟；显式单轮唤醒、调度间隔1ms用于有界策略回归，不计60秒主动窗口",
+  "maxCallsPerSession": 120,
+  "callsAtRoute": 12,
+  "totalCalls": 120,
+  "callsAfterRoute": 108,
+  "routeAwareShares": 104,
+  "phase": "Running",
+  "npcRegions": {
+    "tangseng": "passage",
+    "wukong": "passage"
+  },
+  "failure": {
+    "name": "AssertionError",
+    "message": "已核实、已许可且已有明确合法路线，不能用普遍分享耗尽整局预算\n+ actual - expected\n\n+ 'Running'\n- 'Finished'\n"
+  },
+  "elapsedMs": 154960.97789,
+  "resourcesClosed": true,
+  "runnerBoundary": "node:test 在120000ms先报告cancelled；异步执行继续取得完整120次调用与Finished断言失败，随后关闭全部资源。该记录保留FAIL；不当作时限内完成的测试。另targeted-red.txt保存三个无测试超时的实际回归失败。",
+  "routeReceipt": {
+    "schemaVersion": 1,
+    "semanticDigest": "e4dfc3b27acbc83b2427bbeca7a9f1254f9fb36bf2d7c6545e59e390ecb14cc4",
+    "actorId": "C-25f6dede-f2e6-4109-b2fd-02bc047dbb75",
+    "observedSeq": "202",
+    "actionEventRange": {
+      "first": "195",
+      "last": "202"
+    },
+    "status": "Accepted",
+    "code": "OK",
+    "result": {},
+    "sessionId": "S-9c9db921-29bb-4ff9-8b72-8223b42bb2be",
+    "clientActionId": "5c4ec12c-fe56-4828-8219-4bf49eb3f5eb"
+  },
+  "allDecisionSummariesSha256": "1abe8b3ddadda7c7cbc70f48798f52a6af3ce55fb28e94ce005d6d7478895891",
+  "observedDecisionCount": 120,
+  "decisionWitnesses": [
+    {
+      "actorId": "wukong",
+      "decisionId": "D-3a5ba7d2-4f10-4ad0-818d-035b3df26961",
+      "contextDigest": "66c5b5d082274fa91d5d47d1f0922ef71596e22425f0ddbb56d744c8674b88b7",
+      "outputDigest": "b7ebabf60225cc7c7ba9ced42828b70fb3fe359ece7d99298e5598c7b4494d51",
+      "receivedRoute": false,
+      "tools": [
+        "make_claim",
+        "inspect"
+      ],
+      "gate": {},
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "47",
+          "first": "44"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-fe01e480-5f5b-464a-928e-9cd79f88ed32",
+      "contextDigest": "3e20dbb3f56d3145c6a3e867abb3d106a23e450da228d578a173f9a7a3e6487a",
+      "outputDigest": "247a3a286b7660e370628b0c530b33bc2e6c5861dfd5aa357b4cc35982512ef3",
+      "receivedRoute": false,
+      "tools": [
+        "make_claim",
+        "move"
+      ],
+      "gate": {},
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "51",
+          "first": "49"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-e86a8584-aa0a-42c9-9fd9-e40809636e08",
+      "contextDigest": "0b54b9510addeaabf462df1ad6d113ce8db514cc2a260a3775ff6d5c42b9b1f5",
+      "outputDigest": "cea2a746d6763986069b062d2b27005b2e4c908e652dadb5d252728900b0adbe",
+      "receivedRoute": false,
+      "tools": [
+        "make_claim",
+        "share_evidence"
+      ],
+      "gate": {
+        "safe": false,
+        "permit": false,
+        "repairMaterial": null
+      },
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "80",
+          "first": "66"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-38f358f3-f761-4071-9998-0e3e18fa0f97",
+      "contextDigest": "657d4a64d01f5ccc81c056a0e93131f619fc2b46fd3bf9d1f7be78836f4fe71c",
+      "outputDigest": "b05905cddd2c9a6194d21f50880b7781debdd8544c746889f91c2a07167ca49f",
+      "receivedRoute": true,
+      "tools": [
+        "make_claim",
+        "inspect"
+      ],
+      "gate": {
+        "safe": true,
+        "permit": true,
+        "repairMaterial": "original_material"
+      },
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "212",
+          "first": "204"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-cc97c2ad-b67c-4fc0-a9ca-d57d8b5e3712",
+      "contextDigest": "f5b850b0111b1af19f4af64987ec475d1b03e92c0cd8948dea99af2359bcbce1",
+      "outputDigest": "40b8f168b4b349c32008d9cae02c649bf1194a1c21aa4da0f0416079364f8bf6",
+      "receivedRoute": true,
+      "tools": [
+        "make_claim",
+        "inspect"
+      ],
+      "gate": {
+        "safe": true,
+        "permit": true,
+        "repairMaterial": "original_material"
+      },
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "222",
+          "first": "214"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-930c6f10-63eb-4f97-b016-5c20a8da9478",
+      "contextDigest": "33742b6e46717bb087832ce31555c0e0c69f0497b62d0b948191ea5e5c7ffb7d",
+      "outputDigest": "dd3d8d462373b459386990a84c51069bc61d1998faf396703cf19c97ead32055",
+      "receivedRoute": true,
+      "tools": [
+        "make_claim",
+        "inspect"
+      ],
+      "gate": {
+        "safe": true,
+        "permit": true,
+        "repairMaterial": "original_material"
+      },
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "231",
+          "first": "223"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-9f23a6d6-0398-4436-88f6-1cf42a56c1a2",
+      "contextDigest": "0c3fb8ec6ec099d1cb960ace3f24a1cbdff56e4564123d8ed0766cb9d30b9941",
+      "outputDigest": "a89dbfe554d2c2f2c306f485f1933ff66db7b213dd4e8e4488dc1bc56b477af1",
+      "receivedRoute": true,
+      "tools": [
+        "make_claim",
+        "inspect"
+      ],
+      "gate": {
+        "safe": true,
+        "permit": true,
+        "repairMaterial": "original_material"
+      },
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "240",
+          "first": "232"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-ccc4bd06-d3e1-4a01-bd0d-8365c2bd4dfc",
+      "contextDigest": "fac67bbae966ef16a3a9a59180f78f5ea6854e03839568b7f768ea83e6e21c8f",
+      "outputDigest": "524a70872f58d5bf7bf40b47fd5acc5c8c0b82615e27c8c202dc0de10aff31a0",
+      "receivedRoute": true,
+      "tools": [
+        "make_claim",
+        "share_evidence"
+      ],
+      "gate": {
+        "safe": true,
+        "permit": true,
+        "repairMaterial": "original_material"
+      },
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "1149",
+          "first": "1141"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-ee61be59-c0ec-42db-b398-b12bdb7ddc20",
+      "contextDigest": "4d1d1d061415f81bce3532c96b253c195ffd107696d032141e3040b2477824c5",
+      "outputDigest": "2cf3e982381014a385e9fb776183046594d61a8f3dee874b3ff89f52824d94af",
+      "receivedRoute": true,
+      "tools": [
+        "make_claim",
+        "share_evidence"
+      ],
+      "gate": {
+        "safe": true,
+        "permit": true,
+        "repairMaterial": "original_material"
+      },
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "1158",
+          "first": "1150"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-1236401e-b7e9-4470-8f21-a5e75cf4b309",
+      "contextDigest": "f2a655f1b246981cae6ca76d8c1c9d24cae2bfdaa95654a4a1305d3cdbdb6190",
+      "outputDigest": "5df6111b4837ac6d807420f8e4d37c01f94f6dada54d836b459fd8a8544329d0",
+      "receivedRoute": true,
+      "tools": [
+        "make_claim",
+        "share_evidence"
+      ],
+      "gate": {
+        "safe": true,
+        "permit": true,
+        "repairMaterial": "original_material"
+      },
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "1167",
+          "first": "1159"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-b09251a9-8a66-4fa6-9eef-71245fd7e746",
+      "contextDigest": "51e2e3c6d3181d7c59fcf43f60c682fc7d33c77f4cf48e441b6b2d05d3ae0f75",
+      "outputDigest": "80afa0ad32f548f3390c96f208850238448ff527caa83a5e65db5cb7f04a1b18",
+      "receivedRoute": true,
+      "tools": [
+        "make_claim",
+        "share_evidence"
+      ],
+      "gate": {
+        "safe": true,
+        "permit": true,
+        "repairMaterial": "original_material"
+      },
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "1176",
+          "first": "1168"
+        }
+      }
+    }
+  ]
+}

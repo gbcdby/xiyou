@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref, watch } from 'vue';
+import { computed, onBeforeUnmount, ref, shallowRef, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { api, authNotice, enterSession, identity, leaveSession, localNotice, sendAction, sessionClient, sessionState, storageNotice } from '../../state/app-store.ts';
 import { demoSnapshot } from '../../domain/demo.ts';
@@ -13,6 +13,8 @@ import DialoguePanel from '../dialogue/DialoguePanel.vue';
 import ObjectivePanel from '../objective/ObjectivePanel.vue';
 import RecapPanel from '../recap/RecapPanel.vue';
 import PendingActions from './PendingActions.vue';
+import { RecapClient } from '../../network/recap-client.ts';
+import type { RecapState } from '../../network/recap-client.ts';
 
 const props = withDefaults(defineProps<{ demo?: boolean }>(), { demo: false });
 const route = useRoute();
@@ -24,6 +26,8 @@ const snapshot = computed(() => props.demo ? example : sessionState.value.snapsh
 const projection = computed(() => snapshot.value?.projection || null);
 const sessionId = computed(() => props.demo ? '静态界面示例' : String(route.params.sessionId || ''));
 const connected = computed(() => !props.demo && sessionState.value.connection === 'online');
+const recapState = shallowRef<RecapState>({ entries: [], status: 'idle', message: '', nextBeforeSeq: null, complete: false });
+const recapClient = new RecapClient(api, state => { recapState.value = state; });
 const canAct = computed(() => connected.value && projection.value?.phase === 'Running' && projection.value.self.canControl && projection.value.self.mode === 'HumanControlled');
 const people = computed(() => projection.value?.characters.filter(person => person.mode !== 'CoreNPCControlled') || []);
 const timeLeft = computed(() => {
@@ -40,7 +44,13 @@ watch([() => props.demo, () => route.params.sessionId, () => identity.value?.tok
   leaveSession(); startNonce = ''; startNotice.value = '';
   if (!props.demo && route.name === 'session' && typeof route.params.sessionId === 'string' && identity.value) enterSession(route.params.sessionId);
 }, { immediate: true });
-onBeforeUnmount(() => { clearInterval(clock); leaveSession(); });
+watch([() => identity.value?.userId, () => identity.value?.token, () => snapshot.value?.sessionId, () => snapshot.value?.viewId, () => snapshot.value?.snapshotSeq, () => projection.value?.phase, connected], () => {
+  const current = snapshot.value;
+  const phase = current?.projection.phase;
+  if (props.demo || !identity.value || !connected.value || !current || (phase !== 'Finished' && phase !== 'Aborted')) { void recapClient.open(null); return; }
+  void recapClient.open({ sessionId: current.sessionId, actorId: current.projection.self.characterId, throughSeq: current.snapshotSeq, phase, viewId: current.viewId, identity: identity.value.userId + ':' + identity.value.token });
+}, { immediate: true, flush: 'sync' });
+onBeforeUnmount(() => { recapClient.close(); clearInterval(clock); leaveSession(); });
 async function start() {
   if (starting.value || !connected.value) return;
   starting.value = true; startNotice.value = '';
@@ -63,7 +73,7 @@ async function copyRoom() {
       <div v-if="!demo && projection.phase === 'Running' && !projection.self.canControl" class="control-banner"><AppIcon name="shield" /><div><strong>当前为只读视角</strong><p>{{ controlNames[projection.self.mode] }}。恢复本人控制后，可继续提交动作。</p></div><div class="button-row"><button class="primary-button" :disabled="!connected || sessionState.controlBusy" @click="sessionClient.control('resume')">恢复本人控制</button><button class="text-button" :disabled="!connected || sessionState.controlBusy" @click="sessionClient.control('take')">明确接管此角色</button></div></div>
       <section v-if="projection.phase === 'Lobby'" class="panel waiting-room"><span class="eyebrow">待启程</span><h2>{{ people.length }} 位旅伴已相聚</h2><p>2–5 人即可开始，人数决定开局的职责组合。<br />集齐后由房主开始，启程后保持本局身份。</p><div class="waiting-seats"><div v-for="index in 5" :key="index" class="waiting-seat" :class="{ occupied: people[index - 1] }"><span>{{ people[index - 1]?.name.slice(0, 1) || '＋' }}</span><strong>{{ people[index - 1]?.name || '待同行' }}</strong></div></div><button class="primary-button" :disabled="!connected || starting || people.length < 2 || people.length > 5" @click="start">{{ starting ? '正在请求开始…' : '开始同行（房主）' }}<AppIcon name="arrow" :size="17" /></button><p v-if="startNotice" class="small" role="status">{{ startNotice }}</p><p v-if="people.length < 2" class="tiny muted">再邀请至少一位伙伴。</p></section>
       <template v-else>
-        <RecapPanel :projection="projection" />
+        <RecapPanel :projection="projection" :recap="demo ? undefined : recapState" @more="recapClient.loadMore()" />
         <PendingActions v-if="!demo" :actions="sessionState.actions" :disabled="!connected" @retry="id => sessionClient.retry(id)" @query="id => sessionClient.query(id)" />
         <div class="game-layout">
           <aside class="left-column"><section class="identity-card" aria-labelledby="self-heading"><span class="eyebrow">此刻，你是</span><div class="self-title"><span class="self-avatar">{{ projection.self.name.slice(0, 1) }}</span><div><h2 id="self-heading">{{ projection.self.name }}</h2><p>{{ projection.self.roles.map(role => roleNames[role] || role).join(' · ') }}</p></div></div><ul class="role-help"><li v-for="role in projection.self.roles" :key="role">{{ roleHelp[role] || '依照当前已获授权的职责参与同行。' }}</li></ul><div class="control-status"><AppIcon name="shield" :size="15" />{{ demo ? '演示视角 · 操作停用' : projection.self.canControl ? '由你控制' : controlNames[projection.self.mode] }}</div></section><ObjectivePanel :projection="projection" /><TeamPanel :projection="projection" /></aside>

@@ -1,0 +1,463 @@
+{
+  "acceptanceProfile": "mock-20261111",
+  "clock": "real",
+  "policies": {
+    "tangseng": {
+      "providerId": "controlled-tangseng",
+      "modelId": "tangseng-safety-v2",
+      "policyVersion": "tangseng-safety-v2"
+    },
+    "wukong": {
+      "providerId": "controlled-wukong",
+      "modelId": "wukong-inspection-v2",
+      "policyVersion": "wukong-inspection-v2"
+    }
+  },
+  "proposals": [
+    {
+      "actorId": "wukong",
+      "sessionId": "S-afadf4eb-bab7-4664-91ef-adf48d1ab1e7",
+      "decisionId": "D-1743c117-6fbe-43b9-adab-f11de3b6015e",
+      "inputDigest": "06fe6fb836cc70e7a2a81d99c9f484043bdc40a7d4fbb92399d647d7558c9ba7",
+      "contextDigest": "f19856ee0484b0d6ff8c7bd224552f049dafe8233ed356a3218a3a5fecb173f9",
+      "outputDigest": "3a889a5b4a80a7f9b36b7e951d7a2c9a638aa83c6566e76ce4f57f06cff20666",
+      "semanticDigest": "c2640be37e73793f35f1666030bc9e7ce0380d7d141b09acd4281eba090008dd",
+      "tools": [
+        "make_claim",
+        "move"
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "first": "24",
+          "last": "27"
+        },
+        "semanticDigest": "c2640be37e73793f35f1666030bc9e7ce0380d7d141b09acd4281eba090008dd"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-afadf4eb-bab7-4664-91ef-adf48d1ab1e7",
+      "decisionId": "D-a4c53461-5c53-4f22-af4d-7304b7985b79",
+      "inputDigest": "349c770fcbe23b21125425286cbecb52fa0db9703e097c87a3e7624e0ec8da86",
+      "contextDigest": "790fb62cdc1cd73da8be7186cc38ed4f3c5fc98a3f2302789d29bb8f40963d6d",
+      "outputDigest": "243f975b5ab13c9169fc2e626fe104b52b3db1f7fb8a1366a8c08f00146f5129",
+      "semanticDigest": "6993478ad9476faaf1a6f44b078ed3c40a43e989b4934f5b908572f9e805188d",
+      "tools": [
+        "make_claim",
+        "move"
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "first": "34",
+          "last": "38"
+        },
+        "semanticDigest": "6993478ad9476faaf1a6f44b078ed3c40a43e989b4934f5b908572f9e805188d"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-afadf4eb-bab7-4664-91ef-adf48d1ab1e7",
+      "decisionId": "D-be87964b-4de7-4c25-a4b7-1c266c1ffdab",
+      "inputDigest": "60e0c7e9664b5e1356fe580840e2df64707c94c5bc84f6c5c96f782afd206deb",
+      "contextDigest": "09e86172a2ac04bc1c312d54baa38a58663392c4c296c37fef8ff698ce282cb2",
+      "outputDigest": "a58d38ed1c551dd12676788727fb7b416f394c382a528c6836b1225c9875de2e",
+      "semanticDigest": "689737d6027555a58d77e8aadcd36cb5fe5a0c6a8b40b6c1133f4400cea66cce",
+      "tools": [
+        "make_claim",
+        "inspect"
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "first": "39",
+          "last": "41"
+        },
+        "semanticDigest": "689737d6027555a58d77e8aadcd36cb5fe5a0c6a8b40b6c1133f4400cea66cce"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-afadf4eb-bab7-4664-91ef-adf48d1ab1e7",
+      "decisionId": "D-109dbb91-fe50-4608-b12f-4d832a3198fd",
+      "inputDigest": "0af97d7487e44273dff209fdbf676060a3af732139a7adbc2fd345353a4433a4",
+      "contextDigest": "d879ab9cb36a8e5842fea31e5ae7ec8468d782de0f09d822e262c04827ecb718",
+      "outputDigest": "df1d1211191963876d583811a32da9bc94458f2cf0e2b266796cc66fe0a43071",
+      "semanticDigest": "9dce68de5d942297a17fe9ed5a428967d9d2cd752537d54e2a939963b0f67deb",
+      "tools": [
+        "make_claim",
+        "inspect"
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "first": "42",
+          "last": "45"
+        },
+        "semanticDigest": "9dce68de5d942297a17fe9ed5a428967d9d2cd752537d54e2a939963b0f67deb"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-afadf4eb-bab7-4664-91ef-adf48d1ab1e7",
+      "decisionId": "D-f4f33cb7-7043-4fdf-8399-cb8cf317614f",
+      "inputDigest": "16c8e5d67f9aeac93898b18099363062b252ef7a1b55a14fcd126ab35d06bfef",
+      "contextDigest": "f41225488d24ae8c0d2b573fae4d67ae5d601b87f7f22cafebaf10c373931215",
+      "outputDigest": "f9103339387a222faf2bd2ca64d1871f5922a2ab4c776c73f5d280cbfa1e22cd",
+      "semanticDigest": "44304915e361d53fc25d1c0c05b2508f2b52294bd5b70b35c12fe7f68991f030",
+      "tools": [
+        "make_claim"
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "first": "47",
+          "last": "48"
+        },
+        "semanticDigest": "44304915e361d53fc25d1c0c05b2508f2b52294bd5b70b35c12fe7f68991f030"
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "sessionId": "S-a1216fa3-de3f-45e3-af8d-685b1d7ea808",
+      "decisionId": "D-92da89d8-437c-4dbb-b6ec-f7bf110cbe00",
+      "inputDigest": "388ce5c7f4d20466b50cabc48d111177dc3f2c03e8f0c72613c1b1dd767579e0",
+      "contextDigest": "19033f034c5bbf75f52f751728c88e5d10a074ae0b551ba992da8edc86f187c1",
+      "outputDigest": "240da7a63ee7f0b558838accd502680879074090ffd90f60e7884015b82e5e73",
+      "semanticDigest": "16e2c1ce4e8a1638d8257b87adf6391673b384d13daa9b26b5c090fe1b4b86c6",
+      "tools": [
+        "make_claim",
+        "inspect"
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "first": "22",
+          "last": "26"
+        },
+        "semanticDigest": "16e2c1ce4e8a1638d8257b87adf6391673b384d13daa9b26b5c090fe1b4b86c6"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-a1216fa3-de3f-45e3-af8d-685b1d7ea808",
+      "decisionId": "D-a45db4e0-6870-48b3-a537-e9f1d81f929f",
+      "inputDigest": "67ad2e62febd1c74066a872e33c870b0081933bb9ccb462fedbcb286607c8819",
+      "contextDigest": "e510b4eac37dad03768d5aaa34299936ef06edd255d5fab456a1a98fb5eb7c65",
+      "outputDigest": "27457626fb6392b16bc5102e45e9776159ab4f77403a5dccaa04af518681e010",
+      "semanticDigest": "49ece8bb9e2e481a644e0dfba6bcabff252b173451c3d43746614352872671f5",
+      "tools": [
+        "make_claim",
+        "inspect"
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "first": "27",
+          "last": "29"
+        },
+        "semanticDigest": "49ece8bb9e2e481a644e0dfba6bcabff252b173451c3d43746614352872671f5"
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "sessionId": "S-dc62c491-3488-4f94-b5e5-701434f62a69",
+      "decisionId": "D-5daddb89-0a30-4d08-af10-1e9153b89071",
+      "inputDigest": "07102b5143ae858aaefb024727c2f2e16aa9d407d01ca8cb347550ae9a279ecb",
+      "contextDigest": "65a6659a87fb3173b1fb3f9e3442c5890e6b78b79fea3b7ebd2b876de4d5df82",
+      "outputDigest": "6afd842d6da103e5a5b5852a7edcb33e11090a5e30aa9e2bee55d6347c40a7a8",
+      "semanticDigest": "56059db8ab6d3bf1cd5bd2e7ee00297f3c51e9da0cac28f2e7859f0b1f5c47b7",
+      "tools": [
+        "make_claim",
+        "inspect"
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "first": "25",
+          "last": "29"
+        },
+        "semanticDigest": "56059db8ab6d3bf1cd5bd2e7ee00297f3c51e9da0cac28f2e7859f0b1f5c47b7"
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "sessionId": "S-dc62c491-3488-4f94-b5e5-701434f62a69",
+      "decisionId": "D-7532a8d5-3ff1-4141-9787-67d615387df4",
+      "inputDigest": "0cc6f12dc7697b6751bd35bdc23c510b44b55071abc538974a7be8e238837635",
+      "contextDigest": "788a4f8e9071bacb5a9b44635c65328f9c9ab3ef6459e2629726c9ffdee53c63",
+      "outputDigest": "9c4e40cb167bd006ec1e65b3396a0a7e379674d9ae30139cfb473b6f43b8bb4a",
+      "semanticDigest": "fe1a246a2b856f754b62da31f22cc527e18a9a8913ac2e948783592e38d2bb94",
+      "tools": [
+        "make_claim",
+        "share_evidence"
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "first": "37",
+          "last": "41"
+        },
+        "semanticDigest": "fe1a246a2b856f754b62da31f22cc527e18a9a8913ac2e948783592e38d2bb94"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-dc62c491-3488-4f94-b5e5-701434f62a69",
+      "decisionId": "D-99cf7be1-aa8f-4856-b1c9-a936999418e2",
+      "inputDigest": "5c8baa835fd760e657e729574a4e1449ca2ea3c49da39ce272912bf8ff4f923b",
+      "contextDigest": "0c5bdb023f1d84fb034be08eadb42c16aa5eb079bf35a01e0e23f2186ae66e8b",
+      "outputDigest": "47ea8967fb10c3fcf402f8f2f9f29c668046f19eec1309b292583600d66d35b3",
+      "semanticDigest": "992687cdbd3d86a7380e08d3fa814d5a34336703eae34bc09d997f50ae2bc497",
+      "tools": [
+        "make_claim",
+        "inspect"
+      ],
+      "receipt": null
+    },
+    {
+      "actorId": "tangseng",
+      "sessionId": "S-49869a35-8f35-4ff5-baf6-c1b3ae89df15",
+      "decisionId": "D-42be457b-9e7b-47ba-8229-512dd394775b",
+      "inputDigest": "203c96f352586c4ba92604d6c11b04f1b207dce51911ae1af909f3ae06cd6358",
+      "contextDigest": "6c09070bdbc5fbafe49c3e4272a348c05523f71897560d0410e9c432e6616b7e",
+      "outputDigest": "f428b3011e1665ad4d069645d9a13ef89110cd710e4b686ccae4aab147b47ae4",
+      "semanticDigest": "5bb33a054c3a5653cf32cf801ccb010ff94e3aace8820b8fdf7b5a8deaec4588",
+      "tools": [
+        "make_claim",
+        "inspect"
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "first": "29",
+          "last": "34"
+        },
+        "semanticDigest": "5bb33a054c3a5653cf32cf801ccb010ff94e3aace8820b8fdf7b5a8deaec4588"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-49869a35-8f35-4ff5-baf6-c1b3ae89df15",
+      "decisionId": "D-db0a66a4-39ea-4573-87c5-37470e13ad28",
+      "inputDigest": "940b9574dfba7ea6b24aaf5f17ee7a7745edad3634e33ad5a82063ca74e88e16",
+      "contextDigest": "dbfbae62c17648c39125c233c0ccbc7ad29e26154ed8a1f4f27f54d2ddc06921",
+      "outputDigest": "94886db563b720901cc1f642464d43f77a7ca188d4c72590ba7ff52207ebad7e",
+      "semanticDigest": "580814d6f5642fc3b4132a00b8fe4d95657b5db31264484857a3da9372a41677",
+      "tools": [
+        "make_claim",
+        "inspect"
+      ],
+      "receipt": null
+    },
+    {
+      "actorId": "tangseng",
+      "sessionId": "S-49869a35-8f35-4ff5-baf6-c1b3ae89df15",
+      "decisionId": "D-8e70b4e2-d26e-41e0-b6d9-8edb3f303b57",
+      "inputDigest": "2a14e96b862c46ede76550641679243cf3680b57ec00c915405c2069cad105cf",
+      "contextDigest": "0615dc62bbd07403b7e44de8461e347b7affcb9e69c91a1fd21ee6324b4bd760",
+      "outputDigest": "b99c93fe4c9f37921d8e9f630eff3844bac4e2a12aace1b74434b2f042455460",
+      "semanticDigest": "090e4a75722888b8b72cec9e20230f40f5faaa63bf88c9ce8e449581ba546753",
+      "tools": [
+        "make_claim",
+        "share_evidence"
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "first": "47",
+          "last": "53"
+        },
+        "semanticDigest": "090e4a75722888b8b72cec9e20230f40f5faaa63bf88c9ce8e449581ba546753"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-49869a35-8f35-4ff5-baf6-c1b3ae89df15",
+      "decisionId": "D-67e65f86-3556-49d0-8048-d238f4af877f",
+      "inputDigest": "6e785a918cfef737a39e13da64409411767fc249561f96fae1b1ecb81a25ac02",
+      "contextDigest": "0aa632214494b52f119223f5664b4209027f74106d4a79308a35751d022cae89",
+      "outputDigest": "f1921c2747281b2bd51ab26c40a38c87f83bad64dc432d104d5871ba14f10f16",
+      "semanticDigest": "feaee26b4d4554236f0eff3dd949cdcdcf18c684efba579ca228dff86b25e349",
+      "tools": [
+        "make_claim",
+        "share_evidence"
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "first": "62",
+          "last": "68"
+        },
+        "semanticDigest": "feaee26b4d4554236f0eff3dd949cdcdcf18c684efba579ca228dff86b25e349"
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "sessionId": "S-2c4b80f4-308a-4878-a760-927a767fa8c6",
+      "decisionId": "D-25439a8c-56a4-4d39-afc3-6c58d066e98b",
+      "inputDigest": "765ba90171dba4389ac3aebc941e70e393b04a61e408a84e75316a37ac3c34cc",
+      "contextDigest": "90a9dc10323261ea609b87d1abdbe42f71606f95ecfdf5e74ffa2264afeff6f6",
+      "outputDigest": "13796b55677ab3755e2309c797e45d138b953413e1b84f05120850dc9eb9611d",
+      "semanticDigest": "1025616b5cac46f819cc34ab939d1092bc176e931773e1c2212deb90e4a4ac3e",
+      "tools": [
+        "make_claim",
+        "inspect"
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "first": "23",
+          "last": "27"
+        },
+        "semanticDigest": "1025616b5cac46f819cc34ab939d1092bc176e931773e1c2212deb90e4a4ac3e"
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "sessionId": "S-2c4b80f4-308a-4878-a760-927a767fa8c6",
+      "decisionId": "D-2487eed5-56ba-4dcd-b31c-385cf031a6a4",
+      "inputDigest": "35f9190831f2467508ef915e013073fa2b3d9e854305caf9f3ca6ae80a4236f2",
+      "contextDigest": "39a47a4fa238c28a28868589150d8841c28b0630d6f70386d7409fbaee11040a",
+      "outputDigest": "abcef265bd3be66a641b5965572205b1bb44e59210db4f6e03677f58bfd6d44a",
+      "semanticDigest": "7bf94d0c79f589c8780f5f86e5709bd7a2c48cd170ae4bce74259cc83acaa43b",
+      "tools": [
+        "make_claim",
+        "inspect"
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "first": "37",
+          "last": "42"
+        },
+        "semanticDigest": "7bf94d0c79f589c8780f5f86e5709bd7a2c48cd170ae4bce74259cc83acaa43b"
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "sessionId": "S-2c4b80f4-308a-4878-a760-927a767fa8c6",
+      "decisionId": "D-e81bf5b7-7eea-4aa2-be87-e7d3006369ba",
+      "inputDigest": "750e1544a201ac77f5f8f9f190821ecf42a33890265c6b6caa420fecfbc8ca6b",
+      "contextDigest": "e0629f631c00b1e058b57384e0b01baf18e67976a6787a28a3f2464d5d0ad4bb",
+      "outputDigest": "ce74228f02a35777704b602ffdcc91374b73f102bf912d473e979346fda7afd5",
+      "semanticDigest": "5b22ba5ce1ce6cb8181cfbc900ea411f029d06fd4e4839ab5e0362d92ff58438",
+      "tools": [
+        "make_claim",
+        "inspect"
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "first": "49",
+          "last": "54"
+        },
+        "semanticDigest": "5b22ba5ce1ce6cb8181cfbc900ea411f029d06fd4e4839ab5e0362d92ff58438"
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "sessionId": "S-2c4b80f4-308a-4878-a760-927a767fa8c6",
+      "decisionId": "D-6045ca75-1f46-4bc8-872f-b17294f9b427",
+      "inputDigest": "d19af251809808b6405407d7e9d8c3f7beb7a4d1ccac95297bc3609301e198b7",
+      "contextDigest": "a88413e66e98c633f13689e1972006e0c24866a76659e4e2321a4bb7d2d7a2b1",
+      "outputDigest": "bd2460af90dbc6368593161d21ac0f39937abbf15afc41d6904d2d096b5ec73a",
+      "semanticDigest": "b3a7a81250b858351e9437a44fe5ef5b1c7042c2626bf280b4f42000721dd200",
+      "tools": [
+        "make_claim",
+        "move"
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "actionEventRange": {
+          "first": "56",
+          "last": "60"
+        },
+        "semanticDigest": "b3a7a81250b858351e9437a44fe5ef5b1c7042c2626bf280b4f42000721dd200"
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "sessionId": "S-3bcb265c-30ca-4e2a-a662-0a1994aecabe",
+      "decisionId": "D-40a024e5-7c53-43c1-aa4c-ac42b5872722",
+      "inputDigest": "2e5a81fac9b491c8ae1444361ca1b1be31ac9dea4ef0082afc4047b0f96b9afd",
+      "contextDigest": "ccea22afc2ccbcf98f450459516dda8cad4e2dbc0373a78fc20b259f778df08b",
+      "outputDigest": "a673d1015676e666dbd88f3967281d77acb008ff586ed446e263a2c168af451b",
+      "semanticDigest": "e3ad4ac515ab374a3c60e0f4663f998ba1a4152dd1ec18421512f859940a1269",
+      "tools": [
+        "make_claim",
+        "inspect"
+      ],
+      "receipt": null
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-3bcb265c-30ca-4e2a-a662-0a1994aecabe",
+      "decisionId": "D-95bb299e-cf3f-4674-befd-0b60922402e0",
+      "inputDigest": "971add378cd2aed25b11da3a7dac4105c415f9a10b804464910307fbbd0ff398",
+      "contextDigest": "82c977672b12d21e6c55855f0ba57c61b5f64a488e2e6149be48d5c31cb43045",
+      "outputDigest": "91f044af7c20fb415f869ba30d72b69dc0234daaebd86bfa98f1bfd1841ffd1d",
+      "semanticDigest": "0f6a0f4ead10246243d1b0c11889e02e4d026e1c6f874f72c629bc80917d42b9",
+      "tools": [
+        "make_claim",
+        "inspect"
+      ],
+      "receipt": null
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-afadf4eb-bab7-4664-91ef-adf48d1ab1e7",
+      "decisionId": "D-790035c6-5914-48e3-a0a5-cc0dbc835be5",
+      "inputDigest": "e36c65caacf48955a5321fade73d91f09b2289b7fbd86d10871b74f088f5cc8d",
+      "contextDigest": "ecceb3e1184bc2d2d213a881c071e28e2e460427e40c506bceab8579278792ca",
+      "outputDigest": "2c35fbb0c1e6c2e85680d94f36459d6a1677915b8a1b25a28448a6663e9d3fdd",
+      "semanticDigest": "2c35fbb0c1e6c2e85680d94f36459d6a1677915b8a1b25a28448a6663e9d3fdd",
+      "tools": [
+        "wait"
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "actionEventRange": null,
+        "semanticDigest": "2c35fbb0c1e6c2e85680d94f36459d6a1677915b8a1b25a28448a6663e9d3fdd"
+      }
+    },
+    {
+      "actorId": "wukong",
+      "sessionId": "S-afadf4eb-bab7-4664-91ef-adf48d1ab1e7",
+      "decisionId": "D-cc16c09c-f8a6-4af7-a69e-1b744b435dce",
+      "inputDigest": "f09f2331b3ba550d882b01ed828ae2b6fc17d1ab6d8b98d3e2bf2e30540ba25c",
+      "contextDigest": "3937b3866f21f9348292b08fccdaf119b7f2703d3b04abc76fffffb45ad0b609",
+      "outputDigest": "d025f191a4eb6b7537c7711890cc8119605ff0df2d7842ab9682d4c494458def",
+      "semanticDigest": "d025f191a4eb6b7537c7711890cc8119605ff0df2d7842ab9682d4c494458def",
+      "tools": [
+        "wait"
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "NO_CHANGE",
+        "actionEventRange": null,
+        "semanticDigest": "d025f191a4eb6b7537c7711890cc8119605ff0df2d7842ab9682d4c494458def"
+      }
+    }
+  ],
+  "observedProposalCount": 47,
+  "waitProposalCount": 27
+}

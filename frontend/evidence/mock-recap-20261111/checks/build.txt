@@ -1,0 +1,15 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> xiyou-frontend@0.1.0 build
+> vue-tsc --noEmit && vite build
+
+vite v8.3.8 building client environment for production...
+transforming...
+✓ 86 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.54 kB │ gzip:  0.37 kB
+dist/assets/index-CTveO_Y6.css   28.51 kB │ gzip:  6.98 kB
+dist/assets/index-2qDnuco8.js   219.60 kB │ gzip: 77.98 kB
+
+✓ built in 500ms

@@ -1345,6 +1345,161 @@
       ],
       "additionalProperties": false
     },
+    "RecapReference": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "enum": [
+            "observation",
+            "claim",
+            "character",
+            "item",
+            "target",
+            "region",
+            "source"
+          ]
+        },
+        "id": {
+          "$ref": "#/$defs/Id"
+        }
+      },
+      "required": [
+        "kind",
+        "id"
+      ],
+      "additionalProperties": false
+    },
+    "RecapEntry": {
+      "type": "object",
+      "properties": {
+        "entryId": {
+          "$ref": "#/$defs/Id"
+        },
+        "eventSeq": {
+          "$ref": "#/$defs/PositiveDecimalString"
+        },
+        "serverTime": {
+          "$ref": "#/$defs/UtcTimestamp"
+        },
+        "category": {
+          "enum": [
+            "Observation",
+            "Claim",
+            "WorldFact"
+          ]
+        },
+        "kind": {
+          "enum": [
+            "observed",
+            "received_evidence",
+            "heard_claim",
+            "received_claim",
+            "said",
+            "moved",
+            "took",
+            "transferred",
+            "used",
+            "updated",
+            "finished",
+            "aborted"
+          ]
+        },
+        "actorId": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/CharacterId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "text": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FactField"
+          },
+          "maxItems": 32
+        },
+        "references": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/RecapReference"
+          },
+          "maxItems": 40
+        }
+      },
+      "required": [
+        "entryId",
+        "eventSeq",
+        "serverTime",
+        "category",
+        "kind",
+        "actorId",
+        "text",
+        "fields",
+        "references"
+      ],
+      "additionalProperties": false
+    },
+    "AuthorizedRecap": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "type": {
+          "const": "session.recap"
+        },
+        "sessionId": {
+          "$ref": "#/$defs/SessionId"
+        },
+        "actorId": {
+          "$ref": "#/$defs/CharacterId"
+        },
+        "throughSeq": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "phase": {
+          "enum": [
+            "Finished",
+            "Aborted"
+          ]
+        },
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/RecapEntry"
+          },
+          "maxItems": 100
+        },
+        "nextBeforeSeq": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/PositiveDecimalString"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "type",
+        "sessionId",
+        "actorId",
+        "throughSeq",
+        "phase",
+        "entries",
+        "nextBeforeSeq"
+      ],
+      "additionalProperties": false
+    },
     "AuthorizedProjection": {
       "type": "object",
       "properties": {
@@ -2905,6 +3060,9 @@
     },
     {
       "$ref": "#/$defs/AuthorizedProjection"
+    },
+    {
+      "$ref": "#/$defs/AuthorizedRecap"
     }
   ]
 }

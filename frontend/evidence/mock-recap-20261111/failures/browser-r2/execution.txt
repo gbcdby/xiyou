@@ -1,0 +1,13 @@
+{"stage":"2个独立浏览器身份经页面创建、加入、开局和恢复控制","elapsedMs":5643}
+{"stage":"2人实际页面完成查看、拿取、交付、修复、许可、终局与只读复盘","elapsedMs":9987}
+{"stage":"5个独立浏览器身份经页面创建、加入、开局和恢复控制","elapsedMs":18909}
+{"stage":"5人实际页面完成查看、拿取、交付、修复、许可、终局与只读复盘","elapsedMs":20661}
+{"stage":"3个独立浏览器身份经页面创建、加入、开局和恢复控制","elapsedMs":25581}
+TypeError: Cannot read properties of undefined (reading 'value')
+    at file:///workspace/scratch/17ff92cde78f/xiyou-mock-ui/frontend/tests/recap-browser-check.mjs:255:87
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+{"cleanup":"browser","state":"closed"}
+{"cleanup":"vite","state":"closed"}
+{"cleanup":"server","state":"closed"}
+{"cleanup":"postgres","state":"closed"}
+{"assessment":"FAIL","elapsedMs":28105,"checks":5,"resourcesClosed":true}

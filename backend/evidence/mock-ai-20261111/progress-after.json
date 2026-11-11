@@ -1,0 +1,300 @@
+{
+  "status": "PASS",
+  "providerSha256": "5559e983b1c28fd288b516ce8ce64776a35183f5e1862e49ca984bc56691750b",
+  "clock": "真实 Runtime 时钟；显式单轮唤醒、调度间隔1ms用于有界策略回归，不计60秒主动窗口",
+  "maxCallsPerSession": 120,
+  "totalCalls": 13,
+  "callsAtRoute": 11,
+  "callsAfterRoute": 2,
+  "phase": "Finished",
+  "ending": {
+    "facts": [
+      {
+        "key": "safe",
+        "label": "通路安全",
+        "value": true
+      },
+      {
+        "key": "permit",
+        "label": "通行许可有效",
+        "value": true
+      },
+      {
+        "key": "arrived",
+        "label": "师徒实际到达终点",
+        "value": true
+      },
+      {
+        "key": "spareConsumed",
+        "label": "备用材料实际消耗",
+        "value": false
+      },
+      {
+        "key": "originalConsumed",
+        "label": "原材料实际用于修复",
+        "value": true
+      },
+      {
+        "key": "evidenceComplete",
+        "label": "双方已取得完整核验来源",
+        "value": true
+      }
+    ],
+    "endingCode": "clarified_passage"
+  },
+  "npcRegions": {
+    "tangseng": "destination",
+    "wukong": "destination"
+  },
+  "elapsedMs": 1566.8650470000002,
+  "resourcesClosed": true,
+  "decisions": [
+    {
+      "actorId": "wukong",
+      "decisionId": "D-e9837447-b797-4480-bd43-b8482bf66b8f",
+      "contextDigest": "80d0ed2fae749a7ace19372edb98fa1a4e3b0af28f1dfa04149b4f91ac99ca37",
+      "outputDigest": "90df5e78e5d744a74350421a269658933aaaf5777b22c83dfb5c5ed9dac35566",
+      "receivedRoute": false,
+      "tools": [
+        "make_claim",
+        "move"
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "46",
+          "first": "44"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-206c653a-2369-467c-9a41-aa4f5489668d",
+      "contextDigest": "c3e9a6bff71c275844f4d1d8af30a20a530e542a42080a1fed84b68d9a63fcb7",
+      "outputDigest": "cde39a3f065e7992be51ca508a98fae289eced078d8898e8cbf61762da738aa7",
+      "receivedRoute": false,
+      "tools": [
+        "make_claim",
+        "share_evidence"
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "75",
+          "first": "61"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-816ad554-b50b-49ea-8c0f-ec73a53ea75a",
+      "contextDigest": "644c9e32ed6b75c531c41562f5318b1f58a5e6a0ba7cdc170ceeb7057469895e",
+      "outputDigest": "abe7e12f69e45b6b7c4322bde9c690d417d3632c002ef49b306f2d709c71196b",
+      "receivedRoute": false,
+      "tools": [
+        "make_claim",
+        "share_evidence"
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "90",
+          "first": "76"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-083f7d6c-0dd8-49bf-88c9-221cabdd30d5",
+      "contextDigest": "483a80169b0d26f010a557648f8e880f20c9a7ce86fdd5bb1fc69901983adc97",
+      "outputDigest": "15e6cbc320d681bc142f217730bf6c9bef10306b3a8c211010b37794ec4219ef",
+      "receivedRoute": false,
+      "tools": [
+        "make_claim",
+        "inspect"
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "100",
+          "first": "91"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-16639be7-231c-4df0-846c-92f7288bbec8",
+      "contextDigest": "fd0ebe46384d2f965433edaf45e59833a08ae60779f6c257d7c35faefc258b66",
+      "outputDigest": "e9801bc5f2acc5122751d250f07cbf833a6e1a111f377efe3c36cf6938dc3f7a",
+      "receivedRoute": false,
+      "tools": [
+        "make_claim",
+        "share_evidence"
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "116",
+          "first": "102"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-9914e499-ab7d-4fa1-8f77-58d029ad0792",
+      "contextDigest": "3961b3c67a559ae4ac054abf3f2e083adcc31d24a959c32ff21fd98752c3ad83",
+      "outputDigest": "b85ae712b5d7a84e5edf49105e1a52b16da19ec9b90f015adf6037168cc155ea",
+      "receivedRoute": false,
+      "tools": [
+        "make_claim",
+        "share_evidence"
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "131",
+          "first": "117"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-990d9ad7-3ad6-4777-b874-99ec2ee83397",
+      "contextDigest": "e1ca28292d5865a0e0066d8ada891370e59b3f54ada8bfec8fbd2ccaaf5dda70",
+      "outputDigest": "982835f036543f16b2f68e7e7d43f28b43ca4b795d44b2f3d506db6957125373",
+      "receivedRoute": false,
+      "tools": [
+        "make_claim",
+        "inspect"
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "141",
+          "first": "132"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-0f3e5b67-0988-471c-8e48-374485bac782",
+      "contextDigest": "a1b6c70f9f782721f065753d65fa29d77a71b76330cd7e7c83b2eb1b3136d206",
+      "outputDigest": "c6c09505979e8c7297929ebadd388a52995100718b3c5957e9673061127b4978",
+      "receivedRoute": false,
+      "tools": [
+        "make_claim",
+        "inspect"
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "155",
+          "first": "146"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-77027e1e-3f9c-4a20-b054-fb0ee3095806",
+      "contextDigest": "00348f2ea767fe48e7525d8a40f93e81cbca1de0424dbdde4179eca3093ce48a",
+      "outputDigest": "65345ec1c27515434d9f09485af7efedbb19baae674beed16f1041bf0dcbdbc4",
+      "receivedRoute": false,
+      "tools": [
+        "make_claim",
+        "inspect"
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "166",
+          "first": "157"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-42f10e1b-96b3-40a4-ba2a-7d6114c93a33",
+      "contextDigest": "b85f267d3a17a62cc7495c0fb35a7a4dad91d344ad9b9b9d66afd94b87721b34",
+      "outputDigest": "fda4ca502c641834c53802b35517a410b6a8096705a7c67d62e6b8b1297f03e7",
+      "receivedRoute": false,
+      "tools": [
+        "make_claim",
+        "inspect"
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "178",
+          "first": "169"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-cf3237c3-33af-43e1-832c-44da9f2117c9",
+      "contextDigest": "f9d554d3da9586751977794bb3dcb5426e4f2b46f713088db17000872ad38fa0",
+      "outputDigest": "85facdb795fe7622c4785d387a3c537da38b6bc37b9888f28250b7536a4f73f8",
+      "receivedRoute": false,
+      "tools": [
+        "make_claim",
+        "inspect"
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "189",
+          "first": "180"
+        }
+      }
+    },
+    {
+      "actorId": "tangseng",
+      "decisionId": "D-4bec3423-5248-43dd-b692-87d3b17d9753",
+      "contextDigest": "e9f67582bc460ea35314c804caa226ea54865b9586374edccd357c33c1dd7b8f",
+      "outputDigest": "0c677419a2146b74202e874dd00c748c72a8027be47a66de256b3ced4cba8ef4",
+      "receivedRoute": true,
+      "tools": [
+        "make_claim",
+        "move"
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "207",
+          "first": "199"
+        }
+      }
+    },
+    {
+      "actorId": "wukong",
+      "decisionId": "D-2368449c-70b7-40cc-976b-de314cb93331",
+      "contextDigest": "491c08a1b31a1d9a64073fb5f3dc4573237efede79bd663e4c05df4fa4866662",
+      "outputDigest": "fffaaec95d53a839bd56558f60d2c56d97da027abdf0efe3b36c20d8bc91e595",
+      "receivedRoute": true,
+      "tools": [
+        "make_claim",
+        "move"
+      ],
+      "receipt": {
+        "status": "Accepted",
+        "code": "OK",
+        "range": {
+          "last": "217",
+          "first": "209"
+        }
+      }
+    }
+  ]
+}

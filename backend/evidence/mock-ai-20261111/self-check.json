@@ -1,0 +1,56 @@
+{
+  "workId": "vs001-p07",
+  "ticket": "https://github.com/gbcdby/xiyou/issues/10",
+  "specRef": "3690b481d1805f6a7b535584c80a8574c5103d97",
+  "acceptanceProfile": "mock-20261111",
+  "subject": "相对c2511f4的修正字节由source-manifest.json固定；最终提交身份以承载本目录的Git提交为准",
+  "producer": "作者自查",
+  "outcome": "COMPLETE",
+  "independentReview": "NOT_RUN",
+  "externalModelCalls": 0,
+  "findingsAddressed": [
+    "R-vs001-p07-REQ-001",
+    "R-vs001-p07-REQ-002"
+  ],
+  "commands": [
+    {
+      "command": "node --test backend/tests/ai-mock-policy.test.mjs backend/tests/ai-mock-runtime.test.mjs backend/tests/ai-mock-progress.test.mjs",
+      "result": "修正前9pass/3fail；修正后12pass/0fail",
+      "exitCodeBefore": 1,
+      "exitCodeAfter": 0
+    },
+    {
+      "command": "需求审查者提供的两个输入序列；仅重定位导入/报告路径并添加成功断言",
+      "result": "自动调度五人76/120调用自然clarified_passage；61 Decision仅2次请求对应2次移动",
+      "scope": "真实时钟，公开可配调度间隔10ms；不计60秒或900秒"
+    },
+    {
+      "command": "npm run test:backend",
+      "passed": 102,
+      "failed": 0,
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 11655.957647000001,
+      "sourceUnchanged": true
+    },
+    {
+      "command": "npm run verify:mock",
+      "result": "PASS",
+      "observedMs": 60016.968272,
+      "totalCalls": 9,
+      "playerActionsDuringWindow": 0,
+      "process": {
+        "code": 0,
+        "signal": null
+      },
+      "databaseConnectionsClosed": true,
+      "sourceUnchanged": true
+    }
+  ],
+  "uncovered": [
+    "根代理更新后的同候选HTTP/Socket五人/两人整局及900秒矩阵",
+    "独立需求与标准复审",
+    "真实模型、真人体验、公网部署"
+  ],
+  "historicalFailures": "原c251作者检查不覆盖本次反例；新增原始120预算红轨迹和三个针对性红断言均保留。不得以本次绿色抹掉根R1或原独立反例。"
+}
