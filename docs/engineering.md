@@ -29,9 +29,9 @@
 ## 领域命名
 
 - 三个 ID 必须分清：`UserId`（真人账号）、`CharacterId`（本关角色）、`SessionId`（本局实例）。NPC 认识 `CharacterId` 不等于认识 `UserId`。
-- 事件顺序号在单个 Session 内全局有序；状态推进严格为 `State[n+1] = Reduce(State[n], Event[n+1])`。总设计的示例字段 `seq` 与文字中的 `sessionSeq` 表达同一概念，正式 wire schema 命名由 M0 Spec 统一，不假定已经存在两套序号。`eventId` 的示例为 `E1009`，最终唯一性范围一并写入协议。
-- 角色控制权：`HumanControlled → GracePeriod → AIProxyControlled → HumanControlled`。托管 AI 继承已知内容/位置/物品/承诺，但**禁止**重大不可逆决策、泄露玩家私人频道、擅自消耗关键物品。总设计保留的“维持游戏必需行为”例外仍需 Spec 定义可判断的范围；不能由模型临场解释该例外来绕过校验。
-- 时间：`expireAt`、`seq` 等一律以服务端为准。
+- 事件顺序号在单个 Session 内全局有序；状态推进严格为 `State[n+1] = Reduce(State[n], Event[n+1])`。首个切片的正式命名、JSON 表示、分配方式及 `eventId` 唯一性范围见 [M0 协议](specs/m0-protocol.md)；总设计中的 `seq` / `E1009` 保留为初步示例，不另设一套 wire 字段。
+- 角色控制权：`HumanControlled → GracePeriod → AIProxyControlled → HumanControlled`。托管 AI 继承已知内容/位置/物品/承诺，但**禁止**重大不可逆决策、泄露玩家私人频道、擅自消耗关键物品。总设计保留的“维持游戏必需行为”例外由具体 Spec 决定；[首个切片](specs/m0-protocol.md#8-角色控制与断线交还)明确不开放该例外，不能由模型临场解释来绕过校验。
+- 时间与顺序号：服务端截止时间及正式 `sessionSeq` 一律以权威提交为准，具体逻辑时间和序号规则由 M0 协议定义。
 
 ## 工程边界
 

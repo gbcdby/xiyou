@@ -11,6 +11,8 @@
 | 多服务器广播与恢复 | [Redis adapter](https://socket.io/docs/v4/redis-adapter/)、[Connection State Recovery](https://socket.io/docs/v4/connection-state-recovery) | 传统 Redis Pub/Sub adapter 不支持恢复；恢复需显式启用且依赖兼容适配器，也可能失败 |
 | 并发共享类型 | [Yjs Introduction](https://docs.yjs.dev/)、[Shared Types](https://docs.yjs.dev/getting-started/working-with-shared-types) | 共享类型可合并并发更新；最终同步需要更新送达。限制其只用于笔记等子系统是本项目决定 |
 | JSON 数据与索引 | [PostgreSQL JSON Types](https://www.postgresql.org/docs/current/datatype-json.html) | 支持 jsonb 与相应索引，不等于具体 Event Store 的性能或事务语义已经验证 |
+| Session 原子提交与串行化 | [PostgreSQL Explicit Locking](https://www.postgresql.org/docs/current/explicit-locking.html)、[Transaction Isolation](https://www.postgresql.org/docs/current/transaction-iso.html)、[Constraints](https://www.postgresql.org/docs/current/ddl-constraints.html) | 行锁与唯一约束可支撑 M0 方案；所有本局写入仍须统一遵守锁与事务。序列计数不会随事务回滚，连续 `sessionSeq` 需使用受锁保护的事务字段；资料不能代替实现或故障验证 |
+| 传输与应用重试 | [Socket.IO Delivery Guarantees](https://socket.io/docs/v4/delivery-guarantees/) | 默认至多一次投递，持久日志、动作去重、收据与恢复由应用实现；不声称网络恰好一次 |
 | 异步流与消费组 | [Redis Streams](https://redis.io/docs/latest/develop/data-types/streams/) | 提供追加式流和消费组；不由此推出恰好一次执行或故障下不丢数据 |
 | 形式化工具 | [TLA+ Tools](https://lamport.azurewebsites.net/tla/tools.html)、[TLC 文档](https://www.docs.tlapl.us/using:tlc:start) | TLC 对可执行规格进行显式状态检查，可检查 safety/liveness；项目结论仍需绑定具体有限模型、配置和检查证据 |
 | 模型接口候选 | [百炼 OpenAI 兼容接口](https://help.aliyun.com/zh/model-studio/compatibility-of-openai-with-dashscope)、[文本生成](https://help.aliyun.com/zh/model-studio/text-generation)、[SDK](https://help.aliyun.com/zh/model-studio/install-sdk) | 提供兼容调用方式与 DashScope；具体模型能力、地域和 endpoint 需要匹配，尚不是项目已选定的供应商 |
