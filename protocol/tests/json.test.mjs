@@ -1,0 +1,36 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { parseStrictJSON, canonicalize, validateContract, ContractError } from '../index.mjs';
+
+test('重复键和转义后同名键在原始 JSON 入口拒绝', () => {
+  for (const raw of ['{"a":1,"a":2}', '{"a":{"x":1,"\\u0078":2}}']) {
+    assert.throws(() => parseStrictJSON(raw), error => error instanceof ContractError && error.code === 'INVALID_MESSAGE');
+  }
+});
+
+test('JSON 入口保留精确字符串并拒绝无法精确表达的数字', () => {
+  const value = parseStrictJSON('{"seq":"9007199254740993","number":1,"text":"甲"}');
+  assert.equal(value.seq, '9007199254740993');
+  assert.equal(value.text, '甲');
+  for (const raw of ['{"n":9007199254740993}', '{"n":1.25}', '{"n":1e-400}', '{"n":1.00000000000000001}', '{"x":1}x', '{"a":1,}', '{"a":"\\ud800"}']) {
+    assert.throws(() => parseStrictJSON(raw), ContractError);
+  }
+});
+
+test('规范编码按键名排序且不改写数组顺序或 Unicode 内容', () => {
+  assert.equal(canonicalize({ z: [2, 1], a: { y: true, x: '甲' } }), '{"a":{"x":"甲","y":true},"z":[2,1]}');
+  assert.throws(() => canonicalize({ missing: undefined }), ContractError);
+  assert.throws(() => canonicalize({ n: NaN }), ContractError);
+});
+
+test('R-vs001-p01-STD-002：空洞与额外属性不能抵消而通过数组检查', () => {
+  const recipients = [];
+  recipients.length = 1;
+  recipients.extra = 'C4';
+  assert.throws(() => canonicalize(recipients), ContractError);
+  const request = { schemaVersion: 1, sessionId: 'S1', actorId: 'C3', clientActionId: 'A1', controlEpoch: '1', baseSeq: '0', action: { kind: 'speak', text: '检验接收者', channel: 'directed', recipientIds: recipients } };
+  assert.throws(() => validateContract('ClientAction', request), ContractError);
+  request.action.recipientIds = ['C4'];
+  validateContract('ClientAction', request);
+  validateContract('ClientAction', parseStrictJSON(canonicalize(request)));
+});
