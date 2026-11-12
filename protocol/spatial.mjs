@@ -110,7 +110,10 @@ export function validateSpatial(name, value) {
     }
     return value;
 }
-export const parseSpatial = (name, raw) => validateSpatial(name, parseStrictJSON(raw));
+export const parseSpatial = (name, raw) => validateSpatial(name, parseStrictJSON(raw, { maxBytes: ['ProjectionV2','SnapshotV2','BatchV2','ControlResponseV2','RecapV2'].includes(name) ? Infinity : 65536 }));
+/** 有限章节动作的严格构造入口；旧内容字符串操作仍由公开解析器校验。 */
+export const gaolaoInteraction = value => validateSpatial('GaolaoInteractionV2', structuredClone(value));
+export const isGaolaoInteraction = value => value?.kind==='interact' && typeof value.operationId==='string' && value.operationId.startsWith('gz-') && (()=>{try{validateSpatial('GaolaoInteractionV2',value);return true;}catch{return false;}})();
 /** 一个新控制 epoch 只能创建一个输入源；刷新丢失计数器时须重新取得 epoch。 */
 export class MovementCommandSource {
     #next = 0n;

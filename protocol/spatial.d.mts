@@ -3,7 +3,10 @@ import type * as T from '../game/spatial-types.js';
 export type * from '../game/spatial-types.js';
 export function parseSpatial<K extends keyof SpatialContracts>(name: K, raw: string): SpatialContracts[K];
 export function validateSpatial<K extends keyof SpatialContracts>(name: K, value: unknown): SpatialContracts[K];
+export function gaolaoInteraction<A extends T.GaolaoInteractionV2>(value: A): A;
+export function isGaolaoInteraction(value: T.ActionV2): value is T.GaolaoInteractionV2;
 export interface SpatialContracts {
+  GaolaoInteractionV2: T.GaolaoInteractionV2;
   Id: T.Id;
   DecimalString: T.DecimalString;
   PositiveDecimalString: T.PositiveDecimalString;
@@ -16,6 +19,18 @@ export interface SpatialContracts {
   Polygon: T.Polygon;
   Facing: T.Facing;
   ActionV2: T.ActionV2;
+  GaolaoOperationId: T.GaolaoOperationId;
+  ChapterInteractionParameters: T.ChapterInteractionParameters;
+  ConsentPurpose: T.ConsentPurpose;
+  ConsentScopeViewV2: T.ConsentScopeViewV2;
+  ConsentViewV2: T.ConsentViewV2;
+  FollowViewV2: T.FollowViewV2;
+  DecisionViewV2: T.DecisionViewV2;
+  EndProposalViewV2: T.EndProposalViewV2;
+  ChapterViewV2: T.ChapterViewV2;
+  EndingViewV2: T.EndingViewV2;
+  RecapEntryV2: T.RecapEntryV2;
+  RecapV2: T.RecapV2;
   PublicEnvelope: T.PublicEnvelope;
   SyncRequestV2: T.SyncRequestV2;
   ControlRequestV2: T.ControlRequestV2;
@@ -26,6 +41,7 @@ export interface SpatialContracts {
   ItemViewV2: T.ItemViewV2;
   TargetViewV2: T.TargetViewV2;
   PlanViewV2: T.PlanViewV2;
+  EvidenceSourceViewV2: T.EvidenceSourceViewV2;
   ObservationViewV2: T.ObservationViewV2;
   ClaimViewV2: T.ClaimViewV2;
   CooperationViewV2: T.CooperationViewV2;

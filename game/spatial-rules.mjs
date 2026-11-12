@@ -1,6 +1,9 @@
 import { RuleError } from './rules.mjs';
 import { opaqueRef, next, sceneOf, obstacleEnabled, conditionMet, locationOf, inRange, unoccluded, canSee, ensureView, entityRef, resolveRef } from './spatial-world.mjs';
 import { findPath, walkable, clearSegment, pointAlongPath, distance, visibleSegment } from './spatial-geometry.mjs';
+import { isGaolao, observerName, copyGaolaoEvidence } from './gaolao-world.mjs';
+import { applyGaolaoAction,checkGaolaoMovement,checkGaolaoItem } from './gaolao-rules.mjs';
+import {gaolaoNavigationRejection} from './gaolao-navigation.mjs';
 const refuse = code => { throw new RuleError(code); };
 const active = plan => plan && ['accepted', 'moving'].includes(plan.status);
 const online = (tx, a) => a?.kind === 'human' && a.mode === 'HumanControlled' && tx.liveActorIds?.has(a.characterId);
@@ -21,7 +24,7 @@ export function advanceSpatialPositions(tx, sceneTimeMs) {
             continue;
         const a = structuredClone(current), p = a.movement, scene = sceneOf(tx.content, a.sceneId);
         const related = tx.state.characters[p.relatedTarget?.id] ?? tx.state.items[p.relatedTarget?.id] ?? tx.state.targets[p.relatedTarget?.id];
-        if (p.controlEpoch !== a.controlEpoch || p.mapVersion !== tx.state.mapVersion || p.relatedTarget && (!related || related.appearanceEpoch !== p.relatedTarget.appearanceEpoch || related.resourceRevision !== p.relatedTarget.resourceRevision || related.spatialRevision !== p.relatedTarget.spatialRevision || active(related.movement))) {
+        if (p.controlEpoch !== a.controlEpoch || p.mapVersion !== tx.state.mapVersion || gaolaoNavigationRejection(tx.state,a.characterId,p.chapterDependencies) || p.relatedTarget && (!related || related.appearanceEpoch !== p.relatedTarget.appearanceEpoch || related.resourceRevision !== p.relatedTarget.resourceRevision || related.spatialRevision !== p.relatedTarget.spatialRevision || active(related.movement))) {
             p.status = 'cancelled';
             p.reason = '导航目标或控制版本已经失效。';
             emitActor(tx, a);
@@ -150,13 +153,14 @@ function cooperate(tx, actorId, action) {
     tx.emit('spatial.cooperation', { cooperation: record });
     return record.phase === 'locked' ? { status: 'locked' } : {};
 }
-export function applySpatialAction(tx, actorId, principalKind, request) {
+export function applySpatialAction(tx, actorId, principalKind, request, navigationDependencies = null) {
     const a = tx.state.characters[actorId], action = request.action;
     const resolve = ref => resolveRef(tx, actorId, ref, request.viewId);
     if (principalKind === 'proxy' && !['move_to', 'stop_move', 'inspect', 'speak', 'wait'].includes(action.kind))
         refuse('RULE_VIOLATION');
-    if (tx.state.paused && !['stop_move', 'wait'].includes(action.kind) && !(action.kind === 'cooperate' && action.phase === 'cancel'))
+    if (tx.state.paused && !['stop_move', 'wait', ...(isGaolao(tx.state)?['withdraw_consent','request_end','confirm_end']:[])].includes(action.kind) && !(action.kind === 'cooperate' && action.phase === 'cancel'))
         refuse('SESSION_PAUSED');
+    if(isGaolao(tx.state)){const result=applyGaolaoAction(tx,actorId,principalKind,request);if(result!==null)return result;}
     if (action.kind === 'wait')
         return {};
     if (action.kind === 'stop_move') {
@@ -165,6 +169,7 @@ export function applySpatialAction(tx, actorId, principalKind, request) {
         return { movementCommandSeq: action.movementCommandSeq, status: 'cancelled' };
     }
     if (action.kind === 'move_to') {
+        checkGaolaoMovement(tx,actorId,action);
         const destinationScene = sceneOf(tx.content, action.sceneId);
         if (!destinationScene)
             refuse('PATH_UNREACHABLE');
@@ -186,6 +191,7 @@ export function applySpatialAction(tx, actorId, principalKind, request) {
         if (!path)
             refuse('PATH_UNREACHABLE');
         const planVersion = next(a.planVersion), movement = { movementId: opaqueRef(), planVersion, movementCommandSeq: action.movementCommandSeq, actorId, controlEpoch: a.controlEpoch, sceneId: action.sceneId, mapVersion: tx.state.mapVersion, goal: action.destination, path, acceptedAtSceneTime: tx.state.sceneTimeMs, status: 'accepted', travelled: 0, ...(target ? { relatedTarget: { id: target.characterId ?? target.itemId ?? target.targetId, appearanceEpoch: target.appearanceEpoch, resourceRevision: target.resourceRevision, ...(target.spatialRevision !== undefined ? { spatialRevision: target.spatialRevision } : {}) } } : {}) };
+        if(navigationDependencies)movement.chapterDependencies=structuredClone(navigationDependencies);
         emitActor(tx, { ...a, sceneId: action.sceneId, position: origin, spatialRevision: next(a.spatialRevision), planVersion, movement });
         for (const old of Object.values(tx.state.cooperations))
             if (old.phase !== 'locked' && old.ready[actorId]) {
@@ -203,6 +209,7 @@ export function applySpatialAction(tx, actorId, principalKind, request) {
             refuse('STALE_PRECONDITION');
         if (item.lockedBy)
             refuse('RULE_VIOLATION');
+        checkGaolaoItem(tx,actorId,item,action);
         if (action.kind === 'take_item') {
             if (item.location.kind !== 'ground')
                 refuse('RULE_VIOLATION');
@@ -284,7 +291,7 @@ export function applySpatialAction(tx, actorId, principalKind, request) {
         const unique = [...new Map(recipients.map(c => [c.characterId, c])).values()];
         for (const c of unique)
             ensureView(tx, c.characterId);
-        const sourceSeq = next(tx.state.sessionSeq), views = Object.fromEntries(unique.map(c => [c.characterId, { claimRef: opaqueRef(), speakerRef: entityRef(tx.state.views[c.characterId], actorId), speakerName: a.appearanceName, text: action.text, channel: action.channel, sourceSeq }]));
+        const sourceSeq = next(tx.state.sessionSeq), views = Object.fromEntries(unique.map(c => [c.characterId, { claimRef: opaqueRef(), speakerRef: entityRef(tx.state.views[c.characterId], actorId), speakerName: observerName(tx.state,c.characterId,a), text: action.text, channel: action.channel, sourceSeq }]));
         tx.emit('spatial.claim', { views }, { humanCharacterIds: unique.filter(c => c.kind === 'human').map(c => c.characterId), coreNpcCharacterIds: action.channel === 'team' ? [] : unique.filter(c => c.kind !== 'human').map(c => c.characterId), proxyCharacterIds: action.channel === 'team' ? [] : unique.filter(c => c.kind === 'human').map(c => c.characterId) });
         return {};
     }
@@ -298,7 +305,8 @@ export function applySpatialAction(tx, actorId, principalKind, request) {
                 refuse('TARGET_UNAVAILABLE');
             near(tx, a, c);
         }
-        for (const c of recipients)
+        if(isGaolao(tx.state))copyGaolaoEvidence(tx,actorId,observation,recipients.map(c=>c.characterId));
+        else for (const c of recipients)
             observed(tx, c.characterId, observation.statement, observation.fields, observation.category, true, observation.sourceSeq);
         return {};
     }

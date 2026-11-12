@@ -13,7 +13,7 @@ export function parseRecapQuery(parameters) {
   return validateQuery(Object.fromEntries(parameters));
 }
 
-function validateQuery(query) {
+export function validateQuery(query) {
   if (!query || typeof query !== 'object' || Array.isArray(query) || Object.keys(query).some(key => !['throughSeq', 'beforeSeq'].includes(key))) invalid();
   if (!Object.hasOwn(query, 'throughSeq') || typeof query.throughSeq !== 'string' || !decimal.test(query.throughSeq)) invalid();
   if (Object.hasOwn(query, 'beforeSeq') && (typeof query.beforeSeq !== 'string' || !positive.test(query.beforeSeq) || compareDecimal(query.beforeSeq, query.throughSeq) > 0)) invalid();

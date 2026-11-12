@@ -5,7 +5,13 @@ import { increment, audienceFor } from '../game/world.mjs';
 import { authorizedProjection, visibleItem } from '../game/projection.mjs';
 import { RuntimeError } from './errors.mjs';
 import { ownRecord } from '../game/records.mjs';
+import { isSpatial } from '../game/spatial-world.mjs';
 import { refreshGoals, buildContextBasis } from './ai/context.mjs';
+
+async function authorizeRegionDecision(runtime, tx, principal) {
+  await runtime.authorizeInternal(tx, principal);
+  if (isSpatial(tx.state)) throw new RuntimeError('UPGRADE_REQUIRED', '空间章节必须使用授权空间上下文与有限意图入口。');
+}
 
 const currentMode = principal => principal.principalKind === 'core_npc' ? 'CoreNPCControlled' : 'AIProxyControlled';
 const entity = (state, key) => {
@@ -24,7 +30,7 @@ export async function prepareDecision(runtime, handle, options = {}) {
   const principal = runtime.internal(handle);
   if (Object.keys(options).some(key => !['allowedTools', 'readEntityIds', 'observationIds'].includes(key))) throw new RuntimeError('INVALID_MESSAGE', '决策准备包含未知字段。');
   return runtime.locked(principal.sessionId, { kind: 'prepare-decision' }, async tx => {
-    await runtime.authorizeInternal(tx, principal);
+    await authorizeRegionDecision(runtime, tx, principal);
     await runtime.deadline(tx);
     const actor = ownRecord(tx.state.characters, principal.actorId);
     if (tx.state.phase !== 'Running' || actor?.mode !== currentMode(principal)) return new RuntimeError('FORBIDDEN', '该角色当前不能创建新决策。');
@@ -36,7 +42,7 @@ export async function prepareDecision(runtime, handle, options = {}) {
 export async function prepareDecisionContext(runtime, handle) {
   const principal = runtime.internal(handle);
   return runtime.locked(principal.sessionId, { kind: 'prepare-decision-context' }, async tx => {
-    await runtime.authorizeInternal(tx, principal);
+    await authorizeRegionDecision(runtime, tx, principal);
     await runtime.deadline(tx);
     const actor = ownRecord(tx.state.characters, principal.actorId);
     if (tx.state.phase !== 'Running' || actor?.mode !== currentMode(principal)) return new RuntimeError('FORBIDDEN', '该角色当前不能创建新决策。');
@@ -80,7 +86,7 @@ export async function settleDecision(runtime, handle, decisionId, status = 'Canc
   if (!['Rejected', 'Expired', 'Cancelled'].includes(status)) throw new RuntimeError('INVALID_MESSAGE', '决策收束状态无效。');
   const principal = runtime.internal(handle);
   return runtime.locked(principal.sessionId, { kind: 'settle-decision' }, async tx => {
-    await runtime.authorizeInternal(tx, principal);
+    await authorizeRegionDecision(runtime, tx, principal);
     await runtime.deadline(tx);
     const record = await readDecision(tx, principal, decisionId);
     if (record.status === 'Pending') {
@@ -96,7 +102,7 @@ export async function settleDecision(runtime, handle, decisionId, status = 'Canc
 export async function recoverDecisions(runtime, handle) {
   const principal = runtime.internal(handle);
   return runtime.locked(principal.sessionId, { kind: 'recover-decisions' }, async tx => {
-    await runtime.authorizeInternal(tx, principal);
+    await authorizeRegionDecision(runtime, tx, principal);
     await runtime.deadline(tx);
     await tx.client.query("UPDATE decisions SET record=jsonb_set(record,'{status}','\"Expired\"') WHERE session_id=$1 AND actor_id=$2 AND record->>'status'='Pending' AND (record->>'deadlineAt')::timestamptz <= $3", [principal.sessionId, principal.actorId, tx.time]);
     const rows = (await tx.client.query(`SELECT d.record, to_jsonb(a) AS run FROM decisions d
@@ -112,7 +118,7 @@ export async function recoverDecisions(runtime, handle) {
 export async function decisionState(runtime, handle, decisionId) {
   const principal = runtime.internal(handle);
   return runtime.locked(principal.sessionId, { kind: 'decision-state' }, async tx => {
-    await runtime.authorizeInternal(tx, principal);
+    await authorizeRegionDecision(runtime, tx, principal);
     return readDecision(tx, principal, decisionId);
   });
 }
@@ -124,7 +130,7 @@ export async function submitIntent(runtime, handle, decisionId, raw) {
   catch (error) { await settleDecision(runtime, handle, decisionId, 'Rejected'); throw error; }
   const semanticDigest = intentSemanticDigestSync(intent);
   return runtime.confirmOutcome(() => runtime.locked(principal.sessionId, { kind: 'intent' }, async tx => {
-    await runtime.authorizeInternal(tx, principal);
+    await authorizeRegionDecision(runtime, tx, principal);
     const record = await readDecision(tx, principal, decisionId);
     const request = { schemaVersion: 1, sessionId: principal.sessionId, actorId: principal.actorId, clientActionId: `${decisionId}:submit`, controlEpoch: record.controlEpoch, baseSeq: '0' };
     const receipt = await runtime.executeAction(tx, request, semanticDigest, principal, async actor => actor.mode === currentMode(principal), {
@@ -167,7 +173,7 @@ export async function submitFallback(runtime, handle, decisionId) {
   const principal = runtime.internal(handle);
   let semanticDigest;
   return runtime.confirmOutcome(() => runtime.locked(principal.sessionId, { kind: 'fallback' }, async tx => {
-    await runtime.authorizeInternal(tx, principal);
+    await authorizeRegionDecision(runtime, tx, principal);
     const record = await readDecision(tx, principal, decisionId);
     const request = { schemaVersion: 1, sessionId: principal.sessionId, actorId: principal.actorId, clientActionId: `${decisionId}:fallback`, controlEpoch: record.controlEpoch, baseSeq: '0', action: { kind: 'wait' } };
     semanticDigest = actionSemanticDigestSync(request);

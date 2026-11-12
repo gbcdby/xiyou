@@ -9,9 +9,12 @@ import { applyAction, evaluateEnding, endingFacts, RuleError } from '../game/rul
 import { RuntimeError } from './errors.mjs';
 import * as decisions from './decisions.mjs';
 import { ownRecord } from '../game/records.mjs';
+import { readGaolaoRecap } from './gaolao-recap.mjs';
+import { buildSpatialContext } from './ai/spatial-context.mjs';
 import { readRecap } from './recap.mjs';
 import { parseStrictJSON } from '../protocol/index.mjs';
 import { parseSpatial, validateSpatial } from '../protocol/spatial.mjs';
+import { isGaolao } from '../game/gaolao-world.mjs';
 import { isSpatial } from '../game/spatial-world.mjs';
 import * as spatial from './spatial-runtime.mjs';
 import { encodeJsonbText, decodeJsonbText } from './jsonb-text.mjs';
@@ -52,6 +55,7 @@ export class AuthorityRuntime extends EventEmitter {
       await client.query(await readFile(new URL('./migrations/003-ai-output-encoding.sql', import.meta.url), 'utf8'));
       await client.query(await readFile(new URL('./migrations/004-spatial.sql', import.meta.url), 'utf8'));
       await client.query(await readFile(new URL('./migrations/005-spatial-text-encoding.sql', import.meta.url), 'utf8'));
+      await client.query(await readFile(new URL('./migrations/006-spatial-intent-context.sql', import.meta.url), 'utf8'));
       await client.query('COMMIT');
     } catch (error) { await client.query('ROLLBACK').catch(() => {}); throw error; }
     finally { client.release(); }
@@ -318,8 +322,9 @@ export class AuthorityRuntime extends EventEmitter {
     await this.authenticate(token);
     const spatialSession = await this.locked(sessionId, { kind: 'recap-version' }, async tx => {
       await this.access(tx.client, tx.row, token);
-      return isSpatial(tx.state);
+      return isGaolao(tx.state)?'gaolao':isSpatial(tx.state);
     });
+    if(spatialSession==='gaolao')return readGaolaoRecap(this,token,sessionId,query);
     if (spatialSession) throw new RuntimeError('UPGRADE_REQUIRED', '空间历史请使用当前授权快照中的发生时记录。');
     return readRecap(this, token, sessionId, query);
   }
@@ -630,12 +635,12 @@ export class AuthorityRuntime extends EventEmitter {
     return this.locked(principal.sessionId, { kind: 'internal-receipt' }, async tx => {
       await this.authorizeInternal(tx, principal);
       const row = (await tx.client.query('SELECT receipt FROM action_receipts WHERE session_id=$1 AND principal_id=$2 AND client_action_id=$3 AND actor_id=$4', [principal.sessionId, system ? 'system' : principal.principalId, actionId, principal.actorId])).rows[0];
-      return row ? clientReceipt(row.receipt) : null;
+      return row ? row.receipt.schemaVersion===2?row.receipt.publicReceipt:clientReceipt(row.receipt) : null;
     });
   }
   /** 服务端内部模块领取限定 Session/角色的句柄；HTTP/Socket.IO 不暴露此入口。 */
   async bindInternal(sessionId, actorId, principalKind) {
-    if (!['core_npc', 'proxy'].includes(principalKind)) throw new RuntimeError('FORBIDDEN', '内部主体类型无效。');
+    if (!['core_npc', 'scene_role', 'proxy'].includes(principalKind)) throw new RuntimeError('FORBIDDEN', '内部主体类型无效。');
     const result = await this.locked(sessionId, { kind: 'bind-internal' }, async tx => {
       const principal = { sessionId, actorId, principalKind, principalId: `${principalKind}:${actorId}` };
       await this.authorizeInternal(tx, principal);
@@ -649,7 +654,7 @@ export class AuthorityRuntime extends EventEmitter {
     return this.locked(principal.sessionId, { kind: 'internal-observation' }, async tx => {
       await this.authorizeInternal(tx, principal);
       const actor = ownRecord(tx.state.characters, principal.actorId);
-      if (!actor || actor.mode !== (principal.principalKind === 'core_npc' ? 'CoreNPCControlled' : 'AIProxyControlled')) throw new RuntimeError('FORBIDDEN', '该角色当前没有内部控制授权。');
+      if (!actor || actor.mode !== (principal.principalKind !== 'proxy' ? 'CoreNPCControlled' : 'AIProxyControlled') && !(isGaolao(tx.state)&&['Finished','Aborted'].includes(tx.state.phase))) throw new RuntimeError('FORBIDDEN', '该角色当前没有内部控制授权。');
       if (isSpatial(tx.state)) return spatial.snapshotSpatial(tx, principal.actorId, { principalKind: principal.principalKind });
       return {
         sessionId: principal.sessionId, snapshotSeq: tx.state.sessionSeq,
@@ -664,11 +669,14 @@ export class AuthorityRuntime extends EventEmitter {
     if (!principal) throw new RuntimeError('FORBIDDEN', '内部主体身份无效。');
     return principal;
   }
+  async spatialContext(handle) { return buildSpatialContext(await this.observeInternal(handle)); }
   reserveSpatialIntent(handle, intentId, action) { return spatial.reserveSpatialIntent(this, handle, intentId, action); }
+  reserveSpatialFallback(handle,intentId,action,reason) { return spatial.reserveSpatialIntent(this,handle,intentId,action,{mode:'fallback',reason}); }
   submitSpatialIntent(handle, intentId) { return spatial.submitSpatialIntent(this, handle, intentId); }
   async authorizeInternal(tx, principal) {
     const actor = ownRecord(tx.state.characters, principal.actorId);
-    if (principal.sessionId !== tx.row.session_id || !actor || (principal.principalKind === 'core_npc' ? actor.kind !== 'core_npc' : actor.kind !== 'human')) throw new RuntimeError('FORBIDDEN', '内部主体绑定失效。');
+    if (principal.sessionId !== tx.row.session_id || !actor || (principal.principalKind !== 'proxy' ? actor.kind !== 'core_npc' : actor.kind !== 'human')) throw new RuntimeError('FORBIDDEN', '内部主体绑定失效。');
+    if(isGaolao(tx.state)&&principal.principalKind!=='proxy'&&(principal.principalKind==='scene_role' ? actor.actorKind!=='scene_role' : !['persistent_core','chapter_autonomous'].includes(actor.actorKind)))throw new RuntimeError('FORBIDDEN','内部角色职责不符。');
     if (principal.principalKind === 'proxy') {
       const access = await tx.client.query('SELECT 1 FROM session_access a JOIN runtime_users u ON u.user_id=a.user_id WHERE a.session_id=$1 AND a.actor_id=$2 AND a.active AND u.active', [principal.sessionId, principal.actorId]);
       if (!access.rowCount) throw new RuntimeError('FORBIDDEN', '该代理的当前访问权限已经撤销。');
