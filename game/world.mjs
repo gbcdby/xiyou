@@ -1,6 +1,7 @@
 import { assemblePlayers } from '../content/index.mjs';
 import { validateContract } from '../protocol/index.mjs';
 import { ownRecord } from './records.mjs';
+import { emptySpatialWorld, reduceSpatialWorld, isSpatial } from './spatial-world.mjs';
 
 export const increment = value => String(BigInt(value) + 1n);
 export const terminal = state => state.phase === 'Finished' || state.phase === 'Aborted';
@@ -17,6 +18,7 @@ export function audienceFor(state, actorIds, { privateChannel = false } = {}) {
 }
 export const everyone = state => audienceFor(state, Object.keys(state.characters));
 export function emptyWorld(sessionId, content) {
+  if (content.protocolCapability === 'spatial-v2') return emptySpatialWorld(sessionId, content);
   return {
     sessionId, sessionSeq: '0', phase: 'Lobby', contentVersion: content.contentVersion,
     reducerVersion: content.reducerVersion, hostUserId: null, seed: null,
@@ -30,6 +32,7 @@ function character(characterId, name, kind, roles = []) {
 
 /** 固定规则只消费已记录的事件和本局内容快照；不读取时钟、随机数、数据库或模型。 */
 export function reduceWorld(previous, event, content) {
+  if (isSpatial(previous)) return reduceSpatialWorld(previous, event, content);
   if (previous.reducerVersion !== 'world-v1' || content.reducerVersion !== previous.reducerVersion) throw new Error('本服务不能回放该规则版本。');
   validateContract('WorldEvent', event);
   if (event.sessionId !== previous.sessionId || event.sessionSeq !== increment(previous.sessionSeq)) throw new Error('事件不属于本局的连续前缀。');

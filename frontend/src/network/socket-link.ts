@@ -2,8 +2,8 @@ import { io } from 'socket.io-client';
 import type { LinkHandlers, SessionLink } from './link.ts';
 
 /** 禁用库内自动重连，由恢复驱动为每条真实连接分配新的代次。 */
-export const connectSocket = (token: string, handlers: LinkHandlers, origin?: string): SessionLink => {
-  const socket = io(origin, { path: '/socket.io', auth: { token }, autoConnect: false, reconnection: false, timeout: 10000 });
+export const connectSocket = (token: string, handlers: LinkHandlers, origin?: string, capabilities?: string[]): SessionLink => {
+  const socket = io(origin, { path: '/socket.io', auth: { token, ...(capabilities ? { capabilities } : {}) }, autoConnect: false, reconnection: false, timeout: 10000 });
   socket.on('connect', handlers.connected);
   socket.on('disconnect', handlers.disconnected);
   socket.on('connect_error', error => handlers.failed(error.data));
@@ -20,3 +20,5 @@ export const connectSocket = (token: string, handlers: LinkHandlers, origin?: st
     close() { socket.removeAllListeners(); socket.disconnect(); },
   };
 };
+
+export const connectSpatialSocket = (token: string, handlers: LinkHandlers, origin?: string): SessionLink => connectSocket(token, handlers, origin, ['spatial-v2']);

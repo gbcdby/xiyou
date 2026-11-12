@@ -20,9 +20,10 @@ async function availablePort() {
 }
 
 /** 每次检查创建独立的真实 PostgreSQL 集群；失败不退化为内存替身。 */
-export async function startTestPostgres(label = 'runtime') {
+export async function startTestPostgres(label = 'runtime', { outputSubdirectory = 'postgres-tests' } = {}) {
   if (!/^[a-z0-9-]+$/.test(label)) throw new Error('测试名称只能包含小写字母、数字与连字符');
-  const outputRoot = path.join(repository, '.agent-output', 'postgres-tests');
+  if (!/^[a-z0-9-]+$/.test(outputSubdirectory)) throw new Error('测试输出目录名称无效');
+  const outputRoot = path.join(repository, '.agent-output', outputSubdirectory);
   await mkdir(outputRoot, { recursive: true });
   const output = await mkdtemp(path.join(outputRoot, label + '-'));
   const port = await availablePort();

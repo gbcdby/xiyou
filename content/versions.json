@@ -2,5 +2,9 @@
   "trust-repair-fixture-v1": {
     "reducerVersion": "world-v1",
     "sha256": "6ce56fd79c320b23fff565db9f1df5e631ab099d5ffbb91264acafaaedd6972d"
+  },
+  "spatial-graybox-v2": {
+    "reducerVersion": "spatial-world-v2",
+    "sha256": "8bb9f11892d95acb19c57be9b270b582dd319a2252257ec9d11e3a6dc42cf3b8"
   }
 }

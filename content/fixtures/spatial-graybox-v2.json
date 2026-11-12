@@ -1,0 +1,355 @@
+{
+  "schemaVersion": 2,
+  "contentVersion": "spatial-graybox-v2",
+  "protocolCapability": "spatial-v2",
+  "reducerVersion": "spatial-world-v2",
+  "chapterVersion": "graybox-chapter-v1",
+  "mapVersion": "graybox-map-v1",
+  "variantId": "default",
+  "asset_source": "original_team",
+  "timing": {
+    "gracePeriodSeconds": 5,
+    "decisionTimeoutSeconds": 10
+  },
+  "movement": {
+    "speedPerSecond": 100,
+    "interactionRadius": 80,
+    "sightRadius": 500,
+    "hearingRadius": 220
+  },
+  "scenes": [
+    {
+      "sceneId": "gray-yard",
+      "name": "空间验收院落",
+      "width": 600,
+      "height": 400,
+      "unitsPerPixel": 1,
+      "gridSize": 10,
+      "walkableAreas": [
+        {
+          "areaId": "floor",
+          "polygon": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 600,
+              "y": 0
+            },
+            {
+              "x": 600,
+              "y": 400
+            },
+            {
+              "x": 0,
+              "y": 400
+            }
+          ]
+        }
+      ],
+      "obstacles": [
+        {
+          "obstacleId": "wall",
+          "polygon": [
+            {
+              "x": 280,
+              "y": 100
+            },
+            {
+              "x": 300,
+              "y": 100
+            },
+            {
+              "x": 300,
+              "y": 300
+            },
+            {
+              "x": 280,
+              "y": 300
+            }
+          ],
+          "exceptAreas": []
+        },
+        {
+          "obstacleId": "gate",
+          "polygon": [
+            {
+              "x": 490,
+              "y": 0
+            },
+            {
+              "x": 510,
+              "y": 0
+            },
+            {
+              "x": 510,
+              "y": 150
+            },
+            {
+              "x": 490,
+              "y": 150
+            }
+          ],
+          "exceptAreas": [],
+          "disabledWhen": {
+            "targetId": "support",
+            "field": "open",
+            "value": true
+          }
+        }
+      ],
+      "anchors": [
+        {
+          "anchorId": "support-left",
+          "position": {
+            "x": 140,
+            "y": 180
+          },
+          "label": "支架左侧"
+        },
+        {
+          "anchorId": "support-right",
+          "position": {
+            "x": 180,
+            "y": 180
+          },
+          "label": "支架右侧"
+        },
+        {
+          "anchorId": "yard-exit",
+          "position": {
+            "x": 560,
+            "y": 80
+          },
+          "label": "院落出口"
+        }
+      ],
+      "exits": [
+        {
+          "exitId": "to-road",
+          "anchorId": "yard-exit",
+          "destinationSceneId": "gray-road",
+          "destination": {
+            "x": 60,
+            "y": 80
+          },
+          "requirement": {
+            "targetId": "support",
+            "field": "open",
+            "value": true
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "gray-road",
+      "name": "空间验收山路",
+      "width": 600,
+      "height": 400,
+      "unitsPerPixel": 1,
+      "gridSize": 10,
+      "walkableAreas": [
+        {
+          "areaId": "floor",
+          "polygon": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 600,
+              "y": 0
+            },
+            {
+              "x": 600,
+              "y": 400
+            },
+            {
+              "x": 0,
+              "y": 400
+            }
+          ]
+        }
+      ],
+      "obstacles": [],
+      "anchors": [
+        {
+          "anchorId": "road-exit",
+          "position": {
+            "x": 60,
+            "y": 80
+          },
+          "label": "返回院落"
+        }
+      ],
+      "exits": [
+        {
+          "exitId": "to-yard",
+          "anchorId": "road-exit",
+          "destinationSceneId": "gray-yard",
+          "destination": {
+            "x": 550,
+            "y": 80
+          },
+          "requirement": null
+        }
+      ]
+    }
+  ],
+  "spawns": [
+    {
+      "sceneId": "gray-yard",
+      "position": {
+        "x": 100,
+        "y": 100
+      }
+    },
+    {
+      "sceneId": "gray-yard",
+      "position": {
+        "x": 120,
+        "y": 100
+      }
+    },
+    {
+      "sceneId": "gray-yard",
+      "position": {
+        "x": 140,
+        "y": 100
+      }
+    },
+    {
+      "sceneId": "gray-yard",
+      "position": {
+        "x": 160,
+        "y": 100
+      }
+    },
+    {
+      "sceneId": "gray-yard",
+      "position": {
+        "x": 180,
+        "y": 100
+      }
+    }
+  ],
+  "npcs": [
+    {
+      "characterId": "gray-guide",
+      "name": "引路人",
+      "actorKind": "scene_role",
+      "sceneId": "gray-yard",
+      "position": {
+        "x": 100,
+        "y": 200
+      }
+    }
+  ],
+  "items": [
+    {
+      "itemId": "public-tool",
+      "name": "公共支架",
+      "sceneId": "gray-yard",
+      "position": {
+        "x": 140,
+        "y": 110
+      },
+      "transferable": true,
+      "publicBorrowable": true,
+      "fields": [
+        {
+          "key": "note",
+          "label": "用途说明",
+          "value": "借出前登记为公共工具，可由近处同伴从离线托管者领回。"
+        }
+      ]
+    },
+    {
+      "itemId": "private-letter",
+      "name": "私人信件",
+      "sceneId": "gray-yard",
+      "position": {
+        "x": 150,
+        "y": 110
+      },
+      "transferable": true,
+      "publicBorrowable": false,
+      "fields": [
+        {
+          "key": "note",
+          "label": "用途说明",
+          "value": "私人包裹，不允许离线领回。"
+        }
+      ]
+    }
+  ],
+  "targets": [
+    {
+      "targetId": "support",
+      "name": "待固定支架",
+      "sceneId": "gray-yard",
+      "position": {
+        "x": 160,
+        "y": 200
+      },
+      "fields": [
+        {
+          "key": "locked",
+          "label": "支架锁定",
+          "value": false
+        },
+        {
+          "key": "open",
+          "label": "通路开放",
+          "value": false
+        }
+      ],
+      "operationIds": [
+        "lock-support"
+      ]
+    }
+  ],
+  "operations": [
+    {
+      "operationId": "lock-support",
+      "targetId": "support",
+      "kind": "cooperation",
+      "requiredCount": 2,
+      "anchorIds": [
+        "support-left",
+        "support-right"
+      ],
+      "requiredItemIds": [
+        "public-tool"
+      ],
+      "consumedItemIds": [],
+      "requiredFields": [
+        {
+          "key": "locked",
+          "label": "支架锁定",
+          "value": false
+        }
+      ],
+      "effectFields": [
+        {
+          "key": "locked",
+          "label": "支架锁定",
+          "value": true
+        },
+        {
+          "key": "open",
+          "label": "通路开放",
+          "value": true
+        }
+      ]
+    }
+  ],
+  "objectives": [
+    {
+      "objectiveId": "gray-space",
+      "label": "走动、交接公共支架并合作开放通路",
+      "status": "active"
+    }
+  ]
+}

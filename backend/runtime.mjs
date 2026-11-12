@@ -10,12 +10,17 @@ import { RuntimeError } from './errors.mjs';
 import * as decisions from './decisions.mjs';
 import { ownRecord } from '../game/records.mjs';
 import { readRecap } from './recap.mjs';
+import { parseStrictJSON } from '../protocol/index.mjs';
+import { parseSpatial, validateSpatial } from '../protocol/spatial.mjs';
+import { isSpatial } from '../game/spatial-world.mjs';
+import * as spatial from './spatial-runtime.mjs';
 
 const digest = value => createHash('sha256').update(typeof value === 'string' ? value : canonicalize(value)).digest('hex');
 const id = prefix => `${prefix}-${randomUUID()}`;
 const validId = value => typeof value === 'string' && /^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}(?![\s\S])/.test(value);
 const requireId = value => { if (!validId(value)) throw new RuntimeError('INVALID_MESSAGE', '标识格式无效。'); };
 export function clientReceipt(receipt) {
+  if (receipt.schemaVersion === 2) return validateSpatial('ReceiptV2', receipt.publicReceipt);
   const { key, ...fields } = receipt;
   return validateContract('ClientReceipt', { ...fields, sessionId: key.sessionId, clientActionId: key.clientActionId });
 }
@@ -23,6 +28,7 @@ export function clientReceipt(receipt) {
 export async function createRuntime(options) {
   const runtime = new AuthorityRuntime(options);
   await runtime.migrate();
+  await spatial.recoverSpatial(runtime);
   return runtime;
 }
 
@@ -43,6 +49,7 @@ export class AuthorityRuntime extends EventEmitter {
       await client.query(await readFile(new URL('./migrations/001-authority.sql', import.meta.url), 'utf8'));
       await client.query(await readFile(new URL('./migrations/002-ai.sql', import.meta.url), 'utf8'));
       await client.query(await readFile(new URL('./migrations/003-ai-output-encoding.sql', import.meta.url), 'utf8'));
+      await client.query(await readFile(new URL('./migrations/004-spatial.sql', import.meta.url), 'utf8'));
       await client.query('COMMIT');
     } catch (error) { await client.query('ROLLBACK').catch(() => {}); throw error; }
     finally { client.release(); }
@@ -83,7 +90,7 @@ export class AuthorityRuntime extends EventEmitter {
   buildTransaction(client, row, cause) {
     const runtime = this;
     const tx = {
-      client, row, content: row.content_snapshot, state: structuredClone(row.state), events: [], invalidated: new Map(), cause,
+      client, row, content: row.content_snapshot, state: structuredClone(row.state), events: [], invalidated: new Map(), afterCommit: [], cause,
       time: new Date(Math.max(runtime.now(), new Date(row.logical_time).getTime())).toISOString(), clockTouched: false,
       emit(kind, payload, audience = everyone(tx.state), eventCause = tx.cause) {
         if (kind === 'control.changed') {
@@ -94,7 +101,8 @@ export class AuthorityRuntime extends EventEmitter {
           });
         }
         const sessionSeq = increment(tx.state.sessionSeq);
-        const event = validateContract('WorldEvent', { schemaVersion: 1, sessionId: row.session_id, sessionSeq, eventId: `${row.session_id}:E${sessionSeq}`, causedBy: eventCause, serverTime: tx.time, audience, kind, payload });
+        const candidate = { schemaVersion: isSpatial(tx.state) ? 2 : 1, sessionId: row.session_id, sessionSeq, eventId: `${row.session_id}:E${sessionSeq}`, causedBy: eventCause ?? { principalId: 'system', actionId: 'spatial-view' }, serverTime: tx.time, audience, kind, payload };
+        const event = isSpatial(tx.state) ? candidate : validateContract('WorldEvent', candidate);
         tx.state = reduceWorld(tx.state, event, tx.content); tx.events.push(event); return event;
       },
     };
@@ -125,6 +133,7 @@ export class AuthorityRuntime extends EventEmitter {
       await this.persist(tx);
       await this.hooks.beforeCommit?.({ command: command.kind, sessionId, events: tx.events });
       committing = true; await client.query('COMMIT'); committed = true;
+      for (const effect of tx.afterCommit) effect();
       await this.hooks.afterCommit?.({ command: command.kind, sessionId, events: tx.events });
       await this.applyControlEffects(tx);
       if (tx.events.length) this.emit('commit', { sessionId, events: tx.events });
@@ -168,6 +177,7 @@ export class AuthorityRuntime extends EventEmitter {
     } catch (error) { await tx.client.query('ROLLBACK').catch(() => {}); throw error; }
   }
   async deadline(tx) {
+    if (isSpatial(tx.state)) return spatial.advanceSpatialTime(tx);
     tx.clockTouched = true;
     if (tx.state.phase === 'Running' && tx.time >= tx.state.deadlineAt) {
       tx.emit('session.finished', { endingCode: tx.content.endingPolicy.codes.unresolved, facts: endingFacts(tx.state, tx.content) }, everyone(tx.state), { principalId: 'system', actionId: 'deadline' });
@@ -185,12 +195,13 @@ export class AuthorityRuntime extends EventEmitter {
     await tx.client.query('INSERT INTO command_nonces(session_id,principal_id,nonce,semantic_digest,response) VALUES($1,$2,$3,$4,$5)', [tx.row.session_id, principalId, nonce, digest(semantic), response]);
     return response;
   }
-  async create(token, { nonce, contentVersion }) {
+  async create(token, { nonce, contentVersion, capabilities = [] }) {
     requireId(nonce);
     await this.authenticate(token);
     let content;
     try { content = await loadContent(contentVersion); }
     catch { throw new RuntimeError('INVALID_MESSAGE', '内容版本当前不可用。'); }
+    if (content.protocolCapability === 'spatial-v2') spatial.requireSpatialCapability(capabilities);
     const client = await this.pool.connect();
     try {
       await client.query('BEGIN');
@@ -220,12 +231,13 @@ export class AuthorityRuntime extends EventEmitter {
   }
   async listSessions(token) {
     const user = await this.authenticate(token);
-    const rows = (await this.pool.query("SELECT session_id,name,jsonb_array_length(state->'members') AS player_count,state->>'phase' AS phase FROM sessions s WHERE NOT archived AND (state->>'phase'='Lobby' OR EXISTS (SELECT 1 FROM session_access a WHERE a.session_id=s.session_id AND a.user_id=$1 AND a.active)) ORDER BY session_id", [user.userId])).rows;
-    return rows.map(row => ({ sessionId: row.session_id, name: row.name, playerCount: row.player_count, phase: row.phase }));
+    const rows = (await this.pool.query("SELECT session_id,name,jsonb_array_length(state->'members') AS player_count,state->>'phase' AS phase,state->>'protocolCapability' AS capability,state->>'contentVersion' AS content_version FROM sessions s WHERE NOT archived AND (state->>'phase'='Lobby' OR EXISTS (SELECT 1 FROM session_access a WHERE a.session_id=s.session_id AND a.user_id=$1 AND a.active)) ORDER BY session_id", [user.userId])).rows;
+    return rows.map(row => ({ sessionId: row.session_id, name: row.name, playerCount: row.player_count, phase: row.phase, ...(row.capability === 'spatial-v2' ? { protocolCapability: 'spatial-v2', contentVersion: row.content_version, requiredCapabilities: ['spatial-v2'] } : {}) }));
   }
-  async join(token, sessionId, { nonce }) {
+  async join(token, sessionId, { nonce, capabilities = [] }) {
     await this.authenticate(token);
     return this.locked(sessionId, { kind: 'join' }, async tx => {
+      if (isSpatial(tx.state)) spatial.requireSpatialCapability(capabilities);
       const user = await this.authenticate(token, tx.client);
       if (tx.state.members.some(m => m.userId === user.userId)) await this.access(tx.client, tx.row, token);
       tx.cause = { principalId: user.principalId, actionId: nonce };
@@ -236,13 +248,14 @@ export class AuthorityRuntime extends EventEmitter {
       const member = tx.state.members.find(m => m.userId === user.userId);
       if (member) {
         await this.access(tx.client, tx.row, token);
-        return this.saveNonce(tx, user.principalId, nonce, semantic, { sessionId, actorId: member.characterId });
+        return this.saveNonce(tx, user.principalId, nonce, semantic, isSpatial(tx.state) ? { sessionId } : { sessionId, actorId: member.characterId });
       }
       if (tx.state.phase !== 'Lobby' || tx.state.members.length >= 5) return new RuntimeError('FORBIDDEN', '本局当前不能加入新成员。');
       const actorId = id('C');
       tx.emit('session.member_joined', { userId: user.userId, characterId: actorId, name: user.name }, { ...everyone(tx.state), humanCharacterIds: [...everyone(tx.state).humanCharacterIds, actorId], proxyCharacterIds: [...everyone(tx.state).proxyCharacterIds, actorId] });
+      if (isSpatial(tx.state)) spatial.refreshSpatialViews(tx);
       await tx.client.query('INSERT INTO session_access(session_id,user_id,actor_id) VALUES($1,$2,$3)', [sessionId, user.userId, actorId]);
-      return this.saveNonce(tx, user.principalId, nonce, semantic, { sessionId, actorId });
+      return this.saveNonce(tx, user.principalId, nonce, semantic, isSpatial(tx.state) ? { sessionId } : { sessionId, actorId });
     });
   }
   async start(token, sessionId, { nonce }) {
@@ -254,6 +267,7 @@ export class AuthorityRuntime extends EventEmitter {
       const prior = await this.knownNonce(tx, user.principalId, nonce, semantic); if (prior) return prior;
       await this.deadline(tx);
       if (user.userId !== tx.state.hostUserId || tx.state.phase !== 'Lobby' || tx.state.members.length < 2) return new RuntimeError('FORBIDDEN', '仅房主可在二至五名成员就绪后开始。');
+      if (isSpatial(tx.state)) { await spatial.startSpatial(tx); return this.saveNonce(tx, user.principalId, nonce, semantic, { sessionId }); }
       const deadlineAt = new Date(Date.parse(tx.time) + tx.content.timing.durationSeconds * 1000).toISOString();
       tx.emit('session.started', { deadlineAt, characterIds: [...tx.state.members.map(m => m.characterId), ...tx.content.npcs.map(n => n.characterId)] });
       for (const actor of Object.values(tx.state.characters)) {
@@ -282,20 +296,40 @@ export class AuthorityRuntime extends EventEmitter {
       return this.saveNonce(tx, user.principalId, nonce, semantic, { sessionId });
     });
   }
-  async snapshot(token, sessionId) {
+  async snapshot(token, sessionId, capabilities = []) {
     await this.authenticate(token);
     return this.locked(sessionId, { kind: 'snapshot' }, async tx => {
       const user = await this.access(tx.client, tx.row, token);
+      if (isSpatial(tx.state)) { spatial.requireSpatialCapability(capabilities); await spatial.advanceSpatialTime(tx); return spatial.snapshotSpatial(tx, user.actorId); }
       return validateContract('AuthorizedSnapshot', { schemaVersion: 1, type: 'world.snapshot', sessionId, viewId: `${user.actorId}:http-v1`, snapshotSeq: tx.state.sessionSeq, projection: authorizedProjection(tx.state, tx.content, user.actorId) });
     });
   }
-  recap(token, sessionId, query) { return readRecap(this, token, sessionId, query); }
+  async recap(token, sessionId, query) {
+    await this.authenticate(token);
+    const spatialSession = await this.locked(sessionId, { kind: 'recap-version' }, async tx => {
+      await this.access(tx.client, tx.row, token);
+      return isSpatial(tx.state);
+    });
+    if (spatialSession) throw new RuntimeError('UPGRADE_REQUIRED', '空间历史请使用当前授权快照中的发生时记录。');
+    return readRecap(this, token, sessionId, query);
+  }
+  connectionView(handle) { return this.#views.get(handle.connectionId); }
+  setConnectionView(handle, view) { this.retireView(this.#views.get(handle.connectionId)); this.#views.set(handle.connectionId, view); }
   async subscribe(handle, sessionId) {
     const connection = this.connection(handle);
     await this.authenticate(connection.token);
     return this.locked(sessionId, { kind: 'subscribe' }, async tx => {
       const user = await this.access(tx.client, tx.row, connection.token);
       if (!await this.liveConnection(tx, handle)) throw new RuntimeError('UNAUTHENTICATED', '当前连接已经失效。');
+      if (isSpatial(tx.state)) {
+        spatial.requireSpatialCapability(connection.capabilities); await spatial.advanceSpatialTime(tx);
+        const current = tx.state.characters[user.actorId];
+        // 另一条只读连接不能借订阅撤销当前控制者的引用；真正接管才更换控制视图。
+        const heldElsewhere = current.mode === 'HumanControlled' && current.activeConnectionId !== handle.connectionId;
+        const snapshot = await spatial.snapshotSpatial(tx, user.actorId, { connectionId: handle.connectionId, rotate: !heldElsewhere });
+        tx.afterCommit.push(() => this.setConnectionView(handle, { active: true, sessionId, actorId: user.actorId, userId: user.userId, viewId: snapshot.viewId, cursor: snapshot.snapshotSeq, handle, ownedEpoch: current.activeConnectionId === handle.connectionId ? current.controlEpoch : null, schemaVersion: 2 }));
+        return snapshot;
+      }
       const viewId = id('view');
       const actor = ownRecord(tx.state.characters, user.actorId);
       this.retireView(this.#views.get(handle.connectionId));
@@ -312,11 +346,13 @@ export class AuthorityRuntime extends EventEmitter {
     return state;
   }
   async sync(handle, raw) {
+    if (parseStrictJSON(raw)?.schemaVersion === 2) return spatial.syncSpatial(this, handle, parseSpatial('SyncRequestV2', raw));
     const request = parseContract('SyncRequest', raw);
     const connection = this.connection(handle);
     await this.authenticate(connection.token);
     return this.locked(request.sessionId, { kind: 'sync' }, async tx => {
       const user = await this.access(tx.client, tx.row, connection.token);
+      if (isSpatial(tx.state)) throw new RuntimeError('UPGRADE_REQUIRED', '此章节需要空间同步协议。');
       const view = this.#views.get(handle.connectionId);
       if (!view?.active || view.sessionId !== request.sessionId || view.viewId !== request.viewId || view.actorId !== user.actorId || BigInt(request.cursor) > BigInt(tx.state.sessionSeq)) throw new RuntimeError('RESYNC_REQUIRED', '请重新取得当前连接的授权快照。');
       const current = ownRecord(tx.state.characters, user.actorId);
@@ -335,18 +371,18 @@ export class AuthorityRuntime extends EventEmitter {
     });
   }
   /** 发布器只读取已提交前缀；发送失败保留 Pending，客户端游标始终由客户端确认。 */
-  async publishPending(deliver = async () => {}) {
+  async publishPending(deliver = async () => {}, { capability = null } = {}) {
     if (this.#publishing) return;
     this.#publishing = true;
     try {
-      const pending = (await this.pool.query("SELECT session_id,through_seq FROM outbox WHERE status='Pending' ORDER BY session_id,through_seq")).rows;
+      const pending = (await this.pool.query("SELECT o.session_id,o.through_seq FROM outbox o JOIN sessions s ON s.session_id=o.session_id WHERE o.status='Pending' AND ($1::text IS NULL OR s.state->>'protocolCapability'=$1) ORDER BY o.session_id,o.through_seq", [capability])).rows;
       for (const record of pending) {
         for (const view of this.#views.values()) {
           if (!view.active || view.sessionId !== record.session_id) continue;
           try {
             for (;;) {
               if (!view.active) break;
-              const batch = await this.sync(view.handle, JSON.stringify({ schemaVersion: 1, type: 'sync.request', sessionId: view.sessionId, viewId: view.viewId, cursor: view.cursor }));
+              const batch = await this.sync(view.handle, JSON.stringify({ schemaVersion: view.schemaVersion ?? 1, type: 'sync.request', sessionId: view.sessionId, viewId: view.viewId, cursor: view.cursor }));
               if (batch.throughSeq === view.cursor) break;
               if (!view.active) break;
               await deliver(view.handle.connectionId, batch);
@@ -366,11 +402,11 @@ export class AuthorityRuntime extends EventEmitter {
     } finally { this.#publishing = false; }
   }
   /** 仅由可信传输适配器在真实连接建立后调用；请求正文不能创建此句柄。 */
-  async openConnection(token) {
+  async openConnection(token, capabilities = []) {
     const user = await this.authenticate(token);
     const handle = Object.freeze({ connectionId: id('connection') });
     await this.pool.query('INSERT INTO connections(connection_id,user_id,lease_until) VALUES($1,$2,$3)', [handle.connectionId, user.userId, new Date(this.now() + 60_000).toISOString()]);
-    this.#connections.set(handle, { ...user, token, grants: new Map() });
+    this.#connections.set(handle, { ...user, token, capabilities, grants: new Map() });
     this.#handles.set(handle.connectionId, handle);
     return handle;
   }
@@ -385,11 +421,13 @@ export class AuthorityRuntime extends EventEmitter {
     return result.rowCount > 0;
   }
   async control(handle, raw) {
+    if (parseStrictJSON(raw)?.schemaVersion === 2) return spatial.controlSpatial(this, handle, parseSpatial('ControlRequestV2', raw));
     const request = parseContract('ControlRequest', raw);
     const connection = this.connection(handle);
     await this.authenticate(connection.token);
     const result = await this.locked(request.sessionId, { kind: request.type }, async tx => {
       const user = await this.access(tx.client, tx.row, connection.token);
+      if (isSpatial(tx.state)) throw new RuntimeError('UPGRADE_REQUIRED', '此章节需要空间控制协议。');
       if (user.actorId !== request.actorId) throw new RuntimeError('FORBIDDEN', '当前账号没有该角色的控制权限。');
       const semantic = { ...request };
       const prior = await this.knownNonce(tx, user.principalId, request.nonce, semantic); if (prior) return prior;
@@ -424,6 +462,7 @@ export class AuthorityRuntime extends EventEmitter {
         if (!terminal(tx.state) && actor?.mode === 'HumanControlled' && actor.activeConnectionId === handle.connectionId && actor.controlEpoch === epoch) {
           tx.emit('control.changed', { actorId: actor.characterId, mode: 'GracePeriod', controlEpoch: increment(actor.controlEpoch), activeConnectionId: null, graceDeadlineAt: new Date(Date.parse(tx.time) + tx.content.timing.gracePeriodSeconds * 1000).toISOString() });
         }
+        if (isSpatial(tx.state)) await spatial.advanceSpatialTime(tx);
       }).catch(error => { if (error.code !== 'SESSION_GONE') throw error; });
     }
     if (!grants.length) await this.pool.query('UPDATE connections SET active=false WHERE connection_id=$1', [handle.connectionId]);
@@ -469,12 +508,14 @@ export class AuthorityRuntime extends EventEmitter {
     });
   }
   async submit(handle, raw) {
+    if (parseStrictJSON(raw)?.schemaVersion === 2) return spatial.submitSpatial(this, handle, raw);
     const request = parseClientAction(raw);
     const semanticDigest = actionSemanticDigestSync(request);
     const connection = this.connection(handle);
     await this.authenticate(connection.token);
     return this.confirmOutcome(() => this.locked(request.sessionId, { kind: 'action' }, async tx => {
       const user = await this.access(tx.client, tx.row, connection.token);
+      if (isSpatial(tx.state)) throw new RuntimeError('UPGRADE_REQUIRED', '此章节需要空间动作协议。');
       if (request.actorId !== user.actorId) throw new RuntimeError('FORBIDDEN', '当前账号没有该角色的结果读取权限。');
       return this.executeAction(tx, request, semanticDigest, { ...user, principalKind: 'human' }, async actor => actor.mode === 'HumanControlled' && actor.activeConnectionId === handle.connectionId && await this.liveConnection(tx, handle));
     }), () => this.receipt(connection.token, request.sessionId, request.clientActionId), () => semanticDigest);
@@ -522,6 +563,7 @@ export class AuthorityRuntime extends EventEmitter {
       await this.authorizeInternal(tx, principal);
       const actor = ownRecord(tx.state.characters, principal.actorId);
       if (!actor || actor.mode !== (principal.principalKind === 'core_npc' ? 'CoreNPCControlled' : 'AIProxyControlled')) throw new RuntimeError('FORBIDDEN', '该角色当前没有内部控制授权。');
+      if (isSpatial(tx.state)) return spatial.snapshotSpatial(tx, principal.actorId, { principalKind: principal.principalKind });
       return {
         sessionId: principal.sessionId, snapshotSeq: tx.state.sessionSeq,
         projection: authorizedProjection(tx.state, tx.content, principal.actorId, { principalKind: principal.principalKind }),
@@ -535,6 +577,8 @@ export class AuthorityRuntime extends EventEmitter {
     if (!principal) throw new RuntimeError('FORBIDDEN', '内部主体身份无效。');
     return principal;
   }
+  reserveSpatialIntent(handle, intentId, action) { return spatial.reserveSpatialIntent(this, handle, intentId, action); }
+  submitSpatialIntent(handle, intentId) { return spatial.submitSpatialIntent(this, handle, intentId); }
   async authorizeInternal(tx, principal) {
     const actor = ownRecord(tx.state.characters, principal.actorId);
     if (principal.sessionId !== tx.row.session_id || !actor || (principal.principalKind === 'core_npc' ? actor.kind !== 'core_npc' : actor.kind !== 'human')) throw new RuntimeError('FORBIDDEN', '内部主体绑定失效。');

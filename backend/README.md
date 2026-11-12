@@ -1,5 +1,7 @@
 # PostgreSQL 权威运行层
 
+ADV-001 的新增空间会话入口、200ms 权威检查点、恢复围栏、能力协商和客户端调用见 [spatial-v2 接入](spatial.md)。以下旧切片行为继续适用于 `region-v1`；两个版本共用 Session 事务、事件、Receipt 与 outbox，分别使用各自 reducer 和授权投影。
+
 本目录实现 [Ticket #6](https://github.com/gbcdby/xiyou/issues/6) 的服务端基础，依据固定 Spec `6c2a0b9f6d137ad5fbd41721659404333ad8e16d` 的 [M0 协议](../docs/specs/m0-protocol.md)、[玩法契约](../docs/specs/vertical-slice-gameplay.md)和[验证计划](../docs/specs/vertical-slice-verification.md)。
 
 Ticket #6 的原作者修正结果见 [修正结果](evidence/review-fix-r1/implementation-result.md)及[修正自查清单](evidence/review-fix-r1/self-check.json)，保留其原作者 `FIX_REPORTED` 身份；初始候选 `e32c579` 的 [实现结果](evidence/implementation-result.md)及[自查清单](evidence/self-check.json)同样保留为历史证据。后续独立审查与释放由总控记录。
