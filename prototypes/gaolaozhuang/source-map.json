@@ -1,0 +1,106 @@
+{
+  "scope": "xiyou #25，账本禁用原因微修后的托管运行源码与 GitHub 文本源码映射；不表示浏览器全链路复验或部署完成。",
+  "baseline_content_digest_sha256": "efb95d8b43cf8ed310cd66a376e5f7233e825da24003692299995122a3518c28",
+  "digest_algorithm": "按相对路径排序，逐项连接 UTF-8 路径 + NUL + 文件完整字节 + NUL，再取 SHA-256。运行摘要使用去除 dist/ 或 web/ 后的六个文件名。",
+  "runtime_digest_sha256": "60169354dba140a2e5cf9d3b01dbaaf68cf0d7fd5264b3d8972e39e6aa98cb78",
+  "runtime_files": [
+    {
+      "site_path": "site/dist/app.mjs",
+      "github_path": "prototypes/gaolaozhuang/web/app.mjs",
+      "sha256": "cfb4918f53d4d875bf7578d04336c7374d2a096fc795624e416135e3d49fc144",
+      "bytes": 16443,
+      "relation": "字节完全一致"
+    },
+    {
+      "site_path": "site/dist/engine.mjs",
+      "github_path": "prototypes/gaolaozhuang/web/engine.mjs",
+      "sha256": "6f3eee96679d21fdcb69d54c97886ec04d6058865038645e9501a4d607aa96a7",
+      "bytes": 31234,
+      "relation": "字节完全一致"
+    },
+    {
+      "site_path": "site/dist/index.html",
+      "github_path": "prototypes/gaolaozhuang/web/index.html",
+      "sha256": "affa70618fe1150ab3892d29500f39201504a27bdad1deed829d91c61efe80b7",
+      "bytes": 7394,
+      "relation": "字节完全一致"
+    },
+    {
+      "site_path": "site/dist/navigation.mjs",
+      "github_path": "prototypes/gaolaozhuang/web/navigation.mjs",
+      "sha256": "3096b8e57db0e3c2ebd9c7c42fd4bd32957d9f28b7063da5daeac47094dc7296",
+      "bytes": 2652,
+      "relation": "字节完全一致"
+    },
+    {
+      "site_path": "site/dist/style.css",
+      "github_path": "prototypes/gaolaozhuang/web/style.css",
+      "sha256": "8f155e88ffb401a04a611041b3e2667d591741ff5793950103848a1ddd0d27b0",
+      "bytes": 19292,
+      "relation": "字节完全一致"
+    },
+    {
+      "site_path": "site/dist/world.mjs",
+      "github_path": "prototypes/gaolaozhuang/web/world.mjs",
+      "sha256": "abfb030849eb869368434f9226c342f8f9958e2eab895719640eebe3ac6a3394",
+      "bytes": 12640,
+      "relation": "字节完全一致"
+    }
+  ],
+  "test_files": [
+    {
+      "site_path": "site/tests/engine.test.mjs",
+      "github_path": "prototypes/gaolaozhuang/tests/engine.test.mjs",
+      "site_sha256": "37fb952827703a20c8d29f59df2345753240fb6c7d2db0345992bf6c098365fe",
+      "github_sha256": "0cc9750ee8921181483ebdd669b437835e0bf0af01f8a68d378f12904ef5b445",
+      "relation": "仅将导入前缀 ../dist/ 替换为 ../web/；断言、用例和其余文本相同"
+    },
+    {
+      "site_path": "site/tests/navigation.test.mjs",
+      "github_path": "prototypes/gaolaozhuang/tests/navigation.test.mjs",
+      "site_sha256": "e4991c92e4396c166d68e7fb5d435ae75bb4f8af95760f6f61787dcef9d77469",
+      "github_sha256": "687a35f29374f9176da5ac1e364097b834a41e23c9fba4a57faadfac64da5759",
+      "relation": "仅将导入前缀 ../dist/ 替换为 ../web/；断言、用例和其余文本相同"
+    },
+    {
+      "site_path": "site/tests/world.test.mjs",
+      "github_path": "prototypes/gaolaozhuang/tests/world.test.mjs",
+      "site_sha256": "e847bb355008c19852f9c0a3a2dee3ecd5428f3d03e84afe4c05389852415c01",
+      "github_sha256": "ba042dd6a0c4a1394ddc479d227f880d23ad037607055f0b21c6b24effd7009d",
+      "relation": "仅将导入前缀 ../dist/ 替换为 ../web/；断言、用例和其余文本相同"
+    }
+  ],
+  "external_assets": [
+    {
+      "site_path": "site/dist/assets/courtyard.png",
+      "restore_path": "prototypes/gaolaozhuang/web/assets/courtyard.png",
+      "sha256": "f5df307eaea03188e823a279cb3df3a65b1b6a7931c329294cd6b79e4c0d510a",
+      "bytes": 3423640,
+      "github_included": false,
+      "download_manifest": "assets.json"
+    }
+  ],
+  "github_exclusions": [
+    "dist/",
+    "evidence/",
+    ".agent-output/",
+    ".git/",
+    ".openai/hosting.json",
+    "图片二进制",
+    "运行日志"
+  ],
+  "metadata_changes": [
+    "README.md：说明 web/ 手写源码、素材恢复及本地启动。",
+    "assets.json：记录 web/ 恢复路径、真实持久素材包入口、ZIP 与 PNG 摘要及访问方式。",
+    "source-map.json：登记运行源码字节对应及外置素材。"
+  ],
+  "unchanged_configuration": [
+    "package.json"
+  ],
+  "evidence_reference": {
+    "url": "https://chatgpt.com/library?file_id=libfile_fde3_f-dcb5d7ae28c0819193c12df819d1c135_66aec10a983c8191a09f0deb89988b42&account_id=personal",
+    "archive_sha256": "b3de87da6d7ea5a5c190c67dc6cd22950c7d9f37ca491ca09b88d3faae2bf814",
+    "scope": "原基线独立浏览器与测试检查，以及微修/源码映射作者自查；最终完整浏览器流程未重跑。"
+  },
+  "documentation_state": "本快照冻结时，实际试玩与 draft PR 地址由 GitHub #25 后续交付记录补充。"
+}

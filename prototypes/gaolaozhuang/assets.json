@@ -1,0 +1,46 @@
+{
+  "chapter": "高老庄",
+  "purpose": "xiyou #25 独立交互原型",
+  "assets": [
+    {
+      "path": "web/assets/courtyard.png",
+      "asset_source": "original_team",
+      "creation_method": "image_gen.imagegen 原创生成，以本项目此前的概念图作风格和材质参考",
+      "role": "无人物、无 UI 的运行时场景底图",
+      "width": 1586,
+      "height": 992,
+      "bytes": 3423640,
+      "sha256": "f5df307eaea03188e823a279cb3df3a65b1b6a7931c329294cd6b79e4c0d510a",
+      "post_processing": "未编辑图片，直接保留生成字节；运行时映射到 1600 × 1000 逻辑坐标",
+      "art_direction": "原创江南庄院，灰瓦粉墙、明亮浅色院地、墨线骨架与通透淡彩。中下部开阔，石桌与低花圃构成两处中央障碍。",
+      "source_limit": "使用项目现行美术规范与本次概念图；未声称核对缺失的历史 72 张参考原图。",
+      "runtime_note": "底图敞开的门洞由独立门障层覆盖；doorOpen 成立后移除门障。碰撞和互动锚点按可见场景校准。",
+      "distribution": "external_archive",
+      "external_download_url": "https://chatgpt.com/library?file_id=libfile_fde3_f-fc9468445c1481919976698091b2e074_66aec10a983c8191a09f0deb89988b42&account_id=personal",
+      "download_status": "已保存；授权账号下载 ZIP 后解压恢复",
+      "archive_member": "courtyard.png",
+      "restore_path": "web/assets/courtyard.png",
+      "download_note": "授权账号文件入口；先下载 ZIP，再解压根目录的 courtyard.png 到 restore_path，不将入口 URL 当作 PNG/CDN 直链。",
+      "external_archive_name": "xiyou-gaolao-courtyard-asset-20261112.zip",
+      "external_archive_sha256": "eed0546456090563b7bd876632bcdc49152d9bf8bd7aef3d209c639076acda49",
+      "external_entry_type": "authenticated_library_file"
+    },
+    {
+      "path": "web/world.mjs",
+      "asset_source": "original_team",
+      "creation_method": "Canvas 原创程序绘制",
+      "role": "可替换的原型人物、木料、账本、门障、支架和交互提示；非正式角色动画"
+    },
+    {
+      "path": "web/app.mjs",
+      "asset_source": "original_team",
+      "creation_method": "Web Audio 正弦波合成，无外部音频采样",
+      "role": "默认关闭的轻声提示与简单音阶"
+    },
+    {
+      "asset_source": "classical_public_domain_reference",
+      "creation_method": "以古典《西游记》高老庄人物关系为基础的原创短流程与对白",
+      "role": "本地原型剧情；不复刻现代改编的对白、音乐、造型或 UI"
+    }
+  ]
+}

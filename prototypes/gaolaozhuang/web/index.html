@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#edf0e7">
+  <meta name="description" content="走进水墨淡彩的高老庄，与同伴准备支架、护送翠兰，带着线索赴一场会面。无战斗 H5 交互原型。">
+  <title>高老庄 · 风来有信</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <main id="app" aria-label="高老庄交互原型">
+    <div class="world-shell" id="world-shell">
+      <canvas id="world" aria-label="高老庄庭院地图，点击地面行走，点击人物或物件靠近互动" tabindex="0"></canvas>
+      <div class="scene-vignette" aria-hidden="true"></div>
+      <div class="scene-location"><span class="location-line"></span><span id="location-name">高家前庭</span><span class="weather">晴 · 风过竹梢</span></div>
+    </div>
+
+    <header class="topbar">
+      <div class="chapter-brand">
+        <span class="seal" aria-hidden="true">西游</span>
+        <div><span class="eyebrow">第一章 · 风来有信</span><h1>高老庄</h1></div>
+        <span class="ink-divider" aria-hidden="true"></span>
+        <button class="mode-badge" id="help-open" type="button" aria-label="原型说明与操作帮助"><span></span>交互原型 <i>?</i></button>
+      </div>
+      <div class="party" role="group" aria-label="切换当前角色">
+        <button class="party-member active" id="select-gaocai" data-player="gaocai" type="button" aria-pressed="true">
+          <span class="avatar avatar-gaocai" aria-hidden="true">才</span><span><b>高才</b><small>引路 · 传信</small></span><kbd>1</kbd>
+        </button>
+        <button class="party-member" id="select-carpenter" data-player="carpenter" type="button" aria-pressed="false">
+          <span class="avatar avatar-carpenter" aria-hidden="true">匠</span><span><b>木匠</b><small>搭架 · 协作</small></span><kbd>2</kbd>
+        </button>
+      </div>
+    </header>
+
+    <aside class="quest-card" aria-label="当前任务">
+      <div class="quest-overline"><span>此刻要做</span><span id="chapter-progress">一 · 开门</span></div>
+      <h2 id="quest-title">先去取支架木料</h2>
+      <p id="quest-detail">翠兰还在后屋。各带一根木料，到门前搭好两侧支架。</p>
+      <button class="quest-guide" id="guide-button" type="button">去下一处 <span aria-hidden="true">↗</span></button>
+      <div class="quest-trail" aria-label="样片进度"><span id="step-door" class="current">开门</span><i></i><span id="step-escort">护送</span><i></i><span id="step-meeting">赴约</span></div>
+    </aside>
+
+    <div class="top-note"><span class="mini-dot"></span>本地切换两名角色</div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <section class="interaction-card" id="interaction-card" aria-label="附近互动" hidden>
+      <div class="interaction-mark" id="interaction-mark" aria-hidden="true">访</div>
+      <div class="interaction-main"><div class="interaction-heading"><span id="interaction-name"></span><span id="interaction-distance"></span></div><p id="interaction-hint"></p><div class="interaction-actions" id="interaction-actions"></div></div>
+      <button class="card-close" id="interaction-close" type="button" aria-label="收起互动面板">×</button>
+    </section>
+
+    <section class="speech-card" id="speech-card" aria-live="polite" hidden><span id="speech-name"></span><p id="speech-text"></p><button type="button" id="speech-close" aria-label="收起对白">×</button></section>
+
+    <footer class="bottom-bar">
+      <div class="controls-hint"><span class="mouse-icon" aria-hidden="true"></span><span>点击行走 / 互动</span><i></i><span><kbd>1</kbd> <kbd>2</kbd> 切换同伴</span><i></i><span><kbd>E</kbd> 就近互动</span><button class="stop-button" id="stop-button" type="button">停步 <kbd>Esc</kbd></button></div>
+      <div class="utility-actions">
+        <button id="inventory-open" type="button"><span class="utility-icon" aria-hidden="true">囊</span><span>行囊</span><small id="inventory-count">0</small></button>
+        <button id="notebook-open" type="button"><span class="utility-icon" aria-hidden="true">录</span><span>手记</span><span class="new-dot" id="notebook-dot" hidden></span></button>
+        <button id="sound-toggle" type="button" aria-pressed="false"><span class="utility-icon" aria-hidden="true">♪</span><span id="sound-label">声音关</span></button>
+      </div>
+    </footer>
+
+    <div class="modal-backdrop" id="intro-modal" role="dialog" aria-modal="true" aria-labelledby="intro-title">
+      <section class="intro-paper modal-paper">
+        <div class="paper-kicker"><span></span> 西行小记 · 第一回 <span></span></div>
+        <div class="intro-seal" aria-hidden="true">入庄</div>
+        <h2 id="intro-title">风来有信</h2>
+        <p class="intro-setting">高老庄 · 晴</p>
+        <p class="intro-story">后屋门扇受了损，翠兰还在里面。<br>两位远行客刚进庄。先搭把手，<br>再慢慢听一听，这庄里的旧事。</p>
+        <div class="intro-roles"><div><span class="avatar avatar-gaocai" aria-hidden="true">才</span><b>高才</b><small>递消息，问来意</small></div><span class="role-connector" aria-hidden="true">与</span><div><span class="avatar avatar-carpenter" aria-hidden="true">匠</span><b>木匠</b><small>备木料，搭支架</small></div></div>
+        <button class="primary-button" id="start-button" type="button">入庄一探 <span aria-hidden="true">→</span></button>
+        <p class="intro-boundary">约 5–8 分钟 · 本地切换两人 · 无战斗<br>NPC 使用预设演示行为，本轮体验行走与协作。</p>
+      </section>
+    </div>
+
+    <div class="drawer-backdrop" id="drawer-backdrop" hidden></div>
+    <aside class="drawer" id="drawer" aria-label="行囊与手记" hidden>
+      <div class="drawer-head"><div><span class="eyebrow" id="drawer-kicker">随身物件</span><h2 id="drawer-title">行囊</h2></div><button class="circle-close" id="drawer-close" type="button" aria-label="关闭">×</button></div>
+      <div class="drawer-body" id="drawer-content"></div>
+    </aside>
+
+    <div class="modal-backdrop" id="recap-modal" role="dialog" aria-modal="true" aria-labelledby="recap-title" hidden>
+      <section class="recap-paper modal-paper"><span class="eyebrow">高老庄 · 片段完成</span><h2 id="recap-title">这一次，先把人放在心上</h2><div id="recap-content"></div><p class="recap-note">这是首章的一段交互样片。乔装、收徒抉择、真实联机与自主 AI 留待后续。</p><div class="recap-actions"><button class="secondary-button" id="recap-continue" type="button">回庭院逛逛</button><button class="primary-button" id="restart-button" type="button">再走一回 →</button></div></section>
+    </div>
+
+    <div id="load-error" class="load-error" hidden><h2>庭院暂时未能载入</h2><p>请刷新页面再试。若仍未恢复，可以把这个页面链接交给负责原型的 Agent。</p><button onclick="location.reload()" type="button">重新载入</button></div>
+  </main>
+  <script type="module" src="./app.mjs" onerror="document.getElementById('load-error').hidden=false"></script>
+</body>
+</html>
