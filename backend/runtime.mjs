@@ -15,7 +15,7 @@ import { readRecap } from './recap.mjs';
 import { parseStrictJSON } from '../protocol/index.mjs';
 import { parseSpatial, validateSpatial } from '../protocol/spatial.mjs';
 import { isGaolao } from '../game/gaolao-world.mjs';
-import { isSpatial } from '../game/spatial-world.mjs';
+import { isSpatial, ensureView } from '../game/spatial-world.mjs';
 import * as spatial from './spatial-runtime.mjs';
 import { encodeJsonbText, decodeJsonbText } from './jsonb-text.mjs';
 
@@ -339,6 +339,7 @@ export class AuthorityRuntime extends EventEmitter {
     const connection = this.connection(handle), current = this.#views.get(handle.connectionId);
     return !connection.closing && this.#handles.get(handle.connectionId) === handle
       && scope.generation >= connection.installedViewScopeGeneration
+      && (view.terminalGeneration === undefined || view.terminalGeneration === connection.terminalViewGeneration)
       && !(current?.sessionId === view.sessionId && current.scope.generation === scope.generation && BigInt(current.cursor) > BigInt(view.cursor));
   }
   setConnectionView(handle, view, scope) {
@@ -359,12 +360,15 @@ export class AuthorityRuntime extends EventEmitter {
     connection.recoverableView = pending;
   }
   stageSpatialView(tx, handle, view, scope, { recovery = false } = {}) {
-    const connection = this.connection(handle), pending = { view, scope };
+    const connection = this.connection(handle);
     if (!recovery) {
       if (scope.generation < connection.viewScopeFence) throw new RuntimeError('RESYNC_REQUIRED', '当前连接已经采用较新的会话选择。');
       // 候选入事务即推进选择围栏；这不是提交成功标志，回滚也不重新授权旧请求。
       connection.viewScopeFence = scope.generation;
+      // 终态读取共享固定水位；通过选择围栏后才分配安装代次，过期选择不能干扰新读取。
+      if (view.terminalBinding) view = { ...view, terminalGeneration: ++connection.terminalViewGeneration };
     }
+    const pending = { view, scope };
     connection.pendingViews.add(pending);
     tx.afterFinish.push(({ committed, committing }) => {
       connection.pendingViews.delete(pending);
@@ -378,8 +382,11 @@ export class AuthorityRuntime extends EventEmitter {
         const row = (await tx.client.query('SELECT state FROM sessions WHERE session_id=$1 FOR UPDATE', [view.sessionId])).rows[0];
         const binding = row?.state.views?.[view.actorId], actor = row?.state.characters?.[view.actorId];
         const access = (await tx.client.query('SELECT 1 FROM session_access WHERE session_id=$1 AND user_id=$2 AND actor_id=$3 AND active', [view.sessionId, view.userId, view.actorId])).rowCount;
-        if (binding?.viewId === view.viewId && access && await this.liveConnection({ client: tx.client, time: new Date(this.now()).toISOString() }, handle)
-          && (view.ownedEpoch === null || terminal(row.state) || actor?.activeConnectionId === handle.connectionId && actor.controlEpoch === view.ownedEpoch)) {
+        const currentBinding = row && (view.terminalBinding
+          ? terminal(row.state) && row.state.sessionSeq === view.cursor
+          : !terminal(row.state) && binding?.viewId === view.viewId);
+        if (currentBinding && access && await this.liveConnection({ client: tx.client, time: new Date(this.now()).toISOString() }, handle)
+          && (view.ownedEpoch === null || actor?.activeConnectionId === handle.connectionId && actor.controlEpoch === view.ownedEpoch)) {
           const installed = this.setConnectionView(handle, view, scope);
           if (installed && actor?.mode === 'HumanControlled' && actor.activeConnectionId === handle.connectionId) connection.grants.set(view.sessionId, actor.controlEpoch);
         }
@@ -413,8 +420,9 @@ export class AuthorityRuntime extends EventEmitter {
         const current = tx.state.characters[user.actorId];
         // 另一条只读连接不能借订阅撤销当前控制者的引用；真正接管才更换控制视图。
         const heldElsewhere = current.mode === 'HumanControlled' && current.activeConnectionId !== handle.connectionId;
-        const snapshot = await spatial.snapshotSpatial(tx, user.actorId, { connectionId: handle.connectionId, rotate: !heldElsewhere });
-        this.stageSpatialView(tx, handle, { active: true, sessionId, actorId: user.actorId, userId: user.userId, viewId: snapshot.viewId, cursor: snapshot.snapshotSeq, handle, ownedEpoch: current.activeConnectionId === handle.connectionId ? current.controlEpoch : null, schemaVersion: 2 }, scope);
+        const terminalBinding = terminal(tx.state) ? ensureView(tx, user.actorId, { rotate: true }) : null;
+        const snapshot = await spatial.snapshotSpatial(tx, user.actorId, { connectionId: handle.connectionId, rotate: !heldElsewhere, binding: terminalBinding });
+        this.stageSpatialView(tx, handle, { active: true, sessionId, actorId: user.actorId, userId: user.userId, viewId: snapshot.viewId, cursor: snapshot.snapshotSeq, handle, ownedEpoch: current.activeConnectionId === handle.connectionId ? current.controlEpoch : null, schemaVersion: 2, ...(terminalBinding ? { terminalBinding } : {}) }, scope);
         return snapshot;
       }
       const viewId = id('view');
@@ -497,7 +505,7 @@ export class AuthorityRuntime extends EventEmitter {
     const user = await this.authenticate(token);
     const handle = Object.freeze({ connectionId: id('connection') });
     await this.pool.query('INSERT INTO connections(connection_id,user_id,lease_until) VALUES($1,$2,$3)', [handle.connectionId, user.userId, new Date(this.now() + 60_000).toISOString()]);
-    this.#connections.set(handle, { ...user, token, capabilities, grants: new Map(), viewScopeGeneration: 0, viewScopeFence: 0, installedViewScopeGeneration: 0, requestedViewScope: null, pendingViews: new Set(), recoverableView: null, closing: false });
+    this.#connections.set(handle, { ...user, token, capabilities, grants: new Map(), viewScopeGeneration: 0, viewScopeFence: 0, installedViewScopeGeneration: 0, terminalViewGeneration: 0, requestedViewScope: null, pendingViews: new Set(), recoverableView: null, closing: false });
     this.#handles.set(handle.connectionId, handle);
     return handle;
   }

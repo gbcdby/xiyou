@@ -10,7 +10,7 @@ const connected = computed(() => (sessionState.value.connection === 'online' && 
 
 <template>
   <a class="skip-link" href="#main">跳到主要内容</a>
-  <header class="app-header">
+  <header v-if="route.name !== 'spatial-session'" class="app-header">
     <div class="header-inner">
       <RouterLink to="/" class="brand" aria-label="西游同行，返回房间大厅"><span class="brand-seal">西</span><span>西游<span class="brand-dot">·</span>同行<small>一程山水，一同求证</small></span></RouterLink>
       <nav class="main-nav" aria-label="主要导航"><RouterLink to="/" :class="{ active: route.name === 'lobby' }">房间大厅</RouterLink><RouterLink to="/demo" :class="{ active: route.name === 'demo' }">界面演示</RouterLink></nav>
@@ -18,5 +18,5 @@ const connected = computed(() => (sessionState.value.connection === 'online' && 
     </div>
   </header>
   <main id="main"><RouterView /></main>
-  <footer class="app-footer"><span>西游 · 同行</span><span>有所闻，也有所证。</span></footer>
+  <footer v-if="route.name !== 'spatial-session'" class="app-footer"><span>西游 · 同行</span><span>有所闻，也有所证。</span></footer>
 </template>

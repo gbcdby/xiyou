@@ -9,7 +9,7 @@ import { repository, saveJSON, sourceIdentity, sha256, until } from './network-s
 
 const output = resolve(process.env.FRONTEND_EVIDENCE_DIR || resolve(repository, '.agent-output/ui-implementer/spatial-browser'));
 await mkdir(output, { recursive: true });
-const report = { scope: 'A1灰盒作者自查：真实Vue/独立浏览器/HTTP/Socket.IO/PostgreSQL；自动化，不是真人、正式视觉或完整章节验收', source: await sourceIdentity(), startedAt: new Date().toISOString(), checks: [], pageErrors: [], cleanup: [] };
+const report = { scope: 'A1灰盒作者自查：真实Vue/独立浏览器/HTTP/Socket.IO/PostgreSQL；自动化，不是真人、正式视觉或完整章节验收', source: await sourceIdentity(), startedAt: new Date().toISOString(), checks: [], pointerChecks: [], pageErrors: [], cleanup: [] };
 let database, server, vite, browser, activePages = []; const contexts = [];
 const check = (name, details = {}) => { report.checks.push({ name, status: 'PASS', ...details }); console.log(JSON.stringify({ check: name })); };
 const snapshot = page => page.evaluate(async () => (await import('/src/state/spatial-store.ts')).spatialState.value.snapshot);
@@ -20,10 +20,24 @@ async function arrived(page, previousSequence, position, description) {
 async function point(page, position) {
   await until(async () => (await state(page)).inputReady && !(await snapshot(page))?.projection.paused, '本地授权场景已恢复运行');
   const previousSequence = (await snapshot(page))?.projection.movement?.movementCommandSeq;
+  const previousIds = await page.evaluate(async () => (await import('/src/state/spatial-store.ts')).spatialState.value.actions.map(action => action.id));
   await page.bringToFront();
   const map = page.getByTestId('spatial-map');
-  const location = await map.evaluate((svg, position) => { const p = new DOMPoint(position.x, position.y).matrixTransform(svg.getScreenCTM()); const box = svg.getBoundingClientRect(); return { x: p.x - box.left, y: p.y - box.top }; }, position);
-  await map.click({ position: location });
+  await map.scrollIntoViewIfNeeded();
+  // 浏览器实际指针按屏幕像素落点，先取最近整数像素，避免分数坐标被截断后偏到相邻世界坐标。
+  const location = await map.evaluate((svg, position) => {
+    const transform = svg.getScreenCTM(); const p = new DOMPoint(position.x, position.y).matrixTransform(transform); const box = svg.getBoundingClientRect();
+    const pixel = { x: Math.round(p.x), y: Math.round(p.y) }; const world = new DOMPoint(pixel.x, pixel.y).matrixTransform(transform.inverse());
+    return { click: { x: pixel.x - box.left, y: pixel.y - box.top }, pixel, mappedWorld: { x: Math.round(world.x), y: Math.round(world.y) } };
+  }, position);
+  assert.deepEqual(location.mappedWorld, position, '当前缩放须存在能命中原精确世界目标的屏幕像素');
+  await map.click({ position: location.click });
+  const outgoing = await until(() => page.evaluate(async previousIds => {
+    const drafts = (await import('/src/state/spatial-store.ts')).spatialState.value.actions;
+    return drafts.filter(draft => !previousIds.includes(draft.id)).map(draft => JSON.parse(draft.raw)).find(request => request.action.kind === 'move_to');
+  }, previousIds), '本次真实地图点击发出移动请求');
+  assert.deepEqual(outgoing.action.destination, position, '实际发出世界坐标与原精确目标一致');
+  report.pointerChecks.push({ target: position, screenPixel: location.pixel, mappedWorld: location.mappedWorld, sentDestination: outgoing.action.destination, movementCommandSeq: outgoing.action.movementCommandSeq });
   return previousSequence;
 }
 async function screenshot(page, name) { const path = resolve(output, name); await page.screenshot({ path, fullPage: true }); report.checks.push({ screenshot: name, sha256: sha256(await readFile(path)) }); }
@@ -43,7 +57,7 @@ try {
       const page = await context.newPage(); pages.push(page); activePages = pages;
       page.on('pageerror', error => report.pageErrors.push({ group: count, player: i, message: error.message }));
       await page.goto(baseURL); await page.getByLabel('你的称呼', { exact: true }).fill(`灰盒${count}人旅伴${i + 1}`); await page.getByRole('button', { name: '以此名同行' }).click();
-      if (i === 0) { await page.getByRole('button', { name: '创建同行房间' }).click(); await page.waitForURL(/\/spatial\/[^/]+$/); sessionId = new URL(page.url()).pathname.split('/').at(-1); }
+      if (i === 0) { await page.getByLabel('选择行程').selectOption('spatial'); await page.getByRole('button', { name: '创建同行房间' }).click(); await page.waitForURL(/\/spatial\/[^/]+$/); sessionId = new URL(page.url()).pathname.split('/').at(-1); }
       else { await page.getByLabel('房间号', { exact: true }).fill(sessionId); await page.locator('.join-form').getByRole('button', { name: '加入', exact: true }).click(); await page.waitForURL(/\/spatial\/[^/]+$/); }
       await until(async () => (await snapshot(page))?.projection.phase === 'Lobby', '浏览器取得实际空间大厅');
     }
@@ -73,9 +87,11 @@ try {
       await arrived(partner, approachSequence, { x: 180, y: 110 }, '收件人本次路线实际到达交接处');
       const partnerName = (await snapshot(partner)).projection.self.name;
       const recipient = (await snapshot(host)).projection.entities.find(e => e.name === partnerName);
-      assert.ok(recipient); await host.getByLabel('交接给', { exact: true }).selectOption(recipient.entityRef);
+      assert.ok(recipient); await host.getByRole('button', { name: '行囊', exact: true }).click();
+      await host.getByLabel('交接给', { exact: true }).selectOption(recipient.entityRef);
       await host.locator('.spatial-inventory').getByRole('button', { name: '交给对方', exact: true }).click();
       await until(async () => { const p = (await snapshot(partner)).projection; return p.items.some(i => i.name === '公共支架' && i.location.kind === 'held' && i.location.ownerRef === p.self.entityRef); }, '唯一持物权实际转交');
+      await host.getByRole('button', { name: '关闭行囊', exact: true }).click();
       const anchors = (await snapshot(host)).projection.cooperations[0].anchors;
       const anchorSequences = await Promise.all([host, partner].map(async page => (await snapshot(page)).projection.movement?.movementCommandSeq));
       await host.getByRole('button', { name: '前往位置1', exact: true }).click(); await partner.getByRole('button', { name: '前往位置2', exact: true }).click();

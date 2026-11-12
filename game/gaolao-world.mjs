@@ -55,7 +55,9 @@ export function gaolaoOperations(state,content,observerId,entity){
   if(own){if(id===p.cuilan)ops.push('gz-step-back','gz-confirm-settlement','gz-pause-follow');if(id===p.wukong)ops.push('gz-apply-appearance','gz-release-appearance');if(id===p.tang)ops.push('gz-show-passage','gz-confirm-meeting','gz-recruitment-decision','gz-finish-separation');if(id===p.bajie)ops.push('gz-confirm-meeting','gz-membership-decision','gz-join-party');}
   // 未识破时两个同貌对象提供同一类请求入口；只有规则解析真身后才能授予许可。
   if(observer.kind==='human'){
-    if(id===p.cuilan||state.chapter.disguise?.actorId===id)ops.push('gz-request-appearance','gz-request-private-items');
+    const appearsCuilan=id===p.cuilan||state.chapter.disguise?.actorId===id;
+    if(appearsCuilan)ops.push('gz-request-appearance');
+    if(appearsCuilan||content.chapterRules.privateItems.some(item=>item.ownerId===id))ops.push('gz-request-private-items');
     if([p.tang,p.bajie].includes(id)&&entity.appearanceName!=='翠兰')ops.push('gz-invite-meeting');
     if(id===p.witness)ops.push('gz-hear-witness');
   }

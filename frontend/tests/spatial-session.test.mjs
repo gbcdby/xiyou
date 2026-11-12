@@ -147,3 +147,21 @@ test('超过八十个未知动作从持久数据恢复时仍逐个查询，首�
   assert.equal(restored.requests.find(request => request.event === 'player.action.request')?.value, originals[0]);
   restored.client.close();
 });
+
+test('A2 用途参数与结束轮在未知确认、恢复换视图后逐字重试，不改成新许可或新轮', async () => {
+  const reference = letter => 'R' + letter.repeat(32);
+  const h = harness(); h.client.open('spatial-room', 'token'); h.handlers.connected(); await flush(); await h.client.control('resume');
+  const actions = [
+    { kind: 'interact', operationId: 'gz-request-private-items', targetRef: reference('p'), expectedTargetRevision: '13', parameters: { itemRefs: [reference('i'), reference('j')], expectedConsentVersion: '7' } },
+    { kind: 'propose_follow', subjectRef: reference('p'), leaderRef: reference('s'), destinationId: 'safe-yard', expectedConsentVersion: '8' },
+    { kind: 'confirm_end', proposalId: 'precise-round', proposalVersion: '9' },
+  ];
+  for (const action of actions) { h.actionReplies.push(async () => { throw new Error('A2 确认丢失'); }); await h.client.send(action); }
+  const originals = h.requests.filter(r => r.event === 'player.action.request').map(r => r.value);
+  const saved = structuredClone(h.client.state.actions); h.client.close();
+  const restored = harness(); restored.client.open('spatial-room', 'token', saved); restored.handlers.connected(); await flush(); await restored.client.control('take');
+  for (const raw of originals) await restored.client.retry(JSON.parse(raw).clientActionId);
+  assert.deepEqual(restored.requests.filter(r => r.event === 'player.action.request').map(r => r.value), originals);
+  assert.deepEqual(originals.map(raw => JSON.parse(raw).action), actions);
+  restored.client.close();
+});

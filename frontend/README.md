@@ -1,6 +1,6 @@
 # 同行前端 · 联机界面与授权复盘
 
-ADV-001 [#33](https://github.com/gbcdby/xiyou/issues/33) 新增独立的 `spatial-v2` 灰盒入口，接口、恢复和已确认轨迹表现见[空间客户端说明](spatial.md)。原 `region-v1` 页面、房间与下面的历史证据继续保留；灰盒不代表高老庄完整章或正式视觉已通过。
+ADV-001 [#33](https://github.com/gbcdby/xiyou/issues/33) 在独立的 `spatial-v2` 入口接入已释放的高老庄规则，接口、章节交互、恢复和已确认轨迹表现见[空间客户端说明](spatial.md)。原 `region-v1` 页面、房间与下面的历史证据继续保留；生产接线、固定候选作者自查、独立验收与正式视觉通过分别记录。
 
 本目录提供 Vue 3 / TypeScript / Vue Router 的房间界面、授权投影视图、HTTP / Socket.IO 客户端以及恢复驱动。已接入 #6 权威运行服务；本轮以合成玩家身份执行实际 PostgreSQL、HTTP、Socket.IO 与浏览器代码。用户在 2026-11-11 明确本批使用 mock 输入；当前同候选完整玩法、五身份长测、浏览器检查与独立审查见[整体验证记录](evidence/mock-integration-20261111/README.md)。
 
@@ -26,7 +26,7 @@ npm run dev
 
 `/demo` 是独立的静态界面演示：只使用手写且通过公开契约校验的授权 DTO，醒目标注“无真实联机”，所有世界动作停用。演示数据的 `contentVersion` 是 `ui-demo-v1`，不作为实际内容或玩法验收材料。
 
-大厅默认创建 `spatial-graybox-v2` 行走灰盒，可用公开配置 `VITE_SPATIAL_CONTENT_VERSION` 指定对应空间内容版本；选择“山间通路·旧版玩法”仍使用 `trust-repair-fixture-v1`，由 `VITE_CONTENT_VERSION` 替换。前端不导入完整 `content` 配置、服务端状态、内部受众或 NPC 信念。
+大厅默认创建 `gaolaozhuang-v1` 高老庄章，可用公开配置 `VITE_GAOLAO_CONTENT_VERSION` 指定同类已发布内容。明确选择行走灰盒时使用 `spatial-graybox-v2`，由 `VITE_SPATIAL_CONTENT_VERSION` 替换；选择“山间通路·旧版玩法”仍使用 `trust-repair-fixture-v1`，由 `VITE_CONTENT_VERSION` 替换。前端不导入完整 `content` 配置、服务端状态、内部受众或 NPC 信念。
 
 ### 浏览器检查
 

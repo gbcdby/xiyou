@@ -26,7 +26,7 @@ async function createParty(count, label) {
     await page.goto(baseURL);
     await page.getByLabel('你的称呼', { exact: true }).fill(`${label}${i + 1}`);
     await page.getByRole('button', { name: '以此名同行' }).click();
-    if (i === 0) await page.getByRole('button', { name: '创建同行房间' }).click();
+    if (i === 0) { await page.getByLabel('选择行程').selectOption('region'); await page.getByRole('button', { name: '创建同行房间' }).click(); }
     else { await page.getByLabel('房间号', { exact: true }).fill(sessionId); await page.locator('.join-form').getByRole('button', { name: '加入', exact: true }).click(); }
     await page.waitForURL(/\/sessions\/[^/]+$/);
     sessionId ||= new URL(page.url()).pathname.split('/').at(-1);
@@ -209,6 +209,7 @@ async function pagingAndCancellation() {
 
   const oldRoom = await delayedReload();
   await reader.page.locator('.back-link').click();
+  await reader.page.getByLabel('选择行程').selectOption('region');
   await reader.page.getByRole('button', { name: '创建同行房间', exact: true }).click();
   await reader.page.getByRole('heading', { name: '1 位旅伴已相聚', exact: true }).waitFor();
   assert.notEqual(new URL(reader.page.url()).pathname.split('/').at(-1), reader.sessionId);
@@ -227,6 +228,7 @@ async function pagingAndCancellation() {
   await reader.page.getByRole('link', { name: '返回大厅重新登录', exact: true }).click();
   await reader.page.getByLabel('你的称呼', { exact: true }).fill('换身份合成玩家');
   await reader.page.getByRole('button', { name: '以此名同行', exact: true }).click();
+  await reader.page.getByLabel('选择行程').selectOption('region');
   await reader.page.getByRole('button', { name: '创建同行房间', exact: true }).click();
   await reader.page.getByRole('heading', { name: '1 位旅伴已相聚', exact: true }).waitFor();
   const currentUser = await reader.page.evaluate(() => JSON.parse(sessionStorage.getItem('xiyou.guest.v1')).userId);
