@@ -99,9 +99,9 @@ try {
       await host.getByRole('button', { name: '我已就位', exact: true }).click(); await partner.getByRole('button', { name: '我已就位', exact: true }).click();
       await until(async () => (await snapshot(host)).projection.cooperations.some(c => c.phase === 'locked'), '两人协作锁定');
       check(`${count}人：到达后拿取、近距唯一交接、两人协作锁定`);
-      await host.getByRole('button', { name: '走向出口', exact: true }).click();
+      await host.getByRole('button', { name: '走向出口 · 院落出口', exact: true }).click();
       await until(async () => (await snapshot(host)).projection.self.sceneId === 'gray-road', '沿实际出口进入短路', 20000);
-      await host.getByRole('button', { name: '走向出口', exact: true }).click(); await until(async () => (await snapshot(host)).projection.self.sceneId === 'gray-yard', '返回院落');
+      await host.getByRole('button', { name: '走向出口 · 返回院落', exact: true }).click(); await until(async () => (await snapshot(host)).projection.self.sceneId === 'gray-yard', '返回院落');
       check(`${count}人：场景出口按授权条件来回行走`);
       await screenshot(host, `spatial-${count}players-desktop.png`);
     }
