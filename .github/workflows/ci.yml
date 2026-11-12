@@ -1,0 +1,89 @@
+name: 自动检查
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: 协议、规则、联机与浏览器
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      CI: 'true'
+      CHROMIUM_ARGS: '[]'
+    steps:
+      - name: 读取候选
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: 准备 Node.js 24
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            frontend/package-lock.json
+      - name: 准备独立 Schema 检查器
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7
+        with:
+          python-version: '3.12'
+      - name: 安装已锁定依赖
+        run: |
+          npm ci
+          npm ci --prefix frontend
+          python -m pip install --disable-pip-version-check jsonschema==4.26.0
+      - name: 核对协议与内容生成产物
+        run: |
+          node protocol/scripts/generate.mjs --check
+          node protocol/scripts/generate-spatial.mjs --check
+          node content/scripts/generate.mjs --check
+      - name: 协议、内容行为与独立 Schema 检查
+        run: |
+          npm run test:protocol
+          npm run test:content
+          python protocol/scripts/check-schema.py
+          python content/scripts/check-schema.py
+          frontend/node_modules/.bin/tsc --noEmit --strict --module nodenext --target es2022 protocol/tests/consumer.mts
+      - name: 后端真实 PostgreSQL 与 HTTP、Socket.IO 检查
+        # 现有测试自行创建独立数据库和随机端口；失败不会退化为内存替身。
+        run: npm run test:backend
+      - name: 前端行为、类型与生产构建
+        run: |
+          npm test --prefix frontend
+          npm run build --prefix frontend
+      - name: 安装已锁定 Playwright 对应的 Chromium
+        working-directory: frontend
+        run: npx --no-install playwright install --with-deps chromium
+      - name: 真实多人空间浏览器检查
+        env:
+          FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-spatial
+        run: node frontend/tests/spatial-browser-check.mjs
+      - name: 未决请求、持久恢复与原样重试检查
+        env:
+          FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-retention
+        run: npm run test:browser:spatial-retention --prefix frontend
+      - name: 保留浏览器结果与截图
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: browser-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          # 仅上传具名结果和截图，不上传数据库目录、连接配置或浏览器缓存。
+          path: |
+            .agent-output/ci/browser-spatial/result.json
+            .agent-output/ci/browser-spatial/result-before-cleanup.json
+            .agent-output/ci/browser-spatial/*.png
+            .agent-output/ci/browser-retention/report.json
+            .agent-output/ci/browser-retention/pending-actions.png
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 7

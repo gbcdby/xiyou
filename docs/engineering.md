@@ -60,3 +60,21 @@
 - 只使用古典原著、公版文本与团队原创表达；禁止复刻现代影视/动漫/游戏的人物造型、对白、配乐、UI、资产。
 - 新资产登记 `asset_source`：`original_team` / `classical_public_domain_reference` / `licensed_asset`。
 - 赛事规则以登录后的官方页面为准，不把第三方转载的未核实规则写进代码或文档。
+
+## GitHub Actions 自动检查
+
+[#29](https://github.com/gbcdby/xiyou/issues/29) 的自动检查配置见 [ci.yml](../.github/workflows/ci.yml)。覆盖普通 push、pull_request 与 workflow_dispatch；只请求 `contents: read`，不保留 checkout 凭据，不部署、不调用真实模型、不需要用户 secret 或私人素材。配置入库、本地检查通过、远端 workflow 实际运行成功是不同状态；结果以对应提交的 Actions run 为准。手动入口需该工作流先进入默认分支。
+
+运行环境为 Ubuntu 24.04、Node.js 24、Python 3.12。前后端使用各自 lockfile 执行 `npm ci`；真实 PostgreSQL 由已锁定的 `embedded-postgres` 和现有测试辅助程序在随机本机端口启动，无需另建共享数据库。Playwright 固定为已用于本轮浏览器检查的 1.57.0，CI 安装其对应 Chromium，不依赖开发机的 `PLAYWRIGHT_MODULE` / `CHROMIUM_PATH`。
+
+| 自动门槛 | 现有入口 |
+| --- | --- |
+| 协议与内容一致性 | 三个生成器 `--check`、`test:protocol`、`test:content`、两个 Python Schema 检查与协议 TypeScript 消费检查 |
+| 后端事务与联机 | `npm run test:backend`；包含真实 PostgreSQL、HTTP/Socket.IO 和受控 AI 供应商检查 |
+| 前端行为与构建 | `npm test --prefix frontend`、`npm run build --prefix frontend` |
+| A1 多人空间 | `node frontend/tests/spatial-browser-check.mjs`，真实 Vue/Chromium/服务/数据库 |
+| 未决请求恢复 | `npm run test:browser:spatial-retention --prefix frontend`，真实页面与存储、受控收据替身 |
+
+浏览器缺依赖、启动失败或行为失败都会使工作流失败，不静默跳过。仅上传具名浏览器报告和截图；数据库数据、连接配置及缓存不上传。该自动检查不替代按候选执行的 TLC、完整章/长时运行、真实 AI、真人体验、正式视觉和独立双轴审查，既有阶段释放条件不变。
+
+官方工具依据：[checkout](https://github.com/actions/checkout)、[setup-node](https://github.com/actions/setup-node)、[setup-python](https://github.com/actions/setup-python)、[Playwright CI](https://playwright.dev/docs/ci)。Actions 使用读取到的完整提交 SHA 固定；升级运行工具时重新核对其官方 runner 要求与实际结果。
