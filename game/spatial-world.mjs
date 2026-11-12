@@ -1,6 +1,7 @@
 import { randomBytes } from 'node:crypto';
 import { validateSpatial } from '../protocol/spatial.mjs';
 import { distance, clearSegment } from './spatial-geometry.mjs';
+import { isGaolao, setupGaolaoState, observerName, projectGaolao, gaolaoOperations } from './gaolao-world.mjs';
 import { RuleError } from './rules.mjs';
 export const opaqueRef = () => 'R' + randomBytes(24).toString('base64url');
 export const isSpatial = state => state.protocolCapability === 'spatial-v2';
@@ -20,7 +21,7 @@ function actor(id, name, actorKind = 'human') {
     return { characterId: id, name, appearanceName: name, appearanceEpoch: '0', kind: actorKind === 'human' ? 'human' : 'core_npc', actorKind, sceneId: null, position: null, facing: 'S', spatialRevision: '0', resourceRevision: '0', controlEpoch: '0', mode: 'Revoked', activeConnectionId: null, graceDeadlineAt: null, movement: null, planVersion: '0', capabilities: ['move_to', 'stop_move', 'inspect', 'take_item', 'put_item', 'transfer_item', 'reclaim_public_item', 'cooperate', 'interact', 'speak', 'make_claim', 'share_evidence', 'wait'] };
 }
 export function reduceSpatialWorld(previous, event, content) {
-    if (previous.reducerVersion !== 'spatial-world-v2' || content.reducerVersion !== previous.reducerVersion || event.schemaVersion !== 2 || event.sessionId !== previous.sessionId || event.sessionSeq !== next(previous.sessionSeq))
+    if (!['spatial-world-v2','gaolao-world-v1'].includes(previous.reducerVersion) || content.reducerVersion !== previous.reducerVersion || event.schemaVersion !== 2 || event.sessionId !== previous.sessionId || event.sessionSeq !== next(previous.sessionSeq))
         throw new Error('空间事件不属于当前解释器的连续前缀。');
     if (['Finished', 'Aborted'].includes(previous.phase) && event.kind !== 'spatial.view')
         throw new Error('终局之后不能追加空间事实。');
@@ -44,6 +45,15 @@ export function reduceSpatialWorld(previous, event, content) {
                 state.items[item.itemId] = { itemId: item.itemId, name: item.name, appearanceEpoch: '0', location: { kind: 'ground', sceneId: item.sceneId, position: item.position }, resourceRevision: '0', transferable: item.transferable, publicBorrowable: item.publicBorrowable, fields: item.fields, lockedBy: null };
             for (const target of content.targets)
                 state.targets[target.targetId] = { ...target, appearanceEpoch: '0', resourceRevision: '0' };
+            setupGaolaoState(state,content);
+            break;
+        case 'gaolao.membership':
+            if(!isGaolao(state))throw new Error('旧解释器不支持章节成员事件。');
+            state.onlineMembershipVersion=p.version;
+            break;
+        case 'gaolao.chapter':
+            if(!isGaolao(state)||state.chapter?.cuilanSafe&&!p.chapter.cuilanSafe)throw new Error('安全事实不得回滚。');
+            state.chapter=p.chapter;
             break;
         case 'control.changed': {
             const a = state.characters[p.actorId];
@@ -53,7 +63,8 @@ export function reduceSpatialWorld(previous, event, content) {
             for (const c of Object.values(state.cooperations))
                 if (c.phase !== 'locked')
                     delete c.ready[p.actorId];
-            state.onlineMembershipVersion = next(state.onlineMembershipVersion);
+            if(!isGaolao(state))state.onlineMembershipVersion = next(state.onlineMembershipVersion);
+            if(isGaolao(state)&&state.chapter){for(const f of Object.values(state.chapter.follows)){if([f.subjectId,f.leaderId].includes(p.actorId)&&['accepted','following','arrived'].includes(f.status)){f.status='paused';f.reason='控制来源变化，请本人重新确认。';f.planVersion=next(f.planVersion);}}}
             break;
         }
         case 'spatial.clock':
@@ -89,7 +100,7 @@ export function reduceSpatialWorld(previous, event, content) {
         case 'session.aborted':
         case 'session.finished':
             state.phase = event.kind === 'session.aborted' ? 'Aborted' : 'Finished';
-            state.ending = { title: p.title ?? '本局已经结束', summary: p.reason ?? p.summary ?? '本局已经结束。' };
+            state.ending = { title: p.title ?? '本局已经结束', summary: p.reason ?? p.summary ?? '本局已经结束。',...(isGaolao(state)?{...(p.endingCode?{endingCode:p.endingCode}:{}),facts:p.facts??[]}: {}) };
             for (const a of Object.values(state.characters)) {
                 a.mode = 'Revoked';
                 a.controlEpoch = next(a.controlEpoch);
@@ -145,7 +156,7 @@ export function resolveRef(tx, actorId, ref, viewId, { visible = true } = {}) {
 }
 export function spatialProjection(state, content, actorId, { connectionId = null, highWater = '0', view = state.views[actorId], principalKind = 'human' } = {}) {
     const a = state.characters[actorId];
-    const publicActor = c => ({ entityRef: entityRef(view, c.characterId), name: c.appearanceName, appearanceEpoch: c.appearanceEpoch, sceneId: c.sceneId, position: c.position, facing: c.facing });
+    const publicActor = c => ({ entityRef: entityRef(view, c.characterId), name: observerName(state,actorId,c), ...(isGaolao(state)&&state.chapter?{resourceRevision:c.resourceRevision,availableOperations:gaolaoOperations(state,content,actorId,c)}:{}), appearanceEpoch: c.appearanceEpoch, sceneId: c.sceneId, position: c.position, facing: c.facing });
     const visible = Object.values(state.characters).filter(c => canSee(state, content, actorId, c));
     const entities = visible.map(c => { const motion = c.motionViews?.[actorId]; return { ...publicActor(c), ...(motion?.viewId === view.viewId ? { motionTrail: motion.motionTrail, motionFromSceneTimeMs: motion.motionFromSceneTimeMs, motionThroughSceneTimeMs: motion.motionThroughSceneTimeMs } : {}) }; }).sort((x, y) => x.entityRef.localeCompare(y.entityRef));
     const items = Object.values(state.items).filter(i => i.location.kind !== 'consumed' && canSee(state, content, actorId, i) && (i.location.kind === 'ground' || i.location.characterId === actorId || i.publicBorrowable)).map(i => ({ entityRef: entityRef(view, i.itemId), name: i.name, location: i.location.kind === 'ground' ? i.location : { kind: 'held', ownerRef: entityRef(view, i.location.characterId) }, resourceRevision: i.resourceRevision, transferable: i.transferable, publicBorrowable: i.publicBorrowable, fields: i.fields, ...(i.publicBorrowable && i.location.kind === 'character' && state.characters[i.location.characterId]?.mode === 'AIProxyControlled' ? { reclaimHolderEpoch: state.characters[i.location.characterId].controlEpoch } : {}) }));
@@ -153,5 +164,5 @@ export function spatialProjection(state, content, actorId, { connectionId = null
     const currentScene = sceneOf(content, a.sceneId);
     const scene = currentScene ? { sceneId: currentScene.sceneId, name: currentScene.name, width: currentScene.width, height: currentScene.height, unitsPerPixel: currentScene.unitsPerPixel, walkableAreas: currentScene.walkableAreas, obstacles: currentScene.obstacles.filter(obstacleEnabled(state)).map(({ obstacleId, polygon, exceptAreas }) => ({ obstacleId, polygon, exceptAreas })), anchors: currentScene.anchors, exits: currentScene.exits.map(({ exitId, anchorId, destinationSceneId, destination, requirement }) => ({ exitId, anchorId, destinationSceneId, destination, open: conditionMet(state, requirement) })) } : null;
     const movement = a.movement ? Object.fromEntries(['movementId', 'planVersion', 'movementCommandSeq', 'sceneId', 'mapVersion', 'goal', 'path', 'acceptedAtSceneTime', 'status', 'reason'].filter(k => a.movement[k] !== undefined).map(k => [k, a.movement[k]])) : null;
-    return safeProjection({ protocolCapability: 'spatial-v2', chapterVersion: state.chapterVersion, mapVersion: state.mapVersion, variantId: state.variantId, contentVersion: state.contentVersion, reducerVersion: state.reducerVersion, phase: state.phase, sceneTimeMs: state.sceneTimeMs, paused: state.paused, self: { ...publicActor(a), controlEpoch: a.controlEpoch, canControl: principalKind === 'human' && a.mode === 'HumanControlled' && connectionId === a.activeConnectionId, capabilities: a.capabilities, movementCommandHighWater: highWater }, entities, items, targets, scene, movement, observations: (state.observations[actorId] ?? []).filter(o => principalKind !== 'proxy' || o.shareable).slice(-256), claims: (state.claims[actorId] ?? []).filter(c => principalKind === 'human' || c.channel !== 'team').slice(-256), cooperations: content.operations.filter(def => def.kind === 'cooperation' && state.targets[def.targetId] && canSee(state, content, actorId, state.targets[def.targetId])).map(def => { const record = state.cooperations[def.operationId]; return { operationId: def.operationId, operationVersion: record?.version ?? '0', phase: record?.phase ?? 'preparing', readyCount: Object.keys(record?.ready ?? {}).length, requiredCount: def.requiredCount, anchors: def.anchorIds.map(id => currentScene.anchors.find(anchor => anchor.anchorId === id).position) }; }), objectives: content.objectives, ending: state.ending });
+    return safeProjection({ protocolCapability: 'spatial-v2', chapterVersion: state.chapterVersion, mapVersion: state.mapVersion, variantId: state.variantId, contentVersion: state.contentVersion, reducerVersion: state.reducerVersion, phase: state.phase, sceneTimeMs: state.sceneTimeMs, paused: state.paused, self: { ...publicActor(a), controlEpoch: a.controlEpoch, canControl: principalKind === 'human' && a.mode === 'HumanControlled' && connectionId === a.activeConnectionId, capabilities: a.capabilities, movementCommandHighWater: highWater }, entities, items, targets, scene, movement, observations: (state.observations[actorId] ?? []).filter(o => principalKind !== 'proxy' || o.shareable).slice(-256), claims: (state.claims[actorId] ?? []).filter(c => principalKind === 'human' || c.channel !== 'team').slice(-256), cooperations: content.operations.filter(def => def.kind === 'cooperation' && state.targets[def.targetId] && canSee(state, content, actorId, state.targets[def.targetId])).map(def => { const record = state.cooperations[def.operationId]; return { operationId: def.operationId, operationVersion: record?.version ?? '0', phase: record?.phase ?? 'preparing', readyCount: Object.keys(record?.ready ?? {}).length, requiredCount: def.requiredCount, anchors: def.anchorIds.map(id => currentScene.anchors.find(anchor => anchor.anchorId === id).position) }; }), objectives: content.objectives, ending: state.ending,...(isGaolao(state)&&state.chapter?{chapter:projectGaolao(state,content,actorId,view)}:{}) });
 }

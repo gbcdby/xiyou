@@ -9,6 +9,8 @@ export { contentSchema } from './schema.mjs';
 
 const registry = new Map([
   ['trust-repair-fixture-v1', new URL('./fixtures/trust-repair-fixture-v1.json', import.meta.url)],
+  ['gaolaozhuang-v1', new URL('./fixtures/gaolaozhuang-v1.json', import.meta.url)],
+  ['gaolaozhuang-tools-east-v1', new URL('./fixtures/gaolaozhuang-tools-east-v1.json', import.meta.url)],
   ['spatial-graybox-v2', new URL('./fixtures/spatial-graybox-v2.json', import.meta.url)],
 ]);
 

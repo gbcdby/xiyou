@@ -6,5 +6,13 @@
   "spatial-graybox-v2": {
     "reducerVersion": "spatial-world-v2",
     "sha256": "8bb9f11892d95acb19c57be9b270b582dd319a2252257ec9d11e3a6dc42cf3b8"
+  },
+  "gaolaozhuang-v1": {
+    "reducerVersion": "gaolao-world-v1",
+    "sha256": "0d901f5ee4ff85ce9eca658628e7d9f5c8fa052100ba1f001fea550ac525f93c"
+  },
+  "gaolaozhuang-tools-east-v1": {
+    "reducerVersion": "gaolao-world-v1",
+    "sha256": "8b405833b5f84d2a2e72d60b6b6da0ab69c2a33b26a33eb4126855e1fc626e3e"
   }
 }

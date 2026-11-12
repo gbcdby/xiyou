@@ -26,3 +26,15 @@ const numericSequence: ClientAction = { ...request, baseSeq: 9007199254740993 };
 // @ts-expect-error 模型候选不能持有可信决策版本。
 const changedEpoch: ProposedIntent = { decisionId: 'D1', toolCalls: [], controlEpoch: '2' };
 void [forged, numericSequence, changedEpoch];
+
+// 高老庄仅使用有限动作构造入口，避免旧内容任意字符串操作分支吞没判别。
+import { gaolaoInteraction, isGaolaoInteraction } from '../spatial.mjs';
+import type { ActionV2 } from '../spatial.mjs';
+const chapterAction=gaolaoInteraction({kind:'interact',operationId:'gz-confirm-settlement',targetRef:'R'+ 'a'.repeat(32),expectedTargetRevision:'1',parameters:{consentId:'R'+ 'b'.repeat(32),expectedConsentVersion:'2'}});
+chapterAction.parameters.consentId;
+// @ts-expect-error 本人安置操作不能省略同意版本参数
+gaolaoInteraction({kind:'interact',operationId:'gz-confirm-settlement',targetRef:'ref',expectedTargetRevision:'1'});
+// @ts-expect-error 章节操作不能临时发明
+gaolaoInteraction({kind:'interact',operationId:'gz-invent-world',targetRef:'ref',expectedTargetRevision:'1'});
+function chapterConsumer(action:ActionV2){if(isGaolaoInteraction(action)&&action.operationId==='gz-confirm-settlement')return action.parameters.consentId;}
+void chapterConsumer;
