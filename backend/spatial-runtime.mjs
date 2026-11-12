@@ -54,9 +54,9 @@ export function refreshSpatialViews(tx) {
     for (const actorId of Object.keys(tx.state.views))
         ensureView(tx, actorId);
 }
-export async function snapshotSpatial(tx, actorId, { connectionId = null, rotate = false, viewId, principalKind = 'human' } = {}) {
-    const view = ensureView(tx, actorId, { rotate, ...(viewId ? { viewId } : {}) });
-    return validateSpatial('SnapshotV2', { schemaVersion: 2, type: 'world.snapshot', sessionId: tx.row.session_id, viewId: view.viewId, snapshotSeq: tx.state.sessionSeq, projection: spatialProjection(tx.state, tx.content, actorId, { connectionId, principalKind, highWater: await highWater(tx, tx.state.characters[actorId]) }) });
+export async function snapshotSpatial(tx, actorId, { connectionId = null, rotate = false, viewId, principalKind = 'human', binding = null } = {}) {
+    const view = binding ?? ensureView(tx, actorId, { rotate, ...(viewId ? { viewId } : {}) });
+    return validateSpatial('SnapshotV2', { schemaVersion: 2, type: 'world.snapshot', sessionId: tx.row.session_id, viewId: view.viewId, snapshotSeq: tx.state.sessionSeq, projection: spatialProjection(tx.state, tx.content, actorId, { connectionId, principalKind, view, highWater: await highWater(tx, tx.state.characters[actorId]) }) });
 }
 export async function recoverSpatial(runtime) {
     const rows = (await runtime.pool.query("SELECT session_id FROM sessions WHERE state->>'protocolCapability'='spatial-v2' AND state->>'phase' IN ('Lobby','Running')")).rows;
@@ -188,7 +188,9 @@ export async function syncSpatial(runtime, handle, request) {
     const connection = runtime.connection(handle);
     requireSpatialCapability(connection.capabilities);
     return runtime.locked(request.sessionId, { kind: 'spatial-sync' }, async (tx) => {
-        const user = await runtime.access(tx.client, tx.row, connection.token), view = runtime.connectionView(handle), binding = tx.state.views[user.actorId], actor = tx.state.characters[user.actorId];
+        const user = await runtime.access(tx.client, tx.row, connection.token), view = runtime.connectionView(handle), ended = ['Finished', 'Aborted'].includes(tx.state.phase), binding = view?.terminalBinding ?? tx.state.views[user.actorId], actor = tx.state.characters[user.actorId];
+        if (ended && !await runtime.liveConnection(tx, handle)) throw new RuntimeError('UNAUTHENTICATED');
+        if (view?.terminalBinding && (!ended || view.cursor !== tx.state.sessionSeq)) throw new RuntimeError('RESYNC_REQUIRED');
         if (!view?.active || view.viewId !== request.viewId || binding?.viewId !== request.viewId || view.sessionId !== request.sessionId || view.actorId !== user.actorId || BigInt(request.cursor) > BigInt(tx.state.sessionSeq) || BigInt(request.cursor) < BigInt(binding?.createdAtSeq ?? '0'))
             throw new RuntimeError('RESYNC_REQUIRED');
         if (view.ownedEpoch !== null && !['Finished', 'Aborted'].includes(tx.state.phase) && (actor.activeConnectionId !== handle.connectionId || actor.controlEpoch !== view.ownedEpoch))
@@ -199,7 +201,7 @@ export async function syncSpatial(runtime, handle, request) {
             ?? (await tx.client.query('SELECT through_seq FROM outbox WHERE session_id=$1 AND through_seq>$2 AND through_seq<=$3 ORDER BY through_seq LIMIT 1', [request.sessionId, request.cursor, tx.state.sessionSeq])).rows[0];
         const throughSeq = boundary?.through_seq ?? request.cursor;
         const state = await runtime.stateAt(tx, throughSeq);
-        const events = throughSeq === request.cursor ? [] : [{ sessionSeq: throughSeq, eventId: `${request.sessionId}:E${throughSeq}`, kind: 'projection.replace', payload: { projection: spatialProjection(state, tx.content, user.actorId, { connectionId: handle.connectionId, highWater: await highWater(tx, actor) }) } }];
+        const events = throughSeq === request.cursor ? [] : [{ sessionSeq: throughSeq, eventId: `${request.sessionId}:E${throughSeq}`, kind: 'projection.replace', payload: { projection: spatialProjection(state, tx.content, user.actorId, { connectionId: handle.connectionId, ...(view.terminalBinding ? { view: view.terminalBinding } : {}), highWater: await highWater(tx, actor) }) } }];
         return validateSpatial('BatchV2', { schemaVersion: 2, type: 'world.batch', sessionId: request.sessionId, viewId: request.viewId, fromExclusive: request.cursor, throughSeq, events });
     });
 }

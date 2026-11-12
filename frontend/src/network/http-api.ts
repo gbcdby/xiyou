@@ -1,6 +1,6 @@
 import { validateContract } from '../../../protocol/index.mjs';
 import { validateSpatial } from '../../../protocol/spatial.mjs';
-import type { ReceiptV2 } from '../../../game/spatial-types.ts';
+import type { ReceiptV2, RecapV2 } from '../../../game/spatial-types.ts';
 import { spatialErrorMessage } from '../domain/spatial-errors.ts';
 import type { AuthorizedSnapshot, AuthorizedRecap, ClientReceipt, GuestIdentity, RoomMembership, RoomSummary } from '../domain/world.ts';
 
@@ -91,6 +91,11 @@ export class HttpApi {
   async spatialReceipt(sessionId: string, actionId: string): Promise<ReceiptV2 | null> {
     try { return validateSpatial('ReceiptV2', await this.#request(`/sessions/${encodeURIComponent(sessionId)}/actions/${encodeURIComponent(actionId)}`, undefined, undefined, true)); }
     catch (error) { if (error instanceof ApiFailure && error.status === 404 && ['OUTCOME_UNKNOWN', 'REQUEST_FAILED'].includes(error.code)) return null; throw error; }
+  }
+  async spatialRecap(sessionId: string, throughSeq: string, beforeSeq?: string, signal?: AbortSignal): Promise<RecapV2> {
+    const query = new URLSearchParams({ throughSeq });
+    if (beforeSeq !== undefined) query.set('beforeSeq', beforeSeq);
+    return validateSpatial('RecapV2', await this.#request(`/sessions/${encodeURIComponent(sessionId)}/recap?${query}`, undefined, signal, true));
   }
   async join(sessionId: string, nonce: string): Promise<RoomMembership> {
     const data = record(await this.#request(`/sessions/${encodeURIComponent(sessionId)}/join`, { nonce }));

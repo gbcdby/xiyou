@@ -12,5 +12,5 @@
     "verbatimModuleSyntax": true,
     "types": ["vite/client"]
   },
-  "include": ["src/**/*.ts", "src/**/*.vue", "tests/browser-fixture.ts", "../game/types.ts"]
+  "include": ["src/**/*.ts", "src/**/*.vue", "tests/browser-fixture.ts", "tests/gaolao-fixture.ts", "tests/GaolaoFixture.vue", "../game/types.ts"]
 }

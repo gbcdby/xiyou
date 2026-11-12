@@ -68,6 +68,11 @@ jobs:
         env:
           FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-spatial
         run: node frontend/tests/spatial-browser-check.mjs
+      - name: 高老庄真实 2 人与 5 人章节及授权复盘
+        env:
+          FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-gaolao
+        # 玩家操作走真实页面，NPC 只使用受信受控策略；不替代独立的 900 秒验收。
+        run: npm run test:browser:gaolao --prefix frontend
       - name: 未决请求、持久恢复与原样重试检查
         env:
           FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-retention
@@ -84,6 +89,9 @@ jobs:
             .agent-output/ci/browser-spatial/*.png
             .agent-output/ci/browser-retention/report.json
             .agent-output/ci/browser-retention/pending-actions.png
+            .agent-output/ci/browser-gaolao/result.json
+            .agent-output/ci/browser-gaolao/result-before-cleanup.json
+            .agent-output/ci/browser-gaolao/*.png
           include-hidden-files: true
           if-no-files-found: warn
           retention-days: 7

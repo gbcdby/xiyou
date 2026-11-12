@@ -8,5 +8,7 @@ const labels: Record<string, string> = {
   PATH_UNREACHABLE: '当前无法走到这个位置，请选择可达的地面。', OUT_OF_RANGE: '距离还不够近，请走近以后操作。', OCCLUDED: '中间仍有遮挡，请先找到可以接近的路线。',
   TARGET_UNAVAILABLE: '当前无法对这个对象执行这项操作。', SESSION_PAUSED: '等待至少两位真人在线后继续。', SESSION_NOT_RUNNING: '当前阶段不能执行这项操作。',
   RULE_VIOLATION: '当前条件不满足这项操作。', NOT_READY: '所需准备尚未完成。', ACTION_ID_REUSE: '原动作身份与请求不一致，请先查询原结果。',
+  CONSENT_REQUIRED: '这次用途或安排尚未取得本人的有效许可，请先征求本人意见。',
+  CONSENT_STALE: '本次许可已经回应、撤回或改约，请查看最新安排后再操作。',
 };
 export const spatialErrorMessage = (code: string): string => labels[code] || '请求未完成，请同步当前场景后重试。';

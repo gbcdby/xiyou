@@ -23,6 +23,7 @@ function actor(id, name, actorKind = 'human') {
 export function reduceSpatialWorld(previous, event, content) {
     if (!['spatial-world-v2','gaolao-world-v1'].includes(previous.reducerVersion) || content.reducerVersion !== previous.reducerVersion || event.schemaVersion !== 2 || event.sessionId !== previous.sessionId || event.sessionSeq !== next(previous.sessionSeq))
         throw new Error('空间事件不属于当前解释器的连续前缀。');
+    // 旧版本曾在终态记录 spatial.view；保留原日志回放，新读取由 ensureView 保持只读。
     if (['Finished', 'Aborted'].includes(previous.phase) && event.kind !== 'spatial.view')
         throw new Error('终局之后不能追加空间事实。');
     const state = structuredClone(previous), p = event.payload;
@@ -130,15 +131,15 @@ export function inRange(state, content, a, b, radius) { return !!(a?.position &&
 export function unoccluded(state, content, a, b) { const scene = sceneOf(content, a?.sceneId); return !!(scene && a?.position && b?.position && a.sceneId === b.sceneId && clearSegment(scene, a.position, b.position, obstacleEnabled(state))); }
 export function canSee(state, content, observerId, entity) { const a = state.characters[observerId], b = locationOf(state, entity); return state.phase === 'Lobby' && entity.kind === 'human' || entity.characterId === observerId || entity.location?.characterId === observerId || inRange(state, content, a, b, content.movement.sightRadius) && unoccluded(state, content, a, b); }
 export function ensureView(tx, actorId, { rotate = false, viewId = opaqueRef() } = {}) {
-    const old = tx.state.views[actorId];
+    const old = tx.state.views[actorId], readOnly = ['Finished', 'Aborted'].includes(tx.state.phase);
     if (old && !rotate && Object.values({ ...tx.state.characters, ...tx.state.items, ...tx.state.targets }).every(e => old.bindings[e.characterId ?? e.itemId ?? e.targetId]?.appearanceEpoch === (e.appearanceEpoch ?? '0')))
         return old;
     const bindings = rotate ? {} : structuredClone(old?.bindings ?? {});
     for (const [id, e] of Object.entries({ ...tx.state.characters, ...tx.state.items, ...tx.state.targets }))
         if (!bindings[id] || bindings[id].appearanceEpoch !== e.appearanceEpoch)
             bindings[id] = { ref: opaqueRef(), appearanceEpoch: e.appearanceEpoch };
-    const view = { viewId: rotate || !old ? viewId : old.viewId, viewEpoch: rotate || !old ? next(old?.viewEpoch ?? '0') : old.viewEpoch, createdAtSeq: rotate || !old ? next(tx.state.sessionSeq) : old.createdAtSeq ?? '0', bindings };
-    tx.emit('spatial.view', { actorId, view }, { humanCharacterIds: [], coreNpcCharacterIds: [], proxyCharacterIds: [] });
+    const view = { viewId: rotate || !old ? viewId : old.viewId, viewEpoch: rotate || !old ? next(old?.viewEpoch ?? '0') : old.viewEpoch, createdAtSeq: rotate || !old ? (readOnly ? tx.state.sessionSeq : next(tx.state.sessionSeq)) : old.createdAtSeq ?? '0', bindings };
+    if (!readOnly) tx.emit('spatial.view', { actorId, view }, { humanCharacterIds: [], coreNpcCharacterIds: [], proxyCharacterIds: [] });
     return view;
 }
 export const entityRef = (view, id) => view.bindings[id]?.ref;
