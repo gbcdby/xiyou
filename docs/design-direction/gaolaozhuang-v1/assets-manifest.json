@@ -1,0 +1,185 @@
+{
+  "baseline": "GZ-VIS-01/v1.0",
+  "date": "2026-11-12",
+  "status": "design_candidate_adopted_by_coordinator_pending_independent_review",
+  "code_baseline": "60e68a83cac2bd5d45b410a64545730a2a1c3eb4",
+  "product_validation": "NOT_RUN",
+  "assets": [
+    {
+      "path": "assets/courtyard.png",
+      "role": "高家院落：原型字节复用",
+      "asset_source": "original_team",
+      "creation_method": "original_archive_bytes",
+      "width": 1586,
+      "height": 992,
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/gaocai-idle-se.png",
+      "role": "高才SE站姿：原manifest脚底与scale",
+      "asset_source": "original_team",
+      "creation_method": "original_archive_bytes",
+      "width": 362,
+      "height": 543,
+      "mode": "RGBA"
+    },
+    {
+      "path": "assets/characters-concept.png",
+      "role": "五人静态造型：设计使用，不是动画包",
+      "asset_source": "original_team",
+      "creation_method": "image_gen",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA"
+    },
+    {
+      "path": "assets/village-road.png",
+      "role": "庄外短路：场景概念，不是导航已验证地图",
+      "asset_source": "original_team",
+      "creation_method": "image_gen",
+      "width": 1586,
+      "height": 992,
+      "mode": "RGB"
+    }
+  ],
+  "previews": [
+    {
+      "path": "previews/dialogue-1600x1000.png",
+      "role": "隔离设计样页实际渲染；不代表正式游戏运行",
+      "width": 1600,
+      "height": 1000,
+      "creation_method": "browser_render_of_isolated_design"
+    },
+    {
+      "path": "previews/follow-1600x1000.png",
+      "role": "隔离设计样页实际渲染；不代表正式游戏运行",
+      "width": 1600,
+      "height": 1000,
+      "creation_method": "browser_render_of_isolated_design"
+    },
+    {
+      "path": "previews/inventory-1600x1000.png",
+      "role": "隔离设计样页实际渲染；不代表正式游戏运行",
+      "width": 1600,
+      "height": 1000,
+      "creation_method": "browser_render_of_isolated_design"
+    },
+    {
+      "path": "previews/main-1600x1000.png",
+      "role": "隔离设计样页实际渲染；不代表正式游戏运行",
+      "width": 1600,
+      "height": 1000,
+      "creation_method": "browser_render_of_isolated_design"
+    },
+    {
+      "path": "previews/notebook-1600x1000.png",
+      "role": "隔离设计样页实际渲染；不代表正式游戏运行",
+      "width": 1600,
+      "height": 1000,
+      "creation_method": "browser_render_of_isolated_design"
+    },
+    {
+      "path": "previews/recap-1600x1000.png",
+      "role": "隔离设计样页实际渲染；不代表正式游戏运行",
+      "width": 1600,
+      "height": 1000,
+      "creation_method": "browser_render_of_isolated_design"
+    },
+    {
+      "path": "previews/road-1600x1000.png",
+      "role": "隔离设计样页实际渲染；不代表正式游戏运行",
+      "width": 1600,
+      "height": 1000,
+      "creation_method": "browser_render_of_isolated_design"
+    },
+    {
+      "path": "previews/state-board-1600.png",
+      "role": "隔离设计样页实际渲染；不代表正式游戏运行",
+      "width": 1600,
+      "height": 2139,
+      "creation_method": "browser_render_of_isolated_design"
+    }
+  ],
+  "actor_atlas_display_windows": {
+    "tang": {
+      "x": 40,
+      "width": 310,
+      "top": 10,
+      "footY": 866,
+      "footX": 156
+    },
+    "wukong": {
+      "x": 365,
+      "width": 290,
+      "top": 74,
+      "footY": 869,
+      "footX": 161
+    },
+    "bajie": {
+      "x": 680,
+      "width": 390,
+      "top": 47,
+      "footY": 866,
+      "footX": 208
+    },
+    "cuilan": {
+      "x": 1087,
+      "width": 292,
+      "top": 57,
+      "footY": 869,
+      "footX": 140
+    },
+    "carpenter": {
+      "x": 1406,
+      "width": 340,
+      "top": 28,
+      "footY": 867,
+      "footX": 187
+    }
+  },
+  "actor_atlas_note": "显示裁窗与脚底均为本轮静态设计值，只用于概念图等比摆放；不是正式动画manifest。原PNG不裁写。",
+  "checks": {
+    "viewports": [
+      "main",
+      "follow",
+      "road",
+      "dialogue",
+      "inventory",
+      "notebook",
+      "recap"
+    ],
+    "viewport_size_css_px": [
+      1600,
+      1000
+    ],
+    "device_scale_factor": 1,
+    "state_board_width": 1600,
+    "page_errors": 0,
+    "checked_text_horizontal_overflow": 0,
+    "all_referenced_images_loaded": true,
+    "contrast_ratios": [
+      12.34,
+      5.89,
+      6.54,
+      6.89,
+      5.48,
+      5.57
+    ],
+    "review_scope": "作者自查；主调度采用设计方向；待独立审查",
+    "not_covered": [
+      "正式服务端多人",
+      "真实模型",
+      "真人玩法",
+      "完整角色动画",
+      "前景局部淡化",
+      "手机真机",
+      "完整响应式与辅助技术"
+    ]
+  },
+  "artifact_access": {
+    "current_authorized_delivery": "available_for_this_task",
+    "public_recovery": "NOT_AVAILABLE",
+    "note": "新图像的对外恢复入口尚未获得授权。本清单不含个人资源标识、下载链接或归档元数据；未取得图像时不能声明视觉复现完整。",
+    "existing_project_source": "../../../prototypes/gaolaozhuang/README.md"
+  }
+}
