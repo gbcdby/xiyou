@@ -6,11 +6,12 @@
 
 2026-11-11 用户启动 `auto` 后，开始将[初步产品与技术设计](../../初步设计文档.md)细化为首个可玩切片。文档候选、独立审查与实际采用状态以关联的 GitHub 任务及 PR 为准；规格存在不表示实现或运行验收通过。
 
-当前新的设计候选为 **ADV-001**：依据用户要求，转向可行走、无战斗的多人叙事解谜，采用六章原著顺序，先展开五庄观。用户本次要求先落成 Spec；应用实现与真实实施 Tickets 尚未开始。
+当前设计候选为 **ADV-001 v0.2**（2026-11-12，北京时间）：用户已明确选定高老庄为首章。原五庄观详案保留为 CH02，其余改用经典章节路线；真假美猴王为条件候选。具体玩法、三名自主NPC、乔装/本人随行与验收见主文档。此次只修订 Spec；应用实现与实施 Tickets 尚未开始。
 
 | Spec | 范围 | 权威记录 |
 | --- | --- | --- |
-| [ADV-001：无战斗多人叙事冒险与首章五庄观](narrative-adventure.md) | 共用行走/交互/AI边界、六章顺序、五庄观双路线、阶段与验收；设计候选 | [汇总 #23](https://github.com/gbcdby/xiyou/issues/23)，实施 Tickets 尚未建立 |
+| [ADV-001：无战斗多人叙事冒险与首章高老庄](narrative-adventure.md) | v0.2：共用行走/交互、经典章节顺序、高老庄完整玩法、三NPC/乔装/随行边界与验收；设计候选 | [汇总 #23](https://github.com/gbcdby/xiyou/issues/23)、[设计 PR #24](https://github.com/gbcdby/xiyou/pull/24)，实施 Tickets 尚未建立 |
+| [ADV-001：CH02五庄观保留详案](narrative-adventure-wuzhuang.md) | 同一v0.2的后续A4范围；保留果数、两条完整路线和原ADV-AC-07/08/09；运行未执行 | 同一汇总与PR，不是另一个已实施Spec |
 | [VS-001：首个可玩切片](vertical-slice.md) | M0–M4：协议、无 AI 联机、单 AI、双 AI、第一机制关 | [汇总 #2](https://github.com/gbcdby/xiyou/issues/2)、[设计 #3](https://github.com/gbcdby/xiyou/issues/3)、[任务目录](vertical-slice-tasks.md) |
 | [VS-001：本轮模拟验收修订](vertical-slice-mock.md) | mock-20261111：模拟输入、实际实现验证、受控双NPC与授权复盘，验证后合并 | 同一汇总与任务目录，结果须同时注明 profile 和固定候选 |
 

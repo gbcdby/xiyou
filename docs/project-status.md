@@ -2,15 +2,15 @@
 
 ## 当前基线
 
-更新日期：**2026-11-11 UTC**。本次读取的代码基线为 [`main@5d0befff`](https://github.com/gbcdby/xiyou/tree/5d0befff3673c840756d64a982878ac76dfd0273)。当前实现已包含 `game/`、`protocol/`、`formal/`、`backend/`、`frontend/` 与 `content/`：Node.js / PostgreSQL 权威服务、Vue 界面、受控双角色、第一机制关及授权复盘。上一轮终点为[模拟输入下完成验证并合并的可玩切片](specs/vertical-slice-mock.md)，实际候选、独立审查、运行证据与合并事实见 [#2](https://github.com/gbcdby/xiyou/issues/2) / [#12](https://github.com/gbcdby/xiyou/issues/12) / [PR #22](https://github.com/gbcdby/xiyou/pull/22)。历史证据保留其对应候选身份，不代表本次重跑。本页不复制活动任务清单。
+更新日期：**2026-11-12（北京时间）**。本次读取的代码基线为 [`main@5d0befff`](https://github.com/gbcdby/xiyou/tree/5d0befff3673c840756d64a982878ac76dfd0273)。当前实现已包含 `game/`、`protocol/`、`formal/`、`backend/`、`frontend/` 与 `content/`：Node.js / PostgreSQL 权威服务、Vue 界面、受控双角色、第一机制关及授权复盘。上一轮终点为[模拟输入下完成验证并合并的可玩切片](specs/vertical-slice-mock.md)，实际候选、独立审查、运行证据与合并事实见 [#2](https://github.com/gbcdby/xiyou/issues/2) / [#12](https://github.com/gbcdby/xiyou/issues/12) / [PR #22](https://github.com/gbcdby/xiyou/pull/22)。历史证据保留其对应候选身份，不代表本次重跑。本页不复制活动任务清单。
 
 模拟策略经正式 Gateway、Decision 和 Validator 执行；有限模型、数据库、HTTP / Socket.IO 与浏览器检查分别保留证据。实际供应商质量、真人体验、真实设备和公网部署仍未执行。运行入口见[仓库说明](../README.md#本机运行模拟切片)。
 
 ### 当前设计阶段：可行走的无战斗冒险
 
-用户明确希望玩家能行走、交互，以故事与协作解谜完成任务，采用水墨淡彩画风，并要求先形成 Spec。新的设计候选为[ADV-001：无战斗多人叙事冒险与首章五庄观](specs/narrative-adventure.md)：六章按五庄观→平顶山→乌鸡国→车迟国→火焰山→金平府推进，首章设计包含提前和解与协作救树两条完整路线。
+用户要求可行走交互、水墨淡彩、无战斗，以故事和协作解谜为主；随后要求更经典的选题，并明确首章做高老庄。当前为[ADV-001 v0.2：首章高老庄](specs/narrative-adventure.md)：救出并安置翠兰→乔装或公开会面→查证候客旧事→自愿入队或安全分别。路线为高老庄→五庄观→白骨精→女儿国→真假美猴王（条件候选）→火焰山；红孩儿仅作CH05未过门槛时的替补，采用时按原著重排。原[五庄观双路线详案](specs/narrative-adventure-wuzhuang.md)保留为CH02。
 
-当前移动仍为 `regionId` 区域切换，世界界面仍以区域按钮和物件卡片为主；连续行走、空间距离/遮挡和正式五庄观内容尚未实现。下一工程阶段的释放条件见[ADV-001推进阶段](specs/narrative-adventure.md#12-推进阶段与释放条件)，不能将旧M0–M4模拟结果当作新玩法或视觉验收。此次仅保存设计候选，尚未建立其实施 Tickets。
+当前移动仍为 `regionId` 区域切换，世界界面仍以区域按钮和物件卡片为主；连续行走、空间距离/遮挡和正式高老庄内容尚未实现；当前身份投影与固定双NPC内容结构也需扩展，不能直接支撑悟空乔装和自主八戒。下一工程阶段的释放条件见[ADV-001推进阶段](specs/narrative-adventure.md#12-推进阶段与释放条件)，不能将旧M0–M4模拟结果当作新玩法或视觉验收。此次仅修订设计候选，沿用[汇总 #23](https://github.com/gbcdby/xiyou/issues/23)和[草稿设计 PR #24](https://github.com/gbcdby/xiyou/pull/24)，未开始业务实现、实施拆票、合并或发布。正式UI需先有已采用的视觉基准，再做实现与截图对照。
 
 ### 初始检查快照（历史）
 
@@ -36,7 +36,7 @@
 ## 已有产品与技术边界
 
 - 《西游记》多人合作叙事：唐僧与孙悟空跨关持续存在；每局最多五位真人，玩家逐关扮演当地配角。
-- 六关原本只有机制类型；用户同意将本轮六章推荐落成[ADV-001](specs/narrative-adventure.md)。五庄观先展开，后五章逐章细化，第一章延续“信任与证据 + 纠纷解决”。
+- 六关具体路线由[ADV-001 v0.2](specs/narrative-adventure.md)承接；高老庄已确定首发，五庄观保留第二章，后续经典章节逐章细化且真假美猴王仍有选题门槛。高老庄启用八戒作为第三名章内自主AI，唐僧/悟空仍是两位跨章核心。
 - 用户新决定：可行走的水墨淡彩场景，无战斗，以故事、探索与协作解谜为主；具体行为和验收以ADV-001候选为准。
 - 协作依赖信息、权限与能力的差异；NPC 可以怀疑、拒绝和改变计划。世界事实、NPC 信念与角色陈述必须分开。
 - 当前前端采用 Vue 3 与 TypeScript，后端采用 Node.js 与 PostgreSQL。服务端维护权威状态与顺序事件，受控模型输入通过 Model Gateway 接入。
