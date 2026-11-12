@@ -1,5 +1,7 @@
 # VS-001 v1 协议契约
 
+ADV-001 空间增量独立见[高老庄有限动作](gaolao-v2.md)、[公开造型协商](spatial-appearance-v1.md)和[空间模型 context/意图](spatial-ai-v2.md)。以下 v1 合同继续保持既有含义，不承载空间模型输出。
+
 本目录实现 [Ticket #4](https://github.com/gbcdby/xiyou/issues/4) 的结构、编码与 TypeScript 边界，依据固定 Spec 修订 `6c2a0b9f6d137ad5fbd41721659404333ad8e16d` 的 [M0 协议](../docs/specs/m0-protocol.md)。当前为可审查实现候选；任务是否完成及下游产物是否释放，以 Issue 中的独立审查与 PR 记录为准。
 
 这里没有数据库、世界提交器、权限引擎或网络服务。通过结构校验的消息仍须经过当前认证、Session/角色/连接绑定、epoch、对象版本、可见性、终局和领域规则检查。

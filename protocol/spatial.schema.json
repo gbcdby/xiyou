@@ -2,6 +2,28 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/gbcdby/xiyou/protocol/spatial-v2",
   "$defs": {
+    "SpatialClientCapability": {
+      "enum": [
+        "spatial-v2",
+        "spatial-appearance-v1"
+      ]
+    },
+    "AppearanceIdV2": {
+      "enum": [
+        "neutral",
+        "gaocai",
+        "courtyard-helper",
+        "carpenter",
+        "kitchen-helper",
+        "woodcutter",
+        "tang",
+        "wukong",
+        "bajie",
+        "cuilan",
+        "gao",
+        "witness"
+      ]
+    },
     "GaolaoInteractionV2": {
       "oneOf": [
         {
@@ -1738,6 +1760,9 @@
         "appearanceEpoch": {
           "$ref": "#/$defs/DecimalString"
         },
+        "appearanceId": {
+          "$ref": "#/$defs/AppearanceIdV2"
+        },
         "sceneId": {
           "oneOf": [
             {
@@ -1811,6 +1836,9 @@
         },
         "appearanceEpoch": {
           "$ref": "#/$defs/DecimalString"
+        },
+        "appearanceId": {
+          "$ref": "#/$defs/AppearanceIdV2"
         },
         "sceneId": {
           "oneOf": [

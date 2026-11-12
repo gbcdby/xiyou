@@ -1,0 +1,2255 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/gbcdby/xiyou/protocol/spatial-ai-v2",
+  "$defs": {
+    "SpatialProposedIntentV2": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 2
+        },
+        "decisionId": {
+          "$ref": "#/$defs/Id"
+        },
+        "toolCalls": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SpatialModelActionV2"
+          },
+          "maxItems": 1,
+          "minItems": 1
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "decisionId",
+        "toolCalls"
+      ],
+      "additionalProperties": false
+    },
+    "Id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}(?![\\s\\S])"
+    },
+    "SpatialModelActionV2": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "move_to"
+            },
+            "sceneId": {
+              "$ref": "#/$defs/Id"
+            },
+            "destination": {
+              "$ref": "#/$defs/Position"
+            },
+            "targetRef": {
+              "$ref": "#/$defs/EntityRef"
+            },
+            "anchorId": {
+              "$ref": "#/$defs/Id"
+            }
+          },
+          "required": [
+            "kind",
+            "sceneId",
+            "destination"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "stop_move"
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "inspect"
+            },
+            "targetRef": {
+              "$ref": "#/$defs/EntityRef"
+            }
+          },
+          "required": [
+            "kind",
+            "targetRef"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "take_item"
+            },
+            "itemRef": {
+              "$ref": "#/$defs/EntityRef"
+            },
+            "expectedItemRevision": {
+              "$ref": "#/$defs/DecimalString"
+            }
+          },
+          "required": [
+            "kind",
+            "itemRef",
+            "expectedItemRevision"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "put_item"
+            },
+            "itemRef": {
+              "$ref": "#/$defs/EntityRef"
+            },
+            "expectedItemRevision": {
+              "$ref": "#/$defs/DecimalString"
+            },
+            "sceneId": {
+              "$ref": "#/$defs/Id"
+            },
+            "position": {
+              "$ref": "#/$defs/Position"
+            }
+          },
+          "required": [
+            "kind",
+            "itemRef",
+            "expectedItemRevision",
+            "sceneId",
+            "position"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "transfer_item"
+            },
+            "itemRef": {
+              "$ref": "#/$defs/EntityRef"
+            },
+            "expectedItemRevision": {
+              "$ref": "#/$defs/DecimalString"
+            },
+            "recipientRef": {
+              "$ref": "#/$defs/EntityRef"
+            }
+          },
+          "required": [
+            "kind",
+            "itemRef",
+            "expectedItemRevision",
+            "recipientRef"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "interact"
+            },
+            "targetRef": {
+              "$ref": "#/$defs/EntityRef"
+            },
+            "operationId": {
+              "type": "string",
+              "pattern": "^(?!gz-)[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}(?![\\s\\S])"
+            },
+            "expectedTargetRevision": {
+              "$ref": "#/$defs/DecimalString"
+            }
+          },
+          "required": [
+            "kind",
+            "targetRef",
+            "operationId",
+            "expectedTargetRevision"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "$ref": "#/$defs/GaolaoInteractionV2"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "speak"
+            },
+            "text": {
+              "type": "string",
+              "maxLength": 2000,
+              "minLength": 1
+            },
+            "channel": {
+              "enum": [
+                "public",
+                "directed"
+              ]
+            },
+            "recipientRefs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/EntityRef"
+              },
+              "maxItems": 256
+            }
+          },
+          "required": [
+            "kind",
+            "text",
+            "channel",
+            "recipientRefs"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "make_claim"
+            },
+            "text": {
+              "type": "string",
+              "maxLength": 2000,
+              "minLength": 1
+            },
+            "channel": {
+              "enum": [
+                "public",
+                "directed"
+              ]
+            },
+            "recipientRefs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/EntityRef"
+              },
+              "maxItems": 256
+            }
+          },
+          "required": [
+            "kind",
+            "text",
+            "channel",
+            "recipientRefs"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "share_evidence"
+            },
+            "evidenceRef": {
+              "$ref": "#/$defs/EntityRef"
+            },
+            "recipientRefs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/EntityRef"
+              },
+              "maxItems": 256,
+              "minItems": 1
+            }
+          },
+          "required": [
+            "kind",
+            "evidenceRef",
+            "recipientRefs"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "respond_consent"
+            },
+            "consentId": {
+              "$ref": "#/$defs/EntityRef"
+            },
+            "expectedConsentVersion": {
+              "$ref": "#/$defs/DecimalString"
+            },
+            "response": {
+              "enum": [
+                "accept",
+                "decline",
+                "defer"
+              ]
+            }
+          },
+          "required": [
+            "kind",
+            "consentId",
+            "expectedConsentVersion",
+            "response"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "withdraw_consent"
+            },
+            "consentId": {
+              "$ref": "#/$defs/EntityRef"
+            },
+            "expectedConsentVersion": {
+              "$ref": "#/$defs/DecimalString"
+            }
+          },
+          "required": [
+            "kind",
+            "consentId",
+            "expectedConsentVersion"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "wait"
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "Position": {
+      "type": "object",
+      "properties": {
+        "x": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "y": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        }
+      },
+      "required": [
+        "x",
+        "y"
+      ],
+      "additionalProperties": false
+    },
+    "EntityRef": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{32,96}(?![\\s\\S])"
+    },
+    "DecimalString": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)(?![\\s\\S])"
+    },
+    "GaolaoInteractionV2": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "interact"
+            },
+            "targetRef": {
+              "$ref": "#/$defs/EntityRef"
+            },
+            "operationId": {
+              "enum": [
+                "gz-contact",
+                "gz-check-seal",
+                "gz-try-key",
+                "gz-step-back",
+                "gz-break-seal",
+                "gz-release-appearance",
+                "gz-reveal-identity",
+                "gz-check-appearance",
+                "gz-read-ledger",
+                "gz-hear-witness",
+                "gz-show-passage",
+                "gz-confirm-meeting",
+                "gz-release-support",
+                "gz-plan-departure",
+                "gz-join-party",
+                "gz-finish-separation"
+              ]
+            },
+            "expectedTargetRevision": {
+              "$ref": "#/$defs/DecimalString"
+            }
+          },
+          "required": [
+            "kind",
+            "targetRef",
+            "operationId",
+            "expectedTargetRevision"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "interact"
+            },
+            "targetRef": {
+              "$ref": "#/$defs/EntityRef"
+            },
+            "operationId": {
+              "enum": [
+                "gz-confirm-settlement",
+                "gz-pause-follow",
+                "gz-apply-appearance"
+              ]
+            },
+            "expectedTargetRevision": {
+              "$ref": "#/$defs/DecimalString"
+            },
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "consentId": {
+                  "$ref": "#/$defs/EntityRef"
+                },
+                "expectedConsentVersion": {
+                  "$ref": "#/$defs/DecimalString"
+                }
+              },
+              "required": [
+                "consentId",
+                "expectedConsentVersion"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "kind",
+            "targetRef",
+            "operationId",
+            "expectedTargetRevision",
+            "parameters"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "interact"
+            },
+            "targetRef": {
+              "$ref": "#/$defs/EntityRef"
+            },
+            "operationId": {
+              "enum": [
+                "gz-request-appearance",
+                "gz-invite-meeting"
+              ]
+            },
+            "expectedTargetRevision": {
+              "$ref": "#/$defs/DecimalString"
+            },
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "destinationId": {
+                  "$ref": "#/$defs/Id"
+                },
+                "expectedConsentVersion": {
+                  "$ref": "#/$defs/DecimalString"
+                }
+              },
+              "required": [
+                "destinationId",
+                "expectedConsentVersion"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "kind",
+            "targetRef",
+            "operationId",
+            "expectedTargetRevision",
+            "parameters"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "interact"
+            },
+            "targetRef": {
+              "$ref": "#/$defs/EntityRef"
+            },
+            "operationId": {
+              "enum": [
+                "gz-compare-sources"
+              ]
+            },
+            "expectedTargetRevision": {
+              "$ref": "#/$defs/DecimalString"
+            },
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "evidenceRefs": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/EntityRef"
+                  },
+                  "maxItems": 2,
+                  "minItems": 2,
+                  "uniqueItems": true
+                }
+              },
+              "required": [
+                "evidenceRefs"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "kind",
+            "targetRef",
+            "operationId",
+            "expectedTargetRevision",
+            "parameters"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "interact"
+            },
+            "targetRef": {
+              "$ref": "#/$defs/EntityRef"
+            },
+            "operationId": {
+              "enum": [
+                "gz-recruitment-decision",
+                "gz-membership-decision"
+              ]
+            },
+            "expectedTargetRevision": {
+              "$ref": "#/$defs/DecimalString"
+            },
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "expectedDecisionVersion": {
+                  "$ref": "#/$defs/DecimalString"
+                },
+                "response": {
+                  "enum": [
+                    "accept",
+                    "decline",
+                    "defer",
+                    "withdraw"
+                  ]
+                }
+              },
+              "required": [
+                "expectedDecisionVersion",
+                "response"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "kind",
+            "targetRef",
+            "operationId",
+            "expectedTargetRevision",
+            "parameters"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "interact"
+            },
+            "targetRef": {
+              "$ref": "#/$defs/EntityRef"
+            },
+            "operationId": {
+              "enum": [
+                "gz-return-public"
+              ]
+            },
+            "expectedTargetRevision": {
+              "$ref": "#/$defs/DecimalString"
+            },
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "itemRef": {
+                  "$ref": "#/$defs/EntityRef"
+                },
+                "expectedItemRevision": {
+                  "$ref": "#/$defs/DecimalString"
+                }
+              },
+              "required": [
+                "itemRef",
+                "expectedItemRevision"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "kind",
+            "targetRef",
+            "operationId",
+            "expectedTargetRevision",
+            "parameters"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "interact"
+            },
+            "targetRef": {
+              "$ref": "#/$defs/EntityRef"
+            },
+            "operationId": {
+              "enum": [
+                "gz-request-private-items"
+              ]
+            },
+            "expectedTargetRevision": {
+              "$ref": "#/$defs/DecimalString"
+            },
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "itemRefs": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/EntityRef"
+                  },
+                  "maxItems": 8,
+                  "minItems": 1,
+                  "uniqueItems": true
+                },
+                "expectedConsentVersion": {
+                  "$ref": "#/$defs/DecimalString"
+                }
+              },
+              "required": [
+                "itemRefs",
+                "expectedConsentVersion"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "kind",
+            "targetRef",
+            "operationId",
+            "expectedTargetRevision",
+            "parameters"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "SpatialContextV2": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 2
+        },
+        "contextVersion": {
+          "const": "spatial-ai-context-v1"
+        },
+        "sessionId": {
+          "$ref": "#/$defs/Id"
+        },
+        "viewId": {
+          "$ref": "#/$defs/Id"
+        },
+        "snapshotSeq": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "projection": {
+          "$ref": "#/$defs/SpatialModelProjectionV2"
+        },
+        "tools": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SpatialModelToolV2"
+          },
+          "maxItems": 4096
+        },
+        "decision": {
+          "type": "object",
+          "properties": {
+            "decisionId": {
+              "$ref": "#/$defs/Id"
+            }
+          },
+          "required": [
+            "decisionId"
+          ],
+          "additionalProperties": false
+        },
+        "persona": {
+          "type": "object",
+          "properties": {
+            "motives": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 400
+              },
+              "maxItems": 8
+            },
+            "boundaries": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 400
+              },
+              "maxItems": 8
+            }
+          },
+          "required": [
+            "motives",
+            "boundaries"
+          ],
+          "additionalProperties": false
+        },
+        "goals": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SpatialModelGoalV2"
+          },
+          "maxItems": 32
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "contextVersion",
+        "sessionId",
+        "viewId",
+        "snapshotSeq",
+        "projection",
+        "tools"
+      ],
+      "additionalProperties": false
+    },
+    "SpatialModelProjectionV2": {
+      "type": "object",
+      "properties": {
+        "protocolCapability": {
+          "const": "spatial-v2"
+        },
+        "chapterVersion": {
+          "$ref": "#/$defs/Id"
+        },
+        "mapVersion": {
+          "$ref": "#/$defs/Id"
+        },
+        "variantId": {
+          "$ref": "#/$defs/Id"
+        },
+        "contentVersion": {
+          "$ref": "#/$defs/Id"
+        },
+        "reducerVersion": {
+          "enum": [
+            "spatial-world-v2",
+            "gaolao-world-v1"
+          ]
+        },
+        "phase": {
+          "enum": [
+            "Lobby",
+            "Running",
+            "Finished",
+            "Aborted"
+          ]
+        },
+        "sceneTimeMs": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "paused": {
+          "type": "boolean"
+        },
+        "self": {
+          "$ref": "#/$defs/SpatialModelSelfV2"
+        },
+        "entities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SpatialModelEntityV2"
+          },
+          "maxItems": 256
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SpatialModelItemV2"
+          },
+          "maxItems": 256
+        },
+        "targets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TargetViewV2"
+          },
+          "maxItems": 256
+        },
+        "scene": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/PublicScene"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "movement": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/SpatialModelMovementV2"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "observations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ObservationViewV2"
+          },
+          "maxItems": 256
+        },
+        "claims": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ClaimViewV2"
+          },
+          "maxItems": 256
+        },
+        "cooperations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CooperationViewV2"
+          },
+          "maxItems": 256
+        },
+        "objectives": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "objectiveId": {
+                "$ref": "#/$defs/Id"
+              },
+              "label": {
+                "type": "string",
+                "maxLength": 240
+              },
+              "status": {
+                "enum": [
+                  "active",
+                  "completed",
+                  "blocked"
+                ]
+              }
+            },
+            "required": [
+              "objectiveId",
+              "label",
+              "status"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 256
+        },
+        "ending": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/EndingViewV2"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "chapter": {
+          "$ref": "#/$defs/ChapterViewV2"
+        }
+      },
+      "required": [
+        "protocolCapability",
+        "chapterVersion",
+        "mapVersion",
+        "variantId",
+        "contentVersion",
+        "reducerVersion",
+        "phase",
+        "sceneTimeMs",
+        "paused",
+        "self",
+        "entities",
+        "items",
+        "targets",
+        "scene",
+        "movement",
+        "observations",
+        "claims",
+        "cooperations",
+        "objectives",
+        "ending"
+      ],
+      "additionalProperties": false
+    },
+    "SpatialModelSelfV2": {
+      "type": "object",
+      "properties": {
+        "entityRef": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "appearanceEpoch": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "appearanceId": {
+          "$ref": "#/$defs/AppearanceIdV2"
+        },
+        "sceneId": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/Id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "position": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/Position"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "facing": {
+          "$ref": "#/$defs/Facing"
+        },
+        "capabilities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Id"
+          },
+          "maxItems": 256
+        },
+        "resourceRevision": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "availableOperations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/GaolaoOperationId"
+          },
+          "maxItems": 256
+        }
+      },
+      "required": [
+        "entityRef",
+        "name",
+        "appearanceEpoch",
+        "sceneId",
+        "position",
+        "facing",
+        "capabilities"
+      ],
+      "additionalProperties": false
+    },
+    "AppearanceIdV2": {
+      "enum": [
+        "neutral",
+        "gaocai",
+        "courtyard-helper",
+        "carpenter",
+        "kitchen-helper",
+        "woodcutter",
+        "tang",
+        "wukong",
+        "bajie",
+        "cuilan",
+        "gao",
+        "witness"
+      ]
+    },
+    "Facing": {
+      "enum": [
+        "N",
+        "NE",
+        "E",
+        "SE",
+        "S",
+        "SW",
+        "W",
+        "NW"
+      ]
+    },
+    "GaolaoOperationId": {
+      "enum": [
+        "gz-contact",
+        "gz-check-seal",
+        "gz-try-key",
+        "gz-step-back",
+        "gz-break-seal",
+        "gz-confirm-settlement",
+        "gz-pause-follow",
+        "gz-request-appearance",
+        "gz-apply-appearance",
+        "gz-release-appearance",
+        "gz-reveal-identity",
+        "gz-check-appearance",
+        "gz-read-ledger",
+        "gz-hear-witness",
+        "gz-compare-sources",
+        "gz-show-passage",
+        "gz-invite-meeting",
+        "gz-confirm-meeting",
+        "gz-recruitment-decision",
+        "gz-membership-decision",
+        "gz-release-support",
+        "gz-return-public",
+        "gz-plan-departure",
+        "gz-join-party",
+        "gz-finish-separation",
+        "gz-request-private-items"
+      ]
+    },
+    "SpatialModelEntityV2": {
+      "type": "object",
+      "properties": {
+        "entityRef": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "appearanceEpoch": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "appearanceId": {
+          "$ref": "#/$defs/AppearanceIdV2"
+        },
+        "sceneId": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/Id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "position": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/Position"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "facing": {
+          "$ref": "#/$defs/Facing"
+        },
+        "resourceRevision": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "availableOperations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/GaolaoOperationId"
+          },
+          "maxItems": 256
+        }
+      },
+      "required": [
+        "entityRef",
+        "name",
+        "appearanceEpoch",
+        "sceneId",
+        "position",
+        "facing"
+      ],
+      "additionalProperties": false
+    },
+    "SpatialModelItemV2": {
+      "type": "object",
+      "properties": {
+        "entityRef": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "location": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "ground"
+                },
+                "sceneId": {
+                  "$ref": "#/$defs/Id"
+                },
+                "position": {
+                  "$ref": "#/$defs/Position"
+                }
+              },
+              "required": [
+                "kind",
+                "sceneId",
+                "position"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "held"
+                },
+                "ownerRef": {
+                  "$ref": "#/$defs/EntityRef"
+                }
+              },
+              "required": [
+                "kind",
+                "ownerRef"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "resourceRevision": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "transferable": {
+          "type": "boolean"
+        },
+        "publicBorrowable": {
+          "type": "boolean"
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FactField"
+          },
+          "maxItems": 32
+        }
+      },
+      "required": [
+        "entityRef",
+        "name",
+        "location",
+        "resourceRevision",
+        "transferable",
+        "publicBorrowable",
+        "fields"
+      ],
+      "additionalProperties": false
+    },
+    "FactField": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/Id"
+        },
+        "label": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "value": {
+          "$ref": "#/$defs/Scalar"
+        }
+      },
+      "required": [
+        "key",
+        "label",
+        "value"
+      ],
+      "additionalProperties": false
+    },
+    "Scalar": {
+      "oneOf": [
+        {
+          "type": "string",
+          "maxLength": 2000
+        },
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "TargetViewV2": {
+      "type": "object",
+      "properties": {
+        "entityRef": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "sceneId": {
+          "$ref": "#/$defs/Id"
+        },
+        "position": {
+          "$ref": "#/$defs/Position"
+        },
+        "resourceRevision": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "availableOperations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Id"
+          },
+          "maxItems": 256
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FactField"
+          },
+          "maxItems": 32
+        }
+      },
+      "required": [
+        "entityRef",
+        "name",
+        "sceneId",
+        "position",
+        "resourceRevision",
+        "availableOperations",
+        "fields"
+      ],
+      "additionalProperties": false
+    },
+    "PublicScene": {
+      "type": "object",
+      "properties": {
+        "sceneId": {
+          "$ref": "#/$defs/Id"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000000
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000000
+        },
+        "unitsPerPixel": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000
+        },
+        "walkableAreas": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "areaId": {
+                "$ref": "#/$defs/Id"
+              },
+              "polygon": {
+                "$ref": "#/$defs/Polygon"
+              }
+            },
+            "required": [
+              "areaId",
+              "polygon"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 256
+        },
+        "obstacles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "obstacleId": {
+                "$ref": "#/$defs/Id"
+              },
+              "polygon": {
+                "$ref": "#/$defs/Polygon"
+              },
+              "exceptAreas": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Id"
+                },
+                "maxItems": 256
+              }
+            },
+            "required": [
+              "obstacleId",
+              "polygon",
+              "exceptAreas"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 256
+        },
+        "anchors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "anchorId": {
+                "$ref": "#/$defs/Id"
+              },
+              "position": {
+                "$ref": "#/$defs/Position"
+              },
+              "label": {
+                "type": "string",
+                "maxLength": 120
+              }
+            },
+            "required": [
+              "anchorId",
+              "position",
+              "label"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 256
+        },
+        "exits": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "exitId": {
+                "$ref": "#/$defs/Id"
+              },
+              "anchorId": {
+                "$ref": "#/$defs/Id"
+              },
+              "destinationSceneId": {
+                "$ref": "#/$defs/Id"
+              },
+              "destination": {
+                "$ref": "#/$defs/Position"
+              },
+              "open": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "exitId",
+              "anchorId",
+              "destinationSceneId",
+              "destination",
+              "open"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 256
+        }
+      },
+      "required": [
+        "sceneId",
+        "name",
+        "width",
+        "height",
+        "unitsPerPixel",
+        "walkableAreas",
+        "obstacles",
+        "anchors",
+        "exits"
+      ],
+      "additionalProperties": false
+    },
+    "Polygon": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Position"
+      },
+      "maxItems": 128,
+      "minItems": 3
+    },
+    "SpatialModelMovementV2": {
+      "type": "object",
+      "properties": {
+        "movementId": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "planVersion": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "sceneId": {
+          "$ref": "#/$defs/Id"
+        },
+        "mapVersion": {
+          "$ref": "#/$defs/Id"
+        },
+        "goal": {
+          "$ref": "#/$defs/Position"
+        },
+        "path": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Position"
+          },
+          "maxItems": 4096
+        },
+        "acceptedAtSceneTime": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "status": {
+          "enum": [
+            "accepted",
+            "moving",
+            "arrived",
+            "blocked",
+            "cancelled"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "maxLength": 120
+        }
+      },
+      "required": [
+        "movementId",
+        "planVersion",
+        "sceneId",
+        "mapVersion",
+        "goal",
+        "path",
+        "acceptedAtSceneTime",
+        "status"
+      ],
+      "additionalProperties": false
+    },
+    "ObservationViewV2": {
+      "type": "object",
+      "properties": {
+        "observationRef": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "category": {
+          "enum": [
+            "WorldFact",
+            "Evidence",
+            "Claim"
+          ]
+        },
+        "statement": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "sourceSeq": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FactField"
+          },
+          "maxItems": 32
+        },
+        "shareable": {
+          "type": "boolean"
+        },
+        "source": {
+          "$ref": "#/$defs/EvidenceSourceViewV2"
+        }
+      },
+      "required": [
+        "observationRef",
+        "category",
+        "statement",
+        "sourceSeq",
+        "fields",
+        "shareable"
+      ],
+      "additionalProperties": false
+    },
+    "EvidenceSourceViewV2": {
+      "type": "object",
+      "properties": {
+        "sourceRef": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "kind": {
+          "enum": [
+            "archive",
+            "testimony",
+            "material",
+            "comparison",
+            "decision",
+            "arrangement",
+            "contact"
+          ]
+        },
+        "label": {
+          "type": "string",
+          "maxLength": 240
+        },
+        "beforeArrivalDays": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 36500
+        },
+        "receivedSeq": {
+          "$ref": "#/$defs/DecimalString"
+        }
+      },
+      "required": [
+        "sourceRef",
+        "kind",
+        "label",
+        "beforeArrivalDays",
+        "receivedSeq"
+      ],
+      "additionalProperties": false
+    },
+    "ClaimViewV2": {
+      "type": "object",
+      "properties": {
+        "claimRef": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "speakerRef": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "speakerName": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "text": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "channel": {
+          "enum": [
+            "public",
+            "directed",
+            "team"
+          ]
+        },
+        "sourceSeq": {
+          "$ref": "#/$defs/DecimalString"
+        }
+      },
+      "required": [
+        "claimRef",
+        "speakerRef",
+        "speakerName",
+        "text",
+        "channel",
+        "sourceSeq"
+      ],
+      "additionalProperties": false
+    },
+    "CooperationViewV2": {
+      "type": "object",
+      "properties": {
+        "operationId": {
+          "$ref": "#/$defs/Id"
+        },
+        "operationVersion": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "phase": {
+          "enum": [
+            "preparing",
+            "locked"
+          ]
+        },
+        "readyCount": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5
+        },
+        "requiredCount": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "anchors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Position"
+          },
+          "maxItems": 5
+        }
+      },
+      "required": [
+        "operationId",
+        "operationVersion",
+        "phase",
+        "readyCount",
+        "requiredCount",
+        "anchors"
+      ],
+      "additionalProperties": false
+    },
+    "EndingViewV2": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "summary": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "endingCode": {
+          "enum": [
+            "GZ-E01",
+            "GZ-E02",
+            "GZ-E03"
+          ]
+        },
+        "facts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FactField"
+          },
+          "maxItems": 32
+        }
+      },
+      "required": [
+        "title",
+        "summary"
+      ],
+      "additionalProperties": false
+    },
+    "ChapterViewV2": {
+      "type": "object",
+      "properties": {
+        "chapterId": {
+          "const": "gaolaozhuang"
+        },
+        "responsibilities": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ]
+          },
+          "maxItems": 5
+        },
+        "progress": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FactField"
+          },
+          "maxItems": 32
+        },
+        "consents": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ConsentViewV2"
+          },
+          "maxItems": 256
+        },
+        "follows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FollowViewV2"
+          },
+          "maxItems": 256
+        },
+        "decisions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DecisionViewV2"
+          },
+          "maxItems": 256
+        },
+        "destinations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "destinationId": {
+                "$ref": "#/$defs/Id"
+              },
+              "label": {
+                "type": "string",
+                "maxLength": 120
+              },
+              "sceneId": {
+                "$ref": "#/$defs/Id"
+              },
+              "position": {
+                "$ref": "#/$defs/Position"
+              },
+              "purpose": {
+                "enum": [
+                  "follow",
+                  "meeting",
+                  "departure",
+                  "waiting"
+                ]
+              }
+            },
+            "required": [
+              "destinationId",
+              "label",
+              "sceneId",
+              "position",
+              "purpose"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 256
+        },
+        "endProposal": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/EndProposalViewV2"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "publicItems": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "itemRef": {
+                "$ref": "#/$defs/EntityRef"
+              },
+              "name": {
+                "type": "string",
+                "maxLength": 120
+              },
+              "borrowed": {
+                "type": "boolean"
+              },
+              "returned": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "itemRef",
+              "name",
+              "borrowed",
+              "returned"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 256
+        },
+        "route": {
+          "enum": [
+            "undecided",
+            "public",
+            "disguise"
+          ]
+        }
+      },
+      "required": [
+        "chapterId",
+        "responsibilities",
+        "progress",
+        "consents",
+        "follows",
+        "decisions",
+        "destinations",
+        "endProposal",
+        "publicItems"
+      ],
+      "additionalProperties": false
+    },
+    "ConsentViewV2": {
+      "type": "object",
+      "properties": {
+        "consentId": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "subjectRef": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "requesterRef": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "purpose": {
+          "$ref": "#/$defs/ConsentPurpose"
+        },
+        "scope": {
+          "$ref": "#/$defs/ConsentScopeViewV2"
+        },
+        "version": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "status": {
+          "enum": [
+            "proposed",
+            "accepted",
+            "declined",
+            "deferred",
+            "withdrawn"
+          ]
+        },
+        "sourceSeq": {
+          "$ref": "#/$defs/DecimalString"
+        }
+      },
+      "required": [
+        "consentId",
+        "subjectRef",
+        "requesterRef",
+        "purpose",
+        "scope",
+        "version",
+        "status",
+        "sourceSeq"
+      ],
+      "additionalProperties": false
+    },
+    "ConsentPurpose": {
+      "enum": [
+        "follow",
+        "appearance",
+        "private_items",
+        "meeting",
+        "membership"
+      ]
+    },
+    "ConsentScopeViewV2": {
+      "type": "object",
+      "properties": {
+        "destinationId": {
+          "$ref": "#/$defs/Id"
+        },
+        "leaderRef": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "itemRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/EntityRef"
+          },
+          "maxItems": 256
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "FollowViewV2": {
+      "type": "object",
+      "properties": {
+        "followId": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "subjectRef": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "leaderRef": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "destinationId": {
+          "$ref": "#/$defs/Id"
+        },
+        "planVersion": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "consentId": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "consentVersion": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "status": {
+          "enum": [
+            "proposed",
+            "accepted",
+            "following",
+            "paused",
+            "arrived",
+            "settled",
+            "withdrawn",
+            "cancelled"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "maxLength": 240
+        }
+      },
+      "required": [
+        "followId",
+        "subjectRef",
+        "leaderRef",
+        "destinationId",
+        "planVersion",
+        "consentId",
+        "consentVersion",
+        "status",
+        "reason"
+      ],
+      "additionalProperties": false
+    },
+    "DecisionViewV2": {
+      "type": "object",
+      "properties": {
+        "decisionId": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "subjectRef": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "purpose": {
+          "enum": [
+            "recruitment",
+            "membership"
+          ]
+        },
+        "version": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "status": {
+          "enum": [
+            "undecided",
+            "accepted",
+            "declined",
+            "deferred",
+            "withdrawn"
+          ]
+        },
+        "sourceSeq": {
+          "$ref": "#/$defs/DecimalString"
+        }
+      },
+      "required": [
+        "decisionId",
+        "subjectRef",
+        "purpose",
+        "version",
+        "status",
+        "sourceSeq"
+      ],
+      "additionalProperties": false
+    },
+    "EndProposalViewV2": {
+      "type": "object",
+      "properties": {
+        "proposalId": {
+          "$ref": "#/$defs/Id"
+        },
+        "proposalVersion": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "scope": {
+          "enum": [
+            "chapter",
+            "recruitment"
+          ]
+        },
+        "onlineMembershipVersion": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "requiredCount": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "confirmedCount": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5
+        },
+        "ownConfirmed": {
+          "type": "boolean"
+        },
+        "status": {
+          "enum": [
+            "pending",
+            "confirmed",
+            "invalidated"
+          ]
+        }
+      },
+      "required": [
+        "proposalId",
+        "proposalVersion",
+        "scope",
+        "onlineMembershipVersion",
+        "requiredCount",
+        "confirmedCount",
+        "ownConfirmed",
+        "status"
+      ],
+      "additionalProperties": false
+    },
+    "SpatialModelToolV2": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "enum": [
+            "move_to",
+            "stop_move",
+            "inspect",
+            "take_item",
+            "put_item",
+            "transfer_item",
+            "interact",
+            "speak",
+            "make_claim",
+            "share_evidence",
+            "respond_consent",
+            "withdraw_consent",
+            "wait"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "sceneId": {
+          "$ref": "#/$defs/Id"
+        },
+        "targetRef": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "itemRef": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "expectedItemRevision": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "operationId": {
+          "$ref": "#/$defs/Id"
+        },
+        "expectedTargetRevision": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "evidenceRef": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "consentId": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "expectedConsentVersion": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "purpose": {
+          "$ref": "#/$defs/ConsentPurpose"
+        },
+        "scope": {
+          "$ref": "#/$defs/ConsentScopeViewV2"
+        }
+      },
+      "required": [
+        "kind",
+        "description"
+      ],
+      "additionalProperties": false
+    },
+    "SpatialModelGoalV2": {
+      "type": "object",
+      "properties": {
+        "goalId": {
+          "$ref": "#/$defs/Id"
+        },
+        "label": {
+          "type": "string",
+          "maxLength": 240
+        },
+        "status": {
+          "enum": [
+            "active",
+            "completed",
+            "blocked"
+          ]
+        },
+        "basedOnObservationRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/EntityRef"
+          },
+          "maxItems": 32,
+          "uniqueItems": true
+        },
+        "objectiveId": {
+          "$ref": "#/$defs/Id"
+        }
+      },
+      "required": [
+        "goalId",
+        "label",
+        "status",
+        "basedOnObservationRefs"
+      ],
+      "additionalProperties": false
+    },
+    "SpatialDecisionContextV2": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 2
+        },
+        "contextVersion": {
+          "const": "spatial-ai-context-v1"
+        },
+        "sessionId": {
+          "$ref": "#/$defs/Id"
+        },
+        "viewId": {
+          "$ref": "#/$defs/Id"
+        },
+        "snapshotSeq": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "projection": {
+          "$ref": "#/$defs/SpatialModelProjectionV2"
+        },
+        "tools": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SpatialModelToolV2"
+          },
+          "maxItems": 4096
+        },
+        "decision": {
+          "type": "object",
+          "properties": {
+            "decisionId": {
+              "$ref": "#/$defs/Id"
+            }
+          },
+          "required": [
+            "decisionId"
+          ],
+          "additionalProperties": false
+        },
+        "persona": {
+          "type": "object",
+          "properties": {
+            "motives": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 400
+              },
+              "maxItems": 8
+            },
+            "boundaries": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 400
+              },
+              "maxItems": 8
+            }
+          },
+          "required": [
+            "motives",
+            "boundaries"
+          ],
+          "additionalProperties": false
+        },
+        "goals": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SpatialModelGoalV2"
+          },
+          "maxItems": 32
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "contextVersion",
+        "sessionId",
+        "viewId",
+        "snapshotSeq",
+        "projection",
+        "tools",
+        "decision"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

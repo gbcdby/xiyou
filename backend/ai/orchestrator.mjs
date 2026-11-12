@@ -2,11 +2,43 @@ import { reserveCall, saveOutput, saveOutcome, callCount } from './persistence.m
 import { RuntimeError } from '../errors.mjs';
 import { decodeStoredOutput, isPersistableIntent } from './output.mjs';
 import { parseProposedIntent, intentSemanticDigestSync } from '../../protocol/node.mjs';
+import { parseSpatialProposedIntent } from '../../protocol/spatial-ai.mjs';
+import { spatialIntentSemanticDigestSync } from '../../protocol/spatial-ai-node.mjs';
+import { storedSpatialContext } from './spatial-decisions.mjs';
+
+/** 移动检查点只用于规则模拟；到达、许可、观察与真正使用的资源变化才唤醒模型。 */
+function spatialWake(actor, event) {
+  const id = actor.handle.actorId, p = event.payload;
+  if (event.causedBy?.actionId === `${actor.decision?.decisionId}:fallback`) return false;
+  if (event.kind === 'spatial.clock') {
+    const resumed = actor.paused === true && p.paused === false;
+    actor.paused = p.paused;
+    return resumed;
+  }
+  if (event.kind === 'spatial.observation') return p.observerId === id;
+  if (event.kind === 'spatial.claim') return Object.hasOwn(p.views, id) && event.causedBy?.actorId !== id;
+  if (event.kind === 'control.changed') return p.actorId === id;
+  if (event.kind === 'spatial.started') return true;
+  if (event.kind === 'spatial.actor') {
+    const current = p.actor, own = current.characterId === id;
+    const semantic = `${current.appearanceEpoch}/${current.resourceRevision}/${own ? current.movement?.movementId ?? '' : ''}/${own ? ['accepted', 'moving'].includes(current.movement?.status) ? 'moving' : current.movement?.status ?? '' : ''}`;
+    const previous = actor.semanticStates.get(current.characterId);
+    actor.semanticStates.set(current.characterId, semantic);
+    const relevant = own || Object.values(actor.decision?.readVersions ?? {}).some(value => value.id === current.characterId);
+    return relevant && previous !== undefined && previous !== semantic;
+  }
+  if (['spatial.item', 'spatial.target'].includes(event.kind)) {
+    const current = p.item ?? p.target, id = current.itemId ?? current.targetId;
+    return Object.values(actor.decision?.readVersions ?? {}).some(value => value.id === id && value.resourceRevision !== current.resourceRevision);
+  }
+  return false;
+}
 
 /** 单进程的有界调度器；数据库仍决定权限、时序及每一项实际效果。 */
 export class AIOrchestrator {
   #runtime; #gateway; #actors = new Map(); #tasks = new Set(); #timer = null; #closed = false; #closing;
   #maxConcurrent; #minIntervalMs; #maxCallsPerSession; #onCommit; #onAuthorization;
+  #lastServedKey = null;
   constructor({ runtime, gateway, maxConcurrent = 2, minIntervalMs = 1000, maxCallsPerSession = 60 }) {
     for (const [name, value] of Object.entries({ maxConcurrent, minIntervalMs, maxCallsPerSession })) if (!Number.isSafeInteger(value) || value <= 0) throw new Error(`${name}必须为正整数。`);
     this.#runtime = runtime; this.#gateway = gateway; this.#maxConcurrent = maxConcurrent;
@@ -14,7 +46,11 @@ export class AIOrchestrator {
     this.#onCommit = ({ sessionId, events }) => {
       for (const actor of this.#actors.values()) if (actor.handle.sessionId === sessionId) {
         if (events.some(event => event.kind === 'session.finished' || event.kind === 'session.aborted' || (event.kind === 'control.changed' && event.payload.actorId === actor.handle.actorId && actor.decision && BigInt(event.payload.controlEpoch) > BigInt(actor.decision.controlEpoch)))) actor.controller?.abort();
-        if (actor.autoWake && !events.every(event => event.kind === 'GoalUpdated' && event.payload.holderId === actor.handle.actorId)) this.wake(actor.handle);
+        const ended = events.some(event => event.kind === 'session.finished' || event.kind === 'session.aborted');
+        if (ended) { actor.dirty = false; continue; }
+        const spatialEvents = events.some(event => event.schemaVersion === 2);
+        const shouldWake = spatialEvents ? events.reduce((wake, event) => spatialWake(actor, event) || wake, false) : !events.every(event => event.kind === 'GoalUpdated' && event.payload.holderId === actor.handle.actorId);
+        if (actor.autoWake && shouldWake) this.wake(actor.handle);
       }
     };
     this.#onAuthorization = ({ sessionId }) => {
@@ -28,7 +64,7 @@ export class AIOrchestrator {
     const key = `${handle.sessionId}/${handle.actorId}/${handle.principalKind}`;
     const existing = this.#actors.get(key);
     if (existing && existing.handle !== handle) throw new Error('同一角色已经注册，必须复用可信句柄。');
-    if (!existing) this.#actors.set(key, { handle, autoWake, active: false, dirty: false, nextEligibleAt: 0, phase: 'Idle', calls: 0, decision: null, recoveryWork: null, controller: null, lastReceipt: null, lastFallback: null, error: null, retries: 0 });
+    if (!existing) this.#actors.set(key, { handle, autoWake, active: false, dirty: false, nextEligibleAt: 0, phase: 'Idle', calls: 0, decision: null, recoveryWork: null, controller: null, lastReceipt: null, lastFallback: null, error: null, retries: 0, semanticStates: new Map(), paused: null });
     if (wake) this.wake(handle);
   }
   #actor(handle) { return this.#actors.get(`${handle.sessionId}/${handle.actorId}/${handle.principalKind}`); }
@@ -51,12 +87,13 @@ export class AIOrchestrator {
       const { decision: record, run } = entry;
       if (run?.semantic_digest && run.output_raw !== null) {
         // 即使 Decision 已终态，原提交也先查结果；查询未知绝不被解释成失败。
-        let receipt = await this.#runtime.internalReceipt(actor.handle, `${record.decisionId}:submit`);
-        if (!receipt) {
+        let found = await this.#runtime.decisionReceipt(actor.handle, record.decisionId);
+        if (!found) {
           if (this.#closed) return { blocked: true };
           const raw = decodeStoredOutput(run);
-          const intent = parseProposedIntent(raw, record.decisionId);
-          if (intentSemanticDigestSync(intent) !== run.semantic_digest) throw new RuntimeError('ACTION_ID_REUSE', '恢复的原文与已保存摘要不匹配。');
+          const intent = record.schemaVersion === 2 ? parseSpatialProposedIntent(raw, record.decisionId, storedSpatialContext(record)) : parseProposedIntent(raw, record.decisionId);
+          const semanticDigest = record.schemaVersion === 2 ? spatialIntentSemanticDigestSync(intent) : intentSemanticDigestSync(intent);
+          if (semanticDigest !== run.semantic_digest) throw new RuntimeError('ACTION_ID_REUSE', '恢复的原文与已保存摘要不匹配。');
           // 旧版本可能把带 NUL 的 JSON 记为 Valid；确认无原收据后才拒绝，不能覆盖 Unknown。
           if (!isPersistableIntent(intent)) {
             await this.#runtime.settleDecision(actor.handle, record.decisionId, 'Rejected');
@@ -64,10 +101,11 @@ export class AIOrchestrator {
             actor.recoveryWork = null;
             continue;
           }
-          receipt = await this.#runtime.submitIntent(actor.handle, record.decisionId, raw);
+          const receipt = await this.#runtime.submitIntent(actor.handle, record.decisionId, raw);
+          found = record.schemaVersion === 2 ? await this.#runtime.decisionReceipt(actor.handle, record.decisionId) : { receipt, semanticDigest: receipt.semanticDigest };
         }
-        if (!receipt.status || receipt.semanticDigest !== run.semantic_digest) throw new RuntimeError('ACTION_ID_REUSE', '恢复的原文与已保存收据不匹配。');
-        actor.lastReceipt = receipt;
+        if (!found?.receipt.status || found.semanticDigest !== run.semantic_digest) throw new RuntimeError('ACTION_ID_REUSE', '恢复的原文与已保存收据不匹配。');
+        actor.lastReceipt = found.receipt;
       } else if (record.status === 'Pending') {
         const reason = run?.model_result?.status;
         await this.#runtime.settleDecision(actor.handle, record.decisionId, ['Invalid', 'Timeout', 'ProviderError', 'Blocked'].includes(reason) ? 'Rejected' : 'Cancelled');
@@ -102,12 +140,15 @@ export class AIOrchestrator {
     clearTimeout(this.#timer); this.#timer = null;
     if (this.#closed) return;
     let next = Infinity;
-    for (const actor of this.#actors.values()) {
+    const entries = [...this.#actors], start = Math.max(0, entries.findIndex(([key]) => key === this.#lastServedKey) + 1);
+    for (const [key, actor] of [...entries.slice(start), ...entries.slice(0, start)]) {
       if (!actor.dirty || actor.active) continue;
       if (this.#tasks.size >= this.#maxConcurrent) break;
       const wait = actor.nextEligibleAt - performance.now();
       if (wait > 0) { next = Math.min(next, wait); continue; }
       actor.active = true; actor.dirty = false; actor.nextEligibleAt = performance.now() + this.#minIntervalMs;
+      // 从上次实际领槽角色之后继续；后来注册的第三人也在同一轮转中。
+      this.#lastServedKey = key;
       const task = this.#run(actor);
       this.#tasks.add(task);
       task.finally(() => { actor.active = false; this.#tasks.delete(task); this.#pump(); }).catch(() => {});
@@ -122,6 +163,7 @@ export class AIOrchestrator {
       if (await callCount(this.#runtime, actor.handle) >= this.#maxCallsPerSession) { actor.phase = 'BudgetExhausted'; actor.dirty = false; return; }
       const prepared = await this.#runtime.prepareDecisionContext(actor.handle);
       actor.decision = prepared.decision;
+      if (prepared.context.schemaVersion === 2) actor.paused = prepared.context.projection.paused;
       if (actor.controller.signal.aborted || this.#closed) {
         await this.#runtime.settleDecision(actor.handle, actor.decision.decisionId, 'Cancelled'); return;
       }
@@ -144,6 +186,7 @@ export class AIOrchestrator {
       await this.#finishDecision(actor, actor.decision.decisionId);
       actor.retries = 0;
     } catch (error) {
+      if (error.code === 'SESSION_PAUSED') actor.paused = true;
       actor.error = error.code ?? 'INTERNAL_ERROR'; actor.phase = error.code === 'OUTCOME_UNKNOWN' ? 'Unknown' : 'Unavailable';
       if (error.code === 'OUTCOME_UNKNOWN' && ++actor.retries <= 3) { actor.dirty = true; actor.nextEligibleAt = performance.now() + this.#minIntervalMs; }
     } finally { actor.controller = null; if (!actor.error && actor.phase !== 'BudgetExhausted') actor.phase = 'Idle'; }

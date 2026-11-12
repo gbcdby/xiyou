@@ -10,6 +10,14 @@ import { isGaolao, observeGaolao } from '../game/gaolao-world.mjs';
 import { initializeGaolao,updateGaolaoPresence,advanceGaolaoFollow,checkGaolaoFallback } from '../game/gaolao-rules.mjs';
 import {gaolaoNavigationDependencies,gaolaoNavigationRejection} from '../game/gaolao-navigation.mjs';
 const digest = value => createHash('sha256').update(canonicalize(value)).digest('hex');
+const hasAppearance = capabilities => capabilities.includes('spatial-appearance-v1');
+/** 旧 nonce 保留原结果；仅为未协商的新连接移除它不能读取的扩展字段。 */
+function compatibleControlResponse(response, capabilities) {
+    if (hasAppearance(capabilities)) return response;
+    const copy = structuredClone(response), projection = copy.snapshot.projection;
+    for (const entity of [projection.self, ...projection.entities]) delete entity.appearanceId;
+    return copy;
+}
 export function requireSpatialCapability(capabilities) {
     if (!Array.isArray(capabilities) || !capabilities.includes('spatial-v2'))
         throw new RuntimeError('UPGRADE_REQUIRED', '此章节需要 spatial-v2 客户端。');
@@ -54,9 +62,9 @@ export function refreshSpatialViews(tx) {
     for (const actorId of Object.keys(tx.state.views))
         ensureView(tx, actorId);
 }
-export async function snapshotSpatial(tx, actorId, { connectionId = null, rotate = false, viewId, principalKind = 'human', binding = null } = {}) {
+export async function snapshotSpatial(tx, actorId, { connectionId = null, rotate = false, viewId, principalKind = 'human', binding = null, capabilities = [] } = {}) {
     const view = binding ?? ensureView(tx, actorId, { rotate, ...(viewId ? { viewId } : {}) });
-    return validateSpatial('SnapshotV2', { schemaVersion: 2, type: 'world.snapshot', sessionId: tx.row.session_id, viewId: view.viewId, snapshotSeq: tx.state.sessionSeq, projection: spatialProjection(tx.state, tx.content, actorId, { connectionId, principalKind, view, highWater: await highWater(tx, tx.state.characters[actorId]) }) });
+    return validateSpatial('SnapshotV2', { schemaVersion: 2, type: 'world.snapshot', sessionId: tx.row.session_id, viewId: view.viewId, snapshotSeq: tx.state.sessionSeq, projection: spatialProjection(tx.state, tx.content, actorId, { connectionId, principalKind, view, includeAppearance: hasAppearance(capabilities), highWater: await highWater(tx, tx.state.characters[actorId]) }) });
 }
 export async function recoverSpatial(runtime) {
     const rows = (await runtime.pool.query("SELECT session_id FROM sessions WHERE state->>'protocolCapability'='spatial-v2' AND state->>'phase' IN ('Lobby','Running')")).rows;
@@ -83,7 +91,7 @@ export async function controlSpatial(runtime, handle, request) {
             // 只恢复本连接待安装的原结果；重放历史 nonce 不重新选择或绑定旧会话。
             const recovery = connection.recoverableView;
             if (recovery?.view.viewId === prior.snapshot.viewId && recovery.view.sessionId === request.sessionId) runtime.stageSpatialView(tx, handle, recovery.view, recovery.scope, { recovery: true });
-            return prior;
+            return compatibleControlResponse(prior, connection.capabilities);
         }
         await advanceSpatialTime(tx);
         if (['Finished', 'Aborted'].includes(tx.state.phase))
@@ -99,13 +107,13 @@ export async function controlSpatial(runtime, handle, request) {
         if (actor.activeConnectionId !== handle.connectionId || actor.mode !== 'HumanControlled' || request.type === 'control.take')
             tx.emit('control.changed', { actorId: user.actorId, mode: 'HumanControlled', controlEpoch: next(actor.controlEpoch), activeConnectionId: handle.connectionId, graceDeadlineAt: null });
         await advanceSpatialTime(tx);
-        const snapshot = await snapshotSpatial(tx, user.actorId, { connectionId: handle.connectionId, rotate: true });
+        const snapshot = await snapshotSpatial(tx, user.actorId, { connectionId: handle.connectionId, rotate: true, capabilities: connection.capabilities });
         runtime.stageSpatialView(tx, handle, { active: true, sessionId: request.sessionId, actorId: user.actorId, userId: user.userId, viewId: snapshot.viewId, cursor: snapshot.snapshotSeq, handle, ownedEpoch: tx.state.characters[user.actorId].controlEpoch, schemaVersion: 2 }, scope);
         const response = validateSpatial('ControlResponseV2', { schemaVersion: 2, sessionId: request.sessionId, nonce: request.nonce, controlEpoch: tx.state.characters[user.actorId].controlEpoch, observedSeq: tx.state.sessionSeq, snapshot });
         return runtime.saveNonce(tx, user.principalId, request.nonce, request, response);
     });
 }
-export async function executeSpatial(runtime, tx, request, principal, authorized) {
+export async function executeSpatial(runtime, tx, request, principal, authorized, options = {}) {
     tx.cause = { principalId: principal.principalId, actionId: request.clientActionId, actorId: principal.actorId };
     await advanceSpatialTime(tx);
     const semanticDigest = digest(request), key = [request.sessionId, principal.principalId, request.clientActionId];
@@ -135,9 +143,15 @@ export async function executeSpatial(runtime, tx, request, principal, authorized
         const view = tx.state.views[principal.actorId];
         if (view?.viewId !== request.viewId || entityRef(view, principal.actorId) !== request.actorRef)
             throw new RuleError('STALE_REFERENCE');
+        await options.validate?.();
         const navigationDependencies=principal.executionContext?.navigationDependencies??null,rejection=gaolaoNavigationRejection(tx.state,principal.actorId,navigationDependencies);
         if(rejection)throw new RuleError(rejection);
-        if(principal.executionContext?.mode==='fallback'){checkGaolaoFallback(tx,principal.actorId,request.action);observeGaolao(tx,principal.actorId,{statement:'技术降级按现有授权与稳定安全目标执行；不代作新的同意或去留决定。',fields:[{key:'reason',label:'技术原因',value:principal.executionContext.reason}]});}
+        if(principal.executionContext?.mode==='fallback'){
+            if(isGaolao(tx.state)){
+                checkGaolaoFallback(tx,principal.actorId,request.action);
+                observeGaolao(tx,principal.actorId,{statement:'技术降级按现有授权与稳定安全目标执行；不代作新的同意或去留决定。',fields:[{key:'reason',label:'技术原因',value:principal.executionContext.reason}]});
+            }else if(!['wait','stop_move'].includes(request.action.kind))throw new RuleError('RULE_VIOLATION');
+        }
         result = applySpatialAction(tx, principal.actorId, principal.principalKind, request,navigationDependencies);
         if(isGaolao(tx.state))refreshSpatialViews(tx);
     }
@@ -201,7 +215,7 @@ export async function syncSpatial(runtime, handle, request) {
             ?? (await tx.client.query('SELECT through_seq FROM outbox WHERE session_id=$1 AND through_seq>$2 AND through_seq<=$3 ORDER BY through_seq LIMIT 1', [request.sessionId, request.cursor, tx.state.sessionSeq])).rows[0];
         const throughSeq = boundary?.through_seq ?? request.cursor;
         const state = await runtime.stateAt(tx, throughSeq);
-        const events = throughSeq === request.cursor ? [] : [{ sessionSeq: throughSeq, eventId: `${request.sessionId}:E${throughSeq}`, kind: 'projection.replace', payload: { projection: spatialProjection(state, tx.content, user.actorId, { connectionId: handle.connectionId, ...(view.terminalBinding ? { view: view.terminalBinding } : {}), highWater: await highWater(tx, actor) }) } }];
+        const events = throughSeq === request.cursor ? [] : [{ sessionSeq: throughSeq, eventId: `${request.sessionId}:E${throughSeq}`, kind: 'projection.replace', payload: { projection: spatialProjection(state, tx.content, user.actorId, { connectionId: handle.connectionId, includeAppearance: hasAppearance(connection.capabilities), ...(view.terminalBinding ? { view: view.terminalBinding } : {}), highWater: await highWater(tx, actor) }) } }];
         return validateSpatial('BatchV2', { schemaVersion: 2, type: 'world.batch', sessionId: request.sessionId, viewId: request.viewId, fromExclusive: request.cursor, throughSeq, events });
     });
 }

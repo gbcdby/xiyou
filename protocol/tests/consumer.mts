@@ -3,6 +3,7 @@ import {
   type ClientAction, type WorldBatch, type ProposedIntent, type AuthorizedSnapshot,
 } from '../index.mjs';
 import { actionSemanticDigestSync } from '../node.mjs';
+import './spatial-ai-consumer.mjs';
 
 const request: ClientAction = {
   schemaVersion: 1, sessionId: 'S1', actorId: 'C1', clientActionId: 'A1',

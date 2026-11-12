@@ -13,7 +13,7 @@ test('v2复盘HTTP声明空间能力、固定分页水位并保留完整授权�
   const controller = new AbortController();
   assert.deepEqual(await api.spatialRecap('S', '100', '60', controller.signal), large);
   assert.equal(requests[0].path, '/api/sessions/S/recap?throughSeq=100&beforeSeq=60');
-  assert.equal(requests[0].init.headers['X-Xiyou-Capabilities'], 'spatial-v2');
+  assert.equal(requests[0].init.headers['X-Xiyou-Capabilities'], 'spatial-v2,spatial-appearance-v1');
   assert.equal(requests[0].init.method, 'GET');
   assert.equal(Object.hasOwn(requests[0].init, 'body'), false);
   controller.abort(); assert.equal(requests[0].init.signal.aborted, true);

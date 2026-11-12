@@ -1,4 +1,8 @@
-# 单角色 AI 运行模块
+# AI 运行入口
+
+高老庄的三名自主角色、持久决定、轮转、明确供应商配置与样本导出见 [空间运行链](spatial-runtime.md)。下方保留 region-v1 的原入口、原验收依据和历史状态；其中旧 mock profile 不改变高老庄的真实模型与真人体验义务。
+
+## region-v1 原运行模块
 
 归属 [Ticket #9](https://github.com/gbcdby/xiyou/issues/9)，依据固定 Spec `6c2a0b9f6d137ad5fbd41721659404333ad8e16d` 的 [M0 §9–10](../../docs/specs/m0-protocol.md)、[玩法中的感知／目标／信念](../../docs/specs/vertical-slice-gameplay.md)和 [VER-04](../../docs/specs/vertical-slice-verification.md)。权威运行基线是 `5d3e16fa46c4719471092d0567e9bfd1e28737f7`；本目录不改变公共 HTTP／Socket.IO／ProposedIntent 契约。
 
