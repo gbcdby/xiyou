@@ -65,14 +65,19 @@ export async function recoverSpatial(runtime) {
 export async function controlSpatial(runtime, handle, request) {
     const connection = runtime.connection(handle);
     requireSpatialCapability(connection.capabilities);
+    const scope = runtime.connectionViewScope(handle, request.sessionId);
     return runtime.locked(request.sessionId, { kind: request.type }, async (tx) => {
         const user = await runtime.access(tx.client, tx.row, connection.token);
         if (!isSpatial(tx.state))
             throw new RuntimeError('INVALID_MESSAGE');
         tx.cause = { principalId: user.principalId, actionId: request.nonce, actorId: user.actorId };
         const prior = await runtime.knownNonce(tx, user.principalId, request.nonce, request);
-        if (prior)
+        if (prior) {
+            // 只恢复本连接待安装的原结果；重放历史 nonce 不重新选择或绑定旧会话。
+            const recovery = connection.recoverableView;
+            if (recovery?.view.viewId === prior.snapshot.viewId && recovery.view.sessionId === request.sessionId) runtime.stageSpatialView(tx, handle, recovery.view, recovery.scope, { recovery: true });
             return prior;
+        }
         await advanceSpatialTime(tx);
         if (['Finished', 'Aborted'].includes(tx.state.phase))
             throw new RuntimeError('FORBIDDEN', '本局已经结束。');
@@ -88,7 +93,7 @@ export async function controlSpatial(runtime, handle, request) {
             tx.emit('control.changed', { actorId: user.actorId, mode: 'HumanControlled', controlEpoch: next(actor.controlEpoch), activeConnectionId: handle.connectionId, graceDeadlineAt: null });
         await advanceSpatialTime(tx);
         const snapshot = await snapshotSpatial(tx, user.actorId, { connectionId: handle.connectionId, rotate: true });
-        tx.afterCommit.push(() => runtime.setConnectionView(handle, { active: true, sessionId: request.sessionId, actorId: user.actorId, userId: user.userId, viewId: snapshot.viewId, cursor: snapshot.snapshotSeq, handle, ownedEpoch: tx.state.characters[user.actorId].controlEpoch, schemaVersion: 2 }));
+        runtime.stageSpatialView(tx, handle, { active: true, sessionId: request.sessionId, actorId: user.actorId, userId: user.userId, viewId: snapshot.viewId, cursor: snapshot.snapshotSeq, handle, ownedEpoch: tx.state.characters[user.actorId].controlEpoch, schemaVersion: 2 }, scope);
         const response = validateSpatial('ControlResponseV2', { schemaVersion: 2, sessionId: request.sessionId, nonce: request.nonce, controlEpoch: tx.state.characters[user.actorId].controlEpoch, observedSeq: tx.state.sessionSeq, snapshot });
         return runtime.saveNonce(tx, user.principalId, request.nonce, request, response);
     });

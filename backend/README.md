@@ -17,7 +17,7 @@ Ticket #6 的原作者修正结果见 [修正结果](evidence/review-fix-r1/impl
 DATABASE_URL='postgresql://USER:PASSWORD@127.0.0.1:5432/xiyou' npm start
 ```
 
-默认监听 `127.0.0.1:3000`，可通过 `HOST`、`PORT` 调整。`GET /health` 检查数据库连接。服务启动依序执行 [001-authority.sql](migrations/001-authority.sql) 和 [002-ai.sql](migrations/002-ai.sql)，迁移使用事务和数据库 advisory lock，不删除现有数据。默认启动不调用 AI；可信集成方式见 AI 模块说明。
+默认监听 `127.0.0.1:3000`，可通过 `HOST`、`PORT` 调整。`GET /health` 检查数据库连接。服务启动按序执行 `migrations/` 下的 001–005 迁移，使用事务和数据库 advisory lock，不删除现有数据；空间文本的增量编码与历史读取边界见 [spatial.md](spatial.md#版本运行与存储)。默认启动不调用 AI；可信集成方式见 AI 模块说明。
 
 退出时处理 SIGINT／SIGTERM，停止维护、关闭 Socket.IO、等待已接纳任务结束，再关闭连接池。业务库不可用时不会切换到内存世界。原型登录是随机 Bearer token，数据库只保存 token 的 SHA-256；生产账号运营不在 #6 范围。
 
