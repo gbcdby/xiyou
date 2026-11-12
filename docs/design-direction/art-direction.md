@@ -12,7 +12,7 @@
 
 本项目继承了**配色职责、明度／彩度／邻接／材质配合、UI 自然融合与可读性、可复现实验和证据边界**等规范。现存色板包含 10 对可计算的设计提案色值；旧资料中的完整性检查、色值检查和素材迁移叙述属于历史背景，不能替代 xiyou 当前版本的检查记录。
 
-当前仓库没有原始参考图、总览图或 ART01 原文与配图，也没有本项目的成图、真机或玩家 UX 验证证据。本次整理保留规则，校正资料状态，不把历史审阅写成本项目已完成。
+原始参考图、总览图及 ART01 原文与配图仍未迁入；这些历史审阅不能写成本轮已完成。2026-11-12新增的 [高老庄视觉基准](gaolaozhuang-v1/README.md)保存本项目的设计规范、隔离样页和采用范围，图像交付与对外恢复边界见该目录说明；正式页面合同见 [GZ-VIS-01](../specs/gaolaozhuang-visual.md)。设计图与样页渲染不代表正式游戏、真机或玩家 UX 验证。
 
 通用设计方法见仓库技能包的 [游戏案例库](../../.agents/skills/worker-visual-design/references/game-case-library.md)、[UI/UX 模式](../../.agents/skills/worker-visual-design/references/game-ui-ux-patterns.md)与[决策手册](../../.agents/skills/worker-visual-design/references/ui-ux-decision-playbook.md)。本项目仅保留[跨游戏视觉迁移摘要](references/research/design-transfer.md)，不把其他游戏的具体页面规则与商业机制搬进本目录。
 

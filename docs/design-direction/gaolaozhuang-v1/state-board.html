@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>高老庄 · 关键状态设计</title><link rel="stylesheet" href="visual.css"><style>
+body{background:#eee5d4}.board{width:1600px;margin:0 auto;padding:46px 50px 44px}.board-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:30px;border-bottom:1px solid #a8946d;padding-bottom:24px}.board h1{font-size:34px;letter-spacing:4px;margin:0 0 10px}.board .intro{font-size:15px;line-height:1.8;color:#665c4b;margin:0;max-width:930px}.edition{font:14px sans-serif;line-height:1.8;text-align:right;color:#665c4b}.section{margin-top:25px}.section-title{font-size:20px;margin:0 0 15px;display:flex;gap:12px;align-items:center}.section-title span{font:12px sans-serif;background:#963f2f;color:#fff8e9;border-radius:3px;padding:5px 7px}.grid{display:grid;gap:18px}.three{grid-template-columns:repeat(3,1fr)}.four{grid-template-columns:repeat(4,1fr)}.card{border:1px solid #b29a6f77;background:#f8f2e5;border-radius:8px;padding:20px;min-width:0}.card h3{font-size:19px;line-height:1.55;margin:7px 0 10px}.card p{font-size:14px;line-height:1.9;color:#665c4b;margin:0}.card .sample{margin-top:17px;border-top:1px solid #ac987344;padding-top:15px}.pill{display:inline-flex;align-items:center;gap:7px;border:1px solid #365e5240;border-radius:15px;background:#edf0e2;color:#365e52;font:14px "Noto Sans CJK SC",sans-serif;padding:6px 11px}.pill.pending{background:#f0e9dc;border-color:#76572e55;color:#76572e}.pill.unknown{background:#ede8ee;border-color:#66566e55;color:#66566e}.sample button{margin-top:14px}.sample button:disabled{opacity:.65}.door-row{display:flex;align-items:center;gap:22px;min-height:128px}.door-icon{position:relative;flex:none;width:100px;height:112px;border:5px solid #6c533c;background:repeating-linear-gradient(90deg,#a17e54 0 11px,#70573d 12px 13px);border-radius:3px}.door-icon:after{content:"";position:absolute;width:15px;height:26px;left:37px;top:39px;background:#bc9b56;border:1px solid #80643c}.door-icon.locked:before{content:"";position:absolute;width:112px;height:9px;left:-11px;top:76px;background:#c29c65;border:2px solid #80643c;transform:rotate(-27deg)}.door-icon.open{background:#4c4437;border-color:#a17e54}.door-icon.open:after{width:30px;height:102px;left:0;top:0;transform:skewY(-11deg);transform-origin:top left;background:repeating-linear-gradient(90deg,#a17e54 0 11px,#70573d 12px 13px)}.appearance-sample{display:flex;align-items:center;gap:25px;min-height:145px}.cuilan-crop{position:relative;width:55px;height:145px;overflow:hidden;flex:none}.cuilan-crop img{position:absolute;width:310.45px;height:155.225px;left:-190.225px;top:-10px;max-width:none}.identity-name{font-size:23px;margin-bottom:7px}.explanation{border-top:1px solid #ac987344;margin-top:12px!important;padding-top:13px}.flow-status{font-size:20px;line-height:1.6;min-height:32px;display:flex;gap:10px;align-items:center;margin-bottom:12px}.status-dot{width:10px;height:10px;background:#365e52;border-radius:50%}.pending-dot{border:2px solid #76572e;background:transparent}.warning{border-left:4px solid #76572e;padding:13px 16px;background:#f0e9dc;margin-top:15px}.warning p{font-size:14px}.outcome{font-size:22px!important;line-height:1.5!important;font-weight:600;color:#332c23!important;margin:8px 0 12px!important}.board-footer{margin-top:28px;border-top:1px solid #ac987366;padding-top:17px;display:flex;gap:36px;color:#665c4b;font-size:13px;line-height:1.8}.swatches{display:flex;align-items:center;gap:7px}.swatch{width:18px;height:18px;border-radius:50%;border:1px solid #0002}.view-label{font:12px sans-serif;letter-spacing:1px;color:#665c4b}.small{font-size:12px!important}
+</style></head><body><main class="board">
+<header class="board-header"><div><h1>高老庄 · 关键状态</h1><p class="intro">界面把“打算做、正在做、真的做到了”分开。图形与姓名遵守同一个观察者视角，重要变化用文字与形状共同表达。</p></div><div class="edition">ADV-001 / GZ-VIS-01<br>设计状态板 · 1600 CSS px<br>2026-11-12</div></header>
+
+<section class="section"><h2 class="section-title"><span>01</span> 门、支撑与通路</h2><div class="grid three">
+<article class="card"><div class="door-row"><div class="door-icon"></div><div><span class="pill pending">◇ 铜封未解</span><h3>先核对安全条件</h3><p>门仍然闭合。普通钥匙不适用，也不因此消耗。</p></div></div><p class="explanation">门外承力点、人物退让区各自可见。不能只把交互按钮变为“已开启”。</p></article>
+<article class="card"><div class="door-row"><div class="door-icon locked"></div><div><span class="pill">✓ 支撑已锁定</span><h3>准备已经留下</h3><p>安装者可以离开。短暂掉线不会让支撑自动松开。</p></div></div><p class="explanation">单侧完成就只画单侧锁定；另一侧仍是待装材料。计数、贴图和世界事实必须一致。</p></article>
+<article class="card"><div class="door-row"><div class="door-icon open"></div><div><span class="pill">✓ 通路已开放</span><h3>门开了，安置还没完成</h3><p>真实翠兰需要同意安排、实际走出，再确认安全。</p></div></div><p class="explanation">本排是状态构图示意；正式铜封、门撑与门扇美术需独立分层制作。</p></article>
+</div></section>
+
+<section class="section"><h2 class="section-title"><span>02</span> 接受路线不等于到达</h2><div class="grid four">
+<article class="card"><div class="flow-status"><span class="status-dot pending-dot"></span>正在前往</div><p>路线已受理，位置随服务端确认推进。</p><div class="sample"><button class="secondary-button">停步</button></div></article>
+<article class="card"><div class="flow-status"><span class="status-dot"></span>已到达，可查看</div><p>距离、目标状态重新核对后，开放交互。</p><div class="sample"><button class="secondary-button">查看门撑</button></div></article>
+<article class="card"><div class="flow-status">◇ 暂时无法靠近</div><p>通路受阻，保留物件，原排队操作取消。</p><div class="sample"><button class="secondary-button">重新选择位置</button></div></article>
+<article class="card"><div class="flow-status">? 正在确认结果</div><p>连接恢复后查询原操作，不能再交出一份。</p><div class="sample"><button class="secondary-button" disabled>正在确认</button></div></article>
+</div></section>
+
+<section class="section"><h2 class="section-title"><span>03</span> 一样的外貌，不同的合法知识</h2><div class="grid three">
+<article class="card"><p class="view-label">真实翠兰 · 已安置的本人</p><div class="appearance-sample"><div class="cuilan-crop"><img src="assets/characters-concept.png" alt="翠兰造型"></div><div><div class="identity-name">翠兰</div><span class="pill">✓ 已确认安置</span></div></div><p class="explanation">她的物品、随行同意与安全事实仍归她本人。其他同外貌角色不能替代。</p></article>
+<article class="card"><p class="view-label">尚未识破者的视角</p><div class="appearance-sample"><div class="cuilan-crop"><img src="assets/characters-concept.png" alt="眼前女子的外观"></div><div><div class="identity-name">翠兰</div><span class="pill pending">◇ 可当面交谈</span></div></div><p class="explanation">与真实翠兰使用相同外貌资产。名字、收据、物主提示均不附带隐藏真身。</p></article>
+<article class="card"><p class="view-label">已合法知道真相者的视角</p><div class="appearance-sample"><div class="cuilan-crop"><img src="assets/characters-concept.png" alt="借用翠兰外貌的当前形象"></div><div><div class="identity-name">悟空 · 借貌</div><span class="pill">✓ 你已知情</span></div></div><p class="explanation">外貌不换成猴脸以方便调试。合法获知后才更新姓名和必要说明。</p></article>
+</div></section>
+
+<section class="section"><h2 class="section-title"><span>04</span> 本人同意、随行与撤回</h2><div class="grid three">
+<article class="card"><span class="pill pending">◇ 待本人回应</span><h3>已提议去前院客房</h3><p>带路者：高才。她尚未回应，角色保持原处。</p><div class="sample"><button class="secondary-button" disabled>等她回应</button><p class="small">父亲、玩家和同外貌人物均不能代答。</p></div></article>
+<article class="card"><span class="pill">● 随行中</span><h3>一起去她同意的地点</h3><p>可以暂停；更换地点或带路者需要重新约定。</p><div class="sample"><button class="secondary-button">暂停带路</button><p class="small">到了目的地仍要等本人确认安置。</p></div></article>
+<article class="card"><span class="pill unknown">— 原安排已撤回</span><h3>先停下来，再商量</h3><p>原路线不再完成安置，不把迟到回调算成成功。</p><div class="sample"><button class="secondary-button">提出新安排</button><p class="small">已完成的救援，不因撤回会面或借貌而回滚。</p></div></article>
+</div></section>
+
+<section class="section"><h2 class="section-title"><span>05</span> 证据、承诺与可恢复反馈</h2><div class="grid four">
+<article class="card"><span class="pill">✓ 亲眼所见</span><h3>铜封仍在门上</h3><p>记录观察者、地点与当时状态。状态变化后保留历史，不当作现况。</p></article>
+<article class="card"><span class="pill pending">◇ 某人的陈述</span><h3>“我曾在等候来客”</h3><p>保存说话者和合法接收者。听说过，不等于事实已核实。</p></article>
+<article class="card"><span class="pill unknown">◇ 承诺未执行</span><h3>愿意归还工具</h3><p>工具仍由原持有人保管。只有真实交接才显示归还完成。</p></article>
+<article class="card"><span class="pill pending">Ⅱ 等待同伴</span><h3>当前只有一人在线</h3><p>世界准备状态保留，剧情和随行不继续推进。</p><div class="warning"><p>宽限结束后才开放相应“暂告一段”；单人离开不关闭他人的房间。</p></div></article>
+</div></section>
+
+<section class="section"><h2 class="section-title"><span>06</span> 三种真实结果</h2><div class="grid three">
+<article class="card"><p class="view-label">GZ-E01</p><p class="outcome">自愿同行</p><p>双方有效决定、公共物归还、师徒与八戒实际到达出发点，才显示同行结果。</p></article>
+<article class="card"><p class="view-label">GZ-E02</p><p class="outcome">各走各路</p><p>翠兰安全、后宅开放、公共物归还，人物实际分别；未决不写成“八戒已拒绝”。</p></article>
+<article class="card"><p class="view-label">GZ-E03</p><p class="outcome">暂告一段</p><p>逐项留下救援、安置、查证与归还进度；不以统一失败覆盖已发生的事。</p></article>
+</div></section>
+
+<footer class="board-footer"><div class="swatches"><span class="swatch" style="background:#332c23"></span><span class="swatch" style="background:#365e52"></span><span class="swatch" style="background:#963f2f"></span><span class="swatch" style="background:#76572e"></span><span class="swatch" style="background:#66566e"></span><span>墨、青、朱、赭、烟紫分工；状态同时使用文字与符号。</span></div><div>本板只定义视觉合同与设计例子。<br>正式多人、模型行为、连续动画与真机均须独立验收。</div></footer>
+</main></body></html>
