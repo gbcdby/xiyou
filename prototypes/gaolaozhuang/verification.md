@@ -1,5 +1,7 @@
 # 高老庄原型检查与交接
 
+阅读说明：以下首次冻结与历史基线记录原样保留；本轮后续正式受管预览及私有 v2 的实际结果追加在本文末节。初次 BLOCKED 不是最新全部证据，新增有界 PASS 也不等于完整矩阵通过。
+
 ## 2026-11-12：高才方向动画试接检查
 
 **实现者测试 27/27 PASS，独立静态复审 PASS WITH KNOWN ART LIMITS，独立浏览器验收 BLOCKED（尚未进入页面）。** 本节固定候选及其证据，实际分支更新与私有试玩发布以 [PR #26](https://github.com/gbcdby/xiyou/pull/26) 和 [#25 最新交付记录](https://github.com/gbcdby/xiyou/issues/25) 为准；文档冻结不代表已部署。 用户要求把选定角色放进原型试玩。基线为 PR #26 的 `afa12ea57c1b84b7b902a970dfeea724bf7b346d`；仅高才接入已有 PNG，木匠与 NPC 保留原绘制。素材不是原生 GIF，正式动画与美术验收尚未完成。
@@ -113,3 +115,56 @@
 后续交付复用既有 Sites 项目 `appgprj_6af53a3e4fa08191802bab06cd371e68`，保持独立 owner-private 试玩，不新建站点。GitHub 目标为 `prototypes/gaolaozhuang/` 的 draft PR；实际源码与运行包按映射清单对应。#25、#23 保持 open，禁止合并或接入正式游戏生产环境。
 
 接手时先读 #25 最新记录，再读本文件和 README；用实际发布/PR 结果补充可访问地址与提交身份。当前检查摘要不是发布凭据，也不授予合并权限。
+
+## 2026-11-12：受管预览与私有 v2 增量记录
+
+### 结论、来源与证据层级
+
+独立验证者 `/root/verify_gaocai_animation_trial` 随后通过正式 Sites 受管预览进入同一冻结运行候选，以真实 Chrome CUA 操作完成 246.676 秒的有界功能检查，画布 1363×936。**已执行范围 PASS，未观察到阻断本次试接的功能或明显体量、脚底、透明绘制问题。** 原完整矩阵仍有明确未执行项，机器总结果保留 **INCONCLUSIVE**；这不是正式动画、美术或全部故障场景通过。
+
+本次取证冻结于 `2026-11-12T10:37:13.569815+00:00`。早先 Chromium socket 权限失败及 localhost:4175 连接被拒绝的 BLOCKED/NOT_RUN 记录仍有效，未删除或改成当时 PASS；正式受管预览后来解决页面可达性，新增了下表实际证据。验证者未修改候选、内部状态或访问策略。
+
+### 实际覆盖与剩余项
+
+| 编号 | 本次结果 | 实际观察与限制 |
+| --- | --- | --- |
+| GZ-ANIM-01 | PASS（已执行范围） | 在空地实际移动 E、W、N、S、NE、SW、NW、SE，观察原生/三镜像方向；途中改点转向、到达站姿抽查、Esc 停步、1/2 切换。未精确识别全部 40 个 walk 帧相位；NE 近到达截图仍是行走姿态，不能单用该张证明 idle。 |
+| GZ-ANIM-02 | PASS（本视口采样） | 连续截图中高才与木匠主体高度相近，脚底与地面选择圈对齐，镜像未见围绕图边界横跳，alpha 未见实色矩形底。未穷举复杂前景遮挡或重新验收全部 40 帧美术；新高才比其他原型人物更纤细写实。 |
+| GZ-ANIM-03-modal-reset | PASS | 西行中打开行囊，两张稳定 modal 截图间隔约 6.368 秒，主体位置和轮廓未见变化；关闭后继续行走，无可见补跑。说明内重开后回到初始南向、行囊 0、初始任务。仅行囊做此时序采样，说明/手记未分别重复。 |
+| GZ-ANIM-03-hidden | NOT_RUN | 页面隐藏与恢复未执行。 |
+| GZ-ANIM-04 | PASS | 仅高才显示新图；1/2 和头像切换正常，画布点木匠打开正确互动；实际走近木料并领取，行囊 0→1，场景包袱与行囊内木料可见；重开复位。 |
+| GZ-ANIM-05 | NOT_RUN（浏览器故障注入） | 未执行缺 walk/idle/manifest 的浏览器资源故障注入；作者行为测试和 R-001 独立静态复审继续分别构成证据，不改称浏览器实测。 |
+
+暂停证据来自可见帧采样，没有读取引擎内部 phase。JPEG 及 modal 背景模糊导致主体区域少量像素变化，故不声称逐像素或逐字节相同。没有取得 45 张角色 PNG 的逐项浏览器网络加载计数，没有真实录屏；实际截图序列没有合成成 GIF 来冒充录像。
+
+E 步距偏急、NE04/05 近臂反摆/接缝等已知素材限制保留。本轮没有精确覆盖全部步态、脚滑、全部前景遮挡、隐藏页、手机真机、完整剧情或正式美术。
+
+### 同一运行对象与实际发布
+
+独立验证者结束时重新计算源 `web/` 与受管预览 `dist/`，两者均为 55 文件、46 张 PNG（45 张角色图加庭院），摘要相同：
+
+- 八项运行文本：`949625e896be92bd001c4cba4cbedba5d0855bd26b898b1e2d04496219e0ba68`。
+- 完整运行目录：`4266670e9dd9b89030c07d6b4f31229662fa3cda1193d048725fd8f41577f608`。
+- 算法：按去除 `web/` 或 `dist/` 前缀的相对路径排序，逐项连接 UTF-8 路径 + NUL + 完整 bytes + NUL，再取 SHA-256。
+
+发布者 `/root/prepare_private_animation_release` 在映射后执行一次 `npm test`，**27/27 PASS**；测试仅调整 `../web/` 到 `../dist/` 的路径，断言未改。它另核对 Site Git 提交与本地部署包的 55 项运行文件均与冻结候选逐字节一致；后续文档收尾没有改代码、测试或 PNG，没有再运行测试。
+
+| 发布对象 | 实际回执 |
+| --- | --- |
+| 私有试玩 | [高老庄 · 风来有信](https://xiyou-gaolao-prototype.gbcdby98.chatgpt.site)，**v2** |
+| Site source commit | `67a580c48ae7aeb032d8592d5c06ef932faced2c`，父 `967d7a6de638a9f42bd02a51988054a042a3e6fb` |
+| Version ID | `appgprj_6af53a3e4fa08191802bab06cd371e68~appgver_6a64416eda648191893eee7c12c60929` |
+| Deployment ID / 状态 | `appgdep_6af5964e43c4819180bdaa7ddf643b6c` / **succeeded** |
+| 发布后访问回读 | latest version 2；custom revision 1；当前角色 owner，允许用户仅一位 owner，外部访客 0、组 0；原 URL 和访问范围保持 |
+
+GitHub 的运行接入提交 `20f41f1eab66b1b2c80249add3d362914f83ecde` 与上述 Site source 属于不同仓库；之后追加本记录的 GitHub 提交仅变更文档。通过相同运行摘要建立对应，不将文档 head、Site source 或受管预览混为同一 Git 提交。`source-map.json` 的 PENDING 字段明确是初次文档冻结时快照，实际后续发布以本节及 PR/#25 回读记录为准。
+
+发布后普通浏览器打开正式 URL，实际看到 **Sign in required / Log in to access**。当前未认证会话没有进入游戏，未点击登录或绕过访问控制，因此正式 URL 登录后的游戏、资源与交互检查仍为 **NOT_RUN**。上述实际游戏检查来自受管预览；发布成功、资产映射和正式网址登录门可达分别记录，不冒充线上游戏实测。用户可使用站点 owner 所用的 ChatGPT 账号正常登录试玩。
+
+### 可取得的真实截图与接手入口
+
+[gaocai-animation-trial-browser.jpg](https://chatgpt.com/library?file_id=libfile_fde3_f-90c79777fd748191a70b39945834faba_66aec10a983c8191a09f0deb89988b42&account_id=personal) 是受管预览中重开后的完整真实场景原图，与验证者 `reset-scene.jpg` 同字节，SHA-256 为 `5d1f3718fdcdaca017b284fa8473fd747b8c12c948c58a022cac6cc1c6c1fa1b`。**它不是正式 v2 URL 的线上截图，也不是视频。** 本节固化独立报告的关键身份、覆盖、结果和限制；PNG、原始截图序列与运行日志不进入 GitHub。
+
+运行素材仍从 [README](README.md) 和 [assets.json](assets.json) 登记的恢复包取得：40 张 walk 与 5 张 idle 来自已有 PNG，既有 GIF/MP4 是 PNG 序列后编码预览，本轮没有取得原生生成 GIF。试玩顺序为“入庄一探”→点空地/方向键行走→Esc 停步→1/2 或头像切换对照，之后可取料或从说明重开。
+
+本次更新 [PR #26](https://github.com/gbcdby/xiyou/pull/26) 并在 [#25](https://github.com/gbcdby/xiyou/issues/25) 交接；PR 仍为 draft，#25/#23 保持 open，main 与设计 PR #24 不变。不因此声明正式动画或完整首章已验收。
