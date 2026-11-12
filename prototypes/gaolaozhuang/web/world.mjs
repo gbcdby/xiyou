@@ -1,5 +1,6 @@
 // 仅负责场景绘制与屏幕坐标换算，不改变任何游戏事实。
 import { MAP } from './engine.mjs';
+import { gaocaiDirection, gaocaiFrameIndex } from './gaocai-animation.mjs';
 
 const palette = {
   gaocai: ['#618e88','#395e5d','#c6dcd0'], carpenter: ['#b28a65','#6d5848','#e8cfaa'],
@@ -13,9 +14,73 @@ export function createRenderer(canvas, game, onAssetError) {
   let width = 0, height = 0, scale = 1, offsetX = 0, offsetY = 0, cameraX = 800;
   let hoverId = null, clickMark = null;
   const background = new Image();
+  background.onerror = () => onAssetError?.({ kind: 'background' });
   background.src = './assets/courtyard.png';
-  background.onerror = () => onAssetError?.();
   const font = '"Noto Serif CJK SC", "Songti SC", STSong, serif';
+  let gaocaiSprites = null, characterErrorReported = false;
+
+  function characterAssetError() {
+    if (characterErrorReported) return;
+    characterErrorReported = true;
+    onAssetError?.({ kind: 'character', characterId: 'gaocai' });
+  }
+
+  async function preloadGaocai() {
+    try {
+      const manifestUrl = new URL('./assets/gaocai/manifest.json', import.meta.url);
+      const response = await fetch(manifestUrl);
+      if (!response.ok) throw new Error('高才动画清单未载入');
+      const manifest = await response.json();
+      const groups = ['s', 'se', 'e', 'ne', 'n'].map(direction => manifest.native[direction]);
+      // 只校验实际绘制会消费的字段；坏清单整包回退旧人物，不能进入逐帧 draw 后才抛错。
+      const usableFrame = frame => typeof frame?.file === 'string' && frame.file.length > 0
+        && [frame.width, frame.height, frame.scale].every(value => Number.isFinite(value) && value > 0)
+        && Number.isFinite(frame.footPivot?.x) && Number.isFinite(frame.footPivot?.y);
+      if (groups.some(group => !usableFrame(group?.idle) || !Array.isArray(group?.walk?.frames)
+        || group.walk.frames.length !== 8 || !group.walk.frames.every(usableFrame)
+        || !Number.isFinite(group.walk.frameDurationMs) || group.walk.frameDurationMs <= 0)) {
+        throw new Error('高才动画清单字段无效');
+      }
+      const frames = groups.flatMap(group => [group.idle, ...group.walk.frames]);
+      const images = new Map();
+      await Promise.all(frames.map(async frame => {
+        try {
+          const picture = new Image();
+          await new Promise((resolve, reject) => {
+            picture.onload = resolve;
+            picture.onerror = reject;
+            picture.src = new URL(frame.file, manifestUrl).href;
+          });
+          // 浏览器支持时等解码结束；现有 Image 测试替身不需要提供 decode。
+          if (typeof picture.decode === 'function') await picture.decode();
+          images.set(frame.file, picture);
+        } catch { characterAssetError(); }
+      }));
+      // 预载完成前继续旧绘制。某个方向缺行走帧时，整组降为同方向站姿。
+      gaocaiSprites = { manifest, images };
+    } catch { characterAssetError(); }
+  }
+
+  function drawGaocaiSprite(actor) {
+    if (!gaocaiSprites) return false;
+    const { manifest, images } = gaocaiSprites;
+    const direction = gaocaiDirection(actor.facing);
+    const group = manifest.native[direction.nativeDirection];
+    const frames = group.walk.frames;
+    const canWalk = frames.length === 8 && frames.every(frame => images.has(frame.file));
+    const frame = actor.moving && canWalk
+      ? frames[gaocaiFrameIndex(actor.walkDistance, group.walk.frameDurationMs, frames.length)]
+      : group.idle;
+    const picture = images.get(frame.file);
+    if (!picture) return false;
+    ctx.save();
+    ctx.scale(direction.mirrorX ? -1 : 1, 1);
+    // scale 已包含来源组的等比缩放；镜像中心是脚底落点，不能再乘 groupScale。
+    ctx.drawImage(picture, -frame.footPivot.x * frame.scale, -frame.footPivot.y * frame.scale,
+      frame.width * frame.scale, frame.height * frame.scale);
+    ctx.restore();
+    return true;
+  }
 
   function resize() {
     const rect = canvas.getBoundingClientRect();
@@ -150,43 +215,47 @@ export function createRenderer(canvas, game, onAssetError) {
     ellipse(0,1,21,7,'#536c4c27');
     if(active){ellipse(0,0,25,10,'#6f9b7030','#4f896bbf');ellipse(0,0,29,12,null,'#acc49d70');}
     if(actor.id===hoverId)ellipse(0,0,25,10,'#bfc59c35','#9c9b6d99');
-    const next=actor.path?.[0];const direction=next?Math.sign((next.x??next[0])-actor.x)||1:1;
-    ctx.scale(direction,1);ctx.translate(0,bob);
-    // 墨线勾勒的小幅人物只承担原型辨识；不是正式八方向动画资产。
-    line([[-7,-8],[-10-step*.55,0]],'#4e5145',5);line([[7,-8],[9+step*.55,0]],'#4e5145',5);
-    if(actor.id==='wukong'){ctx.beginPath();ctx.moveTo(-10,-20);ctx.bezierCurveTo(-40,-17,-32,-38,-24,-34);ctx.strokeStyle=deep;ctx.lineWidth=4;ctx.stroke();}
-    const robeBottom=actor.id==='cuilan'?20:17;
-    shape([[-12,-47],[12,-47],[robeBottom,-9],[-robeBottom,-9]],base,deep,1.5);
-    shape([[-10,-45],[0,-37],[-3,-13],[-14,-11]],light,'#70766155',.7);
-    shape([[0,-37],[9,-45],[15,-10],[7,-11]],base,'#70766166',.8);
-    const arm=step*.3;shape([[-13,-45],[-23,-25+arm],[-15,-20+arm],[-6,-37]],base,deep,.8);shape([[12,-45],[23,-26-arm],[15,-22-arm],[6,-36]],base,deep,.8);
-    ellipse(-17,-22+arm,3.4,3.7,'#e3c9a6');ellipse(17,-23-arm,3.4,3.7,'#e3c9a6');
-    line([[-12,-29],[13,-29]],deep,3);line([[1,-28],[5,-12]],light,1.2);
-    if(actor.id==='tangseng'){
-      shape([[-12,-44],[13,-38],[15,-12],[4,-13]],'#bc7059','#8c5948',.8);
-      for(let j=0;j<3;j++)line([[0,-37+j*9],[12,-34+j*9]],'#dcb182',.8);
+    ctx.save();
+    if (!(actor.id === 'gaocai' && drawGaocaiSprite(actor))) {
+      const next=actor.path?.[0];const direction=next?Math.sign((next.x??next[0])-actor.x)||1:1;
+      ctx.scale(direction,1);ctx.translate(0,bob);
+      // 墨线勾勒的小幅人物只承担原型辨识；不是正式八方向动画资产。
+      line([[-7,-8],[-10-step*.55,0]],'#4e5145',5);line([[7,-8],[9+step*.55,0]],'#4e5145',5);
+      if(actor.id==='wukong'){ctx.beginPath();ctx.moveTo(-10,-20);ctx.bezierCurveTo(-40,-17,-32,-38,-24,-34);ctx.strokeStyle=deep;ctx.lineWidth=4;ctx.stroke();}
+      const robeBottom=actor.id==='cuilan'?20:17;
+      shape([[-12,-47],[12,-47],[robeBottom,-9],[-robeBottom,-9]],base,deep,1.5);
+      shape([[-10,-45],[0,-37],[-3,-13],[-14,-11]],light,'#70766155',.7);
+      shape([[0,-37],[9,-45],[15,-10],[7,-11]],base,'#70766166',.8);
+      const arm=step*.3;shape([[-13,-45],[-23,-25+arm],[-15,-20+arm],[-6,-37]],base,deep,.8);shape([[12,-45],[23,-26-arm],[15,-22-arm],[6,-36]],base,deep,.8);
+      ellipse(-17,-22+arm,3.4,3.7,'#e3c9a6');ellipse(17,-23-arm,3.4,3.7,'#e3c9a6');
+      line([[-12,-29],[13,-29]],deep,3);line([[1,-28],[5,-12]],light,1.2);
+      if(actor.id==='tangseng'){
+        shape([[-12,-44],[13,-38],[15,-12],[4,-13]],'#bc7059','#8c5948',.8);
+        for(let j=0;j<3;j++)line([[0,-37+j*9],[12,-34+j*9]],'#dcb182',.8);
+      }
+      ellipse(0,-55,10,12,'#ead2b1',deep);
+      if(actor.id==='bajie'){
+        ellipse(-12,-58,7,10,'#bcaa8b',deep);ellipse(12,-58,7,10,'#bcaa8b',deep);
+        ellipse(5,-53,7,4.5,'#d3b694',deep);ctx.fillStyle='#77674f';ctx.fillRect(4,-54,1.5,1.7);ctx.fillRect(8,-54,1.5,1.7);
+      }
+      ctx.fillStyle='#444b40';ctx.beginPath();ctx.ellipse(0,-63,10,6.5,0,Math.PI,Math.PI*2);ctx.fill();
+      if(actor.id==='tangseng'){
+        shape([[-11,-64],[-9,-79],[-4,-72],[0,-83],[5,-72],[10,-78],[11,-63]],'#d8bb77','#9c8156',1);line([[-8,-66],[8,-66]],'#bc8c54',2);
+      }else if(actor.id==='wukong'){
+        line([[-10,-61],[10,-61]],'#cfa746',2.5);ellipse(0,-71,5,4,deep);
+      }else if(actor.id==='cuilan'){
+        ellipse(-8,-65,5,8,'#454a40');ellipse(6,-68,5,4,'#454a40');line([[-11,-69],[10,-72]],'#ab7d70',2);ellipse(10,-72,2,2,'#d6b498');
+      }else if(actor.id==='cook'){
+        shape([[-11,-63],[-9,-72],[8,-72],[11,-62]],'#a5b28e',deep,.8);
+      }else if(actor.id==='carpenter'){
+        shape([[-12,-63],[-10,-70],[8,-72],[12,-63]],'#896f4c',deep,.8);
+      }else{ellipse(0,-70,4.8,4.4,'#414e41');line([[-6,-64],[7,-64]],base,3);}
+      line([[3,-56],[5,-56]],'#68604c',1);line([[3,-50],[6,-50]],'#aa8566',.8);
     }
-    ellipse(0,-55,10,12,'#ead2b1',deep);
-    if(actor.id==='bajie'){
-      ellipse(-12,-58,7,10,'#bcaa8b',deep);ellipse(12,-58,7,10,'#bcaa8b',deep);
-      ellipse(5,-53,7,4.5,'#d3b694',deep);ctx.fillStyle='#77674f';ctx.fillRect(4,-54,1.5,1.7);ctx.fillRect(8,-54,1.5,1.7);
-    }
-    ctx.fillStyle='#444b40';ctx.beginPath();ctx.ellipse(0,-63,10,6.5,0,Math.PI,Math.PI*2);ctx.fill();
-    if(actor.id==='tangseng'){
-      shape([[-11,-64],[-9,-79],[-4,-72],[0,-83],[5,-72],[10,-78],[11,-63]],'#d8bb77','#9c8156',1);line([[-8,-66],[8,-66]],'#bc8c54',2);
-    }else if(actor.id==='wukong'){
-      line([[-10,-61],[10,-61]],'#cfa746',2.5);ellipse(0,-71,5,4,deep);
-    }else if(actor.id==='cuilan'){
-      ellipse(-8,-65,5,8,'#454a40');ellipse(6,-68,5,4,'#454a40');line([[-11,-69],[10,-72]],'#ab7d70',2);ellipse(10,-72,2,2,'#d6b498');
-    }else if(actor.id==='cook'){
-      shape([[-11,-63],[-9,-72],[8,-72],[11,-62]],'#a5b28e',deep,.8);
-    }else if(actor.id==='carpenter'){
-      shape([[-12,-63],[-10,-70],[8,-72],[12,-63]],'#896f4c',deep,.8);
-    }else{ellipse(0,-70,4.8,4.4,'#414e41');line([[-6,-64],[7,-64]],base,3);}
-    line([[3,-56],[5,-56]],'#68604c',1);line([[3,-50],[6,-50]],'#aa8566',.8);
     // 小小包袱让拿到物件的状态在场景中可见。
     const holds=Object.values(game.state.items||{}).some(item=>item.owner===actor.id);
     if(holds){ellipse(-13,-31,6,8,'#b9a57a','#7e815b');line([[-8,-44],[-13,-31]],'#d4c9a5',2);}
+    ctx.restore();
     ctx.restore();
     label(actor.name+(active?' · 你':''),actor.x,actor.y+22,{active,small:!isHuman});
     if(isHuman){ctx.save();ctx.fillStyle=active?'#568063':'#b1956a';ctx.beginPath();ctx.arc(actor.x,actor.y-83,3.2,0,Math.PI*2);ctx.fill();ctx.restore();}
@@ -209,5 +278,6 @@ export function createRenderer(canvas, game, onAssetError) {
   }
 
   resize();
+  void preloadGaocai();
   return {draw,resize,toWorld,hitTest,setHover(id){hoverId=id;},mark(point,time){clickMark={...point,at:time};}};
 }

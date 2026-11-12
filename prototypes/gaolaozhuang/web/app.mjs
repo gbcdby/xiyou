@@ -6,7 +6,9 @@ const $ = id => document.getElementById(id);
 const game = createGame();
 const navigation = createNavigation(game);
 const canvas = $('world');
-const renderer = createRenderer(canvas, game, () => toast('场景图片未能载入，已使用简化地图。玩法仍可继续。'));
+const renderer = createRenderer(canvas, game, asset => toast(asset.kind === 'character'
+  ? '高才的部分动作未能载入，暂用站姿或简化人物。玩法仍可继续。'
+  : '场景图片未能载入，已使用简化地图。玩法仍可继续。'));
 let started = false, selectedTargetId = null, drawerMode = null;
 let toastTimeout, speechTimeout, lastDialogue = '', lastUiKey = '', lastActionKey = '';
 let lastTime = performance.now(), elapsed = 0, uiTimer = 0, recapSeen = false;
@@ -150,7 +152,7 @@ function renderDrawer() {
     $('notebook-dot').hidden=true;
   } else {
     $('drawer-kicker').textContent='原型说明 · 操作';$('drawer-title').textContent='入庄须知';
-    $('drawer-content').innerHTML=`<h3>先试一小段故事</h3><p>两位同伴先搭好门撑，等悟空走来开门；征得翠兰同意后陪她去前庭，再带着旧饭账和证言赴约。</p><h3>怎么走，怎么做</h3><ul><li>点击空地行走。桌子、花圃与房屋边界会挡住去路。</li><li>点击物件或人物，选择下方动作；距离较远时会先走近。</li><li>点击右上头像，或按 <kbd>1</kbd> / <kbd>2</kbd> 切换高才、木匠。</li><li>按 <kbd>E</kbd> 与最近的人或物互动；方向键也可以移动。</li><li>点击“停步”或按 <kbd>Esc</kbd> 取消行走和排队互动。切换同伴也会取消上一人的行动。</li><li>任务卡的“去下一处”可以带路，到场后仍由你选动作。</li></ul><h3>可以试试这些变化</h3><p>让两个人各拿一根木料；走到同伴身边交接饭账；护送途中请翠兰歇一会，再请她继续；会面地点变了，就带着东西重新赴约。</p><h3>这一版的边界</h3><p>这是本地单人切换两个角色的样片，NPC 行为由规则预设，用来验证行走和协作手感。尚未接入真人联机和真实 AI。刷新页面会重新开始，打开手记时暂停模拟。</p><p>桌面横屏体验优先。手机竖屏会随当前角色移动视野，可用“去下一处”前往屏幕外的目标。</p><div class="drawer-footer-note"><p>原型任务：<a href="https://github.com/gbcdby/xiyou/issues/25" target="_blank" rel="noopener noreferrer">xiyou #25</a><br>水墨淡彩场景为本项目生成资产；人物是可替换的原型绘制。</p><button class="secondary-button" id="drawer-restart" type="button">重新开始这段故事</button></div>`;
+    $('drawer-content').innerHTML=`<h3>先试一小段故事</h3><p>两位同伴先搭好门撑，等悟空走来开门；征得翠兰同意后陪她去前庭，再带着旧饭账和证言赴约。</p><h3>怎么走，怎么做</h3><ul><li>点击空地行走。桌子、花圃与房屋边界会挡住去路。</li><li>点击物件或人物，选择下方动作；距离较远时会先走近。</li><li>点击右上头像，或按 <kbd>1</kbd> / <kbd>2</kbd> 切换高才、木匠。</li><li>按 <kbd>E</kbd> 与最近的人或物互动；方向键也可以移动。</li><li>点击“停步”或按 <kbd>Esc</kbd> 取消行走和排队互动。切换同伴也会取消上一人的行动。</li><li>任务卡的“去下一处”可以带路，到场后仍由你选动作。</li></ul><h3>可以试试这些变化</h3><p>让两个人各拿一根木料；走到同伴身边交接饭账；护送途中请翠兰歇一会，再请她继续；会面地点变了，就带着东西重新赴约。</p><h3>这一版的边界</h3><p>这是本地单人切换两个角色的样片，NPC 行为由规则预设，用来验证行走和协作手感。尚未接入真人联机和真实 AI。刷新页面会重新开始，打开手记时暂停模拟。</p><p>桌面横屏体验优先。手机竖屏会随当前角色移动视野，可用“去下一处”前往屏幕外的目标。</p><div class="drawer-footer-note"><p>原型任务：<a href="https://github.com/gbcdby/xiyou/issues/25" target="_blank" rel="noopener noreferrer">xiyou #25</a><br>水墨淡彩场景为本项目生成资产；高才正在试用八方向行走与站立动画，其他人物保留原型绘制。</p><button class="secondary-button" id="drawer-restart" type="button">重新开始这段故事</button></div>`;
     $('drawer-restart').addEventListener('click',restart);
   }
 }
@@ -240,6 +242,7 @@ function frame(now) {
   const dt=Math.min(.25,Math.max(0,(now-lastTime)/1000));lastTime=now;elapsed+=dt;
   try{
     if(started&&!modalOpen()&&!document.hidden){game.update(dt);updatePending();}
+    // 高才帧相位来自引擎实际路程；暂停保留当前帧，重开随新 actor 自动归零。
     renderer.draw(elapsed,dt);
     uiTimer+=dt;if(uiTimer>.12){uiTimer=0;refreshUI();}
   }catch(error){console.error('场景更新失败',error);$('load-error').hidden=false;return;}

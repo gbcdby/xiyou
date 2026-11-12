@@ -1,4 +1,45 @@
-# #25 高老庄原型有限静态审查
+# #25 高才方向动画试接独立静态复审
+
+## 当前结论与候选身份
+
+2026-11-12，独立 reviewer `/root/review_gaocai_animation_trial` 完成两轮静态审查，最终结论为 **PASS WITH KNOWN ART LIMITS**。一位独立审查者分别审查需求轴与标准轴；不是双人审查。交付整理者仅将该报告的结论与证据边界写入本文件，没有修改运行源码、测试或 PNG，也没有新增独立审查或浏览器验收。
+
+- 基线：`prototype/25-gaolaozhuang@afa12ea57c1b84b7b902a970dfeea724bf7b346d`，既有 [draft PR #26](https://github.com/gbcdby/xiyou/pull/26)。
+- 本轮复审对象：8 项运行文本摘要 `sha256:949625e896be92bd001c4cba4cbedba5d0855bd26b898b1e2d04496219e0ba68`。
+- `web/world.mjs` SHA-256：`db3d1aa0e10c812023d0208aaa44b069f4de55255a89727ecb84e663b52fcff1`。
+- 首轮对象：`sha256:021112bbc3258a3b8956741ca16bdf14c9c93b8c7200ef374a28d8ebb0aa5f1f`；只作为已修发现的背景。
+- 指纹算法与逐文件身份见 [source-map.json](source-map.json)，执行证据与未覆盖项见 [verification.md](verification.md)。
+
+| 审查轴 | 最终结论 | 范围 |
+| --- | --- | --- |
+| 需求轴 | PASS | 本轮高才八向、原生/镜像与实际位移驱动的静态接入；R-001 已核对修正，没有未解决代码阻断 |
+| 标准轴 | PASS | 模块职责、无 DOM 引擎、保留现有行为，以及源码与托管目标映射 |
+
+## R-gaocai-animation-001：损坏清单可能中断主循环
+
+首轮发现：清单中的站姿、脚底锚点或帧时长结构损坏时，后续 `draw` 可抛出异常，影响整局继续运行。严重度为中，原为阻断代码问题；最终状态 **VERIFIED，blocking=false**。
+
+实现者在 `world.mjs` 启用角色资源前校验绘制实际消费的 `file`、源尺寸、`scale`、`footPivot`、8 帧数组及有限正帧时长。无效整包保持 `gaocaiSprites=null`，继续旧矢量人物；缺失或坏 JSON 仍由外层捕获，逐方向缺图的 idle/矢量降级保持原样。
+
+复审者只读核对了以下证据：
+
+- E-06：重新计算 8 项文本指纹，等于最终冻结值；`source-map.json` 的 runtime 摘要、字节数和白名单一致。
+- E-07：无效站姿、锚点、帧数组和时长在启用前被拒绝，原逐帧异常路径不再可达。
+- E-08：新增测试调用真实 preload 与 draw，以 Canvas/Image 宿主替身覆盖 `idle=null`、`footPivot=null`、`frameDurationMs=0`，检查错误提示、移动/站立绘制、名称与图片回退；审查者没有运行测试。
+- E-09：去除新增 9 行校验块后，`world.mjs` 摘要等于首轮版本；其他 7 项 runtime 与首轮一致，首轮已审主路径结论继续适用。
+- E-10：作者报告 `npm test` 27/27 PASS，并报告新增回退用例先复现再修绿；这是作者自查，未计为审查者独立运行证据。
+
+## 未覆盖与保留限制
+
+独立浏览器验收为 **BLOCKED**：本地 Chromium 启动遇到 socket 权限限制，正式云浏览器访问 localhost 被拒绝，均未进入页面。GZ-ANIM-01～05 全部 NOT_RUN，没有当前场景截图、连续运动、完整交互、抽屉/页面隐藏暂停或故障资源浏览器通过证据。R-001 修后只复核文件身份，没有重跑上述失败环境路径。
+
+E 原 v1 步距偏急、NE04/05 近臂反摆/接缝，以及连续脚滑、比例、低置信度脚底锚点和 76 单位体量仍为已知美术限制。已有素材来自 PNG，5 个原生方向加 3 个镜像方向；本轮没有生成原生 GIF。用户允许试接，不等于正式动画验收通过。
+
+审查者没有重跑作者测试、重核 45 张 PNG 来源字节、上传/部署或核验发布环境，也没有执行合并。本报告只支持已授权私有试用候选的静态结论；实际分支更新、站点发布和用户试玩须分别记录。
+
+---
+
+# 历史：#25 高老庄原型有限静态审查
 
 这是对原始候选的审查记录。交付整理只去除了本地绝对路径，保留原候选身份和结论。后续文档补齐、账本文案微修与路径映射不在本次独立静态审查范围，见 [verification.md](verification.md)。原始报告保存在 [基线证据包](https://chatgpt.com/library?file_id=libfile_fde3_f-dcb5d7ae28c0819193c12df819d1c135_66aec10a983c8191a09f0deb89988b42&account_id=personal) 的 `static-review-original.md`。
 

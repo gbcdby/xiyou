@@ -1,6 +1,6 @@
 # 高老庄 · 风来有信
 
-《西游记》多人无战斗叙事游戏的**独立 H5 交互原型**。本轮先让一个人在同一页面切换高才和木匠，体验真实行走、近距操作、协作开门、护送和带证据赴约。这是同一浏览器内的本地双角色和预设 NPC 模拟，无远程多人、真实 LLM 或正式八方向动画。本票不等于完整首章或正式视觉验收，也不连接生产房间。
+《西游记》多人无战斗叙事游戏的**独立 H5 交互原型**。本轮先让一个人在同一页面切换高才和木匠，体验真实行走、近距操作、协作开门、护送和带证据赴约。这是同一浏览器内的本地双角色和预设 NPC 模拟，无远程多人、真实 LLM；高才本轮试用五原生、三镜像的八方向行走与站立素材，尚未通过正式动画验收。本票不等于完整首章或正式视觉验收，也不连接生产房间。
 
 ## 任务与依据
 
@@ -14,7 +14,9 @@
 
 先从 [assets.json](assets.json) 中 `external_download_url` 登记的素材包入口下载庭院 ZIP，将其中的 `courtyard.png` 解压到 `web/assets/courtyard.png`。这是授权账号的文件下载入口，不是浏览器运行时的图片直链。原始 PNG 为 3,423,640 字节，SHA-256 必须为 `f5df307eaea03188e823a279cb3df3a65b1b6a7931c329294cd6b79e4c0d510a`；不要提交图片二进制。`npm test` 不依赖这张图片，完整浏览器画面需要先恢复素材。
 
-本目录的 `web/` 是手写运行源码，不是构建输出。托管运行包使用 `dist/`；两者六个运行文本文件逐字节一致，映射与 SHA-256 见 [source-map.json](source-map.json)。
+高才素材从 [gaocai-player-animation-runtime-v1.zip](https://chatgpt.com/library?file_id=libfile_fde3_f-e9e9279c65308191846ce6457cfa5a9e_66aec10a983c8191a09f0deb89988b42&account_id=personal) 恢复，ZIP 为 6,748,031 字节、SHA-256 `cdd47ffb7c7e0582c7bd46340b30ad7aeffa1d471e1b55134a0422515cc7d242`。将包内 `runtime/gaocai/` 的内容复制到 `web/assets/gaocai/`；运行时读取本地相对路径的 `manifest.json` 与 45 张 PNG，不把下载入口当作 CDN。图片总计 6,737,985 字节；逐帧 SHA-256、源尺寸、脚底锚点与缩放见清单。源图来自已有生成 PNG，本次没有原生 GIF 输出。
+
+本目录的 `web/` 是手写运行源码，不是构建输出。当前运行文本共八项：原六项、`gaocai-animation.mjs` 和角色 `manifest.json`。托管运行包目标仍为 `dist/`，相对路径保持不变；本地候选的映射与 SHA-256 见 [source-map.json](source-map.json)。本轮固定的是交付候选；实际 GitHub 分支与私有试玩更新结果以 [PR #26](https://github.com/gbcdby/xiyou/pull/26) 和 [#25 最新记录](https://github.com/gbcdby/xiyou/issues/25) 为准。本文不提前声明站点已更新。
 
 此原型不需要安装依赖或构建。使用支持 ES module 的现代浏览器，通过 HTTP 打开 `web/`，不要直接双击 `file://`。
 
@@ -50,16 +52,41 @@ npm test
 | `web/engine.mjs` | 地图、寻路、物件所有权、动作前置条件、受控 NPC、进度与事实；无 DOM 依赖 |
 | `web/world.mjs` | Canvas 场景、角色绘制、路径与点击命中；不修改游戏事实 |
 | `web/app.mjs` | DOM 界面、输入、手记与回顾 |
+| `web/gaocai-animation.mjs` | 实际位移的八方向量化、原生/镜像映射、距离帧相位；无独立时钟 |
+| `web/assets/gaocai/manifest.json` | 5 个原生方向的 40 张行走帧、5 张站姿、逐帧脚底锚点与最终缩放；PNG 外置恢复 |
 | `web/navigation.mjs` | 导航与到达动作排队；地点精确到达、停步及切换取消 |
 | `web/style.css` / `web/index.html` | 水墨淡彩界面与页面结构 |
 | `web/assets/courtyard.png` | 下载资产 ZIP 后恢复的原始底图；GitHub 不含此 PNG，恢复方式见上文 |
-| `tests/*.test.mjs` | 引擎与导航协调层的行为检查，不替代真人趣味或浏览器体验验收 |
+| `tests/*.test.mjs` | 引擎、导航、动画方向/相位与资源回退的行为检查；不替代浏览器或正式美术验收 |
 | [assets.json](assets.json) | 美术与声音来源、庭院资产包入口及恢复校验 |
-| [verification.md](verification.md) | GZ-P-01 至 GZ-P-07 检查矩阵、证据与未覆盖项 |
-| [review.md](review.md) | 原始候选的有限独立静态审查及边界 |
-| [source-map.json](source-map.json) | 两份候选的运行源码、测试路径与素材映射及 SHA-256 |
+| [verification.md](verification.md) | 本轮 GZ-ANIM-01 至 05、作者测试，以及历史 GZ-P 检查与未覆盖项 |
+| [review.md](review.md) | 本轮动画独立静态复审、R-001 修正及历史基线审查边界 |
+| [source-map.json](source-map.json) | 本轮冻结运行源码、测试路径、素材映射及 SHA-256；托管目标不冒充已部署 |
 
-逻辑地图为 `1600 × 1000`，背景与交互层独立。角色、门障与交互物件使用 Canvas 绘制以便快速改动；这些是可替换的原型资产，不是正式八方向动画。
+逻辑地图为 `1600 × 1000`，背景与交互层独立。角色、门障与交互物件使用 Canvas 绘制以便快速改动。仅高才接入本次 PNG 方向动画；木匠与 NPC 保留原绘制。这些仍是可替换的原型资产，不是正式动画验收结果。
+
+## 高才动画试用合同
+
+本轮对应用户“把玩家操作的那个角色做成这个，再看看原型里的表现”的试用要求，基于 PR #26 分支 `prototype/25-gaolaozhuang` 的 `afa12ea57c1b84b7b902a970dfeea724bf7b346d`。只更换高才的外观，角色落点、碰撞、点击命中、距离、路径与按 y 排序沿用原型规则。
+
+- S、SE、E、NE、N 使用原生帧；W、SW、NW 分别绕脚底镜像 E、SE、NE。名字、选择环、玩家标记与贴图上的持物提示独立保留。
+- 主体高初值为 76 地图单位。每帧按清单的 `footPivot` 与最终 `scale` 绘制，不再乘 `groupScale`，不逐帧拉成等高。Idle 使用自己的基准图锚点；NE 后四帧的 0.70 已计入最终缩放。
+- 引擎按实际非零路段更新末朝向。帧相位来自累计实际行走距离：18.45 单位/帧、147.6 单位/周期，等价于参考速度 205 单位/秒下 90ms/帧；该参数未做物理配速验收。
+- 停步、到达和切换同伴保留末朝向，显示相应站姿。打开说明、行囊、手记、回顾及页面隐藏时引擎不推进，步态冻结且恢复不补跑。重开创建新角色，朝向南、累计路程清零；渲染器没有残留的角色相位缓存。
+- 预载未完成或清单绘制字段损坏时使用旧矢量高才。某原生方向缺行走帧时整组改用同方向站姿；站姿也缺失时使用旧矢量绘制。角色与场景图片的失败提示分开。
+
+现有素材的 S/N 连续脚滑与接缝、SE 完整双步、E 的 00→01 与 04→05 步距、NE 两批比例/接缝及 04/05 近臂反摆尚未验收。镜像会反转交领与光照。76 单位体量与全部脚底锚点是低置信度试接初值，独立验证者的两条浏览器入口均被环境阻塞，尚未进入页面；作者自查不代表真实画面、连续运动或正式美术通过。
+
+## 本轮检查状态
+
+| 证据层 | 当前结论 | 能证明的范围 |
+| --- | --- | --- |
+| 实现者行为测试 | `npm test` 27/27 PASS | 引擎、八向与距离相位、停步/切换/重开、缺损清单回退；Canvas/Image 使用宿主替身 |
+| 独立静态复审 | PASS WITH KNOWN ART LIMITS | 需求轴与标准轴通过；清单字段损坏导致主循环停止的 R-gaocai-animation-001 已修正并 VERIFIED |
+| 独立浏览器验收 | GZ-ANIM-01～05 全部 NOT_RUN / BLOCKED | 本地 Chromium socket 权限失败，正式云浏览器访问 localhost 被拒绝；没有场景截图、连续运动或交互通过证据 |
+| 私有试玩更新 | 交由发布记录确认 | 文档冻结不代表已发布；保持既有 owner-private 访问范围 |
+
+当前八项运行文本摘要为 `949625e896be92bd001c4cba4cbedba5d0855bd26b898b1e2d04496219e0ba68`，完整 `web/` 文件树摘要为 `4266670e9dd9b89030c07d6b4f31229662fa3cda1193d048725fd8f41577f608`；算法见 [source-map.json](source-map.json)。本轮可作为已授权试接交给用户体验，尚未完成正式动画、真实浏览器或完整首章验收。
 
 ## 后续 Agent 接手
 
@@ -75,6 +102,6 @@ npm test
 
 本轮授权终点是可访问的独立原型、检查与后续 Agent 交接，以及 draft PR。源码目标为 `prototypes/gaolaozhuang/`，任务记录挂在 #25；#25 与 #23 保持 open，禁止自动合并或接入正式游戏生产环境。
 
-本快照冻结时，本候选的可访问试玩与 draft PR 地址尚未由本整理者核实；实际交付状态与最终链接以 [#25 最新记录](https://github.com/gbcdby/xiyou/issues/25) 为索引。后续交付复用既有 Sites 项目 `appgprj_6af53a3e4fa08191802bab06cd371e68`，保持独立 owner-private 试玩，不创建新站。源码与资产只用于本项目的授权交付。
+本轮复用 [draft PR #26](https://github.com/gbcdby/xiyou/pull/26) 与[既有私有试玩入口](https://xiyou-gaolao-prototype.gbcdby98.chatgpt.site)。文档冻结时，PR 已确认 draft/open，动画候选尚待提交及发布；源码提交身份、站点版本和发布事实以 [#25 最新记录](https://github.com/gbcdby/xiyou/issues/25) 为索引，不将旧 v1 记录当作本轮动画已上线。发布复用 Sites 项目 `appgprj_6af53a3e4fa08191802bab06cd371e68`，保持 owner-private；源码与资产只用于本项目的授权交付。
 
 原始浏览器全流程与微修后的定向复验分别报告，详见 [verification.md](verification.md)。运行截图、原始日志及图片二进制按项目规则独立保存，不写入 GitHub 源码目录。

@@ -1,4 +1,6 @@
 // 高老庄本地样片：只处理两角色切换与受控人物，不接入生产协议。
+import { facingFromDisplacement } from './gaocai-animation.mjs';
+
 export const MAP = {
   width: 1600,
   height: 1000,
@@ -172,6 +174,7 @@ function advanceActor(actor, dt) {
   let remaining = (actor.speed ?? PLAYER_SPEED) * dt;
   while (actor.path.length && remaining > 0) {
     const next = actor.path[0];
+    const previousX = actor.x, previousY = actor.y;
     const separation = distance(actor, next);
     if (separation <= remaining + EPSILON) {
       actor.x = next.x;
@@ -183,6 +186,12 @@ function advanceActor(actor, dt) {
       actor.y += ((next.y - actor.y) / separation) * remaining;
       remaining = 0;
     }
+    if (actor.id === 'gaocai') {
+      const dx = actor.x - previousX, dy = actor.y - previousY;
+      // 每个真实路段分别取向；一帧跨越转弯时保留最后一段，零位移不会转身。
+      actor.facing = facingFromDisplacement(dx, dy, actor.facing);
+      actor.walkDistance += Math.hypot(dx, dy);
+    }
   }
   actor.moving = actor.path.length > 0;
 }
@@ -193,7 +202,7 @@ function initialState() {
     activeId: 'gaocai',
     stage: 'prepare',
     actors: {
-      gaocai: { id: 'gaocai', name: '高才', x: 690, y: 790, path: [], moving: false, color: '#3b8290', kind: 'player' },
+      gaocai: { id: 'gaocai', name: '高才', x: 690, y: 790, path: [], moving: false, facing: 's', walkDistance: 0, color: '#3b8290', kind: 'player' },
       carpenter: { id: 'carpenter', name: '木匠学徒', x: 750, y: 830, path: [], moving: false, color: '#a95d4a', kind: 'player' },
       wukong: npc('wukong', '孙悟空', MAP.points.wukong, '#a98849'),
       cuilan: npc('cuilan', '高翠兰', MAP.points.door, '#ad7890', { visible: false, speed: 170 }),

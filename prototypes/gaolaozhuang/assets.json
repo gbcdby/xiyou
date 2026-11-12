@@ -1,6 +1,6 @@
 {
   "chapter": "高老庄",
-  "purpose": "xiyou #25 独立交互原型",
+  "purpose": "xiyou #25 独立交互原型；高才方向动画试接，本地候选未发布",
   "assets": [
     {
       "path": "web/assets/courtyard.png",
@@ -26,10 +26,41 @@
       "external_entry_type": "authenticated_library_file"
     },
     {
+      "path": "web/assets/gaocai/",
+      "asset_source": "original_team",
+      "creation_method": "已生成透明 PNG 的逐字节运行副本；40 张行走帧与 5 张 basis_v2 站姿，不来自原生 GIF",
+      "role": "仅高才使用的五原生加三镜像方向试用动画",
+      "status": "PROTOTYPE_TRIAL_NOT_ART_ACCEPTED",
+      "png_count": 45,
+      "png_bytes": 6737985,
+      "manifest_path": "web/assets/gaocai/manifest.json",
+      "manifest_sha256": "c431869d3e6b4fd931ddeadfa029d8424c5f7854eedbc8330de85e25a316dce8",
+      "render_contract": "actor.x/y 为脚底落点；使用每帧 footPivot 与最终 scale，不再次应用 groupScale；目标主体高76地图单位；idle使用独立锚点。",
+      "phase_contract": "仅实际路程推进，18.45单位/帧、147.6单位/周期；参考205单位/秒时约90ms/帧，未做物理配速验收。",
+      "post_processing": "PNG 字节未改；运行时按清单等比绘制及绕脚底水平镜像。",
+      "distribution": "external_archive",
+      "external_download_url": "https://chatgpt.com/library?file_id=libfile_fde3_f-e9e9279c65308191846ce6457cfa5a9e_66aec10a983c8191a09f0deb89988b42&account_id=personal",
+      "external_archive_name": "gaocai-player-animation-runtime-v1.zip",
+      "external_archive_bytes": 6748031,
+      "external_archive_sha256": "cdd47ffb7c7e0582c7bd46340b30ad7aeffa1d471e1b55134a0422515cc7d242",
+      "archive_member": "runtime/gaocai/",
+      "restore_path": "web/assets/gaocai/",
+      "download_note": "下载授权账号的 ZIP 后复制 runtime/gaocai/ 内容；不是浏览器运行时直链。",
+      "source_archive": {
+        "libraryFileId": "libfile_fde3_f-a8516adb205c8191b4878f5912920b62_66aec10a983c8191a09f0deb89988b42",
+        "archiveName": "gaocai-5native-3mirror-material-study-v1.zip",
+        "archiveSha256": "36a9b4b21b5f265968e24b8a30b037429fc3e0083baa00de61ad385361b7a6cc",
+        "nativeGif": false,
+        "provenance": "Existing generated PNG artwork; no frame is represented as extracted from a native GIF."
+      },
+      "known_limitations": "S/N连续脚滑和接缝、SE完整双步尚待看；E保留原v1步距偏急；NE04/05近臂反摆失败且两批比例/接缝未验收。全部pivot和体量为试接初值。",
+      "github_included": "仅文本manifest与说明；45PNG不进入项目GitHub仓库"
+    },
+    {
       "path": "web/world.mjs",
       "asset_source": "original_team",
       "creation_method": "Canvas 原创程序绘制",
-      "role": "可替换的原型人物、木料、账本、门障、支架和交互提示；非正式角色动画"
+      "role": "木匠与 NPC 的原型人物、木料、账本、门障、支架、交互提示及高才资源失败回退；高才正常绘制改用外置 PNG 试用素材"
     },
     {
       "path": "web/app.mjs",

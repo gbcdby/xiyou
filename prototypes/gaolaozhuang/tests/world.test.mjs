@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { MAP, createGame } from '../web/engine.mjs';
 import { createRenderer } from '../web/world.mjs';
 
@@ -52,4 +53,50 @@ test('人物点击：开门后翠兰从头到脚可选，悟空与已移除门�
   }
   const wukong = game.state.actors.wukong;
   assert.equal(renderer.hitTest({ x: wukong.x, y: wukong.y - 30 })?.id, 'wukong', '让路后的悟空仍可独立点击');
+});
+
+test('高才清单的站姿、锚点或帧时长损坏时继续绘制旧人物，不中断场景', async t => {
+  const originals = new Map(['window', 'Image', 'fetch'].map(key => [key, Object.getOwnPropertyDescriptor(globalThis, key)]));
+  Object.defineProperty(globalThis, 'window', { configurable: true, value: { devicePixelRatio: 1 } });
+  Object.defineProperty(globalThis, 'Image', { configurable: true, value: class {
+    set src(value) { this.url = value; this.complete = true; this.naturalWidth = 1; queueMicrotask(() => this.onload?.()); }
+    get src() { return this.url; }
+  } });
+  t.after(() => {
+    for (const [key, descriptor] of originals) {
+      if (descriptor) Object.defineProperty(globalThis, key, descriptor);
+      else delete globalThis[key];
+    }
+  });
+  const source = JSON.parse(readFileSync(new URL('../web/assets/gaocai/manifest.json', import.meta.url), 'utf8'));
+  for (const [label, damage] of [
+    ['缺站姿', manifest => { manifest.native.s.idle = null; }],
+    ['缺脚底锚点', manifest => { manifest.native.s.idle.footPivot = null; }],
+    ['帧时长为零', manifest => { manifest.native.s.walk.frameDurationMs = 0; }],
+  ]) {
+    const manifest = structuredClone(source);
+    damage(manifest);
+    Object.defineProperty(globalThis, 'fetch', { configurable: true, value: async () => ({ ok: true, json: async () => manifest }) });
+    const errors = [], pictures = [], labels = [];
+    // 只隔离 Canvas 宿主；实际清单预载、回退决策和场景 draw 全部执行。
+    const ctx = new Proxy({
+      measureText: () => ({ width: 30 }),
+      createLinearGradient: () => ({ addColorStop() {} }),
+      drawImage: image => pictures.push(image.src),
+      fillText: value => labels.push(value),
+    }, { get: (target, key) => target[key] ?? (() => {}) });
+    const game = createGame();
+    const renderer = createRenderer({
+      getContext: () => ctx,
+      getBoundingClientRect: () => ({ left: 0, top: 0, width: 1600, height: 1000 }),
+    }, game, error => errors.push(error));
+    await new Promise(resolve => setImmediate(resolve));
+    assert.doesNotThrow(() => renderer.draw(0, 0.016), label);
+    game.moveTo(1000, 790);
+    game.update(0.2);
+    assert.doesNotThrow(() => renderer.draw(0.2, 0.016), `${label}后仍能行走`);
+    assert.ok(errors.some(error => error.kind === 'character'), `${label}应报告角色资源错误`);
+    assert.ok(labels.includes('高才 · 你'), `${label}后角色与玩家标记仍在场景中`);
+    assert.equal(pictures.some(url => url.includes('/gaocai/')), false, `${label}应使用旧矢量人物`);
+  }
 });
