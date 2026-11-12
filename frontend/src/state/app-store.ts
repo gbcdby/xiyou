@@ -71,7 +71,7 @@ export function createAppStore(options: AppStoreOptions = {}) {
     try { await sessionClient.send(action); }
     catch (error) { localNotice.value = error instanceof Error ? error.message : '动作尚未提交。'; }
   }
-  return { identity, localNotice, authNotice, storageNotice, sessionState, api, sessionClient, signIn, enterSession, leaveSession, sendAction };
+  return { identity, localNotice, authNotice, storageNotice, sessionState, api, sessionClient, signIn, enterSession, leaveSession, sendAction, invalidateIdentity };
 }
 
-export const { identity, localNotice, authNotice, storageNotice, sessionState, api, sessionClient, signIn, enterSession, leaveSession, sendAction } = createAppStore();
+export const { identity, localNotice, authNotice, storageNotice, sessionState, api, sessionClient, signIn, enterSession, leaveSession, sendAction, invalidateIdentity } = createAppStore();

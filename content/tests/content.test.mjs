@@ -90,6 +90,7 @@ test('已注册版本的文件被意外改写时拒绝装载', async () => {
   try {
     await cp(path.join(repository, 'content'), path.join(copy, 'content'), { recursive: true });
     await symlink(path.join(repository, 'protocol'), path.join(copy, 'protocol'), 'dir');
+    await symlink(path.join(repository, 'game'), path.join(copy, 'game'), 'dir');
     const file = path.join(copy, 'content', 'fixtures', 'trust-repair-fixture-v1.json');
     const modified = JSON.parse(await readFile(file, 'utf8'));
     modified.knowledge.find(entry => entry.knowledgeId === 'register_entry').statement = '相同版本被静默改写。';

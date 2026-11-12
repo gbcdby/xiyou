@@ -1,0 +1,1571 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/gbcdby/xiyou/protocol/spatial-v2",
+  "$defs": {
+    "Id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}(?![\\s\\S])"
+    },
+    "DecimalString": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)(?![\\s\\S])"
+    },
+    "PositiveDecimalString": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]*(?![\\s\\S])"
+    },
+    "UtcTimestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z(?![\\s\\S])"
+    },
+    "Scalar": {
+      "oneOf": [
+        {
+          "type": "string",
+          "maxLength": 2000
+        },
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "FactField": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/Id"
+        },
+        "label": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "value": {
+          "$ref": "#/$defs/Scalar"
+        }
+      },
+      "required": [
+        "key",
+        "label",
+        "value"
+      ],
+      "additionalProperties": false
+    },
+    "EventRange": {
+      "type": "object",
+      "properties": {
+        "first": {
+          "$ref": "#/$defs/PositiveDecimalString"
+        },
+        "last": {
+          "$ref": "#/$defs/PositiveDecimalString"
+        }
+      },
+      "required": [
+        "first",
+        "last"
+      ],
+      "additionalProperties": false
+    },
+    "EntityRef": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{32,96}(?![\\s\\S])"
+    },
+    "Position": {
+      "type": "object",
+      "properties": {
+        "x": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "y": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        }
+      },
+      "required": [
+        "x",
+        "y"
+      ],
+      "additionalProperties": false
+    },
+    "Polygon": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Position"
+      },
+      "maxItems": 128,
+      "minItems": 3
+    },
+    "Facing": {
+      "enum": [
+        "N",
+        "NE",
+        "E",
+        "SE",
+        "S",
+        "SW",
+        "W",
+        "NW"
+      ]
+    },
+    "ActionV2": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "move_to"
+            },
+            "movementCommandSeq": {
+              "$ref": "#/$defs/PositiveDecimalString"
+            },
+            "sceneId": {
+              "$ref": "#/$defs/Id"
+            },
+            "destination": {
+              "$ref": "#/$defs/Position"
+            },
+            "targetRef": {
+              "$ref": "#/$defs/EntityRef"
+            },
+            "anchorId": {
+              "$ref": "#/$defs/Id"
+            }
+          },
+          "required": [
+            "kind",
+            "movementCommandSeq",
+            "sceneId",
+            "destination"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "stop_move"
+            },
+            "movementCommandSeq": {
+              "$ref": "#/$defs/PositiveDecimalString"
+            }
+          },
+          "required": [
+            "kind",
+            "movementCommandSeq"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "inspect"
+            },
+            "targetRef": {
+              "$ref": "#/$defs/EntityRef"
+            }
+          },
+          "required": [
+            "kind",
+            "targetRef"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "take_item"
+            },
+            "itemRef": {
+              "$ref": "#/$defs/EntityRef"
+            },
+            "expectedItemRevision": {
+              "$ref": "#/$defs/DecimalString"
+            }
+          },
+          "required": [
+            "kind",
+            "itemRef",
+            "expectedItemRevision"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "put_item"
+            },
+            "itemRef": {
+              "$ref": "#/$defs/EntityRef"
+            },
+            "expectedItemRevision": {
+              "$ref": "#/$defs/DecimalString"
+            },
+            "sceneId": {
+              "$ref": "#/$defs/Id"
+            },
+            "position": {
+              "$ref": "#/$defs/Position"
+            }
+          },
+          "required": [
+            "kind",
+            "itemRef",
+            "expectedItemRevision",
+            "sceneId",
+            "position"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "transfer_item"
+            },
+            "itemRef": {
+              "$ref": "#/$defs/EntityRef"
+            },
+            "expectedItemRevision": {
+              "$ref": "#/$defs/DecimalString"
+            },
+            "recipientRef": {
+              "$ref": "#/$defs/EntityRef"
+            }
+          },
+          "required": [
+            "kind",
+            "itemRef",
+            "expectedItemRevision",
+            "recipientRef"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "reclaim_public_item"
+            },
+            "itemRef": {
+              "$ref": "#/$defs/EntityRef"
+            },
+            "holderRef": {
+              "$ref": "#/$defs/EntityRef"
+            },
+            "expectedItemRevision": {
+              "$ref": "#/$defs/DecimalString"
+            },
+            "expectedHolderEpoch": {
+              "$ref": "#/$defs/DecimalString"
+            }
+          },
+          "required": [
+            "kind",
+            "itemRef",
+            "holderRef",
+            "expectedItemRevision",
+            "expectedHolderEpoch"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "interact"
+            },
+            "targetRef": {
+              "$ref": "#/$defs/EntityRef"
+            },
+            "operationId": {
+              "$ref": "#/$defs/Id"
+            },
+            "expectedTargetRevision": {
+              "$ref": "#/$defs/DecimalString"
+            }
+          },
+          "required": [
+            "kind",
+            "targetRef",
+            "operationId",
+            "expectedTargetRevision"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "cooperate"
+            },
+            "operationId": {
+              "$ref": "#/$defs/Id"
+            },
+            "operationVersion": {
+              "$ref": "#/$defs/DecimalString"
+            },
+            "phase": {
+              "enum": [
+                "prepare",
+                "ready",
+                "cancel"
+              ]
+            }
+          },
+          "required": [
+            "kind",
+            "operationId",
+            "operationVersion",
+            "phase"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "speak"
+            },
+            "text": {
+              "type": "string",
+              "maxLength": 2000,
+              "minLength": 1
+            },
+            "channel": {
+              "enum": [
+                "public",
+                "directed",
+                "team"
+              ]
+            },
+            "recipientRefs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/EntityRef"
+              },
+              "maxItems": 256
+            }
+          },
+          "required": [
+            "kind",
+            "text",
+            "channel",
+            "recipientRefs"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "make_claim"
+            },
+            "text": {
+              "type": "string",
+              "maxLength": 2000,
+              "minLength": 1
+            },
+            "channel": {
+              "enum": [
+                "public",
+                "directed",
+                "team"
+              ]
+            },
+            "recipientRefs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/EntityRef"
+              },
+              "maxItems": 256
+            }
+          },
+          "required": [
+            "kind",
+            "text",
+            "channel",
+            "recipientRefs"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "share_evidence"
+            },
+            "evidenceRef": {
+              "$ref": "#/$defs/EntityRef"
+            },
+            "recipientRefs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/EntityRef"
+              },
+              "maxItems": 256,
+              "minItems": 1
+            }
+          },
+          "required": [
+            "kind",
+            "evidenceRef",
+            "recipientRefs"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "wait"
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "PublicEnvelope": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 2
+        },
+        "sessionId": {
+          "$ref": "#/$defs/Id"
+        },
+        "viewId": {
+          "$ref": "#/$defs/Id"
+        },
+        "actorRef": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "clientActionId": {
+          "$ref": "#/$defs/Id"
+        },
+        "controlEpoch": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "baseSeq": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "action": {
+          "$ref": "#/$defs/ActionV2"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "sessionId",
+        "viewId",
+        "actorRef",
+        "clientActionId",
+        "controlEpoch",
+        "baseSeq",
+        "action"
+      ],
+      "additionalProperties": false
+    },
+    "SyncRequestV2": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 2
+        },
+        "type": {
+          "const": "sync.request"
+        },
+        "sessionId": {
+          "$ref": "#/$defs/Id"
+        },
+        "viewId": {
+          "$ref": "#/$defs/Id"
+        },
+        "cursor": {
+          "$ref": "#/$defs/DecimalString"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "type",
+        "sessionId",
+        "viewId",
+        "cursor"
+      ],
+      "additionalProperties": false
+    },
+    "ControlRequestV2": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 2
+        },
+        "type": {
+          "enum": [
+            "control.resume",
+            "control.take"
+          ]
+        },
+        "sessionId": {
+          "$ref": "#/$defs/Id"
+        },
+        "viewId": {
+          "$ref": "#/$defs/Id"
+        },
+        "actorRef": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "nonce": {
+          "$ref": "#/$defs/Id"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "type",
+        "sessionId",
+        "viewId",
+        "actorRef",
+        "nonce"
+      ],
+      "additionalProperties": false
+    },
+    "ReceiptResultV2": {
+      "type": "object",
+      "properties": {
+        "movementId": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "planVersion": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "movementCommandSeq": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "status": {
+          "enum": [
+            "accepted",
+            "moving",
+            "arrived",
+            "blocked",
+            "cancelled",
+            "locked"
+          ]
+        },
+        "entityRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/EntityRef"
+          },
+          "maxItems": 256
+        },
+        "observationRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/EntityRef"
+          },
+          "maxItems": 256
+        },
+        "message": {
+          "type": "string",
+          "maxLength": 500
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "ReceiptV2": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 2
+        },
+        "sessionId": {
+          "$ref": "#/$defs/Id"
+        },
+        "clientActionId": {
+          "$ref": "#/$defs/Id"
+        },
+        "status": {
+          "enum": [
+            "Accepted",
+            "Rejected"
+          ]
+        },
+        "code": {
+          "$ref": "#/$defs/Id"
+        },
+        "observedSeq": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "actionEventRange": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/EventRange"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "result": {
+          "$ref": "#/$defs/ReceiptResultV2"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "sessionId",
+        "clientActionId",
+        "status",
+        "code",
+        "observedSeq",
+        "actionEventRange",
+        "result"
+      ],
+      "additionalProperties": false
+    },
+    "EntityViewV2": {
+      "type": "object",
+      "properties": {
+        "entityRef": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "appearanceEpoch": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "sceneId": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/Id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "position": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/Position"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "facing": {
+          "$ref": "#/$defs/Facing"
+        },
+        "motionTrail": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Position"
+          },
+          "maxItems": 4096
+        },
+        "motionFromSceneTimeMs": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "motionThroughSceneTimeMs": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": [
+        "entityRef",
+        "name",
+        "appearanceEpoch",
+        "sceneId",
+        "position",
+        "facing"
+      ],
+      "additionalProperties": false
+    },
+    "SelfViewV2": {
+      "type": "object",
+      "properties": {
+        "entityRef": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "appearanceEpoch": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "sceneId": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/Id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "position": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/Position"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "facing": {
+          "$ref": "#/$defs/Facing"
+        },
+        "controlEpoch": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "canControl": {
+          "type": "boolean"
+        },
+        "capabilities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Id"
+          },
+          "maxItems": 256
+        },
+        "movementCommandHighWater": {
+          "$ref": "#/$defs/DecimalString"
+        }
+      },
+      "required": [
+        "entityRef",
+        "name",
+        "appearanceEpoch",
+        "sceneId",
+        "position",
+        "facing",
+        "controlEpoch",
+        "canControl",
+        "capabilities",
+        "movementCommandHighWater"
+      ],
+      "additionalProperties": false
+    },
+    "ItemViewV2": {
+      "type": "object",
+      "properties": {
+        "entityRef": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "location": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "ground"
+                },
+                "sceneId": {
+                  "$ref": "#/$defs/Id"
+                },
+                "position": {
+                  "$ref": "#/$defs/Position"
+                }
+              },
+              "required": [
+                "kind",
+                "sceneId",
+                "position"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "held"
+                },
+                "ownerRef": {
+                  "$ref": "#/$defs/EntityRef"
+                }
+              },
+              "required": [
+                "kind",
+                "ownerRef"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "resourceRevision": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "transferable": {
+          "type": "boolean"
+        },
+        "publicBorrowable": {
+          "type": "boolean"
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FactField"
+          },
+          "maxItems": 32
+        },
+        "reclaimHolderEpoch": {
+          "$ref": "#/$defs/DecimalString"
+        }
+      },
+      "required": [
+        "entityRef",
+        "name",
+        "location",
+        "resourceRevision",
+        "transferable",
+        "publicBorrowable",
+        "fields"
+      ],
+      "additionalProperties": false
+    },
+    "TargetViewV2": {
+      "type": "object",
+      "properties": {
+        "entityRef": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "sceneId": {
+          "$ref": "#/$defs/Id"
+        },
+        "position": {
+          "$ref": "#/$defs/Position"
+        },
+        "resourceRevision": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "availableOperations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Id"
+          },
+          "maxItems": 256
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FactField"
+          },
+          "maxItems": 32
+        }
+      },
+      "required": [
+        "entityRef",
+        "name",
+        "sceneId",
+        "position",
+        "resourceRevision",
+        "availableOperations",
+        "fields"
+      ],
+      "additionalProperties": false
+    },
+    "PlanViewV2": {
+      "type": "object",
+      "properties": {
+        "movementId": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "planVersion": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "movementCommandSeq": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "sceneId": {
+          "$ref": "#/$defs/Id"
+        },
+        "mapVersion": {
+          "$ref": "#/$defs/Id"
+        },
+        "goal": {
+          "$ref": "#/$defs/Position"
+        },
+        "path": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Position"
+          },
+          "maxItems": 4096
+        },
+        "acceptedAtSceneTime": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "status": {
+          "enum": [
+            "accepted",
+            "moving",
+            "arrived",
+            "blocked",
+            "cancelled"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "maxLength": 120
+        }
+      },
+      "required": [
+        "movementId",
+        "planVersion",
+        "movementCommandSeq",
+        "sceneId",
+        "mapVersion",
+        "goal",
+        "path",
+        "acceptedAtSceneTime",
+        "status"
+      ],
+      "additionalProperties": false
+    },
+    "ObservationViewV2": {
+      "type": "object",
+      "properties": {
+        "observationRef": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "category": {
+          "enum": [
+            "WorldFact",
+            "Evidence",
+            "Claim"
+          ]
+        },
+        "statement": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "sourceSeq": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FactField"
+          },
+          "maxItems": 32
+        },
+        "shareable": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "observationRef",
+        "category",
+        "statement",
+        "sourceSeq",
+        "fields",
+        "shareable"
+      ],
+      "additionalProperties": false
+    },
+    "ClaimViewV2": {
+      "type": "object",
+      "properties": {
+        "claimRef": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "speakerRef": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "speakerName": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "text": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "channel": {
+          "enum": [
+            "public",
+            "directed",
+            "team"
+          ]
+        },
+        "sourceSeq": {
+          "$ref": "#/$defs/DecimalString"
+        }
+      },
+      "required": [
+        "claimRef",
+        "speakerRef",
+        "speakerName",
+        "text",
+        "channel",
+        "sourceSeq"
+      ],
+      "additionalProperties": false
+    },
+    "CooperationViewV2": {
+      "type": "object",
+      "properties": {
+        "operationId": {
+          "$ref": "#/$defs/Id"
+        },
+        "operationVersion": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "phase": {
+          "enum": [
+            "preparing",
+            "locked"
+          ]
+        },
+        "readyCount": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5
+        },
+        "requiredCount": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "anchors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Position"
+          },
+          "maxItems": 5
+        }
+      },
+      "required": [
+        "operationId",
+        "operationVersion",
+        "phase",
+        "readyCount",
+        "requiredCount",
+        "anchors"
+      ],
+      "additionalProperties": false
+    },
+    "PublicScene": {
+      "type": "object",
+      "properties": {
+        "sceneId": {
+          "$ref": "#/$defs/Id"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000000
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000000
+        },
+        "unitsPerPixel": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000
+        },
+        "walkableAreas": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "areaId": {
+                "$ref": "#/$defs/Id"
+              },
+              "polygon": {
+                "$ref": "#/$defs/Polygon"
+              }
+            },
+            "required": [
+              "areaId",
+              "polygon"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 256
+        },
+        "obstacles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "obstacleId": {
+                "$ref": "#/$defs/Id"
+              },
+              "polygon": {
+                "$ref": "#/$defs/Polygon"
+              },
+              "exceptAreas": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Id"
+                },
+                "maxItems": 256
+              }
+            },
+            "required": [
+              "obstacleId",
+              "polygon",
+              "exceptAreas"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 256
+        },
+        "anchors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "anchorId": {
+                "$ref": "#/$defs/Id"
+              },
+              "position": {
+                "$ref": "#/$defs/Position"
+              },
+              "label": {
+                "type": "string",
+                "maxLength": 120
+              }
+            },
+            "required": [
+              "anchorId",
+              "position",
+              "label"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 256
+        },
+        "exits": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "exitId": {
+                "$ref": "#/$defs/Id"
+              },
+              "anchorId": {
+                "$ref": "#/$defs/Id"
+              },
+              "destinationSceneId": {
+                "$ref": "#/$defs/Id"
+              },
+              "destination": {
+                "$ref": "#/$defs/Position"
+              },
+              "open": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "exitId",
+              "anchorId",
+              "destinationSceneId",
+              "destination",
+              "open"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 256
+        }
+      },
+      "required": [
+        "sceneId",
+        "name",
+        "width",
+        "height",
+        "unitsPerPixel",
+        "walkableAreas",
+        "obstacles",
+        "anchors",
+        "exits"
+      ],
+      "additionalProperties": false
+    },
+    "ProjectionV2": {
+      "type": "object",
+      "properties": {
+        "protocolCapability": {
+          "const": "spatial-v2"
+        },
+        "chapterVersion": {
+          "$ref": "#/$defs/Id"
+        },
+        "mapVersion": {
+          "$ref": "#/$defs/Id"
+        },
+        "variantId": {
+          "$ref": "#/$defs/Id"
+        },
+        "contentVersion": {
+          "$ref": "#/$defs/Id"
+        },
+        "reducerVersion": {
+          "const": "spatial-world-v2"
+        },
+        "phase": {
+          "enum": [
+            "Lobby",
+            "Running",
+            "Finished",
+            "Aborted"
+          ]
+        },
+        "sceneTimeMs": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "paused": {
+          "type": "boolean"
+        },
+        "self": {
+          "$ref": "#/$defs/SelfViewV2"
+        },
+        "entities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/EntityViewV2"
+          },
+          "maxItems": 256
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ItemViewV2"
+          },
+          "maxItems": 256
+        },
+        "targets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TargetViewV2"
+          },
+          "maxItems": 256
+        },
+        "scene": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/PublicScene"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "movement": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/PlanViewV2"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "observations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ObservationViewV2"
+          },
+          "maxItems": 256
+        },
+        "claims": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ClaimViewV2"
+          },
+          "maxItems": 256
+        },
+        "cooperations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CooperationViewV2"
+          },
+          "maxItems": 256
+        },
+        "objectives": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "objectiveId": {
+                "$ref": "#/$defs/Id"
+              },
+              "label": {
+                "type": "string",
+                "maxLength": 240
+              },
+              "status": {
+                "enum": [
+                  "active",
+                  "completed",
+                  "blocked"
+                ]
+              }
+            },
+            "required": [
+              "objectiveId",
+              "label",
+              "status"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 256
+        },
+        "ending": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "maxLength": 120
+                },
+                "summary": {
+                  "type": "string",
+                  "maxLength": 500
+                }
+              },
+              "required": [
+                "title",
+                "summary"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "protocolCapability",
+        "chapterVersion",
+        "mapVersion",
+        "variantId",
+        "contentVersion",
+        "reducerVersion",
+        "phase",
+        "sceneTimeMs",
+        "paused",
+        "self",
+        "entities",
+        "items",
+        "targets",
+        "scene",
+        "movement",
+        "observations",
+        "claims",
+        "cooperations",
+        "objectives",
+        "ending"
+      ],
+      "additionalProperties": false
+    },
+    "SnapshotV2": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 2
+        },
+        "type": {
+          "const": "world.snapshot"
+        },
+        "sessionId": {
+          "$ref": "#/$defs/Id"
+        },
+        "viewId": {
+          "$ref": "#/$defs/Id"
+        },
+        "snapshotSeq": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "projection": {
+          "$ref": "#/$defs/ProjectionV2"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "type",
+        "sessionId",
+        "viewId",
+        "snapshotSeq",
+        "projection"
+      ],
+      "additionalProperties": false
+    },
+    "BatchV2": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 2
+        },
+        "type": {
+          "const": "world.batch"
+        },
+        "sessionId": {
+          "$ref": "#/$defs/Id"
+        },
+        "viewId": {
+          "$ref": "#/$defs/Id"
+        },
+        "fromExclusive": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "throughSeq": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "sessionSeq": {
+                "$ref": "#/$defs/PositiveDecimalString"
+              },
+              "eventId": {
+                "$ref": "#/$defs/Id"
+              },
+              "kind": {
+                "const": "projection.replace"
+              },
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "projection": {
+                    "$ref": "#/$defs/ProjectionV2"
+                  }
+                },
+                "required": [
+                  "projection"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "sessionSeq",
+              "eventId",
+              "kind",
+              "payload"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 256
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "type",
+        "sessionId",
+        "viewId",
+        "fromExclusive",
+        "throughSeq",
+        "events"
+      ],
+      "additionalProperties": false
+    },
+    "ControlResponseV2": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 2
+        },
+        "sessionId": {
+          "$ref": "#/$defs/Id"
+        },
+        "nonce": {
+          "$ref": "#/$defs/Id"
+        },
+        "controlEpoch": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "observedSeq": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "snapshot": {
+          "$ref": "#/$defs/SnapshotV2"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "sessionId",
+        "nonce",
+        "controlEpoch",
+        "observedSeq",
+        "snapshot"
+      ],
+      "additionalProperties": false
+    },
+    "ErrorV2": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 2
+        },
+        "code": {
+          "$ref": "#/$defs/Id"
+        },
+        "message": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "requiredCapabilities": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "spatial-v2"
+            ]
+          },
+          "maxItems": 1
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "code",
+        "message"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

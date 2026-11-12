@@ -9,6 +9,7 @@ export { contentSchema } from './schema.mjs';
 
 const registry = new Map([
   ['trust-repair-fixture-v1', new URL('./fixtures/trust-repair-fixture-v1.json', import.meta.url)],
+  ['spatial-graybox-v2', new URL('./fixtures/spatial-graybox-v2.json', import.meta.url)],
 ]);
 
 /** 仅按受控注册表读取版本，不能用外部输入组成文件路径。 */

@@ -1,6 +1,7 @@
 import { canonicalize, parseStrictJSON } from '../protocol/index.mjs';
 import { contractSchema } from '../protocol/schema.mjs';
 import { contentSchema } from './schema.mjs';
+import { validateSpatialContent } from './spatial.mjs';
 
 export class ContentError extends Error {
   constructor(message) {
@@ -76,6 +77,7 @@ function freeze(value) {
 
 /** 验证内容结构与静态引用，不执行世界动作或生成 NPC 感知。 */
 export function validateContent(input) {
+  if (input?.schemaVersion === 2) return validateSpatialContent(input);
   let content;
   try { content = parseStrictJSON(canonicalize(input), { maxBytes: 262144 }); }
   catch { throw new ContentError('配置不是无歧义的有限 JSON'); }

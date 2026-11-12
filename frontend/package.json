@@ -12,6 +12,7 @@
     "typecheck": "vue-tsc --noEmit",
     "test": "node --test tests/*.test.mjs",
     "test:browser": "node tests/browser-check.mjs",
+    "test:browser:spatial-retention": "node tests/spatial-retention-browser.mjs",
     "preview": "vite preview --host 127.0.0.1"
   },
   "dependencies": {

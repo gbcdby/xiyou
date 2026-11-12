@@ -35,6 +35,8 @@ try {
   await page.goto(baseURL);
   await page.getByRole('textbox', { name: '你的称呼', exact: true }).fill('浏览器青禾');
   await page.getByRole('button', { name: '以此名同行' }).click();
+  // 本脚本继续核对旧 region-v1 房间；空间灰盒由独立脚本覆盖。
+  await page.getByLabel('选择行程').selectOption('region');
   await page.getByRole('button', { name: '创建同行房间' }).click();
   await page.waitForURL(/\/sessions\/[^/]+$/);
   const sessionId = new URL(page.url()).pathname.split('/').at(-1); report.sessionId = sessionId;

@@ -5,7 +5,7 @@ export type {
 } from '../../../game/types.ts';
 
 export interface GuestIdentity { token: string; userId: string; name: string }
-export interface RoomSummary { sessionId: string; name: string; playerCount: number; phase: 'Lobby' | 'Running' | 'Finished' | 'Aborted' }
+export interface RoomSummary { sessionId: string; name: string; playerCount: number; phase: 'Lobby' | 'Running' | 'Finished' | 'Aborted'; protocolCapability?: 'spatial-v2'; contentVersion?: string }
 export interface RoomMembership { sessionId: string; actorId: string }
 
 export const roleNames: Record<string, string> = {

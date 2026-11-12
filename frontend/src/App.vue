@@ -2,9 +2,10 @@
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { identity, sessionState } from './state/app-store.ts';
+import { spatialState } from './state/spatial-store.ts';
 import AppIcon from './components/AppIcon.vue';
 const route = useRoute();
-const connected = computed(() => sessionState.value.connection === 'online' && route.name === 'session');
+const connected = computed(() => (sessionState.value.connection === 'online' && route.name === 'session') || (spatialState.value.connection === 'online' && route.name === 'spatial-session'));
 </script>
 
 <template>
