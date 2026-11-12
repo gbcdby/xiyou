@@ -10,6 +10,7 @@
 | 产品玩法与总体技术设计 | [初步设计文档](初步设计文档.md) |
 | 首个可玩切片怎么实现和验收 | [VS-001 Spec](docs/specs/vertical-slice.md) |
 | 本轮模拟运行结果与证据 | [模拟切片验收](frontend/evidence/mock-integration-20261111/README.md) |
+| 高老庄独立 H5 原型、试玩与源码恢复 | [高老庄 · 风来有信](prototypes/gaolaozhuang/README.md) |
 | 文档分别负责什么 | [文档索引](docs/README.md) |
 | 工程约定与验证要求 | [工程约定](docs/engineering.md) |
 | 按技能包推进任务 | [项目工作流](docs/agents/workflow.md) |

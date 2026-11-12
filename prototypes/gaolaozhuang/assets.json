@@ -1,6 +1,6 @@
 {
   "chapter": "高老庄",
-  "purpose": "xiyou #25 独立交互原型；高才方向动画试接，本地候选未发布",
+  "purpose": "xiyou #25 独立交互原型；当前素材已用于 owner-private 私有试玩 v2，随源码作为可恢复的独立 H5 原型基准保存",
   "assets": [
     {
       "path": "web/assets/courtyard.png",
