@@ -1,0 +1,4894 @@
+{
+  "schema_version": 2,
+  "contract": "adv-protocol-v1",
+  "contract_revision": "r2",
+  "model_revision": "r3",
+  "contract_unchanged_from": "a46830f53dea128ddfd2ba145d9a0fbc48513ea5",
+  "contract_sha256": "8a124c275b3548b7ee65118086eb46197de33a2778a1b577264308adf4e8e220",
+  "mode": "design",
+  "implementation_status": "NOT_ASSESSED",
+  "independent_review": {
+    "previous_candidate": "a46830f53dea128ddfd2ba145d9a0fbc48513ea5",
+    "current_requirements": "PENDING_INCREMENT_APPLICABILITY_CONFIRMATION",
+    "current_standards": "PENDING_R003_REREVIEW"
+  },
+  "current": [
+    {
+      "model": "MovementCommands",
+      "profile": "positive",
+      "expected_status": "PASS_WITHIN_SCOPE",
+      "expected_raw_exit": 0,
+      "distinct_state_min": 100,
+      "target_invariants": [
+        "TypeOK",
+        "CommandOrder",
+        "StopFence",
+        "ReceiptStable",
+        "EpochFence"
+      ],
+      "target_properties": [],
+      "classification": "positive",
+      "actual_status": "PASS_WITHIN_SCOPE",
+      "actual_raw_exit": 0,
+      "statistics": {
+        "generated_states": 458119,
+        "distinct_states": 161706,
+        "remaining_states": 0
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "TypeOK",
+            "CommandOrder",
+            "StopFence",
+            "ReceiptStable",
+            "EpochFence"
+          ],
+          "target": [
+            "TypeOK",
+            "CommandOrder",
+            "StopFence",
+            "ReceiptStable",
+            "EpochFence"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "TypeOK",
+            "CommandOrder",
+            "StopFence",
+            "ReceiptStable",
+            "EpochFence"
+          ],
+          "target": [
+            "TypeOK",
+            "CommandOrder",
+            "StopFence",
+            "ReceiptStable",
+            "EpochFence"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-07/movementcommands-positive/result.json",
+      "result_sha256": "2d4c0ccba4ac58b5792279ce04944c2bf498f56402b4b22ddd5b966e4351a7f3",
+      "run_batch": "matrix-07",
+      "runner_exit": 0,
+      "input_identity": {
+        "MovementCommands.tla": true,
+        "MovementCommands.positive.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "NEW_TLC_R3",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "MovementCommands",
+      "profile": "positive-control",
+      "expected_status": "PASS_WITHIN_SCOPE",
+      "expected_raw_exit": 0,
+      "distinct_state_min": 100,
+      "target_invariants": [
+        "TypeOK",
+        "CommandOrder",
+        "StopFence",
+        "ReceiptStable",
+        "EpochFence"
+      ],
+      "target_properties": [],
+      "classification": "positive",
+      "actual_status": "PASS_WITHIN_SCOPE",
+      "actual_raw_exit": 0,
+      "statistics": {
+        "generated_states": 258260,
+        "distinct_states": 102602,
+        "remaining_states": 0
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "TypeOK",
+            "CommandOrder",
+            "StopFence",
+            "ReceiptStable",
+            "EpochFence"
+          ],
+          "target": [
+            "TypeOK",
+            "CommandOrder",
+            "StopFence",
+            "ReceiptStable",
+            "EpochFence"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "TypeOK",
+            "CommandOrder",
+            "StopFence",
+            "ReceiptStable",
+            "EpochFence"
+          ],
+          "target": [
+            "TypeOK",
+            "CommandOrder",
+            "StopFence",
+            "ReceiptStable",
+            "EpochFence"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-07/movementcommands-positive-control/result.json",
+      "result_sha256": "46d42370d215d5b340c0853b8ef8f9cd9a27d1f9f62059b61d4855cdbf4aeb5f",
+      "run_batch": "matrix-07",
+      "runner_exit": 0,
+      "input_identity": {
+        "MovementCommands.tla": true,
+        "MovementCommands.positive-control.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "NEW_TLC_R3",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "MovementCommands",
+      "profile": "positive-recovery",
+      "expected_status": "PASS_WITHIN_SCOPE",
+      "expected_raw_exit": 0,
+      "distinct_state_min": 100,
+      "target_invariants": [
+        "TypeOK",
+        "CommandOrder",
+        "StopFence",
+        "ReceiptStable",
+        "EpochFence"
+      ],
+      "target_properties": [],
+      "classification": "positive",
+      "actual_status": "PASS_WITHIN_SCOPE",
+      "actual_raw_exit": 0,
+      "statistics": {
+        "generated_states": 227439,
+        "distinct_states": 104848,
+        "remaining_states": 0
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "TypeOK",
+            "CommandOrder",
+            "StopFence",
+            "ReceiptStable",
+            "EpochFence"
+          ],
+          "target": [
+            "TypeOK",
+            "CommandOrder",
+            "StopFence",
+            "ReceiptStable",
+            "EpochFence"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "TypeOK",
+            "CommandOrder",
+            "StopFence",
+            "ReceiptStable",
+            "EpochFence"
+          ],
+          "target": [
+            "TypeOK",
+            "CommandOrder",
+            "StopFence",
+            "ReceiptStable",
+            "EpochFence"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-07/movementcommands-positive-recovery/result.json",
+      "result_sha256": "baffa6f6d3ace11f88e8548a7dbca8a1659fb317355da85fc1827fa99bf72770",
+      "run_batch": "matrix-07",
+      "runner_exit": 0,
+      "input_identity": {
+        "MovementCommands.tla": true,
+        "MovementCommands.positive-recovery.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "NEW_TLC_R3",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "MovementCommands",
+      "profile": "negative-type",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "TypeOK"
+      ],
+      "target_properties": [],
+      "classification": "negative",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 4,
+        "distinct_states": 4,
+        "remaining_states": 2
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "TypeOK"
+          ],
+          "target": [
+            "TypeOK"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "TypeOK"
+          ],
+          "target": [
+            "TypeOK"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-07/movementcommands-negative-type/result.json",
+      "result_sha256": "5ba865d8d4adfafbb4364892f0d34c086871c1fbb42647ee84fb1b6f0b557a73",
+      "run_batch": "matrix-07",
+      "runner_exit": 2,
+      "input_identity": {
+        "MovementCommands.tla": true,
+        "MovementCommands.negative-type.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "NEW_TLC_R3",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "MovementCommands",
+      "profile": "negative-late",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "CommandOrder"
+      ],
+      "target_properties": [],
+      "classification": "negative",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 63,
+        "distinct_states": 39,
+        "remaining_states": 26
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "CommandOrder"
+          ],
+          "target": [
+            "CommandOrder"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "CommandOrder"
+          ],
+          "target": [
+            "CommandOrder"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-07/movementcommands-negative-late/result.json",
+      "result_sha256": "d5939b929b1c0a199bcd3db45018968b1abffa8534a4d53ad2c00dbcaf40a7ad",
+      "run_batch": "matrix-07",
+      "runner_exit": 2,
+      "input_identity": {
+        "MovementCommands.tla": true,
+        "MovementCommands.negative-late.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "NEW_TLC_R3",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "MovementCommands",
+      "profile": "negative-stop-no-fence",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "StopFence"
+      ],
+      "target_properties": [],
+      "classification": "negative",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 152,
+        "distinct_states": 88,
+        "remaining_states": 61
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "StopFence"
+          ],
+          "target": [
+            "StopFence"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "StopFence"
+          ],
+          "target": [
+            "StopFence"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-07/movementcommands-negative-stop-no-fence/result.json",
+      "result_sha256": "b76503f1f76ce8f8da19689e42316c66d61fb805da0d7b40e4e500ee18a8396f",
+      "run_batch": "matrix-07",
+      "runner_exit": 2,
+      "input_identity": {
+        "MovementCommands.tla": true,
+        "MovementCommands.negative-stop-no-fence.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "NEW_TLC_R3",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "MovementCommands",
+      "profile": "negative-replay",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "ReceiptStable"
+      ],
+      "target_properties": [],
+      "classification": "negative",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 78,
+        "distinct_states": 47,
+        "remaining_states": 30
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "ReceiptStable"
+          ],
+          "target": [
+            "ReceiptStable"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "ReceiptStable"
+          ],
+          "target": [
+            "ReceiptStable"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-07/movementcommands-negative-replay/result.json",
+      "result_sha256": "38214022632981aa59e9029eb087072842cafe7136443d741fc482e7ec507643",
+      "run_batch": "matrix-07",
+      "runner_exit": 2,
+      "input_identity": {
+        "MovementCommands.tla": true,
+        "MovementCommands.negative-replay.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "NEW_TLC_R3",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "MovementCommands",
+      "profile": "negative-epoch",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "EpochFence"
+      ],
+      "target_properties": [],
+      "classification": "negative",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 38,
+        "distinct_states": 27,
+        "remaining_states": 18
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "EpochFence"
+          ],
+          "target": [
+            "EpochFence"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "EpochFence"
+          ],
+          "target": [
+            "EpochFence"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-07/movementcommands-negative-epoch/result.json",
+      "result_sha256": "ef462c9d609c9c7ccb4ba6cff4cd421225a4ac44d70fc61cfdbc7ef0688743be",
+      "run_batch": "matrix-07",
+      "runner_exit": 2,
+      "input_identity": {
+        "MovementCommands.tla": true,
+        "MovementCommands.negative-epoch.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "NEW_TLC_R3",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "MovementCommands",
+      "profile": "negative-reset-water",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "CommandOrder"
+      ],
+      "target_properties": [],
+      "classification": "negative",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 124,
+        "distinct_states": 76,
+        "remaining_states": 50
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "CommandOrder"
+          ],
+          "target": [
+            "CommandOrder"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "CommandOrder"
+          ],
+          "target": [
+            "CommandOrder"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-07/movementcommands-negative-reset-water/result.json",
+      "result_sha256": "e16c6877c7a30d13991c6ff3329114b5ef58e971b3b5e3835bb50f0e75143c33",
+      "run_batch": "matrix-07",
+      "runner_exit": 2,
+      "input_identity": {
+        "MovementCommands.tla": true,
+        "MovementCommands.negative-reset-water.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "NEW_TLC_R3",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "MovementCommands",
+      "profile": "witness-NoOutOfOrderWitness",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "NoOutOfOrderWitness"
+      ],
+      "target_properties": [],
+      "classification": "witness",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 63,
+        "distinct_states": 39,
+        "remaining_states": 26
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "NoOutOfOrderWitness"
+          ],
+          "target": [
+            "NoOutOfOrderWitness"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "NoOutOfOrderWitness"
+          ],
+          "target": [
+            "NoOutOfOrderWitness"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-07/movementcommands-witness-NoOutOfOrderWitness/result.json",
+      "result_sha256": "3706b5ccc41cc2d96510c861e6a25038970828253e5c5767e6f261e133ea1699",
+      "run_batch": "matrix-07",
+      "runner_exit": 2,
+      "input_identity": {
+        "MovementCommands.tla": true,
+        "MovementCommands.witness-NoOutOfOrderWitness.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "NEW_TLC_R3",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "MovementCommands",
+      "profile": "witness-NoUnknownRetryWitness",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "NoUnknownRetryWitness"
+      ],
+      "target_properties": [],
+      "classification": "witness",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 667,
+        "distinct_states": 347,
+        "remaining_states": 249
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "NoUnknownRetryWitness"
+          ],
+          "target": [
+            "NoUnknownRetryWitness"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "NoUnknownRetryWitness"
+          ],
+          "target": [
+            "NoUnknownRetryWitness"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-07/movementcommands-witness-NoUnknownRetryWitness/result.json",
+      "result_sha256": "122e94fa8be92c5673ae9770aec03bfafdc6ed5ad8539a76429c2a82756f4fbb",
+      "run_batch": "matrix-07",
+      "runner_exit": 2,
+      "input_identity": {
+        "MovementCommands.tla": true,
+        "MovementCommands.witness-NoUnknownRetryWitness.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "NEW_TLC_R3",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "MovementCommands",
+      "profile": "witness-NoStopRejectWitness",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "NoStopRejectWitness"
+      ],
+      "target_properties": [],
+      "classification": "witness",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 152,
+        "distinct_states": 88,
+        "remaining_states": 61
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "NoStopRejectWitness"
+          ],
+          "target": [
+            "NoStopRejectWitness"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "NoStopRejectWitness"
+          ],
+          "target": [
+            "NoStopRejectWitness"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-07/movementcommands-witness-NoStopRejectWitness/result.json",
+      "result_sha256": "76049a2ee4a9c894115546f5b2a45ed5851016c15653e18c3f82deb1d20ef167",
+      "run_batch": "matrix-07",
+      "runner_exit": 2,
+      "input_identity": {
+        "MovementCommands.tla": true,
+        "MovementCommands.witness-NoStopRejectWitness.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "NEW_TLC_R3",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "MovementCommands",
+      "profile": "witness-NoAckRetryWitness",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "NoAckRetryWitness"
+      ],
+      "target_properties": [],
+      "classification": "witness",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 284,
+        "distinct_states": 155,
+        "remaining_states": 102
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "NoAckRetryWitness"
+          ],
+          "target": [
+            "NoAckRetryWitness"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "NoAckRetryWitness"
+          ],
+          "target": [
+            "NoAckRetryWitness"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-07/movementcommands-witness-NoAckRetryWitness/result.json",
+      "result_sha256": "28ebd5ab2b70e1df788dd06eb0ed59871067399456569c47a941c0fcfc0caa5b",
+      "run_batch": "matrix-07",
+      "runner_exit": 2,
+      "input_identity": {
+        "MovementCommands.tla": true,
+        "MovementCommands.witness-NoAckRetryWitness.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "NEW_TLC_R3",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "MovementCommands",
+      "profile": "witness-NoNewAfterStopWitness",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "NoNewAfterStopWitness"
+      ],
+      "target_properties": [],
+      "classification": "witness",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 593,
+        "distinct_states": 314,
+        "remaining_states": 226
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "NoNewAfterStopWitness"
+          ],
+          "target": [
+            "NoNewAfterStopWitness"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "NoNewAfterStopWitness"
+          ],
+          "target": [
+            "NoNewAfterStopWitness"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-07/movementcommands-witness-NoNewAfterStopWitness/result.json",
+      "result_sha256": "c522ce090c2aab80157f04db828d55c2014b9cac32ed082a9f6f6fb5d1e8d1e1",
+      "run_batch": "matrix-07",
+      "runner_exit": 2,
+      "input_identity": {
+        "MovementCommands.tla": true,
+        "MovementCommands.witness-NoNewAfterStopWitness.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "NEW_TLC_R3",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "MovementCommands",
+      "profile": "witness-NoOldEpochRejectedWitness",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "NoOldEpochRejectedWitness"
+      ],
+      "target_properties": [],
+      "classification": "witness",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 38,
+        "distinct_states": 27,
+        "remaining_states": 18
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "NoOldEpochRejectedWitness"
+          ],
+          "target": [
+            "NoOldEpochRejectedWitness"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "NoOldEpochRejectedWitness"
+          ],
+          "target": [
+            "NoOldEpochRejectedWitness"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-07/movementcommands-witness-NoOldEpochRejectedWitness/result.json",
+      "result_sha256": "62e5e3afdb3b1bb60f949b08d47a11e0887c7778df63285696987fa3cc3a4a43",
+      "run_batch": "matrix-07",
+      "runner_exit": 2,
+      "input_identity": {
+        "MovementCommands.tla": true,
+        "MovementCommands.witness-NoOldEpochRejectedWitness.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "NEW_TLC_R3",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "MovementCommands",
+      "profile": "witness-NoNewEpochAcceptedWitness",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "NoNewEpochAcceptedWitness"
+      ],
+      "target_properties": [],
+      "classification": "witness",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 146,
+        "distinct_states": 92,
+        "remaining_states": 61
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "NoNewEpochAcceptedWitness"
+          ],
+          "target": [
+            "NoNewEpochAcceptedWitness"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "NoNewEpochAcceptedWitness"
+          ],
+          "target": [
+            "NoNewEpochAcceptedWitness"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-07/movementcommands-witness-NoNewEpochAcceptedWitness/result.json",
+      "result_sha256": "4b876dd5d627eace655c7d9e6bbe15dec7566e01c6e8106823ddfce5a17c74a1",
+      "run_batch": "matrix-07",
+      "runner_exit": 2,
+      "input_identity": {
+        "MovementCommands.tla": true,
+        "MovementCommands.witness-NoNewEpochAcceptedWitness.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "NEW_TLC_R3",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "MovementCommands",
+      "profile": "witness-NoRestartPreservesReceiptWitness",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "NoRestartPreservesReceiptWitness"
+      ],
+      "target_properties": [],
+      "classification": "witness",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 125,
+        "distinct_states": 77,
+        "remaining_states": 51
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "NoRestartPreservesReceiptWitness"
+          ],
+          "target": [
+            "NoRestartPreservesReceiptWitness"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "NoRestartPreservesReceiptWitness"
+          ],
+          "target": [
+            "NoRestartPreservesReceiptWitness"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-07/movementcommands-witness-NoRestartPreservesReceiptWitness/result.json",
+      "result_sha256": "83cac974669203fd18346c4e40f6133fb8374dbbc2eb81abe6eebaba10cd37ec",
+      "run_batch": "matrix-07",
+      "runner_exit": 2,
+      "input_identity": {
+        "MovementCommands.tla": true,
+        "MovementCommands.witness-NoRestartPreservesReceiptWitness.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "NEW_TLC_R3",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "MovementCommands",
+      "profile": "witness-control-block-ack-retry",
+      "expected_status": "PASS_WITHIN_SCOPE",
+      "expected_raw_exit": 0,
+      "distinct_state_min": 100,
+      "target_invariants": [
+        "NoAckRetryWitness"
+      ],
+      "target_properties": [],
+      "classification": "witness-control",
+      "actual_status": "PASS_WITHIN_SCOPE",
+      "actual_raw_exit": 0,
+      "statistics": {
+        "generated_states": 398201,
+        "distinct_states": 141084,
+        "remaining_states": 0
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "NoAckRetryWitness"
+          ],
+          "target": [
+            "NoAckRetryWitness"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "NoAckRetryWitness"
+          ],
+          "target": [
+            "NoAckRetryWitness"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-07/movementcommands-witness-control-block-ack-retry/result.json",
+      "result_sha256": "8ac9cd5f0b1831b55481e98b59721a0e9fd82c70012cde2a1183bf1e928ac7ef",
+      "run_batch": "matrix-07",
+      "runner_exit": 0,
+      "input_identity": {
+        "MovementCommands.tla": true,
+        "MovementCommands.witness-control-block-ack-retry.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "NEW_TLC_R3",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "MovementCommands",
+      "profile": "witness-control-block-new-after-stop",
+      "expected_status": "PASS_WITHIN_SCOPE",
+      "expected_raw_exit": 0,
+      "distinct_state_min": 100,
+      "target_invariants": [
+        "NoNewAfterStopWitness"
+      ],
+      "target_properties": [],
+      "classification": "witness-control",
+      "actual_status": "PASS_WITHIN_SCOPE",
+      "actual_raw_exit": 0,
+      "statistics": {
+        "generated_states": 288881,
+        "distinct_states": 102468,
+        "remaining_states": 0
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "NoNewAfterStopWitness"
+          ],
+          "target": [
+            "NoNewAfterStopWitness"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "NoNewAfterStopWitness"
+          ],
+          "target": [
+            "NoNewAfterStopWitness"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-07/movementcommands-witness-control-block-new-after-stop/result.json",
+      "result_sha256": "e3b020e138939b605c1d1662279e0964bdf40bbc1431a3f0a72f9fbc788f5914",
+      "run_batch": "matrix-07",
+      "runner_exit": 0,
+      "input_identity": {
+        "MovementCommands.tla": true,
+        "MovementCommands.witness-control-block-new-after-stop.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "NEW_TLC_R3",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "MovementCommands",
+      "profile": "witness-control-block-old-epoch-handle",
+      "expected_status": "PASS_WITHIN_SCOPE",
+      "expected_raw_exit": 0,
+      "distinct_state_min": 100,
+      "target_invariants": [
+        "NoOldEpochRejectedWitness"
+      ],
+      "target_properties": [],
+      "classification": "witness-control",
+      "actual_status": "PASS_WITHIN_SCOPE",
+      "actual_raw_exit": 0,
+      "statistics": {
+        "generated_states": 120398,
+        "distinct_states": 51694,
+        "remaining_states": 0
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "NoOldEpochRejectedWitness"
+          ],
+          "target": [
+            "NoOldEpochRejectedWitness"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "NoOldEpochRejectedWitness"
+          ],
+          "target": [
+            "NoOldEpochRejectedWitness"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-07/movementcommands-witness-control-block-old-epoch-handle/result.json",
+      "result_sha256": "ffb400eb1e2adb70d0005e3e515dd490468deafecbbae941444c5368505a9f53",
+      "run_batch": "matrix-07",
+      "runner_exit": 0,
+      "input_identity": {
+        "MovementCommands.tla": true,
+        "MovementCommands.witness-control-block-old-epoch-handle.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "NEW_TLC_R3",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Movement",
+      "profile": "positive",
+      "expected_status": "PASS_WITHIN_SCOPE",
+      "expected_raw_exit": 0,
+      "distinct_state_min": 100,
+      "target_invariants": [
+        "TypeOK",
+        "ArrivalCurrent",
+        "ArrivalPhysical",
+        "PausedTimeStable"
+      ],
+      "target_properties": [],
+      "classification": "positive",
+      "actual_status": "PASS_WITHIN_SCOPE",
+      "actual_raw_exit": 0,
+      "statistics": {
+        "generated_states": 21093,
+        "distinct_states": 7353,
+        "remaining_states": 0
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "TypeOK",
+            "ArrivalCurrent",
+            "ArrivalPhysical",
+            "PausedTimeStable"
+          ],
+          "target": [
+            "TypeOK",
+            "ArrivalCurrent",
+            "ArrivalPhysical",
+            "PausedTimeStable"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "TypeOK",
+            "ArrivalCurrent",
+            "ArrivalPhysical",
+            "PausedTimeStable"
+          ],
+          "target": [
+            "TypeOK",
+            "ArrivalCurrent",
+            "ArrivalPhysical",
+            "PausedTimeStable"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-01/movement-positive/result.json",
+      "result_sha256": "23512d2063e75bf70dcce1ad6ea1a0ef3f05eda44297f26ed3981fd8da60ba3e",
+      "run_batch": "matrix-01",
+      "runner_exit": 0,
+      "input_identity": {
+        "Movement.tla": true,
+        "Movement.positive.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Movement",
+      "profile": "negative-type",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "TypeOK"
+      ],
+      "target_properties": [],
+      "classification": "negative",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 8,
+        "distinct_states": 8,
+        "remaining_states": 6
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "TypeOK"
+          ],
+          "target": [
+            "TypeOK"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "TypeOK"
+          ],
+          "target": [
+            "TypeOK"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-01/movement-negative-type/result.json",
+      "result_sha256": "ade7f793033f1618dd6be2cabfe5070d7f99f4166b0f9a9555f0cf5d6a114194",
+      "run_batch": "matrix-01",
+      "runner_exit": 2,
+      "input_identity": {
+        "Movement.tla": true,
+        "Movement.negative-type.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Movement",
+      "profile": "negative-stale",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "ArrivalCurrent"
+      ],
+      "target_properties": [],
+      "classification": "negative",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 199,
+        "distinct_states": 144,
+        "remaining_states": 107
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "ArrivalCurrent"
+          ],
+          "target": [
+            "ArrivalCurrent"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "ArrivalCurrent"
+          ],
+          "target": [
+            "ArrivalCurrent"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-01/movement-negative-stale/result.json",
+      "result_sha256": "ce0e83270908a55b806aaccbe84df304b7e331d27050ceb9216b9f2146759eb7",
+      "run_batch": "matrix-01",
+      "runner_exit": 2,
+      "input_identity": {
+        "Movement.tla": true,
+        "Movement.negative-stale.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Movement",
+      "profile": "negative-teleport",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "ArrivalPhysical"
+      ],
+      "target_properties": [],
+      "classification": "negative",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 11,
+        "distinct_states": 11,
+        "remaining_states": 8
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "ArrivalPhysical"
+          ],
+          "target": [
+            "ArrivalPhysical"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "ArrivalPhysical"
+          ],
+          "target": [
+            "ArrivalPhysical"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-01/movement-negative-teleport/result.json",
+      "result_sha256": "85f7391848a179b72579d71c27df59484d03cd910d0a66ab6049fd88f597d3aa",
+      "run_batch": "matrix-01",
+      "runner_exit": 2,
+      "input_identity": {
+        "Movement.tla": true,
+        "Movement.negative-teleport.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Movement",
+      "profile": "negative-paused-clock",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "PausedTimeStable"
+      ],
+      "target_properties": [],
+      "classification": "negative",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 31,
+        "distinct_states": 28,
+        "remaining_states": 23
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "PausedTimeStable"
+          ],
+          "target": [
+            "PausedTimeStable"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "PausedTimeStable"
+          ],
+          "target": [
+            "PausedTimeStable"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-01/movement-negative-paused-clock/result.json",
+      "result_sha256": "8175e469d17765846ee3f5b1904095621dc3138604dd493ae5519266a4cee83a",
+      "run_batch": "matrix-01",
+      "runner_exit": 2,
+      "input_identity": {
+        "Movement.tla": true,
+        "Movement.negative-paused-clock.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Movement",
+      "profile": "witness-NoArrivalWitness",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "NoArrivalWitness"
+      ],
+      "target_properties": [],
+      "classification": "witness",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 59,
+        "distinct_states": 54,
+        "remaining_states": 43
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "NoArrivalWitness"
+          ],
+          "target": [
+            "NoArrivalWitness"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "NoArrivalWitness"
+          ],
+          "target": [
+            "NoArrivalWitness"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-01/movement-witness-NoArrivalWitness/result.json",
+      "result_sha256": "0879e020f46bcf7ebe06d06184342ab044b10bf50aab0c6eee4d5849ccdf2c28",
+      "run_batch": "matrix-01",
+      "runner_exit": 2,
+      "input_identity": {
+        "Movement.tla": true,
+        "Movement.witness-NoArrivalWitness.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Movement",
+      "profile": "witness-NoReplacedArrivalWitness",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "NoReplacedArrivalWitness"
+      ],
+      "target_properties": [],
+      "classification": "witness",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 200,
+        "distinct_states": 145,
+        "remaining_states": 108
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "NoReplacedArrivalWitness"
+          ],
+          "target": [
+            "NoReplacedArrivalWitness"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "NoReplacedArrivalWitness"
+          ],
+          "target": [
+            "NoReplacedArrivalWitness"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-01/movement-witness-NoReplacedArrivalWitness/result.json",
+      "result_sha256": "5113255483410fc71733c7bebb331cac8ecffc2dd9b84b93d16d371e161e03e6",
+      "run_batch": "matrix-01",
+      "runner_exit": 2,
+      "input_identity": {
+        "Movement.tla": true,
+        "Movement.witness-NoReplacedArrivalWitness.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Movement",
+      "profile": "witness-NoRecoverArrivalWitness",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "NoRecoverArrivalWitness"
+      ],
+      "target_properties": [],
+      "classification": "witness",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 678,
+        "distinct_states": 403,
+        "remaining_states": 278
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "NoRecoverArrivalWitness"
+          ],
+          "target": [
+            "NoRecoverArrivalWitness"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "NoRecoverArrivalWitness"
+          ],
+          "target": [
+            "NoRecoverArrivalWitness"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-01/movement-witness-NoRecoverArrivalWitness/result.json",
+      "result_sha256": "b90bee5ed2951314a0a2c1d200fce6930c225d6d8258537373f98fbbc1f8814f",
+      "run_batch": "matrix-01",
+      "runner_exit": 2,
+      "input_identity": {
+        "Movement.tla": true,
+        "Movement.witness-NoRecoverArrivalWitness.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Consent",
+      "profile": "positive",
+      "expected_status": "PASS_WITHIN_SCOPE",
+      "expected_raw_exit": 0,
+      "distinct_state_min": 100,
+      "target_invariants": [
+        "TypeOK",
+        "SettlementAuthorized",
+        "SafetyDurable"
+      ],
+      "target_properties": [],
+      "classification": "positive",
+      "actual_status": "PASS_WITHIN_SCOPE",
+      "actual_raw_exit": 0,
+      "statistics": {
+        "generated_states": 6991,
+        "distinct_states": 2786,
+        "remaining_states": 0
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "TypeOK",
+            "SettlementAuthorized",
+            "SafetyDurable"
+          ],
+          "target": [
+            "TypeOK",
+            "SettlementAuthorized",
+            "SafetyDurable"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "TypeOK",
+            "SettlementAuthorized",
+            "SafetyDurable"
+          ],
+          "target": [
+            "TypeOK",
+            "SettlementAuthorized",
+            "SafetyDurable"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-04/consent-positive/result.json",
+      "result_sha256": "9e59e2abc13180815e2dd1af7a783916d42d5aa7fd61109416b3fd6d07708a82",
+      "run_batch": "matrix-04",
+      "runner_exit": 0,
+      "input_identity": {
+        "Consent.tla": true,
+        "Consent.positive.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Consent",
+      "profile": "negative-type",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "TypeOK"
+      ],
+      "target_properties": [],
+      "classification": "negative",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 11,
+        "distinct_states": 11,
+        "remaining_states": 9
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "TypeOK"
+          ],
+          "target": [
+            "TypeOK"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "TypeOK"
+          ],
+          "target": [
+            "TypeOK"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-04/consent-negative-type/result.json",
+      "result_sha256": "325db5cc66cd8ae09d0b36e655a8cb6ec540c333a384d2fade482668554423b9",
+      "run_batch": "matrix-04",
+      "runner_exit": 2,
+      "input_identity": {
+        "Consent.tla": true,
+        "Consent.negative-type.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Consent",
+      "profile": "negative-impersonation",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "SettlementAuthorized"
+      ],
+      "target_properties": [],
+      "classification": "negative",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 694,
+        "distinct_states": 560,
+        "remaining_states": 456
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "SettlementAuthorized"
+          ],
+          "target": [
+            "SettlementAuthorized"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "SettlementAuthorized"
+          ],
+          "target": [
+            "SettlementAuthorized"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-04/consent-negative-impersonation/result.json",
+      "result_sha256": "eb9e91a50f7b1a67ea1592e7ae023a12e87968b2dcab5da10d1eeae67b454a2b",
+      "run_batch": "matrix-04",
+      "runner_exit": 2,
+      "input_identity": {
+        "Consent.tla": true,
+        "Consent.negative-impersonation.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Consent",
+      "profile": "negative-fake",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "SettlementAuthorized"
+      ],
+      "target_properties": [],
+      "classification": "negative",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 342,
+        "distinct_states": 240,
+        "remaining_states": 168
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "SettlementAuthorized"
+          ],
+          "target": [
+            "SettlementAuthorized"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "SettlementAuthorized"
+          ],
+          "target": [
+            "SettlementAuthorized"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-04/consent-negative-fake/result.json",
+      "result_sha256": "ca6f2e02c6bafc91be412c14dff3678cbd5e19aa387d2c95ae220402ae2acf90",
+      "run_batch": "matrix-04",
+      "runner_exit": 2,
+      "input_identity": {
+        "Consent.tla": true,
+        "Consent.negative-fake.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Consent",
+      "profile": "negative-stale",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "SettlementAuthorized"
+      ],
+      "target_properties": [],
+      "classification": "negative",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 835,
+        "distinct_states": 513,
+        "remaining_states": 314
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "SettlementAuthorized"
+          ],
+          "target": [
+            "SettlementAuthorized"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "SettlementAuthorized"
+          ],
+          "target": [
+            "SettlementAuthorized"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-04/consent-negative-stale/result.json",
+      "result_sha256": "8bf932a76973fbf5b2fc4771feb28d265da97d8f2e92ddfc15f7f9530be1ebd2",
+      "run_batch": "matrix-04",
+      "runner_exit": 2,
+      "input_identity": {
+        "Consent.tla": true,
+        "Consent.negative-stale.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Consent",
+      "profile": "negative-rollback",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "SafetyDurable"
+      ],
+      "target_properties": [],
+      "classification": "negative",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 876,
+        "distinct_states": 547,
+        "remaining_states": 339
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "SafetyDurable"
+          ],
+          "target": [
+            "SafetyDurable"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "SafetyDurable"
+          ],
+          "target": [
+            "SafetyDurable"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-04/consent-negative-rollback/result.json",
+      "result_sha256": "d3a8c1d0ae68e25cdd0d46712f532cb8322a304ad37137c9689cb466ec4c5b6e",
+      "run_batch": "matrix-04",
+      "runner_exit": 2,
+      "input_identity": {
+        "Consent.tla": true,
+        "Consent.negative-rollback.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Consent",
+      "profile": "witness-NoSafeWitness",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "NoSafeWitness"
+      ],
+      "target_properties": [],
+      "classification": "witness",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 285,
+        "distinct_states": 207,
+        "remaining_states": 147
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "NoSafeWitness"
+          ],
+          "target": [
+            "NoSafeWitness"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "NoSafeWitness"
+          ],
+          "target": [
+            "NoSafeWitness"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-04/consent-witness-NoSafeWitness/result.json",
+      "result_sha256": "33c139812bf3eb8aa72b07a3d47d174f3d3305411a9a9874c78acf1fbcf1ac3b",
+      "run_batch": "matrix-04",
+      "runner_exit": 2,
+      "input_identity": {
+        "Consent.tla": true,
+        "Consent.witness-NoSafeWitness.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Consent",
+      "profile": "witness-NoReplanSafeWitness",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "NoReplanSafeWitness"
+      ],
+      "target_properties": [],
+      "classification": "witness",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 1780,
+        "distinct_states": 1000,
+        "remaining_states": 516
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "NoReplanSafeWitness"
+          ],
+          "target": [
+            "NoReplanSafeWitness"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "NoReplanSafeWitness"
+          ],
+          "target": [
+            "NoReplanSafeWitness"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-04/consent-witness-NoReplanSafeWitness/result.json",
+      "result_sha256": "441e1946b86e259ec3cc14d3a94a883147a7047fc5f9e7323824aba4160be6e2",
+      "run_batch": "matrix-04",
+      "runner_exit": 2,
+      "input_identity": {
+        "Consent.tla": true,
+        "Consent.witness-NoReplanSafeWitness.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Consent",
+      "profile": "witness-NoWithdrawSafeWitness",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "NoWithdrawSafeWitness"
+      ],
+      "target_properties": [],
+      "classification": "witness",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 876,
+        "distinct_states": 547,
+        "remaining_states": 339
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "NoWithdrawSafeWitness"
+          ],
+          "target": [
+            "NoWithdrawSafeWitness"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "NoWithdrawSafeWitness"
+          ],
+          "target": [
+            "NoWithdrawSafeWitness"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-04/consent-witness-NoWithdrawSafeWitness/result.json",
+      "result_sha256": "12a7e62b9a829d05daeff1ddcef5fd728c98caef9849254d78edf10c12c0810c",
+      "run_batch": "matrix-04",
+      "runner_exit": 2,
+      "input_identity": {
+        "Consent.tla": true,
+        "Consent.witness-NoWithdrawSafeWitness.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Consent",
+      "profile": "witness-control-block-replan",
+      "expected_status": "PASS_WITHIN_SCOPE",
+      "expected_raw_exit": 0,
+      "distinct_state_min": 100,
+      "target_invariants": [
+        "NoReplanSafeWitness"
+      ],
+      "target_properties": [],
+      "classification": "witness-control",
+      "actual_status": "PASS_WITHIN_SCOPE",
+      "actual_raw_exit": 0,
+      "statistics": {
+        "generated_states": 6567,
+        "distinct_states": 2558,
+        "remaining_states": 0
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "NoReplanSafeWitness"
+          ],
+          "target": [
+            "NoReplanSafeWitness"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "NoReplanSafeWitness"
+          ],
+          "target": [
+            "NoReplanSafeWitness"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-04/consent-witness-control-block-replan/result.json",
+      "result_sha256": "6dd50782dd9b8cc5090e5306acaaab3f7e9685299e94fa11fbf3e652467c39cb",
+      "run_batch": "matrix-04",
+      "runner_exit": 0,
+      "input_identity": {
+        "Consent.tla": true,
+        "Consent.witness-control-block-replan.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Resources",
+      "profile": "positive",
+      "expected_status": "PASS_WITHIN_SCOPE",
+      "expected_raw_exit": 0,
+      "distinct_state_min": 100,
+      "target_invariants": [
+        "TypeOK",
+        "SingleOwner",
+        "EffectOnce",
+        "PreparedDurable",
+        "CooperationAuthorized",
+        "ReclaimAuthorized"
+      ],
+      "target_properties": [],
+      "classification": "positive",
+      "actual_status": "PASS_WITHIN_SCOPE",
+      "actual_raw_exit": 0,
+      "statistics": {
+        "generated_states": 1247,
+        "distinct_states": 496,
+        "remaining_states": 0
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "TypeOK",
+            "SingleOwner",
+            "EffectOnce",
+            "PreparedDurable",
+            "CooperationAuthorized",
+            "ReclaimAuthorized"
+          ],
+          "target": [
+            "TypeOK",
+            "SingleOwner",
+            "EffectOnce",
+            "PreparedDurable",
+            "CooperationAuthorized",
+            "ReclaimAuthorized"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "TypeOK",
+            "SingleOwner",
+            "EffectOnce",
+            "PreparedDurable",
+            "CooperationAuthorized",
+            "ReclaimAuthorized"
+          ],
+          "target": [
+            "TypeOK",
+            "SingleOwner",
+            "EffectOnce",
+            "PreparedDurable",
+            "CooperationAuthorized",
+            "ReclaimAuthorized"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-01/resources-positive/result.json",
+      "result_sha256": "4a6cf9a9ae9963847fc4175e33fac7655fc92b7aa3fcd8ddfd9e0727dc9ca591",
+      "run_batch": "matrix-01",
+      "runner_exit": 0,
+      "input_identity": {
+        "Resources.tla": true,
+        "Resources.positive.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Resources",
+      "profile": "positive-private",
+      "expected_status": "PASS_WITHIN_SCOPE",
+      "expected_raw_exit": 0,
+      "distinct_state_min": 100,
+      "target_invariants": [
+        "TypeOK",
+        "SingleOwner",
+        "EffectOnce",
+        "PreparedDurable",
+        "CooperationAuthorized",
+        "ReclaimAuthorized"
+      ],
+      "target_properties": [],
+      "classification": "positive",
+      "actual_status": "PASS_WITHIN_SCOPE",
+      "actual_raw_exit": 0,
+      "statistics": {
+        "generated_states": 1098,
+        "distinct_states": 428,
+        "remaining_states": 0
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "TypeOK",
+            "SingleOwner",
+            "EffectOnce",
+            "PreparedDurable",
+            "CooperationAuthorized",
+            "ReclaimAuthorized"
+          ],
+          "target": [
+            "TypeOK",
+            "SingleOwner",
+            "EffectOnce",
+            "PreparedDurable",
+            "CooperationAuthorized",
+            "ReclaimAuthorized"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "TypeOK",
+            "SingleOwner",
+            "EffectOnce",
+            "PreparedDurable",
+            "CooperationAuthorized",
+            "ReclaimAuthorized"
+          ],
+          "target": [
+            "TypeOK",
+            "SingleOwner",
+            "EffectOnce",
+            "PreparedDurable",
+            "CooperationAuthorized",
+            "ReclaimAuthorized"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-01/resources-positive-private/result.json",
+      "result_sha256": "f1aeacbcdad0f5ae21bf6adb8e08f02e4fa83ee019c65227f93af415a59cea32",
+      "run_batch": "matrix-01",
+      "runner_exit": 0,
+      "input_identity": {
+        "Resources.tla": true,
+        "Resources.positive-private.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Resources",
+      "profile": "negative-type",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "TypeOK"
+      ],
+      "target_properties": [],
+      "classification": "negative",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 10,
+        "distinct_states": 9,
+        "remaining_states": 7
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "TypeOK"
+          ],
+          "target": [
+            "TypeOK"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "TypeOK"
+          ],
+          "target": [
+            "TypeOK"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-01/resources-negative-type/result.json",
+      "result_sha256": "67f80e7a7e35b19e374961042600d58c2872b9cfc02a35997173722e9bcf0a1c",
+      "run_batch": "matrix-01",
+      "runner_exit": 2,
+      "input_identity": {
+        "Resources.tla": true,
+        "Resources.negative-type.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Resources",
+      "profile": "negative-duplicate-owner",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "SingleOwner"
+      ],
+      "target_properties": [],
+      "classification": "negative",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 190,
+        "distinct_states": 92,
+        "remaining_states": 50
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "SingleOwner"
+          ],
+          "target": [
+            "SingleOwner"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "SingleOwner"
+          ],
+          "target": [
+            "SingleOwner"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-01/resources-negative-duplicate-owner/result.json",
+      "result_sha256": "6fe45dc9cadcb618c12461d1db2386f48e026241ccf1954e3d833214a74ba1ef",
+      "run_batch": "matrix-01",
+      "runner_exit": 2,
+      "input_identity": {
+        "Resources.tla": true,
+        "Resources.negative-duplicate-owner.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Resources",
+      "profile": "negative-repeat-effect",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "EffectOnce"
+      ],
+      "target_properties": [],
+      "classification": "negative",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 155,
+        "distinct_states": 77,
+        "remaining_states": 45
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "EffectOnce"
+          ],
+          "target": [
+            "EffectOnce"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "EffectOnce"
+          ],
+          "target": [
+            "EffectOnce"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-01/resources-negative-repeat-effect/result.json",
+      "result_sha256": "770b6080387a92e3a1f127261e1dad12a9f427fa70a62b45bb812d6f67c4a841",
+      "run_batch": "matrix-01",
+      "runner_exit": 2,
+      "input_identity": {
+        "Resources.tla": true,
+        "Resources.negative-repeat-effect.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Resources",
+      "profile": "negative-unlock",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "PreparedDurable"
+      ],
+      "target_properties": [],
+      "classification": "negative",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 152,
+        "distinct_states": 74,
+        "remaining_states": 42
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "PreparedDurable"
+          ],
+          "target": [
+            "PreparedDurable"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "PreparedDurable"
+          ],
+          "target": [
+            "PreparedDurable"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-01/resources-negative-unlock/result.json",
+      "result_sha256": "6639a5a540e03bbc783e797243a28ff9e7ca3e1ba7f76f0f1c3bbd6512053a10",
+      "run_batch": "matrix-01",
+      "runner_exit": 2,
+      "input_identity": {
+        "Resources.tla": true,
+        "Resources.negative-unlock.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Resources",
+      "profile": "negative-premature",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "CooperationAuthorized"
+      ],
+      "target_properties": [],
+      "classification": "negative",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 5,
+        "distinct_states": 4,
+        "remaining_states": 2
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "CooperationAuthorized"
+          ],
+          "target": [
+            "CooperationAuthorized"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "CooperationAuthorized"
+          ],
+          "target": [
+            "CooperationAuthorized"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-01/resources-negative-premature/result.json",
+      "result_sha256": "a817756177a578fed2755829eaf05d56cf7afeb3f11e9b4578f48b5069754a9b",
+      "run_batch": "matrix-01",
+      "runner_exit": 2,
+      "input_identity": {
+        "Resources.tla": true,
+        "Resources.negative-premature.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Resources",
+      "profile": "negative-reclaim",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "ReclaimAuthorized"
+      ],
+      "target_properties": [],
+      "classification": "negative",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 42,
+        "distinct_states": 26,
+        "remaining_states": 19
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "ReclaimAuthorized"
+          ],
+          "target": [
+            "ReclaimAuthorized"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "ReclaimAuthorized"
+          ],
+          "target": [
+            "ReclaimAuthorized"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-01/resources-negative-reclaim/result.json",
+      "result_sha256": "5c50c7a0ada62a1240077051408ae05dc7887ebad89626dc615e997cd00008d7",
+      "run_batch": "matrix-01",
+      "runner_exit": 2,
+      "input_identity": {
+        "Resources.tla": true,
+        "Resources.negative-reclaim.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Resources",
+      "profile": "negative-private-reclaim",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "ReclaimAuthorized"
+      ],
+      "target_properties": [],
+      "classification": "negative",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 42,
+        "distinct_states": 26,
+        "remaining_states": 19
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "ReclaimAuthorized"
+          ],
+          "target": [
+            "ReclaimAuthorized"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "ReclaimAuthorized"
+          ],
+          "target": [
+            "ReclaimAuthorized"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-01/resources-negative-private-reclaim/result.json",
+      "result_sha256": "6dcac83c98d3fb9c6fc5b23a6648e05fd249536b5e0b0d771b86a21a55ed8316",
+      "run_batch": "matrix-01",
+      "runner_exit": 2,
+      "input_identity": {
+        "Resources.tla": true,
+        "Resources.negative-private-reclaim.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Resources",
+      "profile": "witness-NoReclaimWitness",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "NoReclaimWitness"
+      ],
+      "target_properties": [],
+      "classification": "witness",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 190,
+        "distinct_states": 92,
+        "remaining_states": 50
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "NoReclaimWitness"
+          ],
+          "target": [
+            "NoReclaimWitness"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "NoReclaimWitness"
+          ],
+          "target": [
+            "NoReclaimWitness"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-01/resources-witness-NoReclaimWitness/result.json",
+      "result_sha256": "3f427ce0de51fdb1f4fd3bf8b18bde1d250d0ab5ca7a1698505810f497a2032c",
+      "run_batch": "matrix-01",
+      "runner_exit": 2,
+      "input_identity": {
+        "Resources.tla": true,
+        "Resources.witness-NoReclaimWitness.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Resources",
+      "profile": "witness-NoLockedRecoveryWitness",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "NoLockedRecoveryWitness"
+      ],
+      "target_properties": [],
+      "classification": "witness",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 311,
+        "distinct_states": 142,
+        "remaining_states": 67
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "NoLockedRecoveryWitness"
+          ],
+          "target": [
+            "NoLockedRecoveryWitness"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "NoLockedRecoveryWitness"
+          ],
+          "target": [
+            "NoLockedRecoveryWitness"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-01/resources-witness-NoLockedRecoveryWitness/result.json",
+      "result_sha256": "6efb7542f632c0d64872d61169b9e38c9cf3024c5a8829585fe30d79b0d5a5df",
+      "run_batch": "matrix-01",
+      "runner_exit": 2,
+      "input_identity": {
+        "Resources.tla": true,
+        "Resources.witness-NoLockedRecoveryWitness.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Resources",
+      "profile": "witness-NoReclaimReconnectWitness",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "NoReclaimReconnectWitness"
+      ],
+      "target_properties": [],
+      "classification": "witness",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 370,
+        "distinct_states": 168,
+        "remaining_states": 75
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "NoReclaimReconnectWitness"
+          ],
+          "target": [
+            "NoReclaimReconnectWitness"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "NoReclaimReconnectWitness"
+          ],
+          "target": [
+            "NoReclaimReconnectWitness"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-01/resources-witness-NoReclaimReconnectWitness/result.json",
+      "result_sha256": "8fcab1787004692af77f55c17651d7e2335e3eb0b0fbb218f9801e9a82f76662",
+      "run_batch": "matrix-01",
+      "runner_exit": 2,
+      "input_identity": {
+        "Resources.tla": true,
+        "Resources.witness-NoReclaimReconnectWitness.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Identity",
+      "profile": "positive",
+      "expected_status": "PASS_WITHIN_SCOPE",
+      "expected_raw_exit": 0,
+      "distinct_state_min": 100,
+      "target_invariants": [
+        "TypeOK",
+        "NoIdentityLeak",
+        "EventAudienceFixed",
+        "HistoryAsObserved",
+        "ReferenceTargetStable"
+      ],
+      "target_properties": [],
+      "classification": "positive",
+      "actual_status": "PASS_WITHIN_SCOPE",
+      "actual_raw_exit": 0,
+      "statistics": {
+        "generated_states": 77249,
+        "distinct_states": 7456,
+        "remaining_states": 0
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "TypeOK",
+            "NoIdentityLeak",
+            "EventAudienceFixed",
+            "HistoryAsObserved",
+            "ReferenceTargetStable"
+          ],
+          "target": [
+            "TypeOK",
+            "NoIdentityLeak",
+            "EventAudienceFixed",
+            "HistoryAsObserved",
+            "ReferenceTargetStable"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "TypeOK",
+            "NoIdentityLeak",
+            "EventAudienceFixed",
+            "HistoryAsObserved",
+            "ReferenceTargetStable"
+          ],
+          "target": [
+            "TypeOK",
+            "NoIdentityLeak",
+            "EventAudienceFixed",
+            "HistoryAsObserved",
+            "ReferenceTargetStable"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-01/identity-positive/result.json",
+      "result_sha256": "f153eddec113bc790ea0c74b439ae86904d9e41375fbf098c04e25e31192f1de",
+      "run_batch": "matrix-01",
+      "runner_exit": 0,
+      "input_identity": {
+        "Identity.tla": true,
+        "Identity.positive.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Identity",
+      "profile": "negative-type",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "TypeOK"
+      ],
+      "target_properties": [],
+      "classification": "negative",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 25,
+        "distinct_states": 25,
+        "remaining_states": 23
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "TypeOK"
+          ],
+          "target": [
+            "TypeOK"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "TypeOK"
+          ],
+          "target": [
+            "TypeOK"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-01/identity-negative-type/result.json",
+      "result_sha256": "0fe47e3929e3baee9e4ecebade3619a312518f7d58ee776e68f42f404b355b18",
+      "run_batch": "matrix-01",
+      "runner_exit": 2,
+      "input_identity": {
+        "Identity.tla": true,
+        "Identity.negative-type.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Identity",
+      "profile": "negative-raw-id",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "NoIdentityLeak"
+      ],
+      "target_properties": [],
+      "classification": "negative",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 30,
+        "distinct_states": 30,
+        "remaining_states": 27
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "NoIdentityLeak"
+          ],
+          "target": [
+            "NoIdentityLeak"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "NoIdentityLeak"
+          ],
+          "target": [
+            "NoIdentityLeak"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-01/identity-negative-raw-id/result.json",
+      "result_sha256": "b1f8f4b90a769888bccf1e5e991ff4659ec944ae8441f58a9c6a49b50903c2f7",
+      "run_batch": "matrix-01",
+      "runner_exit": 2,
+      "input_identity": {
+        "Identity.tla": true,
+        "Identity.negative-raw-id.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Identity",
+      "profile": "negative-true-name",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "NoIdentityLeak"
+      ],
+      "target_properties": [],
+      "classification": "negative",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 30,
+        "distinct_states": 30,
+        "remaining_states": 27
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "NoIdentityLeak"
+          ],
+          "target": [
+            "NoIdentityLeak"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "NoIdentityLeak"
+          ],
+          "target": [
+            "NoIdentityLeak"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-01/identity-negative-true-name/result.json",
+      "result_sha256": "af73d714dfc978f9464b2428ae80843f73f1cb640cd72dd1d15c6bf8082372dc",
+      "run_batch": "matrix-01",
+      "runner_exit": 2,
+      "input_identity": {
+        "Identity.tla": true,
+        "Identity.negative-true-name.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Identity",
+      "profile": "negative-late-audience",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "EventAudienceFixed"
+      ],
+      "target_properties": [],
+      "classification": "negative",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 1667,
+        "distinct_states": 445,
+        "remaining_states": 364
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "EventAudienceFixed"
+          ],
+          "target": [
+            "EventAudienceFixed"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "EventAudienceFixed"
+          ],
+          "target": [
+            "EventAudienceFixed"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-01/identity-negative-late-audience/result.json",
+      "result_sha256": "a4ecc37b2b073396ae4eeb5c5ff6bef45ee31065e2b24542d8dfd36be68da9d5",
+      "run_batch": "matrix-01",
+      "runner_exit": 2,
+      "input_identity": {
+        "Identity.tla": true,
+        "Identity.negative-late-audience.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Identity",
+      "profile": "negative-rewrite-history",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "HistoryAsObserved"
+      ],
+      "target_properties": [],
+      "classification": "negative",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 6382,
+        "distinct_states": 1145,
+        "remaining_states": 795
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "HistoryAsObserved"
+          ],
+          "target": [
+            "HistoryAsObserved"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "HistoryAsObserved"
+          ],
+          "target": [
+            "HistoryAsObserved"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-01/identity-negative-rewrite-history/result.json",
+      "result_sha256": "e1951cd40a10a2772ed9eed93a41dead454979c7a2b00b868981b67557906769",
+      "run_batch": "matrix-01",
+      "runner_exit": 2,
+      "input_identity": {
+        "Identity.tla": true,
+        "Identity.negative-rewrite-history.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Identity",
+      "profile": "negative-by-name",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "ReferenceTargetStable"
+      ],
+      "target_properties": [],
+      "classification": "negative",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 45,
+        "distinct_states": 45,
+        "remaining_states": 42
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "ReferenceTargetStable"
+          ],
+          "target": [
+            "ReferenceTargetStable"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "ReferenceTargetStable"
+          ],
+          "target": [
+            "ReferenceTargetStable"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-01/identity-negative-by-name/result.json",
+      "result_sha256": "4026a68e4148ce3513356ec418d2f7487a6d45e87877e0fd90be52633c204f82",
+      "run_batch": "matrix-01",
+      "runner_exit": 2,
+      "input_identity": {
+        "Identity.tla": true,
+        "Identity.negative-by-name.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Identity",
+      "profile": "negative-stale-ref",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "ReferenceTargetStable"
+      ],
+      "target_properties": [],
+      "classification": "negative",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 25,
+        "distinct_states": 24,
+        "remaining_states": 22
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "ReferenceTargetStable"
+          ],
+          "target": [
+            "ReferenceTargetStable"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "ReferenceTargetStable"
+          ],
+          "target": [
+            "ReferenceTargetStable"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-01/identity-negative-stale-ref/result.json",
+      "result_sha256": "ef2c04d051ab3edd39c0b059930297d871775e876675da3a714b92ed251f6247",
+      "run_batch": "matrix-01",
+      "runner_exit": 2,
+      "input_identity": {
+        "Identity.tla": true,
+        "Identity.negative-stale-ref.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Identity",
+      "profile": "witness-NoDisguisedHistoryWitness",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "NoDisguisedHistoryWitness"
+      ],
+      "target_properties": [],
+      "classification": "witness",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 3643,
+        "distinct_states": 740,
+        "remaining_states": 550
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "NoDisguisedHistoryWitness"
+          ],
+          "target": [
+            "NoDisguisedHistoryWitness"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "NoDisguisedHistoryWitness"
+          ],
+          "target": [
+            "NoDisguisedHistoryWitness"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-01/identity-witness-NoDisguisedHistoryWitness/result.json",
+      "result_sha256": "02514a2251dc5f747cf0f02168c2855d00134f9f18bd1bd36d162a25c222afa0",
+      "run_batch": "matrix-01",
+      "runner_exit": 2,
+      "input_identity": {
+        "Identity.tla": true,
+        "Identity.witness-NoDisguisedHistoryWitness.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Identity",
+      "profile": "witness-NoLateReplayWitness",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "NoLateReplayWitness"
+      ],
+      "target_properties": [],
+      "classification": "witness",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 1667,
+        "distinct_states": 445,
+        "remaining_states": 364
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "NoLateReplayWitness"
+          ],
+          "target": [
+            "NoLateReplayWitness"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "NoLateReplayWitness"
+          ],
+          "target": [
+            "NoLateReplayWitness"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-01/identity-witness-NoLateReplayWitness/result.json",
+      "result_sha256": "5db4e7150adcdc98ee86f417a989c9df22636397a6d6d3227dcd32131cd01a0f",
+      "run_batch": "matrix-01",
+      "runner_exit": 2,
+      "input_identity": {
+        "Identity.tla": true,
+        "Identity.witness-NoLateReplayWitness.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Identity",
+      "profile": "witness-NoRefTransferWitness",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "NoRefTransferWitness"
+      ],
+      "target_properties": [],
+      "classification": "witness",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 45,
+        "distinct_states": 45,
+        "remaining_states": 42
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "NoRefTransferWitness"
+          ],
+          "target": [
+            "NoRefTransferWitness"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "NoRefTransferWitness"
+          ],
+          "target": [
+            "NoRefTransferWitness"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-01/identity-witness-NoRefTransferWitness/result.json",
+      "result_sha256": "019105741c4fc9be1288963f0331d0265dcd33a7a5a666b3a82149ddd98f1c05",
+      "run_batch": "matrix-01",
+      "runner_exit": 2,
+      "input_identity": {
+        "Identity.tla": true,
+        "Identity.witness-NoRefTransferWitness.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Scheduler",
+      "profile": "positive-1",
+      "expected_status": "PASS_WITHIN_SCOPE",
+      "expected_raw_exit": 0,
+      "distinct_state_min": 30,
+      "target_invariants": [
+        "TypeOK",
+        "BudgetRespected"
+      ],
+      "target_properties": [
+        "NoStarvation"
+      ],
+      "classification": "positive",
+      "actual_status": "PASS_WITHIN_SCOPE",
+      "actual_raw_exit": 0,
+      "statistics": {
+        "generated_states": 377,
+        "distinct_states": 188,
+        "remaining_states": 0
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "TypeOK",
+            "BudgetRespected"
+          ],
+          "target": [
+            "TypeOK",
+            "BudgetRespected"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [
+            "NoStarvation"
+          ],
+          "target": [
+            "NoStarvation"
+          ],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "TypeOK",
+            "BudgetRespected"
+          ],
+          "target": [
+            "TypeOK",
+            "BudgetRespected"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [
+            "NoStarvation"
+          ],
+          "target": [
+            "NoStarvation"
+          ],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-02/scheduler-positive-1/result.json",
+      "result_sha256": "8395626eee77c656e879f2392067cbdd4e50398657c6c72beab3df626b8acccc",
+      "run_batch": "matrix-02",
+      "runner_exit": 0,
+      "input_identity": {
+        "Scheduler.tla": true,
+        "Scheduler.positive-1.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Scheduler",
+      "profile": "positive-2",
+      "expected_status": "PASS_WITHIN_SCOPE",
+      "expected_raw_exit": 0,
+      "distinct_state_min": 30,
+      "target_invariants": [
+        "TypeOK",
+        "BudgetRespected"
+      ],
+      "target_properties": [
+        "NoStarvation"
+      ],
+      "classification": "positive",
+      "actual_status": "PASS_WITHIN_SCOPE",
+      "actual_raw_exit": 0,
+      "statistics": {
+        "generated_states": 2379,
+        "distinct_states": 594,
+        "remaining_states": 0
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "TypeOK",
+            "BudgetRespected"
+          ],
+          "target": [
+            "TypeOK",
+            "BudgetRespected"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [
+            "NoStarvation"
+          ],
+          "target": [
+            "NoStarvation"
+          ],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "TypeOK",
+            "BudgetRespected"
+          ],
+          "target": [
+            "TypeOK",
+            "BudgetRespected"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [
+            "NoStarvation"
+          ],
+          "target": [
+            "NoStarvation"
+          ],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-02/scheduler-positive-2/result.json",
+      "result_sha256": "56cc7fae99f569815ca394b4ac4050a5d422d8cbf0b8634b34b2d5e757632c77",
+      "run_batch": "matrix-02",
+      "runner_exit": 0,
+      "input_identity": {
+        "Scheduler.tla": true,
+        "Scheduler.positive-2.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Scheduler",
+      "profile": "negative-type",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "TypeOK"
+      ],
+      "target_properties": [],
+      "classification": "negative",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 3,
+        "distinct_states": 3,
+        "remaining_states": 1
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "TypeOK"
+          ],
+          "target": [
+            "TypeOK"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "TypeOK"
+          ],
+          "target": [
+            "TypeOK"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-02/scheduler-negative-type/result.json",
+      "result_sha256": "3020274c1a4faf003a8de506c8e76d64f2e040ecc54d53027103064c53d24033",
+      "run_batch": "matrix-02",
+      "runner_exit": 2,
+      "input_identity": {
+        "Scheduler.tla": true,
+        "Scheduler.negative-type.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Scheduler",
+      "profile": "negative-overbook",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "BudgetRespected"
+      ],
+      "target_properties": [],
+      "classification": "negative",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 4,
+        "distinct_states": 3,
+        "remaining_states": 0
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "BudgetRespected"
+          ],
+          "target": [
+            "BudgetRespected"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "BudgetRespected"
+          ],
+          "target": [
+            "BudgetRespected"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-02/scheduler-negative-overbook/result.json",
+      "result_sha256": "eb28f1c61dcdb552bbe3274f4cf1bd93675cf0834daed02b3985cd7d2994c8b8",
+      "run_batch": "matrix-02",
+      "runner_exit": 2,
+      "input_identity": {
+        "Scheduler.tla": true,
+        "Scheduler.negative-overbook.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Scheduler",
+      "profile": "negative-starve",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 13,
+      "distinct_state_min": 1,
+      "target_invariants": [],
+      "target_properties": [
+        "NoStarvation"
+      ],
+      "classification": "negative",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 13,
+      "statistics": {
+        "generated_states": 41,
+        "distinct_states": 20,
+        "remaining_states": 0
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [
+            "NoStarvation"
+          ],
+          "target": [
+            "NoStarvation"
+          ],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [
+            "NoStarvation"
+          ],
+          "target": [
+            "NoStarvation"
+          ],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-02/scheduler-negative-starve/result.json",
+      "result_sha256": "897ee27d2bd230190c24b33f8dc73040b95189f528395fa1fddad21d63b10ff2",
+      "run_batch": "matrix-02",
+      "runner_exit": 2,
+      "input_identity": {
+        "Scheduler.tla": true,
+        "Scheduler.negative-starve.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    },
+    {
+      "model": "Scheduler",
+      "profile": "witness-NoAllServedWitness",
+      "expected_status": "COUNTEREXAMPLE",
+      "expected_raw_exit": 12,
+      "distinct_state_min": 1,
+      "target_invariants": [
+        "NoAllServedWitness"
+      ],
+      "target_properties": [],
+      "classification": "witness",
+      "actual_status": "COUNTEREXAMPLE",
+      "actual_raw_exit": 12,
+      "statistics": {
+        "generated_states": 27,
+        "distinct_states": 27,
+        "remaining_states": 8
+      },
+      "check_inventory": {
+        "configured_invariants": {
+          "actual": [
+            "NoAllServedWitness"
+          ],
+          "target": [
+            "NoAllServedWitness"
+          ],
+          "matches": true
+        },
+        "configured_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        },
+        "expected_invariants": {
+          "actual": [
+            "NoAllServedWitness"
+          ],
+          "target": [
+            "NoAllServedWitness"
+          ],
+          "matches": true
+        },
+        "expected_properties": {
+          "actual": [],
+          "target": [],
+          "matches": true
+        }
+      },
+      "check_inventory_matches": true,
+      "meets_expectation": true,
+      "result": "matrix-02/scheduler-witness-NoAllServedWitness/result.json",
+      "result_sha256": "f413a3b20bac87ade76125394d3f7aae0b64f92ce01e45fb10d1c91173d03cf7",
+      "run_batch": "matrix-02",
+      "runner_exit": 2,
+      "input_identity": {
+        "Scheduler.tla": true,
+        "Scheduler.witness-NoAllServedWitness.cfg": true,
+        "manifest": true,
+        "tool": true,
+        "result": true
+      },
+      "evidence_usage": "REUSED_TLC_FROM_A468",
+      "assessment": "CURRENT_VALIDATOR_REASSESSMENT"
+    }
+  ],
+  "validator_controls": [
+    {
+      "case": "positive-only-type",
+      "target_profile": "positive",
+      "mutated_invariants": [
+        "TypeOK"
+      ],
+      "matrix_exit": 1,
+      "actual_raw_exit": 0,
+      "distinct_states": 7353,
+      "detected": true,
+      "result": "validator-checks-01/positive-only-type/run/matrix-results.json",
+      "result_sha256": "8cede3afe3147e18def615a926facd3efc9cf5a0af7c80dcbfab1e3b5b6e87b0"
+    },
+    {
+      "case": "witness-replaced-target",
+      "target_profile": "witness-NoArrivalWitness",
+      "mutated_invariants": [
+        "NoReplacedArrivalWitness"
+      ],
+      "matrix_exit": 1,
+      "actual_raw_exit": 12,
+      "distinct_states": 145,
+      "detected": true,
+      "result": "validator-checks-01/witness-replaced-target/run/matrix-results.json",
+      "result_sha256": "e2e62f742735b1b838e2318deb24292b03ac5b68d15d030c76963726aa720f77"
+    }
+  ],
+  "history": [
+    {
+      "run_batch": "matrix-01",
+      "scope": "Scheduler",
+      "reason": "预算1正配置12状态未达预声明30下限；补入实际有意义的成功/超时/非法输出结果分支，未降低下限。时序负对照raw13符合预期，但矩阵脚本错误要求TLC输出性质名；修正为唯一配置性质加2116消息核验。"
+    },
+    {
+      "candidate": "edc8b82e00371b430de5803ae072f42c26fde849",
+      "finding": "R-27-REQ-001",
+      "axis": "requirements",
+      "conclusion": "FAIL",
+      "reason": "原合同和Movement只挡旧到达，未挡同epoch迟到首次移动命令；新增发出seq与持久水位、MovementCommands前门模型。"
+    },
+    {
+      "candidate": "edc8b82e00371b430de5803ae072f42c26fde849",
+      "finding": "R-ADV27-STD-001",
+      "axis": "standards",
+      "conclusion": "FAIL",
+      "reason": "原改约见证可被v1 settled后v2 proposed误满足；独立禁止v2 Confirm仍raw12/510states。原Consent9项保留为历史。",
+      "superseded_results": [
+        {
+          "model": "Consent",
+          "profile": "positive",
+          "expected_status": "PASS_WITHIN_SCOPE",
+          "expected_raw_exit": 0,
+          "distinct_state_min": 100,
+          "target_invariants": [
+            "TypeOK",
+            "SettlementAuthorized",
+            "SafetyDurable"
+          ],
+          "target_properties": [],
+          "classification": "positive",
+          "actual_status": "PASS_WITHIN_SCOPE",
+          "actual_raw_exit": 0,
+          "statistics": {
+            "generated_states": 6107,
+            "distinct_states": 2394,
+            "remaining_states": 0
+          },
+          "meets_expectation": true,
+          "result": "matrix-01/consent-positive/result.json",
+          "result_sha256": "c8e362c50d2edc886ea6e965965926b37912c83a632ea3b05f1d3909d182f203",
+          "runner_exit": 0,
+          "run_batch": "matrix-01"
+        },
+        {
+          "model": "Consent",
+          "profile": "negative-type",
+          "expected_status": "COUNTEREXAMPLE",
+          "expected_raw_exit": 12,
+          "distinct_state_min": 1,
+          "target_invariants": [
+            "TypeOK"
+          ],
+          "target_properties": [],
+          "classification": "negative",
+          "actual_status": "COUNTEREXAMPLE",
+          "actual_raw_exit": 12,
+          "statistics": {
+            "generated_states": 11,
+            "distinct_states": 11,
+            "remaining_states": 9
+          },
+          "meets_expectation": true,
+          "result": "matrix-01/consent-negative-type/result.json",
+          "result_sha256": "a152d1a91f91536ebbcaa1428c1b8169e84df84488f50a2042dfea64832f1b7b",
+          "runner_exit": 2,
+          "run_batch": "matrix-01"
+        },
+        {
+          "model": "Consent",
+          "profile": "negative-impersonation",
+          "expected_status": "COUNTEREXAMPLE",
+          "expected_raw_exit": 12,
+          "distinct_state_min": 1,
+          "target_invariants": [
+            "SettlementAuthorized"
+          ],
+          "target_properties": [],
+          "classification": "negative",
+          "actual_status": "COUNTEREXAMPLE",
+          "actual_raw_exit": 12,
+          "statistics": {
+            "generated_states": 694,
+            "distinct_states": 554,
+            "remaining_states": 450
+          },
+          "meets_expectation": true,
+          "result": "matrix-01/consent-negative-impersonation/result.json",
+          "result_sha256": "dcc32842ccc57ea46e52e4d62461eba634b98e895131591349daf600b4c8a191",
+          "runner_exit": 2,
+          "run_batch": "matrix-01"
+        },
+        {
+          "model": "Consent",
+          "profile": "negative-fake",
+          "expected_status": "COUNTEREXAMPLE",
+          "expected_raw_exit": 12,
+          "distinct_state_min": 1,
+          "target_invariants": [
+            "SettlementAuthorized"
+          ],
+          "target_properties": [],
+          "classification": "negative",
+          "actual_status": "COUNTEREXAMPLE",
+          "actual_raw_exit": 12,
+          "statistics": {
+            "generated_states": 342,
+            "distinct_states": 234,
+            "remaining_states": 162
+          },
+          "meets_expectation": true,
+          "result": "matrix-01/consent-negative-fake/result.json",
+          "result_sha256": "0c780bd6dce40be988b92c7c1f10715a2383623a0a1c37708ff20174294dcc79",
+          "runner_exit": 2,
+          "run_batch": "matrix-01"
+        },
+        {
+          "model": "Consent",
+          "profile": "negative-stale",
+          "expected_status": "COUNTEREXAMPLE",
+          "expected_raw_exit": 12,
+          "distinct_state_min": 1,
+          "target_invariants": [
+            "SettlementAuthorized"
+          ],
+          "target_properties": [],
+          "classification": "negative",
+          "actual_status": "COUNTEREXAMPLE",
+          "actual_raw_exit": 12,
+          "statistics": {
+            "generated_states": 829,
+            "distinct_states": 491,
+            "remaining_states": 295
+          },
+          "meets_expectation": true,
+          "result": "matrix-01/consent-negative-stale/result.json",
+          "result_sha256": "43fd6b543ffd0a7a27dd2d5ed086814a4aed2ff9e9a05ad82f4f425e56d2f34a",
+          "runner_exit": 2,
+          "run_batch": "matrix-01"
+        },
+        {
+          "model": "Consent",
+          "profile": "negative-rollback",
+          "expected_status": "COUNTEREXAMPLE",
+          "expected_raw_exit": 12,
+          "distinct_state_min": 1,
+          "target_invariants": [
+            "SafetyDurable"
+          ],
+          "target_properties": [],
+          "classification": "negative",
+          "actual_status": "COUNTEREXAMPLE",
+          "actual_raw_exit": 12,
+          "statistics": {
+            "generated_states": 870,
+            "distinct_states": 522,
+            "remaining_states": 317
+          },
+          "meets_expectation": true,
+          "result": "matrix-01/consent-negative-rollback/result.json",
+          "result_sha256": "b04cc6edf392dde780eb21ab91136b3b4f49eb29e8382acdfb4a6ab90ee0e724",
+          "runner_exit": 2,
+          "run_batch": "matrix-01"
+        },
+        {
+          "model": "Consent",
+          "profile": "witness-NoSafeWitness",
+          "expected_status": "COUNTEREXAMPLE",
+          "expected_raw_exit": 12,
+          "distinct_state_min": 1,
+          "target_invariants": [
+            "NoSafeWitness"
+          ],
+          "target_properties": [],
+          "classification": "witness",
+          "actual_status": "COUNTEREXAMPLE",
+          "actual_raw_exit": 12,
+          "statistics": {
+            "generated_states": 285,
+            "distinct_states": 204,
+            "remaining_states": 144
+          },
+          "meets_expectation": true,
+          "result": "matrix-01/consent-witness-NoSafeWitness/result.json",
+          "result_sha256": "25ef9b3998c331c84e4f3eb6ebd2b510f6d77d047486faf7ba345f888e5b83ce",
+          "runner_exit": 2,
+          "run_batch": "matrix-01"
+        },
+        {
+          "model": "Consent",
+          "profile": "witness-NoReplanSafeWitness",
+          "expected_status": "COUNTEREXAMPLE",
+          "expected_raw_exit": 12,
+          "distinct_state_min": 1,
+          "target_invariants": [
+            "NoReplanSafeWitness"
+          ],
+          "target_properties": [],
+          "classification": "witness",
+          "actual_status": "COUNTEREXAMPLE",
+          "actual_raw_exit": 12,
+          "statistics": {
+            "generated_states": 709,
+            "distinct_states": 416,
+            "remaining_states": 268
+          },
+          "meets_expectation": true,
+          "result": "matrix-01/consent-witness-NoReplanSafeWitness/result.json",
+          "result_sha256": "1dec52c1b2c69959efbe626b30d7b23944da23f9709db821e139988c833a6108",
+          "runner_exit": 2,
+          "run_batch": "matrix-01"
+        },
+        {
+          "model": "Consent",
+          "profile": "witness-NoWithdrawSafeWitness",
+          "expected_status": "COUNTEREXAMPLE",
+          "expected_raw_exit": 12,
+          "distinct_state_min": 1,
+          "target_invariants": [
+            "NoWithdrawSafeWitness"
+          ],
+          "target_properties": [],
+          "classification": "witness",
+          "actual_status": "COUNTEREXAMPLE",
+          "actual_raw_exit": 12,
+          "statistics": {
+            "generated_states": 870,
+            "distinct_states": 522,
+            "remaining_states": 317
+          },
+          "meets_expectation": true,
+          "result": "matrix-01/consent-witness-NoWithdrawSafeWitness/result.json",
+          "result_sha256": "28f82610e4b260f7b95761c21eea6b190bb3ec6f5bc695c50e7f3081590ef14d",
+          "runner_exit": 2,
+          "run_batch": "matrix-01"
+        }
+      ]
+    },
+    {
+      "candidate": "edc8b82e00371b430de5803ae072f42c26fde849",
+      "finding": "R-ADV27-STD-002",
+      "axis": "standards",
+      "conclusion": "FAIL",
+      "reason": "原矩阵未核positive/witness实际检查清单；仅TypeOK真实raw0/7353states被误接纳。现统一集合核对，两个真实TLC突变均拒绝。"
+    },
+    {
+      "run_batches": [
+        "matrix-03",
+        "matrix-05"
+      ],
+      "scope": "MovementCommands",
+      "reason": "作者补强未知请求见证，记录B提交后发出重试且已实际处理；前两版各17项原结果保留，当前采用matrix-06的17项完整重跑。"
+    },
+    {
+      "candidate": "a46830f53dea128ddfd2ba145d9a0fbc48513ea5",
+      "review_round": "r2",
+      "requirements": "PASS",
+      "standards": "FAIL",
+      "verified_findings": [
+        "R-27-REQ-001",
+        "R-ADV27-STD-001",
+        "R-ADV27-STD-002"
+      ],
+      "open_finding": "R-ADV27-STD-003",
+      "reason": "独立审查指出ACK见证允许Retry→Handle→LoseAck；禁止丢ACK后Retry仍raw12/144states。r2原始记录保留。",
+      "superseded_results_index": {
+        "candidate": "a46830f53dea128ddfd2ba145d9a0fbc48513ea5",
+        "path": "formal/adv001/results.json",
+        "model": "MovementCommands"
+      }
+    },
+    {
+      "scope": "MovementCommands八项见证因果审计",
+      "reason": "本轮在Retry记录已丢ACK及原收据/效果；补强停止后发出新目标和旧epoch拒绝的当步观测；3个阻断对照均raw0且完成。其余5项核对原始顺序及状态写入依赖，保持条件。"
+    }
+  ],
+  "inputs": {
+    "build_manifests.py": "1b9c80d25164031395ca5149fd34d233b3ee6ab9ba847e595609d436b66bdd15",
+    "consent.json": "6f582f518bb655a243aa8d7572a818cbb4a0316722b724807e447a1f2b4c0ca4",
+    "expectations.json": "5a154983e34ac3202b853700d2649c5f3c904b718eefc3f8e52eb9e74c783862",
+    "identity.json": "53f3bb46c67c0a1661126ac81b5cf768178a711a4e25e76ce604b56b0b9c3a88",
+    "model/Consent.negative-fake.cfg": "d66d457ba2ffe617476aca97da9a516e7b25ffac146fcd8f36964454cdec4bb8",
+    "model/Consent.negative-impersonation.cfg": "b88c07fdba25a21356a0baf7f916dd2e8c6d7350496f03a57cbcad90e78b423f",
+    "model/Consent.negative-rollback.cfg": "65bc674934052fecc9f5ae996ae6963e7ea9b585f0b3992b5d68ca23b88d5950",
+    "model/Consent.negative-stale.cfg": "92f09f8245182af96629424ab056f8cbf5e18c5f0d3b468273d6cc6eebf0ae39",
+    "model/Consent.negative-type.cfg": "634b83bf6a0046e89be76549ce49a711765164b5f116c34dcefc25a13cdc262d",
+    "model/Consent.positive.cfg": "50d9d224e6d235553af621c6ba6af7f237ec967b244d6d2a80f7481a39fb7d98",
+    "model/Consent.tla": "8d295a5ec227ea0f75880c80099740142ebc9cf91130142cf9662435e9886c01",
+    "model/Consent.witness-NoReplanSafeWitness.cfg": "0d6a256b247fcc796ddd81941e20fe9fba5b47baf89d199ff452ac6cb9cdb844",
+    "model/Consent.witness-NoSafeWitness.cfg": "a8517852e0364fd6952bcec9a4271079500030699e363173256edde2f4fb7761",
+    "model/Consent.witness-NoWithdrawSafeWitness.cfg": "0cc0b7b1dcb314ff4578b9f43c77518280889c08d7aaffbdfe7a8d57c7266db2",
+    "model/Consent.witness-control-block-replan.cfg": "ef5ccfc8e4fe594c1578af5dc24cfa2fd624474da1a068991ac79f092901c18c",
+    "model/Identity.negative-by-name.cfg": "bac9006819f6ddb41a8556eebcef193cab074b3f46044956e16d8936a5166b07",
+    "model/Identity.negative-late-audience.cfg": "1bc2a8f6184af1d60c086f83a33f184595709ecefeaa9bbf898f6a0c2666ecb4",
+    "model/Identity.negative-raw-id.cfg": "636990986d9ccdf04c297d92faed03ed2417b7c4613ac374a491103f18185e04",
+    "model/Identity.negative-rewrite-history.cfg": "c658b2e7fb2b52079df11bf6c7a58809436c45e9da7d3c7710847582f478cce4",
+    "model/Identity.negative-stale-ref.cfg": "6979ccbc6354842addd6df0c6a9f5964551f01d7ac16218a0c8dac1239f79215",
+    "model/Identity.negative-true-name.cfg": "6d61aff8c05636a13cf296ff00357cfbe1ecae02d088a6dc0174e2aa6980df80",
+    "model/Identity.negative-type.cfg": "634b83bf6a0046e89be76549ce49a711765164b5f116c34dcefc25a13cdc262d",
+    "model/Identity.positive.cfg": "22fb81f2adaede24af63ba323093ec18c044fe103f9c07b777ba9aec075d715a",
+    "model/Identity.tla": "dac08a2cca737d4388b7dfcdfa93668becd893003505bb138a1c43f6fc176f39",
+    "model/Identity.witness-NoDisguisedHistoryWitness.cfg": "d326cbd9fa9877bb93206048d0401e067e56a079ea3357bb2b6ba16fa804aca3",
+    "model/Identity.witness-NoLateReplayWitness.cfg": "18d77ce6540216cdec99e3c2e7c55c19d48eca0606d70e8d93b68976291f11b2",
+    "model/Identity.witness-NoRefTransferWitness.cfg": "d40e2a2dd2743bff538f61d56d0a48925643d0b40978bbbd61eea953d4eec2be",
+    "model/Movement.negative-paused-clock.cfg": "78e0210ee4666fba8fa8080e85e5ba1e7fd021952ed97cd8f6c058130ed47d89",
+    "model/Movement.negative-stale.cfg": "88ea40bf2482390bab835f4f48827e88d7efa209d4f2508d061def96b49a0555",
+    "model/Movement.negative-teleport.cfg": "d49b46936d9fd862067c6bd03c91a8c3d2087ced876b0a43006ede9dcf249b95",
+    "model/Movement.negative-type.cfg": "634b83bf6a0046e89be76549ce49a711765164b5f116c34dcefc25a13cdc262d",
+    "model/Movement.positive.cfg": "bd2b00e48abab0c892d6a7a32dbc831688711ba473fac0124fae106d6daea36a",
+    "model/Movement.tla": "717d63799f6b5a9dc6ade8997f6d0581cf17ad92e6eea2e35e54337ed3908c1c",
+    "model/Movement.witness-NoArrivalWitness.cfg": "c58dc00410de31a204de1bd5f19d744e4012e1b099e65672374596e14b2c3371",
+    "model/Movement.witness-NoRecoverArrivalWitness.cfg": "586b4af9836aa405ebee38366f7f37747674d20ea16d02756deb4cf5a38986f9",
+    "model/Movement.witness-NoReplacedArrivalWitness.cfg": "e7966158e1cc8083ee1daea91cba3fb6f0de02cb1b8b5d9486e5bdc3b74cbf44",
+    "model/MovementCommands.negative-epoch.cfg": "4bf04b8f69b39995397ed428138277638db638faca55d40c85a64db56093089c",
+    "model/MovementCommands.negative-late.cfg": "bf02ef908b671a20096514e2589ef22ec01795ff540c4066de547e26e9170e27",
+    "model/MovementCommands.negative-replay.cfg": "a507869447314bcfcf8fd18d7ec52005b65d3ef640281bb74c9937a07cc032c9",
+    "model/MovementCommands.negative-reset-water.cfg": "3c98947b6c343ea1e8f77a7c2c24293e428a7effea8bbf15e1035921927933e0",
+    "model/MovementCommands.negative-stop-no-fence.cfg": "876eba08ef9a9295f57f763821323f96fcb36a1ea28478d03eb428286032dce8",
+    "model/MovementCommands.negative-type.cfg": "b8ec86ea86ac2f351b8d3e723e1cbe1d88da2fbba1f4cb7b269bfc73bfbc5275",
+    "model/MovementCommands.positive-control.cfg": "ac5effffb75afb20ebc7c78e443b5eb7d9f5bdb8272ba2e5a2c06b813427874d",
+    "model/MovementCommands.positive-recovery.cfg": "4dedb7c8b3a7b4ceef7772e2ab8bee8a2ea687fc5c701f0394eb898a8bc96962",
+    "model/MovementCommands.positive.cfg": "0f460a3b7f475a076d08c5987a1d5d7f998aa45b0b89970efb61915746f5e54b",
+    "model/MovementCommands.tla": "2c43de977a9804e9a5da60d912ff91a51a8e4a83d93ef867648936c5c60b725d",
+    "model/MovementCommands.witness-NoAckRetryWitness.cfg": "e39550a0ba2d543b4e0a8991b6333fa50438c81b5f763f468c327bd448ae88b6",
+    "model/MovementCommands.witness-NoNewAfterStopWitness.cfg": "8809f182ccab0953426ddad3c07279822ff1b12d025fd61512b7947225409b3e",
+    "model/MovementCommands.witness-NoNewEpochAcceptedWitness.cfg": "a2d13b00c42356ef1800edc37b3f1fef6c5fd9424e8b9e6f3ae4393e42dedd74",
+    "model/MovementCommands.witness-NoOldEpochRejectedWitness.cfg": "c675b952551202d866166598c94f914c2505a486024a20c42fe2afd213c79fbd",
+    "model/MovementCommands.witness-NoOutOfOrderWitness.cfg": "2fbe28305548a9f2289881cd2edb84ffa8f381a4a3fdf1ae892c08a340e4dc84",
+    "model/MovementCommands.witness-NoRestartPreservesReceiptWitness.cfg": "1a2698a6c60b0eed746b323dcae772c310c598038c06aaed97d96a2706522439",
+    "model/MovementCommands.witness-NoStopRejectWitness.cfg": "2c814f0e9d125e6cd0f9f88850b3cb96c14b0bf5a34a6a786e8966a4e9941b99",
+    "model/MovementCommands.witness-NoUnknownRetryWitness.cfg": "18fc687fc57eb77d08af4ea1a9c3172bb3da4b76eab9211d80042117a8acab3c",
+    "model/MovementCommands.witness-control-block-ack-retry.cfg": "e55b6ce2f60c1053f2b730a131a246949c6516ee4892aa9a1961c949a62066da",
+    "model/MovementCommands.witness-control-block-new-after-stop.cfg": "47e87accc5b6c99a8a2bd73a5aae9c2db7554fc8a602bfc016a761f4cd8c3790",
+    "model/MovementCommands.witness-control-block-old-epoch-handle.cfg": "b4a5ca3ff8f9197b663630af63928648d48f1ff4aae550e3448ab39b5b8a86b4",
+    "model/Resources.negative-duplicate-owner.cfg": "268c3565952fffbf89c7eb3372e96750791cffdd8ed357c1e004915d3f91f13e",
+    "model/Resources.negative-premature.cfg": "f8a1d9f1e9913d0bc8d6231b90d3d1c82327fa83ae528d0604f10d3b332d2ab3",
+    "model/Resources.negative-private-reclaim.cfg": "1c4ba1c0da8a386b6d56a668ae5503de98d7f0f32ddc136f3052d141430d797c",
+    "model/Resources.negative-reclaim.cfg": "36c5086da165815aad96b16d543001e2cc5be224acd2213812194db0704b747a",
+    "model/Resources.negative-repeat-effect.cfg": "95c10efd0d7313a8f220da649a1a647319ab12016011b886c300791ef4686375",
+    "model/Resources.negative-type.cfg": "87c37e4fe4efa59e0af81a49cd5235e4efe579feb36c1aa2263bf49b5bfac80a",
+    "model/Resources.negative-unlock.cfg": "37858a933c041ee58654d83a3f8fce67e02f6e728c53caf25af46ac7f4fd64cf",
+    "model/Resources.positive-private.cfg": "523baa0da2643d524fe8423cb0db9f87188525c420187ab51fafc5498067da58",
+    "model/Resources.positive.cfg": "94bea9baffbf6e46738b6a9bb226545bb89158e3191ab1aade94a8ee067fe5b7",
+    "model/Resources.tla": "cc01070cf40619c25797f0d746c0d633e969a96f91d07d0c7d12450584bc55a8",
+    "model/Resources.witness-NoLockedRecoveryWitness.cfg": "12e4b0997e147094935f53a7d7f58a5da872f7835958f2c9c46c4da521aac67d",
+    "model/Resources.witness-NoReclaimReconnectWitness.cfg": "72f163945b953e4560a600acdfd382274cdce93b3a7934470dbe9bfecbb3e4ae",
+    "model/Resources.witness-NoReclaimWitness.cfg": "2b87c41925041f13b4715a3a5c281fd95f20fe9557b87ada1964fa647f4495c4",
+    "model/Scheduler.negative-overbook.cfg": "fb20d3b71c6d37b9db4d01e4cd45aadff6e95e9b75ded427d5073d8e739758ee",
+    "model/Scheduler.negative-starve.cfg": "68eb779b90a5377efe1445809541b3a7e5b68267524c4ccc1c3570730c7a555b",
+    "model/Scheduler.negative-type.cfg": "0713f931aad8115cd9a26683a71c9c5b75611c18300ded948dd360887f337c27",
+    "model/Scheduler.positive-1.cfg": "8e705f1b13da9bb4fd8e6ac61a375814f9bcfa4f60798304fab093e5b3730d45",
+    "model/Scheduler.positive-2.cfg": "08827ae58e05cd7d7f90f055c42e120528df7351161b5b5ae15c98339ab04f6b",
+    "model/Scheduler.tla": "d8cad30e00365e99c709666e46baaa46d2b4900c90b63e7666da452e9adaf3b7",
+    "model/Scheduler.witness-NoAllServedWitness.cfg": "8c50ce733a51d54b0fb711bb2047c33bfc06249011a4e5448e44c8d27def9e95",
+    "movement.json": "42176533ff1e4aa5d83574801503739e54947d962b7cf245f4877a21f70ab588",
+    "movementcommands.json": "80dfbc9504453224adf521a19246682c540a963ed6faad16f4478bd8a9a3c1f7",
+    "resources.json": "24bd99b300ec010a119d4dc6a0c720bdea69d6fe5f057eef0f5d213c2385efea",
+    "run_matrix.py": "984b49c7bd3bfe15a40a1144270a330cb97fc2585fff4f8fd07f44ba0b4809be",
+    "scheduler.json": "75edc3885ad3186c15cac5c5c531028ef73bb69808b1f700e6742ca15d624bc7",
+    "verify_matrix_contract.py": "8454b5308159267be8da2b30e7a8257aa2d2fd76bd391e23c2ba44dac9bd5891",
+    "../../.agents/skills/worker-tla/scripts/run_tlc.py": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a"
+  },
+  "reassessment": {
+    "checker_sha256": "984b49c7bd3bfe15a40a1144270a330cb97fc2585fff4f8fd07f44ba0b4809be",
+    "current_results": "audit-03/current-67-reassessment.json",
+    "current_results_sha256": "d2c05982770f8ddf515cf694d0415ec6d107266a820a6876167e68bc14543ebb",
+    "current_count": 67,
+    "reused_tlc_count": 47,
+    "new_tlc_count": 20,
+    "witness_trace_audit": "r3-witness-traces.json",
+    "witness_trace_audit_sha256": "3d03aa06b0c0a62cb737c698dac0f83083b63e66e4af36792c52417a1c8bb6dd",
+    "note": "r3只重跑MovementCommands全20项；其他5模型47项与a468内容身份一致，重审而非新运行。"
+  },
+  "inputs_scope": "当前实际根模块/配置/清单与原始快照逐项比对；标准模块来自同一摘要jar。合同与a468逐字一致；新增观测不改变Fault=none的业务动作规则。"
+}

@@ -1,0 +1,306 @@
+{
+  "schema_version": 1,
+  "feature": "ADV-001 Consent",
+  "tool": {
+    "version": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "model": {
+    "root": "model",
+    "entry": "Consent.tla"
+  },
+  "profiles": {
+    "positive": {
+      "config": "Consent.positive.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "SettlementAuthorized",
+        "SafetyDurable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "真实翠兰与悟空2实体，2位带路者，2安置点，2代提议，3种回应身份，最多2个乱序回调。",
+        "covered_interleavings_and_faults": [
+          "真实本人接受",
+          "同外貌实体不能替代安置",
+          "撤回/改约与旧到达",
+          "已安置事实不回滚"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "negative-type": {
+      "config": "Consent.negative-type.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "真实翠兰与悟空2实体，2位带路者，2安置点，2代提议，3种回应身份，最多2个乱序回调。",
+        "covered_interleavings_and_faults": [
+          "真实本人接受",
+          "同外貌实体不能替代安置",
+          "撤回/改约与旧到达",
+          "已安置事实不回滚"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "negative-impersonation": {
+      "config": "Consent.negative-impersonation.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "SettlementAuthorized"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "真实翠兰与悟空2实体，2位带路者，2安置点，2代提议，3种回应身份，最多2个乱序回调。",
+        "covered_interleavings_and_faults": [
+          "真实本人接受",
+          "同外貌实体不能替代安置",
+          "撤回/改约与旧到达",
+          "已安置事实不回滚"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "negative-fake": {
+      "config": "Consent.negative-fake.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "SettlementAuthorized"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "真实翠兰与悟空2实体，2位带路者，2安置点，2代提议，3种回应身份，最多2个乱序回调。",
+        "covered_interleavings_and_faults": [
+          "真实本人接受",
+          "同外貌实体不能替代安置",
+          "撤回/改约与旧到达",
+          "已安置事实不回滚"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "negative-stale": {
+      "config": "Consent.negative-stale.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "SettlementAuthorized"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "真实翠兰与悟空2实体，2位带路者，2安置点，2代提议，3种回应身份，最多2个乱序回调。",
+        "covered_interleavings_and_faults": [
+          "真实本人接受",
+          "同外貌实体不能替代安置",
+          "撤回/改约与旧到达",
+          "已安置事实不回滚"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "negative-rollback": {
+      "config": "Consent.negative-rollback.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "SafetyDurable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "真实翠兰与悟空2实体，2位带路者，2安置点，2代提议，3种回应身份，最多2个乱序回调。",
+        "covered_interleavings_and_faults": [
+          "真实本人接受",
+          "同外貌实体不能替代安置",
+          "撤回/改约与旧到达",
+          "已安置事实不回滚"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "witness-NoSafeWitness": {
+      "config": "Consent.witness-NoSafeWitness.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoSafeWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "真实翠兰与悟空2实体，2位带路者，2安置点，2代提议，3种回应身份，最多2个乱序回调。",
+        "covered_interleavings_and_faults": [
+          "真实本人接受",
+          "同外貌实体不能替代安置",
+          "撤回/改约与旧到达",
+          "已安置事实不回滚"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "witness-NoReplanSafeWitness": {
+      "config": "Consent.witness-NoReplanSafeWitness.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoReplanSafeWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "真实翠兰与悟空2实体，2位带路者，2安置点，2代提议，3种回应身份，最多2个乱序回调。",
+        "covered_interleavings_and_faults": [
+          "真实本人接受",
+          "同外貌实体不能替代安置",
+          "撤回/改约与旧到达",
+          "已安置事实不回滚"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "witness-NoWithdrawSafeWitness": {
+      "config": "Consent.witness-NoWithdrawSafeWitness.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWithdrawSafeWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "真实翠兰与悟空2实体，2位带路者，2安置点，2代提议，3种回应身份，最多2个乱序回调。",
+        "covered_interleavings_and_faults": [
+          "真实本人接受",
+          "同外貌实体不能替代安置",
+          "撤回/改约与旧到达",
+          "已安置事实不回滚"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "witness-control-block-replan": {
+      "config": "Consent.witness-control-block-replan.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoReplanSafeWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "真实翠兰与悟空2实体，2位带路者，2安置点，2代提议，3种回应身份，最多2个乱序回调。",
+        "covered_interleavings_and_faults": [
+          "真实本人接受",
+          "同外貌实体不能替代安置",
+          "撤回/改约与旧到达",
+          "已安置事实不回滚"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    }
+  }
+}

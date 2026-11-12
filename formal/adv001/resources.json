@@ -1,0 +1,384 @@
+{
+  "schema_version": 1,
+  "feature": "ADV-001 Resources",
+  "tool": {
+    "version": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "model": {
+    "root": "model",
+    "entry": "Resources.tla"
+  },
+  "profiles": {
+    "positive": {
+      "config": "Resources.positive.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "SingleOwner",
+        "EffectOnce",
+        "PreparedDurable",
+        "CooperationAuthorized",
+        "ReclaimAuthorized"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "2位玩家，1公共或私人物，1领回请求，1重放，1掉线/托管/重连，1恢复，2人合作准备。",
+        "covered_interleavings_and_faults": [
+          "唯一归属",
+          "同操作重放无第二效果",
+          "合作就位与锁定持久",
+          "离线公共物领回/重连竞争",
+          "私人和远距/宽限内拒绝"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "positive-private": {
+      "config": "Resources.positive-private.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "SingleOwner",
+        "EffectOnce",
+        "PreparedDurable",
+        "CooperationAuthorized",
+        "ReclaimAuthorized"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "2位玩家，1公共或私人物，1领回请求，1重放，1掉线/托管/重连，1恢复，2人合作准备。",
+        "covered_interleavings_and_faults": [
+          "唯一归属",
+          "同操作重放无第二效果",
+          "合作就位与锁定持久",
+          "离线公共物领回/重连竞争",
+          "私人和远距/宽限内拒绝"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "negative-type": {
+      "config": "Resources.negative-type.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "2位玩家，1公共或私人物，1领回请求，1重放，1掉线/托管/重连，1恢复，2人合作准备。",
+        "covered_interleavings_and_faults": [
+          "唯一归属",
+          "同操作重放无第二效果",
+          "合作就位与锁定持久",
+          "离线公共物领回/重连竞争",
+          "私人和远距/宽限内拒绝"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "negative-duplicate-owner": {
+      "config": "Resources.negative-duplicate-owner.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "SingleOwner"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "2位玩家，1公共或私人物，1领回请求，1重放，1掉线/托管/重连，1恢复，2人合作准备。",
+        "covered_interleavings_and_faults": [
+          "唯一归属",
+          "同操作重放无第二效果",
+          "合作就位与锁定持久",
+          "离线公共物领回/重连竞争",
+          "私人和远距/宽限内拒绝"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "negative-repeat-effect": {
+      "config": "Resources.negative-repeat-effect.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "EffectOnce"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "2位玩家，1公共或私人物，1领回请求，1重放，1掉线/托管/重连，1恢复，2人合作准备。",
+        "covered_interleavings_and_faults": [
+          "唯一归属",
+          "同操作重放无第二效果",
+          "合作就位与锁定持久",
+          "离线公共物领回/重连竞争",
+          "私人和远距/宽限内拒绝"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "negative-unlock": {
+      "config": "Resources.negative-unlock.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "PreparedDurable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "2位玩家，1公共或私人物，1领回请求，1重放，1掉线/托管/重连，1恢复，2人合作准备。",
+        "covered_interleavings_and_faults": [
+          "唯一归属",
+          "同操作重放无第二效果",
+          "合作就位与锁定持久",
+          "离线公共物领回/重连竞争",
+          "私人和远距/宽限内拒绝"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "negative-premature": {
+      "config": "Resources.negative-premature.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "CooperationAuthorized"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "2位玩家，1公共或私人物，1领回请求，1重放，1掉线/托管/重连，1恢复，2人合作准备。",
+        "covered_interleavings_and_faults": [
+          "唯一归属",
+          "同操作重放无第二效果",
+          "合作就位与锁定持久",
+          "离线公共物领回/重连竞争",
+          "私人和远距/宽限内拒绝"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "negative-reclaim": {
+      "config": "Resources.negative-reclaim.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "ReclaimAuthorized"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "2位玩家，1公共或私人物，1领回请求，1重放，1掉线/托管/重连，1恢复，2人合作准备。",
+        "covered_interleavings_and_faults": [
+          "唯一归属",
+          "同操作重放无第二效果",
+          "合作就位与锁定持久",
+          "离线公共物领回/重连竞争",
+          "私人和远距/宽限内拒绝"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "negative-private-reclaim": {
+      "config": "Resources.negative-private-reclaim.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "ReclaimAuthorized"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "2位玩家，1公共或私人物，1领回请求，1重放，1掉线/托管/重连，1恢复，2人合作准备。",
+        "covered_interleavings_and_faults": [
+          "唯一归属",
+          "同操作重放无第二效果",
+          "合作就位与锁定持久",
+          "离线公共物领回/重连竞争",
+          "私人和远距/宽限内拒绝"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "witness-NoReclaimWitness": {
+      "config": "Resources.witness-NoReclaimWitness.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoReclaimWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "2位玩家，1公共或私人物，1领回请求，1重放，1掉线/托管/重连，1恢复，2人合作准备。",
+        "covered_interleavings_and_faults": [
+          "唯一归属",
+          "同操作重放无第二效果",
+          "合作就位与锁定持久",
+          "离线公共物领回/重连竞争",
+          "私人和远距/宽限内拒绝"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "witness-NoLockedRecoveryWitness": {
+      "config": "Resources.witness-NoLockedRecoveryWitness.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoLockedRecoveryWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "2位玩家，1公共或私人物，1领回请求，1重放，1掉线/托管/重连，1恢复，2人合作准备。",
+        "covered_interleavings_and_faults": [
+          "唯一归属",
+          "同操作重放无第二效果",
+          "合作就位与锁定持久",
+          "离线公共物领回/重连竞争",
+          "私人和远距/宽限内拒绝"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "witness-NoReclaimReconnectWitness": {
+      "config": "Resources.witness-NoReclaimReconnectWitness.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoReclaimReconnectWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "2位玩家，1公共或私人物，1领回请求，1重放，1掉线/托管/重连，1恢复，2人合作准备。",
+        "covered_interleavings_and_faults": [
+          "唯一归属",
+          "同操作重放无第二效果",
+          "合作就位与锁定持久",
+          "离线公共物领回/重连竞争",
+          "私人和远距/宽限内拒绝"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    }
+  }
+}
