@@ -8,6 +8,10 @@
 
 迁移 `004-spatial.sql` 只增加命令水位与内部意图表，不重写既有会话、日志或内容快照。最终世界、事件、Receipt、outbox 与水位均沿用 `AuthorityRuntime.locked` 的 PostgreSQL 行锁事务。`spatial_command_sources` 是命令元数据，不由客户端世界位置重建。灰盒、地图、章节、变体、reducer、seed 和内容摘要固定在 Session 中；旧日志继续走原解释器。
 
+迁移 [005-spatial-text-encoding.sql](migrations/005-spatial-text-encoding.sql) 为 `sessions.state`、`world_events.event`、`command_nonces.response` 各增加一个可空文本编码标记，既有 JSONB 行保持原值。空间协议允许正文包含 U+0000；含该码点的文档通过 [jsonb-text.mjs](jsonb-text.mjs) 将所有字符串中的反斜杠编码为两个反斜杠、NUL 编码为反斜杠加 `0`，并在独立列标记 `nul-escaped-v1`。键和值均按标记解码，普通文档和标记为空的历史行按原文读取，因此字面 `\0`、字面 `\u0000`、真实 NUL 可区分。编码保留其他 Unicode 码点及其组合顺序；协议、原请求摘要和 Receipt 格式沿用原定义。
+
+事件、世界状态及其编码标记在原 Session 事务提交；含历史正文的控制 nonce 快照也使用相同编码。投影、同步、回放、启动恢复和原 nonce 重试先恢复原字符串，SQL 选择用的 capability、phase、ID、序号等受约束元数据保持原值。旧 region 会话继续使用原存储与解释器，并可与编码后的空间会话共存。迁移可重复执行；读写编码行的服务必须带有该解码器，因此升级按既有单权威进程边界替换服务。已写入编码行后直接运行旧服务二进制可能把转义字面量当正文；本次没有实现旧二进制混写或自动降级迁移。
+
 服务对空间会话每 200ms 做维护，旧 region 会话与连接心跳保留 1000ms 周期。动作发生前也先推进同一权威检查点。少于两位有效在线真人时，剧情场景时间、移动与合作效果暂停；宽限和鉴权仍使用服务端时间。恢复不会把宕机时间补进剧情。服务端将几何路线转换为整数脚底位置，人物互不形成硬碰撞；当前导航使用点位置、多边形与可配置网格，正式美术半径/扫掠验证属于正式地图集成。
 
 ## 客户端入口
@@ -35,6 +39,16 @@ socket.emit('control.resume', JSON.stringify(request), control => {
 ```
 
 重新连接后合法 resume 或主动 take 提高 epoch。原连接仍持有控制时，另一个连接 resume 得到 `CONTROL_HELD`。同一连接同一来源的 resume 可以保留 epoch，因此不能无条件重新创建序号源。
+
+空间连接的请求选择、事务提交和本地安装分别裁定，不能把 COMMIT 响应已返回或已经安装当作唯一的选择围栏：
+
+| 阶段 | 权威依据与边界 |
+| --- | --- |
+| 请求与候选准备 | 跨会话选择分配本连接的代次，同一选择代次内的同会话请求仍按实际提交顺序处理。合法的新视图候选登记入事务时，推进单调的 `viewScopeFence`；它只使旧在途选择失效，不表示世界已经提交。旧代次在行锁内或候选登记时得到 `RESYNC_REQUIRED`，事务回滚，不旋转当前持久视图。 |
+| 事务提交 | 当前 viewId、epoch 和事件只由 PostgreSQL 的 Session 事务决定。新选择已提交但驱动响应在途时，准备阶段的围栏已经生效，旧请求不能再破坏其视图。新选择回滚会保留已有安装，但不重新授权旧在途请求；原代次重试或再次选择仍可前进。 |
+| 本地安装 | COMMIT 后短暂重取 Session 行锁，按当前持久 viewId、epoch、读权、活跃连接及已安装代次核验。旧回调不能覆盖已安装的新视图、切回旧会话或复活已关闭连接；不比较两个会话的 sessionSeq。 |
+
+原控制 nonce 查询返回已提交的原结果；需要恢复安装时沿用原 scope，不把历史查询/恢复当作新选择推进围栏。这样既可恢复安装和断线交还信息，也不会再次提高 epoch 或挤掉在途的新选择。安装在途或暂时失败时，发布器继续服务其他读者，并保留待发 outbox。
 
 ```js
 import { MovementCommandSource, parseSpatial } from '../protocol/spatial.mjs';
@@ -82,6 +96,8 @@ socket.emit('player.action.request', originalRaw, receipt => {});
 node protocol/scripts/generate-spatial.mjs --check
 node --test protocol/tests/spatial.test.mjs backend/tests/spatial-geometry.test.mjs
 node --test backend/tests/spatial-runtime.test.mjs backend/tests/spatial-network.test.mjs
+node --test backend/tests/spatial-commit-order.test.mjs
+node --test backend/tests/spatial-text-persistence.test.mjs
 ```
 
-后两组是不同证据：第一组为纯校验/几何，第二组使用隔离真实 PostgreSQL 以及真实 HTTP/Socket.IO；没有以内存替身代替数据库。五连接短程网络检查不代替 15 分钟集成、真实浏览器表现、正式地图或完整首章验收。
+校验/几何与运行检查分别取证：空间运行、网络、提交顺序和文本持久化检查使用隔离真实 PostgreSQL，网络与提交顺序检查还包含真实 HTTP/Socket.IO 边界。文本检查覆盖合法 NUL、字面转义、Unicode 边界、原 Receipt/nonce、恢复回放和历史表结构升级。没有以内存替身代替数据库。五连接短程网络检查不代替 15 分钟集成、真实浏览器表现、正式地图或完整首章验收。

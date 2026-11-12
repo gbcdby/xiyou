@@ -39,7 +39,7 @@ export class SpatialSessionClient {
   #source: MovementCommandSource | null = null; #queued: QueuedAction | null = null; #controlBusy = false;
   #pendingControl: { request: ControlRequestV2; raw: string; serial: number } | null = null;
   #heartbeat: ReturnType<typeof setInterval> | null = null; #retryTimer: ReturnType<typeof setTimeout> | null = null;
-  #syncKey = '';
+  #syncKey = ''; #syncRevision = 0;
   #displayedArrival = '';
   constructor(api: ReceiptReader, connect: ConnectLink, options: Options = {}) {
     this.#api = api; this.#connect = connect;
@@ -126,16 +126,23 @@ export class SpatialSessionClient {
   }
   async sync() {
     const snapshot = this.#view.snapshot; const link = this.#link; const serial = this.#serial; const generation = this.#view.generation;
-    const key = `${serial}:${generation}`; if (!snapshot || !link?.connected || this.#syncKey === key) return;
+    const revision = this.#syncRevision; const key = `${serial}:${generation}:${revision}`;
+    // 控制事务会替换服务端视图；结果未决时，不用旧视图补发打断同一连接上的原 nonce。
+    if (!snapshot || !link?.connected || this.#pendingControl || this.#syncKey === key) return;
     this.#syncKey = key;
     try {
       for (let page = 0; page < 8; page++) {
+        if (revision !== this.#syncRevision || this.#pendingControl) break;
         const request = this.#view.syncRequest(); if (!request) break;
         const value = await link.request('sync.request', canonicalize(request));
-        if (serial !== this.#serial || generation !== this.#view.generation) return;
+        if (serial !== this.#serial) return;
+        // 访问失效不属于可丢弃的旧视图结果，必须继续立即撤销本连接的授权。
+        const error = asError(value);
+        if (error && ['UNAUTHENTICATED', 'FORBIDDEN', 'SESSION_GONE', 'UPGRADE_REQUIRED'].includes(error.code)) { this.#handleError(value); return; }
+        if (generation !== this.#view.generation || revision !== this.#syncRevision) return;
         if (this.#batch(value, generation) !== 'applied') break;
       }
-    } catch { if (serial === this.#serial && generation === this.#view.generation) { this.#message = '状态同步暂未完成，当前位置仍以上次服务器确认为准。'; this.#publish(); } }
+    } catch { if (serial === this.#serial && generation === this.#view.generation && revision === this.#syncRevision) { this.#message = '状态同步暂未完成，当前位置仍以上次服务器确认为准。'; this.#publish(); } }
     finally { if (this.#syncKey === key) this.#syncKey = ''; }
   }
   #ready(): SnapshotV2 {
@@ -207,20 +214,24 @@ export class SpatialSessionClient {
     this.#queued = null; const type = kind === 'take' ? 'control.take' : 'control.resume';
     const old = this.#pendingControl;
     const request = old?.serial === serial && old.request.type === type ? old.request : validateSpatial('ControlRequestV2', { schemaVersion: 2, type, sessionId: snapshot.sessionId, viewId: snapshot.viewId, actorRef: snapshot.projection.self.entityRef, nonce: this.#options.id() });
-    const raw = old?.request === request ? old.raw : canonicalize(request); this.#pendingControl = { request, raw, serial }; this.#controlBusy = true; this.#publish();
+    const raw = old?.request === request ? old.raw : canonicalize(request); this.#pendingControl = { request, raw, serial }; this.#syncRevision++; this.#controlBusy = true; this.#publish();
     try {
       const value = await link.request(type, raw); if (serial !== this.#serial || generation !== this.#view.generation) return;
       const error = asError(value); if (error) { if (error.code !== 'OUTCOME_UNKNOWN') this.#pendingControl = null; this.#handleError(value); return; }
       const response = validateSpatial('ControlResponseV2', value);
       if (response.sessionId !== snapshot.sessionId || response.nonce !== request.nonce || response.snapshot.sessionId !== snapshot.sessionId || response.snapshot.projection.self.controlEpoch !== response.controlEpoch) throw new Error('控制响应身份不匹配。');
+      const current = this.#view.snapshot;
+      if (!current || current.projection.phase !== 'Running' || compareDecimal(current.projection.self.controlEpoch, response.controlEpoch) > 0) {
+        this.#pendingControl = null; this.#message = '控制状态已经更新，旧确认未恢复输入。'; return;
+      }
       const knownSource = this.#source?.controlEpoch === response.controlEpoch;
       const newEpoch = compareDecimal(response.controlEpoch, snapshot.projection.self.controlEpoch) > 0;
       const next = this.#view.begin(this.#sessionId);
       if (this.#view.acceptSnapshot(response.snapshot, next) !== 'applied') throw new Error('新控制视图无效。');
       if (!knownSource) this.#source = newEpoch ? new MovementCommandSource(response.controlEpoch) : null;
-      this.#pendingControl = null; this.#message = this.#source ? '已恢复本人控制。' : '本地输入序号已丢失，请明确接管以建立新的控制周期。'; this.#publish(); void this.sync();
+      this.#pendingControl = null; this.#message = this.#source ? '已恢复本人控制。' : '本地输入序号已丢失，请明确接管以建立新的控制周期。'; this.#publish();
     } catch { if (serial === this.#serial) { this.#message = '控制结果待确认，再次点击会重试原请求。'; this.#publish(); } }
-    finally { if (serial === this.#serial) { this.#controlBusy = false; this.#publish(); } }
+    finally { if (serial === this.#serial) { this.#controlBusy = false; this.#publish(); void this.sync(); } }
   }
   #drainQueued() {
     const queued = this.#queued; const snapshot = this.#view.snapshot; if (!queued || !snapshot) return;
