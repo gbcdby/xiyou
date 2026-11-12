@@ -1,5 +1,7 @@
 # ADV-001：无战斗多人叙事冒险与首章高老庄
 
+> **实施接续（2026-11-12）：**用户已要求按 auto 模式完成 [#23](https://github.com/gbcdby/xiyou/issues/23)。下文“本次仅 A0、不实施”等描述保留 v0.2 设计轮的历史范围，不再阻止本次正式实施。共用技术合同与有限模型从 [#27](https://github.com/gbcdby/xiyou/issues/27) / [adv-protocol-v1](adv-protocol.md) 进入；当前合同、审查及实现状态分别读取关联记录，产品验收不因启动自动模式而降低。
+
 ## 0. 状态与阅读入口
 
 | 项目 | 内容 |

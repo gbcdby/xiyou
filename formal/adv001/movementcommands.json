@@ -1,0 +1,626 @@
+{
+  "schema_version": 1,
+  "feature": "ADV-001 MovementCommands",
+  "tool": {
+    "version": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "model": {
+    "root": "model",
+    "entry": "MovementCommands.tla"
+  },
+  "profiles": {
+    "positive": {
+      "config": "MovementCommands.positive.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "CommandOrder",
+        "StopFence",
+        "ReceiptStable",
+        "EpochFence"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "1唯一控制源，order配置4命令(甲/乙/停止/新丙)，control/recovery配置3命令；发出/处理/ACK独立；1请求丢失、1ACK丢失、1原样重试、1换控或重启。",
+        "covered_interleavings_and_faults": [
+          "同epoch较旧命令迟到首次处理",
+          "未知请求原样重试",
+          "停止持久围栏与之后合法新移动",
+          "ACK丢失后的幂等结果",
+          "控制/恢复epoch隔离与Receipt持久"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "positive-control": {
+      "config": "MovementCommands.positive-control.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "CommandOrder",
+        "StopFence",
+        "ReceiptStable",
+        "EpochFence"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "1唯一控制源，order配置4命令(甲/乙/停止/新丙)，control/recovery配置3命令；发出/处理/ACK独立；1请求丢失、1ACK丢失、1原样重试、1换控或重启。",
+        "covered_interleavings_and_faults": [
+          "同epoch较旧命令迟到首次处理",
+          "未知请求原样重试",
+          "停止持久围栏与之后合法新移动",
+          "ACK丢失后的幂等结果",
+          "控制/恢复epoch隔离与Receipt持久"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "positive-recovery": {
+      "config": "MovementCommands.positive-recovery.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "CommandOrder",
+        "StopFence",
+        "ReceiptStable",
+        "EpochFence"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "1唯一控制源，order配置4命令(甲/乙/停止/新丙)，control/recovery配置3命令；发出/处理/ACK独立；1请求丢失、1ACK丢失、1原样重试、1换控或重启。",
+        "covered_interleavings_and_faults": [
+          "同epoch较旧命令迟到首次处理",
+          "未知请求原样重试",
+          "停止持久围栏与之后合法新移动",
+          "ACK丢失后的幂等结果",
+          "控制/恢复epoch隔离与Receipt持久"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "negative-type": {
+      "config": "MovementCommands.negative-type.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "1唯一控制源，order配置4命令(甲/乙/停止/新丙)，control/recovery配置3命令；发出/处理/ACK独立；1请求丢失、1ACK丢失、1原样重试、1换控或重启。",
+        "covered_interleavings_and_faults": [
+          "同epoch较旧命令迟到首次处理",
+          "未知请求原样重试",
+          "停止持久围栏与之后合法新移动",
+          "ACK丢失后的幂等结果",
+          "控制/恢复epoch隔离与Receipt持久"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "negative-late": {
+      "config": "MovementCommands.negative-late.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "CommandOrder"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "1唯一控制源，order配置4命令(甲/乙/停止/新丙)，control/recovery配置3命令；发出/处理/ACK独立；1请求丢失、1ACK丢失、1原样重试、1换控或重启。",
+        "covered_interleavings_and_faults": [
+          "同epoch较旧命令迟到首次处理",
+          "未知请求原样重试",
+          "停止持久围栏与之后合法新移动",
+          "ACK丢失后的幂等结果",
+          "控制/恢复epoch隔离与Receipt持久"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "negative-stop-no-fence": {
+      "config": "MovementCommands.negative-stop-no-fence.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "StopFence"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "1唯一控制源，order配置4命令(甲/乙/停止/新丙)，control/recovery配置3命令；发出/处理/ACK独立；1请求丢失、1ACK丢失、1原样重试、1换控或重启。",
+        "covered_interleavings_and_faults": [
+          "同epoch较旧命令迟到首次处理",
+          "未知请求原样重试",
+          "停止持久围栏与之后合法新移动",
+          "ACK丢失后的幂等结果",
+          "控制/恢复epoch隔离与Receipt持久"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "negative-replay": {
+      "config": "MovementCommands.negative-replay.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "ReceiptStable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "1唯一控制源，order配置4命令(甲/乙/停止/新丙)，control/recovery配置3命令；发出/处理/ACK独立；1请求丢失、1ACK丢失、1原样重试、1换控或重启。",
+        "covered_interleavings_and_faults": [
+          "同epoch较旧命令迟到首次处理",
+          "未知请求原样重试",
+          "停止持久围栏与之后合法新移动",
+          "ACK丢失后的幂等结果",
+          "控制/恢复epoch隔离与Receipt持久"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "negative-epoch": {
+      "config": "MovementCommands.negative-epoch.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "EpochFence"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "1唯一控制源，order配置4命令(甲/乙/停止/新丙)，control/recovery配置3命令；发出/处理/ACK独立；1请求丢失、1ACK丢失、1原样重试、1换控或重启。",
+        "covered_interleavings_and_faults": [
+          "同epoch较旧命令迟到首次处理",
+          "未知请求原样重试",
+          "停止持久围栏与之后合法新移动",
+          "ACK丢失后的幂等结果",
+          "控制/恢复epoch隔离与Receipt持久"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "negative-reset-water": {
+      "config": "MovementCommands.negative-reset-water.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "CommandOrder"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "1唯一控制源，order配置4命令(甲/乙/停止/新丙)，control/recovery配置3命令；发出/处理/ACK独立；1请求丢失、1ACK丢失、1原样重试、1换控或重启。",
+        "covered_interleavings_and_faults": [
+          "同epoch较旧命令迟到首次处理",
+          "未知请求原样重试",
+          "停止持久围栏与之后合法新移动",
+          "ACK丢失后的幂等结果",
+          "控制/恢复epoch隔离与Receipt持久"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "witness-NoOutOfOrderWitness": {
+      "config": "MovementCommands.witness-NoOutOfOrderWitness.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoOutOfOrderWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "1唯一控制源，order配置4命令(甲/乙/停止/新丙)，control/recovery配置3命令；发出/处理/ACK独立；1请求丢失、1ACK丢失、1原样重试、1换控或重启。",
+        "covered_interleavings_and_faults": [
+          "同epoch较旧命令迟到首次处理",
+          "未知请求原样重试",
+          "停止持久围栏与之后合法新移动",
+          "ACK丢失后的幂等结果",
+          "控制/恢复epoch隔离与Receipt持久"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "witness-NoUnknownRetryWitness": {
+      "config": "MovementCommands.witness-NoUnknownRetryWitness.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoUnknownRetryWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "1唯一控制源，order配置4命令(甲/乙/停止/新丙)，control/recovery配置3命令；发出/处理/ACK独立；1请求丢失、1ACK丢失、1原样重试、1换控或重启。",
+        "covered_interleavings_and_faults": [
+          "同epoch较旧命令迟到首次处理",
+          "未知请求原样重试",
+          "停止持久围栏与之后合法新移动",
+          "ACK丢失后的幂等结果",
+          "控制/恢复epoch隔离与Receipt持久"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "witness-NoStopRejectWitness": {
+      "config": "MovementCommands.witness-NoStopRejectWitness.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoStopRejectWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "1唯一控制源，order配置4命令(甲/乙/停止/新丙)，control/recovery配置3命令；发出/处理/ACK独立；1请求丢失、1ACK丢失、1原样重试、1换控或重启。",
+        "covered_interleavings_and_faults": [
+          "同epoch较旧命令迟到首次处理",
+          "未知请求原样重试",
+          "停止持久围栏与之后合法新移动",
+          "ACK丢失后的幂等结果",
+          "控制/恢复epoch隔离与Receipt持久"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "witness-NoAckRetryWitness": {
+      "config": "MovementCommands.witness-NoAckRetryWitness.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoAckRetryWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "1唯一控制源，order配置4命令(甲/乙/停止/新丙)，control/recovery配置3命令；发出/处理/ACK独立；1请求丢失、1ACK丢失、1原样重试、1换控或重启。",
+        "covered_interleavings_and_faults": [
+          "同epoch较旧命令迟到首次处理",
+          "未知请求原样重试",
+          "停止持久围栏与之后合法新移动",
+          "ACK丢失后的幂等结果",
+          "控制/恢复epoch隔离与Receipt持久"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "witness-NoNewAfterStopWitness": {
+      "config": "MovementCommands.witness-NoNewAfterStopWitness.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoNewAfterStopWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "1唯一控制源，order配置4命令(甲/乙/停止/新丙)，control/recovery配置3命令；发出/处理/ACK独立；1请求丢失、1ACK丢失、1原样重试、1换控或重启。",
+        "covered_interleavings_and_faults": [
+          "同epoch较旧命令迟到首次处理",
+          "未知请求原样重试",
+          "停止持久围栏与之后合法新移动",
+          "ACK丢失后的幂等结果",
+          "控制/恢复epoch隔离与Receipt持久"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "witness-NoOldEpochRejectedWitness": {
+      "config": "MovementCommands.witness-NoOldEpochRejectedWitness.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoOldEpochRejectedWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "1唯一控制源，order配置4命令(甲/乙/停止/新丙)，control/recovery配置3命令；发出/处理/ACK独立；1请求丢失、1ACK丢失、1原样重试、1换控或重启。",
+        "covered_interleavings_and_faults": [
+          "同epoch较旧命令迟到首次处理",
+          "未知请求原样重试",
+          "停止持久围栏与之后合法新移动",
+          "ACK丢失后的幂等结果",
+          "控制/恢复epoch隔离与Receipt持久"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "witness-NoNewEpochAcceptedWitness": {
+      "config": "MovementCommands.witness-NoNewEpochAcceptedWitness.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoNewEpochAcceptedWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "1唯一控制源，order配置4命令(甲/乙/停止/新丙)，control/recovery配置3命令；发出/处理/ACK独立；1请求丢失、1ACK丢失、1原样重试、1换控或重启。",
+        "covered_interleavings_and_faults": [
+          "同epoch较旧命令迟到首次处理",
+          "未知请求原样重试",
+          "停止持久围栏与之后合法新移动",
+          "ACK丢失后的幂等结果",
+          "控制/恢复epoch隔离与Receipt持久"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "witness-NoRestartPreservesReceiptWitness": {
+      "config": "MovementCommands.witness-NoRestartPreservesReceiptWitness.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoRestartPreservesReceiptWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "1唯一控制源，order配置4命令(甲/乙/停止/新丙)，control/recovery配置3命令；发出/处理/ACK独立；1请求丢失、1ACK丢失、1原样重试、1换控或重启。",
+        "covered_interleavings_and_faults": [
+          "同epoch较旧命令迟到首次处理",
+          "未知请求原样重试",
+          "停止持久围栏与之后合法新移动",
+          "ACK丢失后的幂等结果",
+          "控制/恢复epoch隔离与Receipt持久"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "witness-control-block-ack-retry": {
+      "config": "MovementCommands.witness-control-block-ack-retry.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoAckRetryWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "1唯一控制源，order配置4命令(甲/乙/停止/新丙)，control/recovery配置3命令；发出/处理/ACK独立；1请求丢失、1ACK丢失、1原样重试、1换控或重启。",
+        "covered_interleavings_and_faults": [
+          "同epoch较旧命令迟到首次处理",
+          "未知请求原样重试",
+          "停止持久围栏与之后合法新移动",
+          "ACK丢失后的幂等结果",
+          "控制/恢复epoch隔离与Receipt持久"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "witness-control-block-new-after-stop": {
+      "config": "MovementCommands.witness-control-block-new-after-stop.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoNewAfterStopWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "1唯一控制源，order配置4命令(甲/乙/停止/新丙)，control/recovery配置3命令；发出/处理/ACK独立；1请求丢失、1ACK丢失、1原样重试、1换控或重启。",
+        "covered_interleavings_and_faults": [
+          "同epoch较旧命令迟到首次处理",
+          "未知请求原样重试",
+          "停止持久围栏与之后合法新移动",
+          "ACK丢失后的幂等结果",
+          "控制/恢复epoch隔离与Receipt持久"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "witness-control-block-old-epoch-handle": {
+      "config": "MovementCommands.witness-control-block-old-epoch-handle.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoOldEpochRejectedWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "1唯一控制源，order配置4命令(甲/乙/停止/新丙)，control/recovery配置3命令；发出/处理/ACK独立；1请求丢失、1ACK丢失、1原样重试、1换控或重启。",
+        "covered_interleavings_and_faults": [
+          "同epoch较旧命令迟到首次处理",
+          "未知请求原样重试",
+          "停止持久围栏与之后合法新移动",
+          "ACK丢失后的幂等结果",
+          "控制/恢复epoch隔离与Receipt持久"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    }
+  }
+}

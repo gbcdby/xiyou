@@ -1,0 +1,337 @@
+{
+  "schema_version": 1,
+  "feature": "ADV-001 Identity",
+  "tool": {
+    "version": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "model": {
+    "root": "model",
+    "entry": "Identity.tla"
+  },
+  "profiles": {
+    "positive": {
+      "config": "Identity.positive.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "NoIdentityLeak",
+        "EventAudienceFixed",
+        "HistoryAsObserved",
+        "ReferenceTargetStable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "2观察者，真实悟空/翠兰2实体，1次变身/获知/视图重建，1事件，8类输出出口，1次引用操作。",
+        "covered_interleavings_and_faults": [
+          "按观察者各出口隐藏真身",
+          "发生时受众",
+          "历史按当时视角保留",
+          "同名不重定向及过期引用拒绝"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "negative-type": {
+      "config": "Identity.negative-type.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "2观察者，真实悟空/翠兰2实体，1次变身/获知/视图重建，1事件，8类输出出口，1次引用操作。",
+        "covered_interleavings_and_faults": [
+          "按观察者各出口隐藏真身",
+          "发生时受众",
+          "历史按当时视角保留",
+          "同名不重定向及过期引用拒绝"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "negative-raw-id": {
+      "config": "Identity.negative-raw-id.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoIdentityLeak"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "2观察者，真实悟空/翠兰2实体，1次变身/获知/视图重建，1事件，8类输出出口，1次引用操作。",
+        "covered_interleavings_and_faults": [
+          "按观察者各出口隐藏真身",
+          "发生时受众",
+          "历史按当时视角保留",
+          "同名不重定向及过期引用拒绝"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "negative-true-name": {
+      "config": "Identity.negative-true-name.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoIdentityLeak"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "2观察者，真实悟空/翠兰2实体，1次变身/获知/视图重建，1事件，8类输出出口，1次引用操作。",
+        "covered_interleavings_and_faults": [
+          "按观察者各出口隐藏真身",
+          "发生时受众",
+          "历史按当时视角保留",
+          "同名不重定向及过期引用拒绝"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "negative-late-audience": {
+      "config": "Identity.negative-late-audience.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "EventAudienceFixed"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "2观察者，真实悟空/翠兰2实体，1次变身/获知/视图重建，1事件，8类输出出口，1次引用操作。",
+        "covered_interleavings_and_faults": [
+          "按观察者各出口隐藏真身",
+          "发生时受众",
+          "历史按当时视角保留",
+          "同名不重定向及过期引用拒绝"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "negative-rewrite-history": {
+      "config": "Identity.negative-rewrite-history.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "HistoryAsObserved"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "2观察者，真实悟空/翠兰2实体，1次变身/获知/视图重建，1事件，8类输出出口，1次引用操作。",
+        "covered_interleavings_and_faults": [
+          "按观察者各出口隐藏真身",
+          "发生时受众",
+          "历史按当时视角保留",
+          "同名不重定向及过期引用拒绝"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "negative-by-name": {
+      "config": "Identity.negative-by-name.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "ReferenceTargetStable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "2观察者，真实悟空/翠兰2实体，1次变身/获知/视图重建，1事件，8类输出出口，1次引用操作。",
+        "covered_interleavings_and_faults": [
+          "按观察者各出口隐藏真身",
+          "发生时受众",
+          "历史按当时视角保留",
+          "同名不重定向及过期引用拒绝"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "negative-stale-ref": {
+      "config": "Identity.negative-stale-ref.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "ReferenceTargetStable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "2观察者，真实悟空/翠兰2实体，1次变身/获知/视图重建，1事件，8类输出出口，1次引用操作。",
+        "covered_interleavings_and_faults": [
+          "按观察者各出口隐藏真身",
+          "发生时受众",
+          "历史按当时视角保留",
+          "同名不重定向及过期引用拒绝"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "witness-NoDisguisedHistoryWitness": {
+      "config": "Identity.witness-NoDisguisedHistoryWitness.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoDisguisedHistoryWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "2观察者，真实悟空/翠兰2实体，1次变身/获知/视图重建，1事件，8类输出出口，1次引用操作。",
+        "covered_interleavings_and_faults": [
+          "按观察者各出口隐藏真身",
+          "发生时受众",
+          "历史按当时视角保留",
+          "同名不重定向及过期引用拒绝"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "witness-NoLateReplayWitness": {
+      "config": "Identity.witness-NoLateReplayWitness.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoLateReplayWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "2观察者，真实悟空/翠兰2实体，1次变身/获知/视图重建，1事件，8类输出出口，1次引用操作。",
+        "covered_interleavings_and_faults": [
+          "按观察者各出口隐藏真身",
+          "发生时受众",
+          "历史按当时视角保留",
+          "同名不重定向及过期引用拒绝"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    },
+    "witness-NoRefTransferWitness": {
+      "config": "Identity.witness-NoRefTransferWitness.cfg",
+      "timeout_seconds": 90,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoRefTransferWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": "2观察者，真实悟空/翠兰2实体，1次变身/获知/视图重建，1事件，8类输出出口，1次引用操作。",
+        "covered_interleavings_and_faults": [
+          "按观察者各出口隐藏真身",
+          "发生时受众",
+          "历史按当时视角保留",
+          "同名不重定向及过期引用拒绝"
+        ],
+        "excluded_behaviors": [
+          "真实数据库/网络/解析/几何/自然语言/完整章节",
+          "任意规模及无限次故障",
+          "所有子模型的完整组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单Session原子权威提交；已提交状态可靠保留；有限模型不是实现证明。"
+      ]
+    }
+  }
+}

@@ -1,0 +1,843 @@
+[
+  {
+    "model": "MovementCommands",
+    "profile": "positive",
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_raw_exit": 0,
+    "distinct_state_min": 100,
+    "target_invariants": [
+      "TypeOK",
+      "CommandOrder",
+      "StopFence",
+      "ReceiptStable",
+      "EpochFence"
+    ],
+    "target_properties": [],
+    "classification": "positive"
+  },
+  {
+    "model": "MovementCommands",
+    "profile": "positive-control",
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_raw_exit": 0,
+    "distinct_state_min": 100,
+    "target_invariants": [
+      "TypeOK",
+      "CommandOrder",
+      "StopFence",
+      "ReceiptStable",
+      "EpochFence"
+    ],
+    "target_properties": [],
+    "classification": "positive"
+  },
+  {
+    "model": "MovementCommands",
+    "profile": "positive-recovery",
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_raw_exit": 0,
+    "distinct_state_min": 100,
+    "target_invariants": [
+      "TypeOK",
+      "CommandOrder",
+      "StopFence",
+      "ReceiptStable",
+      "EpochFence"
+    ],
+    "target_properties": [],
+    "classification": "positive"
+  },
+  {
+    "model": "MovementCommands",
+    "profile": "negative-type",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "TypeOK"
+    ],
+    "target_properties": [],
+    "classification": "negative"
+  },
+  {
+    "model": "MovementCommands",
+    "profile": "negative-late",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "CommandOrder"
+    ],
+    "target_properties": [],
+    "classification": "negative"
+  },
+  {
+    "model": "MovementCommands",
+    "profile": "negative-stop-no-fence",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "StopFence"
+    ],
+    "target_properties": [],
+    "classification": "negative"
+  },
+  {
+    "model": "MovementCommands",
+    "profile": "negative-replay",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "ReceiptStable"
+    ],
+    "target_properties": [],
+    "classification": "negative"
+  },
+  {
+    "model": "MovementCommands",
+    "profile": "negative-epoch",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "EpochFence"
+    ],
+    "target_properties": [],
+    "classification": "negative"
+  },
+  {
+    "model": "MovementCommands",
+    "profile": "negative-reset-water",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "CommandOrder"
+    ],
+    "target_properties": [],
+    "classification": "negative"
+  },
+  {
+    "model": "MovementCommands",
+    "profile": "witness-NoOutOfOrderWitness",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "NoOutOfOrderWitness"
+    ],
+    "target_properties": [],
+    "classification": "witness"
+  },
+  {
+    "model": "MovementCommands",
+    "profile": "witness-NoUnknownRetryWitness",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "NoUnknownRetryWitness"
+    ],
+    "target_properties": [],
+    "classification": "witness"
+  },
+  {
+    "model": "MovementCommands",
+    "profile": "witness-NoStopRejectWitness",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "NoStopRejectWitness"
+    ],
+    "target_properties": [],
+    "classification": "witness"
+  },
+  {
+    "model": "MovementCommands",
+    "profile": "witness-NoAckRetryWitness",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "NoAckRetryWitness"
+    ],
+    "target_properties": [],
+    "classification": "witness"
+  },
+  {
+    "model": "MovementCommands",
+    "profile": "witness-NoNewAfterStopWitness",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "NoNewAfterStopWitness"
+    ],
+    "target_properties": [],
+    "classification": "witness"
+  },
+  {
+    "model": "MovementCommands",
+    "profile": "witness-NoOldEpochRejectedWitness",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "NoOldEpochRejectedWitness"
+    ],
+    "target_properties": [],
+    "classification": "witness"
+  },
+  {
+    "model": "MovementCommands",
+    "profile": "witness-NoNewEpochAcceptedWitness",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "NoNewEpochAcceptedWitness"
+    ],
+    "target_properties": [],
+    "classification": "witness"
+  },
+  {
+    "model": "MovementCommands",
+    "profile": "witness-NoRestartPreservesReceiptWitness",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "NoRestartPreservesReceiptWitness"
+    ],
+    "target_properties": [],
+    "classification": "witness"
+  },
+  {
+    "model": "MovementCommands",
+    "profile": "witness-control-block-ack-retry",
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_raw_exit": 0,
+    "distinct_state_min": 100,
+    "target_invariants": [
+      "NoAckRetryWitness"
+    ],
+    "target_properties": [],
+    "classification": "witness-control"
+  },
+  {
+    "model": "MovementCommands",
+    "profile": "witness-control-block-new-after-stop",
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_raw_exit": 0,
+    "distinct_state_min": 100,
+    "target_invariants": [
+      "NoNewAfterStopWitness"
+    ],
+    "target_properties": [],
+    "classification": "witness-control"
+  },
+  {
+    "model": "MovementCommands",
+    "profile": "witness-control-block-old-epoch-handle",
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_raw_exit": 0,
+    "distinct_state_min": 100,
+    "target_invariants": [
+      "NoOldEpochRejectedWitness"
+    ],
+    "target_properties": [],
+    "classification": "witness-control"
+  },
+  {
+    "model": "Movement",
+    "profile": "positive",
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_raw_exit": 0,
+    "distinct_state_min": 100,
+    "target_invariants": [
+      "TypeOK",
+      "ArrivalCurrent",
+      "ArrivalPhysical",
+      "PausedTimeStable"
+    ],
+    "target_properties": [],
+    "classification": "positive"
+  },
+  {
+    "model": "Movement",
+    "profile": "negative-type",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "TypeOK"
+    ],
+    "target_properties": [],
+    "classification": "negative"
+  },
+  {
+    "model": "Movement",
+    "profile": "negative-stale",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "ArrivalCurrent"
+    ],
+    "target_properties": [],
+    "classification": "negative"
+  },
+  {
+    "model": "Movement",
+    "profile": "negative-teleport",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "ArrivalPhysical"
+    ],
+    "target_properties": [],
+    "classification": "negative"
+  },
+  {
+    "model": "Movement",
+    "profile": "negative-paused-clock",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "PausedTimeStable"
+    ],
+    "target_properties": [],
+    "classification": "negative"
+  },
+  {
+    "model": "Movement",
+    "profile": "witness-NoArrivalWitness",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "NoArrivalWitness"
+    ],
+    "target_properties": [],
+    "classification": "witness"
+  },
+  {
+    "model": "Movement",
+    "profile": "witness-NoReplacedArrivalWitness",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "NoReplacedArrivalWitness"
+    ],
+    "target_properties": [],
+    "classification": "witness"
+  },
+  {
+    "model": "Movement",
+    "profile": "witness-NoRecoverArrivalWitness",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "NoRecoverArrivalWitness"
+    ],
+    "target_properties": [],
+    "classification": "witness"
+  },
+  {
+    "model": "Consent",
+    "profile": "positive",
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_raw_exit": 0,
+    "distinct_state_min": 100,
+    "target_invariants": [
+      "TypeOK",
+      "SettlementAuthorized",
+      "SafetyDurable"
+    ],
+    "target_properties": [],
+    "classification": "positive"
+  },
+  {
+    "model": "Consent",
+    "profile": "negative-type",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "TypeOK"
+    ],
+    "target_properties": [],
+    "classification": "negative"
+  },
+  {
+    "model": "Consent",
+    "profile": "negative-impersonation",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "SettlementAuthorized"
+    ],
+    "target_properties": [],
+    "classification": "negative"
+  },
+  {
+    "model": "Consent",
+    "profile": "negative-fake",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "SettlementAuthorized"
+    ],
+    "target_properties": [],
+    "classification": "negative"
+  },
+  {
+    "model": "Consent",
+    "profile": "negative-stale",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "SettlementAuthorized"
+    ],
+    "target_properties": [],
+    "classification": "negative"
+  },
+  {
+    "model": "Consent",
+    "profile": "negative-rollback",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "SafetyDurable"
+    ],
+    "target_properties": [],
+    "classification": "negative"
+  },
+  {
+    "model": "Consent",
+    "profile": "witness-NoSafeWitness",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "NoSafeWitness"
+    ],
+    "target_properties": [],
+    "classification": "witness"
+  },
+  {
+    "model": "Consent",
+    "profile": "witness-NoReplanSafeWitness",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "NoReplanSafeWitness"
+    ],
+    "target_properties": [],
+    "classification": "witness"
+  },
+  {
+    "model": "Consent",
+    "profile": "witness-NoWithdrawSafeWitness",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "NoWithdrawSafeWitness"
+    ],
+    "target_properties": [],
+    "classification": "witness"
+  },
+  {
+    "model": "Consent",
+    "profile": "witness-control-block-replan",
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_raw_exit": 0,
+    "distinct_state_min": 100,
+    "target_invariants": [
+      "NoReplanSafeWitness"
+    ],
+    "target_properties": [],
+    "classification": "witness-control"
+  },
+  {
+    "model": "Resources",
+    "profile": "positive",
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_raw_exit": 0,
+    "distinct_state_min": 100,
+    "target_invariants": [
+      "TypeOK",
+      "SingleOwner",
+      "EffectOnce",
+      "PreparedDurable",
+      "CooperationAuthorized",
+      "ReclaimAuthorized"
+    ],
+    "target_properties": [],
+    "classification": "positive"
+  },
+  {
+    "model": "Resources",
+    "profile": "positive-private",
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_raw_exit": 0,
+    "distinct_state_min": 100,
+    "target_invariants": [
+      "TypeOK",
+      "SingleOwner",
+      "EffectOnce",
+      "PreparedDurable",
+      "CooperationAuthorized",
+      "ReclaimAuthorized"
+    ],
+    "target_properties": [],
+    "classification": "positive"
+  },
+  {
+    "model": "Resources",
+    "profile": "negative-type",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "TypeOK"
+    ],
+    "target_properties": [],
+    "classification": "negative"
+  },
+  {
+    "model": "Resources",
+    "profile": "negative-duplicate-owner",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "SingleOwner"
+    ],
+    "target_properties": [],
+    "classification": "negative"
+  },
+  {
+    "model": "Resources",
+    "profile": "negative-repeat-effect",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "EffectOnce"
+    ],
+    "target_properties": [],
+    "classification": "negative"
+  },
+  {
+    "model": "Resources",
+    "profile": "negative-unlock",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "PreparedDurable"
+    ],
+    "target_properties": [],
+    "classification": "negative"
+  },
+  {
+    "model": "Resources",
+    "profile": "negative-premature",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "CooperationAuthorized"
+    ],
+    "target_properties": [],
+    "classification": "negative"
+  },
+  {
+    "model": "Resources",
+    "profile": "negative-reclaim",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "ReclaimAuthorized"
+    ],
+    "target_properties": [],
+    "classification": "negative"
+  },
+  {
+    "model": "Resources",
+    "profile": "negative-private-reclaim",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "ReclaimAuthorized"
+    ],
+    "target_properties": [],
+    "classification": "negative"
+  },
+  {
+    "model": "Resources",
+    "profile": "witness-NoReclaimWitness",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "NoReclaimWitness"
+    ],
+    "target_properties": [],
+    "classification": "witness"
+  },
+  {
+    "model": "Resources",
+    "profile": "witness-NoLockedRecoveryWitness",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "NoLockedRecoveryWitness"
+    ],
+    "target_properties": [],
+    "classification": "witness"
+  },
+  {
+    "model": "Resources",
+    "profile": "witness-NoReclaimReconnectWitness",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "NoReclaimReconnectWitness"
+    ],
+    "target_properties": [],
+    "classification": "witness"
+  },
+  {
+    "model": "Identity",
+    "profile": "positive",
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_raw_exit": 0,
+    "distinct_state_min": 100,
+    "target_invariants": [
+      "TypeOK",
+      "NoIdentityLeak",
+      "EventAudienceFixed",
+      "HistoryAsObserved",
+      "ReferenceTargetStable"
+    ],
+    "target_properties": [],
+    "classification": "positive"
+  },
+  {
+    "model": "Identity",
+    "profile": "negative-type",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "TypeOK"
+    ],
+    "target_properties": [],
+    "classification": "negative"
+  },
+  {
+    "model": "Identity",
+    "profile": "negative-raw-id",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "NoIdentityLeak"
+    ],
+    "target_properties": [],
+    "classification": "negative"
+  },
+  {
+    "model": "Identity",
+    "profile": "negative-true-name",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "NoIdentityLeak"
+    ],
+    "target_properties": [],
+    "classification": "negative"
+  },
+  {
+    "model": "Identity",
+    "profile": "negative-late-audience",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "EventAudienceFixed"
+    ],
+    "target_properties": [],
+    "classification": "negative"
+  },
+  {
+    "model": "Identity",
+    "profile": "negative-rewrite-history",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "HistoryAsObserved"
+    ],
+    "target_properties": [],
+    "classification": "negative"
+  },
+  {
+    "model": "Identity",
+    "profile": "negative-by-name",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "ReferenceTargetStable"
+    ],
+    "target_properties": [],
+    "classification": "negative"
+  },
+  {
+    "model": "Identity",
+    "profile": "negative-stale-ref",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "ReferenceTargetStable"
+    ],
+    "target_properties": [],
+    "classification": "negative"
+  },
+  {
+    "model": "Identity",
+    "profile": "witness-NoDisguisedHistoryWitness",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "NoDisguisedHistoryWitness"
+    ],
+    "target_properties": [],
+    "classification": "witness"
+  },
+  {
+    "model": "Identity",
+    "profile": "witness-NoLateReplayWitness",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "NoLateReplayWitness"
+    ],
+    "target_properties": [],
+    "classification": "witness"
+  },
+  {
+    "model": "Identity",
+    "profile": "witness-NoRefTransferWitness",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "NoRefTransferWitness"
+    ],
+    "target_properties": [],
+    "classification": "witness"
+  },
+  {
+    "model": "Scheduler",
+    "profile": "positive-1",
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_raw_exit": 0,
+    "distinct_state_min": 30,
+    "target_invariants": [
+      "TypeOK",
+      "BudgetRespected"
+    ],
+    "target_properties": [
+      "NoStarvation"
+    ],
+    "classification": "positive"
+  },
+  {
+    "model": "Scheduler",
+    "profile": "positive-2",
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_raw_exit": 0,
+    "distinct_state_min": 30,
+    "target_invariants": [
+      "TypeOK",
+      "BudgetRespected"
+    ],
+    "target_properties": [
+      "NoStarvation"
+    ],
+    "classification": "positive"
+  },
+  {
+    "model": "Scheduler",
+    "profile": "negative-type",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "TypeOK"
+    ],
+    "target_properties": [],
+    "classification": "negative"
+  },
+  {
+    "model": "Scheduler",
+    "profile": "negative-overbook",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "BudgetRespected"
+    ],
+    "target_properties": [],
+    "classification": "negative"
+  },
+  {
+    "model": "Scheduler",
+    "profile": "negative-starve",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 13,
+    "distinct_state_min": 1,
+    "target_invariants": [],
+    "target_properties": [
+      "NoStarvation"
+    ],
+    "classification": "negative"
+  },
+  {
+    "model": "Scheduler",
+    "profile": "witness-NoAllServedWitness",
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_raw_exit": 12,
+    "distinct_state_min": 1,
+    "target_invariants": [
+      "NoAllServedWitness"
+    ],
+    "target_properties": [],
+    "classification": "witness"
+  }
+]
