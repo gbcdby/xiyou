@@ -1,0 +1,177 @@
+{
+  "scope": "xiyou #25 高才方向动画冻结交付候选；本文登记源码、素材及托管目标映射，不把目标路径或旧v1记录视为本轮已部署事实。",
+  "baseline": {
+    "github_head": "afa12ea57c1b84b7b902a970dfeea724bf7b346d",
+    "branch": "prototype/25-gaolaozhuang",
+    "pr": 26,
+    "runtime_digest_sha256": "60169354dba140a2e5cf9d3b01dbaaf68cf0d7fd5264b3d8972e39e6aa98cb78",
+    "relation": "改动前背景"
+  },
+  "digest_algorithm": "运行文本按去除 web/ 前缀的相对路径排序；连接 UTF-8 路径 + NUL + 文件完整字节 + NUL，再取 SHA-256。",
+  "runtime_text_file_count": 8,
+  "runtime_digest_sha256": "949625e896be92bd001c4cba4cbedba5d0855bd26b898b1e2d04496219e0ba68",
+  "runtime_files": [
+    {
+      "site_path_target": "site/dist/app.mjs",
+      "github_path": "prototypes/gaolaozhuang/web/app.mjs",
+      "sha256": "e7f28ab26e615812ecd0fd257025a20fe0ddb4f6fd58f1024c14935ba9aa7264",
+      "bytes": 16727,
+      "relation": "冻结交付候选；此字段是目标路径映射，实际托管身份须由发布记录确认。"
+    },
+    {
+      "site_path_target": "site/dist/assets/gaocai/manifest.json",
+      "github_path": "prototypes/gaolaozhuang/web/assets/gaocai/manifest.json",
+      "sha256": "c431869d3e6b4fd931ddeadfa029d8424c5f7854eedbc8330de85e25a316dce8",
+      "bytes": 50732,
+      "relation": "冻结交付候选；此字段是目标路径映射，实际托管身份须由发布记录确认。"
+    },
+    {
+      "site_path_target": "site/dist/engine.mjs",
+      "github_path": "prototypes/gaolaozhuang/web/engine.mjs",
+      "sha256": "f46996a7a1e942d40e77086d4803cb72b2837a7545834f796c5acfe202888ad5",
+      "bytes": 31709,
+      "relation": "冻结交付候选；此字段是目标路径映射，实际托管身份须由发布记录确认。"
+    },
+    {
+      "site_path_target": "site/dist/gaocai-animation.mjs",
+      "github_path": "prototypes/gaolaozhuang/web/gaocai-animation.mjs",
+      "sha256": "ba50265b55969c4049d2197f91a5995c70c988af855d5eb4bb8fa20d09ea3fc7",
+      "bytes": 1046,
+      "relation": "冻结交付候选；此字段是目标路径映射，实际托管身份须由发布记录确认。"
+    },
+    {
+      "site_path_target": "site/dist/index.html",
+      "github_path": "prototypes/gaolaozhuang/web/index.html",
+      "sha256": "affa70618fe1150ab3892d29500f39201504a27bdad1deed829d91c61efe80b7",
+      "bytes": 7394,
+      "relation": "冻结交付候选；此字段是目标路径映射，实际托管身份须由发布记录确认。"
+    },
+    {
+      "site_path_target": "site/dist/navigation.mjs",
+      "github_path": "prototypes/gaolaozhuang/web/navigation.mjs",
+      "sha256": "3096b8e57db0e3c2ebd9c7c42fd4bd32957d9f28b7063da5daeac47094dc7296",
+      "bytes": 2652,
+      "relation": "冻结交付候选；此字段是目标路径映射，实际托管身份须由发布记录确认。"
+    },
+    {
+      "site_path_target": "site/dist/style.css",
+      "github_path": "prototypes/gaolaozhuang/web/style.css",
+      "sha256": "8f155e88ffb401a04a611041b3e2667d591741ff5793950103848a1ddd0d27b0",
+      "bytes": 19292,
+      "relation": "冻结交付候选；此字段是目标路径映射，实际托管身份须由发布记录确认。"
+    },
+    {
+      "site_path_target": "site/dist/world.mjs",
+      "github_path": "prototypes/gaolaozhuang/web/world.mjs",
+      "sha256": "db3d1aa0e10c812023d0208aaa44b069f4de55255a89727ecb84e663b52fcff1",
+      "bytes": 16170,
+      "relation": "冻结交付候选；此字段是目标路径映射，实际托管身份须由发布记录确认。"
+    }
+  ],
+  "test_files": [
+    {
+      "github_path": "prototypes/gaolaozhuang/tests/engine.test.mjs",
+      "sha256": "0cc9750ee8921181483ebdd669b437835e0bf0af01f8a68d378f12904ef5b445",
+      "bytes": 19484
+    },
+    {
+      "github_path": "prototypes/gaolaozhuang/tests/gaocai-animation.test.mjs",
+      "sha256": "b1aab2febb2998b708d2a4eabecfa481a72b69d6f15915c23b23c3fe50ea8f69",
+      "bytes": 2712
+    },
+    {
+      "github_path": "prototypes/gaolaozhuang/tests/navigation.test.mjs",
+      "sha256": "687a35f29374f9176da5ac1e364097b834a41e23c9fba4a57faadfac64da5759",
+      "bytes": 2691
+    },
+    {
+      "github_path": "prototypes/gaolaozhuang/tests/world.test.mjs",
+      "sha256": "8d1508164e439189a3ffa6ed395715e53d06beae46c61e865606e32a2096c978",
+      "bytes": 5251
+    }
+  ],
+  "external_assets": [
+    {
+      "site_path_target": "site/dist/assets/courtyard.png",
+      "restore_path": "prototypes/gaolaozhuang/web/assets/courtyard.png",
+      "sha256": "f5df307eaea03188e823a279cb3df3a65b1b6a7931c329294cd6b79e4c0d510a",
+      "bytes": 3423640,
+      "github_included": false,
+      "download_manifest": "assets.json"
+    },
+    {
+      "site_path_target": "site/dist/assets/gaocai/",
+      "restore_path": "prototypes/gaolaozhuang/web/assets/gaocai/",
+      "png_count": 45,
+      "png_bytes": 6737985,
+      "manifest": "web/assets/gaocai/manifest.json",
+      "per_image_sha256": "见 manifest.native[d].idle 与 walk.frames[i].sha256",
+      "github_png_included": false,
+      "external_archive_sha256": "cdd47ffb7c7e0582c7bd46340b30ad7aeffa1d471e1b55134a0422515cc7d242",
+      "download_manifest": "assets.json"
+    }
+  ],
+  "github_text_allowlist": [
+    "README.md",
+    "assets.json",
+    "package.json",
+    "review.md",
+    "source-map.json",
+    "tests/engine.test.mjs",
+    "tests/gaocai-animation.test.mjs",
+    "tests/navigation.test.mjs",
+    "tests/world.test.mjs",
+    "verification.md",
+    "web/app.mjs",
+    "web/assets/gaocai/README.md",
+    "web/assets/gaocai/manifest.json",
+    "web/engine.mjs",
+    "web/gaocai-animation.mjs",
+    "web/index.html",
+    "web/navigation.mjs",
+    "web/style.css",
+    "web/world.mjs"
+  ],
+  "github_exclusions": [
+    "dist/",
+    "evidence/",
+    ".agent-output/",
+    ".git/",
+    ".openai/hosting.json",
+    "PNG 与其他图片二进制",
+    "ZIP",
+    "运行日志"
+  ],
+  "metadata_changes": [
+    "README.md：动画试接合同、恢复入口、八项运行文本与未验收范围。",
+    "assets.json：登记真实运行资产包、PNG来源与校验。",
+    "verification.md：本候选作者自查与历史浏览器证据分开。",
+    "source-map.json：登记当前运行文本和外置PNG，未声称已同步远端。",
+    "review.md：保存本轮独立静态复审、R-001 VERIFIED及已知美术限制；保留历史基线报告。"
+  ],
+  "historical_evidence_reference": {
+    "url": "https://chatgpt.com/library?file_id=libfile_fde3_f-dcb5d7ae28c0819193c12df819d1c135_66aec10a983c8191a09f0deb89988b42&account_id=personal",
+    "archive_sha256": "b3de87da6d7ea5a5c190c67dc6cd22950c7d9f37ca491ca09b88d3faae2bf814",
+    "scope": "原基线独立浏览器与测试检查，以及微修/源码映射作者自查；最终完整浏览器流程未重跑。",
+    "relation": "原型基线与微修背景，不覆盖本次动画"
+  },
+  "documentation_state": "已整理可交付候选；PR#26保持draft、#25/#23保持open，不合并main，不修改PR#24。该字段为文档冻结时的范围声明，不冒充后续分支或站点更新结果。",
+  "full_web_tree_sha256": "4266670e9dd9b89030c07d6b4f31229662fa3cda1193d048725fd8f41577f608",
+  "full_web_tree_digest_algorithm": "web/目录内全部文件，按去除web/前缀的相对路径排序，连接UTF-8 path+NUL+完整bytes+NUL，再SHA-256。",
+  "evidence_summary": {
+    "author_tests": "npm test 27/27 PASS；实现者自查，未由交付整理者重跑。",
+    "independent_static_review": "PASS WITH KNOWN ART LIMITS；需求轴与标准轴PASS；R-gaocai-animation-001 VERIFIED。",
+    "browser": "GZ-ANIM-01～05全NOT_RUN / BLOCKED；本地Chromium socket权限错误与正式云浏览器localhost拒绝连接，均未进入页面。",
+    "browser_attempt_subject_sha256": "021112bbc3258a3b8956741ca16bdf14c9c93b8c7200ef374a28d8ebb0aa5f1f",
+    "browser_repair_followup": "R-001修正后仅复核最终候选身份，未重跑失败的浏览器路径。",
+    "raw_runtime_visual_signoff": false
+  },
+  "publication_state_at_document_freeze": {
+    "state": "PENDING",
+    "target_project_id": "appgprj_6af53a3e4fa08191802bab06cd371e68",
+    "target_url": "https://xiyou-gaolao-prototype.gbcdby98.chatgpt.site",
+    "access": "保持既有owner-private",
+    "result_reference": "https://github.com/gbcdby/xiyou/issues/25",
+    "note": "固定文档时尚未执行本轮动画发布；后续事实以PR26与Issue25实际回读记录为准。"
+  }
+}

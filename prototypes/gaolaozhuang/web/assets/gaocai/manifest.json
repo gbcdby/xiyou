@@ -1,0 +1,1681 @@
+{
+  "schemaVersion": 1,
+  "assetId": "gaocai-player-trial-2026-11-12-v1",
+  "characterId": "gaocai",
+  "status": "PROTOTYPE_TRIAL_NOT_ART_ACCEPTED",
+  "source": {
+    "libraryFileId": "libfile_fde3_f-a8516adb205c8191b4878f5912920b62_66aec10a983c8191a09f0deb89988b42",
+    "archiveName": "gaocai-5native-3mirror-material-study-v1.zip",
+    "archiveSha256": "36a9b4b21b5f265968e24b8a30b037429fc3e0083baa00de61ad385361b7a6cc",
+    "nativeGif": false,
+    "provenance": "Existing generated PNG artwork; no frame is represented as extracted from a native GIF."
+  },
+  "nativeDirections": [
+    "s",
+    "se",
+    "e",
+    "ne",
+    "n"
+  ],
+  "directions": {
+    "s": {
+      "nativeDirection": "s",
+      "mirrorX": false
+    },
+    "se": {
+      "nativeDirection": "se",
+      "mirrorX": false
+    },
+    "e": {
+      "nativeDirection": "e",
+      "mirrorX": false
+    },
+    "ne": {
+      "nativeDirection": "ne",
+      "mirrorX": false
+    },
+    "n": {
+      "nativeDirection": "n",
+      "mirrorX": false
+    },
+    "w": {
+      "nativeDirection": "e",
+      "mirrorX": true
+    },
+    "sw": {
+      "nativeDirection": "se",
+      "mirrorX": true
+    },
+    "nw": {
+      "nativeDirection": "ne",
+      "mirrorX": true
+    }
+  },
+  "targetBodyHeight": 76,
+  "units": "prototype map units; x/y is the projected foot-ground point",
+  "frameDurationMs": 90,
+  "cycleDurationMs": 720,
+  "sourcePreviewFrameDurationMs": 100,
+  "phaseContract": "Use phase index floor(activeMovementMs / 90) % 8. Turn changes direction without resetting the phase; idle holds the last actual movement direction. Duration is an experiment, not speed calibration.",
+  "renderContract": {
+    "position": "ctx.translate(actor.x, actor.y); ctx.scale(mirrorX ? -1 : 1, 1); ctx.drawImage(image, -footPivot.x * scale, -footPivot.y * scale, width * scale, height * scale);",
+    "scale": "Every image uses the recorded final scale (map units per source pixel). Do not apply groupScale a second time. Do not scale each frame to its own alpha bbox.",
+    "mirrorPivot": "Mirror the actor-local coordinate system around actor.x/actor.y, not the PNG center. No extra mirrored PNG files.",
+    "bodyHeightReference": "alpha > 16 is used only to measure a source group median once; pixels and alpha are never altered. Idle uses the single basis-image body extent.",
+    "validation": "All pivots and the 76-unit scale are provisional integration estimates. They must be checked in the actual browser; no foot-lock or animation acceptance is claimed."
+  },
+  "native": {
+    "s": {
+      "bodyHeightSource": 517.0,
+      "walk": {
+        "frameDurationMs": 90,
+        "cycleDurationMs": 720,
+        "sourceGroupScalePolicy": "1.0 except ne indices 4..7 use 0.70 as one group",
+        "frames": [
+          {
+            "index": 0,
+            "phase": 0.0,
+            "durationMs": 90,
+            "file": "walk/s/00.png",
+            "width": 362,
+            "height": 543,
+            "sizePx": [
+              362,
+              543
+            ],
+            "footPivot": {
+              "x": 181,
+              "y": 528
+            },
+            "scale": 0.1470019342359768,
+            "groupScale": 1.0,
+            "bodyHeightSource": 517.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "1590e4fa1bee654505fb6b2601ad29d3134f578f98439a6e9a4266308ac6f243",
+            "sourceFile": "native_candidates/s_static_candidate/gaocai_walk_s_00.png",
+            "sourceAtlas": "atlases/gaocai-walk-s-original-4x2.png",
+            "sourceRectXyxy": [
+              0,
+              0,
+              362,
+              543
+            ],
+            "alphaBBox16": [
+              95,
+              9,
+              272,
+              534
+            ]
+          },
+          {
+            "index": 1,
+            "phase": 0.125,
+            "durationMs": 90,
+            "file": "walk/s/01.png",
+            "width": 362,
+            "height": 543,
+            "sizePx": [
+              362,
+              543
+            ],
+            "footPivot": {
+              "x": 181,
+              "y": 528
+            },
+            "scale": 0.1470019342359768,
+            "groupScale": 1.0,
+            "bodyHeightSource": 517.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "bee82c51f096114a6dfa9a7fb13fa25a7ce92e3ebae38b3a31e16877dbf9e584",
+            "sourceFile": "native_candidates/s_static_candidate/gaocai_walk_s_01.png",
+            "sourceAtlas": "atlases/gaocai-walk-s-original-4x2.png",
+            "sourceRectXyxy": [
+              362,
+              0,
+              724,
+              543
+            ],
+            "alphaBBox16": [
+              93,
+              8,
+              271,
+              530
+            ]
+          },
+          {
+            "index": 2,
+            "phase": 0.25,
+            "durationMs": 90,
+            "file": "walk/s/02.png",
+            "width": 362,
+            "height": 543,
+            "sizePx": [
+              362,
+              543
+            ],
+            "footPivot": {
+              "x": 181,
+              "y": 528
+            },
+            "scale": 0.1470019342359768,
+            "groupScale": 1.0,
+            "bodyHeightSource": 517.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "e05a7a772eb1186d4d830416216654ba87dd3194f134fcfee2579997a012698f",
+            "sourceFile": "native_candidates/s_static_candidate/gaocai_walk_s_02.png",
+            "sourceAtlas": "atlases/gaocai-walk-s-original-4x2.png",
+            "sourceRectXyxy": [
+              724,
+              0,
+              1086,
+              543
+            ],
+            "alphaBBox16": [
+              92,
+              9,
+              274,
+              525
+            ]
+          },
+          {
+            "index": 3,
+            "phase": 0.375,
+            "durationMs": 90,
+            "file": "walk/s/03.png",
+            "width": 362,
+            "height": 543,
+            "sizePx": [
+              362,
+              543
+            ],
+            "footPivot": {
+              "x": 181,
+              "y": 528
+            },
+            "scale": 0.1470019342359768,
+            "groupScale": 1.0,
+            "bodyHeightSource": 517.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "c7f90208b9e898831f715689836e2d79a92edbf58f0d2f294b916f5534377bb4",
+            "sourceFile": "native_candidates/s_static_candidate/gaocai_walk_s_03.png",
+            "sourceAtlas": "atlases/gaocai-walk-s-original-4x2.png",
+            "sourceRectXyxy": [
+              1086,
+              0,
+              1448,
+              543
+            ],
+            "alphaBBox16": [
+              90,
+              8,
+              280,
+              525
+            ]
+          },
+          {
+            "index": 4,
+            "phase": 0.5,
+            "durationMs": 90,
+            "file": "walk/s/04.png",
+            "width": 362,
+            "height": 543,
+            "sizePx": [
+              362,
+              543
+            ],
+            "footPivot": {
+              "x": 181,
+              "y": 528
+            },
+            "scale": 0.1470019342359768,
+            "groupScale": 1.0,
+            "bodyHeightSource": 517.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "fd1daf8c56f471e1b52d2f9ffc708cdfe7e0fdc930ddfef49f06ca18dbe5fd8f",
+            "sourceFile": "native_candidates/s_static_candidate/gaocai_walk_s_04.png",
+            "sourceAtlas": "atlases/gaocai-walk-s-original-4x2.png",
+            "sourceRectXyxy": [
+              0,
+              543,
+              362,
+              1086
+            ],
+            "alphaBBox16": [
+              91,
+              10,
+              277,
+              532
+            ]
+          },
+          {
+            "index": 5,
+            "phase": 0.625,
+            "durationMs": 90,
+            "file": "walk/s/05.png",
+            "width": 362,
+            "height": 543,
+            "sizePx": [
+              362,
+              543
+            ],
+            "footPivot": {
+              "x": 181,
+              "y": 528
+            },
+            "scale": 0.1470019342359768,
+            "groupScale": 1.0,
+            "bodyHeightSource": 517.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "fb61f2d9e18e9e6eee2b1371cfa8f707a44910af4d1de552eddf68d5978f67ef",
+            "sourceFile": "native_candidates/s_static_candidate/gaocai_walk_s_05.png",
+            "sourceAtlas": "atlases/gaocai-walk-s-original-4x2.png",
+            "sourceRectXyxy": [
+              362,
+              543,
+              724,
+              1086
+            ],
+            "alphaBBox16": [
+              89,
+              10,
+              275,
+              526
+            ]
+          },
+          {
+            "index": 6,
+            "phase": 0.75,
+            "durationMs": 90,
+            "file": "walk/s/06.png",
+            "width": 362,
+            "height": 543,
+            "sizePx": [
+              362,
+              543
+            ],
+            "footPivot": {
+              "x": 181,
+              "y": 528
+            },
+            "scale": 0.1470019342359768,
+            "groupScale": 1.0,
+            "bodyHeightSource": 517.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "f90cb1f665556bc6b568dae91b43b69d70ea9d77c4cd1ce6b8f0c9b2fce5cbc5",
+            "sourceFile": "native_candidates/s_static_candidate/gaocai_walk_s_06.png",
+            "sourceAtlas": "atlases/gaocai-walk-s-original-4x2.png",
+            "sourceRectXyxy": [
+              724,
+              543,
+              1086,
+              1086
+            ],
+            "alphaBBox16": [
+              90,
+              10,
+              274,
+              518
+            ]
+          },
+          {
+            "index": 7,
+            "phase": 0.875,
+            "durationMs": 90,
+            "file": "walk/s/07.png",
+            "width": 362,
+            "height": 543,
+            "sizePx": [
+              362,
+              543
+            ],
+            "footPivot": {
+              "x": 181,
+              "y": 528
+            },
+            "scale": 0.1470019342359768,
+            "groupScale": 1.0,
+            "bodyHeightSource": 517.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "dde68f590bc8768a6cc4fa06d08288e1e6bd3c08679162da05f9d021d0f402b3",
+            "sourceFile": "native_candidates/s_static_candidate/gaocai_walk_s_07.png",
+            "sourceAtlas": "atlases/gaocai-walk-s-original-4x2.png",
+            "sourceRectXyxy": [
+              1086,
+              543,
+              1448,
+              1086
+            ],
+            "alphaBBox16": [
+              91,
+              10,
+              275,
+              527
+            ]
+          }
+        ]
+      },
+      "idle": {
+        "file": "idle/s.png",
+        "width": 362,
+        "height": 543,
+        "sizePx": [
+          362,
+          543
+        ],
+        "bodyHeightSource": 519,
+        "footPivot": {
+          "x": 203,
+          "y": 529
+        },
+        "scale": 0.1464354527938343,
+        "groupScale": 1,
+        "sha256": "7490762a7485374b409a983a8930c7769bc3b72303e0da9f1ac0978e3abc4bc6",
+        "sourceFile": "basis/gaocai_basis_s_candidate_v2.png",
+        "alphaBBox16": [
+          116,
+          12,
+          288,
+          531
+        ],
+        "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_MANUAL_GROUND_AND_PELVIS_ESTIMATE",
+        "sourceSelection": "Five-native-direction static basis v2; not a paused walking contact frame."
+      }
+    },
+    "se": {
+      "bodyHeightSource": 515.0,
+      "walk": {
+        "frameDurationMs": 90,
+        "cycleDurationMs": 720,
+        "sourceGroupScalePolicy": "1.0 except ne indices 4..7 use 0.70 as one group",
+        "frames": [
+          {
+            "index": 0,
+            "phase": 0.0,
+            "durationMs": 90,
+            "file": "walk/se/00.png",
+            "width": 362,
+            "height": 543,
+            "sizePx": [
+              362,
+              543
+            ],
+            "footPivot": {
+              "x": 181,
+              "y": 525
+            },
+            "scale": 0.14757281553398058,
+            "groupScale": 1.0,
+            "bodyHeightSource": 515.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "822ed7a30323b04159d61f40b875cab4d7e69685eb8c80eb228c767ecf76d217",
+            "sourceFile": "native_candidates/se_inconclusive/gaocai_walk_se_00.png",
+            "sourceAtlas": "atlases/gaocai-walk-se-original-4x2.png",
+            "sourceRectXyxy": [
+              0,
+              0,
+              362,
+              543
+            ],
+            "alphaBBox16": [
+              59,
+              10,
+              302,
+              524
+            ]
+          },
+          {
+            "index": 1,
+            "phase": 0.125,
+            "durationMs": 90,
+            "file": "walk/se/01.png",
+            "width": 362,
+            "height": 543,
+            "sizePx": [
+              362,
+              543
+            ],
+            "footPivot": {
+              "x": 181,
+              "y": 525
+            },
+            "scale": 0.14757281553398058,
+            "groupScale": 1.0,
+            "bodyHeightSource": 515.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "0a1d7b8a455ffbeb6f8ea8750102f3d0bec2145b59591c1fad2926d41fbea982",
+            "sourceFile": "native_candidates/se_inconclusive/gaocai_walk_se_01.png",
+            "sourceAtlas": "atlases/gaocai-walk-se-original-4x2.png",
+            "sourceRectXyxy": [
+              362,
+              0,
+              724,
+              543
+            ],
+            "alphaBBox16": [
+              85,
+              10,
+              284,
+              519
+            ]
+          },
+          {
+            "index": 2,
+            "phase": 0.25,
+            "durationMs": 90,
+            "file": "walk/se/02.png",
+            "width": 362,
+            "height": 543,
+            "sizePx": [
+              362,
+              543
+            ],
+            "footPivot": {
+              "x": 181,
+              "y": 525
+            },
+            "scale": 0.14757281553398058,
+            "groupScale": 1.0,
+            "bodyHeightSource": 515.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "3e828b6606085eedb89090f70a52261da9a7dcc4bf1b740c485a5d622e6661e5",
+            "sourceFile": "native_candidates/se_inconclusive/gaocai_walk_se_02.png",
+            "sourceAtlas": "atlases/gaocai-walk-se-original-4x2.png",
+            "sourceRectXyxy": [
+              724,
+              0,
+              1086,
+              543
+            ],
+            "alphaBBox16": [
+              96,
+              11,
+              273,
+              518
+            ]
+          },
+          {
+            "index": 3,
+            "phase": 0.375,
+            "durationMs": 90,
+            "file": "walk/se/03.png",
+            "width": 362,
+            "height": 543,
+            "sizePx": [
+              362,
+              543
+            ],
+            "footPivot": {
+              "x": 181,
+              "y": 525
+            },
+            "scale": 0.14757281553398058,
+            "groupScale": 1.0,
+            "bodyHeightSource": 515.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "ff7fa7052adadc4d08b49c05d7de9dd02c048fb13b1878b0d9c048e4bcd94f4f",
+            "sourceFile": "native_candidates/se_inconclusive/gaocai_walk_se_03.png",
+            "sourceAtlas": "atlases/gaocai-walk-se-original-4x2.png",
+            "sourceRectXyxy": [
+              1086,
+              0,
+              1448,
+              543
+            ],
+            "alphaBBox16": [
+              73,
+              10,
+              302,
+              523
+            ]
+          },
+          {
+            "index": 4,
+            "phase": 0.5,
+            "durationMs": 90,
+            "file": "walk/se/04.png",
+            "width": 362,
+            "height": 543,
+            "sizePx": [
+              362,
+              543
+            ],
+            "footPivot": {
+              "x": 181,
+              "y": 525
+            },
+            "scale": 0.14757281553398058,
+            "groupScale": 1.0,
+            "bodyHeightSource": 515.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "9222446a29e6daa1fdcbffc213187e808f12692d712fa7da59e5e21fac46d6ef",
+            "sourceFile": "native_candidates/se_inconclusive/gaocai_walk_se_04.png",
+            "sourceAtlas": "atlases/gaocai-walk-se-original-4x2.png",
+            "sourceRectXyxy": [
+              0,
+              543,
+              362,
+              1086
+            ],
+            "alphaBBox16": [
+              56,
+              11,
+              295,
+              530
+            ]
+          },
+          {
+            "index": 5,
+            "phase": 0.625,
+            "durationMs": 90,
+            "file": "walk/se/05.png",
+            "width": 362,
+            "height": 543,
+            "sizePx": [
+              362,
+              543
+            ],
+            "footPivot": {
+              "x": 181,
+              "y": 525
+            },
+            "scale": 0.14757281553398058,
+            "groupScale": 1.0,
+            "bodyHeightSource": 515.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "103079b93062e1cd6dcafc158af2398a4842b094bed486e21e95b567f02117d0",
+            "sourceFile": "native_candidates/se_inconclusive/gaocai_walk_se_05.png",
+            "sourceAtlas": "atlases/gaocai-walk-se-original-4x2.png",
+            "sourceRectXyxy": [
+              362,
+              543,
+              724,
+              1086
+            ],
+            "alphaBBox16": [
+              85,
+              11,
+              257,
+              527
+            ]
+          },
+          {
+            "index": 6,
+            "phase": 0.75,
+            "durationMs": 90,
+            "file": "walk/se/06.png",
+            "width": 362,
+            "height": 543,
+            "sizePx": [
+              362,
+              543
+            ],
+            "footPivot": {
+              "x": 181,
+              "y": 525
+            },
+            "scale": 0.14757281553398058,
+            "groupScale": 1.0,
+            "bodyHeightSource": 515.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "2338fad366f32451a87e7c3e29ead830997f6acbdf3ed7cf373d1cd33b467c94",
+            "sourceFile": "native_candidates/se_inconclusive/gaocai_walk_se_06.png",
+            "sourceAtlas": "atlases/gaocai-walk-se-original-4x2.png",
+            "sourceRectXyxy": [
+              724,
+              543,
+              1086,
+              1086
+            ],
+            "alphaBBox16": [
+              110,
+              11,
+              254,
+              527
+            ]
+          },
+          {
+            "index": 7,
+            "phase": 0.875,
+            "durationMs": 90,
+            "file": "walk/se/07.png",
+            "width": 362,
+            "height": 543,
+            "sizePx": [
+              362,
+              543
+            ],
+            "footPivot": {
+              "x": 181,
+              "y": 525
+            },
+            "scale": 0.14757281553398058,
+            "groupScale": 1.0,
+            "bodyHeightSource": 515.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "c8157318c4d0fd43d362ba049fe2a28b33217a5353f1ee62a0efdfd945e4eb11",
+            "sourceFile": "native_candidates/se_inconclusive/gaocai_walk_se_07.png",
+            "sourceAtlas": "atlases/gaocai-walk-se-original-4x2.png",
+            "sourceRectXyxy": [
+              1086,
+              543,
+              1448,
+              1086
+            ],
+            "alphaBBox16": [
+              66,
+              12,
+              293,
+              532
+            ]
+          }
+        ]
+      },
+      "idle": {
+        "file": "idle/se.png",
+        "width": 362,
+        "height": 543,
+        "sizePx": [
+          362,
+          543
+        ],
+        "bodyHeightSource": 522,
+        "footPivot": {
+          "x": 184,
+          "y": 527
+        },
+        "scale": 0.14559386973180077,
+        "groupScale": 1,
+        "sha256": "6ef7a476a20d155a90e5333e4149dad2396dd24bfd9c6b83175d09c532a81050",
+        "sourceFile": "basis/gaocai_basis_se_candidate_v2.png",
+        "alphaBBox16": [
+          109,
+          10,
+          261,
+          532
+        ],
+        "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_MANUAL_GROUND_AND_PELVIS_ESTIMATE",
+        "sourceSelection": "Five-native-direction static basis v2; not a paused walking contact frame."
+      }
+    },
+    "e": {
+      "bodyHeightSource": 480.0,
+      "walk": {
+        "frameDurationMs": 90,
+        "cycleDurationMs": 720,
+        "sourceGroupScalePolicy": "1.0 except ne indices 4..7 use 0.70 as one group",
+        "frames": [
+          {
+            "index": 0,
+            "phase": 0.0,
+            "durationMs": 90,
+            "file": "walk/e/00.png",
+            "width": 362,
+            "height": 543,
+            "sizePx": [
+              362,
+              543
+            ],
+            "footPivot": {
+              "x": 181,
+              "y": 510
+            },
+            "scale": 0.15833333333333333,
+            "groupScale": 1.0,
+            "bodyHeightSource": 480.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "6d01aa034142e341fcf5913522e0af0c3ab721dab9176ca2297129e9be9f0a80",
+            "sourceFile": "native_candidates/e_known_gap/gaocai_walk_e_00.png",
+            "sourceAtlas": "atlases/gaocai-walk-e-original-4x2.png",
+            "sourceRectXyxy": [
+              0,
+              0,
+              362,
+              543
+            ],
+            "alphaBBox16": [
+              52,
+              31,
+              328,
+              512
+            ]
+          },
+          {
+            "index": 1,
+            "phase": 0.125,
+            "durationMs": 90,
+            "file": "walk/e/01.png",
+            "width": 362,
+            "height": 543,
+            "sizePx": [
+              362,
+              543
+            ],
+            "footPivot": {
+              "x": 181,
+              "y": 510
+            },
+            "scale": 0.15833333333333333,
+            "groupScale": 1.0,
+            "bodyHeightSource": 480.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "6735085cdf9229473116e9da93aa2d6ee4a6443ecb7b51f5a24a485b3889d736",
+            "sourceFile": "native_candidates/e_known_gap/gaocai_walk_e_01.png",
+            "sourceAtlas": "atlases/gaocai-walk-e-original-4x2.png",
+            "sourceRectXyxy": [
+              362,
+              0,
+              724,
+              543
+            ],
+            "alphaBBox16": [
+              90,
+              32,
+              283,
+              511
+            ]
+          },
+          {
+            "index": 2,
+            "phase": 0.25,
+            "durationMs": 90,
+            "file": "walk/e/02.png",
+            "width": 362,
+            "height": 543,
+            "sizePx": [
+              362,
+              543
+            ],
+            "footPivot": {
+              "x": 181,
+              "y": 510
+            },
+            "scale": 0.15833333333333333,
+            "groupScale": 1.0,
+            "bodyHeightSource": 480.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "59fb4e96278dca293eab05cc18b4e0e894ca3cabe5110621e3d0e5b5681aff91",
+            "sourceFile": "native_candidates/e_known_gap/gaocai_walk_e_02.png",
+            "sourceAtlas": "atlases/gaocai-walk-e-original-4x2.png",
+            "sourceRectXyxy": [
+              724,
+              0,
+              1086,
+              543
+            ],
+            "alphaBBox16": [
+              126,
+              31,
+              253,
+              511
+            ]
+          },
+          {
+            "index": 3,
+            "phase": 0.375,
+            "durationMs": 90,
+            "file": "walk/e/03.png",
+            "width": 362,
+            "height": 543,
+            "sizePx": [
+              362,
+              543
+            ],
+            "footPivot": {
+              "x": 181,
+              "y": 510
+            },
+            "scale": 0.15833333333333333,
+            "groupScale": 1.0,
+            "bodyHeightSource": 480.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "0624dc68a16102146e3aa379ea85e14205c20f076dddd83f5bffc238db7c1299",
+            "sourceFile": "native_candidates/e_known_gap/gaocai_walk_e_03.png",
+            "sourceAtlas": "atlases/gaocai-walk-e-original-4x2.png",
+            "sourceRectXyxy": [
+              1086,
+              0,
+              1448,
+              543
+            ],
+            "alphaBBox16": [
+              92,
+              31,
+              296,
+              512
+            ]
+          },
+          {
+            "index": 4,
+            "phase": 0.5,
+            "durationMs": 90,
+            "file": "walk/e/04.png",
+            "width": 362,
+            "height": 543,
+            "sizePx": [
+              362,
+              543
+            ],
+            "footPivot": {
+              "x": 181,
+              "y": 510
+            },
+            "scale": 0.15833333333333333,
+            "groupScale": 1.0,
+            "bodyHeightSource": 480.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "e2f148d5426615c2dce2718971e7a703207a93471e8a9707641f7452fdcdb9f7",
+            "sourceFile": "native_candidates/e_known_gap/gaocai_walk_e_04.png",
+            "sourceAtlas": "atlases/gaocai-walk-e-original-4x2.png",
+            "sourceRectXyxy": [
+              0,
+              543,
+              362,
+              1086
+            ],
+            "alphaBBox16": [
+              58,
+              31,
+              333,
+              510
+            ]
+          },
+          {
+            "index": 5,
+            "phase": 0.625,
+            "durationMs": 90,
+            "file": "walk/e/05.png",
+            "width": 362,
+            "height": 543,
+            "sizePx": [
+              362,
+              543
+            ],
+            "footPivot": {
+              "x": 181,
+              "y": 510
+            },
+            "scale": 0.15833333333333333,
+            "groupScale": 1.0,
+            "bodyHeightSource": 480.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "ea3f83ca19da849499bed8c69a6e956995084cd8ad01822eed30afb6984e0d44",
+            "sourceFile": "native_candidates/e_known_gap/gaocai_walk_e_05.png",
+            "sourceAtlas": "atlases/gaocai-walk-e-original-4x2.png",
+            "sourceRectXyxy": [
+              362,
+              543,
+              724,
+              1086
+            ],
+            "alphaBBox16": [
+              104,
+              31,
+              280,
+              511
+            ]
+          },
+          {
+            "index": 6,
+            "phase": 0.75,
+            "durationMs": 90,
+            "file": "walk/e/06.png",
+            "width": 362,
+            "height": 543,
+            "sizePx": [
+              362,
+              543
+            ],
+            "footPivot": {
+              "x": 181,
+              "y": 510
+            },
+            "scale": 0.15833333333333333,
+            "groupScale": 1.0,
+            "bodyHeightSource": 480.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "9cc5f017a967d9035b1a011628f3bd311a125c59833c15e163c21344d0876080",
+            "sourceFile": "native_candidates/e_known_gap/gaocai_walk_e_06.png",
+            "sourceAtlas": "atlases/gaocai-walk-e-original-4x2.png",
+            "sourceRectXyxy": [
+              724,
+              543,
+              1086,
+              1086
+            ],
+            "alphaBBox16": [
+              131,
+              31,
+              259,
+              511
+            ]
+          },
+          {
+            "index": 7,
+            "phase": 0.875,
+            "durationMs": 90,
+            "file": "walk/e/07.png",
+            "width": 362,
+            "height": 543,
+            "sizePx": [
+              362,
+              543
+            ],
+            "footPivot": {
+              "x": 181,
+              "y": 510
+            },
+            "scale": 0.15833333333333333,
+            "groupScale": 1.0,
+            "bodyHeightSource": 480.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "87a5656919173cf8b108dc1683e408ce18188f4ba96fb85934c1445b043c78f8",
+            "sourceFile": "native_candidates/e_known_gap/gaocai_walk_e_07.png",
+            "sourceAtlas": "atlases/gaocai-walk-e-original-4x2.png",
+            "sourceRectXyxy": [
+              1086,
+              543,
+              1448,
+              1086
+            ],
+            "alphaBBox16": [
+              90,
+              31,
+              309,
+              511
+            ]
+          }
+        ]
+      },
+      "idle": {
+        "file": "idle/e.png",
+        "width": 362,
+        "height": 543,
+        "sizePx": [
+          362,
+          543
+        ],
+        "bodyHeightSource": 517,
+        "footPivot": {
+          "x": 177,
+          "y": 529
+        },
+        "scale": 0.1470019342359768,
+        "groupScale": 1,
+        "sha256": "a97fde0c260577abced6e2c5e2019dcfe69fe3b13fbc979152dad93580b2f5c3",
+        "sourceFile": "basis/gaocai_basis_e_candidate_v2.png",
+        "alphaBBox16": [
+          131,
+          13,
+          230,
+          530
+        ],
+        "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_MANUAL_GROUND_AND_PELVIS_ESTIMATE",
+        "sourceSelection": "Five-native-direction static basis v2; not a paused walking contact frame."
+      }
+    },
+    "ne": {
+      "bodyHeightSource": 475.0,
+      "walk": {
+        "frameDurationMs": 90,
+        "cycleDurationMs": 720,
+        "sourceGroupScalePolicy": "1.0 except ne indices 4..7 use 0.70 as one group",
+        "frames": [
+          {
+            "index": 0,
+            "phase": 0.0,
+            "durationMs": 90,
+            "file": "walk/ne/00.png",
+            "width": 373,
+            "height": 528,
+            "sizePx": [
+              373,
+              528
+            ],
+            "footPivot": {
+              "x": 186,
+              "y": 505
+            },
+            "scale": 0.16,
+            "groupScale": 1.0,
+            "bodyHeightSource": 475.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "71c0f137484234fed29d7ba83c87965338d5769e46c2dda515c345636b50ff73",
+            "sourceFile": "native_candidates/ne_not_accepted/gaocai_walk_ne_00.png",
+            "sourceAtlas": "source/gaocai-walk-ne-atlas-candidate-v2.png",
+            "sourceRectXyxy": [
+              0,
+              0,
+              373,
+              528
+            ],
+            "alphaBBox16": [
+              81,
+              30,
+              318,
+              513
+            ]
+          },
+          {
+            "index": 1,
+            "phase": 0.125,
+            "durationMs": 90,
+            "file": "walk/ne/01.png",
+            "width": 373,
+            "height": 528,
+            "sizePx": [
+              373,
+              528
+            ],
+            "footPivot": {
+              "x": 186,
+              "y": 505
+            },
+            "scale": 0.16,
+            "groupScale": 1.0,
+            "bodyHeightSource": 475.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "a41ccb498a81c39a7b15bebd214181a493b0d4436caf32fe8254e81463d40477",
+            "sourceFile": "native_candidates/ne_not_accepted/gaocai_walk_ne_01.png",
+            "sourceAtlas": "source/gaocai-walk-ne-atlas-candidate-v2.png",
+            "sourceRectXyxy": [
+              373,
+              0,
+              746,
+              528
+            ],
+            "alphaBBox16": [
+              117,
+              31,
+              310,
+              501
+            ]
+          },
+          {
+            "index": 2,
+            "phase": 0.25,
+            "durationMs": 90,
+            "file": "walk/ne/02.png",
+            "width": 372,
+            "height": 528,
+            "sizePx": [
+              372,
+              528
+            ],
+            "footPivot": {
+              "x": 186,
+              "y": 505
+            },
+            "scale": 0.16,
+            "groupScale": 1.0,
+            "bodyHeightSource": 475.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "beafec7aa46e0796dfcc436318edf376106862a4ff80892888309ac0fb269fdc",
+            "sourceFile": "native_candidates/ne_not_accepted/gaocai_walk_ne_02.png",
+            "sourceAtlas": "source/gaocai-walk-ne-atlas-candidate-v2.png",
+            "sourceRectXyxy": [
+              746,
+              0,
+              1118,
+              528
+            ],
+            "alphaBBox16": [
+              115,
+              30,
+              292,
+              501
+            ]
+          },
+          {
+            "index": 3,
+            "phase": 0.375,
+            "durationMs": 90,
+            "file": "walk/ne/03.png",
+            "width": 373,
+            "height": 528,
+            "sizePx": [
+              373,
+              528
+            ],
+            "footPivot": {
+              "x": 186,
+              "y": 505
+            },
+            "scale": 0.16,
+            "groupScale": 1.0,
+            "bodyHeightSource": 475.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "0abae8d43c3c68c2dc06426be3d6bb82f50cb7de6beb588606bf05f85e265c30",
+            "sourceFile": "native_candidates/ne_not_accepted/gaocai_walk_ne_03.png",
+            "sourceAtlas": "source/gaocai-walk-ne-atlas-candidate-v2.png",
+            "sourceRectXyxy": [
+              1118,
+              0,
+              1491,
+              528
+            ],
+            "alphaBBox16": [
+              83,
+              30,
+              277,
+              509
+            ]
+          },
+          {
+            "index": 4,
+            "phase": 0.5,
+            "durationMs": 90,
+            "file": "walk/ne/04.png",
+            "width": 550,
+            "height": 714,
+            "sizePx": [
+              550,
+              714
+            ],
+            "footPivot": {
+              "x": 295,
+              "y": 700
+            },
+            "scale": 0.11199999999999999,
+            "groupScale": 0.7,
+            "bodyHeightSource": 678.5714285714287,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "c09ef1bfcbf38b2a275b8221e4468be84a6325e65b98019bcee57536909e4603",
+            "sourceFile": "native_candidates/ne_not_accepted/gaocai_walk_ne_04.png",
+            "sourceAtlas": "source/gaocai-walk-ne-halfcycle-04-07-candidate-v3.png",
+            "sourceRectXyxy": [
+              0,
+              0,
+              550,
+              714
+            ],
+            "alphaBBox16": [
+              96,
+              18,
+              475,
+              704
+            ]
+          },
+          {
+            "index": 5,
+            "phase": 0.625,
+            "durationMs": 90,
+            "file": "walk/ne/05.png",
+            "width": 551,
+            "height": 714,
+            "sizePx": [
+              551,
+              714
+            ],
+            "footPivot": {
+              "x": 290,
+              "y": 700
+            },
+            "scale": 0.11199999999999999,
+            "groupScale": 0.7,
+            "bodyHeightSource": 678.5714285714287,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "8bdc6bfe20995457e95e1faa7f04c6f1ef73aaaf3af9a453b593afd4b1965c10",
+            "sourceFile": "native_candidates/ne_not_accepted/gaocai_walk_ne_05.png",
+            "sourceAtlas": "source/gaocai-walk-ne-halfcycle-04-07-candidate-v3.png",
+            "sourceRectXyxy": [
+              550,
+              0,
+              1101,
+              714
+            ],
+            "alphaBBox16": [
+              118,
+              28,
+              444,
+              693
+            ]
+          },
+          {
+            "index": 6,
+            "phase": 0.75,
+            "durationMs": 90,
+            "file": "walk/ne/06.png",
+            "width": 551,
+            "height": 714,
+            "sizePx": [
+              551,
+              714
+            ],
+            "footPivot": {
+              "x": 280,
+              "y": 700
+            },
+            "scale": 0.11199999999999999,
+            "groupScale": 0.7,
+            "bodyHeightSource": 678.5714285714287,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "83a044f0a1e3a9277c460427d0a6b434086e5ca1c312e2da5e43392ca63fa7dd",
+            "sourceFile": "native_candidates/ne_not_accepted/gaocai_walk_ne_06.png",
+            "sourceAtlas": "source/gaocai-walk-ne-halfcycle-04-07-candidate-v3.png",
+            "sourceRectXyxy": [
+              1101,
+              0,
+              1652,
+              714
+            ],
+            "alphaBBox16": [
+              169,
+              25,
+              424,
+              697
+            ]
+          },
+          {
+            "index": 7,
+            "phase": 0.875,
+            "durationMs": 90,
+            "file": "walk/ne/07.png",
+            "width": 550,
+            "height": 714,
+            "sizePx": [
+              550,
+              714
+            ],
+            "footPivot": {
+              "x": 280,
+              "y": 700
+            },
+            "scale": 0.11199999999999999,
+            "groupScale": 0.7,
+            "bodyHeightSource": 678.5714285714287,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "e0693ef4b63104426bddcf05219e171e3aacffc1f7955593dacef05c38363a86",
+            "sourceFile": "native_candidates/ne_not_accepted/gaocai_walk_ne_07.png",
+            "sourceAtlas": "source/gaocai-walk-ne-halfcycle-04-07-candidate-v3.png",
+            "sourceRectXyxy": [
+              1652,
+              0,
+              2202,
+              714
+            ],
+            "alphaBBox16": [
+              107,
+              20,
+              449,
+              702
+            ]
+          }
+        ]
+      },
+      "idle": {
+        "file": "idle/ne.png",
+        "width": 362,
+        "height": 543,
+        "sizePx": [
+          362,
+          543
+        ],
+        "bodyHeightSource": 517,
+        "footPivot": {
+          "x": 173,
+          "y": 527
+        },
+        "scale": 0.1470019342359768,
+        "groupScale": 1,
+        "sha256": "42f47821089fad4375677eafa1f5f8d76eb7f595bff1646f5165cf0d9ec4dfea",
+        "sourceFile": "basis/gaocai_basis_ne_candidate_v2.png",
+        "alphaBBox16": [
+          105,
+          14,
+          246,
+          531
+        ],
+        "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_MANUAL_GROUND_AND_PELVIS_ESTIMATE",
+        "sourceSelection": "Five-native-direction static basis v2; not a paused walking contact frame."
+      }
+    },
+    "n": {
+      "bodyHeightSource": 497.0,
+      "walk": {
+        "frameDurationMs": 90,
+        "cycleDurationMs": 720,
+        "sourceGroupScalePolicy": "1.0 except ne indices 4..7 use 0.70 as one group",
+        "frames": [
+          {
+            "index": 0,
+            "phase": 0.0,
+            "durationMs": 90,
+            "file": "walk/n/00.png",
+            "width": 362,
+            "height": 543,
+            "sizePx": [
+              362,
+              543
+            ],
+            "footPivot": {
+              "x": 181,
+              "y": 518
+            },
+            "scale": 0.1529175050301811,
+            "groupScale": 1.0,
+            "bodyHeightSource": 497.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "b640448e219806bb4978bf4ec045e64eb167ff1bba1a61cbbf0ce31ea2387651",
+            "sourceFile": "native_candidates/n_static_candidate/gaocai_walk_n_00.png",
+            "sourceAtlas": "atlases/gaocai-walk-n-original-4x2.png",
+            "sourceRectXyxy": [
+              0,
+              0,
+              362,
+              543
+            ],
+            "alphaBBox16": [
+              90,
+              19,
+              271,
+              522
+            ]
+          },
+          {
+            "index": 1,
+            "phase": 0.125,
+            "durationMs": 90,
+            "file": "walk/n/01.png",
+            "width": 362,
+            "height": 543,
+            "sizePx": [
+              362,
+              543
+            ],
+            "footPivot": {
+              "x": 181,
+              "y": 518
+            },
+            "scale": 0.1529175050301811,
+            "groupScale": 1.0,
+            "bodyHeightSource": 497.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "3c1f88b64f770c4057e63703756d359acba014a1c000c7ddeaf35e9223c32926",
+            "sourceFile": "native_candidates/n_static_candidate/gaocai_walk_n_01.png",
+            "sourceAtlas": "atlases/gaocai-walk-n-original-4x2.png",
+            "sourceRectXyxy": [
+              362,
+              0,
+              724,
+              543
+            ],
+            "alphaBBox16": [
+              96,
+              19,
+              269,
+              516
+            ]
+          },
+          {
+            "index": 2,
+            "phase": 0.25,
+            "durationMs": 90,
+            "file": "walk/n/02.png",
+            "width": 362,
+            "height": 543,
+            "sizePx": [
+              362,
+              543
+            ],
+            "footPivot": {
+              "x": 181,
+              "y": 518
+            },
+            "scale": 0.1529175050301811,
+            "groupScale": 1.0,
+            "bodyHeightSource": 497.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "d08bd6f30a2febb4ceee1a951bfd4396376c37315c2c18d7fc09b88003d00e40",
+            "sourceFile": "native_candidates/n_static_candidate/gaocai_walk_n_02.png",
+            "sourceAtlas": "atlases/gaocai-walk-n-original-4x2.png",
+            "sourceRectXyxy": [
+              724,
+              0,
+              1086,
+              543
+            ],
+            "alphaBBox16": [
+              95,
+              19,
+              274,
+              501
+            ]
+          },
+          {
+            "index": 3,
+            "phase": 0.375,
+            "durationMs": 90,
+            "file": "walk/n/03.png",
+            "width": 362,
+            "height": 543,
+            "sizePx": [
+              362,
+              543
+            ],
+            "footPivot": {
+              "x": 181,
+              "y": 518
+            },
+            "scale": 0.1529175050301811,
+            "groupScale": 1.0,
+            "bodyHeightSource": 497.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "68ce4be947356fde1b392874c8cf8026b6c588561286b308ac2afd69a5d6d0d5",
+            "sourceFile": "native_candidates/n_static_candidate/gaocai_walk_n_03.png",
+            "sourceAtlas": "atlases/gaocai-walk-n-original-4x2.png",
+            "sourceRectXyxy": [
+              1086,
+              0,
+              1448,
+              543
+            ],
+            "alphaBBox16": [
+              97,
+              19,
+              280,
+              514
+            ]
+          },
+          {
+            "index": 4,
+            "phase": 0.5,
+            "durationMs": 90,
+            "file": "walk/n/04.png",
+            "width": 362,
+            "height": 543,
+            "sizePx": [
+              362,
+              543
+            ],
+            "footPivot": {
+              "x": 181,
+              "y": 518
+            },
+            "scale": 0.1529175050301811,
+            "groupScale": 1.0,
+            "bodyHeightSource": 497.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "7a63d5095225e06440d5b054bfb538664e7e67e42930504dbe94384c6d76bcc3",
+            "sourceFile": "native_candidates/n_static_candidate/gaocai_walk_n_04.png",
+            "sourceAtlas": "atlases/gaocai-walk-n-original-4x2.png",
+            "sourceRectXyxy": [
+              0,
+              543,
+              362,
+              1086
+            ],
+            "alphaBBox16": [
+              94,
+              18,
+              282,
+              521
+            ]
+          },
+          {
+            "index": 5,
+            "phase": 0.625,
+            "durationMs": 90,
+            "file": "walk/n/05.png",
+            "width": 362,
+            "height": 543,
+            "sizePx": [
+              362,
+              543
+            ],
+            "footPivot": {
+              "x": 181,
+              "y": 518
+            },
+            "scale": 0.1529175050301811,
+            "groupScale": 1.0,
+            "bodyHeightSource": 497.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "9e17ea39d73dbd8907f70936a68ff0f4d1eb135156152643f39cec742350e1ef",
+            "sourceFile": "native_candidates/n_static_candidate/gaocai_walk_n_05.png",
+            "sourceAtlas": "atlases/gaocai-walk-n-original-4x2.png",
+            "sourceRectXyxy": [
+              362,
+              543,
+              724,
+              1086
+            ],
+            "alphaBBox16": [
+              94,
+              19,
+              278,
+              516
+            ]
+          },
+          {
+            "index": 6,
+            "phase": 0.75,
+            "durationMs": 90,
+            "file": "walk/n/06.png",
+            "width": 362,
+            "height": 543,
+            "sizePx": [
+              362,
+              543
+            ],
+            "footPivot": {
+              "x": 181,
+              "y": 518
+            },
+            "scale": 0.1529175050301811,
+            "groupScale": 1.0,
+            "bodyHeightSource": 497.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "8c7027aa93da8c095a97b97929f04ff2ed020ab37e55d1e659cdf936b953bc9c",
+            "sourceFile": "native_candidates/n_static_candidate/gaocai_walk_n_06.png",
+            "sourceAtlas": "atlases/gaocai-walk-n-original-4x2.png",
+            "sourceRectXyxy": [
+              724,
+              543,
+              1086,
+              1086
+            ],
+            "alphaBBox16": [
+              94,
+              18,
+              276,
+              502
+            ]
+          },
+          {
+            "index": 7,
+            "phase": 0.875,
+            "durationMs": 90,
+            "file": "walk/n/07.png",
+            "width": 362,
+            "height": 543,
+            "sizePx": [
+              362,
+              543
+            ],
+            "footPivot": {
+              "x": 181,
+              "y": 518
+            },
+            "scale": 0.1529175050301811,
+            "groupScale": 1.0,
+            "bodyHeightSource": 497.0,
+            "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_SOURCE_PREVIEW_ESTIMATE",
+            "sha256": "4eb0f9d20620aa8b595f9d5cf5fe5290a58d141730d6f7abcbff27ad22443899",
+            "sourceFile": "native_candidates/n_static_candidate/gaocai_walk_n_07.png",
+            "sourceAtlas": "atlases/gaocai-walk-n-original-4x2.png",
+            "sourceRectXyxy": [
+              1086,
+              543,
+              1448,
+              1086
+            ],
+            "alphaBBox16": [
+              87,
+              19,
+              275,
+              517
+            ]
+          }
+        ]
+      },
+      "idle": {
+        "file": "idle/n.png",
+        "width": 362,
+        "height": 543,
+        "sizePx": [
+          362,
+          543
+        ],
+        "bodyHeightSource": 517,
+        "footPivot": {
+          "x": 201,
+          "y": 528
+        },
+        "scale": 0.1470019342359768,
+        "groupScale": 1,
+        "sha256": "1d8fa1198816921121ae814a6b0c4f47bdbb18d428fd56a0f74ae978ccb390ed",
+        "sourceFile": "basis/gaocai_basis_n_candidate_v2.png",
+        "alphaBBox16": [
+          114,
+          12,
+          287,
+          529
+        ],
+        "pivotStatus": "PROVISIONAL_LOW_CONFIDENCE_MANUAL_GROUND_AND_PELVIS_ESTIMATE",
+        "sourceSelection": "Five-native-direction static basis v2; not a paused walking contact frame."
+      }
+    }
+  },
+  "knownIssues": {
+    "s": "Static leg exchange readable; continuous playback, foot sliding and loop seam not accepted.",
+    "n": "Static leg exchange readable; continuous playback, foot sliding and loop seam not accepted.",
+    "se": "Complete double step remains inconclusive; contact-frame leg identity is obscured by clothing.",
+    "e": "Complete original v1; 00-to-01 and 04-to-05 spacing change is abrupt. Rejected single-frame corrections are excluded.",
+    "ne": "Old 00-03 + new 04-07; new 06 improves leg exchange but 04/05 near-arm swap failed. Later group uses uniform 0.70 scale. Batch proportions and 03/04,07/00 seams remain unaccepted.",
+    "all": "Preserves source low-alpha noise and asymmetric clothing/light. Mirroring is authorized for this unarmed walk trial only. 90 ms/frame is uncalibrated to current player speed; appearance remains subject to user review."
+  },
+  "counts": {
+    "walkPng": 40,
+    "idlePng": 5,
+    "nativePngTotal": 45,
+    "mirroredPng": 0
+  },
+  "operations": [
+    "byte-for-byte PNG copies",
+    "manifest-only fixed source-group display scale",
+    "manifest-only ground-pivot registration",
+    "runtime-only horizontal mirror mapping"
+  ],
+  "gifCapabilityCheck": {
+    "date": "2026-11-12",
+    "tool": "image_gen__imagegen",
+    "parameters": [
+      "prompt",
+      "referenced_image_paths",
+      "num_last_images_to_include",
+      "transparent_background"
+    ],
+    "newGifControlExposed": false,
+    "action": "No repeated imagegen request; capability limitation applies to the exposed tool schema, not to product availability."
+  }
+}
