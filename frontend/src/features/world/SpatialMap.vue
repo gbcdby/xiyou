@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
-import type { Position, SnapshotV2 } from '../../../../game/spatial-types.ts';
+import type { Position, SnapshotV2, ItemViewV2, TargetViewV2 } from '../../../../game/spatial-types.ts';
 import { ConfirmedMotion } from '../../domain/spatial-motion.ts';
 import { layoutSpatialLabels, screenPosition } from '../../domain/spatial-labels.ts';
 import { sceneArtwork, spriteForAppearance } from '../../domain/gaolao-art.ts';
 import SpatialActorArt from './SpatialActorArt.vue';
 import SpatialObjectArt from './SpatialObjectArt.vue';
 import { objectArtContext, objectInstanceKey, objectVisualVariant, selectObjectArt } from '../../domain/gaolao-object-art.ts';
+import { foregroundOpacity, orderSceneEntries, selectSceneDoor, sceneLayerPresentation } from '../../domain/gaolao-scene-layers.ts';
+import type { SceneForeground, SceneDoorGeometry } from '../../domain/gaolao-scene-layers.ts';
+import { useSceneLayerImages } from './use-scene-layer-images.ts';
 import type { SpatialLabelInput } from '../../domain/spatial-labels.ts';
 import type { ScreenRect } from '../../domain/spatial-labels.ts';
 import { cameraForHud, hudCameraAlternatives, placeHudCards } from '../../domain/gaolao-hud-layout.ts';
@@ -49,17 +52,24 @@ function toggleCamera() { follow.value = !follow.value; }
 function returnToSelf() { follow.value = true; }
 defineExpose({ returnToSelf });
 const scene = computed(() => projection.value.scene);
+const artContext = computed(() => objectArtContext(props.snapshot));
+const layerPresentation = computed(() => sceneLayerPresentation(artContext.value));
+const layerGroup = computed(() => layerPresentation.value.registered);
+const layerResources = computed(() => layerPresentation.value.resources);
+const sceneDoor = computed(() => layerPresentation.value.door);
+const layerContextKey = computed(() => JSON.stringify(artContext.value));
+const { ready: layersReady, failed: layersFailed, instance: layerInstance, source: layerSource, displayFailure: sceneResourceFailed } = useSceneLayerImages(layerGroup, layerContextKey, artAttempt);
 const backgroundFailed = ref(false);
-const artwork = computed(() => sceneArtwork(scene.value?.sceneId));
+const artwork = computed(() => layerGroup.value ? null : sceneArtwork(scene.value?.sceneId));
 const backgroundUrl = computed(() => artwork.value && (artAttempt.value ? `${artwork.value}?retry=${artAttempt.value}` : artwork.value));
 watch(artwork, () => { backgroundFailed.value = false; });
+const displayObstacles = computed(() => scene.value?.obstacles.filter(obstacle => !(sceneDoor.value && scene.value?.sceneId === 'gaolao-courtyard' && obstacle.obstacleId === 'sealed-door')) ?? []);
 const people = computed(() => [...projection.value.entities.filter(e => e.entityRef !== projection.value.self.entityRef), projection.value.self].filter(e => e.sceneId === scene.value?.sceneId && e.position).map(e => {
   const pose = motion.pose(e.entityRef, frameTime.value);
   const appearanceId = 'appearanceId' in e && typeof e.appearanceId === 'string' ? e.appearanceId : undefined;
   return { ...e, appearanceId, position: reducedMotion.value ? e.position : pose?.position || e.position, drawnFacing: pose?.facing || e.facing, moving: !projection.value.paused && !reducedMotion.value && Boolean(pose?.moving), distance: pose?.distance || 0 };
 }).sort((a, b) => a.position!.y - b.position!.y));
 const groundItems = computed(() => projection.value.items.filter(i => i.location.kind === 'ground' && i.location.sceneId === scene.value?.sceneId));
-const artContext = computed(() => objectArtContext(props.snapshot));
 const mapObjects = computed(() => [...groundItems.value, ...projection.value.targets.filter(target => target.sceneId === scene.value?.sceneId)]);
 const objectKeys = computed(() => new Set(mapObjects.value.map(object => objectInstanceKey(artContext.value, object))));
 const invalidObjectState = computed(() => mapObjects.value.some(object => objectVisualVariant(object, artContext.value, 'map') === 'invalid'));
@@ -74,6 +84,42 @@ const selectedObjects = computed(() => [
   ...projection.value.targets.filter(target => target.entityRef === props.selected && target.sceneId === scene.value?.sceneId).map(target => ({ key: target.entityRef, position: target.position })),
   ...groundItems.value.flatMap(item => item.entityRef === props.selected && item.location.kind === 'ground' ? [{ key: item.entityRef, position: item.location.position }] : []),
 ]);
+const doorSelection = computed(() => selectSceneDoor(layerResources.value, artContext.value, projection.value.targets, undefined, layersReady.value));
+const doorInstanceKey = computed(() => JSON.stringify([layerContextKey.value, layerResources.value?.groupVersion, doorSelection.value.target?.entityRef, doorSelection.value.target?.resourceRevision, doorSelection.value.frame?.variant, layersReady.value]));
+const doorFailed = ref(false);
+watch(doorInstanceKey, () => { doorFailed.value = false; }, { flush: 'sync' });
+function doorResource(value: { instanceKey: string; failed: boolean }) { if (value.instanceKey === doorInstanceKey.value) doorFailed.value = value.failed; }
+const protectedBodies = computed(() => [
+  ...people.value.filter(person => protectedRefs.value.has(person.entityRef)).map(person => {
+    const sprite = spriteForAppearance(person.appearanceId, person.drawnFacing, person.moving, person.distance, reducedMotion.value);
+    const b = sprite ? { ...sprite.bounds, x: sprite.mirrorX ? -sprite.bounds.x - sprite.bounds.width : sprite.bounds.x } : { x: -22, y: -82, width: 44, height: 90 };
+    return { depthY: person.position!.y, bounds: { ...b, x: person.position!.x + b.x, y: person.position!.y + b.y } };
+  }),
+  ...mapObjects.value.filter(object => protectedRefs.value.has(object.entityRef)).flatMap(object => {
+    const position = 'location' in object ? object.location.kind === 'ground' ? object.location.position : null : object.position;
+    if (!position) return [];
+    const b = selectObjectArt(object, artContext.value, 'map')?.bounds ?? { x: -18, y: -18, width: 36, height: 36 };
+    return [{ depthY: position.y, bounds: { ...b, x: position.x + b.x, y: position.y + b.y } }];
+  }),
+]);
+type DrawnPerson = (typeof people.value)[number];
+type LayerEntry = { key: string; depthY: number } & (
+  { kind: 'target'; target: TargetViewV2 } | { kind: 'item'; item: ItemViewV2 } | { kind: 'person'; person: DrawnPerson } |
+  { kind: 'foreground'; fragment: SceneForeground } | { kind: 'door'; door: SceneDoorGeometry }
+);
+const drawEntries = computed(() => {
+  const entries: LayerEntry[] = [
+    ...projection.value.targets.filter(target => target.sceneId === scene.value?.sceneId).map(target => ({ kind: 'target' as const, key: objectInstanceKey(artContext.value, target), depthY: target.position.y, target })),
+    ...groundItems.value.map(item => ({ kind: 'item' as const, key: objectInstanceKey(artContext.value, item), depthY: item.location.kind === 'ground' ? item.location.position.y : 0, item })),
+    ...people.value.map(person => ({ kind: 'person' as const, key: person.entityRef + ':' + person.appearanceEpoch, depthY: person.position!.y, person })),
+  ];
+  // 未登记时保留原 targets→items→按脚底排序人物的既有顺序。
+  if (!layerGroup.value) return entries;
+  if (layerResources.value && layersReady.value) for (const fragment of layerResources.value.foreground) entries.push({ kind: 'foreground', key: 'foreground:' + fragment.id, depthY: fragment.depthY, fragment });
+  if (sceneDoor.value) entries.push({ kind: 'door', key: 'scene-door', depthY: sceneDoor.value.depthY, door: sceneDoor.value });
+  return orderSceneEntries(entries);
+});
+const targetFrame = (target: TargetViewV2) => sceneDoor.value && target.visualKey === 'timber-door' ? null : selectObjectArt(target, artContext.value, 'map');
 function labelsFor(view: ScreenRect, cardSpace: ScreenRect[] = []) {
   const size = viewportSize.value;
   const inputs: SpatialLabelInput[] = [];
@@ -194,28 +240,48 @@ function keyboard(event: KeyboardEvent) {
   <section class="spatial-map-card" aria-label="授权行走场景">
     <header class="spatial-map-toolbar"><div><strong>{{ scene?.name || '等待场景' }}</strong><span>点地行走 · 选中物件后靠近操作</span></div><div class="button-row"><button class="secondary-button" @click="toggleCamera">{{ follow ? '查看全图' : '跟随角色' }}</button><button class="secondary-button" @click="returnToSelf">回到角色</button><button v-if="immersive" class="secondary-button" @click="emit('objects')">附近对象与出口</button></div><p v-if="immersive && hudNotice" class="gaolao-space-notice" role="status">{{ hudNotice }}<button class="text-button" @click="emit('restore')">{{ hudRestoreLabel || '回到角色' }}</button></p></header>
     <div v-if="scene" ref="viewport" class="spatial-map-viewport">
-    <svg ref="svg" class="spatial-map" :class="{ 'has-artwork': artwork && !backgroundFailed }" data-testid="spatial-map" :viewBox="box" tabindex="0" role="application" aria-label="行走地图，点击地面或使用方向键移动，Escape停步" @click="click" @keydown="keyboard">
-      <defs><mask v-for="(obstacle, index) in scene.obstacles" :id="`obstacle-mask-${index}`" :key="obstacle.obstacleId" maskUnits="userSpaceOnUse" :x="0" :y="0" :width="scene.width" :height="scene.height"><rect :width="scene.width" :height="scene.height" fill="white" /><template v-for="area in scene.walkableAreas" :key="area.areaId"><polygon v-if="obstacle.exceptAreas.includes(area.areaId)" :points="points(area.polygon)" fill="black" /></template></mask></defs>
+    <svg ref="svg" class="spatial-map" :class="{ 'has-artwork': layerGroup ? layersReady : artwork && !backgroundFailed }" :data-scene-layer-status="!layerGroup ? 'legacy' : layersReady ? 'ready' : layersFailed ? 'failed' : 'pending'" data-testid="spatial-map" :viewBox="box" tabindex="0" role="application" aria-label="行走地图，点击地面或使用方向键移动，Escape停步" @click="click" @keydown="keyboard">
+      <defs><mask v-for="(obstacle, index) in displayObstacles" :id="`obstacle-mask-${index}`" :key="obstacle.obstacleId" maskUnits="userSpaceOnUse" :x="0" :y="0" :width="scene.width" :height="scene.height"><rect :width="scene.width" :height="scene.height" fill="white" /><template v-for="area in scene.walkableAreas" :key="area.areaId"><polygon v-if="obstacle.exceptAreas.includes(area.areaId)" :points="points(area.polygon)" fill="black" /></template></mask></defs>
       <rect :width="scene.width" :height="scene.height" fill="#eee3cb" />
       <image v-if="backgroundUrl && !backgroundFailed" class="spatial-scene-art" :href="backgroundUrl" :width="scene.width" :height="scene.height" preserveAspectRatio="none" aria-hidden="true" @error="backgroundFailed = true" />
-      <g v-if="!artwork || backgroundFailed">
+      <g v-if="layerResources && layersReady" class="spatial-scene-layers" pointer-events="none" aria-hidden="true">
+        <image class="spatial-scene-base" :data-scene-instance="layerInstance" :href="layerSource(layerResources.base)" :x="layerResources.base.worldRect.x" :y="layerResources.base.worldRect.y" :width="layerResources.base.worldRect.width" :height="layerResources.base.worldRect.height" preserveAspectRatio="none" @error="sceneResourceFailed" />
+        <image v-for="floor in layerResources.floors" :key="floor.file" class="spatial-scene-floor" :data-scene-instance="layerInstance" :href="layerSource(floor)" :x="floor.worldRect.x" :y="floor.worldRect.y" :width="floor.worldRect.width" :height="floor.worldRect.height" preserveAspectRatio="none" @error="sceneResourceFailed" />
+      </g>
+      <g v-if="layerGroup ? !layersReady : !artwork || backgroundFailed" class="spatial-geometric-fallback">
       <polygon v-for="area in scene.walkableAreas" :key="area.areaId" :points="points(area.polygon)" class="spatial-ground" />
-      <polygon v-for="(obstacle, index) in scene.obstacles" :key="obstacle.obstacleId" :points="points(obstacle.polygon)" class="spatial-obstacle" :mask="`url(#obstacle-mask-${index})`" />
+      <polygon v-for="(obstacle, index) in displayObstacles" :key="obstacle.obstacleId" :points="points(obstacle.polygon)" class="spatial-obstacle" :mask="`url(#obstacle-mask-${index})`" />
       </g>
       <polyline v-if="projection.movement && ['accepted', 'moving'].includes(projection.movement.status)" class="spatial-route" :points="points(projection.movement.path)" />
-      <g v-for="target in projection.targets.filter(t => t.sceneId === scene!.sceneId)" :key="objectInstanceKey(artContext, target)" :transform="`translate(${target.position.x} ${target.position.y})`" class="spatial-target" :class="{ selected: selected === target.entityRef }" tabindex="0" role="button" :aria-label="`选择${target.name}`" @click.stop="emit('select', target.entityRef)" @keydown.enter.stop="emit('select', target.entityRef)"><SpatialObjectArt :frame="selectObjectArt(target, artContext, 'map')" :instance-key="objectInstanceKey(artContext, target)" :attempt="artAttempt" @resource="objectResource"><rect x="-13" y="-13" width="26" height="26" rx="4" /></SpatialObjectArt><circle class="spatial-object-selection" r="18" /><circle class="spatial-hit" :r="hitRadius" /></g>
-      <g v-for="item in groundItems" :key="objectInstanceKey(artContext, item)" :transform="item.location.kind === 'ground' ? `translate(${item.location.position.x} ${item.location.position.y})` : ''" class="spatial-item" :class="{ selected: selected === item.entityRef }" tabindex="0" role="button" :aria-label="`选择${item.name}`" @click.stop="emit('select', item.entityRef)" @keydown.enter.stop="emit('select', item.entityRef)"><SpatialObjectArt :frame="selectObjectArt(item, artContext, 'map')" :instance-key="objectInstanceKey(artContext, item)" :attempt="artAttempt" @resource="objectResource"><path d="M0 -10 L12 0 L0 10 L-12 0 Z" /></SpatialObjectArt><circle class="spatial-object-selection" r="18" /><circle class="spatial-hit" :r="hitRadius" /></g>
-      <g v-for="person in people" :key="person.entityRef + ':' + person.appearanceEpoch" :transform="`translate(${person.position!.x} ${person.position!.y})`" :data-spatial-self="person.entityRef === projection.self.entityRef ? 'true' : undefined" class="spatial-person" :class="{ self: person.entityRef === projection.self.entityRef, selected: selected === person.entityRef }" tabindex="0" role="button" :aria-label="`${personLabels?.[person.entityRef] || person.name}${person.entityRef === projection.self.entityRef ? '，本人' : ''}`" @click.stop="emit('select', person.entityRef)" @keydown.enter.stop="emit('select', person.entityRef)" @keydown.space.prevent.stop="emit('select', person.entityRef)">
+      <template v-for="entry in drawEntries" :key="entry.key">
+      <g v-if="entry.kind === 'target'" :transform="`translate(${entry.target.position.x} ${entry.target.position.y})`" class="spatial-target" :class="{ selected: selected === entry.target.entityRef }" :data-depth-y="entry.depthY" tabindex="0" role="button" :aria-label="`选择${entry.target.name}`" @click.stop="emit('select', entry.target.entityRef)" @keydown.enter.stop="emit('select', entry.target.entityRef)"><SpatialObjectArt :frame="targetFrame(entry.target)" :instance-key="entry.key" :attempt="artAttempt" @resource="objectResource"><rect x="-13" y="-13" width="26" height="26" rx="4" /></SpatialObjectArt><circle class="spatial-object-selection" r="18" /><circle class="spatial-hit" :r="hitRadius" /></g>
+      <g v-else-if="entry.kind === 'item'" :transform="entry.item.location.kind === 'ground' ? `translate(${entry.item.location.position.x} ${entry.item.location.position.y})` : ''" class="spatial-item" :class="{ selected: selected === entry.item.entityRef }" :data-depth-y="entry.depthY" tabindex="0" role="button" :aria-label="`选择${entry.item.name}`" @click.stop="emit('select', entry.item.entityRef)" @keydown.enter.stop="emit('select', entry.item.entityRef)"><SpatialObjectArt :frame="selectObjectArt(entry.item, artContext, 'map')" :instance-key="entry.key" :attempt="artAttempt" @resource="objectResource"><path d="M0 -10 L12 0 L0 10 L-12 0 Z" /></SpatialObjectArt><circle class="spatial-object-selection" r="18" /><circle class="spatial-hit" :r="hitRadius" /></g>
+      <g v-else-if="entry.kind === 'person'" :transform="`translate(${entry.person.position!.x} ${entry.person.position!.y})`" :data-spatial-self="entry.person.entityRef === projection.self.entityRef ? 'true' : undefined" :data-depth-y="entry.depthY" class="spatial-person" :class="{ self: entry.person.entityRef === projection.self.entityRef, selected: selected === entry.person.entityRef }" tabindex="0" role="button" :aria-label="`${personLabels?.[entry.person.entityRef] || entry.person.name}${entry.person.entityRef === projection.self.entityRef ? '，本人' : ''}`" @click.stop="emit('select', entry.person.entityRef)" @keydown.enter.stop="emit('select', entry.person.entityRef)" @keydown.space.prevent.stop="emit('select', entry.person.entityRef)">
         <ellipse cy="-1" rx="17" ry="6" class="spatial-shadow" />
-        <ellipse v-if="person.entityRef === projection.self.entityRef || selected === person.entityRef" cy="-1" rx="24" ry="9" class="spatial-selection-ring" />
-        <SpatialActorArt :appearance-id="person.appearanceId" :facing="person.drawnFacing" :moving="person.moving" :distance="person.distance" :reduced-motion="reducedMotion" :attempt="artAttempt" @resource="resource" />
+        <ellipse v-if="!layerGroup && (entry.person.entityRef === projection.self.entityRef || selected === entry.person.entityRef)" cy="-1" rx="24" ry="9" class="spatial-selection-ring" />
+        <SpatialActorArt :appearance-id="entry.person.appearanceId" :facing="entry.person.drawnFacing" :moving="entry.person.moving" :distance="entry.person.distance" :reduced-motion="reducedMotion" :attempt="artAttempt" @resource="resource" />
         <circle class="spatial-hit" :r="hitRadius" fill="transparent" />
+      </g>
+      <image v-else-if="entry.kind === 'foreground'" class="spatial-scene-foreground" :data-foreground="entry.fragment.id" :data-depth-y="entry.depthY" :data-scene-instance="layerInstance" :href="layerSource(entry.fragment)" :x="entry.fragment.worldRect.x" :y="entry.fragment.worldRect.y" :width="entry.fragment.worldRect.width" :height="entry.fragment.worldRect.height" :opacity="foregroundOpacity(entry.fragment, protectedBodies)" preserveAspectRatio="none" pointer-events="none" aria-hidden="true" @error="sceneResourceFailed" />
+      <g v-else-if="entry.kind === 'door'" class="spatial-scene-door" :data-depth-y="entry.depthY" :transform="`translate(${entry.door.targetPosition.x} ${entry.door.targetPosition.y})`" pointer-events="none" aria-hidden="true">
+        <SpatialObjectArt :key="doorInstanceKey" :frame="doorSelection.frame" :instance-key="doorInstanceKey" :attempt="artAttempt" @resource="doorResource">
+          <svg class="spatial-neutral-door" :x="entry.door.neutralBounds.x - entry.door.targetPosition.x" :y="entry.door.neutralBounds.y - entry.door.targetPosition.y" :width="entry.door.neutralBounds.width" :height="entry.door.neutralBounds.height" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <rect x="0" y="0" width="100" height="100" rx="8" fill="#edece5" stroke="#9b9e94" stroke-width="2" />
+            <path d="M5 25L25 5 M5 50L50 5 M5 75L75 5 M5 95L95 5 M25 95L95 25 M50 95L95 50 M75 95L95 75" stroke="#b8bdb2" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="18" fill="#f6f2e7" /><text x="50" y="61" text-anchor="middle" font-size="32" fill="#596963">?</text>
+          </svg>
+        </SpatialObjectArt>
+      </g>
+      </template>
+      <g v-if="layerGroup" class="spatial-layer-feedback" pointer-events="none" aria-hidden="true">
+        <ellipse v-for="person in people.filter(value => value.entityRef === projection.self.entityRef || value.entityRef === selected)" :key="person.entityRef" :cx="person.position!.x" :cy="person.position!.y - 1" rx="24" ry="9" class="spatial-selection-ring" />
+        <circle v-for="object in selectedObjects" :key="object.key" :cx="object.position.x" :cy="object.position.y" r="18" class="spatial-layer-object-selection" />
       </g>
     </svg>
     <svg class="spatial-label-guides" :viewBox="'0 0 ' + viewportSize.width + ' ' + viewportSize.height" aria-hidden="true"><line v-for="label in labels.labels" :key="label.key" :x1="label.point.x" :y1="label.point.y" :x2="label.lineX" :y2="label.lineY" /></svg>
     <div class="spatial-map-labels"><template v-for="label in labels.labels" :key="label.key"><button v-if="label.selectable" class="spatial-map-label" :class="{ selected: selected === label.key, self: projection.self.entityRef === label.key }" :style="{ left: label.x + 'px', top: label.y + 'px', width: label.width + 'px', height: label.height + 'px' }" :title="label.label" :aria-label="'选择' + label.label" @click.stop="emit('select', label.key)"><span>{{ label.label }}</span></button><span v-else class="spatial-map-label spatial-map-label-anchor" :style="{ left: label.x + 'px', top: label.y + 'px', width: label.width + 'px', height: label.height + 'px' }">{{ label.label }}</span></template></div>
     </div>
     <button v-if="labels.omitted" class="text-button spatial-map-overflow" @click="emit('objects')">另有 {{ labels.omitted }} 个标记，查看对象与地点</button>
-    <p v-if="!immersive || projection.paused || backgroundFailed || missingResources.size || missingObjects.size || invalidObjectState" class="spatial-map-note" role="status">{{ projection.paused ? '等待同伴回来，眼下的准备会保留。' : '点地行走，靠近后再看一看。' }}<template v-if="backgroundFailed || missingResources.size || missingObjects.size"> 部分图像暂未载入，仍可继续操作。<button class="text-button" @click="retryArtwork">重新载入图像</button></template><template v-if="invalidObjectState"> 部分物件状态暂无法显示，仍可继续操作。</template></p>
+    <p v-if="!immersive || projection.paused || backgroundFailed || layersFailed || doorFailed || missingResources.size || missingObjects.size || invalidObjectState" class="spatial-map-note" role="status">{{ projection.paused ? '等待同伴回来，眼下的准备会保留。' : '点地行走，靠近后再看一看。' }}<template v-if="backgroundFailed || layersFailed || doorFailed || missingResources.size || missingObjects.size"> 部分图像暂未载入，仍可继续操作。<button class="text-button" @click="retryArtwork">重新载入图像</button></template><template v-if="invalidObjectState"> 部分物件状态暂无法显示，仍可继续操作。</template></p>
   </section>
 </template>
