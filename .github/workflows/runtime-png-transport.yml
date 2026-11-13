@@ -1,0 +1,30 @@
+name: 一次性运行背景图传输
+
+on:
+  push:
+    branches:
+      - auto/adv001-runtime-png-transport-20261113
+
+permissions:
+  contents: write
+
+concurrency:
+  group: xiyou-runtime-png-transport-20261113
+  cancel-in-progress: false
+
+jobs:
+  create_blobs:
+    if: github.repository == 'gbcdby/xiyou' && github.ref == 'refs/heads/auto/adv001-runtime-png-transport-20261113' && github.event_name == 'push'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: 读取固定传输候选
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+      - name: 重组核验并创建两个完整 Git blob
+        env:
+          XIYOU_BLOB_TOKEN: ${{ github.token }}
+        run: python3 .github/scripts/runtime-png-transport.py
+

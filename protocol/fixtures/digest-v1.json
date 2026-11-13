@@ -1,7 +1,0 @@
-{
-  "algorithm": "SHA-256",
-  "encoding": "UTF-8",
-  "canonical": "{\"action\":{\"expectedItemRevision\":\"2\",\"itemId\":\"I7\",\"kind\":\"transfer_item\",\"targetId\":\"C4\"},\"actorId\":\"C3\",\"baseSeq\":\"1008\",\"controlEpoch\":\"4\",\"schemaVersion\":1,\"sessionId\":\"S1\"}",
-  "sha256": "cc520129c4a56e590d9ab6ede27f442465a0ee23a9bb0a3a35558a9930f2139a",
-  "source": "M0 协议 4.1；Python hashlib 独立计算"
-}

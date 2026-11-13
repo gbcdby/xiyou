@@ -1,0 +1,210 @@
+{
+  "version": 1,
+  "repository": "gbcdby/xiyou",
+  "branch": "auto/adv001-runtime-png-transport-20261113",
+  "part_bytes": 240000,
+  "assets": {
+    "courtyard": {
+      "target_path": "frontend/public/assets/gaolaozhuang/scenes/courtyard.png",
+      "bytes": 3423640,
+      "sha256": "f5df307eaea03188e823a279cb3df3a65b1b6a7931c329294cd6b79e4c0d510a",
+      "git_blob": "2d6cfd174f9e26b89dedf44a9474d79f99dd3762",
+      "parts": [
+        {
+          "path": "transport/chunks/courtyard/000.part",
+          "bytes": 240000,
+          "sha256": "619eb5db22f1a86a3bd888f47856f18ecc14a2deb193660dda42eaba09c3b344",
+          "git_blob": "09ef3780de9962134132a422fff29a8d5715e7ae"
+        },
+        {
+          "path": "transport/chunks/courtyard/001.part",
+          "bytes": 240000,
+          "sha256": "904b43d8b40ae1926b6080ed844d23141f5c637cfdb574b710e0077d5111ecb4",
+          "git_blob": "cd1a8e2b15f23183835d2628b26e51a9d119244c"
+        },
+        {
+          "path": "transport/chunks/courtyard/002.part",
+          "bytes": 240000,
+          "sha256": "0750735122b3b10cfad69943bb46ad1bbf4f6a6f0186cd5eac0f94f6f9889d54",
+          "git_blob": "dc4325b65fde437c32c33c593c61beee3b15ed42"
+        },
+        {
+          "path": "transport/chunks/courtyard/003.part",
+          "bytes": 240000,
+          "sha256": "52843e1a81ad27f64e0c43392bc5f687c5d12fdbaed36a3a020efa39b2fcd4c5",
+          "git_blob": "474984f2740a47134d9cbab3b59add5bfefc4825"
+        },
+        {
+          "path": "transport/chunks/courtyard/004.part",
+          "bytes": 240000,
+          "sha256": "5dafc548e4331cfca109c0481229f8c457073a292c1e3a7d195f0ec4159707de",
+          "git_blob": "da09fbcdc62896c9b5fcdf20283bc130e0a71585"
+        },
+        {
+          "path": "transport/chunks/courtyard/005.part",
+          "bytes": 240000,
+          "sha256": "647b1ec7abede8bcf3549752a767e83ed02b1cd4d8733ad7fe18e8275e76e197",
+          "git_blob": "470d45dc9267915517e205cf2e35836dffc50c9e"
+        },
+        {
+          "path": "transport/chunks/courtyard/006.part",
+          "bytes": 240000,
+          "sha256": "b5f6e82a5d7517452e0670d29a48979880dd9b9891c0db67c566e0421f045ed4",
+          "git_blob": "c5186ccf52cc4f97817f052817288ee2cc0ca5d4"
+        },
+        {
+          "path": "transport/chunks/courtyard/007.part",
+          "bytes": 240000,
+          "sha256": "b52fffa49da0b4d23e488e14308e1296b5d47362cf4555527cd61190e6568e3d",
+          "git_blob": "04f16d46e06902f85acecd610df5df90316a2c94"
+        },
+        {
+          "path": "transport/chunks/courtyard/008.part",
+          "bytes": 240000,
+          "sha256": "edc6111629586be93328a2c930a9a7d723bbbc004372c249e79f7336f9661eb8",
+          "git_blob": "25bab0801b502a1626f9eaa2de5a84db07d725de"
+        },
+        {
+          "path": "transport/chunks/courtyard/009.part",
+          "bytes": 240000,
+          "sha256": "505990bc2ace8277e50926dcbe56921647799c77a1e737b3a846b73018b70cb8",
+          "git_blob": "07fe9ae712526595f85254e676661e580f7f1240"
+        },
+        {
+          "path": "transport/chunks/courtyard/010.part",
+          "bytes": 240000,
+          "sha256": "0c2e69dbb6fe80b1f651fea635b8fb834a055e4217c75b483362c775fd4e9a3c",
+          "git_blob": "617e2a203f67afe00cbd03fa383a652843041261"
+        },
+        {
+          "path": "transport/chunks/courtyard/011.part",
+          "bytes": 240000,
+          "sha256": "582b5e3d89149d4710305944d3f7075a50e99a28430de8afae3bd7b790a239b5",
+          "git_blob": "7891380cd1720b1368c061f9ba67d35995adf805"
+        },
+        {
+          "path": "transport/chunks/courtyard/012.part",
+          "bytes": 240000,
+          "sha256": "75a1e222138ffc86bfbf304a057defacbab32fc1c8fd9db2671e3296332d1923",
+          "git_blob": "783fafc1f2d4504def0d60a41b83ffac4477f1ae"
+        },
+        {
+          "path": "transport/chunks/courtyard/013.part",
+          "bytes": 240000,
+          "sha256": "1f0c0ea224f52cb0244fda201f2788aac5ab7d547d035b588009e671d297d0af",
+          "git_blob": "5a7d2b3abaae4b1e68b4dac7af115107e4310c9a"
+        },
+        {
+          "path": "transport/chunks/courtyard/014.part",
+          "bytes": 63640,
+          "sha256": "febab27893c1725b3eb97c042b80d14db9a1c7cfff3cf21c93f83e079e6c37a4",
+          "git_blob": "b2fc629a1207dda0b834d79cf182d31b3a414488"
+        }
+      ]
+    },
+    "village-road": {
+      "target_path": "frontend/public/assets/gaolaozhuang/scenes/village-road.png",
+      "bytes": 3751410,
+      "sha256": "51c77eddb5f29727ab6a324398b71d48bcee1f3a828ae3e470f1e6ae190b5115",
+      "git_blob": "309182b1b60721f3fa0567a656f0106b769edaa9",
+      "parts": [
+        {
+          "path": "transport/chunks/village-road/000.part",
+          "bytes": 240000,
+          "sha256": "1092a7fe52b4639f80968793cc2bcad46e9e7af95df516ddb6569d429d39fa16",
+          "git_blob": "7fe69d1b1097499177584cf8df5cd169ce1a8701"
+        },
+        {
+          "path": "transport/chunks/village-road/001.part",
+          "bytes": 240000,
+          "sha256": "a3668ec191bd4aea6318c64c3f111c6f3b963692d06f235fca3c623e562cbb93",
+          "git_blob": "4eb2dd88549e39f6d79465688e126b61c8c265ba"
+        },
+        {
+          "path": "transport/chunks/village-road/002.part",
+          "bytes": 240000,
+          "sha256": "29dc51e625cfb344550ab55aa3bb39801245e498e6e7b9c8cbc0a59c8ee4ad8e",
+          "git_blob": "c8d028d86f3d46225b868234eeeb5115566d2aad"
+        },
+        {
+          "path": "transport/chunks/village-road/003.part",
+          "bytes": 240000,
+          "sha256": "19f7b385ec6928c91da4617956208647d33812d37f6f5f96bd9f092c8ef9c068",
+          "git_blob": "b596d14263cb23681b28ac5d2edeb9cc4fd88bd6"
+        },
+        {
+          "path": "transport/chunks/village-road/004.part",
+          "bytes": 240000,
+          "sha256": "8fdb7600fd6002647c02704c025d98559b5a2819e2c0123069104eafcfdd8b58",
+          "git_blob": "75081efca7ef896d77dc3b8b257ddb721754679f"
+        },
+        {
+          "path": "transport/chunks/village-road/005.part",
+          "bytes": 240000,
+          "sha256": "ab04418c956967580b3d3e77fb6ebedf9b835fabec6cd52d6497f2ef44972e7c",
+          "git_blob": "55dcbeae88568d086a87f0b3940563e7930126f3"
+        },
+        {
+          "path": "transport/chunks/village-road/006.part",
+          "bytes": 240000,
+          "sha256": "a54ea8ea049f92852f007f93bc505ab23d6a7e38f1fc9451bc3e4fc35bd6ad3d",
+          "git_blob": "a2c19172ae582ee2858e814080ccae1f31634f72"
+        },
+        {
+          "path": "transport/chunks/village-road/007.part",
+          "bytes": 240000,
+          "sha256": "314e4d0b15739548d638963f8169697584c1a2418efbec478ed12ea391486eed",
+          "git_blob": "eff2a15f98f176070e2f2f468c8b3843e70fab87"
+        },
+        {
+          "path": "transport/chunks/village-road/008.part",
+          "bytes": 240000,
+          "sha256": "b1a9b193e6459e5a1d92c3105774a47ffa386eb2bf34d5b0382a3d0a636d4dbd",
+          "git_blob": "50ad411063827256ffc21470282460e406f1e22f"
+        },
+        {
+          "path": "transport/chunks/village-road/009.part",
+          "bytes": 240000,
+          "sha256": "ed019302166d837c917cf115903eb71c9c745839fda32b6c450f40e415f9e0d5",
+          "git_blob": "a1ab357c370816ab1bf8641c13356cb2163c12d6"
+        },
+        {
+          "path": "transport/chunks/village-road/010.part",
+          "bytes": 240000,
+          "sha256": "470da9327d6560c1d3bba59fae5d0d9e37a125d8dc455a2f54a489eb43efd88f",
+          "git_blob": "9a0d9a37e1f530944ae8e3efc21dfd3040b914cb"
+        },
+        {
+          "path": "transport/chunks/village-road/011.part",
+          "bytes": 240000,
+          "sha256": "273ae769bd259f722d541dd7795ec8ceec2933eb37c879fa7c72d29d8bd4dc61",
+          "git_blob": "d66030c72367fd0b25cad4fd686a418498367b03"
+        },
+        {
+          "path": "transport/chunks/village-road/012.part",
+          "bytes": 240000,
+          "sha256": "80fac2f75dcb06e52dfc9fe2d9c73e43d21f84165b5db031058f1da347a56cd1",
+          "git_blob": "535d0823d4b6d54586b215930640e113f4c9c77c"
+        },
+        {
+          "path": "transport/chunks/village-road/013.part",
+          "bytes": 240000,
+          "sha256": "7a00a2e6ee64fd14913cd0183e11f4a056fd5728279ef34f535bd39566f6975d",
+          "git_blob": "1ba00e892b21aa17a7c2fbb9a103aed7cdb898a3"
+        },
+        {
+          "path": "transport/chunks/village-road/014.part",
+          "bytes": 240000,
+          "sha256": "b1916fc411c453e063e0334b6a23033722733c57e17ef9446536306dcf9a9f1d",
+          "git_blob": "7e3348a67cff7025c34dfab69360f58f040f9923"
+        },
+        {
+          "path": "transport/chunks/village-road/015.part",
+          "bytes": 151410,
+          "sha256": "ee5f108d8e3ae97cc744027236087b31653480b44e6615c176075fcdb20cc794",
+          "git_blob": "777de0fb3db184de6994664c44d2ddccd3a2b7ff"
+        }
+      ]
+    }
+  }
+}
