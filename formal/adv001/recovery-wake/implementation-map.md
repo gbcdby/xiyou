@@ -1,5 +1,7 @@
 # 恢复后新候选的只读源码对应
 
+> 本页对应表及运行身份限定于原 0ac 候选。之后的 CUI-OBS-01 组合见 [有限来源复核](../facing-source-review.md)：明确列出已有 runtime 漂移和本次 spatial-rules 变化，原 profile 不改写；覆盖切片对应仍适用，整体仍为 `PARTIAL`，没有新 TLC 运行。
+
 ## 固定对象与结论
 
 本次重新读取的源码为 `0ac2bf5f34e49f4508daac74b1d6b38196f15ad6` / tree `047cdcc3a4a2a7239e29e66b31796d5098e6c491`，parent 为 `316ede70eb26133c743ad49f6d294d4ca5be2b89`。不是旧 `8df/77546` 整树。实际读取的 10 个文件与 SHA-256/Git blob 见 [project-profile.json](project-profile.json)。本次没有执行真实业务测试或修改产品代码。

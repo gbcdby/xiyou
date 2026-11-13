@@ -1,6 +1,6 @@
 import { RuleError } from './rules.mjs';
 import { opaqueRef,next,sceneOf,obstacleEnabled,resolveRef,ensureView,inRange,unoccluded,canSee } from './spatial-world.mjs';
-import { findPath,pointAlongPath,distance,inPolygon,clearSegment,walkable } from './spatial-geometry.mjs';
+import { findPath,pointAlongPath,facingAlongPath,distance,inPolygon,clearSegment,walkable } from './spatial-geometry.mjs';
 import {scenePolicy,routeSources,createPolicyRoute,policyRouteValid,checkPolicyLeader,policyLocalPath,actualFrontExit,policySummary} from './gaolao-policy-route.mjs';
 import { isGaolao,chapterPeople,changeChapter,consentFor,consentVersion,observeGaolao,observeConsentChange,knowsSource,nearbyObservers,recordProgress,currentDecision,publicItemsReturned } from './gaolao-world.mjs';
 import {cancelGaolaoNavigation} from './gaolao-navigation.mjs';
@@ -94,7 +94,8 @@ export function advanceGaolaoFollow(tx,sceneTimeMs,paused){
       if(!local){pause('本人的当前通路受阻，等待重新安排。','obstructed');continue;}
       const moved=pointAlongPath(local.path,elapsed*tx.content.movement.speedPerSecond/1000),segments=[subject.position,...local.path.slice(1,moved.index),moved.position];
       if(segments.some((point,i)=>i&&!clearSegment(local.scene,segments[i-1],point,obstacleEnabled(tx.state)))){pause('本人的当前通路受阻，等待重新安排。','obstructed');continue;}
-      const a={...subject,position:moved.position,spatialRevision:distance(subject.position,moved.position)>0?next(subject.spatialRevision):subject.spatialRevision,motionViews:{}};
+      const changed=distance(subject.position,moved.position)>0;
+      const a={...subject,position:moved.position,facing:changed?facingAlongPath(segments,subject.facing):subject.facing,spatialRevision:changed?next(subject.spatialRevision):subject.spatialRevision,motionViews:{}};
       if(route.frontExitRequired&&!route.frontExitDone&&moved.arrived&&actualFrontExit(tx.content,a))route.frontExitDone=true;
       if(local.cross&&moved.arrived){
         const requirement=local.cross.requirement;if(requirement&&fact(tx.state,requirement.targetId,requirement.field)!==requirement.value){pause('约定入口目前不能通过。','obstructed');continue;}
@@ -110,7 +111,8 @@ export function advanceGaolaoFollow(tx,sceneTimeMs,paused){
     const elapsed=Math.max(0,sceneTimeMs-f.lastSceneTime);if(!elapsed)continue;const scene=sceneOf(tx.content,subject.sceneId);let goal=leader.position,cross=null;
     if(leader.sceneId!==subject.sceneId){cross=scene.exits.find(e=>e.destinationSceneId===leader.sceneId);if(!cross){pause('带路者已离开可达路线。');continue;}goal=scene.anchors.find(x=>x.anchorId===cross.anchorId).position;}
     const path=findPath(scene,subject.position,goal,obstacleEnabled(tx.state));if(!path){pause('通路受阻，等待重新安排。');continue;}
-    const moved=pointAlongPath(path,elapsed*tx.content.movement.speedPerSecond/1000),a={...subject,position:moved.position,spatialRevision:distance(subject.position,moved.position)>0?next(subject.spatialRevision):subject.spatialRevision,motionViews:{}};
+    const moved=pointAlongPath(path,elapsed*tx.content.movement.speedPerSecond/1000),segments=[subject.position,...path.slice(1,moved.index),moved.position],changed=distance(subject.position,moved.position)>0;
+    const a={...subject,position:moved.position,facing:changed?facingAlongPath(segments,subject.facing):subject.facing,spatialRevision:changed?next(subject.spatialRevision):subject.spatialRevision,motionViews:{}};
     if(cross&&moved.arrived){a.sceneId=cross.destinationSceneId;a.position=cross.destination;a.spatialRevision=next(a.spatialRevision);}
     actorEvent(tx,a);f.lastSceneTime=sceneTimeMs;f.status='following';
     const d=tx.content.chapterRules.safeDestinations.find(d=>d.destinationId===f.destinationId),area=sceneOf(tx.content,d.sceneId).walkableAreas.find(x=>x.areaId===d.areaId);
