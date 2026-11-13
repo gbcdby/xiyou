@@ -22,6 +22,7 @@ export interface SpatialAIContracts {
   SpatialModelItemV2: T.SpatialModelItemV2;
   FactField: T.FactField;
   Scalar: T.Scalar;
+  ObjectVisualKeyV1: T.ObjectVisualKeyV1;
   TargetViewV2: T.TargetViewV2;
   PublicScene: T.PublicScene;
   Polygon: T.Polygon;

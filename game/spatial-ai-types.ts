@@ -27,13 +27,15 @@ export type GaolaoOperationId = "gz-contact" | "gz-check-seal" | "gz-try-key" | 
 
 export type SpatialModelEntityV2 = { "entityRef": EntityRef; "name": string; "appearanceEpoch": DecimalString; "appearanceId"?: AppearanceIdV2; "sceneId": (Id) | (null); "position": (Position) | (null); "facing": Facing; "resourceRevision"?: DecimalString; "availableOperations"?: Array<GaolaoOperationId>; };
 
-export type SpatialModelItemV2 = { "entityRef": EntityRef; "name": string; "location": ({ "kind": "ground"; "sceneId": Id; "position": Position; }) | ({ "kind": "held"; "ownerRef": EntityRef; }); "resourceRevision": DecimalString; "transferable": boolean; "publicBorrowable": boolean; "fields": Array<FactField>; };
+export type SpatialModelItemV2 = { "entityRef": EntityRef; "name": string; "location": ({ "kind": "ground"; "sceneId": Id; "position": Position; }) | ({ "kind": "held"; "ownerRef": EntityRef; }); "resourceRevision": DecimalString; "transferable": boolean; "publicBorrowable": boolean; "fields": Array<FactField>; "visualKey"?: ObjectVisualKeyV1; };
 
 export type FactField = { "key": Id; "label": string; "value": Scalar; };
 
 export type Scalar = (string) | (number) | (boolean) | (null);
 
-export type TargetViewV2 = { "entityRef": EntityRef; "name": string; "sceneId": Id; "position": Position; "resourceRevision": DecimalString; "availableOperations": Array<Id>; "fields": Array<FactField>; };
+export type ObjectVisualKeyV1 = string;
+
+export type TargetViewV2 = { "entityRef": EntityRef; "name": string; "sceneId": Id; "position": Position; "resourceRevision": DecimalString; "availableOperations": Array<Id>; "fields": Array<FactField>; "visualKey"?: ObjectVisualKeyV1; };
 
 export type PublicScene = { "sceneId": Id; "name": string; "width": number; "height": number; "unitsPerPixel": number; "walkableAreas": Array<{ "areaId": Id; "polygon": Polygon; }>; "obstacles": Array<{ "obstacleId": Id; "polygon": Polygon; "exceptAreas": Array<Id>; }>; "anchors": Array<{ "anchorId": Id; "position": Position; "label": string; }>; "exits": Array<{ "exitId": Id; "anchorId": Id; "destinationSceneId": Id; "destination": Position; "open": boolean; }>; };
 

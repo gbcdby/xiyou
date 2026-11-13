@@ -29,13 +29,15 @@ GaolaoOperationId = Literal["gz-contact", "gz-check-seal", "gz-try-key", "gz-ste
 
 SpatialModelEntityV2 = TypedDict("SpatialModelEntityV2", {"entityRef": ForwardRef("EntityRef"), "name": str, "appearanceEpoch": ForwardRef("DecimalString"), "appearanceId": NotRequired[ForwardRef("AppearanceIdV2")], "sceneId": Union[ForwardRef("Id"), type(None)], "position": Union[ForwardRef("Position"), type(None)], "facing": ForwardRef("Facing"), "resourceRevision": NotRequired[ForwardRef("DecimalString")], "availableOperations": NotRequired[List[ForwardRef("GaolaoOperationId")]]})
 
-SpatialModelItemV2 = TypedDict("SpatialModelItemV2", {"entityRef": ForwardRef("EntityRef"), "name": str, "location": Union[TypedDict("SpatialModelItemV2_location_0", {"kind": Literal["ground"], "sceneId": ForwardRef("Id"), "position": ForwardRef("Position")}), TypedDict("SpatialModelItemV2_location_1", {"kind": Literal["held"], "ownerRef": ForwardRef("EntityRef")})], "resourceRevision": ForwardRef("DecimalString"), "transferable": bool, "publicBorrowable": bool, "fields": List[ForwardRef("FactField")]})
+SpatialModelItemV2 = TypedDict("SpatialModelItemV2", {"entityRef": ForwardRef("EntityRef"), "name": str, "location": Union[TypedDict("SpatialModelItemV2_location_0", {"kind": Literal["ground"], "sceneId": ForwardRef("Id"), "position": ForwardRef("Position")}), TypedDict("SpatialModelItemV2_location_1", {"kind": Literal["held"], "ownerRef": ForwardRef("EntityRef")})], "resourceRevision": ForwardRef("DecimalString"), "transferable": bool, "publicBorrowable": bool, "fields": List[ForwardRef("FactField")], "visualKey": NotRequired[ForwardRef("ObjectVisualKeyV1")]})
 
 FactField = TypedDict("FactField", {"key": ForwardRef("Id"), "label": str, "value": ForwardRef("Scalar")})
 
 Scalar = Union[str, int, bool, type(None)]
 
-TargetViewV2 = TypedDict("TargetViewV2", {"entityRef": ForwardRef("EntityRef"), "name": str, "sceneId": ForwardRef("Id"), "position": ForwardRef("Position"), "resourceRevision": ForwardRef("DecimalString"), "availableOperations": List[ForwardRef("Id")], "fields": List[ForwardRef("FactField")]})
+ObjectVisualKeyV1 = str
+
+TargetViewV2 = TypedDict("TargetViewV2", {"entityRef": ForwardRef("EntityRef"), "name": str, "sceneId": ForwardRef("Id"), "position": ForwardRef("Position"), "resourceRevision": ForwardRef("DecimalString"), "availableOperations": List[ForwardRef("Id")], "fields": List[ForwardRef("FactField")], "visualKey": NotRequired[ForwardRef("ObjectVisualKeyV1")]})
 
 PublicScene = TypedDict("PublicScene", {"sceneId": ForwardRef("Id"), "name": str, "width": int, "height": int, "unitsPerPixel": int, "walkableAreas": List[TypedDict("PublicScene_walkableAreas_item", {"areaId": ForwardRef("Id"), "polygon": ForwardRef("Polygon")})], "obstacles": List[TypedDict("PublicScene_obstacles_item", {"obstacleId": ForwardRef("Id"), "polygon": ForwardRef("Polygon"), "exceptAreas": List[ForwardRef("Id")]})], "anchors": List[TypedDict("PublicScene_anchors_item", {"anchorId": ForwardRef("Id"), "position": ForwardRef("Position"), "label": str})], "exits": List[TypedDict("PublicScene_exits_item", {"exitId": ForwardRef("Id"), "anchorId": ForwardRef("Id"), "destinationSceneId": ForwardRef("Id"), "destination": ForwardRef("Position"), "open": bool})]})
 

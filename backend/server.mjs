@@ -69,7 +69,7 @@ export async function createAuthorityServer({ pool, now, hooks, log = () => {} }
     track((async () => {
       try {
         const auth = exact(socket.handshake.auth, ['token'], ['capabilities']);
-        if (auth.capabilities !== undefined && (!Array.isArray(auth.capabilities) || auth.capabilities.length > 8 || auth.capabilities.some(c => !['region-v1', 'spatial-v2', 'spatial-appearance-v1'].includes(c)))) throw new RuntimeError('INVALID_MESSAGE', '客户端能力格式无效。');
+        if (auth.capabilities !== undefined && (!Array.isArray(auth.capabilities) || auth.capabilities.length > 8 || auth.capabilities.some(c => !['region-v1', 'spatial-v2', 'spatial-appearance-v1', 'spatial-object-visual-v1'].includes(c)))) throw new RuntimeError('INVALID_MESSAGE', '客户端能力格式无效。');
         socket.data.handle = await runtime.openConnection(auth.token, auth.capabilities ?? []);
         next();
       } catch (error) {
