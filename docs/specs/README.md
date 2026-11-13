@@ -10,6 +10,7 @@
 
 | Spec | 范围 | 权威记录 |
 | --- | --- | --- |
+| [EXT-001：统一角色模型与内容扩展接口](actor-content-extensibility.md) | v0.1 草案：玩家／AI 角色与控制抽象、场景／角色／属性／动作扩展；讨论记录，未接受为实施依据 | Spec 汇总：https://github.com/gbcdby/xiyou/issues/45；实施 Tickets 尚未建立，不调整 ADV-001／A3 范围 |
 | [ADV-001：无战斗多人叙事冒险与首章高老庄](narrative-adventure.md) | v0.2：共用行走/交互、经典章节顺序、高老庄完整玩法、三NPC/乔装/随行边界与验收；设计候选 | [汇总 #23](https://github.com/gbcdby/xiyou/issues/23)、[设计 PR #24](https://github.com/gbcdby/xiyou/pull/24)，实施 Tickets 尚未建立 |
 | [ADV-001：CH02五庄观保留详案](narrative-adventure-wuzhuang.md) | 同一v0.2的后续A4范围；保留果数、两条完整路线和原ADV-AC-07/08/09；运行未执行 | 同一汇总与PR，不是另一个已实施Spec |
 | [VS-001：首个可玩切片](vertical-slice.md) | M0–M4：协议、无 AI 联机、单 AI、双 AI、第一机制关 | [汇总 #2](https://github.com/gbcdby/xiyou/issues/2)、[设计 #3](https://github.com/gbcdby/xiyou/issues/3)、[任务目录](vertical-slice-tasks.md) |
@@ -30,4 +31,5 @@ VS-001 的细化材料：[玩法闭环](vertical-slice-gameplay.md)、[M0 协议
 状态可以写为“草案”“实施依据”“被替代”，但必须附实际决定或交接依据；作者完成一稿不自动成为已接受方案。
 
 设计与拆票分别由 `worker-design`、`worker-plan-tickets` 负责。大功能的 Spec 与 Tickets 按 [GitHub 记录约定](../agents/issue-tracker.md)实际保存后，才进入分派。Spec 验收、Ticket 完成与 PR 合并分别判断。
+
 
