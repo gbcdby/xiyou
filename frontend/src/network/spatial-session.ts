@@ -11,7 +11,7 @@ export interface SpatialDraft { id: string; raw: string; status: 'waiting' | 'un
 export interface SpatialState { connection: ConnectionState; snapshot: SnapshotV2 | null; actions: SpatialDraft[]; message: string; controlBusy: boolean; inputReady: boolean; queuedAction: string | null }
 interface Options { onChange?: (state: SpatialState) => void; onUnauthenticated?: (token: string) => void; id?: () => string; heartbeatMs?: number; reconnectDelayMs?: number; waitForVisualArrival?: boolean }
 interface ReceiptReader { receipt(sessionId: string, actionId: string): Promise<ReceiptV2 | null> }
-interface QueuedAction { action: ActionV2; sequence: string; epoch: string; viewId: string; mapVersion: string; targetRef?: string; targetSignature?: string }
+interface QueuedAction { action: ActionV2; sequence: string; epoch: string; viewId: string; mapVersion: string; movementId?: string; targetRef?: string; targetSignature?: string }
 function retainActions(actions: SpatialDraft[]): SpatialDraft[] {
   // 只有已有确定结果的历史计入上限；未决请求必须一直保留原串，直到收据确认。
   let confirmed = 80;
@@ -172,10 +172,11 @@ export class SpatialSessionClient {
     await this.send(approach, true);
   }
   cancelQueued() { this.#queued = null; this.#publish(); }
-  confirmDisplayedArrival(value: { viewId: string; epoch: string; sequence: string; position: Position }) {
+  confirmDisplayedArrival(value: { viewId: string; epoch: string; movementId: string; sequence: string; position: Position }) {
     const snapshot = this.#view.snapshot; const p = snapshot?.projection;
-    if (!snapshot || !p || snapshot.viewId !== value.viewId || p.self.controlEpoch !== value.epoch || p.movement?.movementCommandSeq !== value.sequence || p.movement.status !== 'arrived' || p.self.position?.x !== value.position.x || p.self.position?.y !== value.position.y) return;
-    this.#displayedArrival = `${value.viewId}:${value.epoch}:${value.sequence}`; this.#drainQueued();
+    if (!snapshot || !p || snapshot.viewId !== value.viewId || p.self.controlEpoch !== value.epoch || p.movement?.movementId !== value.movementId || p.movement.movementCommandSeq !== value.sequence || p.movement.status !== 'arrived' || p.self.position?.x !== value.position.x || p.self.position?.y !== value.position.y) return;
+    // 显示确认可以先于原收据到达；保留事件携带的真实计划身份，不借用同号旧计划。
+    this.#displayedArrival = `${value.viewId}:${value.epoch}:${value.movementId}:${value.sequence}`; this.#drainQueued();
   }
   async send(action: ActionV2, preserveQueued = false) {
     const snapshot = this.#ready(); if (!preserveQueued) this.#queued = null;
@@ -199,8 +200,12 @@ export class SpatialSessionClient {
     try {
       const receipt = validateSpatial('ReceiptV2', value); const envelope = parseSpatial('PublicEnvelope', draft.raw);
       if (receipt.sessionId !== envelope.sessionId || receipt.clientActionId !== envelope.clientActionId) throw new Error('收据与原请求不匹配。');
-      if (receipt.status === 'Rejected' && envelope.action.kind === 'move_to' && this.#queued?.sequence === envelope.action.movementCommandSeq && this.#queued.epoch === envelope.controlEpoch) this.#queued = null;
-      this.#update(draft.id, { receipt, status: receipt.status === 'Accepted' ? 'accepted' : 'rejected', detail: receipt.status === 'Rejected' ? spatialErrorMessage(receipt.code) : envelope.action.kind === 'move_to' ? '路线已受理；实际到达以后才会操作。' : '服务器已确认。' }); void this.sync();
+      const queued = this.#queued;
+      if (envelope.action.kind === 'move_to' && queued?.sequence === envelope.action.movementCommandSeq && queued.epoch === envelope.controlEpoch && queued.viewId === envelope.viewId) {
+        if (receipt.status === 'Rejected') this.#queued = null;
+        else queued.movementId = receipt.result.movementId;
+      }
+      this.#update(draft.id, { receipt, status: receipt.status === 'Accepted' ? 'accepted' : 'rejected', detail: receipt.status === 'Rejected' ? spatialErrorMessage(receipt.code) : envelope.action.kind === 'move_to' ? '路线已受理；实际到达以后才会操作。' : '服务器已确认。' }); this.#drainQueued(); void this.sync();
     } catch { this.#update(draft.id, { status: 'unknown', detail: '收据校验未通过，结果仍待确认。' }); }
   }
   async query(id: string) {
@@ -237,9 +242,12 @@ export class SpatialSessionClient {
     const queued = this.#queued; const snapshot = this.#view.snapshot; if (!queued || !snapshot) return;
     const p = snapshot.projection; const movement = p.movement;
     if (snapshot.viewId !== queued.viewId || p.self.controlEpoch !== queued.epoch || !p.self.canControl || p.mapVersion !== queued.mapVersion || targetSignature(snapshot, queued.targetRef) !== queued.targetSignature || p.phase !== 'Running') { this.#queued = null; this.#publish(); return; }
-    if (!movement || compareDecimal(movement.movementCommandSeq, queued.sequence) < 0) return;
+    // 投影计划不携带控制 epoch；当前水位只作取消围栏，原收据才绑定本次计划。
+    const order = compareDecimal(p.self.movementCommandHighWater, queued.sequence);
+    if (order > 0) { this.#queued = null; this.#publish(); return; }
+    if (order < 0 || !queued.movementId || movement?.movementId !== queued.movementId) return;
     if (movement.movementCommandSeq !== queued.sequence || ['cancelled', 'blocked'].includes(movement.status)) { this.#queued = null; this.#publish(); return; }
-    const visuallyArrived = !this.#options.waitForVisualArrival || this.#displayedArrival === `${snapshot.viewId}:${p.self.controlEpoch}:${movement.movementCommandSeq}`;
+    const visuallyArrived = !this.#options.waitForVisualArrival || this.#displayedArrival === `${snapshot.viewId}:${p.self.controlEpoch}:${movement.movementId}:${movement.movementCommandSeq}`;
     if (movement.status === 'arrived' && visuallyArrived && !p.paused && this.state.inputReady) {
       this.#queued = null; this.#publish(); void this.send(queued.action).catch(error => { this.#message = error instanceof Error ? error.message : '后续操作未提交。'; this.#publish(); });
     }

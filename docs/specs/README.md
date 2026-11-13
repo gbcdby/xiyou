@@ -6,12 +6,14 @@
 
 2026-11-11 用户启动 `auto` 后，开始将[初步产品与技术设计](../../初步设计文档.md)细化为首个可玩切片。文档候选、独立审查与实际采用状态以关联的 GitHub 任务及 PR 为准；规格存在不表示实现或运行验收通过。
 
-当前设计候选为 **ADV-001 v0.2**（2026-11-12，北京时间）：用户已明确选定高老庄为首章。原五庄观详案保留为 CH02，其余改用经典章节路线；真假美猴王为条件候选。具体玩法、三名自主NPC、乔装/本人随行与验收见主文档。此次只修订 Spec；应用实现与实施 Tickets 尚未开始。
+当前实施入口为 **ADV-001 v0.2** 及其实施接续说明：用户已明确选定高老庄为首章并要求按 auto 推进，现有应用实现与实施 Tickets 从 [#23](https://github.com/gbcdby/xiyou/issues/23) 进入，阶段与整体验收从 [#29](https://github.com/gbcdby/xiyou/issues/29) 进入。2026-11-13 接管范围仅第一章，后续章节暂缓；五庄观详案和其他经典章节选题保留为设计材料。原文“本次仅设计”等措辞记录 v0.2 设计轮，不能据此认定后续尚未实施，也不能从代码存在推定验收完成。
 
 | Spec | 范围 | 权威记录 |
 | --- | --- | --- |
-| [ADV-001：无战斗多人叙事冒险与首章高老庄](narrative-adventure.md) | v0.2：共用行走/交互、经典章节顺序、高老庄完整玩法、三NPC/乔装/随行边界与验收；设计候选 | [汇总 #23](https://github.com/gbcdby/xiyou/issues/23)、[设计 PR #24](https://github.com/gbcdby/xiyou/pull/24)，实施 Tickets 尚未建立 |
-| [ADV-001：CH02五庄观保留详案](narrative-adventure-wuzhuang.md) | 同一v0.2的后续A4范围；保留果数、两条完整路线和原ADV-AC-07/08/09；运行未执行 | 同一汇总与PR，不是另一个已实施Spec |
+| [ADV-001：无战斗多人叙事冒险与首章高老庄](narrative-adventure.md) | v0.2 及实施接续：共用行走/交互、高老庄玩法、三 NPC/乔装/随行边界与验收 | [汇总与 Tickets #23](https://github.com/gbcdby/xiyou/issues/23)、[验收 #29](https://github.com/gbcdby/xiyou/issues/29)；[PR #24](https://github.com/gbcdby/xiyou/pull/24) 保留设计修订来源 |
+| [ADV-001：共用空间协议](adv-protocol.md) | adv-protocol-v1：权威空间、授权投影、动作与恢复合同；实现绑定有效修订 | [合同与模型 #27](https://github.com/gbcdby/xiyou/issues/27) |
+| [GZ-VIS-01：高老庄视觉基准](gaolaozhuang-visual.md) | v1.1：已采用的场景/UI/尺度与状态语义；正式素材和运行效果另行验收 | [视觉基准 #28](https://github.com/gbcdby/xiyou/issues/28)、[客户端 #33](https://github.com/gbcdby/xiyou/issues/33) |
+| [ADV-001：CH02五庄观保留详案](narrative-adventure-wuzhuang.md) | 同一 v0.2 的后续 A4 范围；保留果数、两条路线和原 ADV-AC-07/08/09，本轮暂缓 | 同一 [#23](https://github.com/gbcdby/xiyou/issues/23)，不是另一个已实施 Spec |
 | [VS-001：首个可玩切片](vertical-slice.md) | M0–M4：协议、无 AI 联机、单 AI、双 AI、第一机制关 | [汇总 #2](https://github.com/gbcdby/xiyou/issues/2)、[设计 #3](https://github.com/gbcdby/xiyou/issues/3)、[任务目录](vertical-slice-tasks.md) |
 | [VS-001：本轮模拟验收修订](vertical-slice-mock.md) | mock-20261111：模拟输入、实际实现验证、受控双NPC与授权复盘，验证后合并 | 同一汇总与任务目录，结果须同时注明 profile 和固定候选 |
 

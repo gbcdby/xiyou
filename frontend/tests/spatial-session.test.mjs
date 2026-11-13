@@ -14,7 +14,7 @@ function harness(options = {}, readReceipt = async () => null) {
     if (event === 'sync.request') { const r = JSON.parse(value); return { schemaVersion: 2, type: 'world.batch', sessionId: r.sessionId, viewId: r.viewId, fromExclusive: r.cursor, throughSeq: r.cursor, events: [] }; }
     if (event.startsWith('control.')) { const r = JSON.parse(value); const snapshot = spatialSnapshot(); snapshot.viewId = 'control-view'; snapshot.projection.self.controlEpoch = '3'; return { schemaVersion: 2, sessionId: r.sessionId, nonce: r.nonce, controlEpoch: '3', observedSeq: snapshot.snapshotSeq, snapshot }; }
     if (actionReplies.length) return await actionReplies.shift()(JSON.parse(value));
-    const r = JSON.parse(value); return { schemaVersion: 2, sessionId: r.sessionId, clientActionId: r.clientActionId, status: 'Accepted', code: 'OK', observedSeq: '10', actionEventRange: null, result: { status: r.action.kind === 'move_to' ? 'accepted' : 'cancelled' } };
+    const r = JSON.parse(value); return { schemaVersion: 2, sessionId: r.sessionId, clientActionId: r.clientActionId, status: 'Accepted', code: 'OK', observedSeq: '10', actionEventRange: null, result: r.action.kind === 'move_to' ? { movementId: 'move_' + String(BigInt(r.action.movementCommandSeq) - 1n).padStart(31, '0'), planVersion: r.action.movementCommandSeq, movementCommandSeq: r.action.movementCommandSeq, status: 'accepted' } : { status: 'cancelled' } };
   } };
   const client = new SpatialSessionClient({ receipt: readReceipt }, (_token, h) => { handlers = h; return link; }, { heartbeatMs: 0, reconnectDelayMs: 0, ...options });
   return { client, requests, initial, get handlers() { return handlers; }, actionReplies };
@@ -36,12 +36,12 @@ test('未知移动重试原串，后发停止的序号更高；控制响应替�
 test('绘制落后于确认点时等待，对应视图与序号追上后才提交排队操作', async () => {
   const h = harness({ waitForVisualArrival: true }); h.client.open('spatial-room', 'token'); h.handlers.connected(); await flush(); await h.client.control('resume');
   await h.client.move({ x: 200, y: 100 }, {}, { kind: 'wait' });
-  const arrived = structuredClone(h.client.state.snapshot); arrived.projection.self.position = { x: 200, y: 100 };
+  const arrived = structuredClone(h.client.state.snapshot); arrived.projection.self.position = { x: 200, y: 100 }; arrived.projection.self.movementCommandHighWater = '1';
   arrived.projection.movement = { movementId: 'move_0000000000000000000000000000000', planVersion: '1', movementCommandSeq: '1', sceneId: 'yard', mapVersion: 'gray-map-v1', goal: { x: 200, y: 100 }, path: [{ x: 100, y: 100 }, { x: 200, y: 100 }], acceptedAtSceneTime: 1000, status: 'arrived' };
   h.handlers.batch(spatialBatch(arrived, '11')); await flush();
   const requests = () => h.requests.filter(r => r.event === 'player.action.request'); assert.equal(requests().length, 1);
-  h.client.confirmDisplayedArrival({ viewId: 'old-view', epoch: '3', sequence: '1', position: { x: 200, y: 100 } }); assert.equal(requests().length, 1);
-  h.client.confirmDisplayedArrival({ viewId: 'control-view', epoch: '3', sequence: '1', position: { x: 200, y: 100 } }); await flush();
+  h.client.confirmDisplayedArrival({ viewId: 'old-view', epoch: '3', movementId: arrived.projection.movement.movementId, sequence: '1', position: { x: 200, y: 100 } }); assert.equal(requests().length, 1);
+  h.client.confirmDisplayedArrival({ viewId: 'control-view', epoch: '3', movementId: arrived.projection.movement.movementId, sequence: '1', position: { x: 200, y: 100 } }); await flush();
   assert.equal(JSON.parse(requests()[1].value).action.kind, 'wait'); h.client.close();
 });
 
@@ -49,7 +49,7 @@ test('导航后操作只由对应服务端arrived触发，停止会取消排队�
   const h = harness(); h.client.open('spatial-room', 'token'); h.handlers.connected(); await flush(); await h.client.control('resume');
   await h.client.move({ x: 200, y: 100 }, {}, { kind: 'wait' });
   assert.equal(h.requests.filter(r => r.event === 'player.action.request').length, 1);
-  const current = structuredClone(h.client.state.snapshot); const projection = current.projection;
+  const current = structuredClone(h.client.state.snapshot); const projection = current.projection; projection.self.movementCommandHighWater = '1';
   projection.movement = { movementId: 'move_0000000000000000000000000000000', planVersion: '1', movementCommandSeq: '1', sceneId: 'yard', mapVersion: 'gray-map-v1', goal: { x: 200, y: 100 }, path: [{ x: 100, y: 100 }, { x: 200, y: 100 }], acceptedAtSceneTime: 1000, status: 'moving' };
   h.handlers.batch(spatialBatch(current, '11', projection)); await flush(); assert.equal(h.requests.filter(r => r.event === 'player.action.request').length, 1);
   const arrived = structuredClone(h.client.state.snapshot); arrived.projection.movement.status = 'arrived'; arrived.projection.self.position = { x: 200, y: 100 };

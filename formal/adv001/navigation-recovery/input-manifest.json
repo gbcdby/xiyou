@@ -1,0 +1,196 @@
+{
+  "schemaVersion": 1,
+  "description": "本目录正式模型与各次实际输入的内容清单；正模型十一文件不变，隔离负对照各保留其实际完整输入。",
+  "sets": {
+    "positive": {
+      "modelRoot": "model",
+      "files": [
+        {
+          "path": "NavRecovery.tla",
+          "sha256": "708f6e24234221b3eb6b707f899906740a9ca370bf388231a0214ed68ba596a7",
+          "bytes": 10202
+        },
+        {
+          "path": "negative-double.cfg",
+          "sha256": "9cb2359548c0aa33254d2cf70c1952b199b3faa2e3259f92f54001677d4a358d",
+          "bytes": 175
+        },
+        {
+          "path": "negative-drop-early.cfg",
+          "sha256": "a1fda983d9683d546948a8dd41ac9697716a55fda322ab52a145b070a97c4778",
+          "bytes": 273
+        },
+        {
+          "path": "negative-map-key.cfg",
+          "sha256": "c9b5535482316371b78296d62adba175e23e65a1b9568e33c99a83879bfba31d",
+          "bytes": 268
+        },
+        {
+          "path": "negative-revive.cfg",
+          "sha256": "f117e2efee55db3dbcd9119c4fe2444c51dc77bb64c5dafabfd42ace317d8a9d",
+          "bytes": 172
+        },
+        {
+          "path": "old-history-live.cfg",
+          "sha256": "b20ac4563e52c3c14327106879f09231804230dfc85bfb212af07e18a4b01df0",
+          "bytes": 186
+        },
+        {
+          "path": "old-same-seq.cfg",
+          "sha256": "9a93ac8b74005baa86e4ab921d5553fbb3ad92bb1dbd8cdc4b24f86a8ca7173a",
+          "bytes": 170
+        },
+        {
+          "path": "old-unknown-history-live.cfg",
+          "sha256": "b35e497f8f6dac6e661252ce58afb8efb50594b9a93fdde2bc0ca4b05cd4fafb",
+          "bytes": 185
+        },
+        {
+          "path": "positive-live.cfg",
+          "sha256": "558e9b25277b6b045b68bda169ae208400fd52491bfd59d788156ca62d863be5",
+          "bytes": 260
+        },
+        {
+          "path": "positive-safety.cfg",
+          "sha256": "f13415420190f6f821dfbb7dd6b95d4e82a9b0b54977e6ef4980441351fb83aa",
+          "bytes": 221
+        },
+        {
+          "path": "witness-early-unknown.cfg",
+          "sha256": "486ff996c1815bc3c5fbad567953ecb4746876a9a3e01c03f20a21076b6ff4ad",
+          "bytes": 163
+        }
+      ]
+    },
+    "receipt": {
+      "modelRoot": "negative-controls/receipt/model",
+      "files": [
+        {
+          "path": "NavRecovery.tla",
+          "sha256": "c47fdb392061dcfd0a9562d9baadd4e867284b27f6c21948aa54d5b9be00e89a",
+          "bytes": 10242
+        },
+        {
+          "path": "negative-double.cfg",
+          "sha256": "9cb2359548c0aa33254d2cf70c1952b199b3faa2e3259f92f54001677d4a358d",
+          "bytes": 175
+        },
+        {
+          "path": "negative-drop-early.cfg",
+          "sha256": "a1fda983d9683d546948a8dd41ac9697716a55fda322ab52a145b070a97c4778",
+          "bytes": 273
+        },
+        {
+          "path": "negative-map-key.cfg",
+          "sha256": "c9b5535482316371b78296d62adba175e23e65a1b9568e33c99a83879bfba31d",
+          "bytes": 268
+        },
+        {
+          "path": "negative-revive.cfg",
+          "sha256": "f117e2efee55db3dbcd9119c4fe2444c51dc77bb64c5dafabfd42ace317d8a9d",
+          "bytes": 172
+        },
+        {
+          "path": "negative.cfg",
+          "sha256": "5ca73f063aafadb55da27b92782b764942ad0d723da8ab2ef74bd013a050ece9",
+          "bytes": 155
+        },
+        {
+          "path": "old-history-live.cfg",
+          "sha256": "b20ac4563e52c3c14327106879f09231804230dfc85bfb212af07e18a4b01df0",
+          "bytes": 186
+        },
+        {
+          "path": "old-same-seq.cfg",
+          "sha256": "9a93ac8b74005baa86e4ab921d5553fbb3ad92bb1dbd8cdc4b24f86a8ca7173a",
+          "bytes": 170
+        },
+        {
+          "path": "old-unknown-history-live.cfg",
+          "sha256": "b35e497f8f6dac6e661252ce58afb8efb50594b9a93fdde2bc0ca4b05cd4fafb",
+          "bytes": 185
+        },
+        {
+          "path": "positive-live.cfg",
+          "sha256": "558e9b25277b6b045b68bda169ae208400fd52491bfd59d788156ca62d863be5",
+          "bytes": 260
+        },
+        {
+          "path": "positive-safety.cfg",
+          "sha256": "f13415420190f6f821dfbb7dd6b95d4e82a9b0b54977e6ef4980441351fb83aa",
+          "bytes": 221
+        },
+        {
+          "path": "witness-early-unknown.cfg",
+          "sha256": "486ff996c1815bc3c5fbad567953ecb4746876a9a3e01c03f20a21076b6ff4ad",
+          "bytes": 163
+        }
+      ]
+    },
+    "type": {
+      "modelRoot": "negative-controls/type/model",
+      "files": [
+        {
+          "path": "NavRecovery.tla",
+          "sha256": "b413d0ea20841189968513b3a46fd78b2e813220dd44ee37fc9601cfbe5b5a84",
+          "bytes": 10193
+        },
+        {
+          "path": "negative-double.cfg",
+          "sha256": "9cb2359548c0aa33254d2cf70c1952b199b3faa2e3259f92f54001677d4a358d",
+          "bytes": 175
+        },
+        {
+          "path": "negative-drop-early.cfg",
+          "sha256": "a1fda983d9683d546948a8dd41ac9697716a55fda322ab52a145b070a97c4778",
+          "bytes": 273
+        },
+        {
+          "path": "negative-map-key.cfg",
+          "sha256": "c9b5535482316371b78296d62adba175e23e65a1b9568e33c99a83879bfba31d",
+          "bytes": 268
+        },
+        {
+          "path": "negative-revive.cfg",
+          "sha256": "f117e2efee55db3dbcd9119c4fe2444c51dc77bb64c5dafabfd42ace317d8a9d",
+          "bytes": 172
+        },
+        {
+          "path": "negative.cfg",
+          "sha256": "568ddaea2208f404522a9e32ef81a4021a5787b72031c605f29367c9441e0a65",
+          "bytes": 140
+        },
+        {
+          "path": "old-history-live.cfg",
+          "sha256": "b20ac4563e52c3c14327106879f09231804230dfc85bfb212af07e18a4b01df0",
+          "bytes": 186
+        },
+        {
+          "path": "old-same-seq.cfg",
+          "sha256": "9a93ac8b74005baa86e4ab921d5553fbb3ad92bb1dbd8cdc4b24f86a8ca7173a",
+          "bytes": 170
+        },
+        {
+          "path": "old-unknown-history-live.cfg",
+          "sha256": "b35e497f8f6dac6e661252ce58afb8efb50594b9a93fdde2bc0ca4b05cd4fafb",
+          "bytes": 185
+        },
+        {
+          "path": "positive-live.cfg",
+          "sha256": "558e9b25277b6b045b68bda169ae208400fd52491bfd59d788156ca62d863be5",
+          "bytes": 260
+        },
+        {
+          "path": "positive-safety.cfg",
+          "sha256": "f13415420190f6f821dfbb7dd6b95d4e82a9b0b54977e6ef4980441351fb83aa",
+          "bytes": 221
+        },
+        {
+          "path": "witness-early-unknown.cfg",
+          "sha256": "486ff996c1815bc3c5fbad567953ecb4746876a9a3e01c03f20a21076b6ff4ad",
+          "bytes": 163
+        }
+      ]
+    }
+  }
+}
