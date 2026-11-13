@@ -6,7 +6,7 @@ import { layoutSpatialLabels, screenPosition } from '../../domain/spatial-labels
 import { sceneArtwork, spriteForAppearance } from '../../domain/gaolao-art.ts';
 import SpatialActorArt from './SpatialActorArt.vue';
 import type { SpatialLabelInput } from '../../domain/spatial-labels.ts';
-const props = defineProps<{ snapshot: SnapshotV2; disabled: boolean; selected?: string; personLabels?: Record<string, string> }>();
+const props = defineProps<{ snapshot: SnapshotV2; disabled: boolean; selected?: string; personLabels?: Record<string, string>; immersive?: boolean }>();
 const emit = defineEmits<{ move: [position: Position]; select: [reference: string]; stop: []; objects: []; settled: [value: { viewId: string; epoch: string; sequence: string; position: Position }] }>();
 const projection = computed(() => props.snapshot.projection);
 const motion = new ConfirmedMotion(); const frameTime = ref(performance.now()); let frame = 0; let settledKey = '';
@@ -125,6 +125,6 @@ function keyboard(event: KeyboardEvent) {
     <div class="spatial-map-labels"><template v-for="label in labels.labels" :key="label.key"><button v-if="label.selectable" class="spatial-map-label" :class="{ selected: selected === label.key, self: projection.self.entityRef === label.key }" :style="{ left: label.x + 'px', top: label.y + 'px', width: label.width + 'px', height: label.height + 'px' }" :title="label.label" :aria-label="'选择' + label.label" @click.stop="emit('select', label.key)"><span>{{ label.label }}</span></button><span v-else class="spatial-map-label spatial-map-label-anchor" :style="{ left: label.x + 'px', top: label.y + 'px', width: label.width + 'px', height: label.height + 'px' }">{{ label.label }}</span></template></div>
     </div>
     <button v-if="labels.omitted" class="text-button spatial-map-overflow" @click="emit('objects')">另有 {{ labels.omitted }} 个标记，查看对象与地点</button>
-    <p class="spatial-map-note" role="status">{{ projection.paused ? '等待同伴回来，眼下的准备会保留。' : '点地行走，靠近后再看一看。' }}<template v-if="backgroundFailed || missingResources.size"> 部分图像暂未载入，仍可继续操作。<button class="text-button" @click="retryArtwork">重新载入图像</button></template></p>
+    <p v-if="!immersive || projection.paused || backgroundFailed || missingResources.size" class="spatial-map-note" role="status">{{ projection.paused ? '等待同伴回来，眼下的准备会保留。' : '点地行走，靠近后再看一看。' }}<template v-if="backgroundFailed || missingResources.size"> 部分图像暂未载入，仍可继续操作。<button class="text-button" @click="retryArtwork">重新载入图像</button></template></p>
   </section>
 </template>

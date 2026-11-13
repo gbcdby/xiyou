@@ -27,6 +27,7 @@ const route = useRoute();
 const sessionId = computed(() => String(route.params.sessionId || ''));
 const projection = computed(() => spatialState.value.snapshot?.projection || null);
 const isGaolao = computed(() => projection.value?.reducerVersion === 'gaolao-world-v1' && Boolean(projection.value.chapter));
+const hud = computed(() => isGaolao.value && projection.value?.phase !== 'Lobby');
 const online = computed(() => spatialState.value.connection === 'online');
 const canAct = computed(() => online.value && spatialState.value.inputReady && projection.value?.phase === 'Running' && !projection.value.paused);
 const canStop = computed(() => online.value && spatialState.value.inputReady && projection.value?.phase === 'Running');
@@ -48,7 +49,11 @@ const personLabeler = new SpatialPersonLabels();
 const personLabels = ref<Record<string, string>>({});
 const hasPersonMarkers = computed(() => projection.value ? [projection.value.self, ...others.value].some(person => personLabels.value[person.entityRef] && personLabels.value[person.entityRef] !== person.name) : false);
 const currentSummary = computed(() => spatialSummary(projection.value));
-const recentPreparations = computed(() => isGaolao.value ? [] : projection.value?.objectives.filter(o => o.status === 'completed').slice(-2) || []);
+const recentPreparations = computed(() => isGaolao.value
+  ? projection.value?.chapter?.progress.filter(field => field.value === true && field.label !== projection.value?.chapter?.progress.at(-1)?.label).slice(-2).map((field, index) => ({ objectiveId: String(index), label: field.label })) || []
+  : projection.value?.objectives.filter(o => o.status === 'completed').slice(-2) || []);
+const duties = { A: '迎客联络', B: '内院照应', C: '木作帮手', D: '灶房帮手', E: '庄外引路' };
+const ownDuties = computed(() => projection.value?.chapter?.responsibilities.map(duty => duties[duty]).join('、') || '同行旅伴');
 const unknownCount = computed(() => spatialState.value.actions.filter(action => action.status === 'waiting' || action.status === 'unknown').length);
 const movementLabels = { accepted: '路线已受理', moving: '正在行走', arrived: '已到达', blocked: '路线受阻', cancelled: '已停步' };
 const connectionNames = { idle: '尚未连接', connecting: '连接房间中', synchronizing: '同步授权场景中', online: '已连接', offline: '正在重连', forbidden: '当前无法访问房间' };
@@ -64,7 +69,7 @@ watch([sessionId, () => identity.value?.token], () => {
   if (identity.value) enterSpatialSession(sessionId.value);
 }, { immediate: true });
 watch(() => spatialState.value.snapshot?.viewId, clearAuthorizedInput);
-watch(() => projection.value?.phase, () => { if (projection.value?.phase === 'Lobby') void refreshPeople(); });
+watch(() => projection.value?.phase, () => { if (projection.value) void refreshPeople(); });
 watch(projection, value => { if (!value) clearAuthorizedInput(); });
 watch([() => spatialState.value.snapshot?.viewId, projection], ([view, value]) => {
   personLabels.value = personLabeler.update(view || null, value ? [value.self, ...others.value].filter(person => person.position !== null) : []);
@@ -78,7 +83,7 @@ watch([reading, () => identity.value?.token, sessionId, () => spatialState.value
     ? { sessionId: snapshot.sessionId, actorRef: p.self.entityRef, throughSeq: snapshot.snapshotSeq, phase: p.phase as 'Finished' | 'Aborted', viewId: snapshot.viewId, identity: identity.value.token }
     : null);
 }, { immediate: true });
-const lobbyPoll = setInterval(() => { if (projection.value?.phase === 'Lobby') void refreshPeople(); }, 2000);
+const lobbyPoll = setInterval(() => { if (projection.value?.phase === 'Lobby' || (hud.value && online.value)) void refreshPeople(); }, 2000);
 onMounted(() => window.addEventListener('keydown', escape, true));
 onBeforeUnmount(() => { clearInterval(lobbyPoll); window.removeEventListener('keydown', escape, true); recapClient.close(); leaveSpatialSession(); });
 
@@ -103,7 +108,11 @@ function showReceipts() {
   document.getElementById('spatial-receipts-heading')?.focus({ preventScroll: true });
 }
 async function showObjects() { closeReading(); await nextTick(); document.getElementById('spatial-selection-heading')?.focus(); }
-async function refreshPeople() { try { roomCount.value = (await api.rooms()).find(room => room.sessionId === sessionId.value)?.playerCount ?? null; } catch { roomCount.value = null; } }
+async function refreshPeople() {
+  const room = sessionId.value; const account = identity.value?.token;
+  try { const rooms = await api.rooms(); if (room === sessionId.value && account === identity.value?.token) roomCount.value = rooms.find(value => value.sessionId === room)?.playerCount ?? null; }
+  catch { if (room === sessionId.value && account === identity.value?.token) roomCount.value = null; }
+}
 async function start() {
   if (!online.value || starting.value) return;
   starting.value = true; startNotice.value = ''; if (!startNonce) startNonce = crypto.randomUUID();
@@ -147,8 +156,12 @@ function ownerName(reference: string) { const p = projection.value; return p?.se
 </script>
 
 <template>
-  <div class="spatial-page page-shell" :class="{ 'gaolao-scene-page': isGaolao }">
-    <header class="spatial-heading">
+  <div class="spatial-page page-shell" :class="{ 'gaolao-scene-page': hud }">
+    <header v-if="hud" class="gaolao-heading">
+      <div class="gaolao-chapter-name"><span class="gaolao-chapter-seal" aria-hidden="true">一</span><div><h1>高老庄</h1><p>{{ projection?.scene?.name || '同行记' }}</p></div></div>
+      <button class="gaolao-party-strip" aria-label="查看本局队伍" @click="openReading('chapter', $event)"><span class="gaolao-party-icon" aria-hidden="true"><AppIcon name="group" :size="25" /></span><span>本局旅伴<strong>{{ roomCount === null ? '人数待同步' : roomCount + ' / 5 位成员' }}</strong></span><span class="gaolao-own-connection">{{ online ? '你的连接正常' : connectionNames[spatialState.connection] }}<small v-if="projection?.paused">Ⅱ 等待同伴</small></span></button>
+    </header>
+    <header v-else class="spatial-heading">
       <div><RouterLink to="/" class="back-link">返回房间大厅</RouterLink><h1>{{ isGaolao ? '高老庄 · 同行记' : '高老庄 · 行走灰盒' }}</h1><p>房间 <code>{{ sessionId }}</code><button class="text-button" @click="copy">{{ copied ? '已复制' : '复制房间号' }}</button></p></div>
       <div class="spatial-connection" role="status">{{ connectionNames[spatialState.connection] }}<small v-if="projection">{{ projection.paused ? 'Ⅱ 等待同伴，场景已暂停' : projection.phase === 'Running' ? '场景运行中' : projection.phase === 'Lobby' ? '等待启程' : '这一程已结束' }}</small></div>
     </header>
@@ -158,16 +171,22 @@ function ownerName(reference: string) { const p = projection.value; return p?.se
       <section v-if="projection.phase === 'Lobby'" class="panel waiting-room"><p class="eyebrow">等待同行</p><h2>{{ roomCount === null ? '等待人数同步' : roomCount + ' 位旅伴已相聚' }}</h2><p>2–5 位真人可以开始。启程后，各自在自己的浏览器中控制角色。</p><button class="primary-button" :disabled="!online || starting || (roomCount !== null && roomCount < 2)" @click="start">{{ starting ? '正在开始…' : '开始同行（房主）' }}</button><p v-if="startNotice" role="status">{{ startNotice }}</p></section>
       <template v-else>
         <section v-if="projection.phase === 'Running' && !spatialState.inputReady" class="control-banner"><div><strong>当前为只读视角</strong><p>恢复本人控制后继续行走。另一处连接正在控制时，可明确选择接管。</p></div><div class="button-row"><button class="primary-button" :disabled="!online || spatialState.controlBusy" @click="performSpatial(() => spatialClient.control('resume'))">恢复本人控制</button><button class="secondary-button" :disabled="!online || spatialState.controlBusy" @click="performSpatial(() => spatialClient.control('take'))">明确接管此角色</button></div></section>
-        <section v-if="projection.ending" class="panel spatial-ending"><h2>{{ projection.ending.title }}</h2><p>{{ projection.ending.summary }}</p></section>
+        <section v-if="projection.ending && !hud" class="panel spatial-ending"><h2>{{ projection.ending.title }}</h2><p>{{ projection.ending.summary }}</p></section>
         <div class="spatial-layout" :class="{ 'reading-open': reading }">
           <div class="spatial-main">
-            <section v-if="currentSummary || recentPreparations.length" class="spatial-current-objective" :aria-label="currentSummary?.caption || '眼下事项'"><div><p class="eyebrow">{{ currentSummary?.caption || '眼下事项' }}</p><h2>{{ currentSummary?.title || '已知准备已留下' }}</h2></div><div class="spatial-known-preparations"><SpatialStatus v-for="objective in recentPreparations" :key="objective.objectiveId" :label="objective.label" tone="confirmed" /></div></section>
-            <SpatialMap :snapshot="spatialState.snapshot!" :disabled="!canAct" :selected="selectedRef" :person-labels="personLabels" @move="move" @select="select" @stop="stop" @objects="showObjects" @settled="spatialClient.confirmDisplayedArrival($event)" />
-            <div class="spatial-action-bar"><div><strong>{{ projection.self.name }}</strong><span data-testid="movement-status">{{ projection.movement ? movementLabels[projection.movement.status] : '点地选择路线' }}</span><span v-if="spatialState.queuedAction">{{ spatialState.queuedAction }}</span></div><button class="secondary-button" :disabled="!canStop" @click="stop">停步 / 取消后续操作</button></div>
+            <section v-if="currentSummary || recentPreparations.length" class="spatial-current-objective" :aria-label="currentSummary?.caption || '眼下事项'"><div><p class="eyebrow">{{ currentSummary?.caption || '眼下事项' }}</p><h2>{{ currentSummary?.title || '已知准备已留下' }}</h2></div><div class="spatial-known-preparations"><SpatialStatus v-for="objective in recentPreparations" :key="objective.objectiveId" :label="objective.label" tone="confirmed" /></div><button v-if="hud" class="text-button gaolao-progress-link" @click="openReading('chapter', $event)">进展 <AppIcon name="arrow" :size="15" /></button></section>
+            <SpatialMap :snapshot="spatialState.snapshot!" :disabled="!canAct" :selected="selectedRef" :person-labels="personLabels" :immersive="hud" @move="move" @select="select" @stop="stop" @objects="showObjects" @settled="spatialClient.confirmDisplayedArrival($event)" />
+            <div class="spatial-action-bar"><div><strong>{{ projection.self.name }}</strong><span v-if="hud" class="gaolao-own-duties">{{ ownDuties }}</span><span data-testid="movement-status">{{ projection.movement ? movementLabels[projection.movement.status] : '点地选择路线' }}</span><span v-if="spatialState.queuedAction">{{ spatialState.queuedAction }}</span></div><button class="secondary-button" aria-label="停步 / 取消后续操作" :disabled="!canStop" @click="stop"><span v-if="hud" aria-hidden="true">□</span>{{ hud ? '停步' : '停步 / 取消后续操作' }}</button><button v-if="hud" class="text-button gaolao-talk-button" @click="openReading('dialogue', $event)"><AppIcon name="chat" :size="19" />交谈</button></div>
             <div v-if="projection.chapter?.follows.length" class="spatial-follow-strip" aria-label="当前随行安排"><p v-for="follow in projection.chapter.follows" :key="follow.followId"><strong>{{ personLabels[follow.subjectRef] || '本次随行者' }}</strong><span>{{ followLabels[follow.status] }}</span><span>{{ projection.chapter.destinations.find(destination => destination.destinationId === follow.destinationId)?.label || '本次约定地点' }}</span></p><button class="text-button" @click="openReading('chapter', $event)">查看随行安排</button></div>
             <div class="spatial-hud-footer">
               <p class="spatial-input-hint">点地行走 · 靠近后交互<br>Esc 关闭阅读区 / 停步</p>
-              <nav class="spatial-tool-dock" aria-label="随身功能">
+              <nav v-if="hud" class="spatial-tool-dock" aria-label="随身功能">
+                <button aria-controls="spatial-reading-pane" :aria-expanded="reading === 'inventory'" @click="openReading('inventory', $event)"><AppIcon name="bag" :size="26" /><span>行囊</span></button>
+                <button aria-controls="spatial-reading-pane" :aria-expanded="reading === 'notebook'" @click="openReading('notebook', $event)"><AppIcon name="book" :size="26" /><span>手记</span></button>
+                <button aria-controls="spatial-reading-pane" :aria-expanded="reading === 'chapter'" @click="openReading('chapter', $event)"><AppIcon name="group" :size="26" /><span>队伍</span></button>
+                <button aria-controls="spatial-reading-pane" :aria-expanded="reading === 'recap'" :disabled="!projection.ending" :title="projection.ending ? '查看本局授权过程' : '这一程结束后可回看'" @click="openReading('recap', $event)"><AppIcon name="clock" :size="26" /><span>回看</span></button>
+              </nav>
+              <nav v-else class="spatial-tool-dock" aria-label="随身功能">
                 <button aria-controls="spatial-reading-pane" :aria-expanded="reading === 'inventory'" @click="openReading('inventory', $event)"><AppIcon name="bag" :size="26" /><span>行囊</span></button>
                 <button aria-controls="spatial-reading-pane" :aria-expanded="reading === 'notebook'" @click="openReading('notebook', $event)"><AppIcon name="book" :size="26" /><span>手记</span></button>
                 <button aria-controls="spatial-reading-pane" :aria-expanded="reading === 'dialogue'" @click="openReading('dialogue', $event)"><AppIcon name="chat" :size="26" /><span>交谈</span></button>
@@ -183,7 +202,7 @@ function ownerName(reference: string) { const p = projection.value; return p?.se
               <SpatialInventoryPane v-if="reading === 'inventory'" :inventory="inventory" :people="others" :person-labels="personLabels" :can-act="canAct" :recipient="recipient" @recipient="recipient = $event" @put="put" @transfer="transfer" />
               <SpatialNotebookPane v-else-if="reading === 'notebook'" :observations="projection.observations" :people="others" :person-labels="personLabels" :can-act="canAct" :recipient="recipient" @recipient="recipient = $event" @share="send({ kind: 'share_evidence', evidenceRef: $event.observationRef, recipientRefs: [recipient] })" />
               <SpatialDialoguePane v-else-if="reading === 'dialogue'" :claims="projection.claims" :people="others" :person-labels="personLabels" :can-act="canAct" :recipient="recipient" :message="message" :channel="channel" @recipient="recipient = $event" @message="message = $event" @channel="channel = $event" @speak="speak" />
-              <template v-else-if="reading === 'chapter' && projection.chapter"><GaolaoChapterState :chapter="projection.chapter" :self="projection.self" :people="projection.entities" :items="projection.items" :person-labels="personLabels" :can-act="canAct" :can-end="canStop" @action="send" /><section v-if="projection.phase === 'Running' && projection.self.capabilities.includes('request_end')" class="gaolao-ending-choices"><h3>共同决定这一程</h3><p>每位当前在线旅伴都须明确确认。结束招徒尝试仍保留安置、归还与实际分别的工作；暂告一段会按已有事实结束本局。</p><p v-if="projection.chapter.endProposal?.status === 'pending'">已有一轮确认正在进行；更换提议会重新征求大家确认。</p><div class="button-row"><button class="secondary-button" :disabled="!canStop || (projection.chapter.endProposal?.scope === 'recruitment' && projection.chapter.endProposal.status !== 'invalidated')" @click="requestEnding('recruitment')">提议结束招徒</button><button class="secondary-button" :disabled="!canStop || (projection.chapter.endProposal?.scope === 'chapter' && projection.chapter.endProposal.status === 'pending')" @click="requestEnding('chapter')">提议暂告一段</button></div></section></template>
+              <template v-else-if="reading === 'chapter' && projection.chapter"><section v-if="hud" class="gaolao-room-details"><h3>本局旅伴</h3><p>{{ roomCount === null ? '成员人数尚未同步。' : '本局有 ' + roomCount + ' 位成员。' }}人数不代表此刻在线状况。</p><p>你：{{ projection.self.name }} · {{ ownDuties }}</p><p>房间 <code>{{ sessionId }}</code></p><button class="text-button" @click="copy">{{ copied ? '已复制' : '复制房间号' }}</button><RouterLink to="/" class="text-button">返回房间大厅</RouterLink></section><GaolaoChapterState :chapter="projection.chapter" :self="projection.self" :people="projection.entities" :items="projection.items" :person-labels="personLabels" :can-act="canAct" :can-end="canStop" @action="send" /><section v-if="projection.phase === 'Running' && projection.self.capabilities.includes('request_end')" class="gaolao-ending-choices"><h3>共同决定这一程</h3><p>每位当前在线旅伴都须明确确认。结束招徒尝试仍保留安置、归还与实际分别的工作；暂告一段会按已有事实结束本局。</p><p v-if="projection.chapter.endProposal?.status === 'pending'">已有一轮确认正在进行；更换提议会重新征求大家确认。</p><div class="button-row"><button class="secondary-button" :disabled="!canStop || (projection.chapter.endProposal?.scope === 'recruitment' && projection.chapter.endProposal.status !== 'invalidated')" @click="requestEnding('recruitment')">提议结束招徒</button><button class="secondary-button" :disabled="!canStop || (projection.chapter.endProposal?.scope === 'chapter' && projection.chapter.endProposal.status === 'pending')" @click="requestEnding('chapter')">提议暂告一段</button></div></section></template>
               <GaolaoRecapPanel v-else-if="reading === 'recap' && isGaolao" :state="recapState" :ending="projection.ending" @load="recapClient.loadMore()" />
               <template v-else-if="reading === 'recap' && projection.ending"><h3>{{ projection.ending.title }}</h3><p class="spatial-record-statement">{{ projection.ending.summary }}</p><SpatialFieldList :fields="projection.ending.facts || []" /></template>
             </SpatialReadingPane>
