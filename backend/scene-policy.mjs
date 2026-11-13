@@ -14,6 +14,20 @@ import {decideGaolaoScenePolicy} from '../game/gaolao-scene-policy.mjs';
 const digest=value=>createHash('sha256').update(canonicalize(value)).digest('hex');
 const id=ref('Id'),seq=ref('DecimalString'),bool={type:'boolean'},hex={type:'string',pattern:'^[a-f0-9]{64}$',minLength:64,maxLength:64};
 const guardNames=['authorized','versionsCurrent','leaderHuman','leaderOnline','near','visible','los','inRoute','localPathReachable','doorOpen','exitReachable','arrived','atRetreat','retreatReachable'];
+// N5 要求重验相应选择的真实依赖；完整 guards 仍保留在不可变 basis 中。
+const actionGuardNames={
+  respond_consent:['authorized','versionsCurrent','leaderHuman','leaderOnline','near','visible','los','inRoute','localPathReachable','doorOpen'],
+  withdraw_consent:['authorized'],
+  'gz-confirm-settlement':['authorized','versionsCurrent','arrived','exitReachable'],
+  'gz-step-back':['authorized','atRetreat'],
+  move_to:['authorized','atRetreat','retreatReachable'],
+};
+function sameChoiceBindings(original,current,action){
+  const names=actionGuardNames[action.kind==='interact'?action.operationId:action.kind];
+  if(!Array.isArray(names))throw new RuntimeError('INVALID_MESSAGE','当前场景策略没有该动作的依赖声明。');
+  const project=({guards,...common})=>({...common,guards:Object.fromEntries(names.map(name=>[name,guards[name]]))});
+  return canonicalize(project(original))===canonicalize(project(current));
+}
 const basisSchema=object({policyVersion:lit('gaolao-cuilan-v1'),stepKey:id,actionId:id,requestDigest:hex,evaluatedThroughSeq:seq,contentVersion:id,chapterVersion:id,mapVersion:id,
   sources:array(object({sourceId:en('rescue-contact',FRONT,TEA),sourceRef:ref('EntityRef'),observationRef:ref('EntityRef'),sourceSeq:seq,receivedSeq:seq,digest:hex}),3),
   consent:nullable(object({consentId:id,version:seq,status:id,purpose:lit('follow')})),follow:nullable(object({followId:id,planVersion:seq,consentVersion:seq,routeDigest:hex})),
@@ -38,6 +52,13 @@ function ownSources(tx,actorId){
   }
   return records;
 }
+/** 当前领路者的布尔资格；只用本人本地通路，供读取与事务前后通知共用。 */
+function leaderEligibility(state,content,actor,leader,follow,online){
+  return {leaderHuman:leader?.kind==='human',leaderOnline:online,
+    near:!!leader&&inRange(state,content,actor,leader,content.movement.interactionRadius),visible:!!leader&&canSee(state,content,actor.characterId,leader),los:!!leader&&unoccluded(state,content,actor,leader),
+    inRoute:!!leader&&!!follow?.policyRoute&&positionPermitted(content,follow.policyRoute,leader,{leader:true}),
+    localPathReachable:!!leader&&!!follow?.policyRoute&&!!policyLocalPath(content,follow.policyRoute,actor,leader,obstacleEnabled(state))};
+}
 export async function scenePolicyInput(tx,principal){
   const actor=tx.state.characters[principal.actorId],chapter=tx.state.chapter,rules=tx.content.chapterRules;
   const snapshot=await snapshotSpatial(tx,principal.actorId,{principalKind:'scene_role',capabilities:['spatial-v2']}),p=snapshot.projection;
@@ -49,8 +70,7 @@ export async function scenePolicyInput(tx,principal){
   const inDestination=!!d&&d.sceneId===actor.sceneId&&distance(actor.position,d.position)<=20&&inPolygon(actor.position,scene.walkableAreas.find(a=>a.areaId===d.areaId)?.polygon??[]);
   const qualified=actor.mode==='CoreNPCControlled'&&actor.actorKind==='scene_role';
   const eligibility={authorized:qualified,versionsCurrent:!!f&&!!c&&f.consentId===c.consentId&&f.consentVersion===c.version&&f.subjectEpoch===actor.controlEpoch&&f.leaderEpoch===leader?.controlEpoch&&policyRouteValid(tx.state,tx.content,f),
-    leaderHuman:leader?.kind==='human',leaderOnline:!!leader&&tx.liveActorIds?.has(leader.characterId)===true,near:!!leader&&inRange(tx.state,tx.content,actor,leader,tx.content.movement.interactionRadius),visible:!!leader&&canSee(tx.state,tx.content,actor.characterId,leader),los:!!leader&&unoccluded(tx.state,tx.content,actor,leader),
-    inRoute:!!leader&&!!f?.policyRoute&&positionPermitted(tx.content,f.policyRoute,leader,{leader:true}),localPathReachable:!!leader&&!!f?.policyRoute&&!!policyLocalPath(tx.content,f.policyRoute,actor,leader,enabled),
+    ...leaderEligibility(tx.state,tx.content,actor,leader,f,!!leader&&tx.liveActorIds?.has(leader.characterId)===true),
     doorOpen:tx.state.targets[rules.sealTargetId].fields.some(x=>x.key==='open'&&x.value===true),exitReachable:inDestination&&!!findPath(scene,actor.position,d.exitPosition,enabled),arrived:f?.status==='arrived'&&inDestination,
     atRetreat:actor.sceneId===rules.retreat.sceneId&&distance(actor.position,rules.retreat.position)<=20,retreatReachable:actor.sceneId===rules.retreat.sceneId&&!!findPath(scene,actor.position,rules.retreat.position,enabled)};
   const input={snapshot,knowledge,participant:{consent,follow,retreated:chapter.retreated,safe:chapter.cuilanSafe,pause:f?.policyPause??null},eligibility,retreat:structuredClone(rules.retreat)};
@@ -73,10 +93,10 @@ function wakeDependencies(state,content,actorId){
   if(!actor||!chapter)return null;
   const f=chapter.follows[actorId],leader=f?state.characters[f.leaderId]:null,scene=sceneOf(content,actor.sceneId);
   const sourceCount=Object.values(chapter.provenance[actorId]??{}).filter(x=>['rescue-contact',FRONT,TEA].includes(x.sourceId)).length;
-  return {phase:state.phase,mapVersion:state.mapVersion,chapterVersion:state.chapterVersion,contentVersion:state.contentVersion,mode:actor.mode,epoch:actor.controlEpoch,viewId:state.views[actorId]?.viewId??null,
+  return {phase:state.phase,mapVersion:state.mapVersion,chapterVersion:state.chapterVersion,contentVersion:state.contentVersion,mode:actor.mode,epoch:actor.controlEpoch,viewId:state.views[actorId]?.viewId??null,subjectRevision:actor.resourceRevision,leaderEpoch:leader?.controlEpoch??null,
     sourceCount,status:sceneStatusSignature(chapter,actorId),movement:['arrived','blocked','cancelled'].includes(actor.movement?.status)?[actor.movement.movementId,actor.movement.status]:null,
     localObstacles:scene?.obstacles.map(o=>[o.obstacleId,obstacleEnabled(state)(o)])??[],
-    proposal:f?.status==='proposed'&&leader?{leaderId:f.leaderId,epoch:leader.controlEpoch,online:chapter.onlineActorIds.includes(f.leaderId),human:leader.kind==='human',near:inRange(state,content,actor,leader,content.movement.interactionRadius),los:unoccluded(state,content,actor,leader),visible:canSee(state,content,actorId,leader),inRoute:!!f.policyRoute&&positionPermitted(content,f.policyRoute,leader,{leader:true})}:null};
+    proposal:f?.status==='proposed'&&leader?{leaderId:f.leaderId,...leaderEligibility(state,content,actor,leader,f,chapter.onlineActorIds.includes(f.leaderId))}:null};
 }
 /** 事务起点与最终提交状态的资格变化，只进入进程内通知，不写事件/DTO/模型。 */
 export function scenePolicyWake(tx){
@@ -99,7 +119,7 @@ export async function prepareScenePolicy(runtime,handle){
     if(old){
       const previous=old.execution_context.scenePolicyBasis;
       const previousBindings=Object.fromEntries(Object.keys(current).map(k=>[k,previous[k]]));
-      if(old.scene_outcome?.status==='Accepted'&&choice.stepKey!=='retreat-navigation'||canonicalize(previousBindings)===canonicalize(current))return {kind:'idle',reason:'当前逻辑步骤已有确定原结果。',evaluatedThroughSeq};
+      if(old.scene_outcome?.status==='Accepted'&&choice.stepKey!=='retreat-navigation'||sameChoiceBindings(previousBindings,current,choice.action))return {kind:'idle',reason:'当前逻辑步骤已有确定原结果。',evaluatedThroughSeq};
     }
     const intentId=`scene-${randomUUID()}`,action=choice.action,navigation=action.kind==='move_to';
     const issued=navigation?(await tx.client.query('INSERT INTO spatial_command_sources(session_id,actor_id,control_epoch,issued_seq) VALUES($1,$2,$3,1) ON CONFLICT(session_id,actor_id,control_epoch) DO UPDATE SET issued_seq=GREATEST(spatial_command_sources.issued_seq,spatial_command_sources.handled_seq)+1 RETURNING issued_seq',[principal.sessionId,principal.actorId,read.actor.controlEpoch])).rows[0].issued_seq:null;
@@ -118,7 +138,7 @@ export async function revalidateScenePolicy(runtime,tx,principal,request,context
   if(basis.actionId!==request.clientActionId||basis.requestDigest!==digest(request))throw new RuntimeError('ACTION_ID_REUSE');
   const read=await scenePolicyInput(tx,principal),choice=decideGaolaoScenePolicy(read.input),current=bindings(tx,principal,read);
   const original=Object.fromEntries(Object.keys(current).map(k=>[k,basis[k]])),{movementCommandSeq,...action}=request.action;
-  if(choice.kind!=='action'||choice.stepKey!==basis.stepKey||canonicalize(choice.action)!==canonicalize(action)||canonicalize(current)!==canonicalize(original))throw new RuleError('STALE_PRECONDITION');
+  if(choice.kind!=='action'||choice.stepKey!==basis.stepKey||canonicalize(choice.action)!==canonicalize(action)||!sameChoiceBindings(original,current,action))throw new RuleError('STALE_PRECONDITION');
   tx.scenePolicyAuthorization=basis;
 }
 /** 查旧 Receipt 不经过首次选择谓词；读权、原演员、原摘要仍必须成立。 */

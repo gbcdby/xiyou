@@ -25,6 +25,20 @@
 
 提交复用 `submitSpatialIntent → executeSpatial`。当前读权、原 actor 与原摘要相同的 Receipt 查重先完成；只有没有旧 Receipt 时才执行 `revalidateScenePolicy`。当前纯判断、动作与准备依据必须相符，效果及新 Receipt 同事务落地。无关 actor 行走造成的全局序号增长不是拒绝依据。变更了条件的旧 accept 只能得到原动作的实际拒绝，不能用同 ID 偷换成 defer/decline。
 
+### 完整留证与动作依赖
+
+N5 要求重验“相应选择谓词”和本次选择的真实依赖；P2-09 的本人撤回依据是当前许可及已经合法送达的偏离结果。完整 `guards` 继续按原严格 schema 保存，作为准备时的事实记录。准备去重与首次提交统一用 `sameChoiceBindings` 比较下表的资格投影。共通字段全部比较：内容/章节/地图版本、所有已保存的本人来源及摘要/收到水位、当前 consent 记录、follow/plan/routeDigest、双方 epoch、本人 view/ref/resourceRevision。没有从共通版本或身份围栏中豁免任何动作。
+
+| 动作 | 参与比较的 guards | 另由当前纯判断及原规则核验 |
+| --- | --- | --- |
+| respond_consent | authorized、versionsCurrent、leaderHuman、leaderOnline、near、visible、los、inRoute、localPathReachable、doorOpen | P2-03～07：当前 proposed、本人资料、相同回应及动作参数。 |
+| withdraw_consent | authorized | P2-09：当前 accepted 许可、同一 paused/deviation 计划、没有新提议替代；无离线/普通阻挡代答。 |
+| gz-confirm-settlement | authorized、versionsCurrent、arrived、exitReachable | 第 2 节/P2-08：实际到达、当前许可/计划、双方 epoch、真实位置与自由出口。 |
+| gz-step-back | authorized、atRetreat | 第 2 节：本人实际联络、尚未退让、当前位置满足门内退让守卫。 |
+| move_to（退让） | authorized、atRetreat、retreatReachable | 第 2 节：本人资料、当前场景、没有在途移动、合法退让目的地。 |
+
+每次仍重新判断 Running、paused、本人资格与已安全状态，要求同一逻辑步骤、同一动作及全部参数。位置资格变化不会单独推翻已成立的 P2-09 撤回；安置确认也只按既定的实际位置/许可/出口条件判定。真正改约、双方 epoch、资源 revision 或相应资格变化仍终结原请求，保留其原 Receipt，后续语义才触发关联的新尝试。原存储 schema、请求摘要与 Receipt 优先顺序没有变化。
+
 成功 accept 增长 consent/plan 版本后，另写 `follow.policyRoute.acceptance`，绑定实际新版本、原 actionId 与原请求摘要；准备 basis 永不回写。新内容的 follow 回应不能绕过这个策略校验走普通内部代答。之后每次推进仍验证原执行关联，旧 proposed 版本不会误停正常随行，也不能刷新旧接受来绕过撤回。
 
 ## 原结果与语义水位
@@ -44,7 +58,9 @@
 
 ## 已提交通知的私有相关性
 
-`scenePolicyWake(tx)` 比较**同一实际事务起点和最终状态**的白名单：本人阶段/控制/view、持久允许来源、当前 consent/follow 的版本/状态/段、本人导航终态、当前场景障碍条件，以及当前提议指定领路者的 epoch/在线/near/LOS/可见/路线范围布尔资格。普通坐标、时钟与无关人物行走不纳入资格键，不逐 tick 重建策略 Snapshot 或寻路。
+`scenePolicyWake(tx)` 比较**同一实际事务起点和最终状态**的白名单：本人阶段/控制/view/resourceRevision、持久允许来源、当前 consent/follow 的版本/状态/段及其领路者 epoch、本人导航终态、当前场景障碍条件，以及当前提议指定领路者的在线/near/LOS/可见/路线范围/本人局部通路布尔资格。领路者 epoch 也覆盖 paused/deviation 下尚待撤回的当前安排；实际改变才有新通知。
+
+`leaderEligibility` 让当前读取与提议资格通知共用同一组谓词。局部通路只求本人当前场景内既有路径的可达布尔值；下一场景仍只使用约定静态入口，不查看远处实时地图。普通坐标、时钟与无关人物行走不纳入资格键；只有布尔边界变化才唤醒，不逐 tick 重建策略 Snapshot，following/arrived/paused 也不为领路者每步移动计算提议资格。`spatialRevision` 和全局 seq 都不是此资格键。
 
 `AuthorityRuntime` 仅在 COMMIT 成功后，把 `{actorId, throughSeq, relevant}` 附于进程内 `commit` 通知的 `scenePolicyWake`。它不进入 WorldEvent、Session 状态、outbox 内容、Public DTO、模型上下文或意图 basis。策略边界计算留在章节适配模块，Runtime 不作人物选择。该事实不依赖控制器持有的旧快照；新提议评估到返回期间发生的资格变化也能被保存。
 
@@ -65,5 +81,7 @@ defer/decline/withdraw 与内部无动作保持不同。近距合格真人回到
 作者定向入口为 `node --test --test-concurrency=1 backend/tests/scene-policy-*.test.mjs`。测试按 GZ-SP-01～08 标记，使用真实 PG、HTTP/Socket 和两个真人身份，覆盖两个新布局、两目的地、退让、实际跨场景安置、过道多点/换领路者/庄外返程、defer/decline/withdraw 补救、事务与恢复交错、原生 57014、暂停重启、旧 epoch、终态、来源窗口、资格频率和模型预算耗尽。正常路径的测试辅助器拒绝代翠兰执行动作；悟空的测试操作仍经原合法内部守卫，不把它记成真实供应商自主表现。
 
 旧内容/同貌权限与自主恢复采用受影响路径的定向回归。作者曾实际发现并保留 arrived 早退及旧提议资格缓存两个产品红灯；相同真实场景用于修复验证，不能删掉失败后改称一直通过。
+
+R-GZ-SP-IMPL-STD-001 的依赖一致性回归位于 `backend/tests/scene-policy-dependencies.test.mjs`：两目的地撤回返回、撤回中的真实 epoch 变化、真正新提议替代、到达确认的合法领路者移动，并核对原文/一次效果、旧通知重复乱序及无关移动频率。独立原反例和旧 red 候选的结论保留，修正版仍须独立复核。
 
 这些是作者检查入口与实现说明，不代表独立需求/标准审查、TLC、新 UI 默认入口、完整 A3、真实模型供应商或发布已通过。新增形式化边界见 [scene 影响报告](../formal/adv001/scene-policy-impact.md)；后续必须对冻结源码单独核对。
