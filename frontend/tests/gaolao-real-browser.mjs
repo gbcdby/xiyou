@@ -8,6 +8,7 @@ import { createAuthorityServer } from '../../backend/server.mjs';
 import { accepted, openDoor, cleanupPublic, disguise, gatherSources, investigate, endTogether, take } from '../../backend/test-support/gaolao-room.mjs';
 import { repository, sourceIdentity, saveJSON, sha256, until, sleep } from './network-support.mjs';
 import { browserRoom, snapshot, clientState, openReading, closeReading, selectObject, waitHumanReceipt } from './gaolao-real-support.mjs';
+import { recordOfflineRecovery } from './gaolao-offline-diagnostics.mjs';
 
 const output = resolve(process.env.FRONTEND_EVIDENCE_DIR || resolve(repository, '.agent-output/adv001-33-a2-integration/real-browser'));
 await mkdir(output, { recursive: true });
@@ -152,14 +153,24 @@ async function privateItemsViaUI(r) {
 
 async function recovery(r) {
   const page = r.pages[0], partner = r.pages[1], originalEpoch = (await snapshot(page)).projection.self.controlEpoch;
-  await page.reload(); await page.getByRole('button', { name: '恢复本人控制', exact: true }).click();
-  await until(async () => (await clientState(page)).inputReady, '刷新后取得新控制周期');
-  await stageSummary(page, '等待本人决定时刷新');
-  assert.ok(BigInt((await snapshot(page)).projection.self.controlEpoch) > BigInt(originalEpoch));
-  await partner.context().setOffline(true); await until(async () => (await snapshot(page)).projection.paused, '两人中一人断线后暂停');
-  const at = (await snapshot(page)).projection.sceneTimeMs; await sleep(700); assert.equal((await snapshot(page)).projection.sceneTimeMs, at);
-  await partner.context().setOffline(false); await until(async () => (await clientState(partner)).connection === 'online', '断线页面重新获得授权');
-  await partner.getByRole('button', { name: '恢复本人控制', exact: true }).click(); await until(async () => (await clientState(partner)).inputReady && !(await snapshot(page)).projection.paused, '实际控制恢复场景时间');
+  await recordOfflineRecovery({ runtime: server.runtime, pool: database.pool, room: r, report }, async diagnostics => {
+    await page.reload(); await page.getByRole('button', { name: '恢复本人控制', exact: true }).click();
+    await until(async () => (await clientState(page)).inputReady, '刷新后取得新控制周期');
+    await stageSummary(page, '等待本人决定时刷新');
+    assert.ok(BigInt((await snapshot(page)).projection.self.controlEpoch) > BigInt(originalEpoch));
+    await diagnostics.beginOffline();
+    await partner.context().setOffline(true); diagnostics.mark('offline-applied');
+    try {
+      await until(async () => (await snapshot(page)).projection.paused, '两人中一人断线后暂停');
+      diagnostics.mark('pause-assertion-passed');
+    } catch (error) {
+      // 只延后清场取证；原 15 秒失败和同一 error 不因尾段观察到暂停而翻绿。
+      try { await diagnostics.observeAfterPauseFailure(error); } finally { throw error; }
+    }
+    const at = (await snapshot(page)).projection.sceneTimeMs; await sleep(700); assert.equal((await snapshot(page)).projection.sceneTimeMs, at); diagnostics.mark('clock-freeze-verified');
+    await partner.context().setOffline(false); diagnostics.mark('network-restored'); await until(async () => (await clientState(partner)).connection === 'online', '断线页面重新获得授权');
+    await partner.getByRole('button', { name: '恢复本人控制', exact: true }).click(); await until(async () => (await clientState(partner)).inputReady && !(await snapshot(page)).projection.paused, '实际控制恢复场景时间'); diagnostics.mark('control-restored');
+  });
   let committed; const observed = new Promise(resolve => { committed = resolve; });
   const message = '本局恢复核对：保留原请求。'; let release;
   heldAck = { message, observed: committed, wait: new Promise(resolve => { release = resolve; }), release };
@@ -307,20 +318,28 @@ try {
     const state = await server.runtime.replay(r.sessionId); report.checks.push({ name: `${r.count}人真实持久终态`, status: 'PASS', sessionId: r.sessionId, ending: state.ending?.endingCode, sessionSeq: state.sessionSeq });
   }
   assert.deepEqual(report.pageErrors, []);
-  report.sourceEnd = await sourceIdentity();
-  assert.deepEqual(report.sourceEnd, report.source, '运行期间生产与脚本源码必须保持同一固定候选');
-  assert.equal(sha256(await readFile(resolve(repository, '.github/workflows/ci.yml'))), report.workflowSha256);
   report.assessment = 'PASS';
 } catch (error) {
   report.assessment = 'FAIL'; report.error = error.stack; console.error(error);
+  report.failureCapture = { at: new Date().toISOString(), stage: report.offlineRecovery?.failureTail ? '只读尾段之后；原失败时点见 offlineRecovery.originalAssertion' : '原失败之后' };
   for (const [index, page] of (activeRoom?.pages || []).entries()) {
     await page.screenshot({ path: resolve(output, `failure-${index}.png`), fullPage: true }).catch(() => {});
     report[`snapshot-${index}`] = await snapshot(page).catch(() => null);
     report[`page-${index}`] = await page.locator('body').innerText().catch(() => ''); report[`state-${index}`] = await clientState(page).catch(() => null);
   }
 } finally {
+  report.cleanupStartedAt = new Date().toISOString();
   heldAck?.release(); await saveJSON(resolve(output, 'result-before-cleanup.json'), report);
   for (const [name, close] of [['browser', () => browser?.close()], ['vite', () => vite?.close()], ['server', () => server?.close()], ['postgres', () => database?.stop()]]) { await close(); report.cleanup.push(name); }
-  report.finishedAt = new Date().toISOString(); report.resourcesClosed = true; await saveJSON(resolve(output, 'result.json'), report);
+  report.finishedAt = new Date().toISOString(); report.resourcesClosed = true;
+  try {
+    report.sourceEnd = await sourceIdentity();
+    assert.deepEqual(report.sourceEnd, report.source, '运行期间生产与脚本源码必须保持同一固定候选');
+    assert.equal(sha256(await readFile(resolve(repository, '.github/workflows/ci.yml'))), report.workflowSha256);
+  } catch (error) {
+    report.sourceAuditError = error.stack;
+    if (report.assessment !== 'FAIL') { report.assessment = 'FAIL'; report.error = error.stack; }
+  }
+  await saveJSON(resolve(output, 'result.json'), report);
   console.log(JSON.stringify({ assessment: report.assessment, checks: report.checks.length, output })); if (report.assessment !== 'PASS') process.exitCode = 1;
 }
