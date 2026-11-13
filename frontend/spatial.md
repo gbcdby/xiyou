@@ -4,7 +4,7 @@
 
 ## 入口与兼容
 
-- 大厅默认选择高老庄完整章 `gaolaozhuang-v1`，可用 `VITE_GAOLAO_CONTENT_VERSION` 配置同类已发布空间内容；仍可明确选择行走灰盒或旧版山间通路。空间创建、加入和 Socket 认证明确携带 `spatial-v2` 能力，空间只读 HTTP 请求使用能力请求头。
+- 大厅的单一高老庄入口在没有 `VITE_GAOLAO_CONTENT_VERSION` 覆盖时默认创建 `gaolaozhuang-scene-v2`；显式配置值原样生效，可选择工具东侧新场景 `gaolaozhuang-tools-east-scene-v2`，也可为回归或兼容固定旧版。加入或恢复已有房间沿用其存储的内容版本，不迁移旧局；仍可明确选择行走灰盒或旧版山间通路。空间创建、加入和 Socket 认证明确携带 `spatial-v2` 能力，空间只读 HTTP 请求使用能力请求头。
 - `/spatial/:sessionId` 只消费 `SnapshotV2` / `BatchV2`；`/sessions/:sessionId` 保持原 v1 驱动。房间列表能力或加入结果决定路由，新创建的旧版房间直接沿已选能力加入，不等待列表更新。
 - `protocol/spatial-schema.mjs` 仍是字段唯一来源。前端使用生成类型与公开校验器，不维护第二份消息 schema，不导入服务端内容、真身、受众或知识状态。
 

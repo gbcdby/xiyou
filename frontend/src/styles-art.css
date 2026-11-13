@@ -77,7 +77,7 @@
 .gaolao-scene-page .spatial-map-note { position: absolute; z-index: 9; bottom: 120px; left: 30px; display: flex; align-items: center; flex-wrap: wrap; gap: 6px; max-width: 420px; margin: 0; padding: 6px 12px; border: 1px solid #c9b99699; border-radius: 6px; color: var(--hud-muted); background: #f8f2e5ed; font-size: 13px; }
 .gaolao-scene-page .spatial-map-note button { min-height: 44px; }
 .gaolao-scene-page .spatial-pending-link { position: absolute; z-index: 24; bottom: 120px; right: 30px; min-height: 44px; margin: 0; background: var(--hud-paper); }
-.gaolao-scene-page .spatial-receipts { position: absolute; z-index: 30; top: 132px; left: 30px; width: 390px; max-height: calc(100dvh - 260px); overflow: auto; background: var(--hud-paper); }
+.gaolao-scene-page .spatial-receipts { position: absolute; z-index: 30; top: 132px; left: 30px; width: 390px; max-height: calc(100dvh - 260px); margin: 0; overflow: auto; background: var(--hud-paper); }
 .gaolao-scene-page button:focus-visible, .gaolao-scene-page a:focus-visible { outline: 3px solid #365e52; outline-offset: 3px; }
 .gaolao-scene-page .spatial-sidebar { display: block; }
 .gaolao-scene-page .spatial-sidebar[data-reading-kind="action"] { top: 47%; max-height: calc(53dvh - 125px); }

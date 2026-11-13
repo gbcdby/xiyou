@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { placeHudCard, cameraForHud } from '../src/domain/gaolao-hud-layout.ts';
+import { placeHudCard, placeHudCards, cameraForHud, hudCameraAlternatives } from '../src/domain/gaolao-hud-layout.ts';
 import { screenPosition } from '../src/domain/spatial-labels.ts';
 
 const overlaps = (a, b) => a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;
@@ -71,4 +71,60 @@ test('场景边缘仍有合法取景时，HUD相机保持完整地图覆盖视�
       assert.ok(point.y - 90 * point.scale - 70 >= entry.safeArea.y && point.y + 60 <= entry.safeArea.y + entry.safeArea.height);
     }
   }
+});
+
+test('铜封门保持选中而本人走向C14时，浮卡空域不足不能触发地图外取景', () => {
+  const viewport = { width: 1600, height: 1000 }, scene = { width: 1600, height: 1000 };
+  const safeArea = { x: 360, y: 132, width: 804, height: 727 };
+  // 独立真实录像的中间落点与原精确目的地，目标仍是同一个已授权铜封门。
+  for (const self of [{ x: 910.376, y: 412.566 }, { x: 754.886, y: 406.254 }, { x: 315, y: 390 }]) {
+    const positions = [self, { x: 1250, y: 425 }], original = structuredClone(positions);
+    const view = cameraForHud({ viewport, scene, safeArea, positions });
+    assert.ok(within(view, { x: 0, y: 0, ...scene }), '正常行走不能用顶部/右侧大片纸底为卡片腾空');
+    assert.ok(Math.abs(view.width / view.height - viewport.width / viewport.height) < 1e-9);
+    for (const position of positions) {
+      const point = screenPosition(position, view, viewport);
+      assert.ok(point.x >= 0 && point.x <= viewport.width && point.y >= 0 && point.y <= viewport.height, '本人和原选中目标都保持在真实地图取景内');
+    }
+    assert.deepEqual(positions, original);
+  }
+});
+
+test('最终姓名挤占阅读区时的换边候选仍全部由真实背景覆盖，不修改本人或目标', () => {
+  const scene = { width: 1600, height: 1000 };
+  const cases = [[{ x: 1250, y: 325 }, { x: 1250, y: 425 }], [{ x: 950, y: 650 }, { x: 1000, y: 750 }], [{ x: 989, y: 711 }, { x: 1080, y: 750 }]], original = structuredClone(cases);
+  for (const positions of cases) {
+  for (const viewport of [{ width: 390, height: 844 }, { width: 1600, height: 1000 }, { width: 1600, height: 900 }]) {
+    const safeArea = { x: 28, y: 202, width: viewport.width - 56, height: 183 };
+    const preferred = cameraForHud({ viewport, scene, positions, safeArea });
+    const candidates = hudCameraAlternatives(viewport, scene, positions, safeArea, preferred);
+    assert.ok(candidates.length > 0);
+    for (const view of candidates) {
+      assert.ok(within(view, { x: 0, y: 0, ...scene }));
+      assert.ok(Math.abs(view.width / view.height - viewport.width / viewport.height) < 1e-9);
+      for (const point of positions) {
+        const screen = screenPosition(point, view, viewport);
+        assert.ok(screen.x > 0 && screen.x < viewport.width && screen.y > 0 && screen.y < viewport.height);
+      }
+    }
+  }
+  }
+  assert.deepEqual(cases, original);
+});
+
+test('390同时阅读与随行时，正文保留140px并为随行短卡留位，不吞掉状态入口', () => {
+  const bounds = { x: 12, y: 202, width: 366, height: 429 };
+  const protectedRegions = [{ x: 70, y: 202, width: 60, height: 80 }, { x: 37, y: 304, width: 120, height: 44 }, { x: 192, y: 268, width: 176, height: 44 }];
+  const reserved = [{ x: 12, y: 128, width: 310, height: 58 }, { x: 237, y: 581, width: 141, height: 50 }];
+  const panel = { bounds, preferred: { x: 12, y: 401 }, size: { width: 366, height: 230 }, reserved, minHeight: 140 };
+  const follow = { bounds, preferred: { x: 12, y: 455 }, size: { width: 366, height: 176 }, reserved, minHeight: 110 };
+  const placed = placeHudCards({ panel, follow, protectedRegions });
+  assert.equal(placed.panel.collapsed, false); assert.ok(placed.panel.rect?.height >= 140);
+  assert.ok(placed.follow.rect?.height >= 44, '随行提示仍有可见入口');
+  for (const rect of [placed.panel.rect, placed.follow.rect]) {
+    assert.ok(within(rect, bounds));
+    for (const body of protectedRegions) assert.equal(overlaps(rect, protect(body)), false);
+    for (const fixed of reserved) assert.equal(overlaps(rect, fixed), false);
+  }
+  assert.equal(overlaps(placed.panel.rect, placed.follow.rect), false);
 });

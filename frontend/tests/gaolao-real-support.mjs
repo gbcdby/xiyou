@@ -18,18 +18,28 @@ const operationLabels = {
 
 export async function closeReading(page) {
   const pane = page.locator('.spatial-reading-pane');
-  if (await pane.count()) await pane.getByRole('button', { name: /^关闭/ }).click();
+  if (await pane.count()) {
+    const condensed = page.locator('.spatial-sidebar.hud-card-collapsed').getByRole('button', { name: '关闭暂收浮卡', exact: true });
+    if (await condensed.isVisible()) await condensed.click();
+    else await pane.getByRole('button', { name: /^关闭/ }).click();
+  }
 }
 export async function openReading(page, label) {
   await closeReading(page);
   await page.getByRole('button', { name: label, exact: true }).click();
+  const restore = page.locator('.spatial-sidebar.hud-card-collapsed').getByRole('button', { name: '取消选择并展开', exact: true });
+  const restored = await restore.isVisible();
+  if (restored) await restore.click();
   await page.locator('.spatial-reading-pane').waitFor();
+  return restored;
 }
 
 /** HUD 将附近列表折叠；先走可见入口，再沿原对象/锚点按钮操作。 */
 async function openObjects(page) {
   const entry = page.getByRole('button', { name: '附近对象与出口', exact: true });
   if (await entry.count()) await entry.click();
+  const restore = page.locator('.spatial-sidebar.hud-card-collapsed').getByRole('button', { name: '取消选择并展开', exact: true });
+  if (await restore.isVisible()) await restore.click();
 }
 
 /** 读取当前授权对象以找到玩家可见的文字入口；不解析真实角色ID或跨观察者引用。 */

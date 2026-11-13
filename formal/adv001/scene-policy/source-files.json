@@ -1,0 +1,219 @@
+{
+  "schema_version": 1,
+  "binding": "固定产品文件SHA-256为运行之外的源码对应依据；复现TLC不要求这些本地Git提交可达。",
+  "public_baseline": {
+    "commit": "b891cef67150c8dd32af1765736a7f4ce97ebdb3",
+    "tree": "b1bcbb042e6a0e1976e44fff67f8476b4592edc9",
+    "provenance": "公开PR 47同树发布对应由交付记录提供；本次读取同树候选的本地对象，并未联网重取远端。",
+    "files": {
+      "docs/specs/gaolao-scene-policy.md": {
+        "sha256": "23c0ce7459016c0c48be19c6996473e46d768a1c724d42a292ae49b481f03adf",
+        "git_blob": "f206953fe093d4d0a3e36bd773cf6a1819fadc47",
+        "bytes": 51070
+      },
+      "formal/adv001/scene-policy-impact.md": {
+        "sha256": "06d73243bb0326b0dcccea3c54d4e63340cfde690a6401b58ef1ec43fca2acc9",
+        "git_blob": "d007ed443fb3da5b23171270e1f6c5de23a64970",
+        "bytes": 12912
+      },
+      "backend/scene-policy.mjs": {
+        "sha256": "1c963e318d7b80a33b065b2842c1f61b42a92f44d871c6c80b9be2cc90ba07ef",
+        "git_blob": "ceda5fd7e0d2ffe2e41fa8e2dd5e016e00dbd0dc",
+        "bytes": 15855
+      },
+      "backend/scene-policy-runtime.mjs": {
+        "sha256": "d0a6932b67154f2f0f1c206958456bc33e598d258bae6e677799d8323bb5cb5f",
+        "git_blob": "0ca676891d2e9dfcb0c0bb5e7d9d98fe62ba7836",
+        "bytes": 7294
+      },
+      "backend/scene-policy-runtime.md": {
+        "sha256": "3580279caee94e788c5ef5a43652b9e6bee0b5e28466a7822626d090a0b7980e",
+        "git_blob": "b2f4c80b72251f2e7848b38074489edaa95e6c07",
+        "bytes": 10176
+      },
+      "backend/spatial-runtime.mjs": {
+        "sha256": "fd1619eca6e232c9a796af2f52cb49a3cc486ccc9cf47a9b7c9ec885b59981ce",
+        "git_blob": "dffd874896255bc19e9d5ffd021e9813f4d70493",
+        "bytes": 22837
+      },
+      "backend/runtime.mjs": {
+        "sha256": "382d5d0f2c712e1db63f1b845c0d09a6c0a6ce33d2d99a79109e2fad7e2d8e56",
+        "git_blob": "f70da3c885a680ae33f86f1be4a00b999a2a7c7d",
+        "bytes": 59105
+      },
+      "backend/migrations/008-scene-policy.sql": {
+        "sha256": "a9c119f17436db64f0bf9d426df1f1732eec4b4c38a29f1b669fa499d80645b3",
+        "git_blob": "c9dc0e2f1fbfe151338b9e263bf1366483ea78e9",
+        "bytes": 444
+      },
+      "game/gaolao-scene-policy.mjs": {
+        "sha256": "c241fe5ae79cf68046a8da4b5af52e5a1a3946912fefe09c16a2b7c05a514dee",
+        "git_blob": "4713ef2e6829ebbe068ee73b26344eae2b7611f9",
+        "bytes": 2859
+      },
+      "game/gaolao-policy-route.mjs": {
+        "sha256": "edec97133c1ab1ac70fd2d2109817acba289a8c31eb29ed7864f4faa02abab6d",
+        "git_blob": "95e9d3a4900ca2c56c1241c0cd66975a942ff095",
+        "bytes": 10034
+      },
+      "game/gaolao-rules.mjs": {
+        "sha256": "1860259156b9a5e427abcd250331e3198bc1cef4cb234bfc7aa776ef97723492",
+        "git_blob": "e9533c6ce59c7066c8c49859c4e11b0ce9efbf00",
+        "bytes": 37517
+      }
+    }
+  },
+  "std001_fixed_candidate": {
+    "commit": "7f48f5f2cff6ad39bd7d55c2da600607f0ebc05b",
+    "tree": "56ae53064b99542e53ae7af3081a0629a9a572de",
+    "status": "HISTORICAL: STD-001 fixed; STD-002 FAIL on 7f48f5f; retained, not reclassified",
+    "files": {
+      "docs/specs/gaolao-scene-policy.md": {
+        "sha256": "23c0ce7459016c0c48be19c6996473e46d768a1c724d42a292ae49b481f03adf",
+        "git_blob": "f206953fe093d4d0a3e36bd773cf6a1819fadc47",
+        "bytes": 51070
+      },
+      "formal/adv001/scene-policy-impact.md": {
+        "sha256": "06d73243bb0326b0dcccea3c54d4e63340cfde690a6401b58ef1ec43fca2acc9",
+        "git_blob": "d007ed443fb3da5b23171270e1f6c5de23a64970",
+        "bytes": 12912
+      },
+      "backend/scene-policy.mjs": {
+        "sha256": "c92b0d47fa741212c21d7ef2fa930202acf2e3ad8f2c2cf50355d49895309da8",
+        "git_blob": "0f538238d4d16e639437e3d62cb0510a4ebffb70",
+        "bytes": 16902
+      },
+      "backend/scene-policy-runtime.mjs": {
+        "sha256": "d0a6932b67154f2f0f1c206958456bc33e598d258bae6e677799d8323bb5cb5f",
+        "git_blob": "0ca676891d2e9dfcb0c0bb5e7d9d98fe62ba7836",
+        "bytes": 7294
+      },
+      "backend/scene-policy-runtime.md": {
+        "sha256": "12c65a38b5aeb7e401b19bee9fd13f5862a2f8a418a1c357dd335ae004d0b2d7",
+        "git_blob": "c6728657a91a347ede6377de1b03e0138d7641c8",
+        "bytes": 13185
+      },
+      "backend/spatial-runtime.mjs": {
+        "sha256": "fd1619eca6e232c9a796af2f52cb49a3cc486ccc9cf47a9b7c9ec885b59981ce",
+        "git_blob": "dffd874896255bc19e9d5ffd021e9813f4d70493",
+        "bytes": 22837
+      },
+      "backend/runtime.mjs": {
+        "sha256": "382d5d0f2c712e1db63f1b845c0d09a6c0a6ce33d2d99a79109e2fad7e2d8e56",
+        "git_blob": "f70da3c885a680ae33f86f1be4a00b999a2a7c7d",
+        "bytes": 59105
+      },
+      "backend/migrations/008-scene-policy.sql": {
+        "sha256": "a9c119f17436db64f0bf9d426df1f1732eec4b4c38a29f1b669fa499d80645b3",
+        "git_blob": "c9dc0e2f1fbfe151338b9e263bf1366483ea78e9",
+        "bytes": 444
+      },
+      "game/gaolao-scene-policy.mjs": {
+        "sha256": "c241fe5ae79cf68046a8da4b5af52e5a1a3946912fefe09c16a2b7c05a514dee",
+        "git_blob": "4713ef2e6829ebbe068ee73b26344eae2b7611f9",
+        "bytes": 2859
+      },
+      "game/gaolao-policy-route.mjs": {
+        "sha256": "edec97133c1ab1ac70fd2d2109817acba289a8c31eb29ed7864f4faa02abab6d",
+        "git_blob": "95e9d3a4900ca2c56c1241c0cd66975a942ff095",
+        "bytes": 10034
+      },
+      "game/gaolao-rules.mjs": {
+        "sha256": "1860259156b9a5e427abcd250331e3198bc1cef4cb234bfc7aa776ef97723492",
+        "git_blob": "e9533c6ce59c7066c8c49859c4e11b0ce9efbf00",
+        "bytes": 37517
+      }
+    }
+  },
+  "current_candidate": {
+    "commit": "955850241093332353cbb8b84fc2a7df40ecb827",
+    "tree": "b23c8f7aa296799c38767a2cb438bcc98602582c",
+    "parent": "7f48f5f2cff6ad39bd7d55c2da600607f0ebc05b",
+    "covered_transitions": "IN_SYNC",
+    "overall_mapping": "PARTIAL",
+    "public_commit": "a217805297139d9a3f2905ce864a64585f78fc7f",
+    "public_status": "PUBLISHED_SAME_TREE_PER_VERIFIED_HANDOFF",
+    "files": {
+      "docs/specs/gaolao-scene-policy.md": {
+        "sha256": "23c0ce7459016c0c48be19c6996473e46d768a1c724d42a292ae49b481f03adf",
+        "git_blob": "f206953fe093d4d0a3e36bd773cf6a1819fadc47",
+        "bytes": 51070
+      },
+      "formal/adv001/scene-policy-impact.md": {
+        "sha256": "06d73243bb0326b0dcccea3c54d4e63340cfde690a6401b58ef1ec43fca2acc9",
+        "git_blob": "d007ed443fb3da5b23171270e1f6c5de23a64970",
+        "bytes": 12912
+      },
+      "backend/scene-policy.mjs": {
+        "sha256": "290826e0c204bcc9241705d51256b90e5923f5a55bb6539d5511e18798109edd",
+        "git_blob": "faaa2137703e443dab223e73cea55beb4f3eecaa",
+        "bytes": 17776
+      },
+      "backend/scene-policy-runtime.mjs": {
+        "sha256": "3f6f0107842e82709dbad4f9fcfcf3140689bcf552bf90ecb3ba713080d79710",
+        "git_blob": "660d85c56b87893b3c90de6b7b3f074b028a04ef",
+        "bytes": 7357
+      },
+      "backend/scene-policy-runtime.md": {
+        "sha256": "82eda0a93e42f7fac8e84727fae9c2f60dca3445582bca9e4d3ccbc040e51575",
+        "git_blob": "960a4d4eb22295abfcfa176b2761341c089c8f6a",
+        "bytes": 16354
+      },
+      "backend/spatial-runtime.mjs": {
+        "sha256": "fd1619eca6e232c9a796af2f52cb49a3cc486ccc9cf47a9b7c9ec885b59981ce",
+        "git_blob": "dffd874896255bc19e9d5ffd021e9813f4d70493",
+        "bytes": 22837
+      },
+      "backend/runtime.mjs": {
+        "sha256": "110444dddaff072e6e67c316d7c81a621ada64419739ba705fda4ca549a8d22f",
+        "git_blob": "6971c618c33e969370cce69f6cc545dbb50c4db3",
+        "bytes": 59121
+      },
+      "backend/migrations/008-scene-policy.sql": {
+        "sha256": "a9c119f17436db64f0bf9d426df1f1732eec4b4c38a29f1b669fa499d80645b3",
+        "git_blob": "c9dc0e2f1fbfe151338b9e263bf1366483ea78e9",
+        "bytes": 444
+      },
+      "game/gaolao-scene-policy.mjs": {
+        "sha256": "c241fe5ae79cf68046a8da4b5af52e5a1a3946912fefe09c16a2b7c05a514dee",
+        "git_blob": "4713ef2e6829ebbe068ee73b26344eae2b7611f9",
+        "bytes": 2859
+      },
+      "game/gaolao-policy-route.mjs": {
+        "sha256": "edec97133c1ab1ac70fd2d2109817acba289a8c31eb29ed7864f4faa02abab6d",
+        "git_blob": "95e9d3a4900ca2c56c1241c0cd66975a942ff095",
+        "bytes": 10034
+      },
+      "game/gaolao-rules.mjs": {
+        "sha256": "1860259156b9a5e427abcd250331e3198bc1cef4cb234bfc7aa776ef97723492",
+        "git_blob": "e9533c6ce59c7066c8c49859c4e11b0ce9efbf00",
+        "bytes": 37517
+      },
+      "backend/tests/scene-policy-result-dedup.test.mjs": {
+        "sha256": "724f14499bd2279b093f2d9293278a9d4ab120c177a64060927cd19f816069a1",
+        "git_blob": "f5b89f4e5070636bb361243184874d4fe9783b61",
+        "bytes": 8885
+      }
+    },
+    "assessed_scope": "ASSESSED_WITHIN_SCOPE"
+  },
+  "publication_handoff": {
+    "public_commit": "a217805297139d9a3f2905ce864a64585f78fc7f",
+    "tree": "b23c8f7aa296799c38767a2cb438bcc98602582c",
+    "source_equivalent": "955850241093332353cbb8b84fc2a7df40ecb827",
+    "provenance": "发布交接确认PR47已实际保存完整同树；本任务按固定产品文件hash绑定，未另行访问远端。",
+    "prior_public_commit_prefix": "178a28",
+    "prior_source_equivalent": "7f48f5f2cff6ad39bd7d55c2da600607f0ebc05b"
+  },
+  "unchanged_follow_mapping": {
+    "module_and_configs_equal_to": "cb52c73567f7dbb294f66401212d6b35a7787f36",
+    "manifest_also_equal": true,
+    "source_files_unchanged": [
+      "game/gaolao-policy-route.mjs",
+      "game/gaolao-rules.mjs",
+      "game/gaolao-scene-policy.mjs",
+      "backend/spatial-runtime.mjs"
+    ]
+  },
+  "product_scope": "高老庄首章当前机制，含前院与茶棚分支；后续章节不在范围。"
+}

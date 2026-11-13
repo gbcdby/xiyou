@@ -1,0 +1,2160 @@
+{
+  "schemaVersion": 2,
+  "contentVersion": "gaolaozhuang-scene-v2",
+  "protocolCapability": "spatial-v2",
+  "reducerVersion": "gaolao-world-v1",
+  "chapterVersion": "gaolaozhuang-chapter-v2",
+  "mapVersion": "gaolao-layout-v1.1",
+  "variantId": "west-tools",
+  "asset_source": "original_team",
+  "timing": {
+    "gracePeriodSeconds": 5,
+    "decisionTimeoutSeconds": 10
+  },
+  "movement": {
+    "speedPerSecond": 180,
+    "interactionRadius": 90,
+    "sightRadius": 520,
+    "hearingRadius": 240
+  },
+  "scenes": [
+    {
+      "sceneId": "gaolao-courtyard",
+      "name": "高家院落",
+      "width": 1600,
+      "height": 1000,
+      "unitsPerPixel": 1,
+      "gridSize": 10,
+      "walkableAreas": [
+        {
+          "areaId": "court-ground",
+          "polygon": [
+            {
+              "x": 110,
+              "y": 610
+            },
+            {
+              "x": 110,
+              "y": 430
+            },
+            {
+              "x": 430,
+              "y": 385
+            },
+            {
+              "x": 800,
+              "y": 370
+            },
+            {
+              "x": 1140,
+              "y": 395
+            },
+            {
+              "x": 1390,
+              "y": 395
+            },
+            {
+              "x": 1560,
+              "y": 435
+            },
+            {
+              "x": 1560,
+              "y": 700
+            },
+            {
+              "x": 1440,
+              "y": 820
+            },
+            {
+              "x": 1470,
+              "y": 900
+            },
+            {
+              "x": 1120,
+              "y": 985
+            },
+            {
+              "x": 200,
+              "y": 985
+            },
+            {
+              "x": 160,
+              "y": 850
+            }
+          ]
+        },
+        {
+          "areaId": "guest-room",
+          "polygon": [
+            {
+              "x": 525,
+              "y": 240
+            },
+            {
+              "x": 755,
+              "y": 240
+            },
+            {
+              "x": 755,
+              "y": 327
+            },
+            {
+              "x": 525,
+              "y": 327
+            }
+          ]
+        },
+        {
+          "areaId": "guest-passage",
+          "polygon": [
+            {
+              "x": 615,
+              "y": 327
+            },
+            {
+              "x": 685,
+              "y": 327
+            },
+            {
+              "x": 685,
+              "y": 395
+            },
+            {
+              "x": 615,
+              "y": 395
+            }
+          ]
+        },
+        {
+          "areaId": "rear-room",
+          "polygon": [
+            {
+              "x": 1160,
+              "y": 250
+            },
+            {
+              "x": 1360,
+              "y": 250
+            },
+            {
+              "x": 1360,
+              "y": 335
+            },
+            {
+              "x": 1160,
+              "y": 335
+            }
+          ]
+        },
+        {
+          "areaId": "rear-side-corridor",
+          "polygon": [
+            {
+              "x": 1095,
+              "y": 290
+            },
+            {
+              "x": 1160,
+              "y": 290
+            },
+            {
+              "x": 1160,
+              "y": 335
+            },
+            {
+              "x": 1095,
+              "y": 335
+            }
+          ]
+        },
+        {
+          "areaId": "rear-door-passage",
+          "polygon": [
+            {
+              "x": 1215,
+              "y": 335
+            },
+            {
+              "x": 1285,
+              "y": 335
+            },
+            {
+              "x": 1285,
+              "y": 415
+            },
+            {
+              "x": 1215,
+              "y": 415
+            }
+          ]
+        },
+        {
+          "areaId": "service-apron",
+          "polygon": [
+            {
+              "x": 150,
+              "y": 370
+            },
+            {
+              "x": 430,
+              "y": 370
+            },
+            {
+              "x": 470,
+              "y": 440
+            },
+            {
+              "x": 160,
+              "y": 470
+            }
+          ]
+        }
+      ],
+      "obstacles": [
+        {
+          "obstacleId": "front-house",
+          "polygon": [
+            {
+              "x": 430,
+              "y": 160
+            },
+            {
+              "x": 810,
+              "y": 160
+            },
+            {
+              "x": 810,
+              "y": 350
+            },
+            {
+              "x": 430,
+              "y": 365
+            }
+          ],
+          "exceptAreas": [
+            "guest-room",
+            "guest-passage"
+          ]
+        },
+        {
+          "obstacleId": "rear-house",
+          "polygon": [
+            {
+              "x": 810,
+              "y": 170
+            },
+            {
+              "x": 1586,
+              "y": 170
+            },
+            {
+              "x": 1586,
+              "y": 400
+            },
+            {
+              "x": 1390,
+              "y": 395
+            },
+            {
+              "x": 1140,
+              "y": 395
+            },
+            {
+              "x": 810,
+              "y": 350
+            }
+          ],
+          "exceptAreas": [
+            "rear-room",
+            "rear-side-corridor",
+            "rear-door-passage"
+          ]
+        },
+        {
+          "obstacleId": "west-wall",
+          "polygon": [
+            {
+              "x": 0,
+              "y": 210
+            },
+            {
+              "x": 110,
+              "y": 210
+            },
+            {
+              "x": 110,
+              "y": 625
+            },
+            {
+              "x": 0,
+              "y": 625
+            }
+          ],
+          "exceptAreas": []
+        },
+        {
+          "obstacleId": "supply-shelves",
+          "polygon": [
+            {
+              "x": 150,
+              "y": 285
+            },
+            {
+              "x": 405,
+              "y": 285
+            },
+            {
+              "x": 405,
+              "y": 370
+            },
+            {
+              "x": 150,
+              "y": 370
+            }
+          ],
+          "exceptAreas": []
+        },
+        {
+          "obstacleId": "flower-bed",
+          "polygon": [
+            {
+              "x": 470,
+              "y": 440
+            },
+            {
+              "x": 625,
+              "y": 440
+            },
+            {
+              "x": 625,
+              "y": 510
+            },
+            {
+              "x": 470,
+              "y": 510
+            }
+          ],
+          "exceptAreas": []
+        },
+        {
+          "obstacleId": "stone-table",
+          "polygon": [
+            {
+              "x": 790,
+              "y": 452
+            },
+            {
+              "x": 985,
+              "y": 452
+            },
+            {
+              "x": 985,
+              "y": 565
+            },
+            {
+              "x": 790,
+              "y": 565
+            }
+          ],
+          "exceptAreas": []
+        },
+        {
+          "obstacleId": "west-plants",
+          "polygon": [
+            {
+              "x": 0,
+              "y": 660
+            },
+            {
+              "x": 130,
+              "y": 675
+            },
+            {
+              "x": 190,
+              "y": 990
+            },
+            {
+              "x": 0,
+              "y": 1000
+            }
+          ],
+          "exceptAreas": []
+        },
+        {
+          "obstacleId": "gate-left-wall",
+          "polygon": [
+            {
+              "x": 980,
+              "y": 1000
+            },
+            {
+              "x": 1120,
+              "y": 930
+            },
+            {
+              "x": 1225,
+              "y": 825
+            },
+            {
+              "x": 1275,
+              "y": 745
+            },
+            {
+              "x": 1320,
+              "y": 755
+            },
+            {
+              "x": 1315,
+              "y": 900
+            },
+            {
+              "x": 1190,
+              "y": 1000
+            }
+          ],
+          "exceptAreas": []
+        },
+        {
+          "obstacleId": "gate-right-wall",
+          "polygon": [
+            {
+              "x": 1490,
+              "y": 700
+            },
+            {
+              "x": 1550,
+              "y": 690
+            },
+            {
+              "x": 1586,
+              "y": 830
+            },
+            {
+              "x": 1500,
+              "y": 870
+            }
+          ],
+          "exceptAreas": []
+        },
+        {
+          "obstacleId": "sealed-door",
+          "polygon": [
+            {
+              "x": 1210,
+              "y": 350
+            },
+            {
+              "x": 1290,
+              "y": 350
+            },
+            {
+              "x": 1290,
+              "y": 395
+            },
+            {
+              "x": 1210,
+              "y": 395
+            }
+          ],
+          "exceptAreas": [],
+          "disabledWhen": {
+            "targetId": "gz-door",
+            "field": "open",
+            "value": true
+          }
+        }
+      ],
+      "anchors": [
+        {
+          "anchorId": "C01",
+          "position": {
+            "x": 1250,
+            "y": 425
+          },
+          "label": "铜封门／门外检查站位"
+        },
+        {
+          "anchorId": "C02",
+          "position": {
+            "x": 1190,
+            "y": 405
+          },
+          "label": "左承力／锁定门撑"
+        },
+        {
+          "anchorId": "C03",
+          "position": {
+            "x": 1310,
+            "y": 405
+          },
+          "label": "右承力／锁定门撑"
+        },
+        {
+          "anchorId": "C04",
+          "position": {
+            "x": 1080,
+            "y": 415
+          },
+          "label": "侧窗外联络"
+        },
+        {
+          "anchorId": "C05",
+          "position": {
+            "x": 1125,
+            "y": 315
+          },
+          "label": "侧窗内回应"
+        },
+        {
+          "anchorId": "C06",
+          "position": {
+            "x": 1250,
+            "y": 275
+          },
+          "label": "门内安全退让"
+        },
+        {
+          "anchorId": "C07",
+          "position": {
+            "x": 1320,
+            "y": 300
+          },
+          "label": "本人包裹／信件"
+        },
+        {
+          "anchorId": "C08",
+          "position": {
+            "x": 1250,
+            "y": 325
+          },
+          "label": "内室接人／安排"
+        },
+        {
+          "anchorId": "C09",
+          "position": {
+            "x": 1110,
+            "y": 320
+          },
+          "label": "门内侧廊"
+        },
+        {
+          "anchorId": "C10",
+          "position": {
+            "x": 1100,
+            "y": 450
+          },
+          "label": "外间乔装／公开会面"
+        },
+        {
+          "anchorId": "C11",
+          "position": {
+            "x": 645,
+            "y": 350
+          },
+          "label": "前院客房门口"
+        },
+        {
+          "anchorId": "C12",
+          "position": {
+            "x": 645,
+            "y": 285
+          },
+          "label": "客房内到达／确认区"
+        },
+        {
+          "anchorId": "C13",
+          "position": {
+            "x": 645,
+            "y": 390
+          },
+          "label": "客房自由退出至前庭"
+        },
+        {
+          "anchorId": "C14",
+          "position": {
+            "x": 315,
+            "y": 390
+          },
+          "label": "公用工具架／借还"
+        },
+        {
+          "anchorId": "C15",
+          "position": {
+            "x": 260,
+            "y": 405
+          },
+          "label": "旧饭账查阅／展示"
+        },
+        {
+          "anchorId": "C16",
+          "position": {
+            "x": 365,
+            "y": 425
+          },
+          "label": "待客物／座席准备"
+        },
+        {
+          "anchorId": "C17",
+          "position": {
+            "x": 840,
+            "y": 410
+          },
+          "label": "前厅问询／高太公"
+        },
+        {
+          "anchorId": "C18",
+          "position": {
+            "x": 950,
+            "y": 650
+          },
+          "label": "来客迎接"
+        },
+        {
+          "anchorId": "C19",
+          "position": {
+            "x": 1320,
+            "y": 820
+          },
+          "label": "庄口公开会面"
+        },
+        {
+          "anchorId": "C20",
+          "position": {
+            "x": 1425,
+            "y": 880
+          },
+          "label": "去庄外短路"
+        },
+        {
+          "anchorId": "C21",
+          "position": {
+            "x": 1390,
+            "y": 830
+          },
+          "label": "从庄外进入院落"
+        },
+        {
+          "anchorId": "C22",
+          "position": {
+            "x": 708,
+            "y": 640
+          },
+          "label": "随行样例：高才脚底"
+        },
+        {
+          "anchorId": "C23",
+          "position": {
+            "x": 645,
+            "y": 620
+          },
+          "label": "随行样例：翠兰脚底"
+        }
+      ],
+      "exits": [
+        {
+          "exitId": "court-road",
+          "anchorId": "C20",
+          "destinationSceneId": "gaolao-village-road",
+          "destination": {
+            "x": 850,
+            "y": 900
+          },
+          "requirement": null
+        }
+      ]
+    },
+    {
+      "sceneId": "gaolao-village-road",
+      "name": "庄外短路与云栈洞外",
+      "width": 1600,
+      "height": 1000,
+      "unitsPerPixel": 1,
+      "gridSize": 10,
+      "walkableAreas": [
+        {
+          "areaId": "road-ground",
+          "polygon": [
+            {
+              "x": 250,
+              "y": 430
+            },
+            {
+              "x": 820,
+              "y": 345
+            },
+            {
+              "x": 985,
+              "y": 310
+            },
+            {
+              "x": 1030,
+              "y": 195
+            },
+            {
+              "x": 1090,
+              "y": 195
+            },
+            {
+              "x": 1110,
+              "y": 315
+            },
+            {
+              "x": 1180,
+              "y": 355
+            },
+            {
+              "x": 1300,
+              "y": 295
+            },
+            {
+              "x": 1430,
+              "y": 215
+            },
+            {
+              "x": 1550,
+              "y": 215
+            },
+            {
+              "x": 1580,
+              "y": 350
+            },
+            {
+              "x": 1520,
+              "y": 445
+            },
+            {
+              "x": 1550,
+              "y": 690
+            },
+            {
+              "x": 1290,
+              "y": 760
+            },
+            {
+              "x": 1140,
+              "y": 995
+            },
+            {
+              "x": 365,
+              "y": 995
+            },
+            {
+              "x": 300,
+              "y": 790
+            },
+            {
+              "x": 230,
+              "y": 620
+            },
+            {
+              "x": 130,
+              "y": 550
+            }
+          ]
+        },
+        {
+          "areaId": "tea-front",
+          "polygon": [
+            {
+              "x": 290,
+              "y": 300
+            },
+            {
+              "x": 770,
+              "y": 290
+            },
+            {
+              "x": 770,
+              "y": 400
+            },
+            {
+              "x": 290,
+              "y": 420
+            }
+          ]
+        },
+        {
+          "areaId": "tea-room",
+          "polygon": [
+            {
+              "x": 515,
+              "y": 215
+            },
+            {
+              "x": 635,
+              "y": 215
+            },
+            {
+              "x": 635,
+              "y": 290
+            },
+            {
+              "x": 515,
+              "y": 290
+            }
+          ]
+        },
+        {
+          "areaId": "tea-passage",
+          "polygon": [
+            {
+              "x": 550,
+              "y": 290
+            },
+            {
+              "x": 610,
+              "y": 290
+            },
+            {
+              "x": 610,
+              "y": 405
+            },
+            {
+              "x": 550,
+              "y": 405
+            }
+          ]
+        }
+      ],
+      "obstacles": [
+        {
+          "obstacleId": "tea-building",
+          "polygon": [
+            {
+              "x": 250,
+              "y": 140
+            },
+            {
+              "x": 780,
+              "y": 140
+            },
+            {
+              "x": 800,
+              "y": 375
+            },
+            {
+              "x": 280,
+              "y": 425
+            }
+          ],
+          "exceptAreas": [
+            "tea-front",
+            "tea-room",
+            "tea-passage"
+          ]
+        },
+        {
+          "obstacleId": "tea-left-table",
+          "polygon": [
+            {
+              "x": 350,
+              "y": 295
+            },
+            {
+              "x": 550,
+              "y": 295
+            },
+            {
+              "x": 550,
+              "y": 385
+            },
+            {
+              "x": 350,
+              "y": 385
+            }
+          ],
+          "exceptAreas": []
+        },
+        {
+          "obstacleId": "tea-right-table",
+          "polygon": [
+            {
+              "x": 635,
+              "y": 245
+            },
+            {
+              "x": 750,
+              "y": 245
+            },
+            {
+              "x": 750,
+              "y": 335
+            },
+            {
+              "x": 635,
+              "y": 335
+            }
+          ],
+          "exceptAreas": []
+        },
+        {
+          "obstacleId": "tea-front-post",
+          "polygon": [
+            {
+              "x": 615,
+              "y": 315
+            },
+            {
+              "x": 635,
+              "y": 315
+            },
+            {
+              "x": 635,
+              "y": 355
+            },
+            {
+              "x": 615,
+              "y": 355
+            }
+          ],
+          "exceptAreas": []
+        },
+        {
+          "obstacleId": "west-house",
+          "polygon": [
+            {
+              "x": 0,
+              "y": 140
+            },
+            {
+              "x": 250,
+              "y": 140
+            },
+            {
+              "x": 280,
+              "y": 430
+            },
+            {
+              "x": 210,
+              "y": 535
+            },
+            {
+              "x": 0,
+              "y": 590
+            }
+          ],
+          "exceptAreas": []
+        },
+        {
+          "obstacleId": "road-planter",
+          "polygon": [
+            {
+              "x": 640,
+              "y": 470
+            },
+            {
+              "x": 675,
+              "y": 442
+            },
+            {
+              "x": 880,
+              "y": 445
+            },
+            {
+              "x": 945,
+              "y": 485
+            },
+            {
+              "x": 925,
+              "y": 550
+            },
+            {
+              "x": 675,
+              "y": 570
+            },
+            {
+              "x": 640,
+              "y": 530
+            }
+          ],
+          "exceptAreas": []
+        },
+        {
+          "obstacleId": "cave-rock",
+          "polygon": [
+            {
+              "x": 1100,
+              "y": 220
+            },
+            {
+              "x": 1220,
+              "y": 205
+            },
+            {
+              "x": 1250,
+              "y": 285
+            },
+            {
+              "x": 1135,
+              "y": 325
+            }
+          ],
+          "exceptAreas": []
+        },
+        {
+          "obstacleId": "road-bench",
+          "polygon": [
+            {
+              "x": 1320,
+              "y": 368
+            },
+            {
+              "x": 1490,
+              "y": 368
+            },
+            {
+              "x": 1490,
+              "y": 448
+            },
+            {
+              "x": 1320,
+              "y": 448
+            }
+          ],
+          "exceptAreas": []
+        },
+        {
+          "obstacleId": "front-left-wall",
+          "polygon": [
+            {
+              "x": 0,
+              "y": 720
+            },
+            {
+              "x": 300,
+              "y": 730
+            },
+            {
+              "x": 370,
+              "y": 920
+            },
+            {
+              "x": 365,
+              "y": 995
+            },
+            {
+              "x": 0,
+              "y": 1000
+            }
+          ],
+          "exceptAreas": []
+        },
+        {
+          "obstacleId": "front-right-wall",
+          "polygon": [
+            {
+              "x": 1320,
+              "y": 730
+            },
+            {
+              "x": 1586,
+              "y": 690
+            },
+            {
+              "x": 1586,
+              "y": 1000
+            },
+            {
+              "x": 1140,
+              "y": 995
+            },
+            {
+              "x": 1200,
+              "y": 875
+            }
+          ],
+          "exceptAreas": []
+        }
+      ],
+      "anchors": [
+        {
+          "anchorId": "R01",
+          "position": {
+            "x": 850,
+            "y": 960
+          },
+          "label": "回高家院落"
+        },
+        {
+          "anchorId": "R02",
+          "position": {
+            "x": 850,
+            "y": 900
+          },
+          "label": "从院落进入短路"
+        },
+        {
+          "anchorId": "R03",
+          "position": {
+            "x": 700,
+            "y": 415
+          },
+          "label": "常驻茶棚见证人"
+        },
+        {
+          "anchorId": "R04",
+          "position": {
+            "x": 575,
+            "y": 325
+          },
+          "label": "茶棚后间门口"
+        },
+        {
+          "anchorId": "R05",
+          "position": {
+            "x": 575,
+            "y": 255
+          },
+          "label": "茶棚后间到达／确认区"
+        },
+        {
+          "anchorId": "R06",
+          "position": {
+            "x": 575,
+            "y": 405
+          },
+          "label": "后间自由退出至茶棚"
+        },
+        {
+          "anchorId": "R07",
+          "position": {
+            "x": 1240,
+            "y": 340
+          },
+          "label": "八戒公开等待点"
+        },
+        {
+          "anchorId": "R08",
+          "position": {
+            "x": 1430,
+            "y": 245
+          },
+          "label": "云栈洞口／暂回入口"
+        },
+        {
+          "anchorId": "R09",
+          "position": {
+            "x": 1450,
+            "y": 275
+          },
+          "label": "洞外暂回位置"
+        },
+        {
+          "anchorId": "R10",
+          "position": {
+            "x": 1060,
+            "y": 610
+          },
+          "label": "庄外公开会面"
+        },
+        {
+          "anchorId": "R11",
+          "position": {
+            "x": 1060,
+            "y": 205
+          },
+          "label": "离庄出发点"
+        },
+        {
+          "anchorId": "R12",
+          "position": {
+            "x": 1030,
+            "y": 280
+          },
+          "label": "出发前等候"
+        },
+        {
+          "anchorId": "R13",
+          "position": {
+            "x": 480,
+            "y": 405
+          },
+          "label": "茶棚待客物／展示材料"
+        },
+        {
+          "anchorId": "R14",
+          "position": {
+            "x": 760,
+            "y": 750
+          },
+          "label": "短路样例：高才脚底"
+        },
+        {
+          "anchorId": "R15",
+          "position": {
+            "x": 1030,
+            "y": 460
+          },
+          "label": "茶棚与洞外道路分岔"
+        }
+      ],
+      "exits": [
+        {
+          "exitId": "road-court",
+          "anchorId": "R01",
+          "destinationSceneId": "gaolao-courtyard",
+          "destination": {
+            "x": 1390,
+            "y": 830
+          },
+          "requirement": null
+        }
+      ]
+    }
+  ],
+  "spawns": [
+    {
+      "sceneId": "gaolao-courtyard",
+      "position": {
+        "x": 950,
+        "y": 650
+      }
+    },
+    {
+      "sceneId": "gaolao-courtyard",
+      "position": {
+        "x": 708,
+        "y": 640
+      }
+    },
+    {
+      "sceneId": "gaolao-courtyard",
+      "position": {
+        "x": 645,
+        "y": 620
+      }
+    },
+    {
+      "sceneId": "gaolao-courtyard",
+      "position": {
+        "x": 1320,
+        "y": 820
+      }
+    },
+    {
+      "sceneId": "gaolao-courtyard",
+      "position": {
+        "x": 1390,
+        "y": 830
+      }
+    }
+  ],
+  "npcs": [
+    {
+      "characterId": "gz-tang",
+      "name": "唐僧",
+      "actorKind": "persistent_core",
+      "sceneId": "gaolao-courtyard",
+      "position": {
+        "x": 950,
+        "y": 650
+      }
+    },
+    {
+      "characterId": "gz-wukong",
+      "name": "孙悟空",
+      "actorKind": "persistent_core",
+      "sceneId": "gaolao-courtyard",
+      "position": {
+        "x": 990,
+        "y": 650
+      }
+    },
+    {
+      "characterId": "gz-bajie",
+      "name": "猪刚鬣",
+      "actorKind": "chapter_autonomous",
+      "sceneId": "gaolao-village-road",
+      "position": {
+        "x": 1240,
+        "y": 340
+      }
+    },
+    {
+      "characterId": "gz-cuilan",
+      "name": "翠兰",
+      "actorKind": "scene_role",
+      "sceneId": "gaolao-courtyard",
+      "position": {
+        "x": 1125,
+        "y": 315
+      }
+    },
+    {
+      "characterId": "gz-gao",
+      "name": "高太公",
+      "actorKind": "scene_role",
+      "sceneId": "gaolao-courtyard",
+      "position": {
+        "x": 840,
+        "y": 410
+      }
+    },
+    {
+      "characterId": "gz-witness",
+      "name": "茶棚见证人",
+      "actorKind": "scene_role",
+      "sceneId": "gaolao-village-road",
+      "position": {
+        "x": 700,
+        "y": 415
+      }
+    }
+  ],
+  "items": [
+    {
+      "itemId": "gz-brace",
+      "name": "公共门撑",
+      "sceneId": "gaolao-courtyard",
+      "position": {
+        "x": 315,
+        "y": 390
+      },
+      "transferable": true,
+      "publicBorrowable": true,
+      "fields": [
+        {
+          "key": "handling",
+          "label": "物品性质",
+          "value": "本队公共借用物；超出离线宽限后，近处同伴可依法领回。"
+        }
+      ]
+    },
+    {
+      "itemId": "gz-rope",
+      "name": "公共绳索",
+      "sceneId": "gaolao-courtyard",
+      "position": {
+        "x": 365,
+        "y": 425
+      },
+      "transferable": true,
+      "publicBorrowable": true,
+      "fields": [
+        {
+          "key": "handling",
+          "label": "物品性质",
+          "value": "本队公共借用物；超出离线宽限后，近处同伴可依法领回。"
+        }
+      ]
+    },
+    {
+      "itemId": "gz-parcel",
+      "name": "私人包裹",
+      "sceneId": "gaolao-courtyard",
+      "position": {
+        "x": 1320,
+        "y": 300
+      },
+      "transferable": true,
+      "publicBorrowable": false,
+      "fields": [
+        {
+          "key": "handling",
+          "label": "物品性质",
+          "value": "本人私物；只按其本次用途与物品许可处理。"
+        }
+      ]
+    },
+    {
+      "itemId": "gz-letter",
+      "name": "私人信件",
+      "sceneId": "gaolao-courtyard",
+      "position": {
+        "x": 1320,
+        "y": 300
+      },
+      "transferable": true,
+      "publicBorrowable": false,
+      "fields": [
+        {
+          "key": "handling",
+          "label": "物品性质",
+          "value": "本人私物；只按其本次用途与物品许可处理。"
+        }
+      ]
+    },
+    {
+      "itemId": "gz-rake",
+      "name": "私人钉耙",
+      "sceneId": "gaolao-village-road",
+      "position": {
+        "x": 1450,
+        "y": 275
+      },
+      "transferable": true,
+      "publicBorrowable": false,
+      "fields": [
+        {
+          "key": "handling",
+          "label": "物品性质",
+          "value": "本人私物；只按其本次用途与物品许可处理。"
+        }
+      ]
+    }
+  ],
+  "targets": [
+    {
+      "targetId": "gz-window",
+      "name": "侧窗联络点",
+      "sceneId": "gaolao-courtyard",
+      "position": {
+        "x": 1080,
+        "y": 415
+      },
+      "operationIds": [
+        "gz-contact"
+      ],
+      "fields": []
+    },
+    {
+      "targetId": "gz-door",
+      "name": "铜封门",
+      "sceneId": "gaolao-courtyard",
+      "position": {
+        "x": 1250,
+        "y": 425
+      },
+      "operationIds": [
+        "gz-check-seal",
+        "gz-try-key",
+        "gz-break-seal"
+      ],
+      "fields": [
+        {
+          "key": "open",
+          "label": "后宅开放",
+          "value": false
+        }
+      ]
+    },
+    {
+      "targetId": "gz-support",
+      "name": "门撑承力点",
+      "sceneId": "gaolao-courtyard",
+      "position": {
+        "x": 1250,
+        "y": 425
+      },
+      "operationIds": [
+        "gz-lock-support",
+        "gz-release-support"
+      ],
+      "fields": [
+        {
+          "key": "locked",
+          "label": "门撑锁定",
+          "value": false
+        }
+      ]
+    },
+    {
+      "targetId": "gz-ledger",
+      "name": "灶房旧饭账",
+      "sceneId": "gaolao-courtyard",
+      "position": {
+        "x": 260,
+        "y": 405
+      },
+      "operationIds": [
+        "gz-read-ledger"
+      ],
+      "fields": []
+    },
+    {
+      "targetId": "gz-return",
+      "name": "公共工具借还架",
+      "sceneId": "gaolao-courtyard",
+      "position": {
+        "x": 315,
+        "y": 390
+      },
+      "operationIds": [
+        "gz-return-public"
+      ],
+      "fields": []
+    },
+    {
+      "targetId": "gz-meeting-C10",
+      "name": "外间会面点",
+      "sceneId": "gaolao-courtyard",
+      "position": {
+        "x": 1100,
+        "y": 450
+      },
+      "operationIds": [
+        "gz-compare-sources",
+        "gz-plan-departure"
+      ],
+      "fields": []
+    },
+    {
+      "targetId": "gz-meeting-C19",
+      "name": "庄口会面点",
+      "sceneId": "gaolao-courtyard",
+      "position": {
+        "x": 1320,
+        "y": 820
+      },
+      "operationIds": [
+        "gz-compare-sources",
+        "gz-plan-departure"
+      ],
+      "fields": []
+    },
+    {
+      "targetId": "gz-meeting-R10",
+      "name": "庄外会面点",
+      "sceneId": "gaolao-village-road",
+      "position": {
+        "x": 1060,
+        "y": 610
+      },
+      "operationIds": [
+        "gz-compare-sources",
+        "gz-plan-departure"
+      ],
+      "fields": []
+    }
+  ],
+  "operations": [
+    {
+      "operationId": "gz-contact",
+      "targetId": "gz-window",
+      "kind": "interaction",
+      "requiredCount": 1,
+      "anchorIds": [
+        "C04"
+      ],
+      "requiredItemIds": [],
+      "consumedItemIds": [],
+      "requiredFields": [],
+      "effectFields": []
+    },
+    {
+      "operationId": "gz-check-seal",
+      "targetId": "gz-door",
+      "kind": "interaction",
+      "requiredCount": 1,
+      "anchorIds": [
+        "C01"
+      ],
+      "requiredItemIds": [],
+      "consumedItemIds": [],
+      "requiredFields": [],
+      "effectFields": []
+    },
+    {
+      "operationId": "gz-try-key",
+      "targetId": "gz-door",
+      "kind": "interaction",
+      "requiredCount": 1,
+      "anchorIds": [
+        "C01"
+      ],
+      "requiredItemIds": [],
+      "consumedItemIds": [],
+      "requiredFields": [],
+      "effectFields": []
+    },
+    {
+      "operationId": "gz-break-seal",
+      "targetId": "gz-door",
+      "kind": "interaction",
+      "requiredCount": 1,
+      "anchorIds": [
+        "C01"
+      ],
+      "requiredItemIds": [],
+      "consumedItemIds": [],
+      "requiredFields": [],
+      "effectFields": []
+    },
+    {
+      "operationId": "gz-release-support",
+      "targetId": "gz-support",
+      "kind": "interaction",
+      "requiredCount": 1,
+      "anchorIds": [
+        "C01"
+      ],
+      "requiredItemIds": [],
+      "consumedItemIds": [],
+      "requiredFields": [],
+      "effectFields": []
+    },
+    {
+      "operationId": "gz-read-ledger",
+      "targetId": "gz-ledger",
+      "kind": "interaction",
+      "requiredCount": 1,
+      "anchorIds": [
+        "C15"
+      ],
+      "requiredItemIds": [],
+      "consumedItemIds": [],
+      "requiredFields": [],
+      "effectFields": []
+    },
+    {
+      "operationId": "gz-return-public",
+      "targetId": "gz-return",
+      "kind": "interaction",
+      "requiredCount": 1,
+      "anchorIds": [
+        "C14"
+      ],
+      "requiredItemIds": [],
+      "consumedItemIds": [],
+      "requiredFields": [],
+      "effectFields": []
+    },
+    {
+      "operationId": "gz-compare-sources",
+      "targetId": "gz-meeting-C10",
+      "kind": "interaction",
+      "requiredCount": 1,
+      "anchorIds": [
+        "C10"
+      ],
+      "requiredItemIds": [],
+      "consumedItemIds": [],
+      "requiredFields": [],
+      "effectFields": []
+    },
+    {
+      "operationId": "gz-plan-departure",
+      "targetId": "gz-meeting-C10",
+      "kind": "interaction",
+      "requiredCount": 1,
+      "anchorIds": [
+        "C10"
+      ],
+      "requiredItemIds": [],
+      "consumedItemIds": [],
+      "requiredFields": [],
+      "effectFields": []
+    },
+    {
+      "operationId": "gz-compare-sources",
+      "targetId": "gz-meeting-C19",
+      "kind": "interaction",
+      "requiredCount": 1,
+      "anchorIds": [
+        "C19"
+      ],
+      "requiredItemIds": [],
+      "consumedItemIds": [],
+      "requiredFields": [],
+      "effectFields": []
+    },
+    {
+      "operationId": "gz-plan-departure",
+      "targetId": "gz-meeting-C19",
+      "kind": "interaction",
+      "requiredCount": 1,
+      "anchorIds": [
+        "C19"
+      ],
+      "requiredItemIds": [],
+      "consumedItemIds": [],
+      "requiredFields": [],
+      "effectFields": []
+    },
+    {
+      "operationId": "gz-compare-sources",
+      "targetId": "gz-meeting-R10",
+      "kind": "interaction",
+      "requiredCount": 1,
+      "anchorIds": [
+        "R10"
+      ],
+      "requiredItemIds": [],
+      "consumedItemIds": [],
+      "requiredFields": [],
+      "effectFields": []
+    },
+    {
+      "operationId": "gz-plan-departure",
+      "targetId": "gz-meeting-R10",
+      "kind": "interaction",
+      "requiredCount": 1,
+      "anchorIds": [
+        "R10"
+      ],
+      "requiredItemIds": [],
+      "consumedItemIds": [],
+      "requiredFields": [],
+      "effectFields": []
+    },
+    {
+      "operationId": "gz-lock-support",
+      "targetId": "gz-support",
+      "kind": "cooperation",
+      "requiredCount": 2,
+      "anchorIds": [
+        "C02",
+        "C03"
+      ],
+      "requiredItemIds": [
+        "gz-brace",
+        "gz-rope"
+      ],
+      "consumedItemIds": [],
+      "requiredFields": [
+        {
+          "key": "locked",
+          "label": "门撑锁定",
+          "value": false
+        }
+      ],
+      "effectFields": [
+        {
+          "key": "locked",
+          "label": "门撑锁定",
+          "value": true
+        }
+      ]
+    }
+  ],
+  "objectives": [
+    {
+      "objectiveId": "rescue",
+      "label": "先联系受困者，再准备安全开门。",
+      "status": "active"
+    }
+  ],
+  "chapterRules": {
+    "chapterId": "gaolaozhuang",
+    "layoutBaseline": "GZ-VIS-01/v1.1",
+    "people": {
+      "tang": "gz-tang",
+      "wukong": "gz-wukong",
+      "bajie": "gz-bajie",
+      "cuilan": "gz-cuilan",
+      "gao": "gz-gao",
+      "witness": "gz-witness"
+    },
+    "roles": [
+      {
+        "roleId": "A",
+        "name": "高才",
+        "knowledge": [
+          "熟悉庄口，可迎接来客并安排联络。"
+        ]
+      },
+      {
+        "roleId": "B",
+        "name": "内院帮工",
+        "knowledge": [
+          "知道后宅侧窗可联系本人；他人不能代答意愿。"
+        ]
+      },
+      {
+        "roleId": "C",
+        "name": "木匠学徒",
+        "knowledge": [
+          "门撑与绳索都是已登记的公用物；锁定后无需一直扶住。"
+        ]
+      },
+      {
+        "roleId": "D",
+        "name": "灶房帮工",
+        "knowledge": [
+          "灶房留有来客到达前的旧饭账，可到现场查阅。"
+        ]
+      },
+      {
+        "roleId": "E",
+        "name": "樵客",
+        "knowledge": [
+          "庄外茶棚有常驻见证人；两处安置点均有自由出口。"
+        ]
+      }
+    ],
+    "partyRoles": {
+      "2": [
+        [
+          "A",
+          "B",
+          "D"
+        ],
+        [
+          "C",
+          "E"
+        ]
+      ],
+      "3": [
+        [
+          "A",
+          "B"
+        ],
+        [
+          "C"
+        ],
+        [
+          "D",
+          "E"
+        ]
+      ],
+      "4": [
+        [
+          "A"
+        ],
+        [
+          "B"
+        ],
+        [
+          "C"
+        ],
+        [
+          "D",
+          "E"
+        ]
+      ],
+      "5": [
+        [
+          "A"
+        ],
+        [
+          "B"
+        ],
+        [
+          "C"
+        ],
+        [
+          "D"
+        ],
+        [
+          "E"
+        ]
+      ]
+    },
+    "contactTargetId": "gz-window",
+    "sealTargetId": "gz-door",
+    "supportTargetId": "gz-support",
+    "ledgerTargetId": "gz-ledger",
+    "returnTargetId": "gz-return",
+    "contactInside": {
+      "sceneId": "gaolao-courtyard",
+      "position": {
+        "x": 1125,
+        "y": 315
+      }
+    },
+    "retreat": {
+      "sceneId": "gaolao-courtyard",
+      "position": {
+        "x": 1250,
+        "y": 275
+      }
+    },
+    "safeDestinations": [
+      {
+        "destinationId": "front-guest-room",
+        "label": "前院客房",
+        "sceneId": "gaolao-courtyard",
+        "position": {
+          "x": 645,
+          "y": 285
+        },
+        "areaId": "guest-room",
+        "exitPosition": {
+          "x": 645,
+          "y": 390
+        }
+      },
+      {
+        "destinationId": "tea-back-room",
+        "label": "茶棚后间",
+        "sceneId": "gaolao-village-road",
+        "position": {
+          "x": 575,
+          "y": 255
+        },
+        "areaId": "tea-room",
+        "exitPosition": {
+          "x": 575,
+          "y": 405
+        }
+      }
+    ],
+    "meetingDestinations": [
+      {
+        "destinationId": "rear-meeting",
+        "label": "外间会面",
+        "sceneId": "gaolao-courtyard",
+        "position": {
+          "x": 1100,
+          "y": 450
+        }
+      },
+      {
+        "destinationId": "front-meeting",
+        "label": "庄口会面",
+        "sceneId": "gaolao-courtyard",
+        "position": {
+          "x": 1320,
+          "y": 820
+        }
+      },
+      {
+        "destinationId": "road-meeting",
+        "label": "庄外会面",
+        "sceneId": "gaolao-village-road",
+        "position": {
+          "x": 1060,
+          "y": 610
+        }
+      }
+    ],
+    "departure": {
+      "sceneId": "gaolao-village-road",
+      "position": {
+        "x": 1060,
+        "y": 205
+      }
+    },
+    "waiting": [
+      {
+        "sceneId": "gaolao-village-road",
+        "position": {
+          "x": 1240,
+          "y": 340
+        }
+      },
+      {
+        "sceneId": "gaolao-village-road",
+        "position": {
+          "x": 1450,
+          "y": 275
+        }
+      }
+    ],
+    "sources": [
+      {
+        "sourceId": "old-ledger",
+        "kind": "archive",
+        "label": "灶房旧饭账原件",
+        "beforeArrivalDays": 7,
+        "category": "Evidence",
+        "statement": "七日前的饭账记有为东土来、往西去的僧人留饭的安排。",
+        "fields": [
+          {
+            "key": "date",
+            "label": "到访前天数",
+            "value": 7
+          },
+          {
+            "key": "record",
+            "label": "原件记载",
+            "value": "为东土来、往西去的僧人留饭。"
+          }
+        ]
+      },
+      {
+        "sourceId": "tea-witness",
+        "kind": "testimony",
+        "label": "茶棚常驻见证人的亲历证言",
+        "beforeArrivalDays": 5,
+        "category": "Claim",
+        "statement": "见证人说：五日前，他曾来询问东土僧人的消息。",
+        "fields": [
+          {
+            "key": "date",
+            "label": "到访前天数",
+            "value": 5
+          },
+          {
+            "key": "account",
+            "label": "本人证言",
+            "value": "在来客到达前曾有人询问东土僧人。"
+          }
+        ]
+      },
+      {
+        "sourceId": "travel-document",
+        "kind": "material",
+        "label": "本人获准展示的通关材料",
+        "beforeArrivalDays": 0,
+        "category": "Evidence",
+        "statement": "本人准许展示的材料说明：来自东土，奉命往西取经。",
+        "fields": [
+          {
+            "key": "mission",
+            "label": "获准展示内容",
+            "value": "东土出发、往西取经。"
+          }
+        ]
+      },
+      {
+        "sourceId": "cuilan-route-front-v1",
+        "kind": "archive",
+        "label": "前院客房路线图记",
+        "beforeArrivalDays": 0,
+        "category": "Evidence",
+        "statement": "本人看过的本地公开路线图记：院内沿后宅公共通路经前庭出口 C13、客房门口 C11 到 C12；客房可沿同一出口自由离开。图记不说明铜封、门撑或当前通路状态。",
+        "fields": []
+      },
+      {
+        "sourceId": "cuilan-route-tea-v1",
+        "kind": "archive",
+        "label": "庄口至茶棚路线图记",
+        "beforeArrivalDays": 0,
+        "category": "Evidence",
+        "statement": "本人看过的本地公开路线图记：院内公共地面到 C20，经庄口到 R02，再经 R06、R04 到 R05；返回院落经 R01/C21。庄外只沿道路分岔 R15 西侧及茶棚前厅、过道、后间。图记不含人物或远处当前通路状态。",
+        "fields": []
+      }
+    ],
+    "privateItems": [
+      {
+        "itemId": "gz-parcel",
+        "ownerId": "gz-cuilan"
+      },
+      {
+        "itemId": "gz-letter",
+        "ownerId": "gz-cuilan"
+      },
+      {
+        "itemId": "gz-rake",
+        "ownerId": "gz-bajie"
+      }
+    ],
+    "endings": [
+      {
+        "endingCode": "GZ-E01",
+        "decisionActorIds": [
+          "gz-tang",
+          "gz-bajie"
+        ],
+        "departureActorIds": [
+          "gz-tang",
+          "gz-wukong",
+          "gz-bajie"
+        ],
+        "waitingActorIds": []
+      },
+      {
+        "endingCode": "GZ-E02",
+        "decisionActorIds": [],
+        "departureActorIds": [
+          "gz-tang",
+          "gz-wukong"
+        ],
+        "waitingActorIds": [
+          "gz-bajie"
+        ]
+      },
+      {
+        "endingCode": "GZ-E03",
+        "decisionActorIds": [],
+        "departureActorIds": [],
+        "waitingActorIds": []
+      }
+    ],
+    "sceneRolePolicies": [
+      {
+        "actorId": "gz-cuilan",
+        "policyVersion": "gaolao-cuilan-v1"
+      }
+    ],
+    "routeSpecs": [
+      {
+        "routeSpecId": "cuilan-front-public-v1",
+        "revision": 1,
+        "sourceId": "cuilan-route-front-v1",
+        "destinationId": "front-guest-room",
+        "anchors": [
+          {
+            "sceneId": "gaolao-courtyard",
+            "anchorId": "C08"
+          },
+          {
+            "sceneId": "gaolao-courtyard",
+            "anchorId": "C01"
+          },
+          {
+            "sceneId": "gaolao-courtyard",
+            "anchorId": "C13"
+          },
+          {
+            "sceneId": "gaolao-courtyard",
+            "anchorId": "C11"
+          },
+          {
+            "sceneId": "gaolao-courtyard",
+            "anchorId": "C12"
+          }
+        ],
+        "exitAnchors": [
+          {
+            "sceneId": "gaolao-courtyard",
+            "anchorId": "C12"
+          },
+          {
+            "sceneId": "gaolao-courtyard",
+            "anchorId": "C11"
+          },
+          {
+            "sceneId": "gaolao-courtyard",
+            "anchorId": "C13"
+          }
+        ]
+      },
+      {
+        "routeSpecId": "cuilan-tea-public-v1",
+        "revision": 1,
+        "sourceId": "cuilan-route-tea-v1",
+        "destinationId": "tea-back-room",
+        "anchors": [
+          {
+            "sceneId": "gaolao-courtyard",
+            "anchorId": "C20"
+          },
+          {
+            "sceneId": "gaolao-village-road",
+            "anchorId": "R02"
+          },
+          {
+            "sceneId": "gaolao-village-road",
+            "anchorId": "R06"
+          },
+          {
+            "sceneId": "gaolao-village-road",
+            "anchorId": "R04"
+          },
+          {
+            "sceneId": "gaolao-village-road",
+            "anchorId": "R05"
+          },
+          {
+            "sceneId": "gaolao-village-road",
+            "anchorId": "R15"
+          },
+          {
+            "sceneId": "gaolao-village-road",
+            "anchorId": "R01"
+          },
+          {
+            "sceneId": "gaolao-courtyard",
+            "anchorId": "C21"
+          }
+        ],
+        "exitAnchors": [
+          {
+            "sceneId": "gaolao-village-road",
+            "anchorId": "R05"
+          },
+          {
+            "sceneId": "gaolao-village-road",
+            "anchorId": "R04"
+          },
+          {
+            "sceneId": "gaolao-village-road",
+            "anchorId": "R06"
+          }
+        ]
+      }
+    ]
+  }
+}

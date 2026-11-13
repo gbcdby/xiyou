@@ -1,0 +1,2652 @@
+{
+  "schema_version": 1,
+  "feature": "scene 原请求、动作相关 basis 与私有语义水位",
+  "tool": {
+    "version": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "model": {
+    "root": "model",
+    "entry": "SceneRequest.tla"
+  },
+  "profiles": {
+    "req-withdraw-return": {
+      "config": "req-withdraw-return.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "RequestImmutable",
+        "ReceiptStable",
+        "EffectOnce",
+        "CurrentChoiceAtCommit",
+        "ExecutionLinkCurrent",
+        "SingleUnsettled",
+        "SemanticRetained",
+        "RecoveryNoConsumption",
+        "FreshEvaluationCause",
+        "RetryBound",
+        "SceneBudgetSeparate",
+        "CapacitySufficient",
+        "ReceiptWatermarkStable",
+        "AttemptLinked",
+        "RejectedAttemptAuthorized",
+        "RejectedWaitKeepsInputBoundary",
+        "TrustedPrepareInput"
+      ],
+      "expected_properties": [
+        "DecisionProgress",
+        "SemanticProgress"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "withdraw",
+          "Event1": "incidental",
+          "Event2": "noise",
+          "EventCount": 1,
+          "Window": "prepared",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": false,
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "持续可用、有限技术失败、内部动作与首次通知弱公平"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-common-change": {
+      "config": "req-common-change.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "RequestImmutable",
+        "ReceiptStable",
+        "EffectOnce",
+        "CurrentChoiceAtCommit",
+        "ExecutionLinkCurrent",
+        "SingleUnsettled",
+        "SemanticRetained",
+        "RecoveryNoConsumption",
+        "FreshEvaluationCause",
+        "RetryBound",
+        "SceneBudgetSeparate",
+        "CapacitySufficient",
+        "ReceiptWatermarkStable",
+        "AttemptLinked",
+        "RejectedAttemptAuthorized",
+        "RejectedWaitKeepsInputBoundary",
+        "TrustedPrepareInput"
+      ],
+      "expected_properties": [
+        "DecisionProgress",
+        "SemanticProgress"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "withdraw",
+          "Event1": "common",
+          "Event2": "noise",
+          "EventCount": 1,
+          "Window": "prepared",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": false,
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "持续可用、有限技术失败、内部动作与首次通知弱公平"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-response-dependency": {
+      "config": "req-response-dependency.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "RequestImmutable",
+        "ReceiptStable",
+        "EffectOnce",
+        "CurrentChoiceAtCommit",
+        "ExecutionLinkCurrent",
+        "SingleUnsettled",
+        "SemanticRetained",
+        "RecoveryNoConsumption",
+        "FreshEvaluationCause",
+        "RetryBound",
+        "SceneBudgetSeparate",
+        "CapacitySufficient",
+        "ReceiptWatermarkStable",
+        "AttemptLinked",
+        "RejectedAttemptAuthorized",
+        "RejectedWaitKeepsInputBoundary",
+        "TrustedPrepareInput"
+      ],
+      "expected_properties": [
+        "DecisionProgress",
+        "SemanticProgress"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "response",
+          "Event1": "dependency",
+          "Event2": "common",
+          "EventCount": 2,
+          "Window": "any",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": false,
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "持续可用、有限技术失败、内部动作与首次通知弱公平"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-settlement-unrelated": {
+      "config": "req-settlement-unrelated.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "RequestImmutable",
+        "ReceiptStable",
+        "EffectOnce",
+        "CurrentChoiceAtCommit",
+        "ExecutionLinkCurrent",
+        "SingleUnsettled",
+        "SemanticRetained",
+        "RecoveryNoConsumption",
+        "FreshEvaluationCause",
+        "RetryBound",
+        "SceneBudgetSeparate",
+        "CapacitySufficient",
+        "ReceiptWatermarkStable",
+        "AttemptLinked",
+        "RejectedAttemptAuthorized",
+        "RejectedWaitKeepsInputBoundary",
+        "TrustedPrepareInput"
+      ],
+      "expected_properties": [
+        "DecisionProgress"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "settlement",
+          "Event1": "incidental",
+          "Event2": "noise",
+          "EventCount": 1,
+          "Window": "prepared",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": false,
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "持续可用、有限技术失败、内部动作与首次通知弱公平"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-retreat-unrelated": {
+      "config": "req-retreat-unrelated.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "RequestImmutable",
+        "ReceiptStable",
+        "EffectOnce",
+        "CurrentChoiceAtCommit",
+        "ExecutionLinkCurrent",
+        "SingleUnsettled",
+        "SemanticRetained",
+        "RecoveryNoConsumption",
+        "FreshEvaluationCause",
+        "RetryBound",
+        "SceneBudgetSeparate",
+        "CapacitySufficient",
+        "ReceiptWatermarkStable",
+        "AttemptLinked",
+        "RejectedAttemptAuthorized",
+        "RejectedWaitKeepsInputBoundary",
+        "TrustedPrepareInput"
+      ],
+      "expected_properties": [
+        "DecisionProgress"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "retreat",
+          "Event1": "incidental",
+          "Event2": "noise",
+          "EventCount": 1,
+          "Window": "prepared",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": false,
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "持续可用、有限技术失败、内部动作与首次通知弱公平"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-noop-late": {
+      "config": "req-noop-late.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "RequestImmutable",
+        "ReceiptStable",
+        "EffectOnce",
+        "CurrentChoiceAtCommit",
+        "ExecutionLinkCurrent",
+        "SingleUnsettled",
+        "SemanticRetained",
+        "RecoveryNoConsumption",
+        "FreshEvaluationCause",
+        "RetryBound",
+        "SceneBudgetSeparate",
+        "CapacitySufficient",
+        "ReceiptWatermarkStable",
+        "AttemptLinked",
+        "RejectedAttemptAuthorized",
+        "RejectedWaitKeepsInputBoundary",
+        "TrustedPrepareInput"
+      ],
+      "expected_properties": [
+        "DecisionProgress",
+        "SemanticProgress"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "settlement",
+          "Event1": "dependency",
+          "Event2": "noise",
+          "EventCount": 1,
+          "Window": "eval-return",
+          "InitialDependency": false,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": false,
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "持续可用、有限技术失败、内部动作与首次通知弱公平"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-noise": {
+      "config": "req-noise.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "RequestImmutable",
+        "ReceiptStable",
+        "EffectOnce",
+        "CurrentChoiceAtCommit",
+        "ExecutionLinkCurrent",
+        "SingleUnsettled",
+        "SemanticRetained",
+        "RecoveryNoConsumption",
+        "FreshEvaluationCause",
+        "RetryBound",
+        "SceneBudgetSeparate",
+        "CapacitySufficient",
+        "ReceiptWatermarkStable",
+        "AttemptLinked",
+        "RejectedAttemptAuthorized",
+        "RejectedWaitKeepsInputBoundary",
+        "TrustedPrepareInput"
+      ],
+      "expected_properties": [
+        "DecisionProgress"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "withdraw",
+          "Event1": "noise",
+          "Event2": "noise",
+          "EventCount": 1,
+          "Window": "prepared",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": false,
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "持续可用、有限技术失败、内部动作与首次通知弱公平"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-unknown-restart": {
+      "config": "req-unknown-restart.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "RequestImmutable",
+        "ReceiptStable",
+        "EffectOnce",
+        "CurrentChoiceAtCommit",
+        "ExecutionLinkCurrent",
+        "SingleUnsettled",
+        "SemanticRetained",
+        "RecoveryNoConsumption",
+        "FreshEvaluationCause",
+        "RetryBound",
+        "SceneBudgetSeparate",
+        "CapacitySufficient",
+        "ReceiptWatermarkStable",
+        "AttemptLinked",
+        "RejectedAttemptAuthorized",
+        "RejectedWaitKeepsInputBoundary",
+        "TrustedPrepareInput"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "withdraw",
+          "Event1": "signal",
+          "Event2": "noise",
+          "EventCount": 1,
+          "Window": "recovery",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 1,
+          "AllowCrash": true,
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-retry-exhaustion": {
+      "config": "req-retry-exhaustion.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "RequestImmutable",
+        "ReceiptStable",
+        "EffectOnce",
+        "CurrentChoiceAtCommit",
+        "ExecutionLinkCurrent",
+        "SingleUnsettled",
+        "SemanticRetained",
+        "RecoveryNoConsumption",
+        "FreshEvaluationCause",
+        "RetryBound",
+        "SceneBudgetSeparate",
+        "CapacitySufficient",
+        "ReceiptWatermarkStable",
+        "AttemptLinked",
+        "RejectedAttemptAuthorized",
+        "RejectedWaitKeepsInputBoundary",
+        "TrustedPrepareInput"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "settlement",
+          "Event1": "signal",
+          "Event2": "noise",
+          "EventCount": 1,
+          "Window": "any",
+          "InitialDependency": false,
+          "MaxRequests": 3,
+          "MaxFailures": 4,
+          "AllowCrash": false,
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-durable-step": {
+      "config": "req-durable-step.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "RequestImmutable",
+        "ReceiptStable",
+        "EffectOnce",
+        "CurrentChoiceAtCommit",
+        "ExecutionLinkCurrent",
+        "SingleUnsettled",
+        "SemanticRetained",
+        "RecoveryNoConsumption",
+        "FreshEvaluationCause",
+        "RetryBound",
+        "SceneBudgetSeparate",
+        "CapacitySufficient",
+        "ReceiptWatermarkStable",
+        "AttemptLinked",
+        "RejectedAttemptAuthorized",
+        "RejectedWaitKeepsInputBoundary",
+        "TrustedPrepareInput"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "repeatable",
+          "Event1": "incidental",
+          "Event2": "noise",
+          "EventCount": 0,
+          "Window": "any",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": true,
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-terminal": {
+      "config": "req-terminal.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "RequestImmutable",
+        "ReceiptStable",
+        "EffectOnce",
+        "CurrentChoiceAtCommit",
+        "ExecutionLinkCurrent",
+        "SingleUnsettled",
+        "SemanticRetained",
+        "RecoveryNoConsumption",
+        "FreshEvaluationCause",
+        "RetryBound",
+        "SceneBudgetSeparate",
+        "CapacitySufficient",
+        "ReceiptWatermarkStable",
+        "AttemptLinked",
+        "RejectedAttemptAuthorized",
+        "RejectedWaitKeepsInputBoundary",
+        "TrustedPrepareInput"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "withdraw",
+          "Event1": "end",
+          "Event2": "noise",
+          "EventCount": 1,
+          "Window": "prepared",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": false,
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-authority": {
+      "config": "req-authority.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "RequestImmutable",
+        "ReceiptStable",
+        "EffectOnce",
+        "CurrentChoiceAtCommit",
+        "ExecutionLinkCurrent",
+        "SingleUnsettled",
+        "SemanticRetained",
+        "RecoveryNoConsumption",
+        "FreshEvaluationCause",
+        "RetryBound",
+        "SceneBudgetSeparate",
+        "CapacitySufficient",
+        "ReceiptWatermarkStable",
+        "AttemptLinked",
+        "RejectedAttemptAuthorized",
+        "RejectedWaitKeepsInputBoundary",
+        "TrustedPrepareInput"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "withdraw",
+          "Event1": "revoke",
+          "Event2": "grant",
+          "EventCount": 2,
+          "Window": "prepared",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": false,
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-old9b-counterexample": {
+      "config": "req-old9b-counterexample.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [],
+      "expected_properties": [
+        "DecisionProgress"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "withdraw",
+          "Event1": "incidental",
+          "Event2": "noise",
+          "EventCount": 1,
+          "Window": "prepared",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": false,
+          "Fault": "old9b",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "持续可用、有限技术失败、内部动作与首次通知弱公平"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-global-seq-counterexample": {
+      "config": "req-global-seq-counterexample.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [],
+      "expected_properties": [
+        "DecisionProgress"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "withdraw",
+          "Event1": "noise",
+          "Event2": "noise",
+          "EventCount": 1,
+          "Window": "prepared",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": false,
+          "Fault": "global-seq",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "持续可用、有限技术失败、内部动作与首次通知弱公平"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-missing-wake-counterexample": {
+      "config": "req-missing-wake-counterexample.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [],
+      "expected_properties": [
+        "DecisionProgress"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "withdraw",
+          "Event1": "common",
+          "Event2": "noise",
+          "EventCount": 1,
+          "Window": "prepared",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": false,
+          "Fault": "miss-wake",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "持续可用、有限技术失败、内部动作与首次通知弱公平"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-negative-rewrite": {
+      "config": "req-negative-rewrite.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "RequestImmutable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "withdraw",
+          "Event1": "incidental",
+          "Event2": "noise",
+          "EventCount": 0,
+          "Window": "any",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": true,
+          "Fault": "rewrite",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-negative-receipt-order": {
+      "config": "req-negative-receipt-order.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "ReceiptStable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "withdraw",
+          "Event1": "incidental",
+          "Event2": "noise",
+          "EventCount": 0,
+          "Window": "any",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": false,
+          "Fault": "receipt-order",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-negative-repeat-effect": {
+      "config": "req-negative-repeat-effect.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "EffectOnce"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "withdraw",
+          "Event1": "incidental",
+          "Event2": "noise",
+          "EventCount": 0,
+          "Window": "any",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": false,
+          "Fault": "repeat-effect",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-negative-stale-basis": {
+      "config": "req-negative-stale-basis.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "CurrentChoiceAtCommit"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "response",
+          "Event1": "dependency",
+          "Event2": "noise",
+          "EventCount": 1,
+          "Window": "prepared",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": false,
+          "Fault": "stale-basis",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-negative-drop-common": {
+      "config": "req-negative-drop-common.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "CurrentChoiceAtCommit"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "withdraw",
+          "Event1": "common",
+          "Event2": "noise",
+          "EventCount": 1,
+          "Window": "prepared",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": false,
+          "Fault": "drop-common",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-negative-old-version": {
+      "config": "req-negative-old-version.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "ExecutionLinkCurrent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "response",
+          "Event1": "incidental",
+          "Event2": "noise",
+          "EventCount": 0,
+          "Window": "any",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": false,
+          "Fault": "old-version",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-negative-clear-newer": {
+      "config": "req-negative-clear-newer.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "SemanticRetained"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "settlement",
+          "Event1": "signal",
+          "Event2": "noise",
+          "EventCount": 1,
+          "Window": "eval-return",
+          "InitialDependency": false,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": false,
+          "Fault": "clear-newer",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-negative-recovery-consume": {
+      "config": "req-negative-recovery-consume.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "RecoveryNoConsumption"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "withdraw",
+          "Event1": "signal",
+          "Event2": "noise",
+          "EventCount": 1,
+          "Window": "recovery",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": false,
+          "Fault": "recovery-consume",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-negative-ordinary": {
+      "config": "req-negative-ordinary.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "FreshEvaluationCause"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "settlement",
+          "Event1": "noise",
+          "Event2": "noise",
+          "EventCount": 1,
+          "Window": "eval-return",
+          "InitialDependency": false,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": false,
+          "Fault": "ordinary",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-negative-duplicate": {
+      "config": "req-negative-duplicate.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "FreshEvaluationCause"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "withdraw",
+          "Event1": "signal",
+          "Event2": "noise",
+          "EventCount": 1,
+          "Window": "recovery",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": false,
+          "Fault": "duplicate",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-negative-pending-spin": {
+      "config": "req-negative-pending-spin.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "RetryBound"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "settlement",
+          "Event1": "signal",
+          "Event2": "noise",
+          "EventCount": 1,
+          "Window": "any",
+          "InitialDependency": false,
+          "MaxRequests": 3,
+          "MaxFailures": 5,
+          "AllowCrash": false,
+          "Fault": "pending-spin",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-negative-volatile-dedup": {
+      "config": "req-negative-volatile-dedup.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "EffectOnce"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "repeatable",
+          "Event1": "incidental",
+          "Event2": "noise",
+          "EventCount": 0,
+          "Window": "any",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": true,
+          "Fault": "volatile-dedup",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-negative-scene-budget": {
+      "config": "req-negative-scene-budget.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "SceneBudgetSeparate"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "withdraw",
+          "Event1": "incidental",
+          "Event2": "noise",
+          "EventCount": 0,
+          "Window": "any",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": false,
+          "Fault": "scene-budget",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-witness-late": {
+      "config": "req-witness-late.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "settlement",
+          "Event1": "dependency",
+          "Event2": "noise",
+          "EventCount": 1,
+          "Window": "eval-return",
+          "InitialDependency": false,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": false,
+          "Fault": "none",
+          "Probe": "late"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-witness-replay": {
+      "config": "req-witness-replay.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "withdraw",
+          "Event1": "incidental",
+          "Event2": "noise",
+          "EventCount": 0,
+          "Window": "any",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": false,
+          "Fault": "none",
+          "Probe": "replay"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-witness-restart": {
+      "config": "req-witness-restart.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "withdraw",
+          "Event1": "incidental",
+          "Event2": "noise",
+          "EventCount": 0,
+          "Window": "any",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": true,
+          "Fault": "none",
+          "Probe": "restart"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-witness-indirect": {
+      "config": "req-witness-indirect.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "withdraw",
+          "Event1": "incidental",
+          "Event2": "noise",
+          "EventCount": 0,
+          "Window": "any",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": false,
+          "Fault": "none",
+          "Probe": "indirect"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-witness-retry": {
+      "config": "req-witness-retry.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "settlement",
+          "Event1": "signal",
+          "Event2": "noise",
+          "EventCount": 1,
+          "Window": "any",
+          "InitialDependency": false,
+          "MaxRequests": 3,
+          "MaxFailures": 4,
+          "AllowCrash": false,
+          "Fault": "none",
+          "Probe": "retry"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-cached-rejection-counterexample": {
+      "config": "req-cached-rejection-counterexample.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [],
+      "expected_properties": [
+        "DecisionProgress"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "withdraw",
+          "Event1": "pause",
+          "Event2": "resume",
+          "EventCount": 2,
+          "Window": "pause-submit",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": false,
+          "Fault": "cached-rejection",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "原撤回Rejected后真实resume，准备basis复原不等于旧拒绝仍适用",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "持续可用、有限技术失败、内部动作与首次通知弱公平"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-resume-after-rejection": {
+      "config": "req-resume-after-rejection.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "RequestImmutable",
+        "ReceiptStable",
+        "EffectOnce",
+        "CurrentChoiceAtCommit",
+        "ExecutionLinkCurrent",
+        "SingleUnsettled",
+        "SemanticRetained",
+        "RecoveryNoConsumption",
+        "FreshEvaluationCause",
+        "RetryBound",
+        "SceneBudgetSeparate",
+        "CapacitySufficient",
+        "ReceiptWatermarkStable",
+        "AttemptLinked",
+        "RejectedAttemptAuthorized",
+        "RejectedWaitKeepsInputBoundary",
+        "TrustedPrepareInput"
+      ],
+      "expected_properties": [
+        "DecisionProgress",
+        "SemanticProgress"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "withdraw",
+          "Event1": "pause",
+          "Event2": "resume",
+          "EventCount": 2,
+          "Window": "pause-submit",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": false,
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "原撤回Rejected后真实resume，准备basis复原不等于旧拒绝仍适用",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "持续可用、有限技术失败、内部动作与首次通知弱公平"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-resume-before-read-late-input": {
+      "config": "req-resume-before-read-late-input.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "RequestImmutable",
+        "ReceiptStable",
+        "EffectOnce",
+        "CurrentChoiceAtCommit",
+        "ExecutionLinkCurrent",
+        "SingleUnsettled",
+        "SemanticRetained",
+        "RecoveryNoConsumption",
+        "FreshEvaluationCause",
+        "RetryBound",
+        "SceneBudgetSeparate",
+        "CapacitySufficient",
+        "ReceiptWatermarkStable",
+        "AttemptLinked",
+        "RejectedAttemptAuthorized",
+        "RejectedWaitKeepsInputBoundary",
+        "TrustedPrepareInput"
+      ],
+      "expected_properties": [
+        "DecisionProgress",
+        "SemanticProgress"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "withdraw",
+          "Event1": "pause",
+          "Event2": "resume",
+          "EventCount": 2,
+          "Window": "resume-before-read",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": true,
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "原撤回Rejected后真实resume，准备basis复原不等于旧拒绝仍适用",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认",
+          "入口捕获0，resume在事务读前提交并送达"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "持续可用、有限技术失败、内部动作与首次通知弱公平"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。",
+        "本配置的控制器detach/attach是指定外部操作，须最终完成；仅对此操作加弱公平，不声称进程重启必然发生。"
+      ]
+    },
+    "req-resume-late-delivery": {
+      "config": "req-resume-late-delivery.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "RequestImmutable",
+        "ReceiptStable",
+        "EffectOnce",
+        "CurrentChoiceAtCommit",
+        "ExecutionLinkCurrent",
+        "SingleUnsettled",
+        "SemanticRetained",
+        "RecoveryNoConsumption",
+        "FreshEvaluationCause",
+        "RetryBound",
+        "SceneBudgetSeparate",
+        "CapacitySufficient",
+        "ReceiptWatermarkStable",
+        "AttemptLinked",
+        "RejectedAttemptAuthorized",
+        "RejectedWaitKeepsInputBoundary",
+        "TrustedPrepareInput"
+      ],
+      "expected_properties": [
+        "DecisionProgress",
+        "SemanticProgress"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "withdraw",
+          "Event1": "pause",
+          "Event2": "resume",
+          "EventCount": 2,
+          "Window": "resume-late-notice",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": true,
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "原撤回Rejected后真实resume，准备basis复原不等于旧拒绝仍适用",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认",
+          "resume已COMMIT，通知在缓存等待读后或返回后才送达"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "持续可用、有限技术失败、内部动作与首次通知弱公平"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。",
+        "本配置的控制器detach/attach是指定外部操作，须最终完成；仅对此操作加弱公平，不声称进程重启必然发生。"
+      ]
+    },
+    "req-rejected-return-unknown": {
+      "config": "req-rejected-return-unknown.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "RequestImmutable",
+        "ReceiptStable",
+        "EffectOnce",
+        "CurrentChoiceAtCommit",
+        "ExecutionLinkCurrent",
+        "SingleUnsettled",
+        "SemanticRetained",
+        "RecoveryNoConsumption",
+        "FreshEvaluationCause",
+        "RetryBound",
+        "SceneBudgetSeparate",
+        "CapacitySufficient",
+        "ReceiptWatermarkStable",
+        "AttemptLinked",
+        "RejectedAttemptAuthorized",
+        "RejectedWaitKeepsInputBoundary",
+        "TrustedPrepareInput"
+      ],
+      "expected_properties": [
+        "DecisionProgress",
+        "SemanticProgress"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "withdraw",
+          "Event1": "pause",
+          "Event2": "resume",
+          "EventCount": 2,
+          "Window": "rejected-unknown",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 1,
+          "AllowCrash": false,
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "原撤回Rejected后真实resume，准备basis复原不等于旧拒绝仍适用",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认",
+          "原Rejected已提交但返回丢失，resume先到，必须先恢复原结果"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "持续可用、有限技术失败、内部动作与首次通知弱公平"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-negative-wide-consume": {
+      "config": "req-negative-wide-consume.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "RejectedWaitKeepsInputBoundary"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "withdraw",
+          "Event1": "pause",
+          "Event2": "resume",
+          "EventCount": 2,
+          "Window": "resume-late-notice",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": true,
+          "Fault": "wide-consume",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "原撤回Rejected后真实resume，准备basis复原不等于旧拒绝仍适用",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认",
+          "resume已COMMIT，通知在缓存等待读后或返回后才送达"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "持续可用、有限技术失败、内部动作与首次通知弱公平"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。",
+        "本配置的控制器detach/attach是指定外部操作，须最终完成；仅对此操作加弱公平，不声称进程重启必然发生。"
+      ]
+    },
+    "req-wide-last-counterexample": {
+      "config": "req-wide-last-counterexample.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [],
+      "expected_properties": [
+        "DecisionProgress"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "withdraw",
+          "Event1": "pause",
+          "Event2": "resume",
+          "EventCount": 2,
+          "Window": "resume-late-notice",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": true,
+          "Fault": "wide-last",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "原撤回Rejected后真实resume，准备basis复原不等于旧拒绝仍适用",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认",
+          "resume已COMMIT，通知在缓存等待读后或返回后才送达"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "持续可用、有限技术失败、内部动作与首次通知弱公平"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。",
+        "本配置的控制器detach/attach是指定外部操作，须最终完成；仅对此操作加弱公平，不声称进程重启必然发生。"
+      ]
+    },
+    "req-negative-recovery-watermark": {
+      "config": "req-negative-recovery-watermark.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "ReceiptWatermarkStable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "withdraw",
+          "Event1": "pause",
+          "Event2": "resume",
+          "EventCount": 2,
+          "Window": "rejected-unknown",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 1,
+          "AllowCrash": false,
+          "Fault": "recovery-seq",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "原撤回Rejected后真实resume，准备basis复原不等于旧拒绝仍适用",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认",
+          "原Rejected已提交但返回丢失，resume先到，必须先恢复原结果"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "持续可用、有限技术失败、内部动作与首次通知弱公平"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-negative-global-signal": {
+      "config": "req-negative-global-signal.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "RejectedAttemptAuthorized"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "withdraw",
+          "Event1": "pause",
+          "Event2": "resume",
+          "EventCount": 2,
+          "Window": "resume-late-notice",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": true,
+          "Fault": "global-signal",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "原撤回Rejected后真实resume，准备basis复原不等于旧拒绝仍适用",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认",
+          "resume已COMMIT，通知在缓存等待读后或返回后才送达"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "持续可用、有限技术失败、内部动作与首次通知弱公平"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。",
+        "本配置的控制器detach/attach是指定外部操作，须最终完成；仅对此操作加弱公平，不声称进程重启必然发生。"
+      ]
+    },
+    "req-negative-skip-recovery": {
+      "config": "req-negative-skip-recovery.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "SingleUnsettled"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "withdraw",
+          "Event1": "pause",
+          "Event2": "resume",
+          "EventCount": 2,
+          "Window": "rejected-unknown",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 1,
+          "AllowCrash": false,
+          "Fault": "skip-recovery",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "原撤回Rejected后真实resume，准备basis复原不等于旧拒绝仍适用",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认",
+          "原Rejected已提交但返回丢失，resume先到，必须先恢复原结果"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "持续可用、有限技术失败、内部动作与首次通知弱公平"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-negative-wrong-parent": {
+      "config": "req-negative-wrong-parent.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "AttemptLinked"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "withdraw",
+          "Event1": "pause",
+          "Event2": "resume",
+          "EventCount": 2,
+          "Window": "pause-submit",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": false,
+          "Fault": "wrong-parent",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "原撤回Rejected后真实resume，准备basis复原不等于旧拒绝仍适用",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认",
+          "旧拒绝后的关联新尝试"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "持续可用、有限技术失败、内部动作与首次通知弱公平"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    },
+    "req-witness-captured-late": {
+      "config": "req-witness-captured-late.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "withdraw",
+          "Event1": "pause",
+          "Event2": "resume",
+          "EventCount": 2,
+          "Window": "resume-before-read",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": true,
+          "Fault": "none",
+          "Probe": "captured-late"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "原撤回Rejected后真实resume，准备basis复原不等于旧拒绝仍适用",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认",
+          "入口捕获0，resume在事务读前提交并送达"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "持续可用、有限技术失败、内部动作与首次通知弱公平"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。",
+        "本配置的控制器detach/attach是指定外部操作，须最终完成；仅对此操作加弱公平，不声称进程重启必然发生。"
+      ]
+    },
+    "req-witness-late-delivery": {
+      "config": "req-witness-late-delivery.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "withdraw",
+          "Event1": "pause",
+          "Event2": "resume",
+          "EventCount": 2,
+          "Window": "resume-late-notice",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 0,
+          "AllowCrash": true,
+          "Fault": "none",
+          "Probe": "late-delivery"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "原撤回Rejected后真实resume，准备basis复原不等于旧拒绝仍适用",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认",
+          "resume已COMMIT，通知在缓存等待读后或返回后才送达"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "持续可用、有限技术失败、内部动作与首次通知弱公平"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。",
+        "本配置的控制器detach/attach是指定外部操作，须最终完成；仅对此操作加弱公平，不声称进程重启必然发生。"
+      ]
+    },
+    "req-witness-rejected-recovered": {
+      "config": "req-witness-rejected-recovered.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Flow": "withdraw",
+          "Event1": "pause",
+          "Event2": "resume",
+          "EventCount": 2,
+          "Window": "rejected-unknown",
+          "InitialDependency": true,
+          "MaxRequests": 3,
+          "MaxFailures": 1,
+          "AllowCrash": false,
+          "Fault": "none",
+          "Probe": "rejected-recovered"
+        },
+        "covered_interleavings_and_faults": [
+          "事务提交与返回消费分离",
+          "原Receipt重放",
+          "重复/倒序私有通知",
+          "动作相关与共同依据变化",
+          "有限Unknown与一次重启",
+          "原撤回Rejected后真实resume，准备basis复原不等于旧拒绝仍适用",
+          "入口已接收语义与随后事务读态分离",
+          "原Receipt observedSeq及恢复副本",
+          "Rejected等待分支按入口水位确认",
+          "原Rejected已提交但返回丢失，resume先到，必须先恢复原结果"
+        ],
+        "excluded_behaviors": [
+          "SQL内部",
+          "连续几何",
+          "完整权限投影",
+          "无限参与者"
+        ],
+        "liveness": "持续可用、有限技术失败、内部动作与首次通知弱公平"
+      },
+      "assumptions": [
+        "Session事务内动作原子；原文摘要与读权抽象为可信谓词。",
+        "有限计划与明确请求上界；CapacitySufficient在正例防止上界隐藏工作。",
+        "incidental不参与当前动作的真实选择；common和dep表示仍必须重验的依据。",
+        "仅可信内部控制器捕获已过滤的pending；公开输入与真实权限算法另由实现验收。"
+      ]
+    }
+  }
+}

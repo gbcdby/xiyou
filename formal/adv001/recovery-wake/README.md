@@ -1,5 +1,7 @@
 # A3 恢复与语义唤醒：恢复后重新模型检查
 
+> 后续来源补充：下文“本次”和 40 项结果均指固定 0ac 阶段。CUI-OBS-01 朝向组合的有限源码复核见 [朝向来源记录](../facing-source-review.md)；其 TLC 为 `NOT_RUN`，旧 profile/模型/运行身份保留。已有 runtime 场景扩展与本轮 spatial-rules 变化分别记录，不把旧 40 项扩为新增分支证明。
+
 ## 本次结论
 
 2026-11-13 对新固定候选 `0ac2bf5f34e49f4508daac74b1d6b38196f15ad6` / tree `047cdcc3a4a2a7239e29e66b31796d5098e6c491` 重新核对源码，并重新执行完整既定矩阵。**40 项均符合各自预声明判据；模型正例结论为 `PASS_WITHIN_SCOPE`，已覆盖源码转移为 `IN_SYNC`，整体源码对应为 `PARTIAL`。** 没有业务代码改动，没有执行真实 PG、HTTP、Socket 或 provider 验收，也不声明完整 A3 通过。

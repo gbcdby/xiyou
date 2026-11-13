@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "tool": {
+    "reported_version": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)",
+    "jar_sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+    "java_version": "openjdk version \"21.0.13\" 2026-10-20\nOpenJDK Runtime Environment (build 21.0.13+9-1-deb13u2-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.13+9-1-deb13u2-Debian, mixed mode, sharing)",
+    "runner_path": ".agents/skills/worker-tla/scripts/run_tlc.py",
+    "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a"
+  },
+  "models": {
+    "SceneFollow.tla": "61c550a71cdeaced28c77bb44347b9f355b015018032fe6e988dfb62b8cb3049",
+    "SceneRequest.tla": "38d48c8f7d3f75009ca3acacc42ba6d9d2d5b1c729f14ef312614e86c54a77e1"
+  },
+  "configuration_files": {
+    "follow-front-live.cfg": "fd9390f49d339e5fe0e9231cc4765aa436f05e43b02b6f628f0fd5b144cf16da",
+    "follow-front-safety.cfg": "9f7f943e6b2edcbf8b85f3b10601fd49da26d1d2bd71985e9ae25b59d75b4bb0",
+    "follow-negative-arrived-skip.cfg": "529ca21c6bc1df2b3ce6d256bc97f911d6b0e44a8851dded01d037af2e878a71",
+    "follow-negative-auto-resume.cfg": "29d4a673559d98063b41f6f02c34e789e03fb1044b68768b998b4f36835861e7",
+    "follow-negative-carry-exit.cfg": "aa349a30fa9fac3c89c0d5b03e8ce58cf6bf86c2c6d9b7a05fc672d7c0949553",
+    "follow-negative-endpoint-only.cfg": "54c3c3beed8bf6ab36327872b575121ee77353cde4a9bfaa044b597dc7b84cc5",
+    "follow-negative-leader-exit.cfg": "a780e0fb771f173a3041c9299c397155aa7cdb228f4e85849184d3fc25ee5637",
+    "follow-negative-move-before-check.cfg": "b555cd0c3fb0bf9b3d821219b0abde66d7b9c1755d6e722ef29832df602ac583",
+    "follow-negative-stale-binding.cfg": "a8707dacabc6061bf0563949e0dd8cf88650785064f5083f722b1e89acb7ea11",
+    "follow-negative-stale-confirm.cfg": "8effeb253bdedc03fcd6c5d2a259f32d82468c3a5f79df7965932ec5739ddfe2",
+    "follow-negative-u-first.cfg": "c1b76ab6519d51ae60d5f287a1a9cb63c1d311db10077d2c7c32d0a925d45f3c",
+    "follow-tea-live.cfg": "3566771571effc7babb470aa2d876ed2ee563d45a1576c908e9656dc979570f7",
+    "follow-tea-safety.cfg": "5206f15a161030c52358940b156333d2d443474f6edcdd969b27fa5d16ff3bb3",
+    "follow-witness-leader-first.cfg": "464725d4e6fc986a6cee893e494e9e6283de16d5eb78a77770e670c5b00907ed",
+    "follow-witness-overlap.cfg": "b4c40dc23d27976af4e0806a6d0c6912266123cb296d58cbb8b346dcd1ed0e6c",
+    "follow-witness-reproposal.cfg": "6a7be01e64d505c92530789cb3c55daa664ede23afdf2f6711b805e2a28e6131",
+    "follow-witness-route.cfg": "02a7c482140c14150c4cd808f35cc804b61e9d03fad42e546a5c1e6b58162b8d",
+    "req-authority.cfg": "3120d29154a7b5e5a84d3beff28be64d6ca8da74ebe7983961162174f912e9f2",
+    "req-cached-rejection-counterexample.cfg": "5b99c2ed0f5d96216563c36d7c3a19603638ec4e46ab3caab1923d0f67139787",
+    "req-common-change.cfg": "e62de5f9ee87825ea948c35eb9f7c91bb8aaa29818c3f409d75627bdbd0d28af",
+    "req-durable-step.cfg": "6ab7aa67ce68a585547eb3453aaf902af7ce9a27470a14e3056a2a88834da7e4",
+    "req-global-seq-counterexample.cfg": "54a0af7f8a6985180e17bfa015bee853538fc966585dd7af7e611d3711f35a0e",
+    "req-missing-wake-counterexample.cfg": "f3530841eb5fb8ee61a9a3fe9904a75c43201919a82beaa735b1652f9e893e85",
+    "req-negative-clear-newer.cfg": "b4b79884e5d091a016a12fc222c0e5adf7b8f751252609c51aa4b96d09bfdaf6",
+    "req-negative-drop-common.cfg": "16385b686ef521355b1119b0b82db213e50377fa2edf59e2a47575fc3b58accd",
+    "req-negative-duplicate.cfg": "763345186324adc39e6a7e4f18462c2e5627a3790a2d2a39105558bf6f8579aa",
+    "req-negative-old-version.cfg": "cb3116e73fe4f065c2731d2f27a9d64ca0f1eb29d2a81e5d29634a988c006147",
+    "req-negative-ordinary.cfg": "6bd681b2b27e034cd135378b4bec558950c55712a78b696a85f5cd899adf77b4",
+    "req-negative-pending-spin.cfg": "0990e5a0fd5f5a8790ef7f86f42c912e0844a7cd332732db0c9aa3f518e95383",
+    "req-negative-receipt-order.cfg": "4467bf2c90e62569b0d173a37d4df6da88f7e2e76d404a01d2252ed8261bc8d9",
+    "req-negative-recovery-consume.cfg": "275bb8063389f852d1fafb602ff29a7093f28dbc06c5ad3db56da77b6ff97cdc",
+    "req-negative-repeat-effect.cfg": "d145a2705356c85df34a9c2476d569702f486f035b7361e8c8e71e481595ca21",
+    "req-negative-rewrite.cfg": "4f5009abc12210908d6f12ba562745f8e63a1749e214bbcdfb24fdf050a1599c",
+    "req-negative-scene-budget.cfg": "5c6ee2b3afe0aef6685827cc01892fd8d89ba5b2fb39c0d6bad42efe556b5e64",
+    "req-negative-stale-basis.cfg": "711e117f3c9c6c462bf641151dbf7b6aaf62fcb27e13c6d74c7fddeb27b2944c",
+    "req-negative-volatile-dedup.cfg": "b84e1509c74e23c542ed351d2c0bbff171a7c76b727eafb948807b84a1ab1f73",
+    "req-noise.cfg": "110d662169837236c5f81152d619fdcf677aba5a6f81d197d6c4d3616c6a6f57",
+    "req-noop-late.cfg": "864dde28c56eab3097ea2f1b3c96af3ccb26753f15c8cf6003f7eca8a3e3369a",
+    "req-old9b-counterexample.cfg": "0a59452744ac56189192a7f7846fe39e59b6c99033e0bc95d93ce06336f49806",
+    "req-response-dependency.cfg": "17630d9bfbab31088bf705546e0e329de0892b771f6b987669c68420c94e2471",
+    "req-resume-after-rejection.cfg": "9940afb6a9e7101bc8d4ac7c1cab45146dcbc53c4658dea94885170deaa3ab4d",
+    "req-retreat-unrelated.cfg": "14aa0e7e92f0a5987c63704b5891f0619228e764dc4c0d19ac10132ea2d62500",
+    "req-retry-exhaustion.cfg": "b8a14882bfbe840b57426b7ae7e698cc29d819017c2034df6d9c5448ac633bf4",
+    "req-settlement-unrelated.cfg": "abfff1356f04aec3044715b65564fba024b49343fb8f798bddab5119a157a51f",
+    "req-terminal.cfg": "2afa150e3e8aabc3982acf8899593d0fed695ef348f4dab84a71c4a16e1c2293",
+    "req-unknown-restart.cfg": "f5eb44ffdcf5487f2db8d05a32ee372a6c8ead32d24d590b5cd789d1d68e61cd",
+    "req-withdraw-return.cfg": "7574550e8b3e764684a34f0baebaec2b9a9a4b63be22fe7064150f98445f569d",
+    "req-witness-indirect.cfg": "e497882cb01ba9dde04580cfb6e33b53dd483d3a7d51407d51dd73f7d9b58426",
+    "req-witness-late.cfg": "be2d822152e8ffab2414942d9386457ff04b07513236ef8a29850f7c351b2d28",
+    "req-witness-replay.cfg": "b0301d0189bece11c14a1217fd67636d0f52ade1ace29064637f3de03ce6ae31",
+    "req-witness-restart.cfg": "74f14c314484bb1dd34f9bf8eca9f71bc929a4b4e33a590c956a6e7c14a1fa2f",
+    "req-witness-retry.cfg": "1a94fe1662f0f2669c47a0b8f3607db0c2ee54740f9b57bd05f3671b3ddd7195"
+  },
+  "manifests": {
+    "follow-verification.json": "eedba8b7063be485041e6d145f4a2bc1549480405202d6f5fce5c7c97d7c30a7",
+    "request-verification.json": "f880096ce32177707e9ded43912a0eb110ee83cf80be4d700ddba598ca32f6f4"
+  },
+  "expectations_sha256": "6df7aa8cdfc8fbe8a1908896821f1eacb0c7c6e88e6cee333bd79c9811e7d75b",
+  "wrapper_sha256": "62b0ed4728d5ab5f877b020149ca405dfc90fa24183755eee1690d8ca879865b",
+  "source_files_sha256": "c83c854cdb191440cc1134fb10c02566b37c61b0f487f1e66ae6cac41c3c7732",
+  "latest_run_finished_at": "2026-11-13T09:29:25.943488+00:00",
+  "external_product_evidence": {
+    "std001-probe": {
+      "sha256": "3701d3ab3f47cba8e829b5cb64adc02a71de6585d1477c07ffec35e78aabd4c1",
+      "bytes": 4044,
+      "execution": "READ_EXISTING_EVIDENCE_NOT_RUN_BY_THIS_TASK"
+    },
+    "std001-result": {
+      "sha256": "9d7f11190bf7e82ec1e32665bd2cb4496d6bf6bd62b757ebe8fd39a471c3ed29",
+      "bytes": 28224,
+      "execution": "READ_EXISTING_EVIDENCE_NOT_RUN_BY_THIS_TASK"
+    },
+    "std002-probe": {
+      "sha256": "7a8aebcff81e364083697470b3113572399ec18998a3ac669066d2d8e9fd2561",
+      "bytes": 4349,
+      "execution": "READ_EXISTING_EVIDENCE_NOT_RUN_BY_THIS_TASK"
+    },
+    "std002-result": {
+      "sha256": "11b5aa4ec4f4ba341b3e2ba943b596c86fc67d8ac55b8fcc678ce957693d60e8",
+      "bytes": 63425,
+      "execution": "READ_EXISTING_EVIDENCE_NOT_RUN_BY_THIS_TASK"
+    }
+  },
+  "implementation_mapping": "covered transitions IN_SYNC; overall PARTIAL; STD-002 FAIL on 7f48f5f; future fix NOT_ASSESSED",
+  "excluded": "旧recovery-wake40项未重跑或计入；无整体实现精化证明。"
+}

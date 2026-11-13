@@ -1,7 +1,7 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, shallowRef, watch } from 'vue';
 import type { ComputedRef, Ref } from 'vue';
-import { placeHudCard } from '../../domain/gaolao-hud-layout.ts';
-import type { HudMapGeometry } from '../../domain/gaolao-hud-layout.ts';
+import { placeHudCards } from '../../domain/gaolao-hud-layout.ts';
+import type { HudMapGeometry, HudCameraArea, HudCardRequest } from '../../domain/gaolao-hud-layout.ts';
 import type { ScreenRect } from '../../domain/spatial-labels.ts';
 
 /** DOM只提供屏幕尺寸；此处不持有角色身份、章节事实或可写客户端。 */
@@ -43,29 +43,37 @@ export function useGaolaoHud(root: Ref<HTMLElement | null>, enabled: ComputedRef
     const y = narrow.value ? Math.max(130, m.objectiveBottom + 16) : 130;
     return { x: margin, y, width: Math.max(0, m.width - margin * 2), height: Math.max(0, m.height - (narrow.value ? 213 : 125) - y) };
   });
-  const panelPlacement = computed(() => {
-    if (!enabled.value || !kind.value) return { rect: null, collapsed: false };
+  const panelRequest = computed<HudCardRequest | undefined>(() => {
+    if (!enabled.value || !kind.value) return undefined;
     const m = measured.value, size = cardSize.value;
     const preferred = narrow.value ? { x: 12, y: m.height - 213 - size.height } : kind.value === 'dialogue' ? { x: 30, y: 470 } : kind.value === 'receipts' ? { x: 30, y: 132 } : { x: m.width - 30 - size.width, y: kind.value === 'action' && !road.value ? m.height * .47 : road.value && kind.value === 'action' ? 145 : 130 };
-    return placeHudCard({ bounds: bounds.value, preferred, size, protectedRegions: mapGeometry.value.protectedRegions, reserved: m.reserved, minHeight: 140 });
+    return { bounds: bounds.value, preferred, size, reserved: m.reserved, minHeight: 140 };
   });
-  const followPlacement = computed(() => {
-    if (!enabled.value || !hasFollow.value) return { rect: null, collapsed: false };
+  const followRequest = computed<HudCardRequest | undefined>(() => {
+    if (!enabled.value || !hasFollow.value) return undefined;
     const m = measured.value, size = { width: Math.min(690, m.width - (narrow.value ? 24 : 60)), height: m.followHeight };
-    return placeHudCard({ bounds: bounds.value, preferred: { x: (m.width - size.width) / 2, y: m.height - (narrow.value ? 213 : 138) - size.height }, size, protectedRegions: mapGeometry.value.protectedRegions, reserved: [...m.reserved, ...(panelPlacement.value.rect ? [panelPlacement.value.rect] : [])], minHeight: 110 });
+    return { bounds: bounds.value, preferred: { x: (m.width - size.width) / 2, y: m.height - (narrow.value ? 213 : 138) - size.height }, size, reserved: m.reserved, minHeight: 110 };
   });
-  const cameraArea = computed<ScreenRect | undefined>(() => {
+  // 请求只描述固定屏幕尺寸，不能依赖当前相机回传的几何；避免相机与浮卡互相追逐。
+  const placements = computed(() => placeHudCards({ panel: panelRequest.value, follow: followRequest.value, protectedRegions: mapGeometry.value.protectedRegions }));
+  const panelPlacement = computed(() => placements.value.panel);
+  const followPlacement = computed(() => placements.value.follow);
+  const cameraArea = computed<HudCameraArea | undefined>(() => {
     if (!enabled.value || !measured.value.width) return undefined;
     const m = measured.value;
+    const cards = { panel: panelRequest.value, follow: followRequest.value };
+    // 只排除固定HUD的上/下边；浮卡不是永久占用，理想空域无解时须换边或收短。
+    const margin = narrow.value ? 28 : 30, top = Math.max(132, m.objectiveBottom + 16);
+    const fallback = { x: margin, y: top, width: Math.max(80, m.width - margin * 2), height: Math.max(120, m.height - (narrow.value ? 224 : 141) - top) };
     if (narrow.value) {
       const y = m.objectiveBottom + 16;
       const bottom = kind.value ? m.height - 213 - cardSize.value.height - 16 : hasFollow.value ? m.height - 213 - m.followHeight - 16 : m.height - 224;
-      return { x: 28, y, width: Math.max(80, m.width - 56), height: Math.max(120, bottom - y) };
+      return { x: 28, y, width: Math.max(80, m.width - 56), height: Math.max(120, bottom - y), fallback, reserved: m.reserved, ...cards };
     }
     const x = kind.value === 'dialogue' ? 620 : 360;
     const right = kind.value && kind.value !== 'dialogue' ? m.width - cardSize.value.width - 46 : m.width - 46;
     const bottom = hasFollow.value ? m.height - 154 - m.followHeight : m.height - 141;
-    return { x, y: 132, width: Math.max(200, right - x), height: Math.max(160, bottom - 132) };
+    return { x, y: 132, width: Math.max(200, right - x), height: Math.max(160, bottom - 132), fallback, reserved: m.reserved, ...cards };
   });
   const style = (placement: typeof panelPlacement.value) => placement.rect ? {
     left: placement.rect.x + 'px', top: placement.rect.y + 'px', width: placement.rect.width + 'px', height: placement.rect.height + 'px', maxHeight: placement.rect.height + 'px', right: 'auto', bottom: 'auto', transform: 'none', visibility: 'visible' as const,

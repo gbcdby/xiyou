@@ -10,7 +10,7 @@ export async function createAIServer({ pool, gateway, now, hooks, maxConcurrent,
   let ai, closing;
   try { ai = await attachSpatialAI({ runtime: server.runtime, gateway, maxConcurrent, minIntervalMs, maxCallsPerSession, log }); }
   catch (error) { await server.close(); throw error; }
-  return { runtime: server.runtime, ai, listen: (...args) => server.listen(...args), close() { return closing ??= (async () => { await ai.close(); await server.close(); })(); } };
+  return { runtime: server.runtime, ai, scenePolicy:server.scenePolicy, listen: (...args) => server.listen(...args), close() { return closing ??= (async () => { await ai.close(); await server.close(); })(); } };
 }
 
 async function main() {
