@@ -99,6 +99,19 @@ export async function waitHumanReceipt(page, previousIds, expected, report, play
   return settled;
 }
 
+/** 要操作的对象卡暂收时，经可见接近入口恢复；纯选择与原地查看不调用此步骤。 */
+async function revealObjectAction(page, reference, control, report, player) {
+  const approach = page.locator('.spatial-sidebar.hud-card-collapsed').getByRole('button', { name: '走近并查看', exact: true });
+  await until(async () => await control.isVisible() || await approach.isVisible(), '对象操作或短卡接近入口可见', 5000);
+  if (await approach.isVisible()) {
+    const beforeInspect = (await clientState(page)).actions.map(draft => draft.id);
+    await approach.click();
+    const receipt = await waitHumanReceipt(page, beforeInspect, { kind: 'inspect', targetRef: reference }, report, player, '短卡走近并查看');
+    assert.equal(receipt.status, 'Accepted', '正常走近后必须确认同一对象可查看');
+    await control.waitFor();
+  }
+}
+
 /** 把公共人类意图映射为真正可见的页面操作。这里绝不调用 spatialClient.send/move。 */
 export async function humanAction(page, action, report, player) {
   const previousIds = (await clientState(page)).actions.map(draft => draft.id);
@@ -114,7 +127,9 @@ export async function humanAction(page, action, report, player) {
     await page.locator('.spatial-object-list').getByRole('button', { name: label, exact: true }).click();
   } else if (action.kind === 'take_item') {
     await selectObject(page, action.itemRef); label = '走近并拿取';
-    await page.getByRole('button', { name: label, exact: true }).click();
+    const take = page.getByRole('button', { name: label, exact: true });
+    await revealObjectAction(page, action.itemRef, take, report, player);
+    await take.click();
   } else if (action.kind === 'transfer_item') {
     const p = (await snapshot(page)).projection; const item = p.items.find(item => item.entityRef === action.itemRef);
     await openReading(page, '行囊'); await visibleRecipient(page, action.recipientRef, '交接给');
@@ -135,6 +150,7 @@ export async function humanAction(page, action, report, player) {
     await page.getByRole('button', { name: label, exact: true }).click();
   } else if (action.kind === 'propose_follow') {
     await selectObject(page, action.subjectRef);
+    await revealObjectAction(page, action.subjectRef, page.getByLabel('随行目的地', { exact: true }), report, player);
     await page.getByLabel('随行目的地', { exact: true }).selectOption(action.destinationId);
     await visibleRecipient(page, action.leaderRef, '本次带路者');
     const button = page.getByRole('button', { name: /^(提出|重新提议)随行安排$/ }); label = await button.innerText(); await button.click();
@@ -150,6 +166,7 @@ export async function humanAction(page, action, report, player) {
   } else if (action.kind === 'interact') {
     await selectObject(page, action.targetRef);
     const area = page.locator('.gaolao-interaction');
+    await revealObjectAction(page, action.targetRef, area, report, player);
     if (action.operationId === 'gz-compare-sources') {
       const observations = (await snapshot(page)).projection.observations;
       for (const reference of action.parameters.evidenceRefs) {
