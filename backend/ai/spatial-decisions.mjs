@@ -1,5 +1,5 @@
 import { createHash, randomUUID } from 'node:crypto';
-import { canonicalize } from '../../protocol/node.mjs';
+import { canonicalize, ContractError } from '../../protocol/node.mjs';
 import { parseSpatialProposedIntent, spatialModelKinds } from '../../protocol/spatial-ai.mjs';
 import { spatialIntentSemanticDigestSync } from '../../protocol/spatial-ai-node.mjs';
 import { RuntimeError } from '../errors.mjs';
@@ -138,11 +138,22 @@ export async function spatialDecisionReceipt(runtime, handle, decisionId, fallba
   });
 }
 
+/** 技术查询故障不否定原提交；明确的合同、权限和规则拒绝不能伪装为未知。 */
+export function isSpatialRecoveryUnknown(error) {
+  if (error instanceof RuntimeError) return error.code === 'OUTCOME_UNKNOWN';
+  return !(error instanceof RuleError || error instanceof ContractError);
+}
+
 async function confirm(runtime, handle, decisionId, fallback, expectedDigest, operation) {
   try { return await operation(); }
   catch (error) {
     if (error.code !== 'OUTCOME_UNKNOWN') throw error;
-    const found = await spatialDecisionReceipt(runtime, handle, decisionId, fallback);
+    let found;
+    try { found = await spatialDecisionReceipt(runtime, handle, decisionId, fallback); }
+    catch (lookupError) {
+      if (!isSpatialRecoveryUnknown(lookupError)) throw lookupError;
+      throw error;
+    }
     if (!found) throw error;
     if (found.semanticDigest !== expectedDigest) throw new RuntimeError('ACTION_ID_REUSE');
     return found.receipt;

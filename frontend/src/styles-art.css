@@ -21,12 +21,13 @@
 .gaolao-scene-page .spatial-map-toolbar button { min-height: 44px; font-size: 14px; }
 .gaolao-scene-page .spatial-map-viewport { height: min(calc(100dvh - 400px), 780px); min-height: 430px; }
 .gaolao-scene-page .spatial-map { background: #eee3cb; }
-.spatial-scene-art, .spatial-actor-art { pointer-events: none; }
+.spatial-scene-art, .spatial-actor-art image { pointer-events: none; }
+.spatial-map .spatial-person .spatial-actor-body-hit { fill: transparent; stroke: none; pointer-events: fill; }
 .spatial-map .spatial-person .spatial-hit, .spatial-map .spatial-target .spatial-hit, .spatial-map .spatial-item .spatial-hit { fill: transparent; stroke: transparent; stroke-width: 0; }
 .spatial-map .spatial-person .spatial-selection-ring { fill: #fff7e43d; stroke: #365e52; stroke-width: 2; }
 .spatial-map .spatial-person.selected .spatial-selection-ring, .spatial-map .spatial-person:focus-visible .spatial-selection-ring { stroke: #963f2f; stroke-width: 3; }
 .spatial-map .spatial-person:focus-visible .spatial-hit { stroke: #264f50; stroke-width: 2; }
-.spatial-actor-fallback { fill: #a99e84; stroke: #675e4e; stroke-width: 1.2; pointer-events: none; }
+.spatial-actor-fallback { fill: #a99e84; stroke: #675e4e; stroke-width: 1.2; pointer-events: visiblePainted; }
 .spatial-person.self .spatial-actor-fallback { fill: #7b9283; stroke: #365e52; }
 .spatial-shadow { fill: #3a38252b; }
 .spatial-map.has-artwork .spatial-target rect { fill: #f8f2e5b8; stroke: #76572e; stroke-width: 2; }

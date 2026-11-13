@@ -150,7 +150,8 @@ export class AuthorityRuntime extends EventEmitter {
       for (const effect of tx.afterCommit) await effect();
       await this.hooks.afterCommit?.({ command: command.kind, sessionId, events: tx.events });
       await this.applyControlEffects(tx);
-      if (tx.events.length) this.emit('commit', { sessionId, events: tx.events });
+      // 仅进程内提交订阅者使用事务起点；不写入 WorldEvent、客户端投影或模型上下文。
+      if (tx.events.length) this.emit('commit', { sessionId, events: tx.events, ...(isSpatial(tx.row.state) ? { spatialPauseBefore: tx.row.state.paused } : {}) });
     } catch (error) {
       if (!committed) await client.query('ROLLBACK').catch(() => {});
       if (committed || committing) throw new RuntimeError('OUTCOME_UNKNOWN', '提交结果尚未确认，请查询原动作身份。');

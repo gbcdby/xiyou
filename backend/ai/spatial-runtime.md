@@ -12,6 +12,25 @@
 
 V2 公开 Receipt 没有摘要。`decisionReceipt` 是可信内部恢复入口：它同时核对原模型意图摘要、持久完整请求摘要和安全 Receipt，返回二者关联；HTTP、Socket 与模型投影不增加内部字段。Unknown 只用原决定、原动作 ID、原文和原序号查询或重试。查询未知不会改成失败，不触发另一份模型输出或另一个动作 ID。进程恢复先提升空间控制 epoch，使未提交的旧计划失效；已提交 Receipt 继续原样恢复。
 
+提交已经 Unknown 后，收据查询中的技术异常（例如 PostgreSQL `57014` 查询超时）保留原 Unknown；恢复待办的后续技术异常也沿用原决定，不改写为已拒绝。合同、权限、会话、版本或摘要错误仍原样透传，`ACTION_ID_REUSE` 不进入技术重试。调度器在初次失败后最多自动重试三次，每次至少间隔 `minIntervalMs`；耗尽后停留 Unknown，仍可显式恢复。成功恢复只收束原决定，即使调用预算有余额也不顺带推理。显式恢复接替尚未执行的旧重试唤醒，避免它在结果已确认后触发额外调用；真正的新语义唤醒仍按既有调度规则处理。
+
+### 恢复期间的语义唤醒
+
+`spatial.clock(paused=false)` 既可能是恢复，也可能是普通运行步进，不能靠新运行器的一次读取猜测。`AuthorityRuntime` 的进程内 `commit` 通知在空间局附带 `spatialPauseBefore`，来源为该已提交事务起点的 `tx.row.state.paused`。调度器按同一通知的原事件顺序折叠，只把真实 true→false 当作恢复。此值只供内部订阅者使用，不写入 WorldEvent、HTTP/Socket DTO、数据库表或模型上下文；region 通知不增加该字段。
+
+调度器把启动/显式唤醒/技术重试的 `dirty` 与已收到的合法语义水位 `pendingSemanticSeq` 分开。语义来源仍限既有的本人观察、可见陈述、相关目标/自己的到达及控制变化等筛选；不扩大任何感知或操作权限。水位复用既有 `sessionSeq`，不新增事件身份或持久队列。已接收语义水位与新 context 的 `baseSeq` 共同去重，普通时钟、无关移动和重复通知不能追加调用。
+
+| 阶段 | 合法新语义事件 | 恢复及消费规则 |
+| --- | --- | --- |
+| 恢复读之前，包括已 checkout 尚未 BEGIN | 去重后保留水位 | 读取的 paused 真/假不影响已收到事件 |
+| 读取后至返回，包括 COMMIT 后延迟 | 同样保留水位 | 返回待办不消费语义水位 |
+| 原 Receipt / outcome 尚未收束 | 排在本人原请求之后 | Unknown 仍使用原请求及有限重试，不开始新规划 |
+| 原结果收束，Idle | 有保留水位则进入独立正常规划周期 | 只有新 context 已授权并成功预留预算，才消费其 baseSeq 已覆盖的水位 |
+| 新推理在途 | context 之后的新水位保留为下一轮 | 当前原文提交不换身份；共享并发、间隔和预算继续适用 |
+| Unknown 重试耗尽、确定拒绝或预算耗尽 | 水位保留，但不能单独造成无限恢复循环 | 新合法触发或显式恢复仍先过原结果和授权；终态清理待执行唤醒 |
+
+因此纯技术恢复不产生新的语义触发，成功收束也不清掉已经收到的真实 resume/Observation。显式恢复接替旧 retry 时只清技术触发；真正的新语义继续保留。同一通知只消费一次，多个已被同一个新 context 包含的事件合并为一次规划。读取、收据收束和事件接收采用同一规则，不再按异步窗口分别猜测暂停状态。
+
 ## 注册、轮转与故障
 
 `attachSpatialAI` 从当前内容的 `actorKind` 注册 `persistent_core` 和 `chapter_autonomous`，共享一个 `AIOrchestrator`、并发上限和每局持久调用预算。高老庄为唐僧、悟空、八戒三人；真人席位不变。`scene_role` 不进入模型队列，现有章节交互规则保持；生产自动场景策略留在后续独立切片，当前入口不自动为场景角色答复同意或移动。
@@ -50,6 +69,7 @@ V2 公开 Receipt 没有摘要。`decisionReceipt` 是可信内部恢复入口�
 ```sh
 node --test backend/tests/ai-spatial-decisions.test.mjs
 node --test backend/tests/ai-spatial-orchestrator.test.mjs
+node --test backend/tests/ai-spatial-unknown.test.mjs
 node --test backend/tests/ai-spatial-config.test.mjs
 npm run test:ai
 ```
