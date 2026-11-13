@@ -64,6 +64,10 @@
 .spatial-target, .spatial-item, .spatial-person { cursor: pointer; outline: none; }
 .spatial-target rect { fill: #c5a472; stroke: #805d35; stroke-width: 2; }
 .spatial-item path { fill: #f7d898; stroke: #976d35; stroke-width: 2; }
+.spatial-object-art image { pointer-events: none; }
+.spatial-object-selection { fill: none; opacity: 0; pointer-events: none; }
+.selected > .spatial-object-selection, .spatial-item:focus > .spatial-object-selection, .spatial-target:focus > .spatial-object-selection { opacity: 1; stroke: #aa5d37; stroke-width: 4; }
+.spatial-inventory-art { width: 40px; height: 40px; float: right; margin: 0 0 8px 12px; }
 .spatial-person circle { fill: #ece2c9; stroke: #557264; stroke-width: 3; }
 .spatial-person.self circle { fill: #39786b; stroke: #244b43; }
 .spatial-person .spatial-person-initial { font-size: 15px; stroke: none; fill: #2e5345; }

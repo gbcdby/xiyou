@@ -5,6 +5,8 @@ import { ConfirmedMotion } from '../../domain/spatial-motion.ts';
 import { layoutSpatialLabels, screenPosition } from '../../domain/spatial-labels.ts';
 import { sceneArtwork, spriteForAppearance } from '../../domain/gaolao-art.ts';
 import SpatialActorArt from './SpatialActorArt.vue';
+import SpatialObjectArt from './SpatialObjectArt.vue';
+import { objectArtContext, objectInstanceKey, objectVisualVariant, selectObjectArt } from '../../domain/gaolao-object-art.ts';
 import type { SpatialLabelInput } from '../../domain/spatial-labels.ts';
 import type { ScreenRect } from '../../domain/spatial-labels.ts';
 import { cameraForHud, hudCameraAlternatives, placeHudCards } from '../../domain/gaolao-hud-layout.ts';
@@ -25,9 +27,9 @@ watch(() => props.snapshot, snapshot => { if (frame) cancelAnimationFrame(frame)
 const viewport = ref<HTMLElement | null>(null);
 const reducedMotion = ref(false); let motionPreference: MediaQueryList | null = null;
 const updateMotionPreference = () => { reducedMotion.value = Boolean(motionPreference?.matches); };
-const artAttempt = ref(0); const missingResources = ref(new Set<string>());
+const artAttempt = ref(0); const missingResources = ref(new Set<string>()); const missingObjects = ref(new Set<string>());
 function resource(value: { file: string; available: boolean }) { const next = new Set(missingResources.value); if (value.available) next.delete(value.file); else next.add(value.file); missingResources.value = next; }
-function retryArtwork() { missingResources.value = new Set(); artAttempt.value++; backgroundFailed.value = false; }
+function retryArtwork() { missingResources.value = new Set(); missingObjects.value = new Set(); artAttempt.value++; backgroundFailed.value = false; }
 const viewportSize = ref({ width: 0, height: 0 });
 let resize: ResizeObserver | null = null; let resizeFrame = 0;
 function measureViewport() {
@@ -57,6 +59,16 @@ const people = computed(() => [...projection.value.entities.filter(e => e.entity
   return { ...e, appearanceId, position: reducedMotion.value ? e.position : pose?.position || e.position, drawnFacing: pose?.facing || e.facing, moving: !projection.value.paused && !reducedMotion.value && Boolean(pose?.moving), distance: pose?.distance || 0 };
 }).sort((a, b) => a.position!.y - b.position!.y));
 const groundItems = computed(() => projection.value.items.filter(i => i.location.kind === 'ground' && i.location.sceneId === scene.value?.sceneId));
+const artContext = computed(() => objectArtContext(props.snapshot));
+const mapObjects = computed(() => [...groundItems.value, ...projection.value.targets.filter(target => target.sceneId === scene.value?.sceneId)]);
+const objectKeys = computed(() => new Set(mapObjects.value.map(object => objectInstanceKey(artContext.value, object))));
+const invalidObjectState = computed(() => mapObjects.value.some(object => objectVisualVariant(object, artContext.value, 'map') === 'invalid'));
+function objectResource(value: { instanceKey: string; failed: boolean }) {
+  const next = new Set(missingObjects.value);
+  if (value.failed && objectKeys.value.has(value.instanceKey)) next.add(value.instanceKey); else next.delete(value.instanceKey);
+  missingObjects.value = next;
+}
+watch(objectKeys, keys => { missingObjects.value = new Set([...missingObjects.value].filter(key => keys.has(key))); });
 const protectedRefs = computed(() => new Set([projection.value.self.entityRef, props.selected, ...(projection.value.chapter?.follows.filter(follow => ['accepted', 'following', 'paused', 'arrived'].includes(follow.status)).map(follow => follow.subjectRef) || [])]));
 const selectedObjects = computed(() => [
   ...projection.value.targets.filter(target => target.entityRef === props.selected && target.sceneId === scene.value?.sceneId).map(target => ({ key: target.entityRef, position: target.position })),
@@ -191,8 +203,8 @@ function keyboard(event: KeyboardEvent) {
       <polygon v-for="(obstacle, index) in scene.obstacles" :key="obstacle.obstacleId" :points="points(obstacle.polygon)" class="spatial-obstacle" :mask="`url(#obstacle-mask-${index})`" />
       </g>
       <polyline v-if="projection.movement && ['accepted', 'moving'].includes(projection.movement.status)" class="spatial-route" :points="points(projection.movement.path)" />
-      <g v-for="target in projection.targets.filter(t => t.sceneId === scene!.sceneId)" :key="target.entityRef" :transform="`translate(${target.position.x} ${target.position.y})`" class="spatial-target" :class="{ selected: selected === target.entityRef }" tabindex="0" role="button" :aria-label="`选择${target.name}`" @click.stop="emit('select', target.entityRef)" @keydown.enter.stop="emit('select', target.entityRef)"><rect x="-13" y="-13" width="26" height="26" rx="4" /><circle class="spatial-hit" :r="hitRadius" /></g>
-      <g v-for="item in groundItems" :key="item.entityRef" :transform="item.location.kind === 'ground' ? `translate(${item.location.position.x} ${item.location.position.y})` : ''" class="spatial-item" :class="{ selected: selected === item.entityRef }" tabindex="0" role="button" :aria-label="`选择${item.name}`" @click.stop="emit('select', item.entityRef)" @keydown.enter.stop="emit('select', item.entityRef)"><path d="M0 -10 L12 0 L0 10 L-12 0 Z" /><circle class="spatial-hit" :r="hitRadius" /></g>
+      <g v-for="target in projection.targets.filter(t => t.sceneId === scene!.sceneId)" :key="objectInstanceKey(artContext, target)" :transform="`translate(${target.position.x} ${target.position.y})`" class="spatial-target" :class="{ selected: selected === target.entityRef }" tabindex="0" role="button" :aria-label="`选择${target.name}`" @click.stop="emit('select', target.entityRef)" @keydown.enter.stop="emit('select', target.entityRef)"><SpatialObjectArt :frame="selectObjectArt(target, artContext, 'map')" :instance-key="objectInstanceKey(artContext, target)" :attempt="artAttempt" @resource="objectResource"><rect x="-13" y="-13" width="26" height="26" rx="4" /></SpatialObjectArt><circle class="spatial-object-selection" r="18" /><circle class="spatial-hit" :r="hitRadius" /></g>
+      <g v-for="item in groundItems" :key="objectInstanceKey(artContext, item)" :transform="item.location.kind === 'ground' ? `translate(${item.location.position.x} ${item.location.position.y})` : ''" class="spatial-item" :class="{ selected: selected === item.entityRef }" tabindex="0" role="button" :aria-label="`选择${item.name}`" @click.stop="emit('select', item.entityRef)" @keydown.enter.stop="emit('select', item.entityRef)"><SpatialObjectArt :frame="selectObjectArt(item, artContext, 'map')" :instance-key="objectInstanceKey(artContext, item)" :attempt="artAttempt" @resource="objectResource"><path d="M0 -10 L12 0 L0 10 L-12 0 Z" /></SpatialObjectArt><circle class="spatial-object-selection" r="18" /><circle class="spatial-hit" :r="hitRadius" /></g>
       <g v-for="person in people" :key="person.entityRef + ':' + person.appearanceEpoch" :transform="`translate(${person.position!.x} ${person.position!.y})`" :data-spatial-self="person.entityRef === projection.self.entityRef ? 'true' : undefined" class="spatial-person" :class="{ self: person.entityRef === projection.self.entityRef, selected: selected === person.entityRef }" tabindex="0" role="button" :aria-label="`${personLabels?.[person.entityRef] || person.name}${person.entityRef === projection.self.entityRef ? '，本人' : ''}`" @click.stop="emit('select', person.entityRef)" @keydown.enter.stop="emit('select', person.entityRef)" @keydown.space.prevent.stop="emit('select', person.entityRef)">
         <ellipse cy="-1" rx="17" ry="6" class="spatial-shadow" />
         <ellipse v-if="person.entityRef === projection.self.entityRef || selected === person.entityRef" cy="-1" rx="24" ry="9" class="spatial-selection-ring" />
@@ -204,6 +216,6 @@ function keyboard(event: KeyboardEvent) {
     <div class="spatial-map-labels"><template v-for="label in labels.labels" :key="label.key"><button v-if="label.selectable" class="spatial-map-label" :class="{ selected: selected === label.key, self: projection.self.entityRef === label.key }" :style="{ left: label.x + 'px', top: label.y + 'px', width: label.width + 'px', height: label.height + 'px' }" :title="label.label" :aria-label="'选择' + label.label" @click.stop="emit('select', label.key)"><span>{{ label.label }}</span></button><span v-else class="spatial-map-label spatial-map-label-anchor" :style="{ left: label.x + 'px', top: label.y + 'px', width: label.width + 'px', height: label.height + 'px' }">{{ label.label }}</span></template></div>
     </div>
     <button v-if="labels.omitted" class="text-button spatial-map-overflow" @click="emit('objects')">另有 {{ labels.omitted }} 个标记，查看对象与地点</button>
-    <p v-if="!immersive || projection.paused || backgroundFailed || missingResources.size" class="spatial-map-note" role="status">{{ projection.paused ? '等待同伴回来，眼下的准备会保留。' : '点地行走，靠近后再看一看。' }}<template v-if="backgroundFailed || missingResources.size"> 部分图像暂未载入，仍可继续操作。<button class="text-button" @click="retryArtwork">重新载入图像</button></template></p>
+    <p v-if="!immersive || projection.paused || backgroundFailed || missingResources.size || missingObjects.size || invalidObjectState" class="spatial-map-note" role="status">{{ projection.paused ? '等待同伴回来，眼下的准备会保留。' : '点地行走，靠近后再看一看。' }}<template v-if="backgroundFailed || missingResources.size || missingObjects.size"> 部分图像暂未载入，仍可继续操作。<button class="text-button" @click="retryArtwork">重新载入图像</button></template><template v-if="invalidObjectState"> 部分物件状态暂无法显示，仍可继续操作。</template></p>
   </section>
 </template>

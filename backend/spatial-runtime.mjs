@@ -12,11 +12,12 @@ import {gaolaoNavigationDependencies,gaolaoNavigationRejection} from '../game/ga
 import {revalidateScenePolicy} from './scene-policy.mjs';
 const digest = value => createHash('sha256').update(canonicalize(value)).digest('hex');
 const hasAppearance = capabilities => capabilities.includes('spatial-appearance-v1');
+const hasObjectVisual = capabilities => capabilities.includes('spatial-object-visual-v1');
 /** 旧 nonce 保留原结果；仅为未协商的新连接移除它不能读取的扩展字段。 */
 function compatibleControlResponse(response, capabilities) {
-    if (hasAppearance(capabilities)) return response;
     const copy = structuredClone(response), projection = copy.snapshot.projection;
-    for (const entity of [projection.self, ...projection.entities]) delete entity.appearanceId;
+    if (!hasAppearance(capabilities)) for (const entity of [projection.self, ...projection.entities]) delete entity.appearanceId;
+    if (!hasObjectVisual(capabilities)) for (const object of [...projection.items, ...projection.targets]) delete object.visualKey;
     return copy;
 }
 export function requireSpatialCapability(capabilities) {
@@ -65,7 +66,7 @@ export function refreshSpatialViews(tx) {
 }
 export async function snapshotSpatial(tx, actorId, { connectionId = null, rotate = false, viewId, principalKind = 'human', binding = null, capabilities = [] } = {}) {
     const view = binding ?? ensureView(tx, actorId, { rotate, ...(viewId ? { viewId } : {}) });
-    return validateSpatial('SnapshotV2', { schemaVersion: 2, type: 'world.snapshot', sessionId: tx.row.session_id, viewId: view.viewId, snapshotSeq: tx.state.sessionSeq, projection: spatialProjection(tx.state, tx.content, actorId, { connectionId, principalKind, view, includeAppearance: hasAppearance(capabilities), highWater: await highWater(tx, tx.state.characters[actorId]) }) });
+    return validateSpatial('SnapshotV2', { schemaVersion: 2, type: 'world.snapshot', sessionId: tx.row.session_id, viewId: view.viewId, snapshotSeq: tx.state.sessionSeq, projection: spatialProjection(tx.state, tx.content, actorId, { connectionId, principalKind, view, includeAppearance: hasAppearance(capabilities), includeObjectVisual: hasObjectVisual(capabilities), highWater: await highWater(tx, tx.state.characters[actorId]) }) });
 }
 export async function recoverSpatial(runtime) {
     const rows = (await runtime.pool.query("SELECT session_id FROM sessions WHERE state->>'protocolCapability'='spatial-v2' AND state->>'phase' IN ('Lobby','Running')")).rows;
@@ -216,7 +217,7 @@ export async function syncSpatial(runtime, handle, request) {
             ?? (await tx.client.query('SELECT through_seq FROM outbox WHERE session_id=$1 AND through_seq>$2 AND through_seq<=$3 ORDER BY through_seq LIMIT 1', [request.sessionId, request.cursor, tx.state.sessionSeq])).rows[0];
         const throughSeq = boundary?.through_seq ?? request.cursor;
         const state = await runtime.stateAt(tx, throughSeq);
-        const events = throughSeq === request.cursor ? [] : [{ sessionSeq: throughSeq, eventId: `${request.sessionId}:E${throughSeq}`, kind: 'projection.replace', payload: { projection: spatialProjection(state, tx.content, user.actorId, { connectionId: handle.connectionId, includeAppearance: hasAppearance(connection.capabilities), ...(view.terminalBinding ? { view: view.terminalBinding } : {}), highWater: await highWater(tx, actor) }) } }];
+        const events = throughSeq === request.cursor ? [] : [{ sessionSeq: throughSeq, eventId: `${request.sessionId}:E${throughSeq}`, kind: 'projection.replace', payload: { projection: spatialProjection(state, tx.content, user.actorId, { connectionId: handle.connectionId, includeAppearance: hasAppearance(connection.capabilities), includeObjectVisual: hasObjectVisual(connection.capabilities), ...(view.terminalBinding ? { view: view.terminalBinding } : {}), highWater: await highWater(tx, actor) }) } }];
         return validateSpatial('BatchV2', { schemaVersion: 2, type: 'world.batch', sessionId: request.sessionId, viewId: request.viewId, fromExclusive: request.cursor, throughSeq, events });
     });
 }

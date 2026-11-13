@@ -1,5 +1,7 @@
 // 由 protocol/scripts/generate-spatial.mjs 从 spatial-schema.mjs 生成；请修改唯一字段源。
-export type SpatialClientCapability = "spatial-v2" | "spatial-appearance-v1";
+export type SpatialClientCapability = "spatial-v2" | "spatial-appearance-v1" | "spatial-object-visual-v1";
+
+export type ObjectVisualKeyV1 = string;
 
 export type AppearanceIdV2 = "neutral" | "gaocai" | "courtyard-helper" | "carpenter" | "kitchen-helper" | "woodcutter" | "tang" | "wukong" | "bajie" | "cuilan" | "gao" | "witness";
 
@@ -67,9 +69,9 @@ export type EntityViewV2 = { "entityRef": EntityRef; "name": string; "appearance
 
 export type SelfViewV2 = { "entityRef": EntityRef; "name": string; "appearanceEpoch": DecimalString; "appearanceId"?: AppearanceIdV2; "sceneId": (Id) | (null); "position": (Position) | (null); "facing": Facing; "controlEpoch": DecimalString; "canControl": boolean; "capabilities": Array<Id>; "movementCommandHighWater": DecimalString; "resourceRevision"?: DecimalString; "availableOperations"?: Array<GaolaoOperationId>; };
 
-export type ItemViewV2 = { "entityRef": EntityRef; "name": string; "location": ({ "kind": "ground"; "sceneId": Id; "position": Position; }) | ({ "kind": "held"; "ownerRef": EntityRef; }); "resourceRevision": DecimalString; "transferable": boolean; "publicBorrowable": boolean; "fields": Array<FactField>; "reclaimHolderEpoch"?: DecimalString; };
+export type ItemViewV2 = { "entityRef": EntityRef; "name": string; "location": ({ "kind": "ground"; "sceneId": Id; "position": Position; }) | ({ "kind": "held"; "ownerRef": EntityRef; }); "resourceRevision": DecimalString; "transferable": boolean; "publicBorrowable": boolean; "fields": Array<FactField>; "reclaimHolderEpoch"?: DecimalString; "visualKey"?: ObjectVisualKeyV1; };
 
-export type TargetViewV2 = { "entityRef": EntityRef; "name": string; "sceneId": Id; "position": Position; "resourceRevision": DecimalString; "availableOperations": Array<Id>; "fields": Array<FactField>; };
+export type TargetViewV2 = { "entityRef": EntityRef; "name": string; "sceneId": Id; "position": Position; "resourceRevision": DecimalString; "availableOperations": Array<Id>; "fields": Array<FactField>; "visualKey"?: ObjectVisualKeyV1; };
 
 export type PlanViewV2 = { "movementId": EntityRef; "planVersion": DecimalString; "movementCommandSeq": DecimalString; "sceneId": Id; "mapVersion": Id; "goal": Position; "path": Array<Position>; "acceptedAtSceneTime": number; "status": "accepted" | "moving" | "arrived" | "blocked" | "cancelled"; "reason"?: string; };
 

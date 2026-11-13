@@ -28,7 +28,8 @@ const gaolaoInteractions = [
     chapterInteraction(['gz-request-private-items'], object({ itemRefs: { ...refs, minItems: 1, maxItems: 8, uniqueItems: true }, expectedConsentVersion: revision })),
 ];
 const defs = {
-  SpatialClientCapability: en('spatial-v2', 'spatial-appearance-v1'),
+  SpatialClientCapability: en('spatial-v2', 'spatial-appearance-v1', 'spatial-object-visual-v1'),
+  ObjectVisualKeyV1: { type: 'string', minLength: 1, maxLength: 64, pattern: '^[a-z][a-z0-9-]{0,63}(?![\\s\\S])' },
   AppearanceIdV2: en('neutral', 'gaocai', 'courtyard-helper', 'carpenter', 'kitchen-helper', 'woodcutter', 'tang', 'wukong', 'bajie', 'cuilan', 'gao', 'witness'),
   GaolaoInteractionV2: { oneOf: gaolaoInteractions },
   Id: contractSchema.$defs.Id,
@@ -89,8 +90,8 @@ const defs = {
   ReceiptV2: object({ schemaVersion: lit(2), sessionId: ref('Id'), clientActionId: ref('Id'), status: en('Accepted', 'Rejected'), code: ref('Id'), observedSeq: revision, actionEventRange: nullable(ref('EventRange')), result: ref('ReceiptResultV2') }),
   EntityViewV2: object({ entityRef: entity, name: text(120), appearanceEpoch: revision, appearanceId: ref('AppearanceIdV2'), sceneId: nullable(ref('Id')), position: nullable(point), facing: ref('Facing'), motionTrail: array(point,4096), motionFromSceneTimeMs: integer(), motionThroughSceneTimeMs: integer(), resourceRevision: revision, availableOperations: array(ref('GaolaoOperationId')) }, ['appearanceId','motionTrail','motionFromSceneTimeMs','motionThroughSceneTimeMs','resourceRevision','availableOperations']),
   SelfViewV2: object({ entityRef: entity, name: text(120), appearanceEpoch: revision, appearanceId: ref('AppearanceIdV2'), sceneId: nullable(ref('Id')), position: nullable(point), facing: ref('Facing'), controlEpoch: revision, canControl: { type: 'boolean' }, capabilities: ids, movementCommandHighWater: revision, resourceRevision: revision, availableOperations: array(ref('GaolaoOperationId')) }, ['appearanceId', 'resourceRevision', 'availableOperations']),
-  ItemViewV2: object({ entityRef: entity, name: text(120), location: { oneOf: [object({ kind: lit('ground'), sceneId: ref('Id'), position: point }), object({ kind: lit('held'), ownerRef: entity })] }, resourceRevision: revision, transferable: { type: 'boolean' }, publicBorrowable: { type: 'boolean' }, fields: fieldList, reclaimHolderEpoch: revision }, ['reclaimHolderEpoch']),
-  TargetViewV2: object({ entityRef: entity, name: text(120), sceneId: ref('Id'), position: point, resourceRevision: revision, availableOperations: ids, fields: fieldList }),
+  ItemViewV2: object({ entityRef: entity, name: text(120), location: { oneOf: [object({ kind: lit('ground'), sceneId: ref('Id'), position: point }), object({ kind: lit('held'), ownerRef: entity })] }, resourceRevision: revision, transferable: { type: 'boolean' }, publicBorrowable: { type: 'boolean' }, fields: fieldList, reclaimHolderEpoch: revision, visualKey: ref('ObjectVisualKeyV1') }, ['reclaimHolderEpoch', 'visualKey']),
+  TargetViewV2: object({ entityRef: entity, name: text(120), sceneId: ref('Id'), position: point, resourceRevision: revision, availableOperations: ids, fields: fieldList, visualKey: ref('ObjectVisualKeyV1') }, ['visualKey']),
   PlanViewV2: object({ movementId: entity, planVersion: revision, movementCommandSeq: revision, sceneId: ref('Id'), mapVersion: ref('Id'), goal: point, path: array(point, 4096), acceptedAtSceneTime: integer(), status: en('accepted', 'moving', 'arrived', 'blocked', 'cancelled'), reason: text(120) }, ['reason']),
   EvidenceSourceViewV2: object({ sourceRef: entity, kind: en('archive', 'testimony', 'material', 'comparison', 'decision', 'arrangement', 'contact'), label: text(240), beforeArrivalDays: integer(36500), receivedSeq: revision }),
   ObservationViewV2: object({ observationRef: entity, category: en('WorldFact', 'Evidence', 'Claim'), statement: text(2000), sourceSeq: revision, fields: fieldList, shareable: { type: 'boolean' }, source: ref('EvidenceSourceViewV2') }, ['source']),
