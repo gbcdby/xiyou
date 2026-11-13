@@ -7,6 +7,7 @@ export type ObjectArtContext = { sessionId: string; viewId: string; contentVersi
 export type ObjectArtAsset = { file: string; width: number; height: number; pivot: { x: number; y: number }; scale: number; layer: 'object'; offset?: { x: number; y: number } };
 export type ObjectArtCatalog = Readonly<Record<string, { contentVersion: string; mapVersion: string; sceneId: string; variants: Partial<Record<ObjectArtVariant, ObjectArtAsset>> }>>;
 export type ObjectArtFrame = { file: string; variant: ObjectArtVariant; layer: 'object'; bounds: { x: number; y: number; width: number; height: number } };
+export type ObjectArtResourceState = { instanceKey: string; requestKey: string; ready: boolean; failed: boolean };
 type PublicObject = ItemViewV2 | TargetViewV2;
 
 /** 已释放目录目前为空；缺正式资源时保留原图形与操作。 */
@@ -15,6 +16,11 @@ export function objectArtContext(snapshot: SnapshotV2): ObjectArtContext {
   return { sessionId: snapshot.sessionId, viewId: snapshot.viewId, contentVersion: snapshot.projection.contentVersion, mapVersion: snapshot.projection.mapVersion, sceneId: snapshot.projection.scene?.sceneId ?? null };
 }
 export const objectInstanceKey = (context: ObjectArtContext, object: PublicObject) => JSON.stringify([context.sessionId, context.viewId, object.entityRef]);
+/** 同一ref换图或重试也必须撤销旧几何；未失败不等于已经画出图片。 */
+export const objectArtRequestKey = (instanceKey: string, frame: ObjectArtFrame | null, attempt: number) => JSON.stringify([instanceKey, frame, attempt]);
+export function readyObjectArtFrame(frame: ObjectArtFrame | null, instanceKey: string, attempt: number, state?: ObjectArtResourceState | null): ObjectArtFrame | null {
+  return frame && state?.ready && !state.failed && state.instanceKey === instanceKey && state.requestKey === objectArtRequestKey(instanceKey, frame, attempt) ? frame : null;
+}
 /** 承力点的锁定值是已提交的协作历史，当前装配仍只看各物件 fixed。 */
 export function objectDisplayFields(object: PublicObject) {
   return !('location' in object) && object.visualKey === 'support-point'

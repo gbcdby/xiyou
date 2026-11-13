@@ -1,8 +1,10 @@
 .spatial-scene-art, .spatial-actor-art image { pointer-events: none; }
 .spatial-map .spatial-person .spatial-actor-body-hit { fill: transparent; stroke: none; pointer-events: fill; }
 .spatial-map .spatial-person .spatial-hit, .spatial-map .spatial-target .spatial-hit, .spatial-map .spatial-item .spatial-hit { fill: transparent; stroke: transparent; stroke-width: 0; }
-.spatial-map .spatial-person .spatial-selection-ring { fill: #fff7e43d; stroke: #365e52; stroke-width: 2; }
-.spatial-map .spatial-person.selected .spatial-selection-ring, .spatial-map .spatial-person:focus-visible .spatial-selection-ring { stroke: #963f2f; stroke-width: 3; }
+.spatial-map .spatial-person .spatial-selection-ring, .spatial-map .spatial-layer-feedback .spatial-selection-ring { fill: #fff7e43d; stroke: #365e52; stroke-width: 2; }
+.spatial-map .spatial-person.selected .spatial-selection-ring, .spatial-map .spatial-person:focus-visible .spatial-selection-ring,
+.spatial-map .spatial-layer-feedback .spatial-selection-ring.selected,
+.spatial-map:has(.spatial-person.self:focus-visible) .spatial-layer-feedback .spatial-selection-ring.self { stroke: #963f2f; stroke-width: 3; }
 .spatial-map .spatial-person:focus-visible .spatial-hit { stroke: #264f50; stroke-width: 2; }
 .spatial-actor-fallback { fill: #a99e84; stroke: #675e4e; stroke-width: 1.2; pointer-events: visiblePainted; }
 .spatial-person.self .spatial-actor-fallback { fill: #7b9283; stroke: #365e52; }

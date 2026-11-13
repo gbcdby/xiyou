@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { objectArtCatalog, objectDisplayFields, objectInstanceKey, objectVisualVariant, selectObjectArt } from '../src/domain/gaolao-object-art.ts';
+import { objectArtCatalog, objectDisplayFields, objectInstanceKey, objectVisualVariant, selectObjectArt, objectArtRequestKey, readyObjectArtFrame } from '../src/domain/gaolao-object-art.ts';
 
 const context = { sessionId: 'fixture-session', viewId: 'fixture-view', contentVersion: 'gaolaozhuang-scene-v2', mapVersion: 'fixture-map', sceneId: 'yard' };
 const ref = letter => 'R' + letter.repeat(32);
@@ -70,4 +70,20 @@ test('几何倍率只施一次，局部偏移不改原权威位置；两ref/新v
   assert.notEqual(objectInstanceKey(context, item), objectInstanceKey(context, { ...item, entityRef: ref('b') }));
   assert.notEqual(objectInstanceKey(context, item), objectInstanceKey({ ...context, viewId: 'new-view' }, item));
   assert.notEqual(objectInstanceKey(context, item), objectInstanceKey({ ...context, sessionId: 'new-session' }, item));
+});
+
+test('图像保护只接受同一实例与本次请求的真实ready，未失败和取消不等于显示', () => {
+  const frame = selectObjectArt(item, context, 'map', catalog), instanceKey = objectInstanceKey(context, item);
+  const state = { instanceKey, requestKey: objectArtRequestKey(instanceKey, frame, 0), ready: true, failed: false };
+  assert.equal(readyObjectArtFrame(frame, instanceKey, 0, state), frame);
+  for (const candidate of [undefined, { ...state, ready: false }, { ...state, failed: true }, { ...state, instanceKey: 'old-instance' }]) assert.equal(readyObjectArtFrame(frame, instanceKey, 0, candidate), null);
+  assert.equal(readyObjectArtFrame(null, instanceKey, 0, state), null);
+  assert.equal(readyObjectArtFrame(frame, instanceKey, 1, state), null, '重试不能继承旧ready');
+  assert.equal(readyObjectArtFrame(frame, objectInstanceKey({ ...context, viewId: 'next-view' }, item), 0, state), null);
+});
+
+test('同ref换源、变体或偏移后，旧图像完成不能提供新几何', () => {
+  const frame = selectObjectArt(item, context, 'map', catalog), instanceKey = objectInstanceKey(context, item);
+  const state = { instanceKey, requestKey: objectArtRequestKey(instanceKey, frame, 0), ready: true, failed: false };
+  for (const next of [{ ...frame, file: '/tests/other.svg' }, { ...frame, variant: 'fixed' }, { ...frame, bounds: { ...frame.bounds, y: -100 } }]) assert.equal(readyObjectArtFrame(next, instanceKey, 0, state), null);
 });

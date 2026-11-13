@@ -83,6 +83,27 @@ export function hudCameraAlternatives(viewport: ScreenSize, scene: ScreenSize, p
   return candidates;
 }
 
+/** 全图始终容纳整个世界；只有当前图像被固定HUD遮挡时，调用方才评估这些等比留白候选。 */
+export function fullMapHudAlternatives(viewport: ScreenSize, scene: ScreenSize, reserved: ScreenRect[]): ScreenRect[] {
+  if (viewport.width <= 0 || viewport.height <= 0 || scene.width <= 0 || scene.height <= 0) return [];
+  const areas: ScreenRect[] = [];
+  for (const rect of reserved) {
+    const left = clamp(rect.x - 16, 0, viewport.width), right = clamp(rect.x + rect.width + 16, 0, viewport.width);
+    const top = clamp(rect.y - 16, 0, viewport.height), bottom = clamp(rect.y + rect.height + 16, 0, viewport.height);
+    areas.push({ x: 0, y: 0, width: left, height: viewport.height }, { x: right, y: 0, width: viewport.width - right, height: viewport.height },
+      { x: 0, y: 0, width: viewport.width, height: top }, { x: 0, y: bottom, width: viewport.width, height: viewport.height - bottom });
+  }
+  const unique = new Map<string, ScreenRect>();
+  for (const area of areas) {
+    if (area.width <= 0 || area.height <= 0) continue;
+    const scale = Math.min(area.width / scene.width, area.height / scene.height);
+    const origin = { x: area.x + (area.width - scene.width * scale) / 2, y: area.y + (area.height - scene.height * scale) / 2 };
+    const view = { x: -origin.x / scale, y: -origin.y / scale, width: viewport.width / scale, height: viewport.height / scale };
+    unique.set(JSON.stringify(view), view);
+  }
+  return [...unique.values()].sort((a, b) => a.width - b.width);
+}
+
 /** 地图边界是硬约束；浮卡的理想空域无解时由卡片换边/收短，不能用图外底色腾空。 */
 export function cameraForHud({ viewport, scene, safeArea, positions }: { viewport: ScreenSize; scene: ScreenSize; safeArea: HudCameraArea; positions: Position[] }): ScreenRect {
   if (!positions.length || viewport.width <= 0 || viewport.height <= 0) return { x: 0, y: 0, ...scene };
