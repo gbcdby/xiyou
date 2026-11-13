@@ -154,6 +154,7 @@ test('A2 用途参数与结束轮在未知确认、恢复换视图后逐字重�
   const actions = [
     { kind: 'interact', operationId: 'gz-request-private-items', targetRef: reference('p'), expectedTargetRevision: '13', parameters: { itemRefs: [reference('i'), reference('j')], expectedConsentVersion: '7' } },
     { kind: 'propose_follow', subjectRef: reference('p'), leaderRef: reference('s'), destinationId: 'safe-yard', expectedConsentVersion: '8' },
+    { kind: 'propose_follow', subjectRef: reference('p'), leaderRef: reference('s'), destinationId: 'safe-yard', expectedTargetRevision: '13' },
     { kind: 'confirm_end', proposalId: 'precise-round', proposalVersion: '9' },
   ];
   for (const action of actions) { h.actionReplies.push(async () => { throw new Error('A2 确认丢失'); }); await h.client.send(action); }

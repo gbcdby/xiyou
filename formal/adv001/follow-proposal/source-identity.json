@@ -1,0 +1,66 @@
+{
+  "head": "6b71dff96439553b336dd523b2126b7c51f6fa83",
+  "tree": "8ed5516ea77f1b299ac2482aa2b24cfa4bdd385e",
+  "implementationHead": "6bc7f6200b7b7168127db2b598946e5b57c61684",
+  "implementationTree": "c566318db25038764fe86b6f3ded8a73edecfdd1",
+  "finalDelta": "仅 protocol/gaolao-v2.md +3/-1，业务/schema/tests字节相同",
+  "status": "只读语义映射；非refinement证明",
+  "files": [
+    {
+      "path": "docs/specs/adv-protocol.md",
+      "sha256": "4a57faffdc8a532c8129e459b1540b930b414f33798d375388f68458ca829a27"
+    },
+    {
+      "path": "docs/specs/gaolao-scene-policy.md",
+      "sha256": "4265df7d63adededeabca5ef6ce93ecf6c8ebeddbd4803b269121e0467b8c17a"
+    },
+    {
+      "path": "protocol/gaolao-v2.md",
+      "sha256": "855c9627a67fc6bdd5761202be1994db95981eaae83a7d52a514fee29eb3cbd8"
+    },
+    {
+      "path": "protocol/spatial-schema.mjs",
+      "sha256": "5ce3c6dc0d10b203131c9466256980df7f01b1582e26f6e05f46c88f31205707"
+    },
+    {
+      "path": "protocol/spatial.schema.json",
+      "sha256": "7c3eca6ac04ec7ed3b41649dcae101835fa49e0b452c4ae3f5568bc0881d7001"
+    },
+    {
+      "path": "game/spatial-types.ts",
+      "sha256": "ed8edc143077c166d96a003b1ae1f5d25a5ee65a65ecefac3ae487dfaef2cb68"
+    },
+    {
+      "path": "game/gaolao-rules.mjs",
+      "sha256": "d231834ef4c5088be5d713eaa24da79da337c402940133089353008eebda501a"
+    },
+    {
+      "path": "game/gaolao-world.mjs",
+      "sha256": "9a56da223eabf2fa75cede508c6120897eeb4ba2fb95aaf24eaa0fb21ef6c712"
+    },
+    {
+      "path": "game/spatial-world.mjs",
+      "sha256": "64d3525eb9532bbf4008e84876190968b917489893d5d233ea7ad1a913130368"
+    },
+    {
+      "path": "game/spatial-rules.mjs",
+      "sha256": "99b540a7442817ff4b97ff6497b84b984c5f5f6b39b0df52a2df0380aa73203e"
+    },
+    {
+      "path": "backend/runtime.mjs",
+      "sha256": "110444dddaff072e6e67c316d7c81a621ada64419739ba705fda4ca549a8d22f"
+    },
+    {
+      "path": "backend/spatial-runtime.mjs",
+      "sha256": "fd1619eca6e232c9a796af2f52cb49a3cc486ccc9cf47a9b7c9ec885b59981ce"
+    },
+    {
+      "path": "frontend/src/domain/gaolao-actions.ts",
+      "sha256": "17335478cbd12593482389fa2022e51a043b7b11b6a18f69ba6874d44ebf50bc"
+    },
+    {
+      "path": "backend/tests/gaolao-follow-proposal.test.mjs",
+      "sha256": "5b320002d49a702bb438be49a5e867ce3ae5ee4eac538264e70b09eae2d55062"
+    }
+  ]
+}

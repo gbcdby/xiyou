@@ -139,7 +139,7 @@ respond_consent/withdraw_consent 没有 reason 参数；可观察理由通过已
 
 ### 4.3 提议、预留、提交的不可变依据
 
-**新增内部绑定 N5：** 当前 public propose_follow 参数不变。规则按目的地、本人当前段和固定内容，给这一个 follow 形成私有 policyRoute：policyVersion、routeSpecId/revision、mapVersion、有限 itinerary/当前段（含第 3.2 节起点分类及 C13 退出段状态）、所需来源身份与摘要。参与者看到对应公开摘要。接受不得在提交时悄悄把旧提议重新解释成另一条路线；前院支线新提议不得直接抄用旧 plan 的起点或出口完成状态。
+**新增内部绑定 N5：** 本内部绑定不增加客户端可自报的路线/同意字段。SP06 新领路者提议按 [ADV 协议第 6 节](adv-protocol.md#6-同意随行与安置) 复用合法可见人物 `expectedTargetRevision`，兼容原 `expectedConsentVersion` 形态；只调整公开并发依据，不改变本节 policyRoute 与路线语义。规则按目的地、本人当前段和固定内容，给这一个 follow 形成私有 policyRoute：policyVersion、routeSpecId/revision、mapVersion、有限 itinerary/当前段（含第 3.2 节起点分类及 C13 退出段状态）、所需来源身份与摘要。参与者看到对应公开摘要。接受不得在提交时悄悄把旧提议重新解释成另一条路线；前院支线新提议不得直接抄用旧 plan 的起点或出口完成状态。
 
 一次有效本人回应仍按原规则提升 consentVersion/planVersion；同一提交把 follow 的路线授权关联到**该回应实际产生的**版本与原 Receipt，而不是永久拿 proposed 的旧版本比较 accepted。原 spatial_intents 请求及其准备 basis 保持不可变。只有这次合法状态转换可以建立新的执行关联；随后改约、撤回、暂停或控制变化不能借“更新关联”续用旧许可。
 

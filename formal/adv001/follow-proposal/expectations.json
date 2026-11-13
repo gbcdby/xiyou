@@ -1,0 +1,325 @@
+{
+  "positive-public": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "PublicProposalAvailable",
+      "VersionFenced",
+      "RevisionAccounting",
+      "SingleBaselineCommit",
+      "AtMostOnce",
+      "ReceiptStable",
+      "NonceDigestBound",
+      "ReceiptOwnerScoped",
+      "ScopeAuthorized",
+      "SchemaExclusive",
+      "ConsentPrivate",
+      "ProposalOnly"
+    ],
+    "properties": [],
+    "target": null,
+    "minimum_distinct_states": 2,
+    "purpose": "safety"
+  },
+  "positive-mixed": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "PublicProposalAvailable",
+      "VersionFenced",
+      "RevisionAccounting",
+      "SingleBaselineCommit",
+      "AtMostOnce",
+      "ReceiptStable",
+      "NonceDigestBound",
+      "ReceiptOwnerScoped",
+      "ScopeAuthorized",
+      "SchemaExclusive",
+      "ConsentPrivate",
+      "ProposalOnly"
+    ],
+    "properties": [],
+    "target": null,
+    "minimum_distinct_states": 2,
+    "purpose": "safety"
+  },
+  "positive-identity-public": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "PublicProposalAvailable",
+      "VersionFenced",
+      "RevisionAccounting",
+      "SingleBaselineCommit",
+      "AtMostOnce",
+      "ReceiptStable",
+      "NonceDigestBound",
+      "ReceiptOwnerScoped",
+      "ScopeAuthorized",
+      "SchemaExclusive",
+      "ConsentPrivate",
+      "ProposalOnly"
+    ],
+    "properties": [],
+    "target": null,
+    "minimum_distinct_states": 2,
+    "purpose": "safety"
+  },
+  "positive-identity-legacy": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "PublicProposalAvailable",
+      "VersionFenced",
+      "RevisionAccounting",
+      "SingleBaselineCommit",
+      "AtMostOnce",
+      "ReceiptStable",
+      "NonceDigestBound",
+      "ReceiptOwnerScoped",
+      "ScopeAuthorized",
+      "SchemaExclusive",
+      "ConsentPrivate",
+      "ProposalOnly"
+    ],
+    "properties": [],
+    "target": null,
+    "minimum_distinct_states": 2,
+    "purpose": "safety"
+  },
+  "negative-type": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "TypeOK"
+    ],
+    "properties": [],
+    "target": "TypeOK",
+    "minimum_distinct_states": null,
+    "purpose": "sensitivity"
+  },
+  "negative-unavailable": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "PublicProposalAvailable"
+    ],
+    "properties": [],
+    "target": "PublicProposalAvailable",
+    "minimum_distinct_states": null,
+    "purpose": "sensitivity"
+  },
+  "negative-public-stale": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "VersionFenced"
+    ],
+    "properties": [],
+    "target": "VersionFenced",
+    "minimum_distinct_states": null,
+    "purpose": "sensitivity"
+  },
+  "negative-legacy-stale": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "VersionFenced"
+    ],
+    "properties": [],
+    "target": "VersionFenced",
+    "minimum_distinct_states": null,
+    "purpose": "sensitivity"
+  },
+  "negative-public-race": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "SingleBaselineCommit"
+    ],
+    "properties": [],
+    "target": "SingleBaselineCommit",
+    "minimum_distinct_states": null,
+    "purpose": "sensitivity"
+  },
+  "negative-mixed-race": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "SingleBaselineCommit"
+    ],
+    "properties": [],
+    "target": "SingleBaselineCommit",
+    "minimum_distinct_states": null,
+    "purpose": "sensitivity"
+  },
+  "negative-move-revision": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "RevisionAccounting"
+    ],
+    "properties": [],
+    "target": "RevisionAccounting",
+    "minimum_distinct_states": null,
+    "purpose": "sensitivity"
+  },
+  "negative-duplicate": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "AtMostOnce"
+    ],
+    "properties": [],
+    "target": "AtMostOnce",
+    "minimum_distinct_states": null,
+    "purpose": "sensitivity"
+  },
+  "negative-receipt-order": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ReceiptStable"
+    ],
+    "properties": [],
+    "target": "ReceiptStable",
+    "minimum_distinct_states": null,
+    "purpose": "sensitivity"
+  },
+  "negative-digest": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NonceDigestBound"
+    ],
+    "properties": [],
+    "target": "NonceDigestBound",
+    "minimum_distinct_states": null,
+    "purpose": "sensitivity"
+  },
+  "negative-owner": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ReceiptOwnerScoped"
+    ],
+    "properties": [],
+    "target": "ReceiptOwnerScoped",
+    "minimum_distinct_states": null,
+    "purpose": "sensitivity"
+  },
+  "negative-scope": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ScopeAuthorized"
+    ],
+    "properties": [],
+    "target": "ScopeAuthorized",
+    "minimum_distinct_states": null,
+    "purpose": "sensitivity"
+  },
+  "negative-schema": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "SchemaExclusive"
+    ],
+    "properties": [],
+    "target": "SchemaExclusive",
+    "minimum_distinct_states": null,
+    "purpose": "sensitivity"
+  },
+  "negative-privacy": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ConsentPrivate"
+    ],
+    "properties": [],
+    "target": "ConsentPrivate",
+    "minimum_distinct_states": null,
+    "purpose": "sensitivity"
+  },
+  "negative-auto-accept": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ProposalOnly"
+    ],
+    "properties": [],
+    "target": "ProposalOnly",
+    "minimum_distinct_states": null,
+    "purpose": "sensitivity"
+  },
+  "witness-new-leader": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoNewLeaderWitness"
+    ],
+    "properties": [],
+    "target": "NoNewLeaderWitness",
+    "minimum_distinct_states": null,
+    "purpose": "reachability"
+  },
+  "witness-public-competition": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoCompetitionWitness"
+    ],
+    "properties": [],
+    "target": "NoCompetitionWitness",
+    "minimum_distinct_states": null,
+    "purpose": "reachability"
+  },
+  "witness-mixed-competition": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoCompetitionWitness"
+    ],
+    "properties": [],
+    "target": "NoCompetitionWitness",
+    "minimum_distinct_states": null,
+    "purpose": "reachability"
+  },
+  "witness-replay-old-control": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoReplayAfterRotateWitness"
+    ],
+    "properties": [],
+    "target": "NoReplayAfterRotateWitness",
+    "minimum_distinct_states": null,
+    "purpose": "reachability"
+  },
+  "witness-unknown-replay": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoUnknownReplayWitness"
+    ],
+    "properties": [],
+    "target": "NoUnknownReplayWitness",
+    "minimum_distinct_states": null,
+    "purpose": "reachability"
+  },
+  "witness-movement": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoMovementWitness"
+    ],
+    "properties": [],
+    "target": "NoMovementWitness",
+    "minimum_distinct_states": null,
+    "purpose": "reachability"
+  }
+}

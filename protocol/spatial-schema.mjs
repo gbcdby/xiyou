@@ -55,6 +55,7 @@ const defs = {
     action('cooperate', { operationId: ref('Id'), operationVersion: revision, phase: en('prepare', 'ready', 'cancel') }),
     ...['speak', 'make_claim'].map(kind => action(kind, { text: { ...text(2000), minLength: 1 }, channel: en('public', 'directed', 'team'), recipientRefs: refs })),
     action('share_evidence', { evidenceRef: entity, recipientRefs: { ...refs, minItems: 1 } }),
+    action('propose_follow', { subjectRef: entity, destinationId: ref('Id'), leaderRef: entity, expectedTargetRevision: revision }),
     action('propose_follow', { subjectRef: entity, destinationId: ref('Id'), leaderRef: entity, expectedConsentVersion: revision }),
     action('respond_consent', { consentId: entity, expectedConsentVersion: revision, response: en('accept', 'decline', 'defer') }),
     action('withdraw_consent', { consentId: entity, expectedConsentVersion: revision }),

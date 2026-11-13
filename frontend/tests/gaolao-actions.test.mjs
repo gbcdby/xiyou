@@ -77,11 +77,15 @@ test('有限人物操作只使用当前可用入口和原目标版本；NPC 本�
   for (const args of [[null, 'gz-contact', true], [{ ...door, resourceRevision: undefined }, 'gz-contact', true], [door, 'gz-contact', false], [door, 'gz-check-seal', true]]) assert.equal(simpleGaolaoAction(...args), null);
 });
 
-test('随行改约保留当前许可版本，只接受当前可见主体、带路者与该用途地点', async () => {
+test('随行改约使用当前可见人物版本，不要求新领路者读取旧许可', async () => {
   const { proposeFollow } = await import('../src/domain/gaolao-actions.ts');
   const p = projection(); p.chapter.consents = [consent('c', 'follow', '4'), { ...consent('d', 'follow', '5'), status: 'withdrawn' }];
   const action = proposeFollow(p, ref('p'), ref('s'), 'safe-yard', true);
-  assert.deepEqual(action, { kind: 'propose_follow', subjectRef: ref('p'), leaderRef: ref('s'), destinationId: 'safe-yard', expectedConsentVersion: '5' });
+  assert.deepEqual(action, { kind: 'propose_follow', subjectRef: ref('p'), leaderRef: ref('s'), destinationId: 'safe-yard', expectedTargetRevision: '21' });
+  p.chapter.consents = [];
+  assert.deepEqual(proposeFollow(p, ref('p'), ref('s'), 'safe-yard', true), action, '自己的旧许可为空不改变合法提议依据');
+  const noRevision = structuredClone(p); delete noRevision.entities[1].resourceRevision;
+  assert.equal(proposeFollow(noRevision, ref('p'), ref('s'), 'safe-yard', true), null, '缺少公开人物版本不能改用私有版本0');
   for (const args of [[p, ref('p'), ref('s'), 'safe-yard', false], [p, ref('s'), ref('s'), 'safe-yard', true], [p, ref('p'), ref('x'), 'safe-yard', true], [p, ref('p'), ref('s'), 'meeting-yard', true]]) assert.equal(proposeFollow(...args), null);
   const hidden = structuredClone(p); hidden.entities[1].position = null;
   assert.equal(proposeFollow(hidden, ref('p'), ref('s'), 'safe-yard', true), null);

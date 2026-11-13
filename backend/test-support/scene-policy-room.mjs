@@ -16,8 +16,8 @@ async function decorate(r,server,network){
   r.drain=async()=>until(()=>{const s=r.sceneStatus();return s&&s.phase==='Idle'&&!s.bootstrap&&s.pendingSemanticSeq==='0';},'场景控制器必须收束当前待办：'+JSON.stringify(r.sceneStatus()),6000);
   const step=r.step;r.step=async(...args)=>{await step(...args);await r.drain();};
   r.propose=async(destinationId,leader=0,{wait=true}={})=>{
-    const s=await r.snapshot(leader),c=await r.entity(leader,'翠兰'),own=await r.snapshot('cuilan'),latest=own.projection.chapter.consents.filter(c=>c.purpose==='follow').at(-1);
-    accepted(await r.send(leader,{kind:'propose_follow',subjectRef:c.entityRef,leaderRef:s.projection.self.entityRef,destinationId,expectedConsentVersion:latest?.version??'0'}));
+    const s=await r.snapshot(leader),c=await r.entity(leader,'翠兰');
+    accepted(await r.send(leader,{kind:'propose_follow',subjectRef:c.entityRef,leaderRef:s.projection.self.entityRef,destinationId,expectedTargetRevision:c.resourceRevision}));
     if(wait)await r.drain();return (await r.snapshot('cuilan')).projection.chapter.consents.filter(c=>c.purpose==='follow').at(-1);
   };
   r.state=()=>server.runtime.replay(r.sessionId);r.network=network;await r.drain();return r;

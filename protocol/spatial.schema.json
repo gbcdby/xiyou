@@ -789,6 +789,34 @@
             "leaderRef": {
               "$ref": "#/$defs/EntityRef"
             },
+            "expectedTargetRevision": {
+              "$ref": "#/$defs/DecimalString"
+            }
+          },
+          "required": [
+            "kind",
+            "subjectRef",
+            "destinationId",
+            "leaderRef",
+            "expectedTargetRevision"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "propose_follow"
+            },
+            "subjectRef": {
+              "$ref": "#/$defs/EntityRef"
+            },
+            "destinationId": {
+              "$ref": "#/$defs/Id"
+            },
+            "leaderRef": {
+              "$ref": "#/$defs/EntityRef"
+            },
             "expectedConsentVersion": {
               "$ref": "#/$defs/DecimalString"
             }
