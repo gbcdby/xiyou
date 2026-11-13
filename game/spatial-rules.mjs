@@ -1,6 +1,6 @@
 import { RuleError } from './rules.mjs';
 import { opaqueRef, next, sceneOf, obstacleEnabled, conditionMet, locationOf, inRange, unoccluded, canSee, ensureView, entityRef, resolveRef } from './spatial-world.mjs';
-import { findPath, walkable, clearSegment, pointAlongPath, distance, visibleSegment } from './spatial-geometry.mjs';
+import { findPath, walkable, clearSegment, pointAlongPath, facingAlongPath, distance, visibleSegment } from './spatial-geometry.mjs';
 import { isGaolao, observerName, copyGaolaoEvidence } from './gaolao-world.mjs';
 import { applyGaolaoAction,checkGaolaoMovement,checkGaolaoItem } from './gaolao-rules.mjs';
 import {gaolaoNavigationRejection} from './gaolao-navigation.mjs';
@@ -42,6 +42,7 @@ export function advanceSpatialPositions(tx, sceneTimeMs) {
             continue;
         }
         if (distance(a.position, nextPoint.position) > 0) {
+            a.facing = facingAlongPath(segments, a.facing);
             a.position = nextPoint.position;
             a.spatialRevision = next(a.spatialRevision);
         }
