@@ -1,0 +1,18 @@
+{
+  "format_version": 1,
+  "kind": "text-only review checkpoint, not runnable product candidate",
+  "source_commit": "7f7650287ada0c24c70c71bb5788d41b7698bac8",
+  "source_tree": "a4e8074ed4a47b2e2938eece3c5b7b6ae5d875fa",
+  "base_main": "818ae314bf77ee3c4881ef39ceca7b601c4aeda1",
+  "target_path": "frontend/tests/gaolao-hud-action-browser.mjs",
+  "git_blob": "ff803bec645cdb4c6f1db1b446e9ff45876259c8",
+  "bytes": 17979,
+  "sha256": "73500375578a1a242bdc69493b7235cc5a2b882296c4b120b326288dcca0fc15",
+  "patch_sha256": "8052d684645e6437b9cc2dff6500a79a8256c3a451861cafb4d51cd7f126252e",
+  "dependencies": {
+    "HUD": "PR48 twelve-file candidate from same frozen source",
+    "Cuilan_text_checkpoint": "https://github.com/gbcdby/xiyou/tree/205042faac15750eef66aed95f8e1ad5db085e9a/review-checkpoint/cuilan-v2-9194",
+    "runtime_PNG": "45 unique runtime PNGs in the separate private review deliverable; no image payload or private location included here"
+  },
+  "public_execution": "NOT_RUN; apply only in an authorized complete local composition; not an active frontend test entry"
+}

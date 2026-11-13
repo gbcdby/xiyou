@@ -1,0 +1,178 @@
+diff --git a/frontend/tests/gaolao-hud-action-browser.mjs b/frontend/tests/gaolao-hud-action-browser.mjs
+new file mode 100644
+index 0000000000000000000000000000000000000000..ff803bec645cdb4c6f1db1b446e9ff45876259c8
+--- /dev/null
++++ b/frontend/tests/gaolao-hud-action-browser.mjs
+@@ -0,0 +1,172 @@
++import assert from 'node:assert/strict';
++import { mkdir, readFile } from 'node:fs/promises';
++import { resolve } from 'node:path';
++import { createServer as createVite } from 'vite';
++import { chromium } from 'playwright';
++import { startTestPostgres } from '../../backend/test-support/postgres.mjs';
++import { createAuthorityServer } from '../../backend/server.mjs';
++import { rescue } from '../../backend/test-support/gaolao-room.mjs';
++import { repository, sourceIdentity, saveJSON, sha256, until } from './network-support.mjs';
++import { browserRoom, snapshot, clientState, closeReading, selectObject } from './gaolao-real-support.mjs';
++import { alphaPoint, settledArt, movePlayer } from './cuilan-runtime-support.mjs';
++
++const output = resolve(process.env.FRONTEND_EVIDENCE_DIR || '.agent-output/hud-std002/action');
++await mkdir(output, { recursive: true });
++const report = { scope: 'R-33-HUD-STD-002作者定向自查；真实PG/HTTP/Socket/Vue两账号，玩家仅可见UI，NPC仅正式受信策略；不是独立复审或真实模型。', source: await sourceIdentity(), startedAt: new Date().toISOString(), checks: [], cases: [], issues: [], pointerInputs: [], humanActions: [], npcActions: [], recapResponses: [], pageErrors: [], screenshots: [], videos: [] };
++let database, server, vite, browser, room;
++async function capture(page, name) {
++  const file = name + '.png'; await page.screenshot({ path: resolve(output, file) });
++  report.screenshots.push({ file, sha256: sha256(await readFile(resolve(output, file))), capturedAt: new Date().toISOString() });
++}
++async function read(page) {
++  return page.evaluate(async () => {
++    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
++    const { spatialState } = await import('/src/state/spatial-store.ts');
++    window.__hudActionRead = () => {
++    const s = spatialState.value, p = s.snapshot.projection;
++    const map = document.querySelector('svg.spatial-map'), props = map.__vueParentComponent.props;
++    const rect = node => { const b = node.getBoundingClientRect(); return { x: b.x, y: b.y, width: b.width, height: b.height }; };
++    const visible = node => { const b = rect(node), css = getComputedStyle(node); return b.width > 0 && b.height > 0 && css.visibility !== 'hidden' && css.display !== 'none'; };
++    const refs = new Set([p.self.entityRef, props.selected, ...(p.chapter?.follows || []).filter(f => ['accepted', 'following', 'paused', 'arrived'].includes(f.status)).map(f => f.subjectRef)]);
++    const people = [p.self, ...p.entities], names = new Set(people.filter(person => refs.has(person.entityRef)).map(person => (props.personLabels?.[person.entityRef] || person.name) + (person.entityRef === p.self.entityRef ? ' · 你' : '')));
++    const regions = [];
++    for (const node of document.querySelectorAll('.spatial-person')) {
++      const person = people.find(person => node.__vnode?.key === person.entityRef + ':' + person.appearanceEpoch);
++      const shape = node.querySelector('image,.spatial-actor-fallback');
++      if (shape && person && refs.has(person.entityRef)) regions.push({ name: node.getAttribute('aria-label'), kind: 'body', ...rect(shape) });
++    }
++    for (const node of document.querySelectorAll('.spatial-target.selected,.spatial-item.selected')) { const shape = node.querySelector('rect,path'); if (shape) regions.push({ name: node.getAttribute('aria-label'), kind: 'target', ...rect(shape) }); }
++    for (const node of document.querySelectorAll('.spatial-map-label')) if (node.classList.contains('self') || node.classList.contains('selected') || names.has(node.getAttribute('title'))) regions.push({ name: node.getAttribute('title'), kind: 'name', ...rect(node) });
++    const cards = [...document.querySelectorAll('.spatial-sidebar,.spatial-follow-strip,.spatial-receipts')].filter(visible).map(node => ({ kind: node.className, ...rect(node) }));
++    const gap = (a, b) => Math.max(a.x - b.x - b.width, b.x - a.x - a.width, a.y - b.y - b.height, b.y - a.y - a.height);
++    const violations = cards.flatMap(card => regions.filter(region => gap(card, region) < 15.9).map(region => ({ card, region, gap: gap(card, region) })));
++    const background = rect(document.querySelector('.spatial-scene-art')), viewport = rect(map), panel = document.querySelector('.spatial-sidebar');
++    const covered = background.x <= viewport.x + .1 && background.y <= viewport.y + .1 && background.x + background.width >= viewport.x + viewport.width - .1 && background.y + background.height >= viewport.y + viewport.height - .1;
++    const missingNames = [...names].filter(name => !regions.some(region => region.kind === 'name' && region.name === name));
++    const condensedControls = [...document.querySelectorAll('.gaolao-condensed button')].filter(visible).map(node => ({ label: node.textContent.trim() || node.getAttribute('aria-label'), font: parseFloat(getComputedStyle(node).fontSize), ...rect(node) }));
++    return { snapshotSeq: s.snapshot.snapshotSeq, viewId: s.snapshot.viewId, self: p.self.position, movement: p.movement, queuedAction: s.queuedAction, selected: props.selected, actions: s.actions.map(({ id, raw, receipt }) => ({ id, raw, receipt })), panel: panel ? { kind: panel.getAttribute('data-reading-kind'), class: panel.className, visible: visible(panel), heading: document.getElementById('spatial-selection-heading')?.textContent } : null, geometry: { viewport, background, covered, regions, cards, violations, missingNames, condensedControls }, cameraArea: props.cameraArea, viewBox: map.getAttribute('viewBox') };
++    };
++    return window.__hudActionRead();
++  });
++}
++function checkGeometry(value) { assert.equal(value.geometry.covered, true, '实际背景覆盖地图'); assert.deepEqual(value.geometry.missingNames, [], '必要姓名不得被省略'); assert.deepEqual(value.geometry.violations, [], '实际当前身体/物件/最终名字和浮卡保留16px'); assert.ok(value.geometry.condensedControls.every(control => control.width >= 44 && control.height >= 44 && control.font >= 14), '短卡真实控件保留44px和14px'); }
++async function startGeometry(page) {
++  await read(page);
++  await page.evaluate(() => {
++    const data = window.__hudActionMotion = { running: true, frames: [], errors: [] };
++    const sample = now => {
++      if (!data.running) return;
++      try { const value = window.__hudActionRead(); data.frames.push({ now, selected: value.selected, snapshotSeq: value.snapshotSeq, movement: value.movement?.status, geometry: value.geometry, viewBox: value.viewBox }); }
++      catch (error) { data.errors.push(error.stack || String(error)); }
++      requestAnimationFrame(now => queueMicrotask(() => sample(now)));
++    };
++    requestAnimationFrame(now => queueMicrotask(() => sample(now)));
++  });
++}
++async function finishGeometry(page) {
++  report.motion = await page.evaluate(() => { window.__hudActionMotion.running = false; return window.__hudActionMotion; });
++  assert.ok(report.motion.frames.length >= 5, '恢复与实际接近必须有连续绘制帧');
++  assert.deepEqual(report.motion.errors, []);
++  for (const frame of report.motion.frames) checkGeometry(frame);
++}
++async function closeObjectPanel(page) {
++  const condensed = page.getByRole('button', { name: '关闭暂收浮卡', exact: true });
++  const expanded = page.getByRole('button', { name: '关闭对象区', exact: true });
++  if (await condensed.isVisible()) await condensed.click(); else if (await expanded.isVisible()) await expanded.click();
++}
++async function inspectCase(page, name, person) {
++  const point = await alphaPoint(page, false), before = await read(page);
++  assert.equal(point.hit.person, '6号 · 翠兰', '只点真实公开身体');
++  await page.mouse.click(point.screen.x, point.screen.y);
++  await until(async () => (await read(page)).selected === person.entityRef, '身体选择当前公开ref');
++  const selected = await read(page); assert.deepEqual(selected.actions, before.actions, '身体选择不穿透发移动'); checkGeometry(selected);
++  const entry = { name, targetRef: person.entityRef, point, before, selected }; report.cases.push(entry);
++  await capture(page, name + '-selected');
++  const restore = page.getByRole('button', { name: '取消选择并展开', exact: true });
++  if (await restore.isVisible()) {
++    await restore.click(); entry.restored = await read(page); await capture(page, name + '-restored');
++    assert.equal(entry.restored.selected, ''); assert.deepEqual(entry.restored.actions, selected.actions); assert.deepEqual(entry.restored.queuedAction, selected.queuedAction); checkGeometry(entry.restored);
++    if (!entry.restored.panel?.visible || entry.restored.panel.kind !== 'objects') report.issues.push({ name, reason: '明确恢复后对象区未展开', before: selected.panel, after: entry.restored.panel });
++    // 原红诊断继续使用既有公开入口核同人重选；记录失败，绝不借此把整轮标绿。
++    if (!entry.restored.panel) await page.getByRole('button', { name: '附近对象与出口', exact: true }).click();
++    await page.locator('.spatial-object-list').getByRole('button', { name: selected.panel.heading.trim(), exact: true }).click();
++    entry.reselected = await read(page); await capture(page, name + '-reselected'); checkGeometry(entry.reselected);
++  }
++  const inspect = page.getByRole('button', { name: '走近并查看', exact: true });
++  if (!(await inspect.isVisible())) { report.issues.push({ name, reason: '同一授权目标的走近查看动作不可达' }); return; }
++  const ids = new Set((await clientState(page)).actions.map(action => action.id));
++  await inspect.click();
++  const request = await until(async () => (await clientState(page)).actions.find(action => !ids.has(action.id) && JSON.parse(action.raw).action.kind === 'inspect' && action.receipt), '真实查看请求和收据');
++  assert.equal(JSON.parse(request.raw).action.targetRef, person.entityRef); assert.equal(request.receipt.status, 'Accepted');
++  await until(async () => BigInt((await snapshot(page)).snapshotSeq) >= BigInt(request.receipt.observedSeq), '查看收据已进入本端公开投影');
++  entry.inspect = request; entry.after = await read(page); checkGeometry(entry.after); await capture(page, name + '-inspected');
++  report.checks.push({ name, status: 'PASS', targetRef: person.entityRef, receipt: request.receipt });
++}
++
++async function recoverWithNavigation(page) {
++  await closeObjectPanel(page); await room.go(0, room.C('C18'));
++  const target = await room.entity(0, '铜封门'); await selectObject(page, target.entityRef);
++  const selected = await read(page), restore = page.getByRole('button', { name: '取消选择并展开', exact: true });
++  assert.ok(selected.panel?.class.includes('hud-card-collapsed'), '合法远处铜封门保留原短卡状态');
++  assert.equal(selected.selected, target.entityRef); checkGeometry(selected); await capture(page, 'door-selected-short');
++  await restore.click(); const expanded = await read(page); checkGeometry(expanded);
++  assert.equal(expanded.selected, ''); assert.equal(expanded.panel?.kind, 'objects'); assert.equal(expanded.panel?.visible, true);
++  assert.equal(expanded.panel.class.includes('hud-card-collapsed'), false, '明确恢复后对象列表真正展开');
++  assert.deepEqual(expanded.actions, selected.actions); assert.deepEqual(expanded.queuedAction, selected.queuedAction);
++  await capture(page, 'door-restored-objects');
++  await page.locator('.spatial-object-list').getByRole('button', { name: '铜封门', exact: true }).click();
++  const reselected = await read(page); assert.equal(reselected.selected, target.entityRef); checkGeometry(reselected);
++  assert.ok(reselected.panel?.class.includes('hud-card-collapsed'), '重选同一远目标仍按真实空域收短');
++  const previous = new Set(reselected.actions.map(action => action.id));
++  await page.locator('.gaolao-condensed').getByRole('button', { name: '走近并查看', exact: true }).click();
++  const move = await until(async () => (await clientState(page)).actions.find(action => !previous.has(action.id) && JSON.parse(action.raw).action.kind === 'move_to' && action.receipt), '真实短卡走近首段收据');
++  assert.equal(move.receipt.status, 'Accepted'); assert.equal(JSON.parse(move.raw).action.targetRef, target.entityRef);
++  const pending = await read(page); assert.ok(pending.queuedAction, '恢复前必须存在实际待执行的查看意图');
++  assert.equal(pending.selected, target.entityRef); await restore.click(); const restoredMoving = await read(page);
++  assert.equal(restoredMoving.selected, ''); assert.equal(restoredMoving.panel?.kind, 'objects');
++  assert.deepEqual(restoredMoving.actions, pending.actions, '恢复不改原raw/nonce/Receipt或另发动作');
++  assert.deepEqual(restoredMoving.queuedAction, pending.queuedAction, '有实导航时显式恢复不丢后续查看');
++  checkGeometry(restoredMoving); await capture(page, 'door-moving-restored');
++  const inspected = await until(async () => (await clientState(page)).actions.find(action => !previous.has(action.id) && JSON.parse(action.raw).action.kind === 'inspect' && action.receipt), '原导航实际到达后正常提交查看');
++  assert.equal(inspected.receipt.status, 'Accepted'); assert.equal(JSON.parse(inspected.raw).action.targetRef, target.entityRef);
++  await until(async () => BigInt((await snapshot(page)).snapshotSeq) >= BigInt(inspected.receipt.observedSeq), '铜封门查看回执已进入本端');
++  const after = await read(page); checkGeometry(after);
++  for (const action of pending.actions) assert.deepEqual(after.actions.find(value => value.id === action.id), action, '完整原请求和收据一直保留');
++  report.navigationRecovery = { targetRef: target.entityRef, selected, expanded, reselected, move, pending, restoredMoving, inspected, after, scope: '真实move→inspect两段；不代替独立旧C20跨出口调查' };
++  await capture(page, 'door-inspected'); report.checks.push({ name: 'short-card-restore-and-live-navigation', status: 'PASS', receipt: inspected.receipt });
++}
++
++try {
++  assert.equal(report.source.status, '', '只在冻结clean源码上运行');
++  database = await startTestPostgres('hud-std002', { outputSubdirectory: 'hud-std002' });
++  server = await createAuthorityServer({ pool: database.pool }); const address = await server.listen(0), origin = 'http://127.0.0.1:' + address.port;
++  vite = await createVite({ root: resolve(repository, 'frontend'), configFile: resolve(repository, 'frontend/vite.config.mjs'), configLoader: 'native', cacheDir: resolve(output, 'vite-cache'), server: { host: '127.0.0.1', port: 0, fs: { allow: [repository] }, proxy: { '/api': { target: origin }, '/socket.io': { target: origin, ws: true } } } });
++  await vite.listen(); const baseURL = 'http://127.0.0.1:' + vite.httpServer.address().port;
++  browser = await chromium.launch({ headless: true, executablePath: process.env.CHROMIUM_PATH, args: [] }); report.browserVersion = browser.version();
++  const recordingBrowser = { newContext: options => browser.newContext({ ...options, recordVideo: { dir: resolve(output, 'recordings'), size: { width: 1600, height: 1000 } } }) };
++  room = await browserRoom({ server, browser: recordingBrowser, baseURL, count: 2, report });
++  assert.equal((await snapshot(room.pages[0])).projection.contentVersion, 'gaolaozhuang-v1', '本组与原独立红同为v1受控角色环境');
++  await rescue(room);
++  const page = room.pages[0]; await room.go(0, room.C('C18')); await room.move('cuilan', 'gaolao-courtyard', { x: 1080, y: 750 });
++  await page.setViewportSize({ width: 390, height: 844 }); await closeReading(page);
++  await until(() => page.evaluate(() => { const b = document.querySelector('.spatial-map-viewport').getBoundingClientRect(), v = document.querySelector('.spatial-label-guides').viewBox.baseVal; return Math.abs(b.width - v.width) < 1 && Math.abs(b.height - v.height) < 1; }), '真实390视口已就绪');
++  await room.move('cuilan', 'gaolao-courtyard', { x: 1000, y: 750 }); await settledArt(page);
++  await startGeometry(page);
++  await inspectCase(page, 'W', await room.entity(0, '翠兰'));
++  await closeObjectPanel(page); await movePlayer(page, { x: 989, y: 711 }, report);
++  report.eSetup = { requested: { x: 989, y: 711 }, actual: (await snapshot(page)).projection.self.position, note: '鼠标像素取整后的真实公开落点；不冒称与独立原E逐点相同。' };
++  await room.move('cuilan', 'gaolao-courtyard', { x: 1080, y: 750 }); await settledArt(page);
++  await inspectCase(page, 'E', await room.entity(0, '翠兰'));
++  await recoverWithNavigation(page); await finishGeometry(page);
++  assert.deepEqual(report.issues, [], '原两方向查看恢复链必须实际可用');
++  assert.deepEqual(report.pageErrors, []); report.sourceEnd = await sourceIdentity(); assert.deepEqual(report.sourceEnd, report.source); report.assessment = 'PASS';
++} catch (error) {
++  report.assessment = 'FAIL'; report.error = error.stack || String(error); console.error(report.error); process.exitCode = 1;
++  if (room) { report.failedUI = await read(room.pages[0]); await capture(room.pages[0], 'failure'); }
++  if (room) report.motion ||= await room.pages[0].evaluate(() => { if (window.__hudActionMotion) window.__hudActionMotion.running = false; return window.__hudActionMotion || null; });
++} finally {
++  report.sourceEnd ||= await sourceIdentity();
++  if (room) { const videos = room.pages.map(page => page.video()); await room.close(); for (let i = 0; i < videos.length; i++) if (videos[i]) { const file = 'actual-ui-' + (i + 1) + '.webm'; await videos[i].saveAs(resolve(output, file)); report.videos.push({ file, sha256: sha256(await readFile(resolve(output, file))) }); } }
++  await browser?.close(); await vite?.close(); await server?.close(); await database?.stop();
++  report.finishedAt = new Date().toISOString(); await saveJSON(resolve(output, 'result.json'), report); console.log(JSON.stringify({ assessment: report.assessment, checks: report.checks, issues: report.issues, output }));
++}
