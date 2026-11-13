@@ -26,9 +26,16 @@ export async function openReading(page, label) {
   await page.locator('.spatial-reading-pane').waitFor();
 }
 
+/** HUD 将附近列表折叠；先走可见入口，再沿原对象/锚点按钮操作。 */
+async function openObjects(page) {
+  const entry = page.getByRole('button', { name: '附近对象与出口', exact: true });
+  if (await entry.count()) await entry.click();
+}
+
 /** 读取当前授权对象以找到玩家可见的文字入口；不解析真实角色ID或跨观察者引用。 */
 export async function selectObject(page, reference) {
   await closeReading(page);
+  await openObjects(page);
   const p = (await snapshot(page)).projection;
   const target = [...p.targets, ...p.items, ...p.entities].find(entity => entity.entityRef === reference);
   assert.ok(target, '目标必须出现在当前玩家授权投影中');
@@ -88,6 +95,7 @@ export async function humanAction(page, action, report, player) {
   let label = action.kind;
   if (action.kind === 'move_to') {
     await closeReading(page);
+    await openObjects(page);
     const p = (await snapshot(page)).projection;
     assert.equal(p.self.sceneId, action.sceneId, '跨场景移动须先经过实际出口按钮');
     const anchor = p.scene.anchors.find(anchor => samePosition(anchor.position, action.destination));
@@ -113,7 +121,7 @@ export async function humanAction(page, action, report, player) {
     assert.ok(await record.count(), '当前材料通过可见原文选择');
     label = '分享给选定对象'; await record.last().getByRole('button', { name: label, exact: true }).click();
   } else if (action.kind === 'cooperate') {
-    await closeReading(page); label = action.phase === 'ready' ? '我已就位' : action.phase === 'prepare' ? '参与准备' : '取消准备';
+    await closeReading(page); await openObjects(page); label = action.phase === 'ready' ? '我已就位' : action.phase === 'prepare' ? '参与准备' : '取消准备';
     await page.getByRole('button', { name: label, exact: true }).click();
   } else if (action.kind === 'propose_follow') {
     await selectObject(page, action.subjectRef);
@@ -236,7 +244,7 @@ export async function browserRoom({ server, browser, baseURL, count, contentVers
       assert.ok(exit, '跨场景须存在公开出口');
       if (actors.get(key).internal) await move(key, scene.sceneId, scene.anchors.find(anchor => anchor.anchorId === exit.anchorId).position);
       else {
-        const page = pages[key]; await closeReading(page);
+        const page = pages[key]; await closeReading(page); await openObjects(page);
         const beforeIds = (await clientState(page)).actions.map(action => action.id);
         const visibleScene = (await snapshot(page)).projection.scene;
         const exitIndex = visibleScene.exits.findIndex(visibleExit => visibleExit.exitId === exit.exitId);

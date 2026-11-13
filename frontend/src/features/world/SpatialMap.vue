@@ -6,8 +6,11 @@ import { layoutSpatialLabels, screenPosition } from '../../domain/spatial-labels
 import { sceneArtwork, spriteForAppearance } from '../../domain/gaolao-art.ts';
 import SpatialActorArt from './SpatialActorArt.vue';
 import type { SpatialLabelInput } from '../../domain/spatial-labels.ts';
-const props = defineProps<{ snapshot: SnapshotV2; disabled: boolean; selected?: string; personLabels?: Record<string, string>; immersive?: boolean }>();
-const emit = defineEmits<{ move: [position: Position]; select: [reference: string]; stop: []; objects: []; settled: [value: { viewId: string; epoch: string; sequence: string; position: Position }] }>();
+import type { ScreenRect } from '../../domain/spatial-labels.ts';
+import { cameraForHud } from '../../domain/gaolao-hud-layout.ts';
+import type { HudMapGeometry } from '../../domain/gaolao-hud-layout.ts';
+const props = defineProps<{ snapshot: SnapshotV2; disabled: boolean; selected?: string; personLabels?: Record<string, string>; immersive?: boolean; cameraArea?: ScreenRect; hudNotice?: string }>();
+const emit = defineEmits<{ move: [position: Position]; select: [reference: string]; stop: []; objects: []; geometry: [value: HudMapGeometry]; settled: [value: { viewId: string; epoch: string; sequence: string; position: Position }] }>();
 const projection = computed(() => props.snapshot.projection);
 const motion = new ConfirmedMotion(); const frameTime = ref(performance.now()); let frame = 0; let settledKey = '';
 function draw(now: number) {
@@ -26,17 +29,23 @@ const artAttempt = ref(0); const missingResources = ref(new Set<string>());
 function resource(value: { file: string; available: boolean }) { const next = new Set(missingResources.value); if (value.available) next.delete(value.file); else next.add(value.file); missingResources.value = next; }
 function retryArtwork() { missingResources.value = new Set(); artAttempt.value++; backgroundFailed.value = false; }
 const viewportSize = ref({ width: 0, height: 0 });
-let resize: ResizeObserver | null = null;
+let resize: ResizeObserver | null = null; let resizeFrame = 0;
+function measureViewport() {
+  resizeFrame = 0; const rect = viewport.value?.getBoundingClientRect();
+  if (rect && (rect.width !== viewportSize.value.width || rect.height !== viewportSize.value.height)) viewportSize.value = { width: rect.width, height: rect.height };
+}
 onMounted(() => {
   motionPreference = matchMedia('(prefers-reduced-motion: reduce)'); updateMotionPreference(); motionPreference.addEventListener('change', updateMotionPreference);
-  resize = new ResizeObserver(() => { const rect = viewport.value?.getBoundingClientRect(); if (rect) viewportSize.value = { width: rect.width, height: rect.height }; });
+  // 下一帧再发布尺寸，避免观察回调内的相机/标签更新再次改变被观察布局。
+  resize = new ResizeObserver(() => { if (!resizeFrame) resizeFrame = requestAnimationFrame(measureViewport); });
   if (viewport.value) resize.observe(viewport.value);
 });
 watch(viewport, (element, previous) => { if (previous) resize?.unobserve(previous); if (element) resize?.observe(element); });
-onBeforeUnmount(() => { if (frame) cancelAnimationFrame(frame); resize?.disconnect(); motionPreference?.removeEventListener('change', updateMotionPreference); });
+onBeforeUnmount(() => { if (frame) cancelAnimationFrame(frame); if (resizeFrame) cancelAnimationFrame(resizeFrame); resize?.disconnect(); motionPreference?.removeEventListener('change', updateMotionPreference); });
 const svg = ref<SVGSVGElement | null>(null); const follow = ref(true);
 function toggleCamera() { follow.value = !follow.value; }
 function returnToSelf() { follow.value = true; }
+defineExpose({ returnToSelf });
 const scene = computed(() => projection.value.scene);
 const backgroundFailed = ref(false);
 const artwork = computed(() => sceneArtwork(scene.value?.sceneId));
@@ -56,6 +65,19 @@ const box = computed(() => {
   const width = Math.min(map.width, Math.max(400, size.width / 0.9)); const height = Math.min(map.height, Math.max(400, size.height / 0.9));
   const x = Math.max(0, Math.min(map.width - width, position.x - width / 2));
   const y = Math.max(0, Math.min(map.height - height, position.y - height / 2));
+  if (props.immersive && props.cameraArea && size.width && size.height) {
+    const positions = people.value.filter(person => protectedRefs.value.has(person.entityRef)).map(person => person.position!);
+    const target = projection.value.targets.find(target => target.entityRef === props.selected && target.sceneId === map.sceneId);
+    if (target) positions.push(target.position);
+    const selectedItem = groundItems.value.find(item => item.entityRef === props.selected);
+    if (selectedItem?.location.kind === 'ground') positions.push(selectedItem.location.position);
+    const area = props.cameraArea;
+    const alreadyVisible = positions.every(point => { const screen = screenPosition(point, { x, y, width, height }, size); return screen.x - 106 >= area.x && screen.x + 106 <= area.x + area.width && screen.y - 90 * screen.scale - 70 >= area.y && screen.y + 60 <= area.y + area.height; });
+    if (!alreadyVisible) {
+      const framed = cameraForHud({ viewport: size, scene: map, safeArea: area, positions });
+      return `${framed.x} ${framed.y} ${framed.width} ${framed.height}`;
+    }
+  }
   return `${x} ${y} ${width} ${height}`;
 });
 const mapScale = computed(() => { const [, , width, height] = box.value.split(' ').map(Number); return Math.max(0.01, Math.min(viewportSize.value.width / width, viewportSize.value.height / height)); });
@@ -82,6 +104,25 @@ const labels = computed(() => {
   for (const anchor of scene.value?.anchors || []) if (scene.value?.exits.some(exit => exit.anchorId === anchor.anchorId)) add('anchor:' + anchor.anchorId, anchor.label, anchor.position, 'anchor');
   return layoutSpatialLabels(inputs, size);
 });
+const hudGeometry = computed<HudMapGeometry>(() => {
+  const size = viewportSize.value; const [x, y, width, height] = box.value.split(' ').map(Number);
+  const protectedRegions: ScreenRect[] = [];
+  if (props.immersive && size.width && size.height) {
+    for (const person of people.value) if (protectedRefs.value.has(person.entityRef) && person.position) {
+      const point = screenPosition(person.position, { x, y, width, height }, size);
+      const sprite = spriteForAppearance(person.appearanceId, person.drawnFacing, person.moving, person.distance, reducedMotion.value);
+      const b = sprite ? { ...sprite.bounds, x: sprite.mirrorX ? -sprite.bounds.x - sprite.bounds.width : sprite.bounds.x } : { x: -22, y: -82, width: 44, height: 90 };
+      protectedRegions.push({ x: point.x + b.x * point.scale, y: point.y + b.y * point.scale, width: b.width * point.scale, height: b.height * point.scale });
+    }
+    for (const label of labels.value.labels) if (protectedRefs.value.has(label.key)) {
+      protectedRegions.push({ x: label.x, y: label.y, width: label.width, height: label.height });
+      if (!people.value.some(person => person.entityRef === label.key)) protectedRegions.push(label.footprint);
+    }
+  }
+  return { viewport: size, protectedRegions };
+});
+let lastHudGeometry = '';
+watch(hudGeometry, value => { const key = JSON.stringify(value); if (key !== lastHudGeometry) { lastHudGeometry = key; emit('geometry', value); } }, { immediate: true, flush: 'post' });
 const points = (values: Position[]) => values.map(p => `${p.x},${p.y}`).join(' ');
 function click(event: MouseEvent) {
   if (props.disabled || !svg.value || !scene.value) return;
@@ -101,7 +142,7 @@ function keyboard(event: KeyboardEvent) {
 
 <template>
   <section class="spatial-map-card" aria-label="授权行走场景">
-    <header class="spatial-map-toolbar"><div><strong>{{ scene?.name || '等待场景' }}</strong><span>点地行走 · 选中物件后靠近操作</span></div><div class="button-row"><button class="secondary-button" @click="toggleCamera">{{ follow ? '查看全图' : '跟随角色' }}</button><button class="secondary-button" @click="returnToSelf">回到角色</button></div></header>
+    <header class="spatial-map-toolbar"><div><strong>{{ scene?.name || '等待场景' }}</strong><span>点地行走 · 选中物件后靠近操作</span></div><div class="button-row"><button class="secondary-button" @click="toggleCamera">{{ follow ? '查看全图' : '跟随角色' }}</button><button class="secondary-button" @click="returnToSelf">回到角色</button><button v-if="immersive" class="secondary-button" @click="emit('objects')">附近对象与出口</button></div><p v-if="immersive && hudNotice" class="gaolao-space-notice" role="status">{{ hudNotice }}</p></header>
     <div v-if="scene" ref="viewport" class="spatial-map-viewport">
     <svg ref="svg" class="spatial-map" :class="{ 'has-artwork': artwork && !backgroundFailed }" data-testid="spatial-map" :viewBox="box" tabindex="0" role="application" aria-label="行走地图，点击地面或使用方向键移动，Escape停步" @click="click" @keydown="keyboard">
       <defs><mask v-for="(obstacle, index) in scene.obstacles" :id="`obstacle-mask-${index}`" :key="obstacle.obstacleId" maskUnits="userSpaceOnUse" :x="0" :y="0" :width="scene.width" :height="scene.height"><rect :width="scene.width" :height="scene.height" fill="white" /><template v-for="area in scene.walkableAreas" :key="area.areaId"><polygon v-if="obstacle.exceptAreas.includes(area.areaId)" :points="points(area.polygon)" fill="black" /></template></mask></defs>
