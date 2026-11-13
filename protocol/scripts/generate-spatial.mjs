@@ -1,5 +1,6 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { spatialSchema } from '../spatial-schema.mjs';
+import './generate-spatial-ai.mjs';
 const typeOf = s => s.$ref ? s.$ref.split('/').at(-1) : 'const' in s ? JSON.stringify(s.const) : s.enum ? s.enum.map(JSON.stringify).join(' | ') : s.oneOf ? s.oneOf.map(x => '(' + typeOf(x) + ')').join(' | ') : s.type === 'array' ? 'Array<' + typeOf(s.items) + '>' : s.type === 'object' ? (typeof s.additionalProperties === 'object' ? 'Record<string, ' + typeOf(s.additionalProperties) + '>' : '{ ' + Object.entries(s.properties ?? {}).map(([k, v]) => JSON.stringify(k) + ((s.required ?? []).includes(k) ? '' : '?') + ': ' + typeOf(v) + ';').join(' ') + ' }') : s.type === 'integer' ? 'number' : s.type;
 const banner = '// 由 protocol/scripts/generate-spatial.mjs 从 spatial-schema.mjs 生成；请修改唯一字段源。\n';
 const artifacts = {

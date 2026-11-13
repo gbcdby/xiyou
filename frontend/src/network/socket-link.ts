@@ -1,4 +1,5 @@
 import { io } from 'socket.io-client';
+import { SPATIAL_CAPABILITIES } from './spatial-capabilities.ts';
 import type { LinkHandlers, SessionLink } from './link.ts';
 
 /** 禁用库内自动重连，由恢复驱动为每条真实连接分配新的代次。 */
@@ -21,4 +22,4 @@ export const connectSocket = (token: string, handlers: LinkHandlers, origin?: st
   };
 };
 
-export const connectSpatialSocket = (token: string, handlers: LinkHandlers, origin?: string): SessionLink => connectSocket(token, handlers, origin, ['spatial-v2']);
+export const connectSpatialSocket = (token: string, handlers: LinkHandlers, origin?: string): SessionLink => connectSocket(token, handlers, origin, SPATIAL_CAPABILITIES);

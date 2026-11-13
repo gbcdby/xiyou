@@ -38,3 +38,7 @@ canonical = json.dumps(semantic, sort_keys=True, ensure_ascii=False, separators=
 assert canonical == vector["canonical"]
 assert hashlib.sha256(canonical.encode("utf-8")).hexdigest() == vector["sha256"]
 print(f"JSON Schema 2020-12 合法；{len(valid)} 个正样本和 {len(invalid)} 个反样本符合预期；{len(dates)} 个 UTC 日历边界与独立摘要向量一致。")
+
+# A3 空间模型是独立合同；沿用现有 CI 入口，保留旧合同检查。
+import runpy
+runpy.run_path(str(root / "scripts/check-spatial-ai.py"), run_name="__main__")

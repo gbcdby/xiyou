@@ -90,29 +90,64 @@ async function rescueViaUI(r, { changes = false } = {}) {
   check(`${r.count}人：真实救援、本人回应与实际安置`, { changes, destination: destination.destinationId });
 }
 
+async function privateItemPublication(r, receipt, label) {
+  const player = r.role('B'), matches = report.humanActions.filter(entry => entry.player === player && entry.request.clientActionId === receipt.clientActionId);
+  assert.equal(matches.length, 1, '私物屏障必须绑定本次页面动作的真实收据');
+  const { request } = matches[0]; assert.deepEqual(matches[0].receipt, receipt); assert.equal(receipt.sessionId, request.sessionId);
+  const itemRef = request.action.itemRef ?? request.action.parameters.itemRefs[0];
+  const started = Date.now(), publication = { label, player, clientActionId: request.clientActionId, sessionId: request.sessionId, viewId: request.viewId, itemRef, receiptSeq: receipt.observedSeq, samples: [] };
+  (report.privateItemPublications ??= []).push(publication);
+  // 只等待同一授权视图到达回执水位；物权断言在屏障之后执行，绝不以正确物主作为等待条件。
+  return until(async () => {
+    const current = await snapshot(r.pages[player]); publication.snapshot = current;
+    const item = current?.projection.items.find(item => item.entityRef === itemRef);
+    publication.samples.push({ ms: Date.now() - started, viewId: current?.viewId, snapshotSeq: current?.snapshotSeq, self: current?.projection.self, movement: current?.projection.movement, item });
+    assert.equal(current?.sessionId, request.sessionId, '私物读写仍在原房间');
+    assert.equal(current.viewId, request.viewId, '私物精确引用仍属于原授权视图');
+    assert.equal(current.projection.self.entityRef, request.actorRef, '私物读写仍由原玩家观察');
+    return BigInt(current.snapshotSeq) >= BigInt(receipt.observedSeq) ? current : false;
+  }, label + '公开投影到达本次回执水位');
+}
+
 async function privateItemsViaUI(r) {
   const carer = r.role('B'); const geometry = await narrowReady(r.pages[carer]); let parcel = await r.entity(carer, '私人包裹');
   let receipt = await r.send(carer, { kind: 'take_item', itemRef: parcel.entityRef, expectedItemRevision: parcel.resourceRevision });
   assert.equal(receipt.status, 'Rejected'); assert.equal(receipt.code, 'CONSENT_REQUIRED');
-  accepted(await r.interact(carer, '翠兰', 'gz-request-private-items', { itemRefs: [parcel.entityRef], expectedConsentVersion: '0' }));
-  await image(r.pages[carer], 'gaolao-2-private-request-narrow.png');
+  const refused = await privateItemPublication(r, receipt, '未许可拿取');
+  assert.deepEqual(refused.projection.items.find(item => item.entityRef === parcel.entityRef).location, parcel.location, '未许可的拿取不改变原物权');
+  const requested = accepted(await r.interact(carer, '翠兰', 'gz-request-private-items', { itemRefs: [parcel.entityRef], expectedConsentVersion: '0' }));
+  const requestedSnapshot = await privateItemPublication(r, requested, '提出私物请求');
+  await image(r.pages[carer], `gaolao-${r.count}-private-request-narrow.png`);
   let consent = await latestConsent(r, 'cuilan', 'private_items');
-  const privateRecord = (await r.snapshot(carer)).projection.observations.findLast(observation => observation.fields.some(field => field.key === 'consent' && field.value === consent.consentId));
+  const privateRecord = requestedSnapshot.projection.observations.findLast(observation => observation.fields.some(field => field.key === 'consent' && field.value === consent.consentId));
   assert.ok(privateRecord && !privateRecord.shareable);
   await openReading(r.pages[carer], '手记');
   const card = r.pages[carer].locator('.spatial-notebook article').filter({ hasText: consent.consentId });
   assert.equal(await card.getByRole('button', { name: '分享给选定对象', exact: true }).count(), 0, '本次私有许可观察不能分享');
-  for (let other = 0; other < r.count; other++) if (other !== carer) assert.ok(!(await r.snapshot(other)).projection.observations.some(observation => observation.fields.some(field => field.key === 'consent' && field.value === consent.consentId)), '未参与者不见私有许可观察');
+  for (let other = 0; other < r.count; other++) if (other !== carer) {
+    const current = await until(async () => { const s = await r.snapshot(other); assert.equal(s.sessionId, requested.sessionId); return BigInt(s.snapshotSeq) >= BigInt(requested.observedSeq) ? s : false; }, '未参与者投影达到本次私物请求水位');
+    assert.ok(!current.projection.observations.some(observation => observation.fields.some(field => field.key === 'consent' && field.value === consent.consentId)), '未参与者不见私有许可观察');
+  }
   accepted(await r.send('cuilan', { kind: 'respond_consent', consentId: consent.consentId, expectedConsentVersion: consent.version, response: 'accept' }));
-  parcel = await r.entity(carer, '私人包裹'); accepted(await r.send(carer, { kind: 'take_item', itemRef: parcel.entityRef, expectedItemRevision: parcel.resourceRevision }));
-  let p = (await r.snapshot(carer)).projection; parcel = p.items.find(item => item.name === '私人包裹');
+  parcel = await r.entity(carer, '私人包裹'); const ground = parcel.location; assert.equal(ground.kind, 'ground');
+  receipt = accepted(await r.send(carer, { kind: 'take_item', itemRef: parcel.entityRef, expectedItemRevision: parcel.resourceRevision }));
+  let p = (await privateItemPublication(r, receipt, '本人许可后拿取')).projection;
+  assert.equal(p.items.filter(item => item.entityRef === parcel.entityRef).length, 1, '本次精确私物在当前投影中唯一');
+  assert.equal(p.self.sceneId, ground.sceneId); assert.ok(Math.hypot(p.self.position.x - ground.position.x, p.self.position.y - ground.position.y) <= r.content.movement.interactionRadius, '真实当前位置在原私物可操作距离内');
+  parcel = p.items.find(item => item.entityRef === parcel.entityRef);
   assert.deepEqual(parcel.location, { kind: 'held', ownerRef: p.self.entityRef });
-  accepted(await r.send(carer, { kind: 'put_item', itemRef: parcel.entityRef, expectedItemRevision: parcel.resourceRevision, sceneId: p.self.sceneId, position: p.self.position }));
+  const placed = { kind: 'ground', sceneId: p.self.sceneId, position: p.self.position };
+  receipt = accepted(await r.send(carer, { kind: 'put_item', itemRef: parcel.entityRef, expectedItemRevision: parcel.resourceRevision, sceneId: placed.sceneId, position: placed.position }));
+  p = (await privateItemPublication(r, receipt, '放在脚边')).projection; parcel = p.items.find(item => item.entityRef === parcel.entityRef);
+  assert.deepEqual(parcel.location, placed, '本次放下已经发布为原精确位置，之后才撤回许可');
   consent = await latestConsent(r, 'cuilan', 'private_items'); accepted(await r.send('cuilan', { kind: 'withdraw_consent', consentId: consent.consentId, expectedConsentVersion: consent.version }));
   parcel = await r.entity(carer, '私人包裹'); receipt = await r.send(carer, { kind: 'take_item', itemRef: parcel.entityRef, expectedItemRevision: parcel.resourceRevision });
   assert.equal(receipt.status, 'Rejected'); assert.equal(receipt.code, 'CONSENT_REQUIRED');
+  const withdrawn = await privateItemPublication(r, receipt, '本人撤回后拒绝拿取');
+  const unchanged = withdrawn.projection.items.find(item => item.entityRef === parcel.entityRef);
+  assert.deepEqual(unchanged.location, placed); assert.equal(unchanged.resourceRevision, parcel.resourceRevision, '撤回后的拒绝不改变私物版本');
   await r.go(carer, r.C('C08')); await r.pages[carer].setViewportSize({ width: 1600, height: 1000 });
-  check('2人：当前私物请求、本人许可/撤回与实际持有，私有观察不传播', { geometry });
+  check(`${r.count}人：当前私物请求、本人许可/撤回与实际持有，私有观察不传播`, { geometry });
 }
 
 async function recovery(r) {
@@ -280,6 +315,7 @@ try {
   report.assessment = 'FAIL'; report.error = error.stack; console.error(error);
   for (const [index, page] of (activeRoom?.pages || []).entries()) {
     await page.screenshot({ path: resolve(output, `failure-${index}.png`), fullPage: true }).catch(() => {});
+    report[`snapshot-${index}`] = await snapshot(page).catch(() => null);
     report[`page-${index}`] = await page.locator('body').innerText().catch(() => ''); report[`state-${index}`] = await clientState(page).catch(() => null);
   }
 } finally {

@@ -3,6 +3,7 @@ import { validateSpatial } from '../protocol/spatial.mjs';
 import { distance, clearSegment } from './spatial-geometry.mjs';
 import { isGaolao, setupGaolaoState, observerName, projectGaolao, gaolaoOperations } from './gaolao-world.mjs';
 import { RuleError } from './rules.mjs';
+import { visibleAppearance } from './spatial-appearance.mjs';
 export const opaqueRef = () => 'R' + randomBytes(24).toString('base64url');
 export const isSpatial = state => state.protocolCapability === 'spatial-v2';
 export const next = value => String(BigInt(value) + 1n);
@@ -155,9 +156,9 @@ export function resolveRef(tx, actorId, ref, viewId, { visible = true } = {}) {
         throw new RuleError('STALE_REFERENCE');
     return entity;
 }
-export function spatialProjection(state, content, actorId, { connectionId = null, highWater = '0', view = state.views[actorId], principalKind = 'human' } = {}) {
+export function spatialProjection(state, content, actorId, { connectionId = null, highWater = '0', view = state.views[actorId], principalKind = 'human', includeAppearance = false } = {}) {
     const a = state.characters[actorId];
-    const publicActor = c => ({ entityRef: entityRef(view, c.characterId), name: observerName(state,actorId,c), ...(isGaolao(state)&&state.chapter?{resourceRevision:c.resourceRevision,availableOperations:gaolaoOperations(state,content,actorId,c)}:{}), appearanceEpoch: c.appearanceEpoch, sceneId: c.sceneId, position: c.position, facing: c.facing });
+    const publicActor = c => ({ entityRef: entityRef(view, c.characterId), name: observerName(state,actorId,c), ...(includeAppearance ? { appearanceId: visibleAppearance(state, content, c) } : {}), ...(isGaolao(state)&&state.chapter?{resourceRevision:c.resourceRevision,availableOperations:gaolaoOperations(state,content,actorId,c)}:{}), appearanceEpoch: c.appearanceEpoch, sceneId: c.sceneId, position: c.position, facing: c.facing });
     const visible = Object.values(state.characters).filter(c => canSee(state, content, actorId, c));
     const entities = visible.map(c => { const motion = c.motionViews?.[actorId]; return { ...publicActor(c), ...(motion?.viewId === view.viewId ? { motionTrail: motion.motionTrail, motionFromSceneTimeMs: motion.motionFromSceneTimeMs, motionThroughSceneTimeMs: motion.motionThroughSceneTimeMs } : {}) }; }).sort((x, y) => x.entityRef.localeCompare(y.entityRef));
     const items = Object.values(state.items).filter(i => i.location.kind !== 'consumed' && canSee(state, content, actorId, i) && (i.location.kind === 'ground' || i.location.characterId === actorId || i.publicBorrowable)).map(i => ({ entityRef: entityRef(view, i.itemId), name: i.name, location: i.location.kind === 'ground' ? i.location : { kind: 'held', ownerRef: entityRef(view, i.location.characterId) }, resourceRevision: i.resourceRevision, transferable: i.transferable, publicBorrowable: i.publicBorrowable, fields: i.fields, ...(i.publicBorrowable && i.location.kind === 'character' && state.characters[i.location.characterId]?.mode === 'AIProxyControlled' ? { reclaimHolderEpoch: state.characters[i.location.characterId].controlEpoch } : {}) }));

@@ -21,6 +21,7 @@ import GaolaoChapterState from '../character/GaolaoChapterState.vue';
 import GaolaoInteractionPanel from '../character/GaolaoInteractionPanel.vue';
 import GaolaoRecapPanel from '../recap/GaolaoRecapPanel.vue';
 import '../../styles-spatial.css';
+import '../../styles-art.css';
 
 const route = useRoute();
 const sessionId = computed(() => String(route.params.sessionId || ''));
@@ -146,7 +147,7 @@ function ownerName(reference: string) { const p = projection.value; return p?.se
 </script>
 
 <template>
-  <div class="spatial-page page-shell">
+  <div class="spatial-page page-shell" :class="{ 'gaolao-scene-page': isGaolao }">
     <header class="spatial-heading">
       <div><RouterLink to="/" class="back-link">返回房间大厅</RouterLink><h1>{{ isGaolao ? '高老庄 · 同行记' : '高老庄 · 行走灰盒' }}</h1><p>房间 <code>{{ sessionId }}</code><button class="text-button" @click="copy">{{ copied ? '已复制' : '复制房间号' }}</button></p></div>
       <div class="spatial-connection" role="status">{{ connectionNames[spatialState.connection] }}<small v-if="projection">{{ projection.paused ? 'Ⅱ 等待同伴，场景已暂停' : projection.phase === 'Running' ? '场景运行中' : projection.phase === 'Lobby' ? '等待启程' : '这一程已结束' }}</small></div>

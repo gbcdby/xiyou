@@ -6,6 +6,8 @@ export function validateSpatial<K extends keyof SpatialContracts>(name: K, value
 export function gaolaoInteraction<A extends T.GaolaoInteractionV2>(value: A): A;
 export function isGaolaoInteraction(value: T.ActionV2): value is T.GaolaoInteractionV2;
 export interface SpatialContracts {
+  SpatialClientCapability: T.SpatialClientCapability;
+  AppearanceIdV2: T.AppearanceIdV2;
   GaolaoInteractionV2: T.GaolaoInteractionV2;
   Id: T.Id;
   DecimalString: T.DecimalString;

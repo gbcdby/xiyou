@@ -1,0 +1,1916 @@
+{
+  "schema_version": 1,
+  "feature": "A3 R-34-RUNTIME-STD-002 恢复与语义水位补充",
+  "tool": {
+    "version": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "model": {
+    "root": "model",
+    "entry": "RecoveryWake.tla"
+  },
+  "contract_sha256": "782983172b61f5b094fb6a3ba73554f160cffb96f7f611d53f3041760817f678",
+  "profiles": {
+    "positive-resume-observation": {
+      "config": "positive-resume-observation.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "OriginalRequestPreserved",
+        "OldEffectAtMostOnce",
+        "RecoveryDoesNotPlan",
+        "PendingSemanticPreserved",
+        "PlannedForFreshCause",
+        "AuthorizedAdmission",
+        "AutomaticRetryBound",
+        "OnlyContextConsumes",
+        "UnknownKeepsOriginalOutcome"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "resume",
+            "observation"
+          ],
+          "paused": true,
+          "receipt": true,
+          "budget": 5,
+          "failures": 1,
+          "manual": false,
+          "fault": "none",
+          "probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "positive-observation-resume": {
+      "config": "positive-observation-resume.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "OriginalRequestPreserved",
+        "OldEffectAtMostOnce",
+        "RecoveryDoesNotPlan",
+        "PendingSemanticPreserved",
+        "PlannedForFreshCause",
+        "AuthorizedAdmission",
+        "AutomaticRetryBound",
+        "OnlyContextConsumes",
+        "UnknownKeepsOriginalOutcome"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "observation",
+            "resume"
+          ],
+          "paused": true,
+          "receipt": true,
+          "budget": 5,
+          "failures": 1,
+          "manual": false,
+          "fault": "none",
+          "probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "positive-ordinary": {
+      "config": "positive-ordinary.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "OriginalRequestPreserved",
+        "OldEffectAtMostOnce",
+        "RecoveryDoesNotPlan",
+        "PendingSemanticPreserved",
+        "PlannedForFreshCause",
+        "AuthorizedAdmission",
+        "AutomaticRetryBound",
+        "OnlyContextConsumes",
+        "UnknownKeepsOriginalOutcome"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "clock",
+            "move",
+            "foreign-observation"
+          ],
+          "paused": false,
+          "receipt": true,
+          "budget": 5,
+          "failures": 1,
+          "manual": false,
+          "fault": "none",
+          "probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "positive-batch": {
+      "config": "positive-batch.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "OriginalRequestPreserved",
+        "OldEffectAtMostOnce",
+        "RecoveryDoesNotPlan",
+        "PendingSemanticPreserved",
+        "PlannedForFreshCause",
+        "AuthorizedAdmission",
+        "AutomaticRetryBound",
+        "OnlyContextConsumes",
+        "UnknownKeepsOriginalOutcome"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "pause-resume",
+            "observation"
+          ],
+          "paused": false,
+          "receipt": true,
+          "budget": 5,
+          "failures": 1,
+          "manual": false,
+          "fault": "none",
+          "probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "positive-control": {
+      "config": "positive-control.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "OriginalRequestPreserved",
+        "OldEffectAtMostOnce",
+        "RecoveryDoesNotPlan",
+        "PendingSemanticPreserved",
+        "PlannedForFreshCause",
+        "AuthorizedAdmission",
+        "AutomaticRetryBound",
+        "OnlyContextConsumes",
+        "UnknownKeepsOriginalOutcome"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "observation",
+            "revoke",
+            "grant",
+            "observation"
+          ],
+          "paused": false,
+          "receipt": false,
+          "budget": 5,
+          "failures": 0,
+          "manual": false,
+          "fault": "none",
+          "probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "positive-terminal": {
+      "config": "positive-terminal.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "OriginalRequestPreserved",
+        "OldEffectAtMostOnce",
+        "RecoveryDoesNotPlan",
+        "PendingSemanticPreserved",
+        "PlannedForFreshCause",
+        "AuthorizedAdmission",
+        "AutomaticRetryBound",
+        "OnlyContextConsumes",
+        "UnknownKeepsOriginalOutcome"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "observation",
+            "end"
+          ],
+          "paused": false,
+          "receipt": true,
+          "budget": 5,
+          "failures": 1,
+          "manual": false,
+          "fault": "none",
+          "probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "positive-unknown": {
+      "config": "positive-unknown.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "OriginalRequestPreserved",
+        "OldEffectAtMostOnce",
+        "RecoveryDoesNotPlan",
+        "PendingSemanticPreserved",
+        "PlannedForFreshCause",
+        "AuthorizedAdmission",
+        "AutomaticRetryBound",
+        "OnlyContextConsumes",
+        "UnknownKeepsOriginalOutcome"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "resume",
+            "observation"
+          ],
+          "paused": true,
+          "receipt": false,
+          "budget": 5,
+          "failures": 4,
+          "manual": true,
+          "fault": "none",
+          "probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "positive-budget": {
+      "config": "positive-budget.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "OriginalRequestPreserved",
+        "OldEffectAtMostOnce",
+        "RecoveryDoesNotPlan",
+        "PendingSemanticPreserved",
+        "PlannedForFreshCause",
+        "AuthorizedAdmission",
+        "AutomaticRetryBound",
+        "OnlyContextConsumes",
+        "UnknownKeepsOriginalOutcome"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "resume",
+            "observation"
+          ],
+          "paused": true,
+          "receipt": true,
+          "budget": 1,
+          "failures": 1,
+          "manual": false,
+          "fault": "none",
+          "probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "live-resume-observation": {
+      "config": "live-resume-observation.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "OriginalRequestPreserved",
+        "OldEffectAtMostOnce",
+        "RecoveryDoesNotPlan",
+        "PendingSemanticPreserved",
+        "PlannedForFreshCause",
+        "AuthorizedAdmission",
+        "AutomaticRetryBound",
+        "OnlyContextConsumes",
+        "UnknownKeepsOriginalOutcome"
+      ],
+      "expected_properties": [
+        "SemanticProgress"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "resume",
+            "observation"
+          ],
+          "paused": true,
+          "receipt": true,
+          "budget": 5,
+          "failures": 1,
+          "manual": false,
+          "fault": "none",
+          "probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "SemanticProgress，原请求最终收束且运行条件最终稳定具备；动作弱公平"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "live-batch": {
+      "config": "live-batch.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "OriginalRequestPreserved",
+        "OldEffectAtMostOnce",
+        "RecoveryDoesNotPlan",
+        "PendingSemanticPreserved",
+        "PlannedForFreshCause",
+        "AuthorizedAdmission",
+        "AutomaticRetryBound",
+        "OnlyContextConsumes",
+        "UnknownKeepsOriginalOutcome"
+      ],
+      "expected_properties": [
+        "SemanticProgress"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "pause-resume",
+            "observation"
+          ],
+          "paused": false,
+          "receipt": true,
+          "budget": 5,
+          "failures": 1,
+          "manual": false,
+          "fault": "none",
+          "probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "SemanticProgress，原请求最终收束且运行条件最终稳定具备；动作弱公平"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "live-control": {
+      "config": "live-control.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "OriginalRequestPreserved",
+        "OldEffectAtMostOnce",
+        "RecoveryDoesNotPlan",
+        "PendingSemanticPreserved",
+        "PlannedForFreshCause",
+        "AuthorizedAdmission",
+        "AutomaticRetryBound",
+        "OnlyContextConsumes",
+        "UnknownKeepsOriginalOutcome"
+      ],
+      "expected_properties": [
+        "SemanticProgress"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "observation",
+            "revoke",
+            "grant",
+            "observation"
+          ],
+          "paused": false,
+          "receipt": false,
+          "budget": 5,
+          "failures": 0,
+          "manual": false,
+          "fault": "none",
+          "probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "SemanticProgress，原请求最终收束且运行条件最终稳定具备；动作弱公平"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "negative-type": {
+      "config": "negative-type.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "resume",
+            "observation"
+          ],
+          "paused": true,
+          "receipt": true,
+          "budget": 5,
+          "failures": 1,
+          "manual": false,
+          "fault": "type",
+          "probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "negative-identity": {
+      "config": "negative-identity.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "OriginalRequestPreserved"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "resume",
+            "observation"
+          ],
+          "paused": false,
+          "receipt": false,
+          "budget": 5,
+          "failures": 1,
+          "manual": false,
+          "fault": "identity",
+          "probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "negative-repeat-effect": {
+      "config": "negative-repeat-effect.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "OldEffectAtMostOnce"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "resume",
+            "observation"
+          ],
+          "paused": false,
+          "receipt": false,
+          "budget": 5,
+          "failures": 1,
+          "manual": false,
+          "fault": "repeat-effect",
+          "probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "negative-recovery-plan": {
+      "config": "negative-recovery-plan.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "RecoveryDoesNotPlan"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "resume",
+            "observation"
+          ],
+          "paused": true,
+          "receipt": true,
+          "budget": 5,
+          "failures": 1,
+          "manual": false,
+          "fault": "recovery-plan",
+          "probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "negative-clear-newer": {
+      "config": "negative-clear-newer.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "PendingSemanticPreserved"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "observation",
+            "observation"
+          ],
+          "paused": false,
+          "receipt": true,
+          "budget": 5,
+          "failures": 1,
+          "manual": false,
+          "fault": "clear-newer",
+          "probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "negative-ordinary": {
+      "config": "negative-ordinary.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "PlannedForFreshCause"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "clock"
+          ],
+          "paused": false,
+          "receipt": true,
+          "budget": 5,
+          "failures": 1,
+          "manual": false,
+          "fault": "ordinary",
+          "probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "negative-duplicate": {
+      "config": "negative-duplicate.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "PlannedForFreshCause"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "observation"
+          ],
+          "paused": false,
+          "receipt": true,
+          "budget": 5,
+          "failures": 1,
+          "manual": false,
+          "fault": "duplicate",
+          "probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "negative-gate": {
+      "config": "negative-gate.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "AuthorizedAdmission"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "observation",
+            "revoke"
+          ],
+          "paused": false,
+          "receipt": true,
+          "budget": 5,
+          "failures": 1,
+          "manual": false,
+          "fault": "gate",
+          "probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "negative-overretry": {
+      "config": "negative-overretry.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "AutomaticRetryBound"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "resume",
+            "observation"
+          ],
+          "paused": true,
+          "receipt": true,
+          "budget": 5,
+          "failures": 5,
+          "manual": false,
+          "fault": "overretry",
+          "probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "negative-pending-spin": {
+      "config": "negative-pending-spin.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "AutomaticRetryBound"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "resume",
+            "observation"
+          ],
+          "paused": true,
+          "receipt": true,
+          "budget": 5,
+          "failures": 4,
+          "manual": false,
+          "fault": "pending-spin",
+          "probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "negative-recovery-consume": {
+      "config": "negative-recovery-consume.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "OnlyContextConsumes"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "resume",
+            "observation"
+          ],
+          "paused": true,
+          "receipt": true,
+          "budget": 5,
+          "failures": 1,
+          "manual": false,
+          "fault": "recovery-consume",
+          "probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "old25c-counterexample": {
+      "config": "old25c-counterexample.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [],
+      "expected_properties": [
+        "SemanticProgress"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "resume"
+          ],
+          "paused": true,
+          "receipt": true,
+          "budget": 5,
+          "failures": 0,
+          "manual": false,
+          "fault": "old25c",
+          "probe": "before-read-only"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "SemanticProgress，原请求最终收束且运行条件最终稳定具备；动作弱公平"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "witness-before-read": {
+      "config": "witness-before-read.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "resume",
+            "observation"
+          ],
+          "paused": true,
+          "receipt": true,
+          "budget": 5,
+          "failures": 1,
+          "manual": false,
+          "fault": "none",
+          "probe": "before-read"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "witness-during-read": {
+      "config": "witness-during-read.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "resume",
+            "observation"
+          ],
+          "paused": true,
+          "receipt": true,
+          "budget": 5,
+          "failures": 1,
+          "manual": false,
+          "fault": "none",
+          "probe": "during-read"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "witness-receipt": {
+      "config": "witness-receipt.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "resume",
+            "observation"
+          ],
+          "paused": true,
+          "receipt": true,
+          "budget": 5,
+          "failures": 1,
+          "manual": false,
+          "fault": "none",
+          "probe": "receipt"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "witness-context-race": {
+      "config": "witness-context-race.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "observation",
+            "observation"
+          ],
+          "paused": false,
+          "receipt": true,
+          "budget": 5,
+          "failures": 1,
+          "manual": false,
+          "fault": "none",
+          "probe": "context-race"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "witness-duplicate": {
+      "config": "witness-duplicate.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "observation"
+          ],
+          "paused": false,
+          "receipt": true,
+          "budget": 5,
+          "failures": 1,
+          "manual": false,
+          "fault": "none",
+          "probe": "duplicate"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "witness-batch": {
+      "config": "witness-batch.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "pause-resume"
+          ],
+          "paused": false,
+          "receipt": true,
+          "budget": 5,
+          "failures": 1,
+          "manual": false,
+          "fault": "none",
+          "probe": "batch"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "witness-retry-bound": {
+      "config": "witness-retry-bound.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "resume",
+            "observation"
+          ],
+          "paused": true,
+          "receipt": true,
+          "budget": 5,
+          "failures": 4,
+          "manual": false,
+          "fault": "none",
+          "probe": "retry-bound"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "witness-explicit": {
+      "config": "witness-explicit.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "resume",
+            "observation"
+          ],
+          "paused": true,
+          "receipt": true,
+          "budget": 5,
+          "failures": 4,
+          "manual": true,
+          "fault": "none",
+          "probe": "explicit"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "witness-blocked": {
+      "config": "witness-blocked.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "observation",
+            "revoke"
+          ],
+          "paused": false,
+          "receipt": true,
+          "budget": 5,
+          "failures": 1,
+          "manual": false,
+          "fault": "none",
+          "probe": "blocked"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "witness-terminal": {
+      "config": "witness-terminal.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "observation",
+            "end"
+          ],
+          "paused": false,
+          "receipt": true,
+          "budget": 5,
+          "failures": 1,
+          "manual": false,
+          "fault": "none",
+          "probe": "terminal"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "witness-pure-recovery": {
+      "config": "witness-pure-recovery.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "clock"
+          ],
+          "paused": false,
+          "receipt": true,
+          "budget": 5,
+          "failures": 1,
+          "manual": false,
+          "fault": "none",
+          "probe": "pure-recovery"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "witness-prepared-pause": {
+      "config": "witness-prepared-pause.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "observation",
+            "pause"
+          ],
+          "paused": false,
+          "receipt": true,
+          "budget": 5,
+          "failures": 1,
+          "manual": false,
+          "fault": "none",
+          "probe": "prepared-pause"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "negative-unknown-reject": {
+      "config": "negative-unknown-reject.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "UnknownKeepsOriginalOutcome"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "resume",
+            "observation"
+          ],
+          "paused": true,
+          "receipt": true,
+          "budget": 5,
+          "failures": 1,
+          "manual": false,
+          "fault": "unknown-reject",
+          "probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "witness-before-read-observation": {
+      "config": "witness-before-read-observation.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "observation"
+          ],
+          "paused": false,
+          "receipt": true,
+          "budget": 5,
+          "failures": 1,
+          "manual": false,
+          "fault": "none",
+          "probe": "before-read"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "witness-during-read-observation": {
+      "config": "witness-during-read-observation.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "observation"
+          ],
+          "paused": false,
+          "receipt": true,
+          "budget": 5,
+          "failures": 1,
+          "manual": false,
+          "fault": "none",
+          "probe": "during-read"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "witness-receipt-observation": {
+      "config": "witness-receipt-observation.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "observation"
+          ],
+          "paused": false,
+          "receipt": true,
+          "budget": 5,
+          "failures": 1,
+          "manual": false,
+          "fault": "none",
+          "probe": "receipt"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    },
+    "witness-reserve-race": {
+      "config": "witness-reserve-race.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "plan": [
+            "observation",
+            "observation"
+          ],
+          "paused": false,
+          "receipt": true,
+          "budget": 5,
+          "failures": 1,
+          "manual": false,
+          "fault": "none",
+          "probe": "reserve-race"
+        },
+        "covered_interleavings_and_faults": [
+          "恢复读取前/读后返回前/原收据收束前",
+          "事务通知乱序和各重复一次",
+          "正常context读取、成功reserve提交、返回后水位消费三步分离",
+          "有限Unknown恢复、当前权限/epoch/暂停/终态门槛"
+        ],
+        "excluded_behaviors": [
+          "跨进程通知丢失与重放持久队列",
+          "供应商文本质量",
+          "SQL隔离与原预算/权限模块内部正确性",
+          "无限外部工作集"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "同一角色只有一个编排器；#27公平调度/共享并发预算作为前提。",
+        "sessionSeq按提交递增，context包含其baseSeq之前的相关合法事实。",
+        "成功reserve提交为授权/预算接纳点；返回可延迟。原请求副作用与Receipt原子幂等。",
+        "交错范围为本进程通知；活性不保证永久Unknown或失去授权/预算时继续规划。"
+      ]
+    }
+  }
+}

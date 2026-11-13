@@ -1,0 +1,91 @@
+{
+  "mode": "restore+check+align",
+  "source_revision": "0ac2bf5f34e49f4508daac74b1d6b38196f15ad6",
+  "source_tree": "047cdcc3a4a2a7239e29e66b31796d5098e6c491",
+  "source_parent": "316ede70eb26133c743ad49f6d294d4ca5be2b89",
+  "source_content": "本次仅从新固定Git对象读取；旧完整tree与运行日志未恢复。",
+  "contract_sha256": "782983172b61f5b094fb6a3ba73554f160cffb96f7f611d53f3041760817f678",
+  "model_recovery": {
+    "status": "EXACT_SHA256_MATCH",
+    "source": "本会话原始模型写入与后续变换的精确工具输入",
+    "prior_model_sha256": "cefc90a3bc05805ade0e60c2d253d520c15fd52f0f35c85dd649d17d503334ae",
+    "restored_model_sha256": "cefc90a3bc05805ade0e60c2d253d520c15fd52f0f35c85dd649d17d503334ae",
+    "prior_manifest_sha256": "0a5a8a0c51d26a6cb47619cf388bace41b1e64e9c159b0510d6169f4a975f0a8",
+    "restored_manifest_sha256": "0a5a8a0c51d26a6cb47619cf388bace41b1e64e9c159b0510d6169f4a975f0a8",
+    "prior_commit_available": false,
+    "prior_logs_available": false,
+    "prior_checks_reused": false
+  },
+  "runtime": "Node异步单进程编排器；权威操作为PostgreSQL Session锁事务。",
+  "state_storage": "pending/last仅进程内；原Decision、ai_runs、Receipt持久化。",
+  "atomicity": "Prepare、reserve成功提交、返回后的同步水位消费三步分离；通知可在各步之间到达。",
+  "inherited_models": [
+    "formal/adv001/model/Scheduler.tla",
+    "formal/adv001/model/MovementCommands.tla"
+  ],
+  "assumed_modules": [
+    "共享并发与轮转公平",
+    "原请求身份/摘要/移动seq/Receipt原子幂等",
+    "授权投影与实际动作暂停/终态/权限围栏"
+  ],
+  "excluded": [
+    "跨进程通知丢失或恢复持久水位",
+    "无限事件或任意参与者数量",
+    "完整provider输出/保存失败后的恢复组合",
+    "真实数据库/HTTP/Socket执行",
+    "外部模型质量",
+    "源码refinement证明与完整A3"
+  ],
+  "files": [
+    {
+      "path": "backend/runtime.mjs",
+      "git_blob": "6e4c442b9e068ee489e7a63e74e1854362609dce",
+      "sha256": "5414b71f77343a0259143dc59936dbe1aa234c7018cd2511f375dd949abfb477"
+    },
+    {
+      "path": "backend/decisions.mjs",
+      "git_blob": "f201ff0759a19d1357ef4466dbd04ea85ce1528e",
+      "sha256": "fb4c659d8971e85bb464c3d28d6a7e44cd44267d8124463acff28fdca668016f"
+    },
+    {
+      "path": "backend/ai/orchestrator.mjs",
+      "git_blob": "adc051b3ead230d3c1c29376dcd40884fc941062",
+      "sha256": "a8245cddfcbce12bde5252377ee683342e94069adf0a61acfc9435c4d1654036"
+    },
+    {
+      "path": "backend/ai/persistence.mjs",
+      "git_blob": "f9cd0be07b0092cd13b1c4eebfef1131eab125ce",
+      "sha256": "70d97c8f17314596267d72c22faca4916364560ee6a06c1bde43538c5ea9b031"
+    },
+    {
+      "path": "backend/ai/spatial-decisions.mjs",
+      "git_blob": "49e61f419d7798ebff9e71da9019639198471e94",
+      "sha256": "476710dd550ed1ec6b23d23419164cdd88f4b401eea9aacbe9682a423923400f"
+    },
+    {
+      "path": "backend/ai/spatial-runtime.md",
+      "git_blob": "23e7172e78c6c792808b5a467e4796685c569c31",
+      "sha256": "dc6b74a03df65fff0ac4b0158fac656edece3bf735cc6c0d3c68e4d785ced0cc"
+    },
+    {
+      "path": "docs/specs/adv-protocol.md",
+      "git_blob": "4269ef53f9eb81989f3f6a866880319bab04c2b8",
+      "sha256": "8a124c275b3548b7ee65118086eb46197de33a2778a1b577264308adf4e8e220"
+    },
+    {
+      "path": "game/spatial-rules.mjs",
+      "git_blob": "98362b83be1cb324fe71647d78a0922046dc9d97",
+      "sha256": "2d5427a451e759a4b09eeceb4ed1c4a4fff3b10d60538d8ffbba8af2028aac81"
+    },
+    {
+      "path": "protocol/node.mjs",
+      "git_blob": "609042f920c02660f7f9f7a7991f2f10566001b5",
+      "sha256": "fcbf2da0fd72566e8af112dd615224bb5a18c1c9ae23fafc4739b6aa9b69754a"
+    },
+    {
+      "path": "protocol/index.mjs",
+      "git_blob": "ce818149e9c4121d50a1adc6185f33e28aca7999",
+      "sha256": "a28bee237d590a5586cc844c7b0bdb234ff9b1719c15775ad55c9a2ce275aa3b"
+    }
+  ]
+}

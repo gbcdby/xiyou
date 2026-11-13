@@ -28,7 +28,8 @@ async function point(page, position) {
   const location = await map.evaluate((svg, position) => {
     const transform = svg.getScreenCTM(); const p = new DOMPoint(position.x, position.y).matrixTransform(transform); const box = svg.getBoundingClientRect();
     const pixel = { x: Math.round(p.x), y: Math.round(p.y) }; const world = new DOMPoint(pixel.x, pixel.y).matrixTransform(transform.inverse());
-    return { click: { x: pixel.x - box.left, y: pixel.y - box.top }, pixel, mappedWorld: { x: Math.round(world.x), y: Math.round(world.y) } };
+    const hit = document.elementFromPoint(pixel.x, pixel.y);
+    return { click: { x: pixel.x - box.left, y: pixel.y - box.top }, pixel, mappedWorld: { x: Math.round(world.x), y: Math.round(world.y) }, hit: { tag: hit?.tagName, class: hit?.getAttribute('class'), label: hit?.closest('button')?.getAttribute('aria-label') || null } };
   }, position);
   assert.deepEqual(location.mappedWorld, position, '当前缩放须存在能命中原精确世界目标的屏幕像素');
   await map.click({ position: location.click });
@@ -37,7 +38,7 @@ async function point(page, position) {
     return drafts.filter(draft => !previousIds.includes(draft.id)).map(draft => JSON.parse(draft.raw)).find(request => request.action.kind === 'move_to');
   }, previousIds), '本次真实地图点击发出移动请求');
   assert.deepEqual(outgoing.action.destination, position, '实际发出世界坐标与原精确目标一致');
-  report.pointerChecks.push({ target: position, screenPixel: location.pixel, mappedWorld: location.mappedWorld, sentDestination: outgoing.action.destination, movementCommandSeq: outgoing.action.movementCommandSeq });
+  report.pointerChecks.push({ target: position, screenPixel: location.pixel, mappedWorld: location.mappedWorld, hit: location.hit, sentDestination: outgoing.action.destination, movementCommandSeq: outgoing.action.movementCommandSeq });
   return previousSequence;
 }
 async function screenshot(page, name) { const path = resolve(output, name); await page.screenshot({ path, fullPage: true }); report.checks.push({ screenshot: name, sha256: sha256(await readFile(path)) }); }
@@ -83,10 +84,18 @@ try {
       await host.locator('.spatial-object-list').getByRole('button', { name: '公共支架', exact: true }).click();
       await host.getByRole('button', { name: '走近并拿取', exact: true }).click();
       await until(async () => { const p = (await snapshot(host)).projection; return p.items.some(i => i.name === '公共支架' && i.location.kind === 'held' && i.location.ownerRef === p.self.entityRef); }, '到达后实际拿取公共物');
-      const approachSequence = await point(partner, { x: 180, y: 110 });
-      await arrived(partner, approachSequence, { x: 180, y: 110 }, '收件人本次路线实际到达交接处');
+      const previousFixture = await partner.getByTestId('spatial-map').evaluate(svg => {
+        const point = new DOMPoint(180, 110).matrixTransform(svg.getScreenCTM()), hit = document.elementFromPoint(point.x, point.y);
+        return { world: { x: 180, y: 110 }, screen: { x: point.x, y: point.y }, hit: { tag: hit?.tagName, class: hit?.getAttribute('class'), label: hit?.closest('button')?.getAttribute('aria-label') || null } };
+      });
+      const approachSequence = await point(partner, { x: 180, y: 150 });
+      await arrived(partner, approachSequence, { x: 180, y: 150 }, '收件人本次路线实际到达交接处');
       const partnerName = (await snapshot(partner)).projection.self.name;
       const recipient = (await snapshot(host)).projection.entities.find(e => e.name === partnerName);
+      const holder = (await snapshot(host)).projection.self.position;
+      const handoffDistance = Math.hypot(holder.x - recipient.position.x, holder.y - recipient.position.y);
+      assert.ok(handoffDistance < 80, '替代空地仍位于原近距交接范围内');
+      report.pointerChecks.push({ group: count, previousFixture, handoff: { holder, recipient: recipient.position, distance: handoffDistance, limit: 80 } });
       assert.ok(recipient); await host.getByRole('button', { name: '行囊', exact: true }).click();
       await host.getByLabel('交接给', { exact: true }).selectOption(recipient.entityRef);
       await host.locator('.spatial-inventory').getByRole('button', { name: '交给对方', exact: true }).click();
