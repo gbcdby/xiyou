@@ -22,10 +22,10 @@ export function screenPosition(position: Position, view: ScreenRect, viewport: S
 }
 
 /** 按本人/选择优先，在屏幕空域排布；容不下的对象仍保留地图标记及独立对象列表入口。 */
-export function layoutSpatialLabels(inputs: SpatialLabelInput[], viewport: ScreenSize): { labels: SpatialLabel[]; omitted: number } {
+export function layoutSpatialLabels(inputs: SpatialLabelInput[], viewport: ScreenSize, reserved: ScreenRect[] = []): { labels: SpatialLabel[]; omitted: number } {
   if (viewport.width < 64 || viewport.height < 60) return { labels: [], omitted: inputs.length };
   const margin = 8;
-  const bodies = inputs.map(input => expand(input.footprint, 8));
+  const bodies = [...inputs.map(input => expand(input.footprint, 8)), ...reserved.map(rect => expand(rect, 8))];
   const labels: SpatialLabel[] = [];
   for (const input of [...inputs].sort((a, b) => a.priority - b.priority)) {
     const width = Math.min(viewport.width - margin * 2, Math.max(64, Math.min(180, [...input.label].length * 14 + 22)));

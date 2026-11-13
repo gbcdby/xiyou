@@ -6,8 +6,11 @@ import { layoutSpatialLabels, screenPosition } from '../../domain/spatial-labels
 import { sceneArtwork, spriteForAppearance } from '../../domain/gaolao-art.ts';
 import SpatialActorArt from './SpatialActorArt.vue';
 import type { SpatialLabelInput } from '../../domain/spatial-labels.ts';
-const props = defineProps<{ snapshot: SnapshotV2; disabled: boolean; selected?: string; personLabels?: Record<string, string> }>();
-const emit = defineEmits<{ move: [position: Position]; select: [reference: string]; stop: []; objects: []; settled: [value: { viewId: string; epoch: string; sequence: string; position: Position }] }>();
+import type { ScreenRect } from '../../domain/spatial-labels.ts';
+import { cameraForHud, hudCameraAlternatives, placeHudCards } from '../../domain/gaolao-hud-layout.ts';
+import type { HudMapGeometry, HudCameraArea, HudCardPlacement } from '../../domain/gaolao-hud-layout.ts';
+const props = defineProps<{ snapshot: SnapshotV2; disabled: boolean; selected?: string; personLabels?: Record<string, string>; immersive?: boolean; cameraArea?: HudCameraArea; hudNotice?: string; hudRestoreLabel?: string }>();
+const emit = defineEmits<{ move: [position: Position]; select: [reference: string]; stop: []; objects: []; restore: []; geometry: [value: HudMapGeometry]; settled: [value: { viewId: string; epoch: string; sequence: string; position: Position }] }>();
 const projection = computed(() => props.snapshot.projection);
 const motion = new ConfirmedMotion(); const frameTime = ref(performance.now()); let frame = 0; let settledKey = '';
 function draw(now: number) {
@@ -26,17 +29,23 @@ const artAttempt = ref(0); const missingResources = ref(new Set<string>());
 function resource(value: { file: string; available: boolean }) { const next = new Set(missingResources.value); if (value.available) next.delete(value.file); else next.add(value.file); missingResources.value = next; }
 function retryArtwork() { missingResources.value = new Set(); artAttempt.value++; backgroundFailed.value = false; }
 const viewportSize = ref({ width: 0, height: 0 });
-let resize: ResizeObserver | null = null;
+let resize: ResizeObserver | null = null; let resizeFrame = 0;
+function measureViewport() {
+  resizeFrame = 0; const rect = viewport.value?.getBoundingClientRect();
+  if (rect && (rect.width !== viewportSize.value.width || rect.height !== viewportSize.value.height)) viewportSize.value = { width: rect.width, height: rect.height };
+}
 onMounted(() => {
   motionPreference = matchMedia('(prefers-reduced-motion: reduce)'); updateMotionPreference(); motionPreference.addEventListener('change', updateMotionPreference);
-  resize = new ResizeObserver(() => { const rect = viewport.value?.getBoundingClientRect(); if (rect) viewportSize.value = { width: rect.width, height: rect.height }; });
+  // 下一帧再发布尺寸，避免观察回调内的相机/标签更新再次改变被观察布局。
+  resize = new ResizeObserver(() => { if (!resizeFrame) resizeFrame = requestAnimationFrame(measureViewport); });
   if (viewport.value) resize.observe(viewport.value);
 });
 watch(viewport, (element, previous) => { if (previous) resize?.unobserve(previous); if (element) resize?.observe(element); });
-onBeforeUnmount(() => { if (frame) cancelAnimationFrame(frame); resize?.disconnect(); motionPreference?.removeEventListener('change', updateMotionPreference); });
+onBeforeUnmount(() => { if (frame) cancelAnimationFrame(frame); if (resizeFrame) cancelAnimationFrame(resizeFrame); resize?.disconnect(); motionPreference?.removeEventListener('change', updateMotionPreference); });
 const svg = ref<SVGSVGElement | null>(null); const follow = ref(true);
 function toggleCamera() { follow.value = !follow.value; }
 function returnToSelf() { follow.value = true; }
+defineExpose({ returnToSelf });
 const scene = computed(() => projection.value.scene);
 const backgroundFailed = ref(false);
 const artwork = computed(() => sceneArtwork(scene.value?.sceneId));
@@ -48,22 +57,13 @@ const people = computed(() => [...projection.value.entities.filter(e => e.entity
   return { ...e, appearanceId, position: reducedMotion.value ? e.position : pose?.position || e.position, drawnFacing: pose?.facing || e.facing, moving: !projection.value.paused && !reducedMotion.value && Boolean(pose?.moving), distance: pose?.distance || 0 };
 }).sort((a, b) => a.position!.y - b.position!.y));
 const groundItems = computed(() => projection.value.items.filter(i => i.location.kind === 'ground' && i.location.sceneId === scene.value?.sceneId));
-const box = computed(() => {
-  const map = scene.value; if (!map) return '0 0 1000 700';
-  const position = motion.position(projection.value.self.entityRef, frameTime.value) || projection.value.self.position;
-  if (!follow.value || !position) return `0 0 ${map.width} ${map.height}`;
-  const size = viewportSize.value;
-  const width = Math.min(map.width, Math.max(400, size.width / 0.9)); const height = Math.min(map.height, Math.max(400, size.height / 0.9));
-  const x = Math.max(0, Math.min(map.width - width, position.x - width / 2));
-  const y = Math.max(0, Math.min(map.height - height, position.y - height / 2));
-  return `${x} ${y} ${width} ${height}`;
-});
-const mapScale = computed(() => { const [, , width, height] = box.value.split(' ').map(Number); return Math.max(0.01, Math.min(viewportSize.value.width / width, viewportSize.value.height / height)); });
-const hitRadius = computed(() => Math.max(18, 22 / mapScale.value));
 const protectedRefs = computed(() => new Set([projection.value.self.entityRef, props.selected, ...(projection.value.chapter?.follows.filter(follow => ['accepted', 'following', 'paused', 'arrived'].includes(follow.status)).map(follow => follow.subjectRef) || [])]));
-const labels = computed(() => {
-  const [x, y, width, height] = box.value.split(' ').map(Number);
-  const view = { x, y, width, height }; const size = viewportSize.value;
+const selectedObjects = computed(() => [
+  ...projection.value.targets.filter(target => target.entityRef === props.selected && target.sceneId === scene.value?.sceneId).map(target => ({ key: target.entityRef, position: target.position })),
+  ...groundItems.value.flatMap(item => item.entityRef === props.selected && item.location.kind === 'ground' ? [{ key: item.entityRef, position: item.location.position }] : []),
+]);
+function labelsFor(view: ScreenRect, cardSpace: ScreenRect[] = []) {
+  const size = viewportSize.value;
   const inputs: SpatialLabelInput[] = [];
   function add(key: string, label: string, position: Position, kind: 'person' | 'object' | 'anchor', bounds?: { x: number; y: number; width: number; height: number }) {
     const point = screenPosition(position, view, size);
@@ -80,8 +80,87 @@ const labels = computed(() => {
   for (const target of projection.value.targets) if (target.sceneId === scene.value?.sceneId) add(target.entityRef, target.name, target.position, 'object');
   for (const item of groundItems.value) if (item.location.kind === 'ground') add(item.entityRef, item.name, item.location.position, 'object');
   for (const anchor of scene.value?.anchors || []) if (scene.value?.exits.some(exit => exit.anchorId === anchor.anchorId)) add('anchor:' + anchor.anchorId, anchor.label, anchor.position, 'anchor');
-  return layoutSpatialLabels(inputs, size);
+  return layoutSpatialLabels(inputs, size, props.immersive ? [...(props.cameraArea?.reserved || []), ...cardSpace] : undefined);
+}
+function geometryFor(view: ScreenRect, placed: ReturnType<typeof labelsFor>): HudMapGeometry {
+  const size = viewportSize.value;
+  const protectedRegions: ScreenRect[] = [];
+  if (props.immersive && size.width && size.height) {
+    for (const person of people.value) if (protectedRefs.value.has(person.entityRef) && person.position) {
+      const point = screenPosition(person.position, view, size);
+      const sprite = spriteForAppearance(person.appearanceId, person.drawnFacing, person.moving, person.distance, reducedMotion.value);
+      const b = sprite ? { ...sprite.bounds, x: sprite.mirrorX ? -sprite.bounds.x - sprite.bounds.width : sprite.bounds.x } : { x: -22, y: -82, width: 44, height: 90 };
+      protectedRegions.push({ x: point.x + b.x * point.scale, y: point.y + b.y * point.scale, width: b.width * point.scale, height: b.height * point.scale });
+    }
+    for (const object of selectedObjects.value) {
+      const point = screenPosition(object.position, view, size);
+      // 选中物的保护不依赖标签能否排下，不能靠略去名字让卡片获得虚假的空域。
+      protectedRegions.push({ x: point.x - 18 * point.scale - 8, y: point.y - 18 * point.scale - 8, width: 36 * point.scale + 16, height: 36 * point.scale + 16 });
+    }
+    for (const label of placed.labels) if (protectedRefs.value.has(label.key)) {
+      protectedRegions.push({ x: label.x, y: label.y, width: label.width, height: label.height });
+    }
+  }
+  return { viewport: size, protectedRegions };
+}
+const framing = computed(() => {
+  const map = scene.value, size = viewportSize.value;
+  const position = motion.position(projection.value.self.entityRef, frameTime.value) || projection.value.self.position;
+  const assemble = (view: ScreenRect, cardSpace: ScreenRect[] = []) => { const labels = labelsFor(view, cardSpace); return { view, labels, geometry: geometryFor(view, labels) }; };
+  if (!map) return assemble({ x: 0, y: 0, width: 1000, height: 700 });
+  if (!follow.value || !position) return assemble({ x: 0, y: 0, width: map.width, height: map.height });
+  const width = Math.min(map.width, Math.max(400, size.width / .9)), height = Math.min(map.height, Math.max(400, size.height / .9));
+  let preferred = { x: Math.max(0, Math.min(map.width - width, position.x - width / 2)), y: Math.max(0, Math.min(map.height - height, position.y - height / 2)), width, height };
+  const area = props.cameraArea;
+  if (!props.immersive || !area || !size.width || !size.height) return assemble(preferred);
+  const actors = people.value.filter(person => protectedRefs.value.has(person.entityRef));
+  const positions = [...actors.map(person => person.position!), ...selectedObjects.value.map(object => object.position)];
+  const scale = Math.min(size.width / width, size.height / height);
+  const covers = width * scale >= size.width - .01 && height * scale >= size.height - .01;
+  const alreadyVisible = positions.every(point => { const screen = screenPosition(point, preferred, size); return screen.x - 106 >= area.x && screen.x + 106 <= area.x + area.width && screen.y - 90 * screen.scale - 70 >= area.y && screen.y + 60 <= area.y + area.height; });
+  if (!covers || !alreadyVisible) preferred = cameraForHud({ viewport: size, scene: map, safeArea: area, positions });
+  const requiredLabels = [...actors.map(person => person.entityRef), ...selectedObjects.value.map(object => object.key)];
+  const state = (card: HudCardPlacement) => !card.rect ? 2 : card.collapsed ? 1 : 0;
+  const overlaps = (a: ScreenRect, b: ScreenRect) => a.x < b.x + b.width + 8 && a.x + a.width > b.x - 8 && a.y < b.y + b.height + 8 && a.y + a.height > b.y - 8;
+  function rank(value: ReturnType<typeof assemble>) {
+    const regions = value.geometry.protectedRegions;
+    const hidden = requiredLabels.filter(key => !value.labels.labels.some(label => label.key === key)).length + regions.filter(rect => rect.x < 0 || rect.y < 0 || rect.x + rect.width > size.width || rect.y + rect.height > size.height || area!.reserved?.some(fixed => overlaps(rect, fixed))).length;
+    const cards = placeHudCards({ panel: area!.panel, follow: area!.follow, protectedRegions: regions });
+    return { ...value, rank: [hidden, area!.panel ? state(cards.panel) : 0, area!.follow ? state(cards.follow) : 0] };
+  }
+  const better = (next: ReturnType<typeof rank>, previous: ReturnType<typeof rank>) => {
+    const difference = next.rank.findIndex((value, index) => value !== previous.rank[index]);
+    return difference >= 0 && next.rank[difference] < previous.rank[difference];
+  };
+  function evaluate(view: ScreenRect) {
+    const initial = rank(assemble(view));
+    if (initial.rank.every(value => value === 0)) return initial;
+    // 姓名先占位可能把原本可用的正文空间切碎。只补一次联合排布候选，
+    // 最终仍逐项核对所有必要姓名、当前身体、固定HUD和16px，不能靠省略姓名腾空。
+    const bodies = geometryFor(view, { labels: [], omitted: 0 }).protectedRegions;
+    const cards = placeHudCards({ panel: area!.panel, follow: area!.follow, protectedRegions: bodies });
+    const cardSpace = [cards.panel, cards.follow].flatMap(card => card.rect && !card.collapsed ? [{ x: card.rect.x - 8, y: card.rect.y - 8, width: card.rect.width + 16, height: card.rect.height + 16 }] : []);
+    if (!cardSpace.length) return initial;
+    const alternative = rank(assemble(view, cardSpace));
+    return better(alternative, initial) ? alternative : initial;
+  }
+  // 先用原取景；仅在正文/姓名无法同时容纳时评估有限换边，绝不改变世界位置或选择。
+  let best = evaluate(preferred);
+  if (best.rank.every(value => value === 0)) return best;
+  for (const candidate of hudCameraAlternatives(size, map, positions, area, preferred)) {
+    const next = evaluate(candidate);
+    if (better(next, best)) best = next;
+    if (best.rank.every(value => value === 0)) break;
+  }
+  return best;
 });
+const box = computed(() => { const { x, y, width, height } = framing.value.view; return `${x} ${y} ${width} ${height}`; });
+const labels = computed(() => framing.value.labels);
+const hudGeometry = computed(() => framing.value.geometry);
+const mapScale = computed(() => Math.max(.01, Math.min(viewportSize.value.width / framing.value.view.width, viewportSize.value.height / framing.value.view.height)));
+const hitRadius = computed(() => Math.max(18, 22 / mapScale.value));
+let lastHudGeometry = '';
+watch(hudGeometry, value => { const key = JSON.stringify(value); if (key !== lastHudGeometry) { lastHudGeometry = key; emit('geometry', value); } }, { immediate: true, flush: 'post' });
 const points = (values: Position[]) => values.map(p => `${p.x},${p.y}`).join(' ');
 function click(event: MouseEvent) {
   if (props.disabled || !svg.value || !scene.value) return;
@@ -101,7 +180,7 @@ function keyboard(event: KeyboardEvent) {
 
 <template>
   <section class="spatial-map-card" aria-label="授权行走场景">
-    <header class="spatial-map-toolbar"><div><strong>{{ scene?.name || '等待场景' }}</strong><span>点地行走 · 选中物件后靠近操作</span></div><div class="button-row"><button class="secondary-button" @click="toggleCamera">{{ follow ? '查看全图' : '跟随角色' }}</button><button class="secondary-button" @click="returnToSelf">回到角色</button></div></header>
+    <header class="spatial-map-toolbar"><div><strong>{{ scene?.name || '等待场景' }}</strong><span>点地行走 · 选中物件后靠近操作</span></div><div class="button-row"><button class="secondary-button" @click="toggleCamera">{{ follow ? '查看全图' : '跟随角色' }}</button><button class="secondary-button" @click="returnToSelf">回到角色</button><button v-if="immersive" class="secondary-button" @click="emit('objects')">附近对象与出口</button></div><p v-if="immersive && hudNotice" class="gaolao-space-notice" role="status">{{ hudNotice }}<button class="text-button" @click="emit('restore')">{{ hudRestoreLabel || '回到角色' }}</button></p></header>
     <div v-if="scene" ref="viewport" class="spatial-map-viewport">
     <svg ref="svg" class="spatial-map" :class="{ 'has-artwork': artwork && !backgroundFailed }" data-testid="spatial-map" :viewBox="box" tabindex="0" role="application" aria-label="行走地图，点击地面或使用方向键移动，Escape停步" @click="click" @keydown="keyboard">
       <defs><mask v-for="(obstacle, index) in scene.obstacles" :id="`obstacle-mask-${index}`" :key="obstacle.obstacleId" maskUnits="userSpaceOnUse" :x="0" :y="0" :width="scene.width" :height="scene.height"><rect :width="scene.width" :height="scene.height" fill="white" /><template v-for="area in scene.walkableAreas" :key="area.areaId"><polygon v-if="obstacle.exceptAreas.includes(area.areaId)" :points="points(area.polygon)" fill="black" /></template></mask></defs>
@@ -125,6 +204,6 @@ function keyboard(event: KeyboardEvent) {
     <div class="spatial-map-labels"><template v-for="label in labels.labels" :key="label.key"><button v-if="label.selectable" class="spatial-map-label" :class="{ selected: selected === label.key, self: projection.self.entityRef === label.key }" :style="{ left: label.x + 'px', top: label.y + 'px', width: label.width + 'px', height: label.height + 'px' }" :title="label.label" :aria-label="'选择' + label.label" @click.stop="emit('select', label.key)"><span>{{ label.label }}</span></button><span v-else class="spatial-map-label spatial-map-label-anchor" :style="{ left: label.x + 'px', top: label.y + 'px', width: label.width + 'px', height: label.height + 'px' }">{{ label.label }}</span></template></div>
     </div>
     <button v-if="labels.omitted" class="text-button spatial-map-overflow" @click="emit('objects')">另有 {{ labels.omitted }} 个标记，查看对象与地点</button>
-    <p class="spatial-map-note" role="status">{{ projection.paused ? '等待同伴回来，眼下的准备会保留。' : '点地行走，靠近后再看一看。' }}<template v-if="backgroundFailed || missingResources.size"> 部分图像暂未载入，仍可继续操作。<button class="text-button" @click="retryArtwork">重新载入图像</button></template></p>
+    <p v-if="!immersive || projection.paused || backgroundFailed || missingResources.size" class="spatial-map-note" role="status">{{ projection.paused ? '等待同伴回来，眼下的准备会保留。' : '点地行走，靠近后再看一看。' }}<template v-if="backgroundFailed || missingResources.size"> 部分图像暂未载入，仍可继续操作。<button class="text-button" @click="retryArtwork">重新载入图像</button></template></p>
   </section>
 </template>

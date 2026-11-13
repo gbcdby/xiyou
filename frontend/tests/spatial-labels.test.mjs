@@ -36,3 +36,18 @@ test('CSS像素映射保留SVG等比留白，放大或缩小不改变原世界�
   assert.deepEqual(screenPosition({ x: 100, y: 100 }, { x: 0, y: 0, width: 1000, height: 800 }, { width: 350, height: 350 }), { x: 35, y: 70, scale: .35 });
   assert.deepEqual(screenPosition({ x: 500, y: 400 }, { x: 200, y: 100, width: 600, height: 600 }, { width: 900, height: 600 }), { x: 450, y: 300, scale: 1 });
 });
+
+test('HUD固定面板占用的空域不能被本人或选中目标标签重新占用', () => {
+  const inputs = [
+    actor('self', 195, 376, { label: '1号 · 高才 · 你', priority: 0, footprint: { x: 150, y: 277, width: 86, height: 106 } }),
+    actor('cuilan', 195, 316, { footprint: { x: 177, y: 228, width: 36, height: 86 } }),
+    actor('selected', 195, 480, { label: '公共门撑', priority: 0, footprint: { x: 171, y: 459, width: 48, height: 48 } }),
+  ];
+  const fixed = [{ x: 12, y: 128, width: 310, height: 58 }, { x: 12, y: 691, width: 366, height: 66 }];
+  const result = layoutSpatialLabels(inputs, { width: 390, height: 844 }, fixed);
+  for (const key of ['self', 'selected']) {
+    const label = result.labels.find(label => label.key === key); assert.ok(label, '保护对象仍有独立可见标签');
+    assert.ok(label.width >= 44 && label.height >= 44);
+    for (const panel of fixed) assert.equal(intersects(label, panel), false, '固定HUD不能挡住受保护称呼');
+  }
+});

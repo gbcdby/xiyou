@@ -18,17 +18,34 @@ const operationLabels = {
 
 export async function closeReading(page) {
   const pane = page.locator('.spatial-reading-pane');
-  if (await pane.count()) await pane.getByRole('button', { name: /^关闭/ }).click();
+  if (await pane.count()) {
+    const condensed = page.locator('.spatial-sidebar.hud-card-collapsed').getByRole('button', { name: '关闭暂收浮卡', exact: true });
+    if (await condensed.isVisible()) await condensed.click();
+    else await pane.getByRole('button', { name: /^关闭/ }).click();
+  }
 }
 export async function openReading(page, label) {
   await closeReading(page);
   await page.getByRole('button', { name: label, exact: true }).click();
+  const restore = page.locator('.spatial-sidebar.hud-card-collapsed').getByRole('button', { name: '取消选择并展开', exact: true });
+  const restored = await restore.isVisible();
+  if (restored) await restore.click();
   await page.locator('.spatial-reading-pane').waitFor();
+  return restored;
+}
+
+/** HUD 将附近列表折叠；先走可见入口，再沿原对象/锚点按钮操作。 */
+async function openObjects(page) {
+  const entry = page.getByRole('button', { name: '附近对象与出口', exact: true });
+  if (await entry.count()) await entry.click();
+  const restore = page.locator('.spatial-sidebar.hud-card-collapsed').getByRole('button', { name: '取消选择并展开', exact: true });
+  if (await restore.isVisible()) await restore.click();
 }
 
 /** 读取当前授权对象以找到玩家可见的文字入口；不解析真实角色ID或跨观察者引用。 */
 export async function selectObject(page, reference) {
   await closeReading(page);
+  await openObjects(page);
   const p = (await snapshot(page)).projection;
   const target = [...p.targets, ...p.items, ...p.entities].find(entity => entity.entityRef === reference);
   assert.ok(target, '目标必须出现在当前玩家授权投影中');
@@ -82,12 +99,26 @@ export async function waitHumanReceipt(page, previousIds, expected, report, play
   return settled;
 }
 
+/** 要操作的对象卡暂收时，经可见接近入口恢复；纯选择与原地查看不调用此步骤。 */
+async function revealObjectAction(page, reference, control, report, player) {
+  const approach = page.locator('.spatial-sidebar.hud-card-collapsed').getByRole('button', { name: '走近并查看', exact: true });
+  await until(async () => await control.isVisible() || await approach.isVisible(), '对象操作或短卡接近入口可见', 5000);
+  if (await approach.isVisible()) {
+    const beforeInspect = (await clientState(page)).actions.map(draft => draft.id);
+    await approach.click();
+    const receipt = await waitHumanReceipt(page, beforeInspect, { kind: 'inspect', targetRef: reference }, report, player, '短卡走近并查看');
+    assert.equal(receipt.status, 'Accepted', '正常走近后必须确认同一对象可查看');
+    await control.waitFor();
+  }
+}
+
 /** 把公共人类意图映射为真正可见的页面操作。这里绝不调用 spatialClient.send/move。 */
 export async function humanAction(page, action, report, player) {
   const previousIds = (await clientState(page)).actions.map(draft => draft.id);
   let label = action.kind;
   if (action.kind === 'move_to') {
     await closeReading(page);
+    await openObjects(page);
     const p = (await snapshot(page)).projection;
     assert.equal(p.self.sceneId, action.sceneId, '跨场景移动须先经过实际出口按钮');
     const anchor = p.scene.anchors.find(anchor => samePosition(anchor.position, action.destination));
@@ -96,7 +127,9 @@ export async function humanAction(page, action, report, player) {
     await page.locator('.spatial-object-list').getByRole('button', { name: label, exact: true }).click();
   } else if (action.kind === 'take_item') {
     await selectObject(page, action.itemRef); label = '走近并拿取';
-    await page.getByRole('button', { name: label, exact: true }).click();
+    const take = page.getByRole('button', { name: label, exact: true });
+    await revealObjectAction(page, action.itemRef, take, report, player);
+    await take.click();
   } else if (action.kind === 'transfer_item') {
     const p = (await snapshot(page)).projection; const item = p.items.find(item => item.entityRef === action.itemRef);
     await openReading(page, '行囊'); await visibleRecipient(page, action.recipientRef, '交接给');
@@ -113,10 +146,11 @@ export async function humanAction(page, action, report, player) {
     assert.ok(await record.count(), '当前材料通过可见原文选择');
     label = '分享给选定对象'; await record.last().getByRole('button', { name: label, exact: true }).click();
   } else if (action.kind === 'cooperate') {
-    await closeReading(page); label = action.phase === 'ready' ? '我已就位' : action.phase === 'prepare' ? '参与准备' : '取消准备';
+    await closeReading(page); await openObjects(page); label = action.phase === 'ready' ? '我已就位' : action.phase === 'prepare' ? '参与准备' : '取消准备';
     await page.getByRole('button', { name: label, exact: true }).click();
   } else if (action.kind === 'propose_follow') {
     await selectObject(page, action.subjectRef);
+    await revealObjectAction(page, action.subjectRef, page.getByLabel('随行目的地', { exact: true }), report, player);
     await page.getByLabel('随行目的地', { exact: true }).selectOption(action.destinationId);
     await visibleRecipient(page, action.leaderRef, '本次带路者');
     const button = page.getByRole('button', { name: /^(提出|重新提议)随行安排$/ }); label = await button.innerText(); await button.click();
@@ -132,6 +166,7 @@ export async function humanAction(page, action, report, player) {
   } else if (action.kind === 'interact') {
     await selectObject(page, action.targetRef);
     const area = page.locator('.gaolao-interaction');
+    await revealObjectAction(page, action.targetRef, area, report, player);
     if (action.operationId === 'gz-compare-sources') {
       const observations = (await snapshot(page)).projection.observations;
       for (const reference of action.parameters.evidenceRefs) {
@@ -236,7 +271,7 @@ export async function browserRoom({ server, browser, baseURL, count, contentVers
       assert.ok(exit, '跨场景须存在公开出口');
       if (actors.get(key).internal) await move(key, scene.sceneId, scene.anchors.find(anchor => anchor.anchorId === exit.anchorId).position);
       else {
-        const page = pages[key]; await closeReading(page);
+        const page = pages[key]; await closeReading(page); await openObjects(page);
         const beforeIds = (await clientState(page)).actions.map(action => action.id);
         const visibleScene = (await snapshot(page)).projection.scene;
         const exitIndex = visibleScene.exits.findIndex(visibleExit => visibleExit.exitId === exit.exitId);
