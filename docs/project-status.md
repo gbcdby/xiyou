@@ -2,15 +2,17 @@
 
 ## 当前基线
 
-更新日期：**2026-11-12（北京时间）**。本次读取的代码基线为 [`main@5d0befff`](https://github.com/gbcdby/xiyou/tree/5d0befff3673c840756d64a982878ac76dfd0273)。当前实现已包含 `game/`、`protocol/`、`formal/`、`backend/`、`frontend/` 与 `content/`：Node.js / PostgreSQL 权威服务、Vue 界面、受控双角色、第一机制关及授权复盘。上一轮终点为[模拟输入下完成验证并合并的可玩切片](specs/vertical-slice-mock.md)，实际候选、独立审查、运行证据与合并事实见 [#2](https://github.com/gbcdby/xiyou/issues/2) / [#12](https://github.com/gbcdby/xiyou/issues/12) / [PR #22](https://github.com/gbcdby/xiyou/pull/22)。历史证据保留其对应候选身份，不代表本次重跑。本页不复制活动任务清单。
+核对日期：**2026-11-13（UTC）**。本次已合入代码的观察基线为 [`main@818ae314`](https://github.com/gbcdby/xiyou/tree/818ae314bf77ee3c4881ef39ceca7b601c4aeda1)。仓库已包含 Node.js / PostgreSQL 权威服务、Vue 空间客户端、连续行走与距离/遮挡规则、高老庄同意/借貌/随行与授权复盘、三名自主 NPC 运行链及独立场景本人策略。代码入口见[仓库说明](../README.md)、[空间自主角色运行链](../backend/ai/spatial-runtime.md)和[本人场景策略运行链](../backend/scene-policy-runtime.md)。本页固定已观察的基线，不复制活动任务清单；后续候选、审查、合并与验收读取 [#23](https://github.com/gbcdby/xiyou/issues/23) 及关联 PR。
 
-模拟策略经正式 Gateway、Decision 和 Validator 执行；有限模型、数据库、HTTP / Socket.IO 与浏览器检查分别保留证据。实际供应商质量、真人体验、真实设备和公网部署仍未执行。运行入口见[仓库说明](../README.md#本机运行模拟切片)。
+历史 VS-001 的[模拟验收修订](specs/vertical-slice-mock.md)及 [PR #22](https://github.com/gbcdby/xiyou/pull/22) 保留原候选和范围，不能替代 ADV-001 验收。代码已合入、受控输入验证、有限模型检查、正式运行视觉、真实供应商质量、真人体验和真实设备分别取证，首章阶段释放以 [#29](https://github.com/gbcdby/xiyou/issues/29) 为准；本页不声明整章完成或已部署。
 
-### 当前设计阶段：可行走的无战斗冒险
+### 当前实施范围：首章高老庄
 
-用户要求可行走交互、水墨淡彩、无战斗，以故事和协作解谜为主；随后要求更经典的选题，并明确首章做高老庄。当前为[ADV-001 v0.2：首章高老庄](specs/narrative-adventure.md)：救出并安置翠兰→乔装或公开会面→查证候客旧事→自愿入队或安全分别。路线为高老庄→五庄观→白骨精→女儿国→真假美猴王（条件候选）→火焰山；红孩儿仅作CH05未过门槛时的替补，采用时按原著重排。原[五庄观双路线详案](specs/narrative-adventure-wuzhuang.md)保留为CH02。
+用户要求可行走交互、水墨淡彩、无战斗，以故事和协作解谜为主；当前按[ADV-001 v0.2：首章高老庄](specs/narrative-adventure.md)接续实施：救出并安置翠兰→乔装或公开会面→查证候客旧事→自愿入队或安全分别。2026-11-13 的接管范围仅第一章，后续章节暂缓，依据保存在 [#23](https://github.com/gbcdby/xiyou/issues/23)。原[五庄观双路线详案](specs/narrative-adventure-wuzhuang.md)及其他章节选题保留为设计材料，不进入本轮制作。
 
-当前移动仍为 `regionId` 区域切换，世界界面仍以区域按钮和物件卡片为主；连续行走、空间距离/遮挡和正式高老庄内容尚未实现；当前身份投影与固定双NPC内容结构也需扩展，不能直接支撑悟空乔装和自主八戒。下一工程阶段的释放条件见[ADV-001推进阶段](specs/narrative-adventure.md#12-推进阶段与释放条件)，不能将旧M0–M4模拟结果当作新玩法或视觉验收。此次仅修订设计候选，沿用[汇总 #23](https://github.com/gbcdby/xiyou/issues/23)和[草稿设计 PR #24](https://github.com/gbcdby/xiyou/pull/24)，未开始业务实现、实施拆票、合并或发布。正式UI需先有已采用的视觉基准，再做实现与截图对照。
+已合基线中的新局默认选择 `gaolaozhuang-scene-v2`，与旧 `gaolaozhuang-v1` 回归内容分开；[PR #47](https://github.com/gbcdby/xiyou/pull/47) 已接入翠兰本人场景策略，[PR #49](https://github.com/gbcdby/xiyou/pull/49) 已接入权威朝向与观察恢复一致性。场景策略不调用模型，三名自主 NPC 的外部供应商仍须按明确配置与授权接入。原 Spec 中“仅设计、尚未实施”的描述是 v0.2 设计轮快照，实施接续说明及 [#23](https://github.com/gbcdby/xiyou/issues/23) 承接后续工作；阶段释放条件不变。
+
+正式界面与素材沿用 [GZ-VIS-01/v1.1](specs/gaolaozhuang-visual.md) 的已采用范围。独立 H5 原型、静态设计图与当前 Vue 应用分别判断；角色方向帧、必要场景资产及真实运行对照仍按视觉规范和 [#33](https://github.com/gbcdby/xiyou/issues/33) 验收，不能由原型或静态图推定完成。
 
 ### 初始检查快照（历史）
 
@@ -37,7 +39,7 @@
 
 - 《西游记》多人合作叙事：唐僧与孙悟空跨关持续存在；每局最多五位真人，玩家逐关扮演当地配角。
 - 六关具体路线由[ADV-001 v0.2](specs/narrative-adventure.md)承接；高老庄已确定首发，五庄观保留第二章，后续经典章节逐章细化且真假美猴王仍有选题门槛。高老庄启用八戒作为第三名章内自主AI，唐僧/悟空仍是两位跨章核心。
-- 用户新决定：可行走的水墨淡彩场景，无战斗，以故事、探索与协作解谜为主；具体行为和验收以ADV-001候选为准。
+- 用户已明确：可行走的水墨淡彩场景，无战斗，以故事、探索与协作解谜为主；具体行为和验收以有效 ADV-001 修订及其实施接续为准。
 - 协作依赖信息、权限与能力的差异；NPC 可以怀疑、拒绝和改变计划。世界事实、NPC 信念与角色陈述必须分开。
 - 当前前端采用 Vue 3 与 TypeScript，后端采用 Node.js 与 PostgreSQL。服务端维护权威状态与顺序事件，受控模型输入通过 Model Gateway 接入。
 - 关卡以配置复用机制，按阶段扩展。下一步无需预先完成六关剧情或全部六类能力。
@@ -64,7 +66,7 @@
 
 用户于 **2026-11-11** 要求按 `auto` 开始下一步，范围为 M0–M4 的设计、验证路径与任务拆分，优先收敛 M0 协议。正式入口为 [VS-001](specs/vertical-slice.md)，包含玩法、协议、验证与任务目录。
 
-当前工作的真实记录为 [Spec 汇总 #2](https://github.com/gbcdby/xiyou/issues/2)与[设计任务 #3](https://github.com/gbcdby/xiyou/issues/3)。设计基于文档整理 [PR #1](https://github.com/gbcdby/xiyou/pull/1) 的 `0a161f4d` 候选；合并情况、有效修订及审查结果读关联记录，不从页面存在推定。上文“当前基线”保留最初检查事实，不冒充活动进度。
+该设计轮的记录为 [Spec 汇总 #2](https://github.com/gbcdby/xiyou/issues/2)与[设计任务 #3](https://github.com/gbcdby/xiyou/issues/3)。设计基于文档整理 [PR #1](https://github.com/gbcdby/xiyou/pull/1) 的 `0a161f4d` 候选；合并情况、有效修订及审查结果读关联记录，不从页面存在推定。本节保留历史设计起点，不作为当前活动进度。
 
 | 设计验收编号 | 设计交付应回答的问题 |
 | --- | --- |

@@ -5,12 +5,19 @@ const ref = 'R' + 'a'.repeat(32);
 test('高老庄有限动作：随行、本人回应及全员结束具有版本字段', () => {
   for (const action of [
     {kind:'propose_follow',subjectRef:ref,leaderRef:ref,destinationId:'front-guest-room',expectedConsentVersion:'0'},
+    {kind:'propose_follow',subjectRef:ref,leaderRef:ref,destinationId:'front-guest-room',expectedTargetRevision:'7'},
     {kind:'respond_consent',consentId:ref,expectedConsentVersion:'1',response:'accept'},
     {kind:'withdraw_consent',consentId:ref,expectedConsentVersion:'2'},
     {kind:'request_end',proposalId:'ending-1',proposalVersion:'0',scope:'recruitment'},
     {kind:'confirm_end',proposalId:'ending-1',proposalVersion:'1'},
     {kind:'interact',targetRef:ref,operationId:'gz-confirm-settlement',expectedTargetRevision:'1',parameters:{consentId:ref,expectedConsentVersion:'2'}},
   ]) assert.deepEqual(validateSpatial('ActionV2', action), action);
+});
+test('随行提议的新旧并发依据互斥，不能省略、混用或自报许可范围', () => {
+  const base = { kind: 'propose_follow', subjectRef: ref, leaderRef: ref, destinationId: 'front-guest-room' };
+  for (const fields of [{}, { expectedTargetRevision: '7', expectedConsentVersion: '2' }, { expectedTargetRevision: '7', purpose: 'private_items' }, { expectedTargetRevision: '7', consentId: ref }, { expectedTargetRevision: 7 }]) {
+    assert.throws(() => validateSpatial('ActionV2', { ...base, ...fields }));
+  }
 });
 test('高老庄有限动作：外部不能提交本人身份、到达或世界事实', () => {
   for (const extra of [{principalKind:'scene_role'},{subjectId:'cuilan'},{arrived:true},{CuilanSafe:true}])

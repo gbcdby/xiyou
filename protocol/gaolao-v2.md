@@ -10,12 +10,14 @@
 
 | 动作 | 参数及语义 |
 | --- | --- |
-| propose_follow | subjectRef、leaderRef、destinationId、expectedConsentVersion；创建新提议，须真实本人回应后才能跟随。期望版本是该主体现有 follow 用途同意版本，无记录为0。 |
+| propose_follow | subjectRef、leaderRef、destinationId、expectedTargetRevision；版本取请求者当前合法可见人物的 EntityViewV2.resourceRevision。创建新提议，须真实本人回应后才能跟随；兼容旧 expectedConsentVersion 形态，两种版本只取其一。 |
 | respond_consent | consentId、expectedConsentVersion、response=accept/decline/defer；真实同意主体独有。每次有效回应提升版本。 |
 | withdraw_consent | consentId、expectedConsentVersion；真实主体撤回，取消依赖旧许可的活动计划。 |
 | request_end | proposalId、proposalVersion、scope=chapter/recruitment；proposalVersion 是当前确认轮版本，无记录为0。请求者作为首位确认人，其他当前在线真人须各自 confirm_end。 |
 | confirm_end | proposalId、proposalVersion；使用投影显示的新版本；在线集合变化使未完成轮失效。 |
 | interact | targetRef、operationId、expectedTargetRevision；有限参数见下表。NPC 目标的语义版本取 EntityViewV2.resourceRevision；场景目标沿 TargetViewV2.resourceRevision。 |
+
+SP06（#33 / #34）的正常随行表单使用公开人物版本，缺少它时不准备请求；自己的私有 `consents/follows` 数组为空不代表全局用途槽为 0，不能据此填写 `expectedConsentVersion: "0"`。legacy `expectedConsentVersion` 仍按原精确同意版本守卫处理；闭合 schema 拒绝同时提供两种版本或都不提供。两种格式成功后都在同一事务内推进人物版本，原 nonce 原串恢复、本人同意与隐私受众保持原合同，详见 [ADV 协议第 6 节](../docs/specs/adv-protocol.md#6-同意随行与安置)。
 
 ## 有限 operationId 与参数
 

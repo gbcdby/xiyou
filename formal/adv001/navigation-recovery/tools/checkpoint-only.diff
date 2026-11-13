@@ -1,0 +1,11 @@
+--- original/run_tlc.py
++++ bundled/run_tlc_checkpoint.py
+@@ -466,7 +466,7 @@
+                    "-Djava.io.tmpdir=" + str(runtime_tmp),
+                    "-DTLA-Library=" + os.pathsep.join(libdirs),
+                    "-cp", str(jar), "tlc2.TLC", "-tool", "-modelcheck",
+-                   "-workers", str(workers), "-metadir", str(output / "states"),
++                   "-checkpoint", "1", "-workers", str(workers), "-metadir", str(output / "states"),
+                    "-config", str(config_snapshot), str(entry_snapshot)]
+         log = output / "tlc.log"
+         result["command"] = command

@@ -10,14 +10,14 @@ import type { ScreenRect } from '../../domain/spatial-labels.ts';
 import { cameraForHud, hudCameraAlternatives, placeHudCards } from '../../domain/gaolao-hud-layout.ts';
 import type { HudMapGeometry, HudCameraArea, HudCardPlacement } from '../../domain/gaolao-hud-layout.ts';
 const props = defineProps<{ snapshot: SnapshotV2; disabled: boolean; selected?: string; personLabels?: Record<string, string>; immersive?: boolean; cameraArea?: HudCameraArea; hudNotice?: string; hudRestoreLabel?: string }>();
-const emit = defineEmits<{ move: [position: Position]; select: [reference: string]; stop: []; objects: []; restore: []; geometry: [value: HudMapGeometry]; settled: [value: { viewId: string; epoch: string; sequence: string; position: Position }] }>();
+const emit = defineEmits<{ move: [position: Position]; select: [reference: string]; stop: []; objects: []; restore: []; geometry: [value: HudMapGeometry]; settled: [value: { viewId: string; epoch: string; movementId: string; sequence: string; position: Position }] }>();
 const projection = computed(() => props.snapshot.projection);
 const motion = new ConfirmedMotion(); const frameTime = ref(performance.now()); let frame = 0; let settledKey = '';
 function draw(now: number) {
   frame = 0; frameTime.value = now; const p = projection.value;
   if (p.movement?.status === 'arrived' && p.self.position && motion.settled(p.self.entityRef, now)) {
-    const key = `${props.snapshot.viewId}:${p.self.controlEpoch}:${p.movement.movementCommandSeq}`;
-    if (key !== settledKey) { settledKey = key; emit('settled', { viewId: props.snapshot.viewId, epoch: p.self.controlEpoch, sequence: p.movement.movementCommandSeq, position: p.self.position }); }
+    const key = `${props.snapshot.viewId}:${p.self.controlEpoch}:${p.movement.movementId}:${p.movement.movementCommandSeq}`;
+    if (key !== settledKey) { settledKey = key; emit('settled', { viewId: props.snapshot.viewId, epoch: p.self.controlEpoch, movementId: p.movement.movementId, sequence: p.movement.movementCommandSeq, position: p.self.position }); }
   }
   if (motion.active(now)) frame = requestAnimationFrame(draw);
 }

@@ -57,10 +57,16 @@ function followProposal(tx,actorId,principalKind,request){
   if(subject.characterId!==p.cuilan||leader.kind!=='human'||!tx.liveActorIds.has(leader.characterId))refuse('RULE_VIOLATION');
   near(tx,tx.state.characters[actorId],subject);near(tx,subject,leader);if(!doorOpen(tx))refuse('NOT_READY');
   const destination=tx.content.chapterRules.safeDestinations.find(d=>d.destinationId===action.destinationId);if(!destination)refuse('TARGET_UNAVAILABLE');
-  const old=tx.state.chapter.follows[p.cuilan],consent=consentRequest(tx,actorId,p.cuilan,'follow',{destinationId:destination.destinationId,leaderId:leader.characterId},action.expectedConsentVersion);
+  // 新领路者只持有合法可见的人物版本；不要求读取上一份私有许可。
+  const publicRevision=Object.hasOwn(action,'expectedTargetRevision');
+  if(publicRevision&&subject.resourceRevision!==action.expectedTargetRevision)refuse('STALE_PRECONDITION');
+  const expectedVersion=publicRevision?consentVersion(tx.state,p.cuilan,'follow'):action.expectedConsentVersion;
+  const old=tx.state.chapter.follows[p.cuilan],consent=consentRequest(tx,actorId,p.cuilan,'follow',{destinationId:destination.destinationId,leaderId:leader.characterId},expectedVersion);
   const follow={followId:opaqueRef(),subjectId:p.cuilan,requesterId:actorId,leaderId:leader.characterId,destinationId:destination.destinationId,planVersion:next(old?.planVersion??'0'),routeVersion:tx.state.mapVersion,consentId:consent.consentId,consentVersion:consent.version,status:'proposed',reason:'等待本人确认这次安排。',subjectEpoch:subject.controlEpoch,leaderEpoch:leader.controlEpoch,lastSceneTime:tx.state.sceneTimeMs};
   if(scenePolicy(tx.content))follow.policyRoute=createPolicyRoute(tx.state,tx.content,subject,leader,destination.destinationId);
   changeChapter(tx,c=>{c.follows[p.cuilan]=follow;});
+  // 兼容的旧格式也推进公开围栏，防止同一人物版本的另一提议覆盖本次安排。
+  bump(tx,p.cuilan);
   if(follow.policyRoute)for(const id of new Set([subject.characterId,actorId,leader.characterId]))observeGaolao(tx,id,{statement:policySummary(tx.content,follow.policyRoute,destination.destinationId),shareable:false,fields:[{key:'destination',label:'本次提议地点',value:destination.destinationId},{key:'consent',label:'待回应许可',value:consent.consentId},{key:'version',label:'提议版本',value:consent.version}]});
   return {};
 }

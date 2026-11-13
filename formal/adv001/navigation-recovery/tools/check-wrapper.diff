@@ -1,0 +1,26 @@
+--- original/check.py
++++ package/check.py
+@@ -23,13 +23,20 @@
+     out.mkdir(parents=True, exist_ok=False)
+     manifest = json.loads((HERE / 'verification.json').read_text())
+     expectations = json.loads((HERE / 'expectations.json').read_text())
+-    names = args.profile or list(manifest['profiles'])
++    manifests = {name: HERE / 'verification.json' for name in manifest['profiles']}
++    for group in ['receipt', 'type']:
++        source = HERE / 'negative-controls' / group / 'verification.json'
++        for name in json.loads(source.read_text())['profiles']:
++            if name in manifests:
++                raise ValueError('负对照名称重复')
++            manifests[name] = source
++    names = args.profile or list(manifests)
+     if not set(names) <= set(expectations):
+         raise ValueError('配置没有预声明判据')
+     def run(name):
+         destination = out / name
+-        command = [sys.executable, str(ROOT / '.agents/skills/worker-tla/scripts/run_tlc.py'),
+-                   '--manifest', str(HERE / 'verification.json'), '--profile', name,
++        command = [sys.executable, str(HERE / 'tools/run_tlc_checkpoint.py'),
++                   '--manifest', str(manifests[name]), '--profile', name,
+                    '--jar', str(Path(args.jar).resolve()), '--out', str(destination)]
+         process = subprocess.run(command, cwd=ROOT, text=True, capture_output=True)
+         result_file = destination / 'result.json'

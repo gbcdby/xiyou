@@ -1,0 +1,1388 @@
+{
+  "schema_version": 1,
+  "feature": "SP06 新领路者公开随行提议并发身份",
+  "tool": {
+    "version": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "model": {
+    "root": "model",
+    "entry": "FollowProposal.tla"
+  },
+  "profiles": {
+    "positive-public": {
+      "config": "positive-public.cfg",
+      "timeout_seconds": 120,
+      "workers": 2,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "TypeOK",
+        "PublicProposalAvailable",
+        "VersionFenced",
+        "RevisionAccounting",
+        "SingleBaselineCommit",
+        "AtMostOnce",
+        "ReceiptStable",
+        "NonceDigestBound",
+        "ReceiptOwnerScoped",
+        "ScopeAuthorized",
+        "SchemaExclusive",
+        "ConsentPrivate",
+        "ProposalOnly"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Scenario": "competition",
+          "LegacyFirst": false,
+          "Fault": "none"
+        },
+        "actors": 2,
+        "nonces_per_authenticated_actor": 2,
+        "attempts_per_nonce": 2,
+        "capture_per_source": 1,
+        "subject_semantic_changes": 1,
+        "movement_events": 1,
+        "view_and_epoch_rotations_per_actor": 0,
+        "invalid_context_changes": 0,
+        "covered_interleavings_and_faults": [
+          "两个公开捕获，或legacy与公开捕获；两提交顺序、3次总提交、每主体2个nonce",
+          "一次respond或withdraw与读取/提交交错，加一次无语义Move",
+          "相同基线一次效果、原串Receipt及确认丢失后重试；其它身份/范围保持合法"
+        ],
+        "excluded_behaviors": [
+          "PG故障实现、密码学、JSON解析及decimal大数",
+          "真实几何、全章路径/动画、本人自然语言决定",
+          "三个以上参与者或无限请求/重启、完整Consent/Nav组合",
+          "一次轨迹内多种不同变参的连续组合；竞争轨迹最多3次提交，身份轨迹最多2次提交",
+          "旧宽交叉配置的多种环境变化连续组合未穷尽；本族结论不代替它。组合安全性的源码单调性论证见MODEL_CONTRACT.md。"
+        ],
+        "liveness": "NOT_CHECKED",
+        "total_submit_calls": 3,
+        "altered_field_dimensions_per_trace": 1,
+        "total_environment_changes": "one subject semantic change plus one Move; no identity/scope change",
+        "environment_changes_independent": true,
+        "view_and_epoch_combined_change": false
+      },
+      "assumptions": [
+        "单Session锁定事务把规则检查、私有槽/计划/公开revision更新与Receipt保存一起提交，原Receipt在事务之外确认；只核提议效果，不要求恢复原Receipt时权威时钟或其他导航完全不变。",
+        "nonce键属于当前认证会话/主体，完整解析请求按语义摘要比较；哈希碰撞、JSON序列化和SQL隔离实现不在TLC中。",
+        "只有已授权的既有回应/撤回能改变私有槽；本模型不重新证明其本人资格、路径、到达或本人选择逻辑。",
+        "公共人物resourceRevision本来可见；隐私性质只禁止新增读取他人许可/随行内容，不声称阻止从公开语义版本推断“状态曾改变”。",
+        "有界安全性与可达见证，不假设网络最终成功，不声称活性/任意请求量/任意故障次数/整个章节组合。"
+      ]
+    },
+    "positive-mixed": {
+      "config": "positive-mixed.cfg",
+      "timeout_seconds": 120,
+      "workers": 2,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "TypeOK",
+        "PublicProposalAvailable",
+        "VersionFenced",
+        "RevisionAccounting",
+        "SingleBaselineCommit",
+        "AtMostOnce",
+        "ReceiptStable",
+        "NonceDigestBound",
+        "ReceiptOwnerScoped",
+        "ScopeAuthorized",
+        "SchemaExclusive",
+        "ConsentPrivate",
+        "ProposalOnly"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Scenario": "competition",
+          "LegacyFirst": true,
+          "Fault": "none"
+        },
+        "actors": 2,
+        "nonces_per_authenticated_actor": 2,
+        "attempts_per_nonce": 2,
+        "capture_per_source": 1,
+        "subject_semantic_changes": 1,
+        "movement_events": 1,
+        "view_and_epoch_rotations_per_actor": 0,
+        "invalid_context_changes": 0,
+        "covered_interleavings_and_faults": [
+          "两个公开捕获，或legacy与公开捕获；两提交顺序、3次总提交、每主体2个nonce",
+          "一次respond或withdraw与读取/提交交错，加一次无语义Move",
+          "相同基线一次效果、原串Receipt及确认丢失后重试；其它身份/范围保持合法"
+        ],
+        "excluded_behaviors": [
+          "PG故障实现、密码学、JSON解析及decimal大数",
+          "真实几何、全章路径/动画、本人自然语言决定",
+          "三个以上参与者或无限请求/重启、完整Consent/Nav组合",
+          "一次轨迹内多种不同变参的连续组合；竞争轨迹最多3次提交，身份轨迹最多2次提交",
+          "旧宽交叉配置的多种环境变化连续组合未穷尽；本族结论不代替它。组合安全性的源码单调性论证见MODEL_CONTRACT.md。"
+        ],
+        "liveness": "NOT_CHECKED",
+        "total_submit_calls": 3,
+        "altered_field_dimensions_per_trace": 1,
+        "total_environment_changes": "one subject semantic change plus one Move; no identity/scope change",
+        "environment_changes_independent": true,
+        "view_and_epoch_combined_change": false
+      },
+      "assumptions": [
+        "单Session锁定事务把规则检查、私有槽/计划/公开revision更新与Receipt保存一起提交，原Receipt在事务之外确认；只核提议效果，不要求恢复原Receipt时权威时钟或其他导航完全不变。",
+        "nonce键属于当前认证会话/主体，完整解析请求按语义摘要比较；哈希碰撞、JSON序列化和SQL隔离实现不在TLC中。",
+        "只有已授权的既有回应/撤回能改变私有槽；本模型不重新证明其本人资格、路径、到达或本人选择逻辑。",
+        "公共人物resourceRevision本来可见；隐私性质只禁止新增读取他人许可/随行内容，不声称阻止从公开语义版本推断“状态曾改变”。",
+        "有界安全性与可达见证，不假设网络最终成功，不声称活性/任意请求量/任意故障次数/整个章节组合。"
+      ]
+    },
+    "positive-identity-public": {
+      "config": "positive-identity-public.cfg",
+      "timeout_seconds": 120,
+      "workers": 2,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "TypeOK",
+        "PublicProposalAvailable",
+        "VersionFenced",
+        "RevisionAccounting",
+        "SingleBaselineCommit",
+        "AtMostOnce",
+        "ReceiptStable",
+        "NonceDigestBound",
+        "ReceiptOwnerScoped",
+        "ScopeAuthorized",
+        "SchemaExclusive",
+        "ConsentPrivate",
+        "ProposalOnly"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Scenario": "identity",
+          "LegacyFirst": false,
+          "Fault": "none"
+        },
+        "actors": 2,
+        "nonces_per_authenticated_actor": 2,
+        "attempts_per_nonce": 2,
+        "capture_per_source": 1,
+        "subject_semantic_changes": 1,
+        "movement_events": 1,
+        "view_and_epoch_rotations_per_actor": {
+          "Focus": 1,
+          "Other": 0
+        },
+        "invalid_context_changes": 1,
+        "covered_interleavings_and_faults": [
+          "单个公开或legacy捕获，2次提交、每个认证主体2个nonce，原串或1个变参维度",
+          "一次总环境变化：respond/withdraw/Move/view/epoch/view+epoch/一个具体访问或范围失效",
+          "原Receipt重复、异文同nonce、跨owner、确认丢失后原串重试；合法/非法目的地与并发依据变参"
+        ],
+        "excluded_behaviors": [
+          "PG故障实现、密码学、JSON解析及decimal大数",
+          "真实几何、全章路径/动画、本人自然语言决定",
+          "三个以上参与者或无限请求/重启、完整Consent/Nav组合",
+          "一次轨迹内多种不同变参的连续组合；竞争轨迹最多3次提交，身份轨迹最多2次提交",
+          "旧宽交叉配置的多种环境变化连续组合未穷尽；本族结论不代替它。组合安全性的源码单调性论证见MODEL_CONTRACT.md。"
+        ],
+        "liveness": "NOT_CHECKED",
+        "total_submit_calls": 2,
+        "altered_field_dimensions_per_trace": 1,
+        "total_environment_changes": 1,
+        "environment_changes_independent": false,
+        "view_and_epoch_combined_change": true
+      },
+      "assumptions": [
+        "单Session锁定事务把规则检查、私有槽/计划/公开revision更新与Receipt保存一起提交，原Receipt在事务之外确认；只核提议效果，不要求恢复原Receipt时权威时钟或其他导航完全不变。",
+        "nonce键属于当前认证会话/主体，完整解析请求按语义摘要比较；哈希碰撞、JSON序列化和SQL隔离实现不在TLC中。",
+        "只有已授权的既有回应/撤回能改变私有槽；本模型不重新证明其本人资格、路径、到达或本人选择逻辑。",
+        "公共人物resourceRevision本来可见；隐私性质只禁止新增读取他人许可/随行内容，不声称阻止从公开语义版本推断“状态曾改变”。",
+        "有界安全性与可达见证，不假设网络最终成功，不声称活性/任意请求量/任意故障次数/整个章节组合。"
+      ]
+    },
+    "positive-identity-legacy": {
+      "config": "positive-identity-legacy.cfg",
+      "timeout_seconds": 120,
+      "workers": 2,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "TypeOK",
+        "PublicProposalAvailable",
+        "VersionFenced",
+        "RevisionAccounting",
+        "SingleBaselineCommit",
+        "AtMostOnce",
+        "ReceiptStable",
+        "NonceDigestBound",
+        "ReceiptOwnerScoped",
+        "ScopeAuthorized",
+        "SchemaExclusive",
+        "ConsentPrivate",
+        "ProposalOnly"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Scenario": "identity",
+          "LegacyFirst": true,
+          "Fault": "none"
+        },
+        "actors": 2,
+        "nonces_per_authenticated_actor": 2,
+        "attempts_per_nonce": 2,
+        "capture_per_source": 1,
+        "subject_semantic_changes": 1,
+        "movement_events": 1,
+        "view_and_epoch_rotations_per_actor": {
+          "Focus": 1,
+          "Other": 0
+        },
+        "invalid_context_changes": 1,
+        "covered_interleavings_and_faults": [
+          "单个公开或legacy捕获，2次提交、每个认证主体2个nonce，原串或1个变参维度",
+          "一次总环境变化：respond/withdraw/Move/view/epoch/view+epoch/一个具体访问或范围失效",
+          "原Receipt重复、异文同nonce、跨owner、确认丢失后原串重试；合法/非法目的地与并发依据变参"
+        ],
+        "excluded_behaviors": [
+          "PG故障实现、密码学、JSON解析及decimal大数",
+          "真实几何、全章路径/动画、本人自然语言决定",
+          "三个以上参与者或无限请求/重启、完整Consent/Nav组合",
+          "一次轨迹内多种不同变参的连续组合；竞争轨迹最多3次提交，身份轨迹最多2次提交",
+          "旧宽交叉配置的多种环境变化连续组合未穷尽；本族结论不代替它。组合安全性的源码单调性论证见MODEL_CONTRACT.md。"
+        ],
+        "liveness": "NOT_CHECKED",
+        "total_submit_calls": 2,
+        "altered_field_dimensions_per_trace": 1,
+        "total_environment_changes": 1,
+        "environment_changes_independent": false,
+        "view_and_epoch_combined_change": true
+      },
+      "assumptions": [
+        "单Session锁定事务把规则检查、私有槽/计划/公开revision更新与Receipt保存一起提交，原Receipt在事务之外确认；只核提议效果，不要求恢复原Receipt时权威时钟或其他导航完全不变。",
+        "nonce键属于当前认证会话/主体，完整解析请求按语义摘要比较；哈希碰撞、JSON序列化和SQL隔离实现不在TLC中。",
+        "只有已授权的既有回应/撤回能改变私有槽；本模型不重新证明其本人资格、路径、到达或本人选择逻辑。",
+        "公共人物resourceRevision本来可见；隐私性质只禁止新增读取他人许可/随行内容，不声称阻止从公开语义版本推断“状态曾改变”。",
+        "有界安全性与可达见证，不假设网络最终成功，不声称活性/任意请求量/任意故障次数/整个章节组合。"
+      ]
+    },
+    "negative-type": {
+      "config": "negative-type.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Scenario": "competition",
+          "LegacyFirst": false,
+          "Fault": "type"
+        },
+        "actors": 2,
+        "nonces_per_authenticated_actor": 2,
+        "attempts_per_nonce": 2,
+        "capture_per_source": 1,
+        "subject_semantic_changes": 1,
+        "movement_events": 1,
+        "view_and_epoch_rotations_per_actor": 0,
+        "invalid_context_changes": 0,
+        "covered_interleavings_and_faults": [
+          "两个公开捕获，或legacy与公开捕获；两提交顺序、3次总提交、每主体2个nonce",
+          "一次respond或withdraw与读取/提交交错，加一次无语义Move",
+          "相同基线一次效果、原串Receipt及确认丢失后重试；其它身份/范围保持合法"
+        ],
+        "excluded_behaviors": [
+          "PG故障实现、密码学、JSON解析及decimal大数",
+          "真实几何、全章路径/动画、本人自然语言决定",
+          "三个以上参与者或无限请求/重启、完整Consent/Nav组合",
+          "一次轨迹内多种不同变参的连续组合；竞争轨迹最多3次提交，身份轨迹最多2次提交",
+          "旧宽交叉配置的多种环境变化连续组合未穷尽；本族结论不代替它。组合安全性的源码单调性论证见MODEL_CONTRACT.md。"
+        ],
+        "liveness": "NOT_CHECKED",
+        "total_submit_calls": 3,
+        "altered_field_dimensions_per_trace": 1,
+        "total_environment_changes": "one subject semantic change plus one Move; no identity/scope change",
+        "environment_changes_independent": true,
+        "view_and_epoch_combined_change": false
+      },
+      "assumptions": [
+        "单Session锁定事务把规则检查、私有槽/计划/公开revision更新与Receipt保存一起提交，原Receipt在事务之外确认；只核提议效果，不要求恢复原Receipt时权威时钟或其他导航完全不变。",
+        "nonce键属于当前认证会话/主体，完整解析请求按语义摘要比较；哈希碰撞、JSON序列化和SQL隔离实现不在TLC中。",
+        "只有已授权的既有回应/撤回能改变私有槽；本模型不重新证明其本人资格、路径、到达或本人选择逻辑。",
+        "公共人物resourceRevision本来可见；隐私性质只禁止新增读取他人许可/随行内容，不声称阻止从公开语义版本推断“状态曾改变”。",
+        "有界安全性与可达见证，不假设网络最终成功，不声称活性/任意请求量/任意故障次数/整个章节组合。"
+      ]
+    },
+    "negative-unavailable": {
+      "config": "negative-unavailable.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "PublicProposalAvailable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Scenario": "identity",
+          "LegacyFirst": false,
+          "Fault": "private-fallback"
+        },
+        "actors": 2,
+        "nonces_per_authenticated_actor": 2,
+        "attempts_per_nonce": 2,
+        "capture_per_source": 1,
+        "subject_semantic_changes": 1,
+        "movement_events": 1,
+        "view_and_epoch_rotations_per_actor": {
+          "Focus": 1,
+          "Other": 0
+        },
+        "invalid_context_changes": 1,
+        "covered_interleavings_and_faults": [
+          "单个公开或legacy捕获，2次提交、每个认证主体2个nonce，原串或1个变参维度",
+          "一次总环境变化：respond/withdraw/Move/view/epoch/view+epoch/一个具体访问或范围失效",
+          "原Receipt重复、异文同nonce、跨owner、确认丢失后原串重试；合法/非法目的地与并发依据变参"
+        ],
+        "excluded_behaviors": [
+          "PG故障实现、密码学、JSON解析及decimal大数",
+          "真实几何、全章路径/动画、本人自然语言决定",
+          "三个以上参与者或无限请求/重启、完整Consent/Nav组合",
+          "一次轨迹内多种不同变参的连续组合；竞争轨迹最多3次提交，身份轨迹最多2次提交",
+          "旧宽交叉配置的多种环境变化连续组合未穷尽；本族结论不代替它。组合安全性的源码单调性论证见MODEL_CONTRACT.md。"
+        ],
+        "liveness": "NOT_CHECKED",
+        "total_submit_calls": 2,
+        "altered_field_dimensions_per_trace": 1,
+        "total_environment_changes": 1,
+        "environment_changes_independent": false,
+        "view_and_epoch_combined_change": true
+      },
+      "assumptions": [
+        "单Session锁定事务把规则检查、私有槽/计划/公开revision更新与Receipt保存一起提交，原Receipt在事务之外确认；只核提议效果，不要求恢复原Receipt时权威时钟或其他导航完全不变。",
+        "nonce键属于当前认证会话/主体，完整解析请求按语义摘要比较；哈希碰撞、JSON序列化和SQL隔离实现不在TLC中。",
+        "只有已授权的既有回应/撤回能改变私有槽；本模型不重新证明其本人资格、路径、到达或本人选择逻辑。",
+        "公共人物resourceRevision本来可见；隐私性质只禁止新增读取他人许可/随行内容，不声称阻止从公开语义版本推断“状态曾改变”。",
+        "有界安全性与可达见证，不假设网络最终成功，不声称活性/任意请求量/任意故障次数/整个章节组合。"
+      ]
+    },
+    "negative-public-stale": {
+      "config": "negative-public-stale.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "VersionFenced"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Scenario": "identity",
+          "LegacyFirst": false,
+          "Fault": "skip-public-version"
+        },
+        "actors": 2,
+        "nonces_per_authenticated_actor": 2,
+        "attempts_per_nonce": 2,
+        "capture_per_source": 1,
+        "subject_semantic_changes": 1,
+        "movement_events": 1,
+        "view_and_epoch_rotations_per_actor": {
+          "Focus": 1,
+          "Other": 0
+        },
+        "invalid_context_changes": 1,
+        "covered_interleavings_and_faults": [
+          "单个公开或legacy捕获，2次提交、每个认证主体2个nonce，原串或1个变参维度",
+          "一次总环境变化：respond/withdraw/Move/view/epoch/view+epoch/一个具体访问或范围失效",
+          "原Receipt重复、异文同nonce、跨owner、确认丢失后原串重试；合法/非法目的地与并发依据变参"
+        ],
+        "excluded_behaviors": [
+          "PG故障实现、密码学、JSON解析及decimal大数",
+          "真实几何、全章路径/动画、本人自然语言决定",
+          "三个以上参与者或无限请求/重启、完整Consent/Nav组合",
+          "一次轨迹内多种不同变参的连续组合；竞争轨迹最多3次提交，身份轨迹最多2次提交",
+          "旧宽交叉配置的多种环境变化连续组合未穷尽；本族结论不代替它。组合安全性的源码单调性论证见MODEL_CONTRACT.md。"
+        ],
+        "liveness": "NOT_CHECKED",
+        "total_submit_calls": 2,
+        "altered_field_dimensions_per_trace": 1,
+        "total_environment_changes": 1,
+        "environment_changes_independent": false,
+        "view_and_epoch_combined_change": true
+      },
+      "assumptions": [
+        "单Session锁定事务把规则检查、私有槽/计划/公开revision更新与Receipt保存一起提交，原Receipt在事务之外确认；只核提议效果，不要求恢复原Receipt时权威时钟或其他导航完全不变。",
+        "nonce键属于当前认证会话/主体，完整解析请求按语义摘要比较；哈希碰撞、JSON序列化和SQL隔离实现不在TLC中。",
+        "只有已授权的既有回应/撤回能改变私有槽；本模型不重新证明其本人资格、路径、到达或本人选择逻辑。",
+        "公共人物resourceRevision本来可见；隐私性质只禁止新增读取他人许可/随行内容，不声称阻止从公开语义版本推断“状态曾改变”。",
+        "有界安全性与可达见证，不假设网络最终成功，不声称活性/任意请求量/任意故障次数/整个章节组合。"
+      ]
+    },
+    "negative-legacy-stale": {
+      "config": "negative-legacy-stale.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "VersionFenced"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Scenario": "identity",
+          "LegacyFirst": true,
+          "Fault": "skip-legacy-version"
+        },
+        "actors": 2,
+        "nonces_per_authenticated_actor": 2,
+        "attempts_per_nonce": 2,
+        "capture_per_source": 1,
+        "subject_semantic_changes": 1,
+        "movement_events": 1,
+        "view_and_epoch_rotations_per_actor": {
+          "Focus": 1,
+          "Other": 0
+        },
+        "invalid_context_changes": 1,
+        "covered_interleavings_and_faults": [
+          "单个公开或legacy捕获，2次提交、每个认证主体2个nonce，原串或1个变参维度",
+          "一次总环境变化：respond/withdraw/Move/view/epoch/view+epoch/一个具体访问或范围失效",
+          "原Receipt重复、异文同nonce、跨owner、确认丢失后原串重试；合法/非法目的地与并发依据变参"
+        ],
+        "excluded_behaviors": [
+          "PG故障实现、密码学、JSON解析及decimal大数",
+          "真实几何、全章路径/动画、本人自然语言决定",
+          "三个以上参与者或无限请求/重启、完整Consent/Nav组合",
+          "一次轨迹内多种不同变参的连续组合；竞争轨迹最多3次提交，身份轨迹最多2次提交",
+          "旧宽交叉配置的多种环境变化连续组合未穷尽；本族结论不代替它。组合安全性的源码单调性论证见MODEL_CONTRACT.md。"
+        ],
+        "liveness": "NOT_CHECKED",
+        "total_submit_calls": 2,
+        "altered_field_dimensions_per_trace": 1,
+        "total_environment_changes": 1,
+        "environment_changes_independent": false,
+        "view_and_epoch_combined_change": true
+      },
+      "assumptions": [
+        "单Session锁定事务把规则检查、私有槽/计划/公开revision更新与Receipt保存一起提交，原Receipt在事务之外确认；只核提议效果，不要求恢复原Receipt时权威时钟或其他导航完全不变。",
+        "nonce键属于当前认证会话/主体，完整解析请求按语义摘要比较；哈希碰撞、JSON序列化和SQL隔离实现不在TLC中。",
+        "只有已授权的既有回应/撤回能改变私有槽；本模型不重新证明其本人资格、路径、到达或本人选择逻辑。",
+        "公共人物resourceRevision本来可见；隐私性质只禁止新增读取他人许可/随行内容，不声称阻止从公开语义版本推断“状态曾改变”。",
+        "有界安全性与可达见证，不假设网络最终成功，不声称活性/任意请求量/任意故障次数/整个章节组合。"
+      ]
+    },
+    "negative-public-race": {
+      "config": "negative-public-race.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "SingleBaselineCommit"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Scenario": "competition",
+          "LegacyFirst": false,
+          "Fault": "no-public-bump"
+        },
+        "actors": 2,
+        "nonces_per_authenticated_actor": 2,
+        "attempts_per_nonce": 2,
+        "capture_per_source": 1,
+        "subject_semantic_changes": 1,
+        "movement_events": 1,
+        "view_and_epoch_rotations_per_actor": 0,
+        "invalid_context_changes": 0,
+        "covered_interleavings_and_faults": [
+          "两个公开捕获，或legacy与公开捕获；两提交顺序、3次总提交、每主体2个nonce",
+          "一次respond或withdraw与读取/提交交错，加一次无语义Move",
+          "相同基线一次效果、原串Receipt及确认丢失后重试；其它身份/范围保持合法"
+        ],
+        "excluded_behaviors": [
+          "PG故障实现、密码学、JSON解析及decimal大数",
+          "真实几何、全章路径/动画、本人自然语言决定",
+          "三个以上参与者或无限请求/重启、完整Consent/Nav组合",
+          "一次轨迹内多种不同变参的连续组合；竞争轨迹最多3次提交，身份轨迹最多2次提交",
+          "旧宽交叉配置的多种环境变化连续组合未穷尽；本族结论不代替它。组合安全性的源码单调性论证见MODEL_CONTRACT.md。"
+        ],
+        "liveness": "NOT_CHECKED",
+        "total_submit_calls": 3,
+        "altered_field_dimensions_per_trace": 1,
+        "total_environment_changes": "one subject semantic change plus one Move; no identity/scope change",
+        "environment_changes_independent": true,
+        "view_and_epoch_combined_change": false
+      },
+      "assumptions": [
+        "单Session锁定事务把规则检查、私有槽/计划/公开revision更新与Receipt保存一起提交，原Receipt在事务之外确认；只核提议效果，不要求恢复原Receipt时权威时钟或其他导航完全不变。",
+        "nonce键属于当前认证会话/主体，完整解析请求按语义摘要比较；哈希碰撞、JSON序列化和SQL隔离实现不在TLC中。",
+        "只有已授权的既有回应/撤回能改变私有槽；本模型不重新证明其本人资格、路径、到达或本人选择逻辑。",
+        "公共人物resourceRevision本来可见；隐私性质只禁止新增读取他人许可/随行内容，不声称阻止从公开语义版本推断“状态曾改变”。",
+        "有界安全性与可达见证，不假设网络最终成功，不声称活性/任意请求量/任意故障次数/整个章节组合。"
+      ]
+    },
+    "negative-mixed-race": {
+      "config": "negative-mixed-race.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "SingleBaselineCommit"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Scenario": "competition",
+          "LegacyFirst": true,
+          "Fault": "no-legacy-bump"
+        },
+        "actors": 2,
+        "nonces_per_authenticated_actor": 2,
+        "attempts_per_nonce": 2,
+        "capture_per_source": 1,
+        "subject_semantic_changes": 1,
+        "movement_events": 1,
+        "view_and_epoch_rotations_per_actor": 0,
+        "invalid_context_changes": 0,
+        "covered_interleavings_and_faults": [
+          "两个公开捕获，或legacy与公开捕获；两提交顺序、3次总提交、每主体2个nonce",
+          "一次respond或withdraw与读取/提交交错，加一次无语义Move",
+          "相同基线一次效果、原串Receipt及确认丢失后重试；其它身份/范围保持合法"
+        ],
+        "excluded_behaviors": [
+          "PG故障实现、密码学、JSON解析及decimal大数",
+          "真实几何、全章路径/动画、本人自然语言决定",
+          "三个以上参与者或无限请求/重启、完整Consent/Nav组合",
+          "一次轨迹内多种不同变参的连续组合；竞争轨迹最多3次提交，身份轨迹最多2次提交",
+          "旧宽交叉配置的多种环境变化连续组合未穷尽；本族结论不代替它。组合安全性的源码单调性论证见MODEL_CONTRACT.md。"
+        ],
+        "liveness": "NOT_CHECKED",
+        "total_submit_calls": 3,
+        "altered_field_dimensions_per_trace": 1,
+        "total_environment_changes": "one subject semantic change plus one Move; no identity/scope change",
+        "environment_changes_independent": true,
+        "view_and_epoch_combined_change": false
+      },
+      "assumptions": [
+        "单Session锁定事务把规则检查、私有槽/计划/公开revision更新与Receipt保存一起提交，原Receipt在事务之外确认；只核提议效果，不要求恢复原Receipt时权威时钟或其他导航完全不变。",
+        "nonce键属于当前认证会话/主体，完整解析请求按语义摘要比较；哈希碰撞、JSON序列化和SQL隔离实现不在TLC中。",
+        "只有已授权的既有回应/撤回能改变私有槽；本模型不重新证明其本人资格、路径、到达或本人选择逻辑。",
+        "公共人物resourceRevision本来可见；隐私性质只禁止新增读取他人许可/随行内容，不声称阻止从公开语义版本推断“状态曾改变”。",
+        "有界安全性与可达见证，不假设网络最终成功，不声称活性/任意请求量/任意故障次数/整个章节组合。"
+      ]
+    },
+    "negative-move-revision": {
+      "config": "negative-move-revision.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "RevisionAccounting"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Scenario": "identity",
+          "LegacyFirst": false,
+          "Fault": "move-bump"
+        },
+        "actors": 2,
+        "nonces_per_authenticated_actor": 2,
+        "attempts_per_nonce": 2,
+        "capture_per_source": 1,
+        "subject_semantic_changes": 1,
+        "movement_events": 1,
+        "view_and_epoch_rotations_per_actor": {
+          "Focus": 1,
+          "Other": 0
+        },
+        "invalid_context_changes": 1,
+        "covered_interleavings_and_faults": [
+          "单个公开或legacy捕获，2次提交、每个认证主体2个nonce，原串或1个变参维度",
+          "一次总环境变化：respond/withdraw/Move/view/epoch/view+epoch/一个具体访问或范围失效",
+          "原Receipt重复、异文同nonce、跨owner、确认丢失后原串重试；合法/非法目的地与并发依据变参"
+        ],
+        "excluded_behaviors": [
+          "PG故障实现、密码学、JSON解析及decimal大数",
+          "真实几何、全章路径/动画、本人自然语言决定",
+          "三个以上参与者或无限请求/重启、完整Consent/Nav组合",
+          "一次轨迹内多种不同变参的连续组合；竞争轨迹最多3次提交，身份轨迹最多2次提交",
+          "旧宽交叉配置的多种环境变化连续组合未穷尽；本族结论不代替它。组合安全性的源码单调性论证见MODEL_CONTRACT.md。"
+        ],
+        "liveness": "NOT_CHECKED",
+        "total_submit_calls": 2,
+        "altered_field_dimensions_per_trace": 1,
+        "total_environment_changes": 1,
+        "environment_changes_independent": false,
+        "view_and_epoch_combined_change": true
+      },
+      "assumptions": [
+        "单Session锁定事务把规则检查、私有槽/计划/公开revision更新与Receipt保存一起提交，原Receipt在事务之外确认；只核提议效果，不要求恢复原Receipt时权威时钟或其他导航完全不变。",
+        "nonce键属于当前认证会话/主体，完整解析请求按语义摘要比较；哈希碰撞、JSON序列化和SQL隔离实现不在TLC中。",
+        "只有已授权的既有回应/撤回能改变私有槽；本模型不重新证明其本人资格、路径、到达或本人选择逻辑。",
+        "公共人物resourceRevision本来可见；隐私性质只禁止新增读取他人许可/随行内容，不声称阻止从公开语义版本推断“状态曾改变”。",
+        "有界安全性与可达见证，不假设网络最终成功，不声称活性/任意请求量/任意故障次数/整个章节组合。"
+      ]
+    },
+    "negative-duplicate": {
+      "config": "negative-duplicate.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "AtMostOnce"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Scenario": "identity",
+          "LegacyFirst": false,
+          "Fault": "reexecute-known"
+        },
+        "actors": 2,
+        "nonces_per_authenticated_actor": 2,
+        "attempts_per_nonce": 2,
+        "capture_per_source": 1,
+        "subject_semantic_changes": 1,
+        "movement_events": 1,
+        "view_and_epoch_rotations_per_actor": {
+          "Focus": 1,
+          "Other": 0
+        },
+        "invalid_context_changes": 1,
+        "covered_interleavings_and_faults": [
+          "单个公开或legacy捕获，2次提交、每个认证主体2个nonce，原串或1个变参维度",
+          "一次总环境变化：respond/withdraw/Move/view/epoch/view+epoch/一个具体访问或范围失效",
+          "原Receipt重复、异文同nonce、跨owner、确认丢失后原串重试；合法/非法目的地与并发依据变参"
+        ],
+        "excluded_behaviors": [
+          "PG故障实现、密码学、JSON解析及decimal大数",
+          "真实几何、全章路径/动画、本人自然语言决定",
+          "三个以上参与者或无限请求/重启、完整Consent/Nav组合",
+          "一次轨迹内多种不同变参的连续组合；竞争轨迹最多3次提交，身份轨迹最多2次提交",
+          "旧宽交叉配置的多种环境变化连续组合未穷尽；本族结论不代替它。组合安全性的源码单调性论证见MODEL_CONTRACT.md。"
+        ],
+        "liveness": "NOT_CHECKED",
+        "total_submit_calls": 2,
+        "altered_field_dimensions_per_trace": 1,
+        "total_environment_changes": 1,
+        "environment_changes_independent": false,
+        "view_and_epoch_combined_change": true
+      },
+      "assumptions": [
+        "单Session锁定事务把规则检查、私有槽/计划/公开revision更新与Receipt保存一起提交，原Receipt在事务之外确认；只核提议效果，不要求恢复原Receipt时权威时钟或其他导航完全不变。",
+        "nonce键属于当前认证会话/主体，完整解析请求按语义摘要比较；哈希碰撞、JSON序列化和SQL隔离实现不在TLC中。",
+        "只有已授权的既有回应/撤回能改变私有槽；本模型不重新证明其本人资格、路径、到达或本人选择逻辑。",
+        "公共人物resourceRevision本来可见；隐私性质只禁止新增读取他人许可/随行内容，不声称阻止从公开语义版本推断“状态曾改变”。",
+        "有界安全性与可达见证，不假设网络最终成功，不声称活性/任意请求量/任意故障次数/整个章节组合。"
+      ]
+    },
+    "negative-receipt-order": {
+      "config": "negative-receipt-order.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "ReceiptStable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Scenario": "identity",
+          "LegacyFirst": false,
+          "Fault": "guard-before-receipt"
+        },
+        "actors": 2,
+        "nonces_per_authenticated_actor": 2,
+        "attempts_per_nonce": 2,
+        "capture_per_source": 1,
+        "subject_semantic_changes": 1,
+        "movement_events": 1,
+        "view_and_epoch_rotations_per_actor": {
+          "Focus": 1,
+          "Other": 0
+        },
+        "invalid_context_changes": 1,
+        "covered_interleavings_and_faults": [
+          "单个公开或legacy捕获，2次提交、每个认证主体2个nonce，原串或1个变参维度",
+          "一次总环境变化：respond/withdraw/Move/view/epoch/view+epoch/一个具体访问或范围失效",
+          "原Receipt重复、异文同nonce、跨owner、确认丢失后原串重试；合法/非法目的地与并发依据变参"
+        ],
+        "excluded_behaviors": [
+          "PG故障实现、密码学、JSON解析及decimal大数",
+          "真实几何、全章路径/动画、本人自然语言决定",
+          "三个以上参与者或无限请求/重启、完整Consent/Nav组合",
+          "一次轨迹内多种不同变参的连续组合；竞争轨迹最多3次提交，身份轨迹最多2次提交",
+          "旧宽交叉配置的多种环境变化连续组合未穷尽；本族结论不代替它。组合安全性的源码单调性论证见MODEL_CONTRACT.md。"
+        ],
+        "liveness": "NOT_CHECKED",
+        "total_submit_calls": 2,
+        "altered_field_dimensions_per_trace": 1,
+        "total_environment_changes": 1,
+        "environment_changes_independent": false,
+        "view_and_epoch_combined_change": true
+      },
+      "assumptions": [
+        "单Session锁定事务把规则检查、私有槽/计划/公开revision更新与Receipt保存一起提交，原Receipt在事务之外确认；只核提议效果，不要求恢复原Receipt时权威时钟或其他导航完全不变。",
+        "nonce键属于当前认证会话/主体，完整解析请求按语义摘要比较；哈希碰撞、JSON序列化和SQL隔离实现不在TLC中。",
+        "只有已授权的既有回应/撤回能改变私有槽；本模型不重新证明其本人资格、路径、到达或本人选择逻辑。",
+        "公共人物resourceRevision本来可见；隐私性质只禁止新增读取他人许可/随行内容，不声称阻止从公开语义版本推断“状态曾改变”。",
+        "有界安全性与可达见证，不假设网络最终成功，不声称活性/任意请求量/任意故障次数/整个章节组合。"
+      ]
+    },
+    "negative-digest": {
+      "config": "negative-digest.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NonceDigestBound"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Scenario": "identity",
+          "LegacyFirst": false,
+          "Fault": "ignore-digest"
+        },
+        "actors": 2,
+        "nonces_per_authenticated_actor": 2,
+        "attempts_per_nonce": 2,
+        "capture_per_source": 1,
+        "subject_semantic_changes": 1,
+        "movement_events": 1,
+        "view_and_epoch_rotations_per_actor": {
+          "Focus": 1,
+          "Other": 0
+        },
+        "invalid_context_changes": 1,
+        "covered_interleavings_and_faults": [
+          "单个公开或legacy捕获，2次提交、每个认证主体2个nonce，原串或1个变参维度",
+          "一次总环境变化：respond/withdraw/Move/view/epoch/view+epoch/一个具体访问或范围失效",
+          "原Receipt重复、异文同nonce、跨owner、确认丢失后原串重试；合法/非法目的地与并发依据变参"
+        ],
+        "excluded_behaviors": [
+          "PG故障实现、密码学、JSON解析及decimal大数",
+          "真实几何、全章路径/动画、本人自然语言决定",
+          "三个以上参与者或无限请求/重启、完整Consent/Nav组合",
+          "一次轨迹内多种不同变参的连续组合；竞争轨迹最多3次提交，身份轨迹最多2次提交",
+          "旧宽交叉配置的多种环境变化连续组合未穷尽；本族结论不代替它。组合安全性的源码单调性论证见MODEL_CONTRACT.md。"
+        ],
+        "liveness": "NOT_CHECKED",
+        "total_submit_calls": 2,
+        "altered_field_dimensions_per_trace": 1,
+        "total_environment_changes": 1,
+        "environment_changes_independent": false,
+        "view_and_epoch_combined_change": true
+      },
+      "assumptions": [
+        "单Session锁定事务把规则检查、私有槽/计划/公开revision更新与Receipt保存一起提交，原Receipt在事务之外确认；只核提议效果，不要求恢复原Receipt时权威时钟或其他导航完全不变。",
+        "nonce键属于当前认证会话/主体，完整解析请求按语义摘要比较；哈希碰撞、JSON序列化和SQL隔离实现不在TLC中。",
+        "只有已授权的既有回应/撤回能改变私有槽；本模型不重新证明其本人资格、路径、到达或本人选择逻辑。",
+        "公共人物resourceRevision本来可见；隐私性质只禁止新增读取他人许可/随行内容，不声称阻止从公开语义版本推断“状态曾改变”。",
+        "有界安全性与可达见证，不假设网络最终成功，不声称活性/任意请求量/任意故障次数/整个章节组合。"
+      ]
+    },
+    "negative-owner": {
+      "config": "negative-owner.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "ReceiptOwnerScoped"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Scenario": "identity",
+          "LegacyFirst": false,
+          "Fault": "global-receipt-key"
+        },
+        "actors": 2,
+        "nonces_per_authenticated_actor": 2,
+        "attempts_per_nonce": 2,
+        "capture_per_source": 1,
+        "subject_semantic_changes": 1,
+        "movement_events": 1,
+        "view_and_epoch_rotations_per_actor": {
+          "Focus": 1,
+          "Other": 0
+        },
+        "invalid_context_changes": 1,
+        "covered_interleavings_and_faults": [
+          "单个公开或legacy捕获，2次提交、每个认证主体2个nonce，原串或1个变参维度",
+          "一次总环境变化：respond/withdraw/Move/view/epoch/view+epoch/一个具体访问或范围失效",
+          "原Receipt重复、异文同nonce、跨owner、确认丢失后原串重试；合法/非法目的地与并发依据变参"
+        ],
+        "excluded_behaviors": [
+          "PG故障实现、密码学、JSON解析及decimal大数",
+          "真实几何、全章路径/动画、本人自然语言决定",
+          "三个以上参与者或无限请求/重启、完整Consent/Nav组合",
+          "一次轨迹内多种不同变参的连续组合；竞争轨迹最多3次提交，身份轨迹最多2次提交",
+          "旧宽交叉配置的多种环境变化连续组合未穷尽；本族结论不代替它。组合安全性的源码单调性论证见MODEL_CONTRACT.md。"
+        ],
+        "liveness": "NOT_CHECKED",
+        "total_submit_calls": 2,
+        "altered_field_dimensions_per_trace": 1,
+        "total_environment_changes": 1,
+        "environment_changes_independent": false,
+        "view_and_epoch_combined_change": true
+      },
+      "assumptions": [
+        "单Session锁定事务把规则检查、私有槽/计划/公开revision更新与Receipt保存一起提交，原Receipt在事务之外确认；只核提议效果，不要求恢复原Receipt时权威时钟或其他导航完全不变。",
+        "nonce键属于当前认证会话/主体，完整解析请求按语义摘要比较；哈希碰撞、JSON序列化和SQL隔离实现不在TLC中。",
+        "只有已授权的既有回应/撤回能改变私有槽；本模型不重新证明其本人资格、路径、到达或本人选择逻辑。",
+        "公共人物resourceRevision本来可见；隐私性质只禁止新增读取他人许可/随行内容，不声称阻止从公开语义版本推断“状态曾改变”。",
+        "有界安全性与可达见证，不假设网络最终成功，不声称活性/任意请求量/任意故障次数/整个章节组合。"
+      ]
+    },
+    "negative-scope": {
+      "config": "negative-scope.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "ScopeAuthorized"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Scenario": "identity",
+          "LegacyFirst": false,
+          "Fault": "skip-scope"
+        },
+        "actors": 2,
+        "nonces_per_authenticated_actor": 2,
+        "attempts_per_nonce": 2,
+        "capture_per_source": 1,
+        "subject_semantic_changes": 1,
+        "movement_events": 1,
+        "view_and_epoch_rotations_per_actor": {
+          "Focus": 1,
+          "Other": 0
+        },
+        "invalid_context_changes": 1,
+        "covered_interleavings_and_faults": [
+          "单个公开或legacy捕获，2次提交、每个认证主体2个nonce，原串或1个变参维度",
+          "一次总环境变化：respond/withdraw/Move/view/epoch/view+epoch/一个具体访问或范围失效",
+          "原Receipt重复、异文同nonce、跨owner、确认丢失后原串重试；合法/非法目的地与并发依据变参"
+        ],
+        "excluded_behaviors": [
+          "PG故障实现、密码学、JSON解析及decimal大数",
+          "真实几何、全章路径/动画、本人自然语言决定",
+          "三个以上参与者或无限请求/重启、完整Consent/Nav组合",
+          "一次轨迹内多种不同变参的连续组合；竞争轨迹最多3次提交，身份轨迹最多2次提交",
+          "旧宽交叉配置的多种环境变化连续组合未穷尽；本族结论不代替它。组合安全性的源码单调性论证见MODEL_CONTRACT.md。"
+        ],
+        "liveness": "NOT_CHECKED",
+        "total_submit_calls": 2,
+        "altered_field_dimensions_per_trace": 1,
+        "total_environment_changes": 1,
+        "environment_changes_independent": false,
+        "view_and_epoch_combined_change": true
+      },
+      "assumptions": [
+        "单Session锁定事务把规则检查、私有槽/计划/公开revision更新与Receipt保存一起提交，原Receipt在事务之外确认；只核提议效果，不要求恢复原Receipt时权威时钟或其他导航完全不变。",
+        "nonce键属于当前认证会话/主体，完整解析请求按语义摘要比较；哈希碰撞、JSON序列化和SQL隔离实现不在TLC中。",
+        "只有已授权的既有回应/撤回能改变私有槽；本模型不重新证明其本人资格、路径、到达或本人选择逻辑。",
+        "公共人物resourceRevision本来可见；隐私性质只禁止新增读取他人许可/随行内容，不声称阻止从公开语义版本推断“状态曾改变”。",
+        "有界安全性与可达见证，不假设网络最终成功，不声称活性/任意请求量/任意故障次数/整个章节组合。"
+      ]
+    },
+    "negative-schema": {
+      "config": "negative-schema.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "SchemaExclusive"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Scenario": "identity",
+          "LegacyFirst": false,
+          "Fault": "open-schema"
+        },
+        "actors": 2,
+        "nonces_per_authenticated_actor": 2,
+        "attempts_per_nonce": 2,
+        "capture_per_source": 1,
+        "subject_semantic_changes": 1,
+        "movement_events": 1,
+        "view_and_epoch_rotations_per_actor": {
+          "Focus": 1,
+          "Other": 0
+        },
+        "invalid_context_changes": 1,
+        "covered_interleavings_and_faults": [
+          "单个公开或legacy捕获，2次提交、每个认证主体2个nonce，原串或1个变参维度",
+          "一次总环境变化：respond/withdraw/Move/view/epoch/view+epoch/一个具体访问或范围失效",
+          "原Receipt重复、异文同nonce、跨owner、确认丢失后原串重试；合法/非法目的地与并发依据变参"
+        ],
+        "excluded_behaviors": [
+          "PG故障实现、密码学、JSON解析及decimal大数",
+          "真实几何、全章路径/动画、本人自然语言决定",
+          "三个以上参与者或无限请求/重启、完整Consent/Nav组合",
+          "一次轨迹内多种不同变参的连续组合；竞争轨迹最多3次提交，身份轨迹最多2次提交",
+          "旧宽交叉配置的多种环境变化连续组合未穷尽；本族结论不代替它。组合安全性的源码单调性论证见MODEL_CONTRACT.md。"
+        ],
+        "liveness": "NOT_CHECKED",
+        "total_submit_calls": 2,
+        "altered_field_dimensions_per_trace": 1,
+        "total_environment_changes": 1,
+        "environment_changes_independent": false,
+        "view_and_epoch_combined_change": true
+      },
+      "assumptions": [
+        "单Session锁定事务把规则检查、私有槽/计划/公开revision更新与Receipt保存一起提交，原Receipt在事务之外确认；只核提议效果，不要求恢复原Receipt时权威时钟或其他导航完全不变。",
+        "nonce键属于当前认证会话/主体，完整解析请求按语义摘要比较；哈希碰撞、JSON序列化和SQL隔离实现不在TLC中。",
+        "只有已授权的既有回应/撤回能改变私有槽；本模型不重新证明其本人资格、路径、到达或本人选择逻辑。",
+        "公共人物resourceRevision本来可见；隐私性质只禁止新增读取他人许可/随行内容，不声称阻止从公开语义版本推断“状态曾改变”。",
+        "有界安全性与可达见证，不假设网络最终成功，不声称活性/任意请求量/任意故障次数/整个章节组合。"
+      ]
+    },
+    "negative-privacy": {
+      "config": "negative-privacy.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "ConsentPrivate"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Scenario": "competition",
+          "LegacyFirst": false,
+          "Fault": "leak-private"
+        },
+        "actors": 2,
+        "nonces_per_authenticated_actor": 2,
+        "attempts_per_nonce": 2,
+        "capture_per_source": 1,
+        "subject_semantic_changes": 1,
+        "movement_events": 1,
+        "view_and_epoch_rotations_per_actor": 0,
+        "invalid_context_changes": 0,
+        "covered_interleavings_and_faults": [
+          "两个公开捕获，或legacy与公开捕获；两提交顺序、3次总提交、每主体2个nonce",
+          "一次respond或withdraw与读取/提交交错，加一次无语义Move",
+          "相同基线一次效果、原串Receipt及确认丢失后重试；其它身份/范围保持合法"
+        ],
+        "excluded_behaviors": [
+          "PG故障实现、密码学、JSON解析及decimal大数",
+          "真实几何、全章路径/动画、本人自然语言决定",
+          "三个以上参与者或无限请求/重启、完整Consent/Nav组合",
+          "一次轨迹内多种不同变参的连续组合；竞争轨迹最多3次提交，身份轨迹最多2次提交",
+          "旧宽交叉配置的多种环境变化连续组合未穷尽；本族结论不代替它。组合安全性的源码单调性论证见MODEL_CONTRACT.md。"
+        ],
+        "liveness": "NOT_CHECKED",
+        "total_submit_calls": 3,
+        "altered_field_dimensions_per_trace": 1,
+        "total_environment_changes": "one subject semantic change plus one Move; no identity/scope change",
+        "environment_changes_independent": true,
+        "view_and_epoch_combined_change": false
+      },
+      "assumptions": [
+        "单Session锁定事务把规则检查、私有槽/计划/公开revision更新与Receipt保存一起提交，原Receipt在事务之外确认；只核提议效果，不要求恢复原Receipt时权威时钟或其他导航完全不变。",
+        "nonce键属于当前认证会话/主体，完整解析请求按语义摘要比较；哈希碰撞、JSON序列化和SQL隔离实现不在TLC中。",
+        "只有已授权的既有回应/撤回能改变私有槽；本模型不重新证明其本人资格、路径、到达或本人选择逻辑。",
+        "公共人物resourceRevision本来可见；隐私性质只禁止新增读取他人许可/随行内容，不声称阻止从公开语义版本推断“状态曾改变”。",
+        "有界安全性与可达见证，不假设网络最终成功，不声称活性/任意请求量/任意故障次数/整个章节组合。"
+      ]
+    },
+    "negative-auto-accept": {
+      "config": "negative-auto-accept.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "ProposalOnly"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Scenario": "identity",
+          "LegacyFirst": false,
+          "Fault": "auto-accept"
+        },
+        "actors": 2,
+        "nonces_per_authenticated_actor": 2,
+        "attempts_per_nonce": 2,
+        "capture_per_source": 1,
+        "subject_semantic_changes": 1,
+        "movement_events": 1,
+        "view_and_epoch_rotations_per_actor": {
+          "Focus": 1,
+          "Other": 0
+        },
+        "invalid_context_changes": 1,
+        "covered_interleavings_and_faults": [
+          "单个公开或legacy捕获，2次提交、每个认证主体2个nonce，原串或1个变参维度",
+          "一次总环境变化：respond/withdraw/Move/view/epoch/view+epoch/一个具体访问或范围失效",
+          "原Receipt重复、异文同nonce、跨owner、确认丢失后原串重试；合法/非法目的地与并发依据变参"
+        ],
+        "excluded_behaviors": [
+          "PG故障实现、密码学、JSON解析及decimal大数",
+          "真实几何、全章路径/动画、本人自然语言决定",
+          "三个以上参与者或无限请求/重启、完整Consent/Nav组合",
+          "一次轨迹内多种不同变参的连续组合；竞争轨迹最多3次提交，身份轨迹最多2次提交",
+          "旧宽交叉配置的多种环境变化连续组合未穷尽；本族结论不代替它。组合安全性的源码单调性论证见MODEL_CONTRACT.md。"
+        ],
+        "liveness": "NOT_CHECKED",
+        "total_submit_calls": 2,
+        "altered_field_dimensions_per_trace": 1,
+        "total_environment_changes": 1,
+        "environment_changes_independent": false,
+        "view_and_epoch_combined_change": true
+      },
+      "assumptions": [
+        "单Session锁定事务把规则检查、私有槽/计划/公开revision更新与Receipt保存一起提交，原Receipt在事务之外确认；只核提议效果，不要求恢复原Receipt时权威时钟或其他导航完全不变。",
+        "nonce键属于当前认证会话/主体，完整解析请求按语义摘要比较；哈希碰撞、JSON序列化和SQL隔离实现不在TLC中。",
+        "只有已授权的既有回应/撤回能改变私有槽；本模型不重新证明其本人资格、路径、到达或本人选择逻辑。",
+        "公共人物resourceRevision本来可见；隐私性质只禁止新增读取他人许可/随行内容，不声称阻止从公开语义版本推断“状态曾改变”。",
+        "有界安全性与可达见证，不假设网络最终成功，不声称活性/任意请求量/任意故障次数/整个章节组合。"
+      ]
+    },
+    "witness-new-leader": {
+      "config": "witness-new-leader.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoNewLeaderWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Scenario": "identity",
+          "LegacyFirst": false,
+          "Fault": "none"
+        },
+        "actors": 2,
+        "nonces_per_authenticated_actor": 2,
+        "attempts_per_nonce": 2,
+        "capture_per_source": 1,
+        "subject_semantic_changes": 1,
+        "movement_events": 1,
+        "view_and_epoch_rotations_per_actor": {
+          "Focus": 1,
+          "Other": 0
+        },
+        "invalid_context_changes": 1,
+        "covered_interleavings_and_faults": [
+          "单个公开或legacy捕获，2次提交、每个认证主体2个nonce，原串或1个变参维度",
+          "一次总环境变化：respond/withdraw/Move/view/epoch/view+epoch/一个具体访问或范围失效",
+          "原Receipt重复、异文同nonce、跨owner、确认丢失后原串重试；合法/非法目的地与并发依据变参"
+        ],
+        "excluded_behaviors": [
+          "PG故障实现、密码学、JSON解析及decimal大数",
+          "真实几何、全章路径/动画、本人自然语言决定",
+          "三个以上参与者或无限请求/重启、完整Consent/Nav组合",
+          "一次轨迹内多种不同变参的连续组合；竞争轨迹最多3次提交，身份轨迹最多2次提交",
+          "旧宽交叉配置的多种环境变化连续组合未穷尽；本族结论不代替它。组合安全性的源码单调性论证见MODEL_CONTRACT.md。"
+        ],
+        "liveness": "NOT_CHECKED",
+        "total_submit_calls": 2,
+        "altered_field_dimensions_per_trace": 1,
+        "total_environment_changes": 1,
+        "environment_changes_independent": false,
+        "view_and_epoch_combined_change": true
+      },
+      "assumptions": [
+        "单Session锁定事务把规则检查、私有槽/计划/公开revision更新与Receipt保存一起提交，原Receipt在事务之外确认；只核提议效果，不要求恢复原Receipt时权威时钟或其他导航完全不变。",
+        "nonce键属于当前认证会话/主体，完整解析请求按语义摘要比较；哈希碰撞、JSON序列化和SQL隔离实现不在TLC中。",
+        "只有已授权的既有回应/撤回能改变私有槽；本模型不重新证明其本人资格、路径、到达或本人选择逻辑。",
+        "公共人物resourceRevision本来可见；隐私性质只禁止新增读取他人许可/随行内容，不声称阻止从公开语义版本推断“状态曾改变”。",
+        "有界安全性与可达见证，不假设网络最终成功，不声称活性/任意请求量/任意故障次数/整个章节组合。"
+      ]
+    },
+    "witness-public-competition": {
+      "config": "witness-public-competition.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoCompetitionWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Scenario": "competition",
+          "LegacyFirst": false,
+          "Fault": "none"
+        },
+        "actors": 2,
+        "nonces_per_authenticated_actor": 2,
+        "attempts_per_nonce": 2,
+        "capture_per_source": 1,
+        "subject_semantic_changes": 1,
+        "movement_events": 1,
+        "view_and_epoch_rotations_per_actor": 0,
+        "invalid_context_changes": 0,
+        "covered_interleavings_and_faults": [
+          "两个公开捕获，或legacy与公开捕获；两提交顺序、3次总提交、每主体2个nonce",
+          "一次respond或withdraw与读取/提交交错，加一次无语义Move",
+          "相同基线一次效果、原串Receipt及确认丢失后重试；其它身份/范围保持合法"
+        ],
+        "excluded_behaviors": [
+          "PG故障实现、密码学、JSON解析及decimal大数",
+          "真实几何、全章路径/动画、本人自然语言决定",
+          "三个以上参与者或无限请求/重启、完整Consent/Nav组合",
+          "一次轨迹内多种不同变参的连续组合；竞争轨迹最多3次提交，身份轨迹最多2次提交",
+          "旧宽交叉配置的多种环境变化连续组合未穷尽；本族结论不代替它。组合安全性的源码单调性论证见MODEL_CONTRACT.md。"
+        ],
+        "liveness": "NOT_CHECKED",
+        "total_submit_calls": 3,
+        "altered_field_dimensions_per_trace": 1,
+        "total_environment_changes": "one subject semantic change plus one Move; no identity/scope change",
+        "environment_changes_independent": true,
+        "view_and_epoch_combined_change": false
+      },
+      "assumptions": [
+        "单Session锁定事务把规则检查、私有槽/计划/公开revision更新与Receipt保存一起提交，原Receipt在事务之外确认；只核提议效果，不要求恢复原Receipt时权威时钟或其他导航完全不变。",
+        "nonce键属于当前认证会话/主体，完整解析请求按语义摘要比较；哈希碰撞、JSON序列化和SQL隔离实现不在TLC中。",
+        "只有已授权的既有回应/撤回能改变私有槽；本模型不重新证明其本人资格、路径、到达或本人选择逻辑。",
+        "公共人物resourceRevision本来可见；隐私性质只禁止新增读取他人许可/随行内容，不声称阻止从公开语义版本推断“状态曾改变”。",
+        "有界安全性与可达见证，不假设网络最终成功，不声称活性/任意请求量/任意故障次数/整个章节组合。"
+      ]
+    },
+    "witness-mixed-competition": {
+      "config": "witness-mixed-competition.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoCompetitionWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Scenario": "competition",
+          "LegacyFirst": true,
+          "Fault": "none"
+        },
+        "actors": 2,
+        "nonces_per_authenticated_actor": 2,
+        "attempts_per_nonce": 2,
+        "capture_per_source": 1,
+        "subject_semantic_changes": 1,
+        "movement_events": 1,
+        "view_and_epoch_rotations_per_actor": 0,
+        "invalid_context_changes": 0,
+        "covered_interleavings_and_faults": [
+          "两个公开捕获，或legacy与公开捕获；两提交顺序、3次总提交、每主体2个nonce",
+          "一次respond或withdraw与读取/提交交错，加一次无语义Move",
+          "相同基线一次效果、原串Receipt及确认丢失后重试；其它身份/范围保持合法"
+        ],
+        "excluded_behaviors": [
+          "PG故障实现、密码学、JSON解析及decimal大数",
+          "真实几何、全章路径/动画、本人自然语言决定",
+          "三个以上参与者或无限请求/重启、完整Consent/Nav组合",
+          "一次轨迹内多种不同变参的连续组合；竞争轨迹最多3次提交，身份轨迹最多2次提交",
+          "旧宽交叉配置的多种环境变化连续组合未穷尽；本族结论不代替它。组合安全性的源码单调性论证见MODEL_CONTRACT.md。"
+        ],
+        "liveness": "NOT_CHECKED",
+        "total_submit_calls": 3,
+        "altered_field_dimensions_per_trace": 1,
+        "total_environment_changes": "one subject semantic change plus one Move; no identity/scope change",
+        "environment_changes_independent": true,
+        "view_and_epoch_combined_change": false
+      },
+      "assumptions": [
+        "单Session锁定事务把规则检查、私有槽/计划/公开revision更新与Receipt保存一起提交，原Receipt在事务之外确认；只核提议效果，不要求恢复原Receipt时权威时钟或其他导航完全不变。",
+        "nonce键属于当前认证会话/主体，完整解析请求按语义摘要比较；哈希碰撞、JSON序列化和SQL隔离实现不在TLC中。",
+        "只有已授权的既有回应/撤回能改变私有槽；本模型不重新证明其本人资格、路径、到达或本人选择逻辑。",
+        "公共人物resourceRevision本来可见；隐私性质只禁止新增读取他人许可/随行内容，不声称阻止从公开语义版本推断“状态曾改变”。",
+        "有界安全性与可达见证，不假设网络最终成功，不声称活性/任意请求量/任意故障次数/整个章节组合。"
+      ]
+    },
+    "witness-replay-old-control": {
+      "config": "witness-replay-old-control.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoReplayAfterRotateWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Scenario": "identity",
+          "LegacyFirst": false,
+          "Fault": "none"
+        },
+        "actors": 2,
+        "nonces_per_authenticated_actor": 2,
+        "attempts_per_nonce": 2,
+        "capture_per_source": 1,
+        "subject_semantic_changes": 1,
+        "movement_events": 1,
+        "view_and_epoch_rotations_per_actor": {
+          "Focus": 1,
+          "Other": 0
+        },
+        "invalid_context_changes": 1,
+        "covered_interleavings_and_faults": [
+          "单个公开或legacy捕获，2次提交、每个认证主体2个nonce，原串或1个变参维度",
+          "一次总环境变化：respond/withdraw/Move/view/epoch/view+epoch/一个具体访问或范围失效",
+          "原Receipt重复、异文同nonce、跨owner、确认丢失后原串重试；合法/非法目的地与并发依据变参"
+        ],
+        "excluded_behaviors": [
+          "PG故障实现、密码学、JSON解析及decimal大数",
+          "真实几何、全章路径/动画、本人自然语言决定",
+          "三个以上参与者或无限请求/重启、完整Consent/Nav组合",
+          "一次轨迹内多种不同变参的连续组合；竞争轨迹最多3次提交，身份轨迹最多2次提交",
+          "旧宽交叉配置的多种环境变化连续组合未穷尽；本族结论不代替它。组合安全性的源码单调性论证见MODEL_CONTRACT.md。"
+        ],
+        "liveness": "NOT_CHECKED",
+        "total_submit_calls": 2,
+        "altered_field_dimensions_per_trace": 1,
+        "total_environment_changes": 1,
+        "environment_changes_independent": false,
+        "view_and_epoch_combined_change": true
+      },
+      "assumptions": [
+        "单Session锁定事务把规则检查、私有槽/计划/公开revision更新与Receipt保存一起提交，原Receipt在事务之外确认；只核提议效果，不要求恢复原Receipt时权威时钟或其他导航完全不变。",
+        "nonce键属于当前认证会话/主体，完整解析请求按语义摘要比较；哈希碰撞、JSON序列化和SQL隔离实现不在TLC中。",
+        "只有已授权的既有回应/撤回能改变私有槽；本模型不重新证明其本人资格、路径、到达或本人选择逻辑。",
+        "公共人物resourceRevision本来可见；隐私性质只禁止新增读取他人许可/随行内容，不声称阻止从公开语义版本推断“状态曾改变”。",
+        "有界安全性与可达见证，不假设网络最终成功，不声称活性/任意请求量/任意故障次数/整个章节组合。"
+      ]
+    },
+    "witness-unknown-replay": {
+      "config": "witness-unknown-replay.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoUnknownReplayWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Scenario": "identity",
+          "LegacyFirst": false,
+          "Fault": "none"
+        },
+        "actors": 2,
+        "nonces_per_authenticated_actor": 2,
+        "attempts_per_nonce": 2,
+        "capture_per_source": 1,
+        "subject_semantic_changes": 1,
+        "movement_events": 1,
+        "view_and_epoch_rotations_per_actor": {
+          "Focus": 1,
+          "Other": 0
+        },
+        "invalid_context_changes": 1,
+        "covered_interleavings_and_faults": [
+          "单个公开或legacy捕获，2次提交、每个认证主体2个nonce，原串或1个变参维度",
+          "一次总环境变化：respond/withdraw/Move/view/epoch/view+epoch/一个具体访问或范围失效",
+          "原Receipt重复、异文同nonce、跨owner、确认丢失后原串重试；合法/非法目的地与并发依据变参"
+        ],
+        "excluded_behaviors": [
+          "PG故障实现、密码学、JSON解析及decimal大数",
+          "真实几何、全章路径/动画、本人自然语言决定",
+          "三个以上参与者或无限请求/重启、完整Consent/Nav组合",
+          "一次轨迹内多种不同变参的连续组合；竞争轨迹最多3次提交，身份轨迹最多2次提交",
+          "旧宽交叉配置的多种环境变化连续组合未穷尽；本族结论不代替它。组合安全性的源码单调性论证见MODEL_CONTRACT.md。"
+        ],
+        "liveness": "NOT_CHECKED",
+        "total_submit_calls": 2,
+        "altered_field_dimensions_per_trace": 1,
+        "total_environment_changes": 1,
+        "environment_changes_independent": false,
+        "view_and_epoch_combined_change": true
+      },
+      "assumptions": [
+        "单Session锁定事务把规则检查、私有槽/计划/公开revision更新与Receipt保存一起提交，原Receipt在事务之外确认；只核提议效果，不要求恢复原Receipt时权威时钟或其他导航完全不变。",
+        "nonce键属于当前认证会话/主体，完整解析请求按语义摘要比较；哈希碰撞、JSON序列化和SQL隔离实现不在TLC中。",
+        "只有已授权的既有回应/撤回能改变私有槽；本模型不重新证明其本人资格、路径、到达或本人选择逻辑。",
+        "公共人物resourceRevision本来可见；隐私性质只禁止新增读取他人许可/随行内容，不声称阻止从公开语义版本推断“状态曾改变”。",
+        "有界安全性与可达见证，不假设网络最终成功，不声称活性/任意请求量/任意故障次数/整个章节组合。"
+      ]
+    },
+    "witness-movement": {
+      "config": "witness-movement.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoMovementWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Scenario": "identity",
+          "LegacyFirst": false,
+          "Fault": "none"
+        },
+        "actors": 2,
+        "nonces_per_authenticated_actor": 2,
+        "attempts_per_nonce": 2,
+        "capture_per_source": 1,
+        "subject_semantic_changes": 1,
+        "movement_events": 1,
+        "view_and_epoch_rotations_per_actor": {
+          "Focus": 1,
+          "Other": 0
+        },
+        "invalid_context_changes": 1,
+        "covered_interleavings_and_faults": [
+          "单个公开或legacy捕获，2次提交、每个认证主体2个nonce，原串或1个变参维度",
+          "一次总环境变化：respond/withdraw/Move/view/epoch/view+epoch/一个具体访问或范围失效",
+          "原Receipt重复、异文同nonce、跨owner、确认丢失后原串重试；合法/非法目的地与并发依据变参"
+        ],
+        "excluded_behaviors": [
+          "PG故障实现、密码学、JSON解析及decimal大数",
+          "真实几何、全章路径/动画、本人自然语言决定",
+          "三个以上参与者或无限请求/重启、完整Consent/Nav组合",
+          "一次轨迹内多种不同变参的连续组合；竞争轨迹最多3次提交，身份轨迹最多2次提交",
+          "旧宽交叉配置的多种环境变化连续组合未穷尽；本族结论不代替它。组合安全性的源码单调性论证见MODEL_CONTRACT.md。"
+        ],
+        "liveness": "NOT_CHECKED",
+        "total_submit_calls": 2,
+        "altered_field_dimensions_per_trace": 1,
+        "total_environment_changes": 1,
+        "environment_changes_independent": false,
+        "view_and_epoch_combined_change": true
+      },
+      "assumptions": [
+        "单Session锁定事务把规则检查、私有槽/计划/公开revision更新与Receipt保存一起提交，原Receipt在事务之外确认；只核提议效果，不要求恢复原Receipt时权威时钟或其他导航完全不变。",
+        "nonce键属于当前认证会话/主体，完整解析请求按语义摘要比较；哈希碰撞、JSON序列化和SQL隔离实现不在TLC中。",
+        "只有已授权的既有回应/撤回能改变私有槽；本模型不重新证明其本人资格、路径、到达或本人选择逻辑。",
+        "公共人物resourceRevision本来可见；隐私性质只禁止新增读取他人许可/随行内容，不声称阻止从公开语义版本推断“状态曾改变”。",
+        "有界安全性与可达见证，不假设网络最终成功，不声称活性/任意请求量/任意故障次数/整个章节组合。"
+      ]
+    }
+  }
+}

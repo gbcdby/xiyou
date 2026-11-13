@@ -1,0 +1,153 @@
+{
+  "positive-safety": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "NoPrematureCrossing",
+      "AtMostOneContinuation",
+      "NoCancelledRevival",
+      "ReceiptBound"
+    ],
+    "properties": [],
+    "target": null,
+    "minimum_distinct_states": 10
+  },
+  "positive-live": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "NoPrematureCrossing",
+      "AtMostOneContinuation",
+      "NoCancelledRevival",
+      "ReceiptBound"
+    ],
+    "properties": [
+      "ContinuationProgress"
+    ],
+    "target": null,
+    "minimum_distinct_states": 10
+  },
+  "old-history-live": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 13,
+    "invariants": [
+      "TypeOK"
+    ],
+    "properties": [
+      "ContinuationProgress"
+    ],
+    "target": "ContinuationProgress",
+    "minimum_distinct_states": 10
+  },
+  "old-same-seq": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "TypeOK",
+      "NoPrematureCrossing"
+    ],
+    "properties": [],
+    "target": "NoPrematureCrossing",
+    "minimum_distinct_states": 10
+  },
+  "old-unknown-history-live": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 13,
+    "invariants": [
+      "TypeOK"
+    ],
+    "properties": [
+      "ContinuationProgress"
+    ],
+    "target": "ContinuationProgress",
+    "minimum_distinct_states": 10
+  },
+  "negative-drop-early": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 13,
+    "invariants": [
+      "TypeOK",
+      "NoPrematureCrossing",
+      "AtMostOneContinuation",
+      "NoCancelledRevival",
+      "ReceiptBound"
+    ],
+    "properties": [
+      "ContinuationProgress"
+    ],
+    "target": "ContinuationProgress",
+    "minimum_distinct_states": 10
+  },
+  "negative-map-key": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 13,
+    "invariants": [
+      "TypeOK",
+      "NoPrematureCrossing",
+      "AtMostOneContinuation",
+      "NoCancelledRevival",
+      "ReceiptBound"
+    ],
+    "properties": [
+      "ContinuationProgress"
+    ],
+    "target": "ContinuationProgress",
+    "minimum_distinct_states": 10
+  },
+  "negative-revive": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "TypeOK",
+      "NoCancelledRevival"
+    ],
+    "properties": [],
+    "target": "NoCancelledRevival",
+    "minimum_distinct_states": 10
+  },
+  "negative-double": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "TypeOK",
+      "AtMostOneContinuation"
+    ],
+    "properties": [],
+    "target": "AtMostOneContinuation",
+    "minimum_distinct_states": 10
+  },
+  "witness-early-unknown": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "TypeOK",
+      "NoEarlyUnknownWitness"
+    ],
+    "properties": [],
+    "target": "NoEarlyUnknownWitness",
+    "minimum_distinct_states": 10
+  },
+  "negative-receipt": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "TypeOK",
+      "ReceiptBound"
+    ],
+    "properties": [],
+    "target": "ReceiptBound",
+    "minimum_distinct_states": 1
+  },
+  "negative-type": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "TypeOK"
+    ],
+    "properties": [],
+    "target": "TypeOK",
+    "minimum_distinct_states": 1
+  }
+}
