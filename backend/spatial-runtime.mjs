@@ -9,6 +9,7 @@ import { applySpatialAction, advanceSpatialPositions, invalidateReady } from '..
 import { isGaolao, observeGaolao } from '../game/gaolao-world.mjs';
 import { initializeGaolao,updateGaolaoPresence,advanceGaolaoFollow,checkGaolaoFallback } from '../game/gaolao-rules.mjs';
 import {gaolaoNavigationDependencies,gaolaoNavigationRejection} from '../game/gaolao-navigation.mjs';
+import {revalidateScenePolicy} from './scene-policy.mjs';
 const digest = value => createHash('sha256').update(canonicalize(value)).digest('hex');
 const hasAppearance = capabilities => capabilities.includes('spatial-appearance-v1');
 /** 旧 nonce 保留原结果；仅为未协商的新连接移除它不能读取的扩展字段。 */
@@ -262,6 +263,7 @@ export async function submitSpatialIntent(runtime, handle, intentId) {
         const row = (await tx.client.query('SELECT request,request_text_encoding,execution_context FROM spatial_intents WHERE session_id=$1 AND intent_id=$2 AND actor_id=$3', [principal.sessionId, intentId, principal.actorId])).rows[0];
         if (!row)
             throw new RuntimeError('FORBIDDEN');
-        return executeSpatial(runtime, tx, decodeJsonbText(row.request,row.request_text_encoding), {...principal,executionContext:row.execution_context}, async (actor) => actor.mode === (principal.principalKind === 'proxy' ? 'AIProxyControlled' : 'CoreNPCControlled'));
+        const request=decodeJsonbText(row.request,row.request_text_encoding);
+        return executeSpatial(runtime, tx, request, {...principal,executionContext:row.execution_context}, async (actor) => actor.mode === (principal.principalKind === 'proxy' ? 'AIProxyControlled' : 'CoreNPCControlled'),row.execution_context.mode==='scene-policy'?{validate:()=>revalidateScenePolicy(runtime,tx,principal,request,row.execution_context)}:{});
     });
 }

@@ -1,0 +1,747 @@
+{
+  "schema_version": 1,
+  "feature": "scene 当前执行关联、C13与整段路线围栏",
+  "tool": {
+    "version": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "model": {
+    "root": "model",
+    "entry": "SceneFollow.tla"
+  },
+  "profiles": {
+    "follow-tea-safety": {
+      "config": "follow-tea-safety.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "OriginAndSources",
+        "ExitBySubject",
+        "WholePathFence",
+        "CurrentExecutionFence",
+        "PausedNeedsProposal",
+        "SettlementCurrent",
+        "ArrivalStillGuarded",
+        "SafetyDurable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Route": "tea",
+          "InitialPosition": "mixed",
+          "MaxPlans": 2,
+          "Environment": "adversarial",
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "B/U闭集分类",
+          "当前执行关联",
+          "C13本人实际退出",
+          "全段路径守卫",
+          "重提议与旧确认回调",
+          "暂停/控制/map变化"
+        ],
+        "excluded_behaviors": [
+          "连续几何算法",
+          "SQL",
+          "授权投影",
+          "真人行为"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "几何真值shape和actualExit由可信实际路径计算提供；模型不计算连续坐标。",
+        "最多两个安排和一次外部资格/暂停变化；不裁剪坏状态。",
+        "接受与步进是权威事务，确认准备和提交明确分离。"
+      ]
+    },
+    "follow-front-safety": {
+      "config": "follow-front-safety.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "OriginAndSources",
+        "ExitBySubject",
+        "WholePathFence",
+        "CurrentExecutionFence",
+        "PausedNeedsProposal",
+        "SettlementCurrent",
+        "ArrivalStillGuarded",
+        "SafetyDurable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Route": "front",
+          "InitialPosition": "mixed",
+          "MaxPlans": 2,
+          "Environment": "adversarial",
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "B/U闭集分类",
+          "当前执行关联",
+          "C13本人实际退出",
+          "全段路径守卫",
+          "重提议与旧确认回调",
+          "暂停/控制/map变化"
+        ],
+        "excluded_behaviors": [
+          "连续几何算法",
+          "SQL",
+          "授权投影",
+          "真人行为"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "几何真值shape和actualExit由可信实际路径计算提供；模型不计算连续坐标。",
+        "最多两个安排和一次外部资格/暂停变化；不裁剪坏状态。",
+        "接受与步进是权威事务，确认准备和提交明确分离。"
+      ]
+    },
+    "follow-tea-live": {
+      "config": "follow-tea-live.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "OriginAndSources",
+        "ExitBySubject",
+        "WholePathFence",
+        "CurrentExecutionFence",
+        "PausedNeedsProposal",
+        "SettlementCurrent",
+        "ArrivalStillGuarded",
+        "SafetyDurable"
+      ],
+      "expected_properties": [
+        "RouteProgress"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Route": "tea",
+          "InitialPosition": "mixed",
+          "MaxPlans": 1,
+          "Environment": "cooperative",
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "B/U闭集分类",
+          "当前执行关联",
+          "C13本人实际退出",
+          "全段路径守卫",
+          "重提议与旧确认回调",
+          "暂停/控制/map变化"
+        ],
+        "excluded_behaviors": [
+          "连续几何算法",
+          "SQL",
+          "授权投影",
+          "真人行为"
+        ],
+        "liveness": "合作领路者、可通路、内部动作弱公平"
+      },
+      "assumptions": [
+        "几何真值shape和actualExit由可信实际路径计算提供；模型不计算连续坐标。",
+        "最多两个安排和一次外部资格/暂停变化；不裁剪坏状态。",
+        "接受与步进是权威事务，确认准备和提交明确分离。"
+      ]
+    },
+    "follow-front-live": {
+      "config": "follow-front-live.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "OriginAndSources",
+        "ExitBySubject",
+        "WholePathFence",
+        "CurrentExecutionFence",
+        "PausedNeedsProposal",
+        "SettlementCurrent",
+        "ArrivalStillGuarded",
+        "SafetyDurable"
+      ],
+      "expected_properties": [
+        "RouteProgress"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Route": "front",
+          "InitialPosition": "mixed",
+          "MaxPlans": 1,
+          "Environment": "cooperative",
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "B/U闭集分类",
+          "当前执行关联",
+          "C13本人实际退出",
+          "全段路径守卫",
+          "重提议与旧确认回调",
+          "暂停/控制/map变化"
+        ],
+        "excluded_behaviors": [
+          "连续几何算法",
+          "SQL",
+          "授权投影",
+          "真人行为"
+        ],
+        "liveness": "合作领路者、可通路、内部动作弱公平"
+      },
+      "assumptions": [
+        "几何真值shape和actualExit由可信实际路径计算提供；模型不计算连续坐标。",
+        "最多两个安排和一次外部资格/暂停变化；不裁剪坏状态。",
+        "接受与步进是权威事务，确认准备和提交明确分离。"
+      ]
+    },
+    "follow-negative-u-first": {
+      "config": "follow-negative-u-first.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "OriginAndSources"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Route": "tea",
+          "InitialPosition": "overlap",
+          "MaxPlans": 2,
+          "Environment": "adversarial",
+          "Fault": "u-first",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "B/U闭集分类",
+          "当前执行关联",
+          "C13本人实际退出",
+          "全段路径守卫",
+          "重提议与旧确认回调",
+          "暂停/控制/map变化"
+        ],
+        "excluded_behaviors": [
+          "连续几何算法",
+          "SQL",
+          "授权投影",
+          "真人行为"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "几何真值shape和actualExit由可信实际路径计算提供；模型不计算连续坐标。",
+        "最多两个安排和一次外部资格/暂停变化；不裁剪坏状态。",
+        "接受与步进是权威事务，确认准备和提交明确分离。"
+      ]
+    },
+    "follow-negative-leader-exit": {
+      "config": "follow-negative-leader-exit.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "ExitBySubject"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Route": "tea",
+          "InitialPosition": "branch",
+          "MaxPlans": 2,
+          "Environment": "adversarial",
+          "Fault": "leader-exit",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "B/U闭集分类",
+          "当前执行关联",
+          "C13本人实际退出",
+          "全段路径守卫",
+          "重提议与旧确认回调",
+          "暂停/控制/map变化"
+        ],
+        "excluded_behaviors": [
+          "连续几何算法",
+          "SQL",
+          "授权投影",
+          "真人行为"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "几何真值shape和actualExit由可信实际路径计算提供；模型不计算连续坐标。",
+        "最多两个安排和一次外部资格/暂停变化；不裁剪坏状态。",
+        "接受与步进是权威事务，确认准备和提交明确分离。"
+      ]
+    },
+    "follow-negative-carry-exit": {
+      "config": "follow-negative-carry-exit.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "ExitBySubject"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Route": "tea",
+          "InitialPosition": "branch",
+          "MaxPlans": 2,
+          "Environment": "adversarial",
+          "Fault": "carry-exit",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "B/U闭集分类",
+          "当前执行关联",
+          "C13本人实际退出",
+          "全段路径守卫",
+          "重提议与旧确认回调",
+          "暂停/控制/map变化"
+        ],
+        "excluded_behaviors": [
+          "连续几何算法",
+          "SQL",
+          "授权投影",
+          "真人行为"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "几何真值shape和actualExit由可信实际路径计算提供；模型不计算连续坐标。",
+        "最多两个安排和一次外部资格/暂停变化；不裁剪坏状态。",
+        "接受与步进是权威事务，确认准备和提交明确分离。"
+      ]
+    },
+    "follow-negative-endpoint-only": {
+      "config": "follow-negative-endpoint-only.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "WholePathFence"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Route": "tea",
+          "InitialPosition": "mixed",
+          "MaxPlans": 2,
+          "Environment": "adversarial",
+          "Fault": "endpoint-only",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "B/U闭集分类",
+          "当前执行关联",
+          "C13本人实际退出",
+          "全段路径守卫",
+          "重提议与旧确认回调",
+          "暂停/控制/map变化"
+        ],
+        "excluded_behaviors": [
+          "连续几何算法",
+          "SQL",
+          "授权投影",
+          "真人行为"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "几何真值shape和actualExit由可信实际路径计算提供；模型不计算连续坐标。",
+        "最多两个安排和一次外部资格/暂停变化；不裁剪坏状态。",
+        "接受与步进是权威事务，确认准备和提交明确分离。"
+      ]
+    },
+    "follow-negative-move-before-check": {
+      "config": "follow-negative-move-before-check.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "WholePathFence"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Route": "tea",
+          "InitialPosition": "mixed",
+          "MaxPlans": 2,
+          "Environment": "adversarial",
+          "Fault": "move-before-check",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "B/U闭集分类",
+          "当前执行关联",
+          "C13本人实际退出",
+          "全段路径守卫",
+          "重提议与旧确认回调",
+          "暂停/控制/map变化"
+        ],
+        "excluded_behaviors": [
+          "连续几何算法",
+          "SQL",
+          "授权投影",
+          "真人行为"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "几何真值shape和actualExit由可信实际路径计算提供；模型不计算连续坐标。",
+        "最多两个安排和一次外部资格/暂停变化；不裁剪坏状态。",
+        "接受与步进是权威事务，确认准备和提交明确分离。"
+      ]
+    },
+    "follow-negative-stale-binding": {
+      "config": "follow-negative-stale-binding.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "CurrentExecutionFence"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Route": "tea",
+          "InitialPosition": "mixed",
+          "MaxPlans": 2,
+          "Environment": "adversarial",
+          "Fault": "stale-binding",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "B/U闭集分类",
+          "当前执行关联",
+          "C13本人实际退出",
+          "全段路径守卫",
+          "重提议与旧确认回调",
+          "暂停/控制/map变化"
+        ],
+        "excluded_behaviors": [
+          "连续几何算法",
+          "SQL",
+          "授权投影",
+          "真人行为"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "几何真值shape和actualExit由可信实际路径计算提供；模型不计算连续坐标。",
+        "最多两个安排和一次外部资格/暂停变化；不裁剪坏状态。",
+        "接受与步进是权威事务，确认准备和提交明确分离。"
+      ]
+    },
+    "follow-negative-auto-resume": {
+      "config": "follow-negative-auto-resume.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "PausedNeedsProposal"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Route": "tea",
+          "InitialPosition": "mixed",
+          "MaxPlans": 2,
+          "Environment": "adversarial",
+          "Fault": "auto-resume",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "B/U闭集分类",
+          "当前执行关联",
+          "C13本人实际退出",
+          "全段路径守卫",
+          "重提议与旧确认回调",
+          "暂停/控制/map变化"
+        ],
+        "excluded_behaviors": [
+          "连续几何算法",
+          "SQL",
+          "授权投影",
+          "真人行为"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "几何真值shape和actualExit由可信实际路径计算提供；模型不计算连续坐标。",
+        "最多两个安排和一次外部资格/暂停变化；不裁剪坏状态。",
+        "接受与步进是权威事务，确认准备和提交明确分离。"
+      ]
+    },
+    "follow-negative-stale-confirm": {
+      "config": "follow-negative-stale-confirm.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "SettlementCurrent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Route": "tea",
+          "InitialPosition": "mixed",
+          "MaxPlans": 2,
+          "Environment": "adversarial",
+          "Fault": "stale-confirm",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "B/U闭集分类",
+          "当前执行关联",
+          "C13本人实际退出",
+          "全段路径守卫",
+          "重提议与旧确认回调",
+          "暂停/控制/map变化"
+        ],
+        "excluded_behaviors": [
+          "连续几何算法",
+          "SQL",
+          "授权投影",
+          "真人行为"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "几何真值shape和actualExit由可信实际路径计算提供；模型不计算连续坐标。",
+        "最多两个安排和一次外部资格/暂停变化；不裁剪坏状态。",
+        "接受与步进是权威事务，确认准备和提交明确分离。"
+      ]
+    },
+    "follow-negative-arrived-skip": {
+      "config": "follow-negative-arrived-skip.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "ArrivalStillGuarded"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Route": "tea",
+          "InitialPosition": "mixed",
+          "MaxPlans": 2,
+          "Environment": "adversarial",
+          "Fault": "arrived-skip",
+          "Probe": "none"
+        },
+        "covered_interleavings_and_faults": [
+          "B/U闭集分类",
+          "当前执行关联",
+          "C13本人实际退出",
+          "全段路径守卫",
+          "重提议与旧确认回调",
+          "暂停/控制/map变化"
+        ],
+        "excluded_behaviors": [
+          "连续几何算法",
+          "SQL",
+          "授权投影",
+          "真人行为"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "几何真值shape和actualExit由可信实际路径计算提供；模型不计算连续坐标。",
+        "最多两个安排和一次外部资格/暂停变化；不裁剪坏状态。",
+        "接受与步进是权威事务，确认准备和提交明确分离。"
+      ]
+    },
+    "follow-witness-route": {
+      "config": "follow-witness-route.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Route": "tea",
+          "InitialPosition": "mixed",
+          "MaxPlans": 1,
+          "Environment": "cooperative",
+          "Fault": "none",
+          "Probe": "route"
+        },
+        "covered_interleavings_and_faults": [
+          "B/U闭集分类",
+          "当前执行关联",
+          "C13本人实际退出",
+          "全段路径守卫",
+          "重提议与旧确认回调",
+          "暂停/控制/map变化"
+        ],
+        "excluded_behaviors": [
+          "连续几何算法",
+          "SQL",
+          "授权投影",
+          "真人行为"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "几何真值shape和actualExit由可信实际路径计算提供；模型不计算连续坐标。",
+        "最多两个安排和一次外部资格/暂停变化；不裁剪坏状态。",
+        "接受与步进是权威事务，确认准备和提交明确分离。"
+      ]
+    },
+    "follow-witness-reproposal": {
+      "config": "follow-witness-reproposal.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Route": "tea",
+          "InitialPosition": "branch",
+          "MaxPlans": 2,
+          "Environment": "adversarial",
+          "Fault": "none",
+          "Probe": "reproposal"
+        },
+        "covered_interleavings_and_faults": [
+          "B/U闭集分类",
+          "当前执行关联",
+          "C13本人实际退出",
+          "全段路径守卫",
+          "重提议与旧确认回调",
+          "暂停/控制/map变化"
+        ],
+        "excluded_behaviors": [
+          "连续几何算法",
+          "SQL",
+          "授权投影",
+          "真人行为"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "几何真值shape和actualExit由可信实际路径计算提供；模型不计算连续坐标。",
+        "最多两个安排和一次外部资格/暂停变化；不裁剪坏状态。",
+        "接受与步进是权威事务，确认准备和提交明确分离。"
+      ]
+    },
+    "follow-witness-overlap": {
+      "config": "follow-witness-overlap.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Route": "tea",
+          "InitialPosition": "branch",
+          "MaxPlans": 2,
+          "Environment": "adversarial",
+          "Fault": "none",
+          "Probe": "overlap"
+        },
+        "covered_interleavings_and_faults": [
+          "B/U闭集分类",
+          "当前执行关联",
+          "C13本人实际退出",
+          "全段路径守卫",
+          "重提议与旧确认回调",
+          "暂停/控制/map变化"
+        ],
+        "excluded_behaviors": [
+          "连续几何算法",
+          "SQL",
+          "授权投影",
+          "真人行为"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "几何真值shape和actualExit由可信实际路径计算提供；模型不计算连续坐标。",
+        "最多两个安排和一次外部资格/暂停变化；不裁剪坏状态。",
+        "接受与步进是权威事务，确认准备和提交明确分离。"
+      ]
+    },
+    "follow-witness-leader-first": {
+      "config": "follow-witness-leader-first.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Route": "tea",
+          "InitialPosition": "branch",
+          "MaxPlans": 2,
+          "Environment": "adversarial",
+          "Fault": "none",
+          "Probe": "leader-first"
+        },
+        "covered_interleavings_and_faults": [
+          "B/U闭集分类",
+          "当前执行关联",
+          "C13本人实际退出",
+          "全段路径守卫",
+          "重提议与旧确认回调",
+          "暂停/控制/map变化"
+        ],
+        "excluded_behaviors": [
+          "连续几何算法",
+          "SQL",
+          "授权投影",
+          "真人行为"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "几何真值shape和actualExit由可信实际路径计算提供；模型不计算连续坐标。",
+        "最多两个安排和一次外部资格/暂停变化；不裁剪坏状态。",
+        "接受与步进是权威事务，确认准备和提交明确分离。"
+      ]
+    }
+  }
+}

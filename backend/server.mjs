@@ -4,6 +4,7 @@ import { Server as SocketServer } from 'socket.io';
 import { parseStrictJSON } from '../protocol/index.mjs';
 import { createRuntime } from './runtime.mjs';
 import { RuntimeError, errorResponse } from './errors.mjs';
+import {attachScenePolicies} from './scene-policy-runtime.mjs';
 
 const exact = (value, keys, optional = []) => {
   if (!value || typeof value !== 'object' || Array.isArray(value) || Object.keys(value).some(key => ![...keys, ...optional].includes(key)) || !keys.every(key => Object.hasOwn(value, key))) throw new RuntimeError('INVALID_MESSAGE', '消息字段不完整或含未知字段。');
@@ -31,6 +32,7 @@ const statusOf = code => ({ INVALID_MESSAGE: 400, UNAUTHENTICATED: 401, FORBIDDE
 /** 单体 HTTP + Socket.IO 适配器；所有世界写入复用 AuthorityRuntime。 */
 export async function createAuthorityServer({ pool, now, hooks, log = () => {} } = {}) {
   const runtime = await createRuntime({ pool, now, hooks });
+  const scenePolicy = await attachScenePolicies({runtime,log});
   const tasks = new Set(); const sockets = new Map();
   let stopped = false; let pulsing = false; let lastLegacyPulse = Date.now();
   function track(promise) { tasks.add(promise); promise.finally(() => tasks.delete(promise)).catch(() => {}); return promise; }
@@ -120,13 +122,14 @@ export async function createAuthorityServer({ pool, now, hooks, log = () => {} }
   };
   const timer = setInterval(() => track(pulse()), 200); timer.unref();
   return {
-    runtime,
+    runtime, scenePolicy,
     async listen(port = 3000, host = '127.0.0.1') {
       await new Promise((resolve, reject) => { http.once('error', reject); http.listen(port, host, resolve); });
       return http.address();
     },
     async close() {
       if (stopped) return; stopped = true; clearInterval(timer);
+      await scenePolicy.close();
       await new Promise(resolve => io.close(resolve));
       while (tasks.size) await Promise.allSettled([...tasks]);
       await runtime.close();

@@ -1,6 +1,7 @@
 import { RuleError } from './rules.mjs';
 import { opaqueRef,next,sceneOf,obstacleEnabled,resolveRef,ensureView,inRange,unoccluded,canSee } from './spatial-world.mjs';
-import { findPath,pointAlongPath,distance,inPolygon } from './spatial-geometry.mjs';
+import { findPath,pointAlongPath,distance,inPolygon,clearSegment,walkable } from './spatial-geometry.mjs';
+import {scenePolicy,routeSources,createPolicyRoute,policyRouteValid,checkPolicyLeader,policyLocalPath,actualFrontExit,policySummary} from './gaolao-policy-route.mjs';
 import { isGaolao,chapterPeople,changeChapter,consentFor,consentVersion,observeGaolao,observeConsentChange,knowsSource,nearbyObservers,recordProgress,currentDecision,publicItemsReturned } from './gaolao-world.mjs';
 import {cancelGaolaoNavigation} from './gaolao-navigation.mjs';
 const refuse=code=>{throw new RuleError(code);};
@@ -31,6 +32,7 @@ function consentResponse(tx,actorId,action){
   const consent=tx.state.chapter.consents[action.consentId];if(!consent||consent.subjectId!==actorId)refuse('STALE_REFERENCE');
   if(consent.version!==action.expectedConsentVersion||tx.state.chapter.consentSlots[`${actorId}:${consent.purpose}`]!==consent.consentId)refuse('CONSENT_STALE');
   if(consent.status==='withdrawn')refuse('CONSENT_STALE');
+  if(scenePolicy(tx.content)&&consent.purpose==='follow'&&action.kind==='respond_consent'&&!tx.scenePolicyAuthorization)refuse('RULE_VIOLATION');
   const status=action.kind==='withdraw_consent'?'withdrawn':{accept:'accepted',decline:'declined',defer:'deferred'}[action.response];
   if(consent.purpose==='follow'&&status==='accepted'){
     const f=tx.state.chapter.follows[actorId],leader=tx.state.characters[consent.scope.leaderId];
@@ -39,6 +41,11 @@ function consentResponse(tx,actorId,action){
   }
   if(consent.purpose==='appearance'&&status==='accepted'&&!tx.state.chapter.cuilanSafe)refuse('NOT_READY');
   changeChapter(tx,c=>{const x=c.consents[action.consentId];x.status=status;x.decidedBy=actorId;x.version=next(x.version);x.sourceSeq=next(tx.state.sessionSeq);if(x.purpose==='follow'){const f=c.follows[actorId];if(f?.consentId===x.consentId){f.consentVersion=x.version;f.planVersion=next(f.planVersion);f.status=status==='accepted'?'accepted':status==='withdrawn'?'withdrawn':status==='deferred'?'paused':'cancelled';f.reason=status==='accepted'?'':'本人尚未同意继续当前安排。';f.subjectEpoch=tx.state.characters[actorId].controlEpoch;f.leaderEpoch=tx.state.characters[f.leaderId].controlEpoch;f.lastSceneTime=tx.state.sceneTimeMs;}}});
+  if(status==='accepted'&&consent.purpose==='follow'&&tx.scenePolicyAuthorization)changeChapter(tx,c=>{
+    const f=c.follows[actorId];
+    // 原准备 basis 不改写；执行关联指向实际增长后的版本和同事务原 Receipt 身份。
+    f.policyRoute.acceptance={consentId:f.consentId,consentVersion:f.consentVersion,planVersion:f.planVersion,actionId:tx.cause.actionId,requestDigest:tx.scenePolicyAuthorization.requestDigest};
+  });
   // 重复原请求由 Receipt 恢复；新的回应改变版本，原外貌许可必须立即失效。
   if(consent.purpose==='appearance'&&tx.state.chapter.disguise?.consentId===consent.consentId)releaseAppearance(tx);
   cancelGaolaoNavigation(tx,actorId,d=>d.consent?.consentId===consent.consentId,'本人回应改变了许可版本，原会面导航取消。');
@@ -52,17 +59,54 @@ function followProposal(tx,actorId,principalKind,request){
   const destination=tx.content.chapterRules.safeDestinations.find(d=>d.destinationId===action.destinationId);if(!destination)refuse('TARGET_UNAVAILABLE');
   const old=tx.state.chapter.follows[p.cuilan],consent=consentRequest(tx,actorId,p.cuilan,'follow',{destinationId:destination.destinationId,leaderId:leader.characterId},action.expectedConsentVersion);
   const follow={followId:opaqueRef(),subjectId:p.cuilan,requesterId:actorId,leaderId:leader.characterId,destinationId:destination.destinationId,planVersion:next(old?.planVersion??'0'),routeVersion:tx.state.mapVersion,consentId:consent.consentId,consentVersion:consent.version,status:'proposed',reason:'等待本人确认这次安排。',subjectEpoch:subject.controlEpoch,leaderEpoch:leader.controlEpoch,lastSceneTime:tx.state.sceneTimeMs};
-  changeChapter(tx,c=>{c.follows[p.cuilan]=follow;});return {};
+  if(scenePolicy(tx.content))follow.policyRoute=createPolicyRoute(tx.state,tx.content,subject,leader,destination.destinationId);
+  changeChapter(tx,c=>{c.follows[p.cuilan]=follow;});
+  if(follow.policyRoute)for(const id of new Set([subject.characterId,actorId,leader.characterId]))observeGaolao(tx,id,{statement:policySummary(tx.content,follow.policyRoute,destination.destinationId),shareable:false,fields:[{key:'destination',label:'本次提议地点',value:destination.destinationId},{key:'consent',label:'待回应许可',value:consent.consentId},{key:'version',label:'提议版本',value:consent.version}]});
+  return {};
 }
-export function initializeGaolao(tx){if(!isGaolao(tx.state))return;const r=tx.content.chapterRules,p=r.people;for(const m of tx.state.members){const roles=tx.state.characters[m.characterId].responsibilities;for(const role of r.roles.filter(x=>roles.includes(x.roleId)))for(const statement of role.knowledge)observeGaolao(tx,m.characterId,{statement,shareable:true});}changeChapter(tx,c=>{c.identityKnowledge[p.wukong]={[p.wukong]:'0'};});}
+export function initializeGaolao(tx){if(!isGaolao(tx.state))return;const r=tx.content.chapterRules,p=r.people;for(const m of tx.state.members){const roles=tx.state.characters[m.characterId].responsibilities;for(const role of r.roles.filter(x=>roles.includes(x.roleId)))for(const statement of role.knowledge)observeGaolao(tx,m.characterId,{statement,shareable:true});}changeChapter(tx,c=>{c.identityKnowledge[p.wukong]={[p.wukong]:'0'};});
+  if(scenePolicy(tx.content))for(const route of routeSources(tx.content)){
+    if(knowsSource(tx.state,p.cuilan,route.sourceId))continue;
+    const source=r.sources.find(s=>s.sourceId===route.sourceId);
+    observeGaolao(tx,p.cuilan,{...source,fields:[...source.fields,...route.knowledge.landmarks.map(a=>({key:a.anchorId,label:'公开路线锚点 '+a.anchorId,value:`${a.sceneId} (${a.position.x},${a.position.y})`}))],metadata:{routeKnowledge:route.knowledge,routeDigest:route.digest}});
+  }
+}
 export function updateGaolaoPresence(tx){if(!isGaolao(tx.state)||!tx.state.chapter)return;const ids=[...tx.liveActorIds].sort();if(JSON.stringify(ids)!==JSON.stringify(tx.state.chapter.onlineActorIds)){changeChapter(tx,c=>{c.onlineActorIds=ids;if(c.endProposal?.status==='pending')c.endProposal.status='invalidated';});tx.emit('gaolao.membership',{version:next(tx.state.onlineMembershipVersion)});}}
 export function advanceGaolaoFollow(tx,sceneTimeMs,paused){
   if(!isGaolao(tx.state)||!tx.state.chapter)return;
   for(const old of Object.values(tx.state.chapter.follows)){
-    if(!activeFollow(old))continue;const f=structuredClone(old),subject=tx.state.characters[f.subjectId],leader=tx.state.characters[f.leaderId],consent=tx.state.chapter.consents[f.consentId];
-    const pause=reason=>{changeChapter(tx,c=>{c.follows[f.subjectId]={...f,status:'paused',reason,planVersion:next(f.planVersion),lastSceneTime:sceneTimeMs};});};
+    if(!activeFollow(old)&&!(old.policyRoute&&old.status==='proposed'))continue;const f=structuredClone(old),subject=tx.state.characters[f.subjectId],leader=tx.state.characters[f.leaderId],consent=tx.state.chapter.consents[f.consentId];
+    const pause=(reason,policyPause='unavailable')=>{changeChapter(tx,c=>{c.follows[f.subjectId]={...f,status:'paused',reason,planVersion:next(f.planVersion),lastSceneTime:sceneTimeMs,...(f.policyRoute?{policyPause}:{})};});if(f.policyRoute)for(const id of new Set([f.subjectId,f.requesterId,f.leaderId]))observeGaolao(tx,id,{statement:reason+' 请在真实本人附近重新提议。',shareable:false,fields:[{key:'follow',label:'本次安排',value:f.followId},{key:'pause',label:'停止原因',value:policyPause}]});};
+    if(f.policyRoute&&!f.policyRoute.origin){pause('本人当前位置缺少已知公共路线资料。','unsupported-origin');continue;}
+    if(f.policyRoute&&(f.routeVersion!==tx.state.mapVersion||!policyRouteValid(tx.state,tx.content,f)||subject.controlEpoch!==f.subjectEpoch||leader.controlEpoch!==f.leaderEpoch)){pause('本次路线或控制版本已变更。','stale');continue;}
+    if(f.status==='proposed')continue;
+    if(f.policyRoute){const accepted=f.policyRoute.acceptance;if(!accepted||accepted.consentId!==f.consentId||accepted.consentVersion!==f.consentVersion||accepted.planVersion!==f.planVersion){pause('本次本人接受的执行关联已失效。','stale');continue;}}
     if(paused||f.routeVersion!==tx.state.mapVersion||!tx.liveActorIds?.has(f.leaderId)||subject.controlEpoch!==f.subjectEpoch||leader.controlEpoch!==f.leaderEpoch||!consent||consent.version!==f.consentVersion||consent.status!=='accepted'){pause('当前安排暂停，请本人重新确认后继续。');continue;}
-    if(f.status==='arrived')continue;
+    if(f.status==='arrived'&&!f.policyRoute)continue;
+    if(f.policyRoute){
+      const route=checkPolicyLeader(tx.content,f.policyRoute,leader);
+      if(!route){pause('当前实际带路已不符合约定的公共路线。','deviation');continue;}
+      // 到达尚不等于本人确认；未 settled 的安排仍受路线与许可约束。
+      if(f.status==='arrived'){if(JSON.stringify(route)!==JSON.stringify(f.policyRoute))changeChapter(tx,c=>{c.follows[f.subjectId].policyRoute=route;});continue;}
+      const elapsed=Math.max(0,sceneTimeMs-f.lastSceneTime);
+      if(!elapsed){if(JSON.stringify(route)!==JSON.stringify(f.policyRoute))changeChapter(tx,c=>{c.follows[f.subjectId].policyRoute=route;});continue;}
+      const local=policyLocalPath(tx.content,route,subject,leader,obstacleEnabled(tx.state));
+      if(!local){pause('本人的当前通路受阻，等待重新安排。','obstructed');continue;}
+      const moved=pointAlongPath(local.path,elapsed*tx.content.movement.speedPerSecond/1000),segments=[subject.position,...local.path.slice(1,moved.index),moved.position];
+      if(segments.some((point,i)=>i&&!clearSegment(local.scene,segments[i-1],point,obstacleEnabled(tx.state)))){pause('本人的当前通路受阻，等待重新安排。','obstructed');continue;}
+      const a={...subject,position:moved.position,spatialRevision:distance(subject.position,moved.position)>0?next(subject.spatialRevision):subject.spatialRevision,motionViews:{}};
+      if(route.frontExitRequired&&!route.frontExitDone&&moved.arrived&&actualFrontExit(tx.content,a))route.frontExitDone=true;
+      if(local.cross&&moved.arrived){
+        const requirement=local.cross.requirement;if(requirement&&fact(tx.state,requirement.targetId,requirement.field)!==requirement.value){pause('约定入口目前不能通过。','obstructed');continue;}
+        // 只在实际跨入时核对这一个入口的物理位置；不预读远处房间路径。
+        if(!walkable(sceneOf(tx.content,local.cross.destinationSceneId),local.cross.destination,obstacleEnabled(tx.state))){pause('约定入口目前受阻。','obstructed');continue;}
+        a.sceneId=local.cross.destinationSceneId;a.position=local.cross.destination;a.spatialRevision=next(a.spatialRevision);route.stage++;
+      }
+      actorEvent(tx,a);f.policyRoute=route;f.lastSceneTime=sceneTimeMs;f.status='following';
+      const d=tx.content.chapterRules.safeDestinations.find(d=>d.destinationId===f.destinationId),area=sceneOf(tx.content,d.sceneId).walkableAreas.find(x=>x.areaId===d.areaId);
+      if(a.sceneId===d.sceneId&&inPolygon(a.position,area.polygon)&&distance(a.position,d.position)<=20&&inRange(tx.state,tx.content,a,leader,tx.content.movement.interactionRadius)&&unoccluded(tx.state,tx.content,a,leader))f.status='arrived';
+      changeChapter(tx,c=>{c.follows[f.subjectId]=f;});continue;
+    }
     const elapsed=Math.max(0,sceneTimeMs-f.lastSceneTime);if(!elapsed)continue;const scene=sceneOf(tx.content,subject.sceneId);let goal=leader.position,cross=null;
     if(leader.sceneId!==subject.sceneId){cross=scene.exits.find(e=>e.destinationSceneId===leader.sceneId);if(!cross){pause('带路者已离开可达路线。');continue;}goal=scene.anchors.find(x=>x.anchorId===cross.anchorId).position;}
     const path=findPath(scene,subject.position,goal,obstacleEnabled(tx.state));if(!path){pause('通路受阻，等待重新安排。');continue;}
