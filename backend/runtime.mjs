@@ -17,6 +17,7 @@ import { parseSpatial, validateSpatial } from '../protocol/spatial.mjs';
 import { isGaolao } from '../game/gaolao-world.mjs';
 import { isSpatial, ensureView } from '../game/spatial-world.mjs';
 import * as spatial from './spatial-runtime.mjs';
+import * as scenePolicy from './scene-policy.mjs';
 import { encodeJsonbText, decodeJsonbText } from './jsonb-text.mjs';
 
 const digest = value => createHash('sha256').update(typeof value === 'string' ? value : canonicalize(value)).digest('hex');
@@ -57,6 +58,7 @@ export class AuthorityRuntime extends EventEmitter {
       await client.query(await readFile(new URL('./migrations/005-spatial-text-encoding.sql', import.meta.url), 'utf8'));
       await client.query(await readFile(new URL('./migrations/006-spatial-intent-context.sql', import.meta.url), 'utf8'));
       await client.query(await readFile(new URL('./migrations/007-spatial-ai-context.sql', import.meta.url), 'utf8'));
+      await client.query(await readFile(new URL('./migrations/008-scene-policy.sql', import.meta.url), 'utf8'));
       await client.query('COMMIT');
     } catch (error) { await client.query('ROLLBACK').catch(() => {}); throw error; }
     finally { client.release(); }
@@ -151,7 +153,10 @@ export class AuthorityRuntime extends EventEmitter {
       await this.hooks.afterCommit?.({ command: command.kind, sessionId, events: tx.events });
       await this.applyControlEffects(tx);
       // 仅进程内提交订阅者使用事务起点；不写入 WorldEvent、客户端投影或模型上下文。
-      if (tx.events.length) this.emit('commit', { sessionId, events: tx.events, ...(isSpatial(tx.row.state) ? { spatialPauseBefore: tx.row.state.paused } : {}) });
+      if (tx.events.length) {
+        const policyWake=isSpatial(tx.row.state)?scenePolicy.scenePolicyWake(tx):null;
+        this.emit('commit', { sessionId, events: tx.events, ...(isSpatial(tx.row.state) ? { spatialPauseBefore: tx.row.state.paused } : {}), ...(policyWake?{scenePolicyWake:policyWake}:{}) });
+      }
     } catch (error) {
       if (!committed) await client.query('ROLLBACK').catch(() => {});
       if (committed || committing) throw new RuntimeError('OUTCOME_UNKNOWN', '提交结果尚未确认，请查询原动作身份。');
@@ -684,6 +689,8 @@ export class AuthorityRuntime extends EventEmitter {
   reserveSpatialIntent(handle, intentId, action) { return spatial.reserveSpatialIntent(this, handle, intentId, action); }
   reserveSpatialFallback(handle,intentId,action,reason) { return spatial.reserveSpatialIntent(this,handle,intentId,action,{mode:'fallback',reason}); }
   submitSpatialIntent(handle, intentId) { return spatial.submitSpatialIntent(this, handle, intentId); }
+  prepareScenePolicy(handle) { return scenePolicy.prepareScenePolicy(this,handle); }
+  recoverScenePolicy(handle) { return scenePolicy.recoverScenePolicy(this,handle); }
   async authorizeInternal(tx, principal) {
     const actor = ownRecord(tx.state.characters, principal.actorId);
     if (principal.sessionId !== tx.row.session_id || !actor || (principal.principalKind !== 'proxy' ? actor.kind !== 'core_npc' : actor.kind !== 'human')) throw new RuntimeError('FORBIDDEN', '内部主体绑定失效。');
