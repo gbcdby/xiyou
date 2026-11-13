@@ -1,11 +1,26 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { placeHudCard, placeHudCards, cameraForHud, hudCameraAlternatives } from '../src/domain/gaolao-hud-layout.ts';
+import { placeHudCard, placeHudCards, cameraForHud, hudCameraAlternatives, fullMapHudAlternatives } from '../src/domain/gaolao-hud-layout.ts';
 import { screenPosition } from '../src/domain/spatial-labels.ts';
 
 const overlaps = (a, b) => a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;
 const protect = r => ({ x: r.x - 16, y: r.y - 16, width: r.width + 32, height: r.height + 32 });
 const within = (r, b) => r.x >= b.x && r.y >= b.y && r.x + r.width <= b.x + b.width && r.y + r.height <= b.y + b.height;
+
+test('全图安全留白候选始终等比包含整个世界，按最少缩小排列且不改HUD', () => {
+  const scene = { width: 1600, height: 1000 }, reserved = [{ x: 30, y: 132, width: 310, height: 187 }, { x: 650, y: 30, width: 300, height: 44 }], original = structuredClone(reserved);
+  for (const viewport of [{ width: 1600, height: 1000 }, { width: 390, height: 844 }]) {
+    const views = fullMapHudAlternatives(viewport, scene, reserved); assert.ok(views.length > 0); assert.ok(views.length <= reserved.length * 4);
+    for (const [index, view] of views.entries()) {
+      assert.ok(Math.abs(view.width / view.height - viewport.width / viewport.height) < 1e-9);
+      const first = screenPosition({ x: 0, y: 0 }, view, viewport), last = screenPosition({ x: scene.width, y: scene.height }, view, viewport);
+      assert.ok(first.x >= -.00001 && first.y >= -.00001 && last.x <= viewport.width + .00001 && last.y <= viewport.height + .00001);
+      if (index) assert.ok(view.width >= views[index - 1].width);
+    }
+  }
+  assert.deepEqual(reserved, original);
+  assert.deepEqual(fullMapHudAlternatives({ width: 0, height: 0 }, scene, reserved), []);
+});
 
 test('动作卡换边避让当前身体与名字各16px，不改保护对象坐标', () => {
   const bodies = [{ x: 1260, y: 420, width: 55, height: 85 }, { x: 1220, y: 510, width: 160, height: 44 }];

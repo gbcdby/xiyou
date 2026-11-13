@@ -6,6 +6,7 @@ import { createServer as createVite } from 'vite';
 import { startTestPostgres } from '../../backend/test-support/postgres.mjs';
 import { createAuthorityServer } from '../../backend/server.mjs';
 import { repository, saveJSON, sourceIdentity, sha256, until } from './network-support.mjs';
+import { checkObjectGeometry } from './object-geometry-resources.mjs';
 
 const output = resolve(process.env.FRONTEND_EVIDENCE_DIR || resolve(repository, '.agent-output/ui-implementer/spatial-browser'));
 await mkdir(output, { recursive: true });
@@ -131,6 +132,7 @@ try {
     }
     for (const context of groupContexts) await context.close(); activePages = [];
   }
+  await checkObjectGeometry({ browser, output, report });
   assert.deepEqual(report.pageErrors, []); report.assessment = 'PASS';
 } catch (error) {
   report.assessment = 'FAIL'; report.error = error.stack; console.error(error);

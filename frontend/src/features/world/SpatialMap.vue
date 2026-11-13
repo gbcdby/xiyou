@@ -6,13 +6,14 @@ import { layoutSpatialLabels, screenPosition } from '../../domain/spatial-labels
 import { sceneArtwork, spriteForAppearance } from '../../domain/gaolao-art.ts';
 import SpatialActorArt from './SpatialActorArt.vue';
 import SpatialObjectArt from './SpatialObjectArt.vue';
-import { objectArtContext, objectInstanceKey, objectVisualVariant, selectObjectArt } from '../../domain/gaolao-object-art.ts';
+import { objectArtContext, objectInstanceKey, objectVisualVariant, selectObjectArt, objectArtRequestKey, readyObjectArtFrame } from '../../domain/gaolao-object-art.ts';
+import type { ObjectArtResourceState } from '../../domain/gaolao-object-art.ts';
 import { foregroundOpacity, orderSceneEntries, selectSceneDoor, sceneLayerPresentation } from '../../domain/gaolao-scene-layers.ts';
 import type { SceneForeground, SceneDoorGeometry } from '../../domain/gaolao-scene-layers.ts';
 import { useSceneLayerImages } from './use-scene-layer-images.ts';
 import type { SpatialLabelInput } from '../../domain/spatial-labels.ts';
 import type { ScreenRect } from '../../domain/spatial-labels.ts';
-import { cameraForHud, hudCameraAlternatives, placeHudCards } from '../../domain/gaolao-hud-layout.ts';
+import { cameraForHud, hudCameraAlternatives, fullMapHudAlternatives, placeHudCards } from '../../domain/gaolao-hud-layout.ts';
 import type { HudMapGeometry, HudCameraArea, HudCardPlacement } from '../../domain/gaolao-hud-layout.ts';
 const props = defineProps<{ snapshot: SnapshotV2; disabled: boolean; selected?: string; personLabels?: Record<string, string>; immersive?: boolean; cameraArea?: HudCameraArea; hudNotice?: string; hudRestoreLabel?: string }>();
 const emit = defineEmits<{ move: [position: Position]; select: [reference: string]; stop: []; objects: []; restore: []; geometry: [value: HudMapGeometry]; settled: [value: { viewId: string; epoch: string; movementId: string; sequence: string; position: Position }] }>();
@@ -30,9 +31,9 @@ watch(() => props.snapshot, snapshot => { if (frame) cancelAnimationFrame(frame)
 const viewport = ref<HTMLElement | null>(null);
 const reducedMotion = ref(false); let motionPreference: MediaQueryList | null = null;
 const updateMotionPreference = () => { reducedMotion.value = Boolean(motionPreference?.matches); };
-const artAttempt = ref(0); const missingResources = ref(new Set<string>()); const missingObjects = ref(new Set<string>());
+const artAttempt = ref(0); const missingResources = ref(new Set<string>()); const objectResources = ref(new Map<string, ObjectArtResourceState>());
 function resource(value: { file: string; available: boolean }) { const next = new Set(missingResources.value); if (value.available) next.delete(value.file); else next.add(value.file); missingResources.value = next; }
-function retryArtwork() { missingResources.value = new Set(); missingObjects.value = new Set(); artAttempt.value++; backgroundFailed.value = false; }
+function retryArtwork() { missingResources.value = new Set(); objectResources.value = new Map(); artAttempt.value++; backgroundFailed.value = false; }
 const viewportSize = ref({ width: 0, height: 0 });
 let resize: ResizeObserver | null = null; let resizeFrame = 0;
 function measureViewport() {
@@ -71,24 +72,32 @@ const people = computed(() => [...projection.value.entities.filter(e => e.entity
 }).sort((a, b) => a.position!.y - b.position!.y));
 const groundItems = computed(() => projection.value.items.filter(i => i.location.kind === 'ground' && i.location.sceneId === scene.value?.sceneId));
 const mapObjects = computed(() => [...groundItems.value, ...projection.value.targets.filter(target => target.sceneId === scene.value?.sceneId)]);
-const objectKeys = computed(() => new Set(mapObjects.value.map(object => objectInstanceKey(artContext.value, object))));
+function objectFrame(object: ItemViewV2 | TargetViewV2) { return !('location' in object) && sceneDoor.value && object.visualKey === 'timber-door' ? null : selectObjectArt(object, artContext.value, 'map'); }
+const objectFrames = computed(() => new Map(mapObjects.value.map(object => [objectInstanceKey(artContext.value, object), objectFrame(object)])));
 const invalidObjectState = computed(() => mapObjects.value.some(object => objectVisualVariant(object, artContext.value, 'map') === 'invalid'));
-function objectResource(value: { instanceKey: string; failed: boolean }) {
-  const next = new Set(missingObjects.value);
-  if (value.failed && objectKeys.value.has(value.instanceKey)) next.add(value.instanceKey); else next.delete(value.instanceKey);
-  missingObjects.value = next;
+function currentObjectResource(value: ObjectArtResourceState) {
+  return objectFrames.value.has(value.instanceKey) && value.requestKey === objectArtRequestKey(value.instanceKey, objectFrames.value.get(value.instanceKey)!, artAttempt.value);
 }
-watch(objectKeys, keys => { missingObjects.value = new Set([...missingObjects.value].filter(key => keys.has(key))); });
+function objectResource(value: ObjectArtResourceState) { if (currentObjectResource(value)) objectResources.value = new Map(objectResources.value).set(value.instanceKey, value); }
+watch([objectFrames, artAttempt], () => { objectResources.value = new Map([...objectResources.value].filter(([, value]) => currentObjectResource(value))); }, { flush: 'sync' });
+const missingObjects = computed(() => new Set([...objectResources.value].filter(([, value]) => value.failed && currentObjectResource(value)).map(([key]) => key)));
 const protectedRefs = computed(() => new Set([projection.value.self.entityRef, props.selected, ...(projection.value.chapter?.follows.filter(follow => ['accepted', 'following', 'paused', 'arrived'].includes(follow.status)).map(follow => follow.subjectRef) || [])]));
 const selectedObjects = computed(() => [
-  ...projection.value.targets.filter(target => target.entityRef === props.selected && target.sceneId === scene.value?.sceneId).map(target => ({ key: target.entityRef, position: target.position })),
-  ...groundItems.value.flatMap(item => item.entityRef === props.selected && item.location.kind === 'ground' ? [{ key: item.entityRef, position: item.location.position }] : []),
+  ...projection.value.targets.filter(target => target.entityRef === props.selected && target.sceneId === scene.value?.sceneId).map(target => ({ key: target.entityRef, position: target.position, bounds: renderedObjectFrame(target)?.bounds })),
+  ...groundItems.value.flatMap(item => item.entityRef === props.selected && item.location.kind === 'ground' ? [{ key: item.entityRef, position: item.location.position, bounds: renderedObjectFrame(item)?.bounds }] : []),
 ]);
 const doorSelection = computed(() => selectSceneDoor(layerResources.value, artContext.value, projection.value.targets, undefined, layersReady.value));
 const doorInstanceKey = computed(() => JSON.stringify([layerContextKey.value, layerResources.value?.groupVersion, doorSelection.value.target?.entityRef, doorSelection.value.target?.resourceRevision, doorSelection.value.frame?.variant, layersReady.value]));
-const doorFailed = ref(false);
-watch(doorInstanceKey, () => { doorFailed.value = false; }, { flush: 'sync' });
-function doorResource(value: { instanceKey: string; failed: boolean }) { if (value.instanceKey === doorInstanceKey.value) doorFailed.value = value.failed; }
+const doorState = ref<ObjectArtResourceState | null>(null);
+watch(doorInstanceKey, () => { doorState.value = null; }, { flush: 'sync' });
+function currentDoorResource(value: ObjectArtResourceState) { return value.instanceKey === doorInstanceKey.value && value.requestKey === objectArtRequestKey(doorInstanceKey.value, doorSelection.value.frame, artAttempt.value); }
+function doorResource(value: ObjectArtResourceState) { if (currentDoorResource(value)) doorState.value = value; }
+const doorFailed = computed(() => Boolean(doorState.value?.failed && currentDoorResource(doorState.value)));
+function renderedObjectFrame(object: ItemViewV2 | TargetViewV2) {
+  if (!('location' in object) && sceneDoor.value && object.visualKey === 'timber-door') return doorSelection.value.target?.entityRef === object.entityRef ? readyObjectArtFrame(doorSelection.value.frame, doorInstanceKey.value, artAttempt.value, doorState.value) : null;
+  const key = objectInstanceKey(artContext.value, object);
+  return readyObjectArtFrame(objectFrame(object), key, artAttempt.value, objectResources.value.get(key));
+}
 const protectedBodies = computed(() => [
   ...people.value.filter(person => protectedRefs.value.has(person.entityRef)).map(person => {
     const sprite = spriteForAppearance(person.appearanceId, person.drawnFacing, person.moving, person.distance, reducedMotion.value);
@@ -98,7 +107,7 @@ const protectedBodies = computed(() => [
   ...mapObjects.value.filter(object => protectedRefs.value.has(object.entityRef)).flatMap(object => {
     const position = 'location' in object ? object.location.kind === 'ground' ? object.location.position : null : object.position;
     if (!position) return [];
-    const b = selectObjectArt(object, artContext.value, 'map')?.bounds ?? { x: -18, y: -18, width: 36, height: 36 };
+    const b = renderedObjectFrame(object)?.bounds ?? { x: -18, y: -18, width: 36, height: 36 };
     return [{ depthY: position.y, bounds: { ...b, x: position.x + b.x, y: position.y + b.y } }];
   }),
 ]);
@@ -119,7 +128,6 @@ const drawEntries = computed(() => {
   if (sceneDoor.value) entries.push({ kind: 'door', key: 'scene-door', depthY: sceneDoor.value.depthY, door: sceneDoor.value });
   return orderSceneEntries(entries);
 });
-const targetFrame = (target: TargetViewV2) => sceneDoor.value && target.visualKey === 'timber-door' ? null : selectObjectArt(target, artContext.value, 'map');
 function labelsFor(view: ScreenRect, cardSpace: ScreenRect[] = []) {
   const size = viewportSize.value;
   const inputs: SpatialLabelInput[] = [];
@@ -135,8 +143,8 @@ function labelsFor(view: ScreenRect, cardSpace: ScreenRect[] = []) {
     const bounds = sprite ? { ...sprite.bounds, x: sprite.mirrorX ? -sprite.bounds.x - sprite.bounds.width : sprite.bounds.x } : undefined;
     add(person.entityRef, (props.personLabels?.[person.entityRef] || person.name) + (person.entityRef === projection.value.self.entityRef ? ' · 你' : ''), person.position, 'person', bounds);
   }
-  for (const target of projection.value.targets) if (target.sceneId === scene.value?.sceneId) add(target.entityRef, target.name, target.position, 'object');
-  for (const item of groundItems.value) if (item.location.kind === 'ground') add(item.entityRef, item.name, item.location.position, 'object');
+  for (const target of projection.value.targets) if (target.sceneId === scene.value?.sceneId) add(target.entityRef, target.name, target.position, 'object', renderedObjectFrame(target)?.bounds);
+  for (const item of groundItems.value) if (item.location.kind === 'ground') add(item.entityRef, item.name, item.location.position, 'object', renderedObjectFrame(item)?.bounds);
   for (const anchor of scene.value?.anchors || []) if (scene.value?.exits.some(exit => exit.anchorId === anchor.anchorId)) add('anchor:' + anchor.anchorId, anchor.label, anchor.position, 'anchor');
   return layoutSpatialLabels(inputs, size, props.immersive ? [...(props.cameraArea?.reserved || []), ...cardSpace] : undefined);
 }
@@ -152,8 +160,9 @@ function geometryFor(view: ScreenRect, placed: ReturnType<typeof labelsFor>): Hu
     }
     for (const object of selectedObjects.value) {
       const point = screenPosition(object.position, view, size);
+      const b = object.bounds ?? { x: -18, y: -18, width: 36, height: 36 };
       // 选中物的保护不依赖标签能否排下，不能靠略去名字让卡片获得虚假的空域。
-      protectedRegions.push({ x: point.x - 18 * point.scale - 8, y: point.y - 18 * point.scale - 8, width: 36 * point.scale + 16, height: 36 * point.scale + 16 });
+      protectedRegions.push({ x: point.x + b.x * point.scale - 8, y: point.y + b.y * point.scale - 8, width: b.width * point.scale + 16, height: b.height * point.scale + 16 });
     }
     for (const label of placed.labels) if (protectedRefs.value.has(label.key)) {
       protectedRegions.push({ x: label.x, y: label.y, width: label.width, height: label.height });
@@ -166,17 +175,18 @@ const framing = computed(() => {
   const position = motion.position(projection.value.self.entityRef, frameTime.value) || projection.value.self.position;
   const assemble = (view: ScreenRect, cardSpace: ScreenRect[] = []) => { const labels = labelsFor(view, cardSpace); return { view, labels, geometry: geometryFor(view, labels) }; };
   if (!map) return assemble({ x: 0, y: 0, width: 1000, height: 700 });
-  if (!follow.value || !position) return assemble({ x: 0, y: 0, width: map.width, height: map.height });
+  const fullMap = !follow.value || !position;
   const width = Math.min(map.width, Math.max(400, size.width / .9)), height = Math.min(map.height, Math.max(400, size.height / .9));
-  let preferred = { x: Math.max(0, Math.min(map.width - width, position.x - width / 2)), y: Math.max(0, Math.min(map.height - height, position.y - height / 2)), width, height };
+  let preferred = fullMap ? { x: 0, y: 0, width: map.width, height: map.height } : { x: Math.max(0, Math.min(map.width - width, position!.x - width / 2)), y: Math.max(0, Math.min(map.height - height, position!.y - height / 2)), width, height };
   const area = props.cameraArea;
   if (!props.immersive || !area || !size.width || !size.height) return assemble(preferred);
   const actors = people.value.filter(person => protectedRefs.value.has(person.entityRef));
-  const positions = [...actors.map(person => person.position!), ...selectedObjects.value.map(object => object.position)];
+  // 素材偏移只扩充镜头候选范围；命中、选择与世界动作仍使用原权威点。
+  const positions = [...actors.map(person => person.position!), ...selectedObjects.value.flatMap(object => object.bounds ? [object.position, { x: object.position.x + object.bounds.x, y: object.position.y + object.bounds.y }, { x: object.position.x + object.bounds.x + object.bounds.width, y: object.position.y + object.bounds.y + object.bounds.height }] : [object.position])];
   const scale = Math.min(size.width / width, size.height / height);
   const covers = width * scale >= size.width - .01 && height * scale >= size.height - .01;
   const alreadyVisible = positions.every(point => { const screen = screenPosition(point, preferred, size); return screen.x - 106 >= area.x && screen.x + 106 <= area.x + area.width && screen.y - 90 * screen.scale - 70 >= area.y && screen.y + 60 <= area.y + area.height; });
-  if (!covers || !alreadyVisible) preferred = cameraForHud({ viewport: size, scene: map, safeArea: area, positions });
+  if (!fullMap && (!covers || !alreadyVisible)) preferred = cameraForHud({ viewport: size, scene: map, safeArea: area, positions });
   const requiredLabels = [...actors.map(person => person.entityRef), ...selectedObjects.value.map(object => object.key)];
   const state = (card: HudCardPlacement) => !card.rect ? 2 : card.collapsed ? 1 : 0;
   const overlaps = (a: ScreenRect, b: ScreenRect) => a.x < b.x + b.width + 8 && a.x + a.width > b.x - 8 && a.y < b.y + b.height + 8 && a.y + a.height > b.y - 8;
@@ -202,7 +212,23 @@ const framing = computed(() => {
     const alternative = rank(assemble(view, cardSpace));
     return better(alternative, initial) ? alternative : initial;
   }
-  // 先用原取景；仅在正文/姓名无法同时容纳时评估有限换边，绝不改变世界位置或选择。
+  if (fullMap) {
+    const conflict = selectedObjects.value.some(object => {
+      if (!object.bounds) return false;
+      const point = screenPosition(object.position, preferred, size), b = object.bounds;
+      const region = { x: point.x + b.x * point.scale - 8, y: point.y + b.y * point.scale - 8, width: b.width * point.scale + 16, height: b.height * point.scale + 16 };
+      return area.reserved?.some(rect => overlaps(region, rect));
+    });
+    if (!conflict) return assemble(preferred);
+    let best = evaluate(preferred);
+    for (const candidate of fullMapHudAlternatives(size, map, area.reserved || [])) {
+      const next = evaluate(candidate);
+      if (better(next, best)) best = next;
+      if (best.rank.every(value => value === 0)) break;
+    }
+    return best;
+  }
+  // 跟随仍受原地图四边约束；只在正文/姓名无法同时容纳时评估有限换边。
   let best = evaluate(preferred);
   if (best.rank.every(value => value === 0)) return best;
   for (const candidate of hudCameraAlternatives(size, map, positions, area, preferred)) {
@@ -254,8 +280,8 @@ function keyboard(event: KeyboardEvent) {
       </g>
       <polyline v-if="projection.movement && ['accepted', 'moving'].includes(projection.movement.status)" class="spatial-route" :points="points(projection.movement.path)" />
       <template v-for="entry in drawEntries" :key="entry.key">
-      <g v-if="entry.kind === 'target'" :transform="`translate(${entry.target.position.x} ${entry.target.position.y})`" class="spatial-target" :class="{ selected: selected === entry.target.entityRef }" :data-depth-y="entry.depthY" tabindex="0" role="button" :aria-label="`选择${entry.target.name}`" @click.stop="emit('select', entry.target.entityRef)" @keydown.enter.stop="emit('select', entry.target.entityRef)"><SpatialObjectArt :frame="targetFrame(entry.target)" :instance-key="entry.key" :attempt="artAttempt" @resource="objectResource"><rect x="-13" y="-13" width="26" height="26" rx="4" /></SpatialObjectArt><circle class="spatial-object-selection" r="18" /><circle class="spatial-hit" :r="hitRadius" /></g>
-      <g v-else-if="entry.kind === 'item'" :transform="entry.item.location.kind === 'ground' ? `translate(${entry.item.location.position.x} ${entry.item.location.position.y})` : ''" class="spatial-item" :class="{ selected: selected === entry.item.entityRef }" :data-depth-y="entry.depthY" tabindex="0" role="button" :aria-label="`选择${entry.item.name}`" @click.stop="emit('select', entry.item.entityRef)" @keydown.enter.stop="emit('select', entry.item.entityRef)"><SpatialObjectArt :frame="selectObjectArt(entry.item, artContext, 'map')" :instance-key="entry.key" :attempt="artAttempt" @resource="objectResource"><path d="M0 -10 L12 0 L0 10 L-12 0 Z" /></SpatialObjectArt><circle class="spatial-object-selection" r="18" /><circle class="spatial-hit" :r="hitRadius" /></g>
+      <g v-if="entry.kind === 'target'" :transform="`translate(${entry.target.position.x} ${entry.target.position.y})`" class="spatial-target" :class="{ selected: selected === entry.target.entityRef }" :data-depth-y="entry.depthY" tabindex="0" role="button" :aria-label="`选择${entry.target.name}`" @click.stop="emit('select', entry.target.entityRef)" @keydown.enter.stop="emit('select', entry.target.entityRef)"><SpatialObjectArt :frame="objectFrame(entry.target)" :instance-key="entry.key" :attempt="artAttempt" @resource="objectResource"><rect x="-13" y="-13" width="26" height="26" rx="4" /></SpatialObjectArt><circle class="spatial-object-selection" r="18" /><circle class="spatial-hit" :r="hitRadius" /></g>
+      <g v-else-if="entry.kind === 'item'" :transform="entry.item.location.kind === 'ground' ? `translate(${entry.item.location.position.x} ${entry.item.location.position.y})` : ''" class="spatial-item" :class="{ selected: selected === entry.item.entityRef }" :data-depth-y="entry.depthY" tabindex="0" role="button" :aria-label="`选择${entry.item.name}`" @click.stop="emit('select', entry.item.entityRef)" @keydown.enter.stop="emit('select', entry.item.entityRef)"><SpatialObjectArt :frame="objectFrame(entry.item)" :instance-key="entry.key" :attempt="artAttempt" @resource="objectResource"><path d="M0 -10 L12 0 L0 10 L-12 0 Z" /></SpatialObjectArt><circle class="spatial-object-selection" r="18" /><circle class="spatial-hit" :r="hitRadius" /></g>
       <g v-else-if="entry.kind === 'person'" :transform="`translate(${entry.person.position!.x} ${entry.person.position!.y})`" :data-spatial-self="entry.person.entityRef === projection.self.entityRef ? 'true' : undefined" :data-depth-y="entry.depthY" class="spatial-person" :class="{ self: entry.person.entityRef === projection.self.entityRef, selected: selected === entry.person.entityRef }" tabindex="0" role="button" :aria-label="`${personLabels?.[entry.person.entityRef] || entry.person.name}${entry.person.entityRef === projection.self.entityRef ? '，本人' : ''}`" @click.stop="emit('select', entry.person.entityRef)" @keydown.enter.stop="emit('select', entry.person.entityRef)" @keydown.space.prevent.stop="emit('select', entry.person.entityRef)">
         <ellipse cy="-1" rx="17" ry="6" class="spatial-shadow" />
         <ellipse v-if="!layerGroup && (entry.person.entityRef === projection.self.entityRef || selected === entry.person.entityRef)" cy="-1" rx="24" ry="9" class="spatial-selection-ring" />
@@ -274,7 +300,7 @@ function keyboard(event: KeyboardEvent) {
       </g>
       </template>
       <g v-if="layerGroup" class="spatial-layer-feedback" pointer-events="none" aria-hidden="true">
-        <ellipse v-for="person in people.filter(value => value.entityRef === projection.self.entityRef || value.entityRef === selected)" :key="person.entityRef" :cx="person.position!.x" :cy="person.position!.y - 1" rx="24" ry="9" class="spatial-selection-ring" />
+        <ellipse v-for="person in people.filter(value => value.entityRef === projection.self.entityRef || value.entityRef === selected)" :key="person.entityRef" :cx="person.position!.x" :cy="person.position!.y - 1" rx="24" ry="9" class="spatial-selection-ring" :class="{ self: person.entityRef === projection.self.entityRef, selected: person.entityRef === selected }" />
         <circle v-for="object in selectedObjects" :key="object.key" :cx="object.position.x" :cy="object.position.y" r="18" class="spatial-layer-object-selection" />
       </g>
     </svg>
