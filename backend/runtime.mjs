@@ -689,7 +689,7 @@ export class AuthorityRuntime extends EventEmitter {
   reserveSpatialIntent(handle, intentId, action) { return spatial.reserveSpatialIntent(this, handle, intentId, action); }
   reserveSpatialFallback(handle,intentId,action,reason) { return spatial.reserveSpatialIntent(this,handle,intentId,action,{mode:'fallback',reason}); }
   submitSpatialIntent(handle, intentId) { return spatial.submitSpatialIntent(this, handle, intentId); }
-  prepareScenePolicy(handle) { return scenePolicy.prepareScenePolicy(this,handle); }
+  prepareScenePolicy(handle,options) { return scenePolicy.prepareScenePolicy(this,handle,options); }
   recoverScenePolicy(handle) { return scenePolicy.recoverScenePolicy(this,handle); }
   async authorizeInternal(tx, principal) {
     const actor = ownRecord(tx.state.characters, principal.actorId);

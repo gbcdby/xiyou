@@ -43,12 +43,29 @@ N5 要求重验“相应选择谓词”和本次选择的真实依赖；P2-09 �
 
 ## 原结果与语义水位
 
-`spatial_intents.scene_outcome` 仅标记已经按当前读权和原摘要核对的原 Receipt。原 request、execution_context 和移动序号不回写。部分唯一索引保证一个 Session/角色的场景策略最多一条未收束预留。逻辑键区分一次退让确认、每份 consent/version 的回应或撤回、每份 follow/plan 的安置确认；确定拒绝后的新尝试关联上一尝试，且要求当前依据变化。
+`spatial_intents.scene_outcome` 仅标记已经按当前读权和原摘要核对的原 Receipt。原 request、execution_context 和移动序号不回写。部分唯一索引保证一个 Session/角色的场景策略最多一条未收束预留。逻辑键区分一次退让确认、每份 consent/version 的回应或撤回、每份 follow/plan 的安置确认。成功步骤继续持久去重；确定拒绝后的新尝试关联上一尝试，要求当前依据变化，或收到晚于该原拒绝的合法新语义且当前选择仍成立。
+
+### 成功步骤与失败尝试
+
+准备时的 basis 相等只能说明两次准备依据相同。原请求可能在临时 paused 时被拒，恢复后再次满足同一 P2-09；不能把该 Rejected 当作人物已经完成撤回。N5 / §6.2～6.3 的新评估入口复用原 `pendingSemanticSeq`：控制器在正常评估调用时捕获它，经可信内部 `prepareScenePolicy(handle,{semanticSeq})` 传入。参数默认 `0`，校验为合法 seq 且不超过当前实际读态；不来自 Public DTO，也不使用最新全局 seq 伪造信号。
+
+| 既有原记录 / 当前判断 | 准备结果 | 确认语义水位 |
+| --- | --- | --- |
+| 有未收束原请求 | recovery，先查回或提交同一原 ID。 | 不消费新语义。 |
+| 当前纯判断确实无动作 | idle。 | 实际 `evaluatedThroughSeq`。 |
+| 已 Accepted 的逻辑步骤 | idle；退让导航保留原有“依据变化可重新导航”例外。 | 实际 `evaluatedThroughSeq`。 |
+| 已 Rejected，当前有效依据有变化 | 按原规则准备关联的新尝试。 | 实际 `evaluatedThroughSeq`。 |
+| 已 Rejected，依据相同，`semanticSeq > 原 Receipt.observedSeq` | 当前纯判断仍须成立；准备关联的新尝试，原拒绝不改写。 | 实际 `evaluatedThroughSeq`。 |
+| 已 Rejected，依据相同，没有更晚已接收语义 | idle 等待；不能凭当前全局 seq 再建动作。 | 仅确认 `semanticSeq`，通过临时结果 `consumeThroughSeq` 明示。 |
+
+`observedSeq` 来自原 `executeSpatial` 在同一 Session 锁事务内做出原动作结果、落原 action_receipts 时的 `tx.state.sessionSeq`，由 `recoverScenePolicy` 核对原身份/摘要后保存至 scene_outcome。它不是恢复返回时的最新 seq。新预留继续使用原有 `previousIntentId/attempt`、原子分配的新 actionId 和实际评估水位；没有新增持久字段。原 Unknown 未收束时不进入上述新尝试分支。
+
+`evaluatedThroughSeq` 始终表示实际读取并判断的权威状态；`consumeThroughSeq` 只用于旧拒绝缓存仍在等输入的分支，表示本次真正收到并确认的语义界线。若 prepare 捕获旧 pending 后，resume 在读取前提交或通知迟到，旧输入不能凭较新的读态消费该 resume。控制器只推进到 consumeThroughSeq，较晚 pending 及之后才送达的合法通知都能再触发正常评估；成功预留和真正无动作仍按原规则消费实际读态。相同/倒序旧通知不新建，原结果的纯技术恢复不隐含语义。
 
 | 阶段 | 接收/消费规则 | 新身份规则 |
 | --- | --- | --- |
 | 原请求恢复读前、读后返回前、结果收束前 | 合法语义始终进入独立 `pendingSemanticSeq`；恢复只查或提交原请求，不消费语义。 | 沿用原 actionId、完整请求、摘要、epoch/ref 与适用移动序号。 |
-| 当前评估与预留 / 确定无动作返回 | 成功当前授权评估只消费 `<= evaluatedThroughSeq`；更晚通知保留。失败或 Unknown 不先清水位。 | 只有有依据的当前选择才能预留新尝试。 |
+| 当前评估与预留 / 确定无动作返回 | 成功当前授权评估只消费 `<= evaluatedThroughSeq`；旧拒绝缓存等输入时仅消费 `consumeThroughSeq`。更晚通知保留，失败或 Unknown 不先清水位。 | 只有有依据的当前选择才能预留新尝试。 |
 | 原结果已收束 | 有独立 pending 或初始化扫描才开始下一正常评估。 | 纯显式恢复没有新动作或对白。 |
 | 重试耗尽 | 保留原身份与 pending；新通知不重置技术重试次数。 | 初次失败后最多三次自动重试，默认间隔 100 ms；显式恢复只接替技术恢复。 |
 | 重启 | 先收束原预留/Receipt，沿用原 epoch 提升与暂停；独立启动扫描读取当前本人资料。易失 pending 不声称跨进程持久。 | 旧未提交 epoch 依法拒绝；旧 paused 安排须真人新提议，不能自动复活。 |
@@ -83,5 +100,7 @@ defer/decline/withdraw 与内部无动作保持不同。近距合格真人回到
 旧内容/同貌权限与自主恢复采用受影响路径的定向回归。作者曾实际发现并保留 arrived 早退及旧提议资格缓存两个产品红灯；相同真实场景用于修复验证，不能删掉失败后改称一直通过。
 
 R-GZ-SP-IMPL-STD-001 的依赖一致性回归位于 `backend/tests/scene-policy-dependencies.test.mjs`：两目的地撤回返回、撤回中的真实 epoch 变化、真正新提议替代、到达确认的合法领路者移动，并核对原文/一次效果、旧通知重复乱序及无关移动频率。独立原反例和旧 red 候选的结论保留，修正版仍须独立复核。
+
+R-GZ-SP-IMPL-STD-002 的结果去重回归位于 `backend/tests/scene-policy-result-dedup.test.mjs`：原撤回被暂停拒绝，正常初始化已捕获旧语义后 resume 在读取前送达或真实 COMMIT 后迟通知，以及原拒绝 COMMIT 返回丢失时先恢复原身份。核对新尝试关联、不可变旧 Rejected、成功后再 resume 去重、旧通知重放/无关移动及纯恢复。原独立暂停/resume 红灯保留；作者检查仍不代替独立复审。
 
 这些是作者检查入口与实现说明，不代表独立需求/标准审查、TLC、新 UI 默认入口、完整 A3、真实模型供应商或发布已通过。新增形式化边界见 [scene 影响报告](../formal/adv001/scene-policy-impact.md)；后续必须对冻结源码单独核对。

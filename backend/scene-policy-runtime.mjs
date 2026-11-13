@@ -42,10 +42,10 @@ export async function attachScenePolicies({runtime,retryIntervalMs=100,log=()=>{
       if(a.needsRecovery)await recoverOriginal(a);
       if(closed||a.terminal){a.phase='Idle';return;}
       if(!a.bootstrap&&!greater(a.pendingSemanticSeq,a.lastSemanticSeq)){a.phase='Idle';return;}
-      const prepared=await runtime.prepareScenePolicy(a.handle);a.evaluations++;
+      const prepared=await runtime.prepareScenePolicy(a.handle,{semanticSeq:a.pendingSemanticSeq});a.evaluations++;
       if(prepared.kind==='recovery'){a.needsRecovery=true;a.intentId=prepared.intentId;await recoverOriginal(a);a.phase='Idle';return;}
       // 返回不能覆盖在读前、读后或 COMMIT 返回期间收到的更晚语义。
-      consume(a,prepared.evaluatedThroughSeq);a.reason=prepared.reason??null;
+      consume(a,prepared.consumeThroughSeq??prepared.evaluatedThroughSeq);a.reason=prepared.reason??null;
       if(prepared.kind==='prepared'){
         a.intentId=prepared.intentId;a.needsRecovery=true;
         a.lastReceipt=await runtime.submitSpatialIntent(a.handle,prepared.intentId);

@@ -104,7 +104,7 @@ export function scenePolicyWake(tx){
   return {actorId:policy.actorId,throughSeq:tx.state.sessionSeq,relevant:canonicalize(wakeDependencies(tx.row.state,tx.content,policy.actorId))!==canonicalize(wakeDependencies(tx.state,tx.content,policy.actorId))};
 }
 const pendingQuery="SELECT * FROM spatial_intents WHERE session_id=$1 AND actor_id=$2 AND execution_context->>'mode'='scene-policy' AND scene_outcome IS NULL ORDER BY intent_id";
-export async function prepareScenePolicy(runtime,handle){
+export async function prepareScenePolicy(runtime,handle,{semanticSeq='0'}={}){
   const principal=runtime.internal(handle);
   return runtime.locked(principal.sessionId,{kind:'scene-policy-prepare'},async tx=>{
     await authorize(runtime,tx,principal);
@@ -112,6 +112,8 @@ export async function prepareScenePolicy(runtime,handle){
     if(pending.length)return {kind:'recovery',intentId:pending[0].intent_id};
     await advanceSpatialTime(tx);
     const read=await scenePolicyInput(tx,principal),choice=decideGaolaoScenePolicy(read.input),evaluatedThroughSeq=tx.state.sessionSeq;
+    checkSpatialSchema(seq,semanticSeq,spatialSchema.$defs);
+    if(BigInt(semanticSeq)>BigInt(evaluatedThroughSeq))throw new RuntimeError('INVALID_MESSAGE','场景语义水位不能晚于当前权威状态。');
     if(!read.input.eligibility.authorized)throw new RuntimeError('FORBIDDEN');
     if(choice.kind!=='action')return {kind:'idle',reason:choice.reason,evaluatedThroughSeq};
     const current=bindings(tx,principal,read);
@@ -119,7 +121,14 @@ export async function prepareScenePolicy(runtime,handle){
     if(old){
       const previous=old.execution_context.scenePolicyBasis;
       const previousBindings=Object.fromEntries(Object.keys(current).map(k=>[k,previous[k]]));
-      if(old.scene_outcome?.status==='Accepted'&&choice.stepKey!=='retreat-navigation'||sameChoiceBindings(previousBindings,current,choice.action))return {kind:'idle',reason:'当前逻辑步骤已有确定原结果。',evaluatedThroughSeq};
+      const succeeded=old.scene_outcome?.status==='Accepted';
+      const newSemanticAfterRejection=old.scene_outcome?.status==='Rejected'&&BigInt(semanticSeq)>BigInt(old.scene_outcome.observedSeq);
+      if(succeeded&&choice.stepKey!=='retreat-navigation')return {kind:'idle',reason:'当前逻辑步骤已有成功原结果。',evaluatedThroughSeq};
+      if(sameChoiceBindings(previousBindings,current,choice.action)&&!newSemanticAfterRejection){
+        // 准备依据相同不能证明旧拒绝仍适用；先等待拒绝之后真正收到的新语义。
+        // 这里只确认调用时已收到的水位，读前提交/迟送达的 resume 仍须保留。
+        return {kind:'idle',reason:succeeded?'当前导航已有成功原结果。':'当前逻辑步骤等待拒绝后的新语义。',evaluatedThroughSeq,...(!succeeded?{consumeThroughSeq:semanticSeq}:{})};
+      }
     }
     const intentId=`scene-${randomUUID()}`,action=choice.action,navigation=action.kind==='move_to';
     const issued=navigation?(await tx.client.query('INSERT INTO spatial_command_sources(session_id,actor_id,control_epoch,issued_seq) VALUES($1,$2,$3,1) ON CONFLICT(session_id,actor_id,control_epoch) DO UPDATE SET issued_seq=GREATEST(spatial_command_sources.issued_seq,spatial_command_sources.handled_seq)+1 RETURNING issued_seq',[principal.sessionId,principal.actorId,read.actor.controlEpoch])).rows[0].issued_seq:null;
