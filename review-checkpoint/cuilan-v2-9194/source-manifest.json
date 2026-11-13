@@ -1,0 +1,161 @@
+{
+  "schema_version": 1,
+  "purpose": "文字源码审阅检查点，不是完整产品候选",
+  "source_commit": "9194b98b6d06db4cf6142afe646358341a49d569",
+  "source_tree": "c983748f6d7edc89cf555e65d42e0dbff0d47590",
+  "base_commit": "201f18349e0baca60a00f3b5ccaa32dc5278b101",
+  "base_tree": "730527715b46e39b077079515f95b74fc8f7d403",
+  "full_source_changed_paths": 106,
+  "included_text_paths": 16,
+  "excluded_png_paths": 90,
+  "files": [
+    {
+      "path": "docs/design-direction/gaolaozhuang-cuilan-v2/README.md",
+      "mode": "100644",
+      "source_blob": "65540220cf3bd289ff2af2a93034d1ea4ea733e2",
+      "source_sha256": "c3aecd8a13186ef5e03b8364a485042bb67e27fa91b632fd1a0aa74978874dff",
+      "source_bytes": 2204,
+      "base_blob": null
+    },
+    {
+      "path": "docs/design-direction/gaolaozhuang-cuilan-v2/manifest.json",
+      "mode": "100644",
+      "source_blob": "e33407fa14536b359871567a3a22ff838cd04404",
+      "source_sha256": "9de259e7d8cabbdf33907d12a3f76ab2e751fd71514e85693cb526ceae0119fe",
+      "source_bytes": 22226,
+      "base_blob": null
+    },
+    {
+      "path": "docs/design-direction/gaolaozhuang-cuilan-v2/preview.html",
+      "mode": "100644",
+      "source_blob": "b2eda3f0f1a4111d734207140165f293fd0654e2",
+      "source_sha256": "34d1e4791aacf74cb66464c56965e8b897839fb3ed1cbeedf4ab629b94554e62",
+      "source_bytes": 5942,
+      "base_blob": null
+    },
+    {
+      "path": "docs/design-direction/gaolaozhuang-cuilan-v2/provenance.json",
+      "mode": "100644",
+      "source_blob": "bf5708f2ac04eabf4dd9482efe02222a799ff5c9",
+      "source_sha256": "29d5444c9212f17930866771280f1f607356e77c35dae9e72ca10ab3a9c55fe2",
+      "source_bytes": 5661,
+      "base_blob": null
+    },
+    {
+      "path": "docs/design-direction/gaolaozhuang-cuilan-v2/runtime-manifest.json",
+      "mode": "100644",
+      "source_blob": "87846b4395122d873eb2815b46a92be7f25a1267",
+      "source_sha256": "b295d5294accb5ed5be3fd1e8d86ccdfcae21c746ff07bfa3d66951a5d26fcf2",
+      "source_bytes": 15194,
+      "base_blob": null
+    },
+    {
+      "path": "docs/design-direction/gaolaozhuang-cuilan-v2/verify-assets.mjs",
+      "mode": "100644",
+      "source_blob": "3bb85a91778a22cd3f9d3194b78479a4e215f06d",
+      "source_sha256": "0a292f6fbd44d0fc0e3fdc5d57933cbd22fb5fccbc2599f4b8bad3ce48146808",
+      "source_bytes": 3068,
+      "base_blob": null
+    },
+    {
+      "path": "frontend/cuilan-runtime-assets.json",
+      "mode": "100644",
+      "source_blob": "66bab39886d507118bb951808f2e5501365d3864",
+      "source_sha256": "afa1441fd235b3be41e9b775abe796d4e2f3956671cf232632d151ea88b4fe7b",
+      "source_bytes": 8986,
+      "base_blob": null
+    },
+    {
+      "path": "frontend/public/assets/gaolaozhuang/.gitignore",
+      "mode": "100644",
+      "source_blob": "3aa475fbce311a41609426028674a7ebfeb09d02",
+      "source_sha256": "b270950ad01353e2dcad3fa769bbd412c2efeb0ea7b3abcaebc8b379f8d0595e",
+      "source_bytes": 2278,
+      "base_blob": "a803df28a32ef2462a10dbc8a2cef3593642781d"
+    },
+    {
+      "path": "frontend/public/assets/gaolaozhuang/README.md",
+      "mode": "100644",
+      "source_blob": "18e10ff59243219493a0681b108de8e0f3507560",
+      "source_sha256": "f1edad173c33bdb69797e209f3a2d0ae0d698403025ee41e64473ae72274d101",
+      "source_bytes": 3222,
+      "base_blob": "76b03e864ba93c47fd234edb3f7e6fcbf2bee4b6"
+    },
+    {
+      "path": "frontend/scripts/check-runtime-assets.mjs",
+      "mode": "100644",
+      "source_blob": "e1014120a58325f1d852191ed3803ea38e36b487",
+      "source_sha256": "eb50a6468a6a8b34a50d7b02195e79b2b9eeb31b5dc98967daf5753c025a4b8a",
+      "source_bytes": 2489,
+      "base_blob": "1aaedecd17ae49980d84c64ead7f550f55fb62b0"
+    },
+    {
+      "path": "frontend/src/domain/gaolao-art.ts",
+      "mode": "100644",
+      "source_blob": "972bd36b0060aa2567241f6bb59df6a28793cb4a",
+      "source_sha256": "07fde9223a468bf15171fd1be4105cd3721b57b20ee467d2249234c9d38b3538",
+      "source_bytes": 2220,
+      "base_blob": "e613b601d3a4f97008c50ae765cd0120ea079115"
+    },
+    {
+      "path": "frontend/tests/cuilan-resource-browser.mjs",
+      "mode": "100644",
+      "source_blob": "394cd219ba7a7049296e2ba462a17862c39f3ab6",
+      "source_sha256": "fe3c837e2eeecd0ef2b00c9e77b2d18f7fbaf6478398d211fee7225a77873fde",
+      "source_bytes": 8550,
+      "base_blob": null
+    },
+    {
+      "path": "frontend/tests/cuilan-runtime-browser.mjs",
+      "mode": "100644",
+      "source_blob": "4572e61037a37191ec37e87ed229c90491f003a4",
+      "source_sha256": "c09287aaa1675d5b66f19f01a432d5e32ca98d1bcb2b8551dc41f0dff58e8b29",
+      "source_bytes": 21701,
+      "base_blob": null
+    },
+    {
+      "path": "frontend/tests/cuilan-runtime-support.mjs",
+      "mode": "100644",
+      "source_blob": "27effbb6c6641f540bb101ae7654394497deed9b",
+      "source_sha256": "f15ce299a6a7eac7dc2757191d7e0351152b883a20889c2595c661b9c4956316",
+      "source_bytes": 14206,
+      "base_blob": null
+    },
+    {
+      "path": "frontend/tests/runtime-assets-browser.mjs",
+      "mode": "100644",
+      "source_blob": "ed3fb626ab639e72bddad16175315225094e3631",
+      "source_sha256": "39ea27190f70e459158d9b19d10f04115dabfbc1e39f65516aeebec248567f6f",
+      "source_bytes": 3690,
+      "base_blob": "7bbc311c82f4b7f43aae01c16fc0240640bae152"
+    },
+    {
+      "path": "frontend/tests/spatial-art.test.mjs",
+      "mode": "100644",
+      "source_blob": "ac1a0e22bd85123fc11325e7cbc76e67ad8a87d8",
+      "source_sha256": "79806949b83652b6c75f6dab53b34ff0789dd40172f19bde629636d5af6ccbfa",
+      "source_bytes": 4975,
+      "base_blob": "2cfff427645a073d72817533229b6e35c6fd34f2"
+    }
+  ],
+  "patch": {
+    "path": "text-changes.patch",
+    "bytes": 132349,
+    "sha256": "bcb17599aa9303cfce856d35d7b516caa17521c34d5f8deff488cf39976291a9"
+  },
+  "offline_verification": {
+    "apply_check": true,
+    "all_16_mode_blob_sha256_exact": true,
+    "other_product_paths_unchanged": true,
+    "text_only_projection_tree": "1fc3b3396ac41cbab76a676dc192589d97533571",
+    "projection_is_not_full_source_tree": true
+  },
+  "payload_checks": {
+    "png_bytes": false,
+    "git_binary_patch": false,
+    "image_base64_or_data_url": false,
+    "per_pixel_encoded_image_data": false,
+    "private_input_or_evidence_locator": false
+  },
+  "status": "保存文字，不代表素材可用、公开图片授权、CI产品通过或阶段释放"
+}

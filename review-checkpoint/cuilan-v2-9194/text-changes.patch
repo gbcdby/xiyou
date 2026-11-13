@@ -1,0 +1,2808 @@
+diff --git a/docs/design-direction/gaolaozhuang-cuilan-v2/README.md b/docs/design-direction/gaolaozhuang-cuilan-v2/README.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..65540220cf3bd289ff2af2a93034d1ea4ea733e2
+--- /dev/null
++++ b/docs/design-direction/gaolaozhuang-cuilan-v2/README.md
+@@ -0,0 +1,26 @@
++# 翠兰 v2 方向序列帧候选
++
++这是沿用已采用 GZ-VIS-01 / v1.1 人物基准的新创作候选，不是旧97a1e392的字节恢复，独立美术与动态审查待执行。正式游戏接入未执行。
++
++完整角色候选：S/SE/E/NE/N 五个原生方向，每向8帧walk与独立idle，共45个418×418 RGBA PNG。SW←SE、W←E、NW←NE只围绕脚点镜像，共八个可用朝向。所有45帧已随本目录纳入Git。
++
++| 来源组 | 固定scale | 参考主体高度 | 原生帧数 |
++| --- | --- | --- | --- |
++| S | 76/395 | 395px | 8 walk + 1 idle |
++| SE | 76/394 | 394px | 8 walk + 1 idle |
++| E | 76/396 | 396px | 8 walk + 1 idle |
++| NE | 76/396 | 396px | 8 walk + 1 idle |
++| N | 76/395 | 395px | 8 walk + 1 idle |
++
++脚点X固定209，逐帧Y在manifest中明确列出，来自鞋底可见接触边缘；没有逐帧改变scale。主体高度范围约74.27–76.96最终显示像素，包含长裙与脚步自然起伏。没有用整体形变、位置动画或代码重画生成肢体动作。
++
++运行读取 runtime-manifest.json；通用序列合同为 manifest.json。每帧局部位置减 footPivot，再乘所属组 scale 一次，平移到世界脚点。只镜像人物像素，姓名和选择环不镜像。停止时保持末朝向、使用独立idle。行走相位按实际累计移动路程 / 147.6 × 8 取整模8；90ms仅为顺序预览参考。
++
++创作源和基准的内容hash、固定裁格及缩放依据见 provenance.json。运行PNG全部随Git交付，读这些文件即可播放，不依赖私有目录或回填包。
++
++本地验文件：`node docs/design-direction/gaolaozhuang-cuilan-v2/verify-assets.mjs --full`。通过只证明声明的技术范围，不证明美术或步态已通过独立审查。
++
++启动任一静态HTTP服务，在浏览器打开本目录的 preview.html，可选择朝向、停步、暂停/继续、重开及底色。预览按模拟累计路程驱动，并提供1×最终尺寸、3×细看和1.5×帧条；它不等于正式游戏验收。
++
++长裙遮挡腿链，鞋、袖口、手臂与裙摆的连续性可观察；隐藏腿部的关节细节不能从外观直接证明。每个来源组采用固定最终倍率，不逐帧归一化。
++
+diff --git a/docs/design-direction/gaolaozhuang-cuilan-v2/manifest.json b/docs/design-direction/gaolaozhuang-cuilan-v2/manifest.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..e33407fa14536b359871567a3a22ff838cd04404
+--- /dev/null
++++ b/docs/design-direction/gaolaozhuang-cuilan-v2/manifest.json
+@@ -0,0 +1,844 @@
++{
++  "schemaVersion": 1,
++  "format": "png-sequence",
++  "character": "cuilan",
++  "transparent": true,
++  "groups": {
++    "s": {
++      "scale": 0.19240506329113924,
++      "sources": [
++        {
++          "file": "walk/s/00.png",
++          "sha256": "e226f0ff3911378417c1eefb371a92e6ae50d45397c5646974a8a9e5b726e71a"
++        },
++        {
++          "file": "walk/s/01.png",
++          "sha256": "c872409cd5f766726a764c61b03a975488c3fb3435a1bce9d92977819304e3b1"
++        },
++        {
++          "file": "walk/s/02.png",
++          "sha256": "0a7a76a0b775cb9db80138df6db55f23ebffd58357ef2b9101b55ea884568f89"
++        },
++        {
++          "file": "walk/s/03.png",
++          "sha256": "6e6be74f122cdc25e91cab1a789b19c9a4cdc12fd47eb27d04f534fda189ad51"
++        },
++        {
++          "file": "walk/s/04.png",
++          "sha256": "e36df54449176c5021f5a46796f4aae988beb94c9380476fe7320b305362803b"
++        },
++        {
++          "file": "walk/s/05.png",
++          "sha256": "0076efee197a6ba446552dfb64a813d92c3cb831be029e22f1ea726f201fc120"
++        },
++        {
++          "file": "walk/s/06.png",
++          "sha256": "e3b317ffcaabe486c83550c676b8746f0e721178209012d8d2701ec707afd359"
++        },
++        {
++          "file": "walk/s/07.png",
++          "sha256": "5e3b79ef16df87a80414d94acce386176cb606572b1865a6358ac2fa79abde07"
++        },
++        {
++          "file": "idle/s.png",
++          "sha256": "596d2a45f27d660373f24a3c85c22f8ab5258cb1aa0ea2e426e9aa8f2c2728c2"
++        }
++      ]
++    },
++    "se": {
++      "scale": 0.19289340101522842,
++      "sources": [
++        {
++          "file": "walk/se/00.png",
++          "sha256": "8b64e0db829f7fd9c4abd3d2e69ecc9ff1e1772e5eca596b8c92354d36892677"
++        },
++        {
++          "file": "walk/se/01.png",
++          "sha256": "7a3348990a01e42eb4fa602a7880bca7c22b49aa5dcfa5155537e598e2c09b6a"
++        },
++        {
++          "file": "walk/se/02.png",
++          "sha256": "da2cb00d03faaf38e840ae867b5e8624c4ee3b5ad4240d5d15d8aaf98e6eee7b"
++        },
++        {
++          "file": "walk/se/03.png",
++          "sha256": "06c15ba0e2de32e669ef177cbec6b63ccd6deed09f3f1ceef3095eb72103bb2a"
++        },
++        {
++          "file": "walk/se/04.png",
++          "sha256": "2d815b4013d2702e918441fc16cd6ff7050d43da1ef8ec6c7be5580b1932fe3d"
++        },
++        {
++          "file": "walk/se/05.png",
++          "sha256": "97eed1b7744781a39d3b68f281cc8b20fc360704ac0ba6c2d1a19c5c3bb2b63b"
++        },
++        {
++          "file": "walk/se/06.png",
++          "sha256": "818787009b33fac68fba796473b009759dbf3e4bf123c4cc445a0972c3f96be1"
++        },
++        {
++          "file": "walk/se/07.png",
++          "sha256": "f372ec799d6cce18b8dcb90a1e1d91c2d007cca427704bc5d25db3abeb29801e"
++        },
++        {
++          "file": "idle/se.png",
++          "sha256": "694ca20ef89dbc036f8b2a10612bb454ab44350ca7266fec2ba56476b1400edd"
++        }
++      ]
++    },
++    "e": {
++      "scale": 0.1919191919191919,
++      "sources": [
++        {
++          "file": "walk/e/00.png",
++          "sha256": "54487c63708afdbd3cb40743cc913bf74e9ab263154b224fc749e9f72d069c35"
++        },
++        {
++          "file": "walk/e/01.png",
++          "sha256": "72ffe9b5745e55542da5347a0a00548258ed5628ed6326128555427ad3d4d98b"
++        },
++        {
++          "file": "walk/e/02.png",
++          "sha256": "7c386842272b78f6479c5093cbb90c844becf1232a683689b76d28a531d06efe"
++        },
++        {
++          "file": "walk/e/03.png",
++          "sha256": "83228d96e30066d3477dea5699e4ce76103843271c5e4cbf9ea2f42a0103cf09"
++        },
++        {
++          "file": "walk/e/04.png",
++          "sha256": "162091ea7fdb66fbb2e14d22eb6cced1da42217139f7cae20be399eeac3a5fdc"
++        },
++        {
++          "file": "walk/e/05.png",
++          "sha256": "f69c8698890bdeee76b6cec79a517179b9fee67cf56879d051ab58588534a5da"
++        },
++        {
++          "file": "walk/e/06.png",
++          "sha256": "0a252d327aacfdc6896b1f0fdb08c1e8d1bf7b43132b9ace1c828dcb82d4e4e8"
++        },
++        {
++          "file": "walk/e/07.png",
++          "sha256": "c2f8d7df9fcc3025078d08225950916c5025a6cc22f728c185f06fd4845770d1"
++        },
++        {
++          "file": "idle/e.png",
++          "sha256": "8949ede50e0bdf360cdb7e1a98a7025c095c2c507a8015622ec56ea42781d497"
++        }
++      ]
++    },
++    "ne": {
++      "scale": 0.1919191919191919,
++      "sources": [
++        {
++          "file": "walk/ne/00.png",
++          "sha256": "101b3e39b1de37e9e61d4adc5d55227f7c244b8713b3a56fea09dcd8af745db7"
++        },
++        {
++          "file": "walk/ne/01.png",
++          "sha256": "f176c2f70af1ebc728ac43c97c7aae8ef3cf5c1f2e6a7d960fd94da9bd1f6dd9"
++        },
++        {
++          "file": "walk/ne/02.png",
++          "sha256": "75de7e6d406963021b3fcbf246cdec441dca0a4fade314e2b83ff8537eefb7c3"
++        },
++        {
++          "file": "walk/ne/03.png",
++          "sha256": "b5bfd47affe69cde71f49cfcb959ac8bbe9dac1fbb8ed67277c5adbe05cc9e2a"
++        },
++        {
++          "file": "walk/ne/04.png",
++          "sha256": "41d3782a389cb96a40839f413fd1fa5f662ca2e8463a3925f5742acd32d6702a"
++        },
++        {
++          "file": "walk/ne/05.png",
++          "sha256": "1032d664fb464264a2ae4d0a772460a23e0e72419511666e7e7e7cf7aa5ed9f2"
++        },
++        {
++          "file": "walk/ne/06.png",
++          "sha256": "80103a77b607765da04d3cc362239811619d4f137f403276843207743aed71fe"
++        },
++        {
++          "file": "walk/ne/07.png",
++          "sha256": "1e1a45b528d0d0b28b5a1503705cff83ca2378ec9e962b64eade3cd090e9166a"
++        },
++        {
++          "file": "idle/ne.png",
++          "sha256": "3c12260bd1e6eb6243c66a3a6cdc8406d1cf000c9c93682d5b9638e92e46c280"
++        }
++      ]
++    },
++    "n": {
++      "scale": 0.19240506329113924,
++      "sources": [
++        {
++          "file": "walk/n/00.png",
++          "sha256": "d0b3110e8f6290974c6abadd4cb1b759e93d90f1134a4f5b0f1a6a45bccd8fa4"
++        },
++        {
++          "file": "walk/n/01.png",
++          "sha256": "a316b85b750bac15f2a0f2fa7a5a08220d65ba94c0a4a54fe7d0f993675a3f6b"
++        },
++        {
++          "file": "walk/n/02.png",
++          "sha256": "f962eb2724053ad69a1384f00dada0d3c92258a789ce3dc614f054f1794e01e5"
++        },
++        {
++          "file": "walk/n/03.png",
++          "sha256": "78199b6acb1f7139a6c8ab6b018e986137b4d38d25569bc8bcdb38cc2111cb93"
++        },
++        {
++          "file": "walk/n/04.png",
++          "sha256": "8e81349d45fc0086153fd1cf04e7cd362feb217860d5c5d10a14deb553fe9cbe"
++        },
++        {
++          "file": "walk/n/05.png",
++          "sha256": "9933ec47ae2548feeb772e3da6248c8c1d85f84fb1ba81f47951186bc14579a9"
++        },
++        {
++          "file": "walk/n/06.png",
++          "sha256": "e6dbb1905da2757da7faea9320d4eda5df8aff212316c9986d1fc55f7d8f82f8"
++        },
++        {
++          "file": "walk/n/07.png",
++          "sha256": "91cbf37eef8d2aaa5f92858049500d1e37e208aa025952035df9943297097820"
++        },
++        {
++          "file": "idle/n.png",
++          "sha256": "6b31f119b5d6231f78e81b3f99955fc5d55543dc7476c3003b92c6a89f512947"
++        }
++      ]
++    }
++  },
++  "directions": {
++    "s": {
++      "walk": {
++        "frameMs": 90,
++        "frames": [
++          {
++            "file": "walk/s/00.png",
++            "sha256": "e226f0ff3911378417c1eefb371a92e6ae50d45397c5646974a8a9e5b726e71a",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              408
++            ],
++            "group": "s"
++          },
++          {
++            "file": "walk/s/01.png",
++            "sha256": "c872409cd5f766726a764c61b03a975488c3fb3435a1bce9d92977819304e3b1",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              408
++            ],
++            "group": "s"
++          },
++          {
++            "file": "walk/s/02.png",
++            "sha256": "0a7a76a0b775cb9db80138df6db55f23ebffd58357ef2b9101b55ea884568f89",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              408
++            ],
++            "group": "s"
++          },
++          {
++            "file": "walk/s/03.png",
++            "sha256": "6e6be74f122cdc25e91cab1a789b19c9a4cdc12fd47eb27d04f534fda189ad51",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              406
++            ],
++            "group": "s"
++          },
++          {
++            "file": "walk/s/04.png",
++            "sha256": "e36df54449176c5021f5a46796f4aae988beb94c9380476fe7320b305362803b",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              407
++            ],
++            "group": "s"
++          },
++          {
++            "file": "walk/s/05.png",
++            "sha256": "0076efee197a6ba446552dfb64a813d92c3cb831be029e22f1ea726f201fc120",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              407
++            ],
++            "group": "s"
++          },
++          {
++            "file": "walk/s/06.png",
++            "sha256": "e3b317ffcaabe486c83550c676b8746f0e721178209012d8d2701ec707afd359",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              407
++            ],
++            "group": "s"
++          },
++          {
++            "file": "walk/s/07.png",
++            "sha256": "5e3b79ef16df87a80414d94acce386176cb606572b1865a6358ac2fa79abde07",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              408
++            ],
++            "group": "s"
++          }
++        ]
++      },
++      "idle": {
++        "file": "idle/s.png",
++        "sha256": "596d2a45f27d660373f24a3c85c22f8ab5258cb1aa0ea2e426e9aa8f2c2728c2",
++        "size": [
++          418,
++          418
++        ],
++        "footPivot": [
++          209,
++          408
++        ],
++        "group": "s"
++      }
++    },
++    "se": {
++      "walk": {
++        "frameMs": 90,
++        "frames": [
++          {
++            "file": "walk/se/00.png",
++            "sha256": "8b64e0db829f7fd9c4abd3d2e69ecc9ff1e1772e5eca596b8c92354d36892677",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              409
++            ],
++            "group": "se"
++          },
++          {
++            "file": "walk/se/01.png",
++            "sha256": "7a3348990a01e42eb4fa602a7880bca7c22b49aa5dcfa5155537e598e2c09b6a",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              407
++            ],
++            "group": "se"
++          },
++          {
++            "file": "walk/se/02.png",
++            "sha256": "da2cb00d03faaf38e840ae867b5e8624c4ee3b5ad4240d5d15d8aaf98e6eee7b",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              408
++            ],
++            "group": "se"
++          },
++          {
++            "file": "walk/se/03.png",
++            "sha256": "06c15ba0e2de32e669ef177cbec6b63ccd6deed09f3f1ceef3095eb72103bb2a",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              408
++            ],
++            "group": "se"
++          },
++          {
++            "file": "walk/se/04.png",
++            "sha256": "2d815b4013d2702e918441fc16cd6ff7050d43da1ef8ec6c7be5580b1932fe3d",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              407
++            ],
++            "group": "se"
++          },
++          {
++            "file": "walk/se/05.png",
++            "sha256": "97eed1b7744781a39d3b68f281cc8b20fc360704ac0ba6c2d1a19c5c3bb2b63b",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              407
++            ],
++            "group": "se"
++          },
++          {
++            "file": "walk/se/06.png",
++            "sha256": "818787009b33fac68fba796473b009759dbf3e4bf123c4cc445a0972c3f96be1",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              408
++            ],
++            "group": "se"
++          },
++          {
++            "file": "walk/se/07.png",
++            "sha256": "f372ec799d6cce18b8dcb90a1e1d91c2d007cca427704bc5d25db3abeb29801e",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              408
++            ],
++            "group": "se"
++          }
++        ]
++      },
++      "idle": {
++        "file": "idle/se.png",
++        "sha256": "694ca20ef89dbc036f8b2a10612bb454ab44350ca7266fec2ba56476b1400edd",
++        "size": [
++          418,
++          418
++        ],
++        "footPivot": [
++          209,
++          411
++        ],
++        "group": "se"
++      }
++    },
++    "e": {
++      "walk": {
++        "frameMs": 90,
++        "frames": [
++          {
++            "file": "walk/e/00.png",
++            "sha256": "54487c63708afdbd3cb40743cc913bf74e9ab263154b224fc749e9f72d069c35",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              403
++            ],
++            "group": "e"
++          },
++          {
++            "file": "walk/e/01.png",
++            "sha256": "72ffe9b5745e55542da5347a0a00548258ed5628ed6326128555427ad3d4d98b",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              406
++            ],
++            "group": "e"
++          },
++          {
++            "file": "walk/e/02.png",
++            "sha256": "7c386842272b78f6479c5093cbb90c844becf1232a683689b76d28a531d06efe",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              406
++            ],
++            "group": "e"
++          },
++          {
++            "file": "walk/e/03.png",
++            "sha256": "83228d96e30066d3477dea5699e4ce76103843271c5e4cbf9ea2f42a0103cf09",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              407
++            ],
++            "group": "e"
++          },
++          {
++            "file": "walk/e/04.png",
++            "sha256": "162091ea7fdb66fbb2e14d22eb6cced1da42217139f7cae20be399eeac3a5fdc",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              402
++            ],
++            "group": "e"
++          },
++          {
++            "file": "walk/e/05.png",
++            "sha256": "f69c8698890bdeee76b6cec79a517179b9fee67cf56879d051ab58588534a5da",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              402
++            ],
++            "group": "e"
++          },
++          {
++            "file": "walk/e/06.png",
++            "sha256": "0a252d327aacfdc6896b1f0fdb08c1e8d1bf7b43132b9ace1c828dcb82d4e4e8",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              406
++            ],
++            "group": "e"
++          },
++          {
++            "file": "walk/e/07.png",
++            "sha256": "c2f8d7df9fcc3025078d08225950916c5025a6cc22f728c185f06fd4845770d1",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              402
++            ],
++            "group": "e"
++          }
++        ]
++      },
++      "idle": {
++        "file": "idle/e.png",
++        "sha256": "8949ede50e0bdf360cdb7e1a98a7025c095c2c507a8015622ec56ea42781d497",
++        "size": [
++          418,
++          418
++        ],
++        "footPivot": [
++          209,
++          410
++        ],
++        "group": "e"
++      }
++    },
++    "ne": {
++      "walk": {
++        "frameMs": 90,
++        "frames": [
++          {
++            "file": "walk/ne/00.png",
++            "sha256": "101b3e39b1de37e9e61d4adc5d55227f7c244b8713b3a56fea09dcd8af745db7",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              412
++            ],
++            "group": "ne"
++          },
++          {
++            "file": "walk/ne/01.png",
++            "sha256": "f176c2f70af1ebc728ac43c97c7aae8ef3cf5c1f2e6a7d960fd94da9bd1f6dd9",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              402
++            ],
++            "group": "ne"
++          },
++          {
++            "file": "walk/ne/02.png",
++            "sha256": "75de7e6d406963021b3fcbf246cdec441dca0a4fade314e2b83ff8537eefb7c3",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              403
++            ],
++            "group": "ne"
++          },
++          {
++            "file": "walk/ne/03.png",
++            "sha256": "b5bfd47affe69cde71f49cfcb959ac8bbe9dac1fbb8ed67277c5adbe05cc9e2a",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              403
++            ],
++            "group": "ne"
++          },
++          {
++            "file": "walk/ne/04.png",
++            "sha256": "41d3782a389cb96a40839f413fd1fa5f662ca2e8463a3925f5742acd32d6702a",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              408
++            ],
++            "group": "ne"
++          },
++          {
++            "file": "walk/ne/05.png",
++            "sha256": "1032d664fb464264a2ae4d0a772460a23e0e72419511666e7e7e7cf7aa5ed9f2",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              407
++            ],
++            "group": "ne"
++          },
++          {
++            "file": "walk/ne/06.png",
++            "sha256": "80103a77b607765da04d3cc362239811619d4f137f403276843207743aed71fe",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              404
++            ],
++            "group": "ne"
++          },
++          {
++            "file": "walk/ne/07.png",
++            "sha256": "1e1a45b528d0d0b28b5a1503705cff83ca2378ec9e962b64eade3cd090e9166a",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              411
++            ],
++            "group": "ne"
++          }
++        ]
++      },
++      "idle": {
++        "file": "idle/ne.png",
++        "sha256": "3c12260bd1e6eb6243c66a3a6cdc8406d1cf000c9c93682d5b9638e92e46c280",
++        "size": [
++          418,
++          418
++        ],
++        "footPivot": [
++          209,
++          411
++        ],
++        "group": "ne"
++      }
++    },
++    "n": {
++      "walk": {
++        "frameMs": 90,
++        "frames": [
++          {
++            "file": "walk/n/00.png",
++            "sha256": "d0b3110e8f6290974c6abadd4cb1b759e93d90f1134a4f5b0f1a6a45bccd8fa4",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              405
++            ],
++            "group": "n"
++          },
++          {
++            "file": "walk/n/01.png",
++            "sha256": "a316b85b750bac15f2a0f2fa7a5a08220d65ba94c0a4a54fe7d0f993675a3f6b",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              405
++            ],
++            "group": "n"
++          },
++          {
++            "file": "walk/n/02.png",
++            "sha256": "f962eb2724053ad69a1384f00dada0d3c92258a789ce3dc614f054f1794e01e5",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              396
++            ],
++            "group": "n"
++          },
++          {
++            "file": "walk/n/03.png",
++            "sha256": "78199b6acb1f7139a6c8ab6b018e986137b4d38d25569bc8bcdb38cc2111cb93",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              405
++            ],
++            "group": "n"
++          },
++          {
++            "file": "walk/n/04.png",
++            "sha256": "8e81349d45fc0086153fd1cf04e7cd362feb217860d5c5d10a14deb553fe9cbe",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              405
++            ],
++            "group": "n"
++          },
++          {
++            "file": "walk/n/05.png",
++            "sha256": "9933ec47ae2548feeb772e3da6248c8c1d85f84fb1ba81f47951186bc14579a9",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              405
++            ],
++            "group": "n"
++          },
++          {
++            "file": "walk/n/06.png",
++            "sha256": "e6dbb1905da2757da7faea9320d4eda5df8aff212316c9986d1fc55f7d8f82f8",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              403
++            ],
++            "group": "n"
++          },
++          {
++            "file": "walk/n/07.png",
++            "sha256": "91cbf37eef8d2aaa5f92858049500d1e37e208aa025952035df9943297097820",
++            "size": [
++              418,
++              418
++            ],
++            "footPivot": [
++              209,
++              405
++            ],
++            "group": "n"
++          }
++        ]
++      },
++      "idle": {
++        "file": "idle/n.png",
++        "sha256": "6b31f119b5d6231f78e81b3f99955fc5d55543dc7476c3003b92c6a89f512947",
++        "size": [
++          418,
++          418
++        ],
++        "footPivot": [
++          209,
++          405
++        ],
++        "group": "n"
++      }
++    },
++    "sw": {
++      "mirrorOf": "se"
++    },
++    "w": {
++      "mirrorOf": "e"
++    },
++    "nw": {
++      "mirrorOf": "ne"
++    }
++  }
++}
+diff --git a/docs/design-direction/gaolaozhuang-cuilan-v2/preview.html b/docs/design-direction/gaolaozhuang-cuilan-v2/preview.html
+new file mode 100644
+index 0000000000000000000000000000000000000000..b2eda3f0f1a4111d734207140165f293fd0654e2
+--- /dev/null
++++ b/docs/design-direction/gaolaozhuang-cuilan-v2/preview.html
+@@ -0,0 +1,84 @@
++<!doctype html>
++<html lang="zh-CN">
++<meta charset="utf-8">
++<meta name="viewport" content="width=device-width,initial-scale=1">
++<title>翠兰 v2 序列帧预览</title>
++<style>
++:root{font:16px system-ui,sans-serif;color:#302e2a;background:#f1eee6}body{margin:0}main{max-width:1200px;margin:auto}
++header{display:flex;gap:14px;align-items:center;flex-wrap:wrap;padding:14px 20px;background:#faf8f2;border-bottom:1px solid #c8c2b4}
++h1{font-size:20px;margin:0 10px 0 0}select,button{font:inherit;border:1px solid #aaa28f;background:#fffdf7;border-radius:4px;padding:6px 10px;color:inherit}
++button{cursor:pointer}canvas{display:block;max-width:100%;height:auto}footer{padding:10px 20px;color:#665e50;font-size:13px}
++</style>
++<main>
++<header><h1>翠兰 v2 · 动作候选</h1>
++<label>朝向 <select id="direction"></select></label>
++<button id="motion">停步</button><button id="pause">暂停</button><button id="restart">重开</button>
++<label>底色 <select id="background"><option value="light">浅色</option><option value="green">庭院绿灰</option><option value="dark">深色</option></select></label>
++<span id="status" aria-live="polite">加载中</span></header>
++<canvas id="stage" width="1200" height="780" aria-label="连续动作预览及方向对照"></canvas>
++<footer>新创作候选，独立审查待执行。左侧 3×，右侧 1×，下方 1.5×；最终组倍率只使用一次。正式游戏接入另行验证。</footer>
++</main>
++<script type="module">
++const canvas=document.querySelector('#stage'),ctx=canvas.getContext('2d');
++const directionSelect=document.querySelector('#direction'),status=document.querySelector('#status');
++const manifest=await fetch('./manifest.json').then(r=>{if(!r.ok)throw Error('manifest加载失败');return r.json()});
++const requested=['n','ne','e','se','s','sw','w','nw'],available=requested.filter(d=>manifest.directions[d]);
++for(const d of available){const op=document.createElement('option');op.value=d;op.textContent=d.toUpperCase();directionSelect.append(op)}
++let direction=available.includes('se')?'se':available[0],moving=true,paused=false,distance=0,lastTime=null,background='light';
++directionSelect.value=direction;
++const images=new Map();
++for(const group of Object.values(manifest.groups))for(const f of group.sources){
++ if(images.has(f.file))continue;
++ const im=new Image();im.src=f.file;
++ await im.decode();images.set(f.file,im);
++}
++const reviewState={ready:true,loadedFiles:images.size,samples:[],events:[],cycleDistance:147.6,previewSpeed:205,phaseSource:'模拟累计路程；停止和暂停均不推进'};
++window.reviewState=reviewState;
++function log(type){reviewState.events.push({type,direction,moving,paused,distance,time:performance.now()})}
++directionSelect.addEventListener('change',()=>{direction=directionSelect.value;log('turn')});
++document.querySelector('#motion').addEventListener('click',()=>{moving=!moving;document.querySelector('#motion').textContent=moving?'停步':'行走';log(moving?'walk':'idle')});
++document.querySelector('#pause').addEventListener('click',()=>{paused=!paused;document.querySelector('#pause').textContent=paused?'继续':'暂停';log(paused?'pause':'resume')});
++document.querySelector('#restart').addEventListener('click',()=>{distance=0;log('restart')});
++document.querySelector('#background').addEventListener('change',e=>{background=e.target.value;log('background')});
++function resolve(d,index,idle=false){
++ const entry=manifest.directions[d],mirror='mirrorOf' in entry,native=mirror?entry.mirrorOf:d;
++ const item=manifest.directions[native],frame=idle?item.idle:item.walk.frames[index%item.walk.frames.length];
++ return {frame,mirror,scale:manifest.groups[frame.group].scale,native};
++}
++function sprite(d,index,x,y,magnification=1,idle=false){
++ const {frame,mirror,scale}=resolve(d,index,idle);ctx.save();ctx.translate(x,y);
++ ctx.scale((mirror?-1:1)*scale*magnification,scale*magnification);
++ ctx.drawImage(images.get(frame.file),-frame.footPivot[0],-frame.footPivot[1]);ctx.restore();
++}
++function text(s,x,y,size=15,color='#514b40'){ctx.fillStyle=color;ctx.font=size+'px system-ui,sans-serif';ctx.fillText(s,x,y)}
++let previousKey='';
++function render(now){
++ const dt=lastTime===null?0:Math.min(now-lastTime,100);lastTime=now;
++ if(moving&&!paused)distance+=205*dt/1000;
++ const index=Math.floor(distance/147.6*8)%8;
++ const bg={light:'#e9e2d3',green:'#b9c3aa',dark:'#303b3b'}[background],ink=background==='dark'?'#eee9dd':'#514b40';
++ ctx.fillStyle=bg;ctx.fillRect(0,0,1200,780);
++ text('选中方向  '+direction.toUpperCase()+'   '+(moving?'行走':'独立站姿'),42,42,20,ink);
++ text('3× 动作细看',42,70,14,ink);
++ ctx.strokeStyle=background==='dark'?'#87968b':'#b9af9c';ctx.lineWidth=1;
++ ctx.beginPath();ctx.moveTo(58,365);ctx.lineTo(440,365);ctx.stroke();
++ sprite(direction,index,244,365,3,!moving);
++ text('脚点固定于基线；相位按累计路程推进',58,405,14,ink);
++ text('8 向最终显示尺寸 · 1×',520,42,20,ink);
++ available.forEach((d,i)=>{const x=578+(i%4)*161,y=180+Math.floor(i/4)*175;
++  sprite(d,index,x,y,1,!moving);text(d.toUpperCase()+(manifest.directions[d].mirrorOf?' 镜像':''),x-25,y+28,13,ink);
++ });
++ text('单循环 00 → 07 → 00 / 站姿独立 · 1.5×',42,500,18,ink);
++ for(let i=0;i<9;i++){const x=70+i*132;sprite(direction,i, x,690,1.5,i===8);text(i===8?'idle':String(i).padStart(2,'0'),x-15,723,14,ink);
++  if(moving&&i===index){ctx.strokeStyle=ink;ctx.strokeRect(x-52,549,104,181)}
++ }
++ Object.assign(reviewState,{direction,moving,paused,distance,frameIndex:moving?index:null,background,time:now});
++ const key=[direction,moving,paused,index].join('/');
++ if(key!==previousKey){reviewState.samples.push({direction,moving,paused,distance,index:moving?index:null,time:now});previousKey=key}
++ status.textContent=(paused?'已暂停 · ':'')+(moving?'第 '+index+' 帧':'站立')+' · 已读 '+images.size+' 帧';
++ requestAnimationFrame(render);
++}
++log('ready');requestAnimationFrame(render);
++</script>
++</html>
++
+diff --git a/docs/design-direction/gaolaozhuang-cuilan-v2/provenance.json b/docs/design-direction/gaolaozhuang-cuilan-v2/provenance.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..bf5708f2ac04eabf4dd9482efe02222a799ff5c9
+--- /dev/null
++++ b/docs/design-direction/gaolaozhuang-cuilan-v2/provenance.json
+@@ -0,0 +1,263 @@
++{
++  "schemaVersion": 1,
++  "assetId": "cuilan-runtime-v2",
++  "asset_source": "original_team",
++  "status": "新候选，独立美术与动态审查待执行",
++  "designReference": "GZ-VIS-01 / v1.1",
++  "adoptedReference": "https://github.com/gbcdby/xiyou/issues/28#issuecomment-6825557386",
++  "referenceHashes": {
++    "characters-concept.png": "ebd376f7950a914798d530c6513aa86bdfdf0c3f5bdc0c097c94c7eff6840fe2",
++    "gaocai-idle-se.png": "6ef7a476a20d155a90e5333e4149dad2396dd24bfd9c6b83175d09c532a81050",
++    "courtyard.png": "f5df307eaea03188e823a279cb3df3a65b1b6a7931c329294cd6b79e4c0d510a"
++  },
++  "runtimeInputs": "manifest groups.sources列出随Git交付的最终PNG；运行不依赖创作图或私有路径。",
++  "creationSources": "原创九格创作源保留内容hash与机械裁切配方；原图和未采用研究不混入运行候选。",
++  "previousCandidate": "本版重新生成，不是旧97a1e392候选的原字节恢复；不继承旧PASS。",
++  "directions": [
++    {
++      "direction": "s",
++      "asset_source": "original_team",
++      "creationTool": "imagegen",
++      "creationSourceSha256": "110c99f0236df24f1c5ef3bb49b018a9920c75f918f86c3d86682173e5c0fac3",
++      "creationSourceSize": [
++        1254,
++        1254
++      ],
++      "derivation": {
++        "grid": [
++          3,
++          3
++        ],
++        "cellSize": [
++          418,
++          418
++        ],
++        "walkCells": [
++          0,
++          1,
++          2,
++          3,
++          4,
++          5,
++          6,
++          7
++        ],
++        "idleCell": 8,
++        "pixelOperations": [
++          "固定网格裁切",
++          "保留原始RGBA像素"
++        ]
++      },
++      "referenceBodyHeightPixels": 395,
++      "scale": 0.19240506329113924,
++      "footPivotX": 209,
++      "footPivotYs": [
++        408,
++        408,
++        408,
++        406,
++        407,
++        407,
++        407,
++        408,
++        408
++      ]
++    },
++    {
++      "direction": "se",
++      "asset_source": "original_team",
++      "creationTool": "imagegen",
++      "creationSourceSha256": "f28078b7ac93c3bbd493b039813e2516b172e320c1f67fec0ae083fe6ed5c8e0",
++      "creationSourceSize": [
++        1254,
++        1254
++      ],
++      "derivation": {
++        "grid": [
++          3,
++          3
++        ],
++        "cellSize": [
++          418,
++          418
++        ],
++        "walkCells": [
++          0,
++          1,
++          2,
++          3,
++          4,
++          5,
++          6,
++          7
++        ],
++        "idleCell": 8,
++        "pixelOperations": [
++          "固定网格裁切",
++          "保留原始RGBA像素"
++        ]
++      },
++      "referenceBodyHeightPixels": 394,
++      "scale": 0.19289340101522842,
++      "footPivotX": 209,
++      "footPivotYs": [
++        409,
++        407,
++        408,
++        408,
++        407,
++        407,
++        408,
++        408,
++        411
++      ]
++    },
++    {
++      "direction": "e",
++      "asset_source": "original_team",
++      "creationTool": "imagegen",
++      "creationSourceSha256": "8b3253812c145a1dd980e8dc8ba032ab9d7e7350a9e9e6a4d55afc5c5c915fd6",
++      "creationSourceSize": [
++        1254,
++        1254
++      ],
++      "derivation": {
++        "grid": [
++          3,
++          3
++        ],
++        "cellSize": [
++          418,
++          418
++        ],
++        "walkCells": [
++          0,
++          1,
++          2,
++          3,
++          4,
++          5,
++          6,
++          7
++        ],
++        "idleCell": 8,
++        "pixelOperations": [
++          "固定网格裁切",
++          "保留原始RGBA像素"
++        ]
++      },
++      "referenceBodyHeightPixels": 396,
++      "scale": 0.1919191919191919,
++      "footPivotX": 209,
++      "footPivotYs": [
++        403,
++        406,
++        406,
++        407,
++        402,
++        402,
++        406,
++        402,
++        410
++      ]
++    },
++    {
++      "direction": "ne",
++      "asset_source": "original_team",
++      "creationTool": "imagegen",
++      "creationSourceSha256": "15f80a0ee48c41ee2cf16209342281712ac564822977379749d57027714726f5",
++      "creationSourceSize": [
++        1254,
++        1254
++      ],
++      "derivation": {
++        "grid": [
++          3,
++          3
++        ],
++        "cellSize": [
++          418,
++          418
++        ],
++        "walkCells": [
++          0,
++          1,
++          2,
++          3,
++          4,
++          5,
++          6,
++          7
++        ],
++        "idleCell": 8,
++        "pixelOperations": [
++          "固定网格裁切",
++          "保留原始RGBA像素"
++        ]
++      },
++      "referenceBodyHeightPixels": 396,
++      "scale": 0.1919191919191919,
++      "footPivotX": 209,
++      "footPivotYs": [
++        412,
++        402,
++        403,
++        403,
++        408,
++        407,
++        404,
++        411,
++        411
++      ]
++    },
++    {
++      "direction": "n",
++      "asset_source": "original_team",
++      "creationTool": "imagegen",
++      "creationSourceSha256": "493d4257fd215a506a4deddb54f46f17f2acca4bcacbaa135627d7bfcacd7afe",
++      "creationSourceSize": [
++        1254,
++        1254
++      ],
++      "derivation": {
++        "grid": [
++          3,
++          3
++        ],
++        "cellSize": [
++          418,
++          418
++        ],
++        "walkCells": [
++          0,
++          1,
++          2,
++          3,
++          4,
++          5,
++          6,
++          7
++        ],
++        "idleCell": 8,
++        "pixelOperations": [
++          "固定网格裁切",
++          "保留原始RGBA像素"
++        ]
++      },
++      "referenceBodyHeightPixels": 395,
++      "scale": 0.19240506329113924,
++      "footPivotX": 209,
++      "footPivotYs": [
++        405,
++        405,
++        396,
++        405,
++        405,
++        405,
++        403,
++        405,
++        405
++      ]
++    }
++  ]
++}
+diff --git a/docs/design-direction/gaolaozhuang-cuilan-v2/runtime-manifest.json b/docs/design-direction/gaolaozhuang-cuilan-v2/runtime-manifest.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..87846b4395122d873eb2815b46a92be7f25a1267
+--- /dev/null
++++ b/docs/design-direction/gaolaozhuang-cuilan-v2/runtime-manifest.json
+@@ -0,0 +1,560 @@
++{
++  "schemaVersion": 1,
++  "assetId": "cuilan-runtime-v2",
++  "asset_source": "original_team",
++  "adoptedReference": "https://github.com/gbcdby/xiyou/issues/28#issuecomment-6825557386",
++  "targetBodyHeight": 76,
++  "cycleDistance": 147.6,
++  "directions": {
++    "s": {
++      "nativeDirection": "s",
++      "mirrorX": false
++    },
++    "se": {
++      "nativeDirection": "se",
++      "mirrorX": false
++    },
++    "e": {
++      "nativeDirection": "e",
++      "mirrorX": false
++    },
++    "ne": {
++      "nativeDirection": "ne",
++      "mirrorX": false
++    },
++    "n": {
++      "nativeDirection": "n",
++      "mirrorX": false
++    },
++    "sw": {
++      "nativeDirection": "se",
++      "mirrorX": true
++    },
++    "w": {
++      "nativeDirection": "e",
++      "mirrorX": true
++    },
++    "nw": {
++      "nativeDirection": "ne",
++      "mirrorX": true
++    }
++  },
++  "native": {
++    "s": {
++      "idle": {
++        "file": "idle/s.png",
++        "width": 418,
++        "height": 418,
++        "footPivot": {
++          "x": 209,
++          "y": 408
++        },
++        "scale": 0.19240506329113924,
++        "sha256": "596d2a45f27d660373f24a3c85c22f8ab5258cb1aa0ea2e426e9aa8f2c2728c2"
++      },
++      "walk": [
++        {
++          "file": "walk/s/00.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 408
++          },
++          "scale": 0.19240506329113924,
++          "sha256": "e226f0ff3911378417c1eefb371a92e6ae50d45397c5646974a8a9e5b726e71a"
++        },
++        {
++          "file": "walk/s/01.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 408
++          },
++          "scale": 0.19240506329113924,
++          "sha256": "c872409cd5f766726a764c61b03a975488c3fb3435a1bce9d92977819304e3b1"
++        },
++        {
++          "file": "walk/s/02.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 408
++          },
++          "scale": 0.19240506329113924,
++          "sha256": "0a7a76a0b775cb9db80138df6db55f23ebffd58357ef2b9101b55ea884568f89"
++        },
++        {
++          "file": "walk/s/03.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 406
++          },
++          "scale": 0.19240506329113924,
++          "sha256": "6e6be74f122cdc25e91cab1a789b19c9a4cdc12fd47eb27d04f534fda189ad51"
++        },
++        {
++          "file": "walk/s/04.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 407
++          },
++          "scale": 0.19240506329113924,
++          "sha256": "e36df54449176c5021f5a46796f4aae988beb94c9380476fe7320b305362803b"
++        },
++        {
++          "file": "walk/s/05.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 407
++          },
++          "scale": 0.19240506329113924,
++          "sha256": "0076efee197a6ba446552dfb64a813d92c3cb831be029e22f1ea726f201fc120"
++        },
++        {
++          "file": "walk/s/06.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 407
++          },
++          "scale": 0.19240506329113924,
++          "sha256": "e3b317ffcaabe486c83550c676b8746f0e721178209012d8d2701ec707afd359"
++        },
++        {
++          "file": "walk/s/07.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 408
++          },
++          "scale": 0.19240506329113924,
++          "sha256": "5e3b79ef16df87a80414d94acce386176cb606572b1865a6358ac2fa79abde07"
++        }
++      ]
++    },
++    "se": {
++      "idle": {
++        "file": "idle/se.png",
++        "width": 418,
++        "height": 418,
++        "footPivot": {
++          "x": 209,
++          "y": 411
++        },
++        "scale": 0.19289340101522842,
++        "sha256": "694ca20ef89dbc036f8b2a10612bb454ab44350ca7266fec2ba56476b1400edd"
++      },
++      "walk": [
++        {
++          "file": "walk/se/00.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 409
++          },
++          "scale": 0.19289340101522842,
++          "sha256": "8b64e0db829f7fd9c4abd3d2e69ecc9ff1e1772e5eca596b8c92354d36892677"
++        },
++        {
++          "file": "walk/se/01.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 407
++          },
++          "scale": 0.19289340101522842,
++          "sha256": "7a3348990a01e42eb4fa602a7880bca7c22b49aa5dcfa5155537e598e2c09b6a"
++        },
++        {
++          "file": "walk/se/02.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 408
++          },
++          "scale": 0.19289340101522842,
++          "sha256": "da2cb00d03faaf38e840ae867b5e8624c4ee3b5ad4240d5d15d8aaf98e6eee7b"
++        },
++        {
++          "file": "walk/se/03.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 408
++          },
++          "scale": 0.19289340101522842,
++          "sha256": "06c15ba0e2de32e669ef177cbec6b63ccd6deed09f3f1ceef3095eb72103bb2a"
++        },
++        {
++          "file": "walk/se/04.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 407
++          },
++          "scale": 0.19289340101522842,
++          "sha256": "2d815b4013d2702e918441fc16cd6ff7050d43da1ef8ec6c7be5580b1932fe3d"
++        },
++        {
++          "file": "walk/se/05.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 407
++          },
++          "scale": 0.19289340101522842,
++          "sha256": "97eed1b7744781a39d3b68f281cc8b20fc360704ac0ba6c2d1a19c5c3bb2b63b"
++        },
++        {
++          "file": "walk/se/06.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 408
++          },
++          "scale": 0.19289340101522842,
++          "sha256": "818787009b33fac68fba796473b009759dbf3e4bf123c4cc445a0972c3f96be1"
++        },
++        {
++          "file": "walk/se/07.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 408
++          },
++          "scale": 0.19289340101522842,
++          "sha256": "f372ec799d6cce18b8dcb90a1e1d91c2d007cca427704bc5d25db3abeb29801e"
++        }
++      ]
++    },
++    "e": {
++      "idle": {
++        "file": "idle/e.png",
++        "width": 418,
++        "height": 418,
++        "footPivot": {
++          "x": 209,
++          "y": 410
++        },
++        "scale": 0.1919191919191919,
++        "sha256": "8949ede50e0bdf360cdb7e1a98a7025c095c2c507a8015622ec56ea42781d497"
++      },
++      "walk": [
++        {
++          "file": "walk/e/00.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 403
++          },
++          "scale": 0.1919191919191919,
++          "sha256": "54487c63708afdbd3cb40743cc913bf74e9ab263154b224fc749e9f72d069c35"
++        },
++        {
++          "file": "walk/e/01.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 406
++          },
++          "scale": 0.1919191919191919,
++          "sha256": "72ffe9b5745e55542da5347a0a00548258ed5628ed6326128555427ad3d4d98b"
++        },
++        {
++          "file": "walk/e/02.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 406
++          },
++          "scale": 0.1919191919191919,
++          "sha256": "7c386842272b78f6479c5093cbb90c844becf1232a683689b76d28a531d06efe"
++        },
++        {
++          "file": "walk/e/03.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 407
++          },
++          "scale": 0.1919191919191919,
++          "sha256": "83228d96e30066d3477dea5699e4ce76103843271c5e4cbf9ea2f42a0103cf09"
++        },
++        {
++          "file": "walk/e/04.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 402
++          },
++          "scale": 0.1919191919191919,
++          "sha256": "162091ea7fdb66fbb2e14d22eb6cced1da42217139f7cae20be399eeac3a5fdc"
++        },
++        {
++          "file": "walk/e/05.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 402
++          },
++          "scale": 0.1919191919191919,
++          "sha256": "f69c8698890bdeee76b6cec79a517179b9fee67cf56879d051ab58588534a5da"
++        },
++        {
++          "file": "walk/e/06.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 406
++          },
++          "scale": 0.1919191919191919,
++          "sha256": "0a252d327aacfdc6896b1f0fdb08c1e8d1bf7b43132b9ace1c828dcb82d4e4e8"
++        },
++        {
++          "file": "walk/e/07.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 402
++          },
++          "scale": 0.1919191919191919,
++          "sha256": "c2f8d7df9fcc3025078d08225950916c5025a6cc22f728c185f06fd4845770d1"
++        }
++      ]
++    },
++    "ne": {
++      "idle": {
++        "file": "idle/ne.png",
++        "width": 418,
++        "height": 418,
++        "footPivot": {
++          "x": 209,
++          "y": 411
++        },
++        "scale": 0.1919191919191919,
++        "sha256": "3c12260bd1e6eb6243c66a3a6cdc8406d1cf000c9c93682d5b9638e92e46c280"
++      },
++      "walk": [
++        {
++          "file": "walk/ne/00.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 412
++          },
++          "scale": 0.1919191919191919,
++          "sha256": "101b3e39b1de37e9e61d4adc5d55227f7c244b8713b3a56fea09dcd8af745db7"
++        },
++        {
++          "file": "walk/ne/01.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 402
++          },
++          "scale": 0.1919191919191919,
++          "sha256": "f176c2f70af1ebc728ac43c97c7aae8ef3cf5c1f2e6a7d960fd94da9bd1f6dd9"
++        },
++        {
++          "file": "walk/ne/02.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 403
++          },
++          "scale": 0.1919191919191919,
++          "sha256": "75de7e6d406963021b3fcbf246cdec441dca0a4fade314e2b83ff8537eefb7c3"
++        },
++        {
++          "file": "walk/ne/03.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 403
++          },
++          "scale": 0.1919191919191919,
++          "sha256": "b5bfd47affe69cde71f49cfcb959ac8bbe9dac1fbb8ed67277c5adbe05cc9e2a"
++        },
++        {
++          "file": "walk/ne/04.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 408
++          },
++          "scale": 0.1919191919191919,
++          "sha256": "41d3782a389cb96a40839f413fd1fa5f662ca2e8463a3925f5742acd32d6702a"
++        },
++        {
++          "file": "walk/ne/05.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 407
++          },
++          "scale": 0.1919191919191919,
++          "sha256": "1032d664fb464264a2ae4d0a772460a23e0e72419511666e7e7e7cf7aa5ed9f2"
++        },
++        {
++          "file": "walk/ne/06.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 404
++          },
++          "scale": 0.1919191919191919,
++          "sha256": "80103a77b607765da04d3cc362239811619d4f137f403276843207743aed71fe"
++        },
++        {
++          "file": "walk/ne/07.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 411
++          },
++          "scale": 0.1919191919191919,
++          "sha256": "1e1a45b528d0d0b28b5a1503705cff83ca2378ec9e962b64eade3cd090e9166a"
++        }
++      ]
++    },
++    "n": {
++      "idle": {
++        "file": "idle/n.png",
++        "width": 418,
++        "height": 418,
++        "footPivot": {
++          "x": 209,
++          "y": 405
++        },
++        "scale": 0.19240506329113924,
++        "sha256": "6b31f119b5d6231f78e81b3f99955fc5d55543dc7476c3003b92c6a89f512947"
++      },
++      "walk": [
++        {
++          "file": "walk/n/00.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 405
++          },
++          "scale": 0.19240506329113924,
++          "sha256": "d0b3110e8f6290974c6abadd4cb1b759e93d90f1134a4f5b0f1a6a45bccd8fa4"
++        },
++        {
++          "file": "walk/n/01.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 405
++          },
++          "scale": 0.19240506329113924,
++          "sha256": "a316b85b750bac15f2a0f2fa7a5a08220d65ba94c0a4a54fe7d0f993675a3f6b"
++        },
++        {
++          "file": "walk/n/02.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 396
++          },
++          "scale": 0.19240506329113924,
++          "sha256": "f962eb2724053ad69a1384f00dada0d3c92258a789ce3dc614f054f1794e01e5"
++        },
++        {
++          "file": "walk/n/03.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 405
++          },
++          "scale": 0.19240506329113924,
++          "sha256": "78199b6acb1f7139a6c8ab6b018e986137b4d38d25569bc8bcdb38cc2111cb93"
++        },
++        {
++          "file": "walk/n/04.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 405
++          },
++          "scale": 0.19240506329113924,
++          "sha256": "8e81349d45fc0086153fd1cf04e7cd362feb217860d5c5d10a14deb553fe9cbe"
++        },
++        {
++          "file": "walk/n/05.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 405
++          },
++          "scale": 0.19240506329113924,
++          "sha256": "9933ec47ae2548feeb772e3da6248c8c1d85f84fb1ba81f47951186bc14579a9"
++        },
++        {
++          "file": "walk/n/06.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 403
++          },
++          "scale": 0.19240506329113924,
++          "sha256": "e6dbb1905da2757da7faea9320d4eda5df8aff212316c9986d1fc55f7d8f82f8"
++        },
++        {
++          "file": "walk/n/07.png",
++          "width": 418,
++          "height": 418,
++          "footPivot": {
++            "x": 209,
++            "y": 405
++          },
++          "scale": 0.19240506329113924,
++          "sha256": "91cbf37eef8d2aaa5f92858049500d1e37e208aa025952035df9943297097820"
++        }
++      ]
++    }
++  },
++  "phaseSource": "按实际累计路程推进；周期147.6沿用已采用高才节奏，正式翠兰移动配速须接入后校准。"
++}
+diff --git a/docs/design-direction/gaolaozhuang-cuilan-v2/verify-assets.mjs b/docs/design-direction/gaolaozhuang-cuilan-v2/verify-assets.mjs
+new file mode 100644
+index 0000000000000000000000000000000000000000..3bb85a91778a22cd3f9d3194b78479a4e215f06d
+--- /dev/null
++++ b/docs/design-direction/gaolaozhuang-cuilan-v2/verify-assets.mjs
+@@ -0,0 +1,44 @@
++import {readFile,stat} from 'node:fs/promises';
++import {resolve,dirname,sep} from 'node:path';
++import {fileURLToPath} from 'node:url';
++import {createHash} from 'node:crypto';
++const root=dirname(fileURLToPath(import.meta.url));
++const manifest=JSON.parse(await readFile(resolve(root,'manifest.json'),'utf8'));
++const runtime=JSON.parse(await readFile(resolve(root,'runtime-manifest.json'),'utf8'));
++const errors=[],seen=new Set(),rows=[];
++const hash=b=>createHash('sha256').update(b).digest('hex');
++const native=Object.entries(manifest.directions).filter(([,v])=>!v.mirrorOf);
++for(const [d,v] of native){
++ if(v.walk.frames.length!==8)errors.push(d+'：不是8帧');
++ const frames=[...v.walk.frames,v.idle],scale=manifest.groups[d]?.scale;
++ if(!(scale>0))errors.push(d+'：组倍率无效');
++ for(let i=0;i<frames.length;i++){
++  const f=frames[i],path=resolve(root,f.file);
++  if(!path.startsWith(root+sep)){errors.push('越界路径：'+f.file);continue}
++  try{
++   const b=await readFile(path);
++   if(b.subarray(0,8).toString('hex')!=='89504e470d0a1a0a')errors.push(f.file+'：不是PNG');
++   if(b.readUInt32BE(16)!==418||b.readUInt32BE(20)!==418||b[25]!==6)errors.push(f.file+'：不是418 RGBA');
++   if(hash(b)!==f.sha256)errors.push(f.file+'：hash不符');
++   const r=i===8?runtime.native[d].idle:runtime.native[d].walk[i];
++   if(r.file!==f.file||r.sha256!==f.sha256||r.scale!==scale||r.footPivot.x!==f.footPivot[0]||r.footPivot.y!==f.footPivot[1])errors.push(f.file+'：两合同不一致');
++   if(f.footPivot.some(x=>!Number.isFinite(x)||x<0||x>418))errors.push(f.file+'：脚点越界');
++   if(!manifest.groups[d].sources.some(x=>x.file===f.file&&x.sha256===f.sha256))errors.push(f.file+'：来源未列出');
++   rows.push({file:f.file,sha256:f.sha256,bytes:b.length});seen.add(f.file);
++  }catch(e){errors.push(f.file+'：'+e.message)}
++ }
++ if(new Set(frames.map(f=>f.sha256)).size!==9)errors.push(d+'：帧重复');
++}
++for(const [d,v] of Object.entries(manifest.directions)){
++ const r=runtime.directions[d];
++ if(v.mirrorOf){
++  if(!manifest.directions[v.mirrorOf]||manifest.directions[v.mirrorOf].mirrorOf)errors.push(d+'：镜像目标无效');
++  if(r.nativeDirection!==v.mirrorOf||!r.mirrorX)errors.push(d+'：镜像运行映射不符');
++ }else if(r.nativeDirection!==d||r.mirrorX)errors.push(d+'：原生运行映射不符');
++}
++if(seen.size!==native.length*9)errors.push('文件数量不符');
++const full=native.length===5&&Object.keys(manifest.directions).length===8;
++if(process.argv.includes('--full')&&!full)errors.push('尚非5原生+3镜像完整角色');
++console.log(JSON.stringify({status:errors.length?'FAIL':'PASS',scope:'文件hash/尺寸/RGBA/脚点/固定倍率/映射；不判定艺术与步态',fullCharacter:full,native:native.map(([d])=>d),directions:Object.keys(manifest.directions),pngFiles:seen.size,pngBytes:rows.reduce((s,r)=>s+r.bytes,0),manifestSha256:hash(await readFile(resolve(root,'manifest.json'))),runtimeManifestSha256:hash(await readFile(resolve(root,'runtime-manifest.json'))),errors},null,2));
++process.exitCode=errors.length?1:0;
++
+diff --git a/frontend/cuilan-runtime-assets.json b/frontend/cuilan-runtime-assets.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..66bab39886d507118bb951808f2e5501365d3864
+--- /dev/null
++++ b/frontend/cuilan-runtime-assets.json
+@@ -0,0 +1,321 @@
++{
++  "schemaVersion": 1,
++  "asset_source": "original_team",
++  "files": [
++    {
++      "file": "cuilan/idle/e.png",
++      "bytes": 95534,
++      "width": 418,
++      "height": 418,
++      "sha256": "8949ede50e0bdf360cdb7e1a98a7025c095c2c507a8015622ec56ea42781d497"
++    },
++    {
++      "file": "cuilan/idle/n.png",
++      "bytes": 111028,
++      "width": 418,
++      "height": 418,
++      "sha256": "6b31f119b5d6231f78e81b3f99955fc5d55543dc7476c3003b92c6a89f512947"
++    },
++    {
++      "file": "cuilan/idle/ne.png",
++      "bytes": 107899,
++      "width": 418,
++      "height": 418,
++      "sha256": "3c12260bd1e6eb6243c66a3a6cdc8406d1cf000c9c93682d5b9638e92e46c280"
++    },
++    {
++      "file": "cuilan/idle/s.png",
++      "bytes": 107157,
++      "width": 418,
++      "height": 418,
++      "sha256": "596d2a45f27d660373f24a3c85c22f8ab5258cb1aa0ea2e426e9aa8f2c2728c2"
++    },
++    {
++      "file": "cuilan/idle/se.png",
++      "bytes": 100912,
++      "width": 418,
++      "height": 418,
++      "sha256": "694ca20ef89dbc036f8b2a10612bb454ab44350ca7266fec2ba56476b1400edd"
++    },
++    {
++      "file": "cuilan/walk/e/00.png",
++      "bytes": 126802,
++      "width": 418,
++      "height": 418,
++      "sha256": "54487c63708afdbd3cb40743cc913bf74e9ab263154b224fc749e9f72d069c35"
++    },
++    {
++      "file": "cuilan/walk/e/01.png",
++      "bytes": 104526,
++      "width": 418,
++      "height": 418,
++      "sha256": "72ffe9b5745e55542da5347a0a00548258ed5628ed6326128555427ad3d4d98b"
++    },
++    {
++      "file": "cuilan/walk/e/02.png",
++      "bytes": 98648,
++      "width": 418,
++      "height": 418,
++      "sha256": "7c386842272b78f6479c5093cbb90c844becf1232a683689b76d28a531d06efe"
++    },
++    {
++      "file": "cuilan/walk/e/03.png",
++      "bytes": 119649,
++      "width": 418,
++      "height": 418,
++      "sha256": "83228d96e30066d3477dea5699e4ce76103843271c5e4cbf9ea2f42a0103cf09"
++    },
++    {
++      "file": "cuilan/walk/e/04.png",
++      "bytes": 133218,
++      "width": 418,
++      "height": 418,
++      "sha256": "162091ea7fdb66fbb2e14d22eb6cced1da42217139f7cae20be399eeac3a5fdc"
++    },
++    {
++      "file": "cuilan/walk/e/05.png",
++      "bytes": 111628,
++      "width": 418,
++      "height": 418,
++      "sha256": "f69c8698890bdeee76b6cec79a517179b9fee67cf56879d051ab58588534a5da"
++    },
++    {
++      "file": "cuilan/walk/e/06.png",
++      "bytes": 102552,
++      "width": 418,
++      "height": 418,
++      "sha256": "0a252d327aacfdc6896b1f0fdb08c1e8d1bf7b43132b9ace1c828dcb82d4e4e8"
++    },
++    {
++      "file": "cuilan/walk/e/07.png",
++      "bytes": 125933,
++      "width": 418,
++      "height": 418,
++      "sha256": "c2f8d7df9fcc3025078d08225950916c5025a6cc22f728c185f06fd4845770d1"
++    },
++    {
++      "file": "cuilan/walk/n/00.png",
++      "bytes": 113401,
++      "width": 418,
++      "height": 418,
++      "sha256": "d0b3110e8f6290974c6abadd4cb1b759e93d90f1134a4f5b0f1a6a45bccd8fa4"
++    },
++    {
++      "file": "cuilan/walk/n/01.png",
++      "bytes": 112384,
++      "width": 418,
++      "height": 418,
++      "sha256": "a316b85b750bac15f2a0f2fa7a5a08220d65ba94c0a4a54fe7d0f993675a3f6b"
++    },
++    {
++      "file": "cuilan/walk/n/02.png",
++      "bytes": 111438,
++      "width": 418,
++      "height": 418,
++      "sha256": "f962eb2724053ad69a1384f00dada0d3c92258a789ce3dc614f054f1794e01e5"
++    },
++    {
++      "file": "cuilan/walk/n/03.png",
++      "bytes": 112354,
++      "width": 418,
++      "height": 418,
++      "sha256": "78199b6acb1f7139a6c8ab6b018e986137b4d38d25569bc8bcdb38cc2111cb93"
++    },
++    {
++      "file": "cuilan/walk/n/04.png",
++      "bytes": 110011,
++      "width": 418,
++      "height": 418,
++      "sha256": "8e81349d45fc0086153fd1cf04e7cd362feb217860d5c5d10a14deb553fe9cbe"
++    },
++    {
++      "file": "cuilan/walk/n/05.png",
++      "bytes": 112257,
++      "width": 418,
++      "height": 418,
++      "sha256": "9933ec47ae2548feeb772e3da6248c8c1d85f84fb1ba81f47951186bc14579a9"
++    },
++    {
++      "file": "cuilan/walk/n/06.png",
++      "bytes": 108996,
++      "width": 418,
++      "height": 418,
++      "sha256": "e6dbb1905da2757da7faea9320d4eda5df8aff212316c9986d1fc55f7d8f82f8"
++    },
++    {
++      "file": "cuilan/walk/n/07.png",
++      "bytes": 113395,
++      "width": 418,
++      "height": 418,
++      "sha256": "91cbf37eef8d2aaa5f92858049500d1e37e208aa025952035df9943297097820"
++    },
++    {
++      "file": "cuilan/walk/ne/00.png",
++      "bytes": 127500,
++      "width": 418,
++      "height": 418,
++      "sha256": "101b3e39b1de37e9e61d4adc5d55227f7c244b8713b3a56fea09dcd8af745db7"
++    },
++    {
++      "file": "cuilan/walk/ne/01.png",
++      "bytes": 119911,
++      "width": 418,
++      "height": 418,
++      "sha256": "f176c2f70af1ebc728ac43c97c7aae8ef3cf5c1f2e6a7d960fd94da9bd1f6dd9"
++    },
++    {
++      "file": "cuilan/walk/ne/02.png",
++      "bytes": 110166,
++      "width": 418,
++      "height": 418,
++      "sha256": "75de7e6d406963021b3fcbf246cdec441dca0a4fade314e2b83ff8537eefb7c3"
++    },
++    {
++      "file": "cuilan/walk/ne/03.png",
++      "bytes": 111557,
++      "width": 418,
++      "height": 418,
++      "sha256": "b5bfd47affe69cde71f49cfcb959ac8bbe9dac1fbb8ed67277c5adbe05cc9e2a"
++    },
++    {
++      "file": "cuilan/walk/ne/04.png",
++      "bytes": 120105,
++      "width": 418,
++      "height": 418,
++      "sha256": "41d3782a389cb96a40839f413fd1fa5f662ca2e8463a3925f5742acd32d6702a"
++    },
++    {
++      "file": "cuilan/walk/ne/05.png",
++      "bytes": 121048,
++      "width": 418,
++      "height": 418,
++      "sha256": "1032d664fb464264a2ae4d0a772460a23e0e72419511666e7e7e7cf7aa5ed9f2"
++    },
++    {
++      "file": "cuilan/walk/ne/06.png",
++      "bytes": 110509,
++      "width": 418,
++      "height": 418,
++      "sha256": "80103a77b607765da04d3cc362239811619d4f137f403276843207743aed71fe"
++    },
++    {
++      "file": "cuilan/walk/ne/07.png",
++      "bytes": 124745,
++      "width": 418,
++      "height": 418,
++      "sha256": "1e1a45b528d0d0b28b5a1503705cff83ca2378ec9e962b64eade3cd090e9166a"
++    },
++    {
++      "file": "cuilan/walk/s/00.png",
++      "bytes": 107315,
++      "width": 418,
++      "height": 418,
++      "sha256": "e226f0ff3911378417c1eefb371a92e6ae50d45397c5646974a8a9e5b726e71a"
++    },
++    {
++      "file": "cuilan/walk/s/01.png",
++      "bytes": 106378,
++      "width": 418,
++      "height": 418,
++      "sha256": "c872409cd5f766726a764c61b03a975488c3fb3435a1bce9d92977819304e3b1"
++    },
++    {
++      "file": "cuilan/walk/s/02.png",
++      "bytes": 107443,
++      "width": 418,
++      "height": 418,
++      "sha256": "0a7a76a0b775cb9db80138df6db55f23ebffd58357ef2b9101b55ea884568f89"
++    },
++    {
++      "file": "cuilan/walk/s/03.png",
++      "bytes": 110397,
++      "width": 418,
++      "height": 418,
++      "sha256": "6e6be74f122cdc25e91cab1a789b19c9a4cdc12fd47eb27d04f534fda189ad51"
++    },
++    {
++      "file": "cuilan/walk/s/04.png",
++      "bytes": 108436,
++      "width": 418,
++      "height": 418,
++      "sha256": "e36df54449176c5021f5a46796f4aae988beb94c9380476fe7320b305362803b"
++    },
++    {
++      "file": "cuilan/walk/s/05.png",
++      "bytes": 101512,
++      "width": 418,
++      "height": 418,
++      "sha256": "0076efee197a6ba446552dfb64a813d92c3cb831be029e22f1ea726f201fc120"
++    },
++    {
++      "file": "cuilan/walk/s/06.png",
++      "bytes": 104104,
++      "width": 418,
++      "height": 418,
++      "sha256": "e3b317ffcaabe486c83550c676b8746f0e721178209012d8d2701ec707afd359"
++    },
++    {
++      "file": "cuilan/walk/s/07.png",
++      "bytes": 110150,
++      "width": 418,
++      "height": 418,
++      "sha256": "5e3b79ef16df87a80414d94acce386176cb606572b1865a6358ac2fa79abde07"
++    },
++    {
++      "file": "cuilan/walk/se/00.png",
++      "bytes": 121887,
++      "width": 418,
++      "height": 418,
++      "sha256": "8b64e0db829f7fd9c4abd3d2e69ecc9ff1e1772e5eca596b8c92354d36892677"
++    },
++    {
++      "file": "cuilan/walk/se/01.png",
++      "bytes": 102111,
++      "width": 418,
++      "height": 418,
++      "sha256": "7a3348990a01e42eb4fa602a7880bca7c22b49aa5dcfa5155537e598e2c09b6a"
++    },
++    {
++      "file": "cuilan/walk/se/02.png",
++      "bytes": 94801,
++      "width": 418,
++      "height": 418,
++      "sha256": "da2cb00d03faaf38e840ae867b5e8624c4ee3b5ad4240d5d15d8aaf98e6eee7b"
++    },
++    {
++      "file": "cuilan/walk/se/03.png",
++      "bytes": 100255,
++      "width": 418,
++      "height": 418,
++      "sha256": "06c15ba0e2de32e669ef177cbec6b63ccd6deed09f3f1ceef3095eb72103bb2a"
++    },
++    {
++      "file": "cuilan/walk/se/04.png",
++      "bytes": 114729,
++      "width": 418,
++      "height": 418,
++      "sha256": "2d815b4013d2702e918441fc16cd6ff7050d43da1ef8ec6c7be5580b1932fe3d"
++    },
++    {
++      "file": "cuilan/walk/se/05.png",
++      "bytes": 97652,
++      "width": 418,
++      "height": 418,
++      "sha256": "97eed1b7744781a39d3b68f281cc8b20fc360704ac0ba6c2d1a19c5c3bb2b63b"
++    },
++    {
++      "file": "cuilan/walk/se/06.png",
++      "bytes": 101273,
++      "width": 418,
++      "height": 418,
++      "sha256": "818787009b33fac68fba796473b009759dbf3e4bf123c4cc445a0972c3f96be1"
++    },
++    {
++      "file": "cuilan/walk/se/07.png",
++      "bytes": 121614,
++      "width": 418,
++      "height": 418,
++      "sha256": "f372ec799d6cce18b8dcb90a1e1d91c2d007cca427704bc5d25db3abeb29801e"
++    }
++  ]
++}
+diff --git a/frontend/public/assets/gaolaozhuang/.gitignore b/frontend/public/assets/gaolaozhuang/.gitignore
+index a803df28a32ef2462a10dbc8a2cef3593642781d..3aa475fbce311a41609426028674a7ebfeb09d02 100644
+--- a/frontend/public/assets/gaolaozhuang/.gitignore
++++ b/frontend/public/assets/gaolaozhuang/.gitignore
+@@ -49,3 +49,50 @@
+ !/gaocai/walk/se/07.png
+ !/scenes/courtyard.png
+ !/scenes/village-road.png
++
++# 翠兰v2正式运行帧，逐文件放行原字节。
++!/cuilan/idle/e.png
++!/cuilan/idle/n.png
++!/cuilan/idle/ne.png
++!/cuilan/idle/s.png
++!/cuilan/idle/se.png
++!/cuilan/walk/e/00.png
++!/cuilan/walk/e/01.png
++!/cuilan/walk/e/02.png
++!/cuilan/walk/e/03.png
++!/cuilan/walk/e/04.png
++!/cuilan/walk/e/05.png
++!/cuilan/walk/e/06.png
++!/cuilan/walk/e/07.png
++!/cuilan/walk/n/00.png
++!/cuilan/walk/n/01.png
++!/cuilan/walk/n/02.png
++!/cuilan/walk/n/03.png
++!/cuilan/walk/n/04.png
++!/cuilan/walk/n/05.png
++!/cuilan/walk/n/06.png
++!/cuilan/walk/n/07.png
++!/cuilan/walk/ne/00.png
++!/cuilan/walk/ne/01.png
++!/cuilan/walk/ne/02.png
++!/cuilan/walk/ne/03.png
++!/cuilan/walk/ne/04.png
++!/cuilan/walk/ne/05.png
++!/cuilan/walk/ne/06.png
++!/cuilan/walk/ne/07.png
++!/cuilan/walk/s/00.png
++!/cuilan/walk/s/01.png
++!/cuilan/walk/s/02.png
++!/cuilan/walk/s/03.png
++!/cuilan/walk/s/04.png
++!/cuilan/walk/s/05.png
++!/cuilan/walk/s/06.png
++!/cuilan/walk/s/07.png
++!/cuilan/walk/se/00.png
++!/cuilan/walk/se/01.png
++!/cuilan/walk/se/02.png
++!/cuilan/walk/se/03.png
++!/cuilan/walk/se/04.png
++!/cuilan/walk/se/05.png
++!/cuilan/walk/se/06.png
++!/cuilan/walk/se/07.png
+diff --git a/frontend/public/assets/gaolaozhuang/README.md b/frontend/public/assets/gaolaozhuang/README.md
+index 76b03e864ba93c47fd234edb3f7e6fcbf2bee4b6..18e10ff59243219493a0681b108de8e0f3507560 100644
+--- a/frontend/public/assets/gaolaozhuang/README.md
++++ b/frontend/public/assets/gaolaozhuang/README.md
+@@ -1,15 +1,18 @@
+ # 高老庄运行图像
+ 
+-本目录为 Vue 渲染器的必要运行素材，47 张已采用 PNG 与源码一起版本固定。目录内仅逐文件放行下表中的 45 张高才帧和 2 张场景，其他图像继续忽略。素材采用源固定为提交 `4b39f6db92c0e7411fa25378239523baf9d2c224`；仅复用原图字节，不包含人物概念图、源归档或私人资源入口。候选的外部发布仍由项目交付负责人按具体文件处理。
++本目录为 Vue 渲染器的必要运行素材，92 张已采用 PNG 与源码一起版本固定。原 45 张高才帧和 2 张场景保持原字节，采用源为提交 `4b39f6db92c0e7411fa25378239523baf9d2c224`；新增 45 张翠兰 v2 帧来自 `b1c438909fb216f7d88408072b80801c4524a7b2`。目录逐文件放行必要帧，其他图像继续忽略。不包含人物概念图、创作源归档或私人资源入口。候选的外部发布仍由项目交付负责人按具体文件处理。
+ 
+ | 路径 | 来源与用途 | 边界 |
+ | --- | --- | --- |
+ | `scenes/courtyard.png` | `original_team`；[#25](https://github.com/gbcdby/xiyou/issues/25) 已接受庭院，原字节复用 | 1586×992 映射到 1600×1000；没有删改前景或墙面 |
+ | `scenes/village-road.png` | `original_team`；[#28](https://github.com/gbcdby/xiyou/issues/28) 已采用庄外概念 | 仅场景输入，不能据此判定正式后间、围护与碰撞校准完成 |
+ | `gaocai/idle/`、`gaocai/walk/` | `original_team`；#25 已接受的 5 原生方向、3 镜像方向，5 站姿 + 40 行走帧 | 原字节、逐帧脚底和最终缩放保持；E/NE 既有艺术观察不重开为用户确认 |
++| `cuilan/idle/`、`cuilan/walk/` | `original_team`；翠兰 v2 的 5 原生方向、3 镜像方向，5 站姿 + 40 行走帧 | 与已审 v2 图像同字节，来源组固定 scale；N02 起伏保留，不逐帧拉齐；这不是旧 v1 的字节恢复 |
+ 
+ 高才的安全运行 manifest 在 `frontend/src/assets/gaocai-manifest.json`，只包含实际消费的帧、脚底、最终缩放和公开采用依据。按原型的 147.6 地图单位完整循环推进步态；停步与减少动态模式用对应方向站姿。缺图时保持中性可选角色，提供“重新载入图像”，不会因为美术资源失败停止房间或猜测隐藏身份。
+ 
+-完整运行字节清单在 [runtime-assets.json](../../../runtime-assets.json)，逐项固定路径、大小、尺寸与 SHA-256。`npm run build --prefix frontend` 在类型检查和打包前读取全部必要 PNG；缺文件、摘要变化或清单与逐帧 manifest 不一致会明确失败。Vite 将它们原样复制到 `dist/assets/gaolaozhuang/`，正常 Git checkout 不需要从旧工作目录补图。
++原47图运行字节清单在 [runtime-assets.json](../../../runtime-assets.json)，逐项固定路径、大小、尺寸与 SHA-256。`npm run build --prefix frontend` 在类型检查和打包前读取全部必要 PNG；缺文件、摘要变化或清单与逐帧 manifest 不一致会明确失败。Vite 将它们原样复制到 `dist/assets/gaolaozhuang/`，正常 Git checkout 不需要从旧工作目录补图。
+ 
+-其余公开造型目前没有正式动画输入，统一使用中性回退；五人概念图没有装成正式动画。完整生产缺口仍按 [GZ-VIS-01 第6节](../../../../docs/specs/gaolaozhuang-visual.md#6-必要资产与动效边界)执行，包括其余 NPC/真人造型与动作、门/门撑/道具、室内、前景遮挡分层。运行来源可读和源码可构建不等于这些资产已经完成。
++原47图清单与高才 manifest 保持原字节；翠兰新增清单为 [cuilan-runtime-assets.json](../../../cuilan-runtime-assets.json)，绘制直接消费 [v2 runtime-manifest](../../../../docs/design-direction/gaolaozhuang-cuilan-v2/runtime-manifest.json)。构建门禁合并两份清单校验精确92图。只以服务端当前公开 `appearanceId=cuilan` 选取翠兰图像，本人与借貌使用同一规则；姓名、entityRef、隐藏身份不参与选图。缺失或未知外观仍为中性回退。
++
++高才与翠兰以外的公开造型目前没有正式动画输入，统一使用中性回退；五人概念图没有装成正式动画。完整生产缺口仍按 [GZ-VIS-01 第6节](../../../../docs/specs/gaolaozhuang-visual.md#6-必要资产与动效边界)执行，包括其余 NPC/真人造型与动作、门/门撑/道具、室内、前景遮挡分层。运行来源可读和源码可构建不等于这些资产已经完成。
+diff --git a/frontend/scripts/check-runtime-assets.mjs b/frontend/scripts/check-runtime-assets.mjs
+index 1aaedecd17ae49980d84c64ead7f550f55fb62b0..e1014120a58325f1d852191ed3803ea38e36b487 100644
+--- a/frontend/scripts/check-runtime-assets.mjs
++++ b/frontend/scripts/check-runtime-assets.mjs
+@@ -3,15 +3,20 @@ import { createHash } from 'node:crypto';
+ import { readFile } from 'node:fs/promises';
+ 
+ const manifest = JSON.parse(await readFile(new URL('../runtime-assets.json', import.meta.url), 'utf8'));
++const cuilanAssets = JSON.parse(await readFile(new URL('../cuilan-runtime-assets.json', import.meta.url), 'utf8'));
+ const gaocai = JSON.parse(await readFile(new URL('../src/assets/gaocai-manifest.json', import.meta.url), 'utf8'));
+-const frames = Object.values(gaocai.native).flatMap(group => [group.idle, ...group.walk]);
+-const required = [...frames.map(frame => 'gaocai/' + frame.file), 'scenes/courtyard.png', 'scenes/village-road.png'].sort();
+-assert.equal(manifest.schemaVersion, 1, '运行素材清单版本有效');
+-assert.equal(manifest.asset_source, 'original_team', '保持已采用素材来源');
+-assert.equal(required.length, 47, '本次固定为高才45帧与2张场景');
+-assert.deepEqual(manifest.files.map(file => file.file).sort(), required, '运行素材清单必须覆盖精确必要文件集合且没有重复');
++const cuilan = JSON.parse(await readFile(new URL('../../docs/design-direction/gaolaozhuang-cuilan-v2/runtime-manifest.json', import.meta.url), 'utf8'));
++const frames = [['gaocai', gaocai], ['cuilan', cuilan]].flatMap(([appearanceId, artwork]) => Object.values(artwork.native).flatMap(group => [group.idle, ...group.walk].map(frame => ({ ...frame, path: appearanceId + '/' + frame.file }))));
++const required = [...frames.map(frame => frame.path), 'scenes/courtyard.png', 'scenes/village-road.png'].sort();
++for (const source of [manifest, cuilanAssets]) {
++  assert.equal(source.schemaVersion, 1, '运行素材清单版本有效');
++  assert.equal(source.asset_source, 'original_team', '保持已采用素材来源');
++}
++const files = [...manifest.files, ...cuilanAssets.files];
++assert.equal(required.length, 92, '本次固定为高才45帧、翠兰v2的45帧与2张场景');
++assert.deepEqual(files.map(file => file.file).sort(), required, '运行素材清单必须覆盖精确必要文件集合且没有重复');
+ let bytes = 0;
+-for (const file of manifest.files) {
++for (const file of files) {
+   let value;
+   try { value = await readFile(new URL('../public/assets/gaolaozhuang/' + file.file, import.meta.url)); }
+   catch { throw new Error('运行素材缺失或不可读：' + file.file); }
+@@ -19,8 +24,8 @@ for (const file of manifest.files) {
+   assert.equal(createHash('sha256').update(value).digest('hex'), file.sha256, '运行素材摘要不符：' + file.file);
+   assert.equal(value.subarray(0, 8).toString('hex'), '89504e470d0a1a0a', '运行素材必须为原 PNG：' + file.file);
+   assert.equal(value.readUInt32BE(16), file.width); assert.equal(value.readUInt32BE(20), file.height);
+-  const frame = frames.find(frame => 'gaocai/' + frame.file === file.file);
++  const frame = frames.find(frame => frame.path === file.file);
+   if (frame) { assert.equal(frame.sha256, file.sha256); assert.equal(frame.width, file.width); assert.equal(frame.height, file.height); }
+   bytes += value.length;
+ }
+-console.log(`运行素材检查通过：${manifest.files.length} 张原 PNG，${bytes} 字节，逐项 SHA-256 一致。`);
++console.log(`运行素材检查通过：${files.length} 张原 PNG，${bytes} 字节，逐项 SHA-256 一致。`);
+diff --git a/frontend/src/domain/gaolao-art.ts b/frontend/src/domain/gaolao-art.ts
+index e613b601d3a4f97008c50ae765cd0120ea079115..972bd36b0060aa2567241f6bb59df6a28793cb4a 100644
+--- a/frontend/src/domain/gaolao-art.ts
++++ b/frontend/src/domain/gaolao-art.ts
+@@ -1,4 +1,5 @@
+ import gaocai from '../assets/gaocai-manifest.json' with { type: 'json' };
++import cuilan from '../../../docs/design-direction/gaolaozhuang-cuilan-v2/runtime-manifest.json' with { type: 'json' };
+ import type { Facing } from '../../../game/spatial-types.ts';
+ 
+ export interface SpriteFrame {
+@@ -7,22 +8,24 @@ export interface SpriteFrame {
+   bounds: { x: number; y: number; width: number; height: number };
+ }
+ 
++const appearanceArtwork = (appearanceId: string | undefined) => appearanceId === 'gaocai' ? gaocai : appearanceId === 'cuilan' ? cuilan : null;
++
+ export function spriteResourcePaths(appearanceId: string | undefined): string[] {
+-  if (appearanceId !== 'gaocai') return [];
+-  return Object.values(gaocai.native).flatMap(group => [group.idle, ...group.walk].map(frame => `/assets/gaolaozhuang/gaocai/${frame.file}`));
++  const artwork = appearanceArtwork(appearanceId); if (!artwork) return [];
++  return Object.values(artwork.native).flatMap(group => [group.idle, ...group.walk].map(frame => `/assets/gaolaozhuang/${appearanceId}/${frame.file}`));
+ }
+ 
+ /** 输入仅为服务端授权的当前外观键；不解析 entityRef、称呼或真实角色。 */
+ export function spriteForAppearance(appearanceId: string | undefined, facing: Facing, moving: boolean, distance: number, reducedMotion = false): SpriteFrame | null {
+-  if (appearanceId !== 'gaocai') return null;
+-  const direction = gaocai.directions[facing.toLowerCase() as keyof typeof gaocai.directions];
++  const artwork = appearanceArtwork(appearanceId); if (!artwork) return null;
++  const direction = artwork.directions[facing.toLowerCase() as keyof typeof artwork.directions];
+   if (!direction) return null;
+-  const native = gaocai.native[direction.nativeDirection as keyof typeof gaocai.native];
++  const native = artwork.native[direction.nativeDirection as keyof typeof artwork.native];
+   const frame = moving && !reducedMotion
+-    ? native.walk[Math.floor(Math.max(0, distance) / gaocai.cycleDistance * native.walk.length) % native.walk.length]
++    ? native.walk[Math.floor(Math.max(0, distance) / artwork.cycleDistance * native.walk.length) % native.walk.length]
+     : native.idle;
+   // scale 已是源组校准后的最终值；不再次乘 groupScale 或按每帧边界归一化。
+-  return { href: `/assets/gaolaozhuang/gaocai/${frame.file}`, mirrorX: direction.mirrorX, bounds: { x: -frame.footPivot.x * frame.scale, y: -frame.footPivot.y * frame.scale, width: frame.width * frame.scale, height: frame.height * frame.scale } };
++  return { href: `/assets/gaolaozhuang/${appearanceId}/${frame.file}`, mirrorX: direction.mirrorX, bounds: { x: -frame.footPivot.x * frame.scale, y: -frame.footPivot.y * frame.scale, width: frame.width * frame.scale, height: frame.height * frame.scale } };
+ }
+ 
+ export function sceneArtwork(sceneId: string | undefined): string | null {
+diff --git a/frontend/tests/cuilan-resource-browser.mjs b/frontend/tests/cuilan-resource-browser.mjs
+new file mode 100644
+index 0000000000000000000000000000000000000000..394cd219ba7a7049296e2ba462a17862c39f3ab6
+--- /dev/null
++++ b/frontend/tests/cuilan-resource-browser.mjs
+@@ -0,0 +1,74 @@
++import assert from 'node:assert/strict';
++import { mkdir, readFile } from 'node:fs/promises';
++import { resolve } from 'node:path';
++import { createServer as createVite } from 'vite';
++import { chromium } from 'playwright';
++import { startTestPostgres } from '../../backend/test-support/postgres.mjs';
++import { createAuthorityServer } from '../../backend/server.mjs';
++import { rescue } from '../../backend/test-support/gaolao-room.mjs';
++import { repository, sourceIdentity, saveJSON, sha256, until, sleep } from './network-support.mjs';
++import { browserRoom, snapshot, clientState } from './gaolao-real-support.mjs';
++import { recordViewport, observeMotion, motionSamples, mark, drawnCuilan, settledArt, pointInfo, alphaPoint, selectPerson, geometry } from './cuilan-runtime-support.mjs';
++
++// 定点补验：真实新房间只验证窄屏录制和资源失败/重试，不重跑已留证的八向与借貌组。
++const output = resolve(process.env.FRONTEND_EVIDENCE_DIR || resolve(repository, '.agent-output/cuilan-v2-runtime/resources-r1'));
++await mkdir(output, { recursive: true });
++const manifestBytes = await readFile(resolve(repository, 'docs/design-direction/gaolaozhuang-cuilan-v2/runtime-manifest.json'));
++const manifest = JSON.parse(manifestBytes);
++const report = { scope: '翠兰v2窄屏与资源恢复定点作者自查；真实PG/HTTP/Socket/Vue双账号；NPC仅由已有受信测试入口驱动，非scene policy/真实LLM闭环；非真人真机', source: await sourceIdentity(), runtimeManifestSha256: sha256(manifestBytes), startedAt: new Date().toISOString(), checks: [], stages: [], humanActions: [], npcActions: [], recapResponses: [], pageErrors: [], pointerInputs: [], screenshots: [], videos: [], motion: [[], []] };
++let database, server, vite, browser, room, recording;
++const cuilan = async page => (await snapshot(page)).projection.entities.filter(person => person.appearanceId === 'cuilan');
++const check = (name, details = {}) => { report.checks.push({ name, status: 'PASS', ...details }); console.log(JSON.stringify({ check: name })); };
++async function capture(page, file) { await page.screenshot({ path: resolve(output, file), fullPage: false }); report.screenshots.push({ file, sha256: sha256(await readFile(resolve(output, file))), viewport: page.viewportSize() }); }
++async function stopRecording() { if (!recording) return; const active = recording; recording = null; const result = await active.stop(); if (result) report.videos.push(result); }
++async function collect(index) { report.motion[index].push(...await motionSamples(room.pages[index])); }
++async function stage(name) { report.stages.push({ name, atMs: performance.now() }); await mark(room.pages, name); }
++async function moveNpc(position) { const actual = await room.move('cuilan', 'gaolao-courtyard', position); await settledArt(room.pages[0]); return actual; }
++
++try {
++  assert.equal(report.source.status, '', '补验只运行冻结干净候选');
++  assert.equal(report.runtimeManifestSha256, 'b295d5294accb5ed5be3fd1e8d86ccdfcae21c746ff07bfa3d66951a5d26fcf2');
++  database = await startTestPostgres('cuilan-v2-resources', { outputSubdirectory: 'cuilan-v2-runtime' }); report.postgresVersion = (await database.pool.query('SHOW server_version')).rows[0].server_version;
++  server = await createAuthorityServer({ pool: database.pool }); const address = await server.listen(0), origin = `http://127.0.0.1:${address.port}`;
++  vite = await createVite({ root: resolve(repository, 'frontend'), configFile: resolve(repository, 'frontend/vite.config.mjs'), configLoader: 'native', cacheDir: resolve(output, 'vite-cache'), server: { host: '127.0.0.1', port: 0, fs: { allow: [repository] }, proxy: { '/api': { target: origin }, '/socket.io': { target: origin, ws: true } } } }); await vite.listen();
++  const baseURL = `http://127.0.0.1:${vite.httpServer.address().port}`;
++  browser = await chromium.launch({ headless: true, executablePath: process.env.CHROMIUM_PATH, args: [] }); report.browserVersion = browser.version();
++  room = await browserRoom({ server, browser, baseURL, count: 2, report });
++  await rescue(room);
++  const [page, observer] = room.pages;
++  await room.go(0, room.C('C18')); await room.go(1, room.C('C22')); await room.move('cuilan', 'gaolao-courtyard', { x: 1080, y: 750 }); await settledArt(page);
++  await page.setViewportSize({ width: 390, height: 844 }); await page.locator('svg.spatial-map').scrollIntoViewIfNeeded(); await sleep(200);
++  for (const current of room.pages) await observeMotion(current, manifest);
++  recording = await recordViewport(page, output, 'continuous-narrow');
++  await stage('narrow-motion');
++  for (const position of [{ x: 1000, y: 750 }, { x: 1080, y: 750 }, { x: 1000, y: 750 }]) await moveNpc(position);
++  const narrowPerson = (await cuilan(page))[0]; await selectPerson(page, narrowPerson.entityRef, await alphaPoint(page, false), report);
++  report.narrow = await geometry(page); await page.locator('svg.spatial-map').scrollIntoViewIfNeeded(); await stopRecording();
++  await capture(page, 'cuilan-narrow.png'); check('390窄屏真实往返与镜像身体选择，14px标签/44px入口及连续录像', report.narrow);
++
++  await stage('resource-failure'); await collect(0); await page.route('**/assets/gaolaozhuang/cuilan/**', route => route.abort()); await page.reload(); await page.getByRole('button', { name: '恢复本人控制', exact: true }).click();
++  await until(async () => (await clientState(page)).inputReady && (await cuilan(page)).length === 1, '资源失败仍取得当前授权外观');
++  await page.getByRole('button', { name: '重新载入图像', exact: true }).waitFor();
++  assert.equal((await drawnCuilan(page)).length, 0); const fallback = (await cuilan(page))[0];
++  await selectPerson(page, fallback.entityRef, await pointInfo(page, { x: fallback.position.x, y: fallback.position.y - 40 }), report);
++  report.resourceFailure = { authorized: fallback, drawn: await drawnCuilan(page), observerArt: await drawnCuilan(observer) };
++  assert.equal(report.resourceFailure.observerArt.length, 1, '故障仅在当前客户端，另一客户端仍显示授权翠兰');
++  await page.locator('svg.spatial-map').scrollIntoViewIfNeeded(); await capture(page, 'cuilan-neutral-failure.png'); check('资源失败回退中性形体，真实身体选择当前ref且不穿透移动');
++
++  await page.unroute('**/assets/gaolaozhuang/cuilan/**'); recording = await recordViewport(page, output, 'continuous-resource-retry');
++  await page.getByRole('button', { name: '重新载入图像', exact: true }).click(); await settledArt(page); await observeMotion(page, manifest); await stage('resource-retry');
++  report.resourceRetry = { beforeMove: await drawnCuilan(page), authoritative: (await moveNpc({ x: 1080, y: 750 })).self.position, afterMove: await drawnCuilan(page) };
++  await page.locator('svg.spatial-map').scrollIntoViewIfNeeded(); await stopRecording(); await capture(page, 'cuilan-retry.png'); check('显式重试恢复原字节v2图像并继续真实权威移动');
++  for (const index of [0, 1]) await collect(index);
++  const drawn = report.motion.flat().flatMap(sample => sample.actors); assert.ok(drawn.length > 30);
++  assert.ok(drawn.every(actor => actor.footError < 0.001 && Math.abs(actor.scaleX - actor.expectedScale) < 0.000001 && Math.abs(actor.scaleY - actor.expectedScale) < 0.000001));
++  report.motionSummary = { samples: report.motion.map(samples => samples.length), maxFootError: Math.max(...drawn.map(actor => actor.footError)), nativeFrames: [...new Set(drawn.map(actor => actor.file))].sort() };
++  assert.deepEqual(report.pageErrors, []); report.sourceEnd = await sourceIdentity(); assert.deepEqual(report.sourceEnd, report.source); report.assessment = 'PASS';
++} catch (error) {
++  report.assessment = 'FAIL'; report.error = error.stack; console.error(error);
++  if (room) for (const [index, page] of room.pages.entries()) { await capture(page, `failure-${index}.png`).catch(() => {}); report['failureSnapshot' + index] = await snapshot(page).catch(() => null); await collect(index).catch(() => {}); }
++} finally {
++  await stopRecording().catch(error => { report.recordingError = String(error); report.assessment = 'FAIL'; });
++  await room?.close(); await browser?.close(); await vite?.close(); await server?.close(); await database?.stop(); report.finishedAt = new Date().toISOString();
++  await saveJSON(resolve(output, 'result.json'), report); console.log(JSON.stringify({ assessment: report.assessment, checks: report.checks.length, output })); if (report.assessment !== 'PASS') process.exitCode = 1;
++}
+diff --git a/frontend/tests/cuilan-runtime-browser.mjs b/frontend/tests/cuilan-runtime-browser.mjs
+new file mode 100644
+index 0000000000000000000000000000000000000000..4572e61037a37191ec37e87ed229c90491f003a4
+--- /dev/null
++++ b/frontend/tests/cuilan-runtime-browser.mjs
+@@ -0,0 +1,164 @@
++import assert from 'node:assert/strict';
++import { mkdir, readFile } from 'node:fs/promises';
++import { resolve } from 'node:path';
++import { createServer as createVite } from 'vite';
++import { chromium } from 'playwright';
++import { startTestPostgres } from '../../backend/test-support/postgres.mjs';
++import { createAuthorityServer } from '../../backend/server.mjs';
++import { accepted, rescue, disguise } from '../../backend/test-support/gaolao-room.mjs';
++import { repository, sourceIdentity, saveJSON, sha256, until, sleep } from './network-support.mjs';
++import { browserRoom, snapshot, clientState, openReading, closeReading } from './gaolao-real-support.mjs';
++import { recordViewport, observeMotion, motionSamples, mark, drawnCuilan, settledArt, published, pointInfo, movePlayer, alphaPoint, selectPerson, geometry } from './cuilan-runtime-support.mjs';
++
++const output = resolve(process.env.FRONTEND_EVIDENCE_DIR || resolve(repository, '.agent-output/cuilan-v2-runtime/browser-r1'));
++await mkdir(output, { recursive: true });
++const manifestBytes = await readFile(resolve(repository, 'docs/design-direction/gaolaozhuang-cuilan-v2/runtime-manifest.json'));
++const manifest = JSON.parse(manifestBytes);
++const report = { scope: '翠兰v2正式游戏接入作者自查；真实PG/HTTP/Socket/Vue双账号。NPC动作由已有受信测试入口驱动，非scene policy/真实LLM闭环；非真人真机。', source: await sourceIdentity(), assetSource: 'b1c438909fb216f7d88408072b80801c4524a7b2', runtimeManifestSha256: sha256(manifestBytes), startedAt: new Date().toISOString(), checks: [], stages: [], humanActions: [], npcActions: [], recapResponses: [], pageErrors: [], pointerInputs: [], screenshots: [], videos: [], observations: [], motion: [[], []], capabilityRequests: [] };
++let database, server, vite, browser, room, recording;
++const check = (name, details = {}) => { report.checks.push({ name, status: 'PASS', ...details }); console.log(JSON.stringify({ check: name })); };
++const cuilan = async page => (await snapshot(page)).projection.entities.filter(person => person.appearanceId === 'cuilan');
++async function capture(page, file) { await page.screenshot({ path: resolve(output, file), fullPage: false }); report.screenshots.push({ file, sha256: sha256(await readFile(resolve(output, file))), viewport: page.viewportSize() }); }
++async function stopRecording() { if (!recording) return; const active = recording; recording = null; const result = await active.stop(); if (result) report.videos.push(result); }
++async function collect(index) { report.motion[index].push(...await motionSamples(room.pages[index])); }
++async function stage(name) { report.stages.push({ name, atMs: performance.now() }); await mark(room.pages, name); }
++async function moveNpc(position) { const p = await room.move('cuilan', 'gaolao-courtyard', position); await settledArt(room.pages[0]); return p; }
++async function currentFigure(page) { const figures = await drawnCuilan(page); assert.equal(figures.length, 1); return figures[0]; }
++
++try {
++  assert.equal(report.source.status, '', '真实接入证据只在冻结干净候选上运行');
++  assert.equal(report.runtimeManifestSha256, 'b295d5294accb5ed5be3fd1e8d86ccdfcae21c746ff07bfa3d66951a5d26fcf2');
++  database = await startTestPostgres('cuilan-v2', { outputSubdirectory: 'cuilan-v2-runtime' }); report.postgresVersion = (await database.pool.query('SHOW server_version')).rows[0].server_version;
++  server = await createAuthorityServer({ pool: database.pool }); const address = await server.listen(0), origin = `http://127.0.0.1:${address.port}`;
++  vite = await createVite({ root: resolve(repository, 'frontend'), configFile: resolve(repository, 'frontend/vite.config.mjs'), configLoader: 'native', cacheDir: resolve(output, 'vite-cache'), server: { host: '127.0.0.1', port: 0, fs: { allow: [repository] }, proxy: { '/api': { target: origin }, '/socket.io': { target: origin, ws: true } } } }); await vite.listen();
++  const baseURL = `http://127.0.0.1:${vite.httpServer.address().port}`;
++  browser = await chromium.launch({ headless: true, executablePath: process.env.CHROMIUM_PATH, args: [] }); report.browserVersion = browser.version();
++  const newContext = browser.newContext.bind(browser);
++  browser.newContext = async options => {
++    const context = await newContext(options);
++    context.on('request', request => {
++      const url = new URL(request.url());
++      if (url.pathname.startsWith('/api/sessions')) {
++        let body; try { body = request.postDataJSON(); } catch {}
++        const capabilities = body?.capabilities, header = request.headers()['x-xiyou-capabilities'];
++        if (capabilities || header) report.capabilityRequests.push({ path: url.pathname, method: request.method(), capabilities, header });
++      }
++    }); return context;
++  };
++  room = await browserRoom({ server, browser, baseURL, count: 2, report });
++  await rescue(room); // 用现有真实交互开门、本人许可随行和确认安置，不改世界事实夹具。
++  const [page, observer] = room.pages;
++  await room.go(0, room.C('C18')); await room.go(1, room.C('C22')); await movePlayer(observer, { x: 850, y: 820 }, report);
++  await room.move('cuilan', 'gaolao-courtyard', { x: 800, y: 750 });
++  await until(async () => (await cuilan(page)).length === 1 && (await drawnCuilan(page)).length === 1, '公开cuilan外观实际加载v2图像'); await settledArt(page);
++  for (const current of room.pages) { await current.locator('svg.spatial-map').scrollIntoViewIfNeeded(); await observeMotion(current, manifest); }
++  await capture(page, 'cuilan-desktop.png'); check('真实开门安置、双账号授权外观与v2原图进入正式地图', { geometry: await geometry(page) });
++  recording = await recordViewport(page, output, 'continuous-desktop');
++
++  const directions = [['S', 800, 850], ['SE', 900, 950], ['E', 1000, 950], ['NE', 1100, 850], ['N', 1100, 750], ['NW', 1000, 650], ['W', 900, 650], ['SW', 800, 750]];
++  report.directions = [];
++  for (const [facing, x, y] of directions) {
++    await stage('direction-' + facing); const actual = await moveNpc({ x, y }); const figure = await currentFigure(page), direction = manifest.directions[facing.toLowerCase()];
++    assert.equal(figure.file, `/assets/gaolaozhuang/cuilan/idle/${direction.nativeDirection}.png`); assert.equal(figure.mirror, direction.mirrorX ? 'scale(-1 1)' : null);
++    report.directions.push({ facing, authoritative: actual.self.position, movement: actual.movement, figure }); await sleep(120);
++  }
++  check('八向权威路线、换向、镜像与各向独立停步站姿');
++  await stage('north-setup'); await moveNpc({ x: 700, y: 940 });
++  await stage('north-continuous'); const north = await moveNpc({ x: 700, y: 600 }); report.north = { movement: north.movement, position: north.self.position };
++  await sleep(200); check('340地图单位持续北行，保留N02起伏供实际录像复看');
++
++  await stage('stop'); await moveNpc({ x: 800, y: 750 });
++  accepted(await room.send('cuilan', { kind: 'move_to', sceneId: 'gaolao-courtyard', destination: { x: 1100, y: 750 } })); await sleep(240);
++  const stop = accepted(await room.send('cuilan', { kind: 'stop_move' })); await published(page, stop); const stopped = (await room.snapshot('cuilan')).projection.self.position;
++  await sleep(350); assert.deepEqual((await room.snapshot('cuilan')).projection.self.position, stopped); await settledArt(page);
++  await stage('reverse'); accepted(await room.send('cuilan', { kind: 'move_to', sceneId: 'gaolao-courtyard', destination: { x: 1100, y: 750 } })); await sleep(240); await moveNpc({ x: 750, y: 750 });
++  assert.equal((await currentFigure(page)).mirror, 'scale(-1 1)'); check('受控NPC停步不原地走步，途中反向由新的权威路线确认'); await stopRecording();
++
++  await stage('reading'); await openReading(page, '行囊'); await capture(page, 'reading-state.png'); const beforeReading = (await cuilan(page))[0].position;
++  recording = await recordViewport(page, output, 'continuous-reading-reduced');
++  await moveNpc({ x: 1100, y: 750 }); assert.notDeepEqual((await cuilan(page))[0].position, beforeReading); assert.equal(await page.locator('.spatial-reading-pane').count(), 1); await closeReading(page);
++  await stage('reduced-motion'); await page.emulateMedia({ reducedMotion: 'reduce' }); const reducedMove = room.move('cuilan', 'gaolao-courtyard', { x: 800, y: 750 });
++  await until(async () => (await drawnCuilan(observer)).some(figure => figure.moving), '另一观察者仍显示普通连续步态'); assert.equal((await drawnCuilan(page)).some(figure => figure.moving), false);
++  await reducedMove; await settledArt(page); await page.emulateMedia({ reducedMotion: 'no-preference' }); await moveNpc({ x: 1000, y: 750 }); check('阅读期间保持世界移动，减弱动态只简化当前观察者并可恢复');
++
++  await stage('late-observer-before'); await moveNpc({ x: 1100, y: 750 });
++  const continuousBefore = { projected: await cuilan(page), drawn: await drawnCuilan(page) }; await collect(1); await observer.reload(); await observer.getByRole('button', { name: '恢复本人控制', exact: true }).click();
++  await until(async () => (await clientState(observer)).inputReady && (await cuilan(observer)).length === 1, '迟入场观察者取得当前公开投影'); await settledArt(observer); await observeMotion(observer, manifest);
++  const late = { projected: await cuilan(observer), drawn: await drawnCuilan(observer) }, continuousAfter = { projected: await cuilan(page), drawn: await drawnCuilan(page) };
++  report.observations.push({ id: 'CUI-OBS-01', severity: 'P2', disposition: 'OPEN：本切片不修改服务端初次投影朝向', continuousBefore, continuousAfter, late, reproduced: continuousAfter.drawn[0].file !== late.drawn[0].file });
++  await stopRecording();
++  await capture(observer, 'late-observer-initial-facing.png'); await capture(page, 'continuous-observer-facing.png');
++  await stage('common-motion-after-late'); await moveNpc({ x: 1200, y: 750 }); await settledArt(observer);
++  assert.equal((await currentFigure(page)).file, (await currentFigure(observer)).file); check('保留首次观察朝向差异，双方共同收到同一E移动后按当前外观同形');
++
++  await stage('alpha-native'); const nativePerson = (await cuilan(page))[0]; const nativeBody = await alphaPoint(page, false); assert.equal(nativeBody.mirror, null); await selectPerson(page, nativePerson.entityRef, nativeBody, report);
++  const nativeGround = await alphaPoint(page, true); await movePlayer(page, nativeGround.world, report, nativeGround);
++  await stage('alpha-mirror'); await moveNpc({ x: 1080, y: 750 }); const mirrorPerson = (await cuilan(page))[0], mirrorBody = await alphaPoint(page, false); assert.equal(mirrorBody.mirror, 'scale(-1 1)'); await selectPerson(page, mirrorPerson.entityRef, mirrorBody, report);
++  const mirrorGround = await alphaPoint(page, true); await movePlayer(page, mirrorGround.world, report, mirrorGround); await capture(page, 'alpha-mirror-selection.png'); await room.go(0, room.C('C18')); check('原生与镜像alpha身体选择当前ref，透明区域真实点地并到达');
++
++  await stage('obstacle-setup'); await movePlayer(page, { x: 900, y: 750 }, report); await moveNpc({ x: 730, y: 500 }); await stage('obstacle-detour');
++  accepted(await room.send('cuilan', { kind: 'move_to', sceneId: 'gaolao-courtyard', destination: { x: 1040, y: 500 } }));
++  const route = (await room.snapshot('cuilan')).projection.movement.path; assert.ok(route.some(point => point.y < 452 || point.y > 565), '服务端路径绕过石桌，不穿过直线障碍');
++  await until(async () => { const p = (await room.snapshot('cuilan')).projection; return p.movement.status === 'arrived' && p.self.position.x === 1040 && p.self.position.y === 500; }, '绕行到达原目标'); await settledArt(page);
++  const beforeRejected = (await room.snapshot('cuilan')).projection.self.position;
++  const rejected = await room.send('cuilan', { kind: 'move_to', sceneId: 'gaolao-courtyard', destination: { x: 850, y: 500 } }); assert.equal(rejected.status, 'Rejected'); await published(page, rejected); assert.deepEqual((await room.snapshot('cuilan')).projection.self.position, beforeRejected);
++  report.obstacle = { route, rejected, beforeRejected }; check('绕行与障碍内目标拒绝保持服务端权威');
++
++  await stage('appearance-preparation'); await room.go(1, room.R('R03')); await room.go('cuilan', room.C('C12')); await disguise(room); await room.go(1, room.C('C10'));
++  await room.move('cuilan', 'gaolao-courtyard', { x: 1040, y: 600 }); await room.move('wukong', 'gaolao-courtyard', { x: 1040, y: 450 });
++  await stage('doubles-common-east'); await room.move('cuilan', 'gaolao-courtyard', { x: 1120, y: 600 }); await room.move('wukong', 'gaolao-courtyard', { x: 1120, y: 450 });
++  for (const current of room.pages) await settledArt(current, 2);
++  report.doubles = [];
++  for (const [index, current] of room.pages.entries()) {
++    const people = await cuilan(current), figures = await drawnCuilan(current); assert.equal(people.length, 2); assert.notEqual(people[0].entityRef, people[1].entityRef);
++    assert.ok(figures.every(figure => figure.file === '/assets/gaolaozhuang/cuilan/idle/e.png' && figure.mirror === null)); assert.deepEqual(figures[0].bounds, figures[1].bounds);
++    report.doubles.push({ observer: index, people, figures });
++  }
++  assert.equal(report.doubles[1].people.filter(person => person.name === '翠兰').length, 2, '未见变貌的观察者只获当前同貌称呼');
++  assert.ok(report.doubles[0].people.some(person => person.name === '孙悟空（借貌）'), '知情者称呼不同，外观规则仍相同'); await capture(observer, 'same-appearance-unknown.png');
++  const invalidBorrowMove = await room.send('wukong', { kind: 'move_to', sceneId: 'gaolao-courtyard', destination: { x: 1100, y: 700 } }); assert.equal(invalidBorrowMove.status, 'Rejected'); assert.equal(invalidBorrowMove.code, 'CONSENT_REQUIRED'); report.borrowBoundary = invalidBorrowMove;
++  await movePlayer(page, { x: 1190, y: 450 }, report); await movePlayer(observer, { x: 1180, y: 500 }, report);
++  const historicalText = '此刻仍以翠兰的称呼在这里交谈。'; const speech = accepted(await room.send('wukong', { kind: 'speak', text: historicalText, channel: 'public', recipientRefs: [] })); await published(observer, speech);
++  const priorClaim = (await snapshot(observer)).projection.claims.find(claim => claim.text === historicalText); assert.equal(priorClaim.speakerName, '翠兰');
++  const beforeReveal = await cuilan(observer); const reveal = accepted(await room.interact(0, '孙悟空（借貌）', 'gz-reveal-identity')); await published(observer, reveal); await settledArt(observer, 2);
++  const afterReveal = await cuilan(observer); assert.ok(afterReveal.some(person => person.name === '孙悟空（借貌）')); assert.ok((await drawnCuilan(observer)).every(figure => figure.file.includes('/cuilan/')));
++  const knownLabel = observer.locator('.spatial-object-list').getByRole('button', { name: /^\d+号 · 孙悟空（借貌）$/ }); await knownLabel.click();
++  const selected = (await cuilan(observer)).find(person => person.name === '孙悟空（借貌）'); assert.ok((await observer.locator('#spatial-selection-heading').innerText()).endsWith('孙悟空（借貌）'));
++  const permission = (await room.snapshot('cuilan')).projection.chapter.consents.filter(consent => consent.purpose === 'appearance').at(-1);
++  const withdrawal = accepted(await room.send('cuilan', { kind: 'withdraw_consent', consentId: permission.consentId, expectedConsentVersion: permission.version })); await published(observer, withdrawal); await published(page, withdrawal);
++  const afterWithdraw = (await snapshot(observer)).projection, wukong = afterWithdraw.entities.find(person => person.name === '孙悟空'); assert.ok(wukong); assert.equal(wukong.appearanceId, 'wukong'); assert.notEqual(wukong.entityRef, selected.entityRef);
++  assert.equal(afterWithdraw.entities.some(person => person.entityRef === selected.entityRef), false); assert.equal((await cuilan(observer)).length, 1); assert.equal(await observer.locator('#spatial-selection-heading').innerText(), '选择人物或物件');
++  assert.equal(afterWithdraw.claims.find(claim => claim.text === historicalText).speakerName, priorClaim.speakerName);
++  report.identityLifecycle = { beforeReveal, afterReveal, selectedBeforeWithdraw: selected, afterWithdraw: wukong, oldClaim: priorClaim, retainedClaim: afterWithdraw.claims.find(claim => claim.text === historicalText) };
++  await capture(observer, 'appearance-withdrawn.png'); check('本人与借貌同素材、知情与未知者同造型；合法揭示/撤回/ref更新与历史称呼保持');
++  await stopRecording();
++
++  await stage('narrow-setup'); await room.go(0, room.C('C18')); await room.move('cuilan', 'gaolao-courtyard', { x: 1080, y: 750 });
++  await page.setViewportSize({ width: 390, height: 844 }); await page.locator('svg.spatial-map').scrollIntoViewIfNeeded(); await sleep(200);
++  recording = await recordViewport(page, output, 'continuous-narrow');
++  await stage('narrow-motion'); await moveNpc({ x: 1000, y: 750 }); const narrowPerson = (await cuilan(page))[0]; await selectPerson(page, narrowPerson.entityRef, await alphaPoint(page, false), report);
++  report.narrow = await geometry(page); await page.locator('svg.spatial-map').scrollIntoViewIfNeeded(); await stopRecording(); await capture(page, 'cuilan-narrow.png'); check('390窄屏实际移动与身体选择，14px标签/44px脚底入口保持', report.narrow);
++  await stage('resource-failure'); await collect(0); await page.route('**/assets/gaolaozhuang/cuilan/**', route => route.abort()); await page.reload(); await page.getByRole('button', { name: '恢复本人控制', exact: true }).click();
++  await until(async () => (await clientState(page)).inputReady && (await cuilan(page)).length === 1, '失败资源下仍取得当前授权视图'); await page.getByRole('button', { name: '重新载入图像', exact: true }).waitFor();
++  assert.equal((await drawnCuilan(page)).length, 0); const fallback = (await cuilan(page))[0]; await selectPerson(page, fallback.entityRef, await pointInfo(page, { x: fallback.position.x, y: fallback.position.y - 40 }), report);
++  await page.locator('svg.spatial-map').scrollIntoViewIfNeeded(); await capture(page, 'cuilan-neutral-failure.png');
++  await page.unroute('**/assets/gaolaozhuang/cuilan/**'); await page.getByRole('button', { name: '重新载入图像', exact: true }).click(); await settledArt(page); await observeMotion(page, manifest); await stage('resource-retry'); await moveNpc({ x: 1080, y: 750 });
++  await page.locator('svg.spatial-map').scrollIntoViewIfNeeded(); await capture(page, 'cuilan-retry.png'); check('资源故障保持当前ref的中性身体选择，显式重试恢复v2并再次实际行走'); await stopRecording();
++
++  for (const index of [0, 1]) await collect(index);
++  const drawn = report.motion.flat().flatMap(sample => sample.actors); assert.ok(drawn.length > 100); assert.ok(drawn.every(actor => actor.footError < 0.001 && Math.abs(actor.scaleX - actor.expectedScale) < 0.000001 && Math.abs(actor.scaleY - actor.expectedScale) < 0.000001), '实际图片脚点与世界脚点稳定相合，每来源组scale只应用一次');
++  report.motionSummary = { samples: report.motion.map(samples => samples.length), maxFootError: Math.max(...drawn.map(actor => actor.footError)), nativeFrames: [...new Set(drawn.map(actor => actor.file))].sort() };
++  for (const [facing] of directions) { const values = report.motion[0].filter(sample => sample.stage === 'direction-' + facing).flatMap(sample => sample.actors); const source = manifest.directions[facing.toLowerCase()]; assert.ok(values.some(actor => actor.moving && actor.file.includes(`/walk/${source.nativeDirection}/`) && actor.mirror === (source.mirrorX ? 'scale(-1 1)' : null)), '真实移动期间消费方向 ' + facing); }
++  const northFrames = new Set(report.motion[0].filter(sample => sample.stage === 'north-continuous').flatMap(sample => sample.actors).map(actor => actor.file).filter(file => file.includes('/walk/n/'))); assert.equal(northFrames.size, 8, '持续北行实际消费完整8相位，包含N02');
++  report.motionSummary.northFrames = [...northFrames].sort();
++  assert.ok(report.capabilityRequests.some(request => request.method === 'POST') && report.capabilityRequests.some(request => request.method === 'GET'));
++  for (const request of report.capabilityRequests) { assert.equal(request.header, 'spatial-v2,spatial-appearance-v1'); if (request.capabilities) assert.deepEqual(request.capabilities, ['spatial-v2', 'spatial-appearance-v1']); }
++  assert.deepEqual(report.pageErrors, []); report.sourceEnd = await sourceIdentity(); assert.deepEqual(report.sourceEnd, report.source); report.assessment = 'PASS';
++} catch (error) {
++  report.assessment = 'FAIL'; report.error = error.stack; console.error(error);
++  if (room) for (const [index, page] of room.pages.entries()) { await capture(page, `failure-${index}.png`).catch(() => {}); report['failureSnapshot' + index] = await snapshot(page).catch(() => null); await collect(index).catch(() => {}); }
++} finally {
++  await stopRecording().catch(error => { report.recordingError = String(error); report.assessment = 'FAIL'; });
++  await room?.close(); await browser?.close(); await vite?.close(); await server?.close(); await database?.stop(); report.finishedAt = new Date().toISOString();
++  await saveJSON(resolve(output, 'result.json'), report); console.log(JSON.stringify({ assessment: report.assessment, checks: report.checks.length, output })); if (report.assessment !== 'PASS') process.exitCode = 1;
++}
+diff --git a/frontend/tests/cuilan-runtime-support.mjs b/frontend/tests/cuilan-runtime-support.mjs
+new file mode 100644
+index 0000000000000000000000000000000000000000..27effbb6c6641f540bb101ae7654394497deed9b
+--- /dev/null
++++ b/frontend/tests/cuilan-runtime-support.mjs
+@@ -0,0 +1,134 @@
++import assert from 'node:assert/strict';
++import { mkdir, readFile, writeFile } from 'node:fs/promises';
++import { resolve } from 'node:path';
++import { execFile } from 'node:child_process';
++import { promisify } from 'node:util';
++import { saveJSON, sha256, until, sleep } from './network-support.mjs';
++import { snapshot, clientState, closeReading } from './gaolao-real-support.mjs';
++
++const execute = promisify(execFile);
++
++/** CDP只录真实视口；截图不使用fullPage，也不改变录制中的视口尺寸。 */
++export async function recordViewport(page, output, name) {
++  const folder = resolve(output, name); await mkdir(resolve(folder, 'frames'), { recursive: true });
++  const session = await page.context().newCDPSession(page), frames = [], writes = [], errors = [];
++  let lastReceived = performance.now(), closed = false;
++  const startedAt = new Date().toISOString();
++  const onFrame = event => {
++    const file = `frames/${String(frames.length).padStart(6, '0')}.jpg`; lastReceived = performance.now();
++    frames.push({ file, timestamp: event.metadata.timestamp, receivedMs: lastReceived, metadata: event.metadata, width: event.metadata.deviceWidth, height: event.metadata.deviceHeight });
++    writes.push(writeFile(resolve(folder, file), Buffer.from(event.data, 'base64')).catch(error => errors.push(String(error))));
++    writes.push(session.send('Page.screencastFrameAck', { sessionId: event.sessionId }).catch(error => errors.push(String(error))));
++  };
++  session.on('Page.screencastFrame', onFrame);
++  const viewport = page.viewportSize();
++  await session.send('Page.startScreencast', { format: 'jpeg', quality: 86, maxWidth: viewport.width, maxHeight: viewport.height, everyNthFrame: 1 });
++  return { async stop() {
++    if (closed) return null; closed = true;
++    await session.send('Page.stopScreencast');
++    // stop响应之后停止接收事件，再排空全部写入/ack；不能在detach期间新增未等待的ack。
++    session.off('Page.screencastFrame', onFrame);
++    const tail = Math.max(0.04, (performance.now() - lastReceived) / 1000), pageClosedAtStop = page.isClosed();
++    await Promise.all(writes); await session.detach();
++    await saveJSON(resolve(folder, 'raw-recording.json'), { startedAt, viewport, frames, errors, pageClosedAtStop, timingSource: 'CDP原始帧抵达单调时钟；保留协议可选timestamp，不将其当作性能时钟' });
++    assert.equal(pageClosedAtStop, false, '录制停止时真实游戏页面仍存活');
++    assert.deepEqual(errors, []); assert.ok(frames.length > 1, '连续视口录制实际取得帧');
++    const lines = ['ffconcat version 1.0'];
++    for (const [index, frame] of frames.entries()) {
++      const duration = index + 1 < frames.length ? (frames[index + 1].receivedMs - frame.receivedMs) / 1000 : tail;
++      assert.ok(duration >= 0, '原始录帧抵达时钟不倒退');
++      lines.push(`file '${frame.file}'`, 'option framerate 1000', `duration ${Math.max(0.001, duration).toFixed(6)}`);
++    }
++    lines.push(`file '${frames.at(-1).file}'`, 'option framerate 1000'); await writeFile(resolve(folder, 'frames.ffconcat'), lines.join('\n') + '\n');
++    const video = resolve(output, name + '.webm');
++    await execute('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', '-f', 'concat', '-safe', '0', '-i', resolve(folder, 'frames.ffconcat'), '-fps_mode', 'vfr', '-c:v', 'libvpx-vp9', '-deadline', 'realtime', '-cpu-used', '8', '-threads', '2', '-b:v', '0', '-crf', '31', '-pix_fmt', 'yuv420p', video]);
++    const probe = JSON.parse((await execute('ffprobe', ['-v', 'error', '-count_frames', '-select_streams', 'v:0', '-show_entries', 'stream=width,height,nb_read_frames:format=duration', '-of', 'json', video])).stdout);
++    const result = { name, startedAt, finishedAt: new Date().toISOString(), viewport, timingSource: 'CDP原始帧抵达单调时钟，非产品FPS/性能测量', frameCount: frames.length, sha256: sha256(await readFile(video)), video, probe, frames };
++    await saveJSON(resolve(folder, 'recording.json'), result); return result;
++  } };
++}
++
++export async function observeMotion(page, manifest) {
++  await page.evaluate(async manifest => {
++    const { spatialState } = await import('/src/state/spatial-store.ts');
++    const frames = new Map(Object.values(manifest.native).flatMap(group => [group.idle, ...group.walk]).map(frame => ['/assets/gaolaozhuang/cuilan/' + frame.file, frame]));
++    window.__cuilanSamples = []; window.__cuilanStage = '初始化'; window.__cuilanObserve = true;
++    const sample = time => {
++      if (!window.__cuilanObserve) return;
++      const state = spatialState.value.snapshot;
++      const actors = [...document.querySelectorAll('.spatial-person')].map(group => {
++        const art = group.querySelector('.spatial-actor-art'), image = art?.querySelector('image'), file = art?.getAttribute('data-art-frame'), frame = frames.get(file);
++        if (!frame || !image) return null;
++        const local = group.transform.baseVal.consolidate().matrix, foot = new DOMPoint(0, 0).matrixTransform(group.getScreenCTM());
++        const drawnPivot = new DOMPoint(image.x.baseVal.value + frame.footPivot.x * image.width.baseVal.value / frame.width, image.y.baseVal.value + frame.footPivot.y * image.height.baseVal.value / frame.height).matrixTransform(image.getScreenCTM());
++        return { label: group.getAttribute('aria-label'), position: { x: local.e, y: local.f }, file, moving: art.getAttribute('data-art-moving') === 'true', mirror: art.getAttribute('transform'), scaleX: image.width.baseVal.value / frame.width, scaleY: image.height.baseVal.value / frame.height, expectedScale: frame.scale, footError: Math.hypot(foot.x - drawnPivot.x, foot.y - drawnPivot.y), screenFoot: { x: foot.x, y: foot.y } };
++      }).filter(Boolean);
++      if (actors.length) window.__cuilanSamples.push({ time, stage: window.__cuilanStage, viewId: state?.viewId, sceneTimeMs: state?.projection.sceneTimeMs, actors, authorized: state?.projection.entities.filter(entity => entity.appearanceId === 'cuilan').map(({ entityRef, appearanceEpoch, name, position, facing, motionTrail }) => ({ entityRef, appearanceEpoch, name, position, facing, motionTrail })) });
++      requestAnimationFrame(sample);
++    };
++    requestAnimationFrame(sample);
++  }, manifest);
++}
++export async function motionSamples(page) { return page.evaluate(() => { window.__cuilanObserve = false; return window.__cuilanSamples || []; }); }
++export async function mark(pages, name) { for (const page of pages) await page.evaluate(name => { window.__cuilanStage = name; }, name); }
++export async function drawnCuilan(page) { return page.evaluate(() => [...document.querySelectorAll('.spatial-person')].flatMap(group => {
++  const art = group.querySelector('[data-art-frame*="/cuilan/"]'); if (!art) return [];
++  const image = art.querySelector('image'), p = group.transform.baseVal.consolidate().matrix;
++  return [{ label: group.getAttribute('aria-label'), file: art.getAttribute('data-art-frame'), moving: art.getAttribute('data-art-moving') === 'true', mirror: art.getAttribute('transform'), position: { x: p.e, y: p.f }, bounds: { x: image.x.baseVal.value, y: image.y.baseVal.value, width: image.width.baseVal.value, height: image.height.baseVal.value } }];
++})); }
++export async function settledArt(page, count = 1) { await until(async () => { const people = await drawnCuilan(page); return people.length === count && people.every(person => !person.moving); }, '实际到达后切换翠兰独立站姿'); }
++export async function published(page, receipt) { return until(async () => { const s = await snapshot(page); return BigInt(s.snapshotSeq) >= BigInt(receipt.observedSeq) ? s : false; }, '实际投影到达本次回执水位'); }
++
++export async function pointInfo(page, world) {
++  await page.locator('svg.spatial-map').scrollIntoViewIfNeeded();
++  return page.locator('svg.spatial-map').evaluate((svg, world) => {
++    const p = new DOMPoint(world.x, world.y).matrixTransform(svg.getScreenCTM()), hit = document.elementFromPoint(p.x, p.y);
++    return { world, screen: { x: p.x, y: p.y }, hit: { tag: hit?.tagName, class: hit?.getAttribute('class'), person: hit?.closest('.spatial-person')?.getAttribute('aria-label') || null, label: hit?.closest('button')?.getAttribute('aria-label') || null, map: hit?.closest('svg.spatial-map') === svg } };
++  }, world);
++}
++export async function movePlayer(page, world, report, supplied) {
++  await closeReading(page);
++  await until(async () => {
++    const position = (await snapshot(page)).projection.self.position;
++    const drawn = await page.locator('[data-spatial-self="true"]').evaluate(group => { const matrix = group.transform.baseVal.consolidate().matrix; return { x: matrix.e, y: matrix.f }; });
++    return Math.hypot(drawn.x - position.x, drawn.y - position.y) < 0.001;
++  }, '选取精确世界点前跟随镜头与已确认脚点停稳');
++  const point = supplied || await pointInfo(page, world); report.pointerInputs.push({ operation: '点地', ...point });
++  assert.ok(point.hit.map && !point.hit.person && !point.hit.label, '原点击位置须为真实可用空地，不穿透控件');
++  const before = (await clientState(page)).actions.map(action => action.id); await page.mouse.click(point.screen.x, point.screen.y);
++  const action = await until(async () => (await clientState(page)).actions.find(action => !before.includes(action.id) && JSON.parse(action.raw).action.kind === 'move_to'), '真实点地发出移动');
++  const request = JSON.parse(action.raw), goal = request.action.destination; report.pointerInputs.at(-1).request = request; assert.ok(Math.hypot(goal.x - world.x, goal.y - world.y) <= 2);
++  const receipt = await until(async () => (await clientState(page)).actions.find(x => x.id === action.id).receipt, '实际移动回执'); assert.equal(receipt.status, 'Accepted');
++  await until(async () => { const p = (await snapshot(page)).projection; return p.movement?.status === 'arrived' && p.self.position.x === goal.x && p.self.position.y === goal.y; }, '原实际请求目标精确到达');
++  report.pointerInputs.at(-1).request = request; report.pointerInputs.at(-1).receipt = receipt; await sleep(250);
++}
++export async function alphaPoint(page, transparent) {
++  await page.locator('svg.spatial-map').scrollIntoViewIfNeeded();
++  return page.locator('.spatial-person [data-art-frame*="/cuilan/"] image').evaluate(async (element, transparent) => {
++    const image = new Image(); image.src = element.getAttribute('href'); await image.decode();
++    const canvas = document.createElement('canvas'); canvas.width = image.width; canvas.height = image.height;
++    const context = canvas.getContext('2d'); context.drawImage(image, 0, 0); const pixels = context.getImageData(0, 0, image.width, image.height).data;
++    const svg = element.closest('svg'), actor = element.closest('.spatial-person'), candidates = [];
++    for (let y = 150; y < 265; y += 3) for (let x = 8; x < image.width - 8; x += 3) {
++      let valid = true;
++      for (let dy = -7; dy <= 7 && valid; dy++) for (let dx = -7; dx <= 7; dx++) { const alpha = pixels[((y + dy) * image.width + x + dx) * 4 + 3]; if (transparent ? alpha !== 0 : alpha < 220) { valid = false; break; } }
++      if (!valid) continue;
++      const point = new DOMPoint(element.x.baseVal.value + (x + 0.5) * element.width.baseVal.value / image.width, element.y.baseVal.value + (y + 0.5) * element.height.baseVal.value / image.height).matrixTransform(element.getScreenCTM());
++      const hit = document.elementFromPoint(point.x, point.y); if (hit?.closest('svg') !== svg || (hit.closest('.spatial-person') && hit.closest('.spatial-person') !== actor)) continue;
++      const world = new DOMPoint(point.x, point.y).matrixTransform(svg.getScreenCTM().inverse());
++      candidates.push({ screen: { x: point.x, y: point.y }, world: { x: world.x, y: world.y }, pixel: { x, y, alpha: pixels[(y * image.width + x) * 4 + 3] }, file: element.getAttribute('href'), mirror: element.parentElement.getAttribute('transform'), hit: { tag: hit.tagName, class: hit.getAttribute('class'), person: hit.closest('.spatial-person')?.getAttribute('aria-label') || null, map: hit.closest('svg.spatial-map') === svg, label: null }, score: Math.abs(x - 209) + Math.abs(y - 209) });
++    }
++    candidates.sort((a, b) => a.score - b.score); if (!candidates.length) throw new Error('没有实际可见的透明/身体像素见证点'); return candidates[0];
++  }, transparent);
++}
++export async function selectPerson(page, expectedRef, point, report) {
++  const before = (await clientState(page)).actions.map(action => action.id); await page.mouse.click(point.screen.x, point.screen.y); await sleep(120);
++  const changed = (await clientState(page)).actions.filter(action => !before.includes(action.id)); assert.equal(changed.some(action => JSON.parse(action.raw).action.kind === 'move_to'), false, '身体点击不能穿透发移动');
++  const heading = await page.locator('#spatial-selection-heading').innerText(); await page.getByRole('button', { name: '在当前位置查看', exact: true }).click();
++  const inspect = await until(async () => (await clientState(page)).actions.find(action => !before.includes(action.id) && JSON.parse(action.raw).action.kind === 'inspect'), '实际查看已选当前公开引用');
++  assert.equal(JSON.parse(inspect.raw).action.targetRef, expectedRef); report.pointerInputs.push({ operation: '人物选择', ...point, heading, request: JSON.parse(inspect.raw), expectedRef });
++}
++export async function geometry(page) {
++  const result = await page.evaluate(() => ({ viewport: innerWidth, content: document.documentElement.scrollWidth, labels: [...document.querySelectorAll('button.spatial-map-label')].map(node => { const box = node.getBoundingClientRect(); return { width: box.width, height: box.height, font: parseFloat(getComputedStyle(node).fontSize) }; }), feet: [...document.querySelectorAll('.spatial-hit')].map(node => { const box = node.getBoundingClientRect(); return { width: box.width, height: box.height }; }) }));
++  assert.ok(result.content <= result.viewport); assert.ok(result.labels.every(x => x.font >= 14 && x.width >= 44 && x.height >= 44)); assert.ok(result.feet.every(x => x.width >= 43.99 && x.height >= 43.99)); return result;
++}
+diff --git a/frontend/tests/runtime-assets-browser.mjs b/frontend/tests/runtime-assets-browser.mjs
+index 7bbc311c82f4b7f43aae01c16fc0240640bae152..ed3fb626ab639e72bddad16175315225094e3631 100644
+--- a/frontend/tests/runtime-assets-browser.mjs
++++ b/frontend/tests/runtime-assets-browser.mjs
+@@ -8,17 +8,19 @@ import { repository, sourceIdentity, saveJSON } from './network-support.mjs';
+ 
+ const output = resolve(process.env.FRONTEND_EVIDENCE_DIR || resolve(repository, '.agent-output/visual-recovery/runtime-assets'));
+ const manifest = JSON.parse(await readFile(resolve(repository, 'frontend/runtime-assets.json'), 'utf8'));
+-const report = { scope: '恢复候选作者自查：干净Git构建的真实HTTP响应与Chromium PNG解码，不代替全章节运行', source: await sourceIdentity(), startedAt: new Date().toISOString(), assets: [] };
++const cuilan = JSON.parse(await readFile(resolve(repository, 'frontend/cuilan-runtime-assets.json'), 'utf8'));
++const files = [...manifest.files, ...cuilan.files];
++const report = { scope: '运行资产作者自查：干净Git构建的真实HTTP响应与Chromium PNG解码，不代替全章节运行', source: await sourceIdentity(), startedAt: new Date().toISOString(), assets: [] };
+ let previewServer, browser;
+ try {
+   assert.equal(report.source.status, '', '运行资产交付检查须从干净Git候选执行');
+   report.trackedPng = execFileSync('git', ['ls-tree', '-r', '--name-only', 'HEAD', 'frontend/public/assets/gaolaozhuang'], { cwd: repository, encoding: 'utf8' }).trim().split('\n').filter(file => file.endsWith('.png'));
+-  assert.deepEqual(report.trackedPng.map(file => file.replace('frontend/public/assets/gaolaozhuang/', '')).sort(), manifest.files.map(file => file.file).sort(), 'Git须完整交付清单中的全部运行图像');
++  assert.deepEqual(report.trackedPng.map(file => file.replace('frontend/public/assets/gaolaozhuang/', '')).sort(), files.map(file => file.file).sort(), 'Git须完整交付清单中的全部运行图像');
+   previewServer = await preview({ root: resolve(repository, 'frontend'), configFile: resolve(repository, 'frontend/vite.config.mjs'), configLoader: 'native', preview: { host: '127.0.0.1', port: 0 } });
+   const baseURL = `http://127.0.0.1:${previewServer.httpServer.address().port}`;
+   browser = await chromium.launch({ headless: true, executablePath: process.env.CHROMIUM_PATH, args: [] }); report.browserVersion = browser.version();
+   const page = await browser.newPage({ viewport: { width: 1600, height: 1000 } }); await page.goto(baseURL + '/assets/gaolaozhuang/scenes/courtyard.png');
+-  for (const expected of manifest.files) {
++  for (const expected of files) {
+     const actual = await page.evaluate(async file => {
+       const url = '/assets/gaolaozhuang/' + file, response = await fetch(url), buffer = await response.arrayBuffer();
+       const digest = [...new Uint8Array(await crypto.subtle.digest('SHA-256', buffer))].map(byte => byte.toString(16).padStart(2, '0')).join('');
+diff --git a/frontend/tests/spatial-art.test.mjs b/frontend/tests/spatial-art.test.mjs
+index 2cfff427645a073d72817533229b6e35c6fd34f2..ac1a0e22bd85123fc11325e7cbc76e67ad8a87d8 100644
+--- a/frontend/tests/spatial-art.test.mjs
++++ b/frontend/tests/spatial-art.test.mjs
+@@ -1,6 +1,6 @@
+ import test from 'node:test';
+ import assert from 'node:assert/strict';
+-import { spriteForAppearance } from '../src/domain/gaolao-art.ts';
++import { spriteForAppearance, spriteResourcePaths } from '../src/domain/gaolao-art.ts';
+ import { ConfirmedMotion } from '../src/domain/spatial-motion.ts';
+ import { spatialSnapshot } from './spatial-fixture.mjs';
+ 
+@@ -30,6 +30,28 @@ test('步态由累计路程推进，减弱动态使用同朝向站姿', () => {
+   assert.match(spriteForAppearance('gaocai', 'N', true, 32, true).href, /idle\/n\.png$/);
+ });
+ 
++test('翠兰v2只按公开外观键消费45原帧，八向沿用来源组倍率和脚点', () => {
++  assert.equal(spriteForAppearance('翠兰', 'S', false, 0), null);
++  assert.equal(spriteForAppearance('孙悟空（借貌）', 'S', false, 0), null);
++  assert.equal(spriteForAppearance('wukong', 'S', false, 0), null);
++  const south = spriteForAppearance('cuilan', 'S', false, 0);
++  assert.ok(south, '服务器公开cuilan外观必须有正式翠兰图像');
++  assert.equal(spriteResourcePaths('cuilan').length, 45);
++  assert.equal(new Set(spriteResourcePaths('cuilan')).size, 45);
++  for (const [facing, native, mirror] of [['S', 's', false], ['SE', 'se', false], ['E', 'e', false], ['NE', 'ne', false], ['N', 'n', false], ['SW', 'se', true], ['W', 'e', true], ['NW', 'ne', true]]) {
++    const idle = spriteForAppearance('cuilan', facing, false, 0);
++    assert.equal(idle.href, `/assets/gaolaozhuang/cuilan/idle/${native}.png`);
++    assert.equal(idle.mirrorX, mirror);
++  }
++  const north02 = spriteForAppearance('cuilan', 'N', true, 36.9);
++  assert.equal(north02.href, '/assets/gaolaozhuang/cuilan/walk/n/02.png');
++  assert.equal(north02.bounds.y, -396 * (76 / 395));
++  assert.equal(north02.bounds.height, 418 * (76 / 395), 'N02保持整组固定倍率，不逐帧拉齐身高');
++  assert.equal(spriteForAppearance('cuilan', 'N', true, 36.9, true).href, '/assets/gaolaozhuang/cuilan/idle/n.png');
++  assert.deepEqual(spriteForAppearance('cuilan', 'NW', true, 0).bounds, spriteForAppearance('cuilan', 'NE', true, 0).bounds);
++  assert.equal(spriteForAppearance('cuilan', 'N', true, 147.6).href, '/assets/gaolaozhuang/cuilan/walk/n/00.png');
++});
++
+ test('绘制位置、步态路程和朝向取同一已确认折线，停止后不继续走步', () => {
+   const motion = new ConfirmedMotion(); const first = spatialSnapshot();
+   first.projection.self.position = { x: 0, y: 0 }; first.projection.self.facing = 'E';
