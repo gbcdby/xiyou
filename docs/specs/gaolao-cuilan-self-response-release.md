@@ -1,6 +1,6 @@
 # CS-R2 依赖、接口与释放矩阵
 
-> 2026-11-14 共享记录已发布：五个 CS-T 标识已映射到真实 GitHub Issues，后续有限释放及当前候选见文末[共享记录发布登记](#共享记录发布登记)。以下原计划正文保留其创建时状态，不据此否认后来已发生的建票或 G0-F1 释放。
+> 2026-11-14 共享记录已发布：五个 CS-T 标识已映射到真实 GitHub Issues，后续有限释放及当前候选见文末[共享记录发布登记](#共享记录发布登记)。以下原计划正文保留其创建时状态，不据此否认后来已发生的建票、G0-F1 和后续 G0-D1 释放。
 
 
 日期：2026-11-14 UTC。对应 [Ticket 草案](gaolao-cuilan-self-response-tasks.md) 固定 CS-R2。**本文件是本计划依赖关系的唯一来源**；下表只声明将来解除条件，所有实现/运行 gate 当前均未释放。状态 `PLANNED_NOT_RELEASED / DESIGN_REVIEW_PASS_FORMAL_PENDING`。
@@ -132,10 +132,10 @@ F1 必须覆盖如下并各有至少一个有效样本和针对风险的拒绝�
 
 2026-11-14：已建立 [CS-T01/#55](https://github.com/gbcdby/xiyou/issues/55)、[CS-T02/#56](https://github.com/gbcdby/xiyou/issues/56)、[CS-T03/#57](https://github.com/gbcdby/xiyou/issues/57)、[CS-T04/#58](https://github.com/gbcdby/xiyou/issues/58)、[CS-T05/#59](https://github.com/gbcdby/xiyou/issues/59)。原 `35d8759` 计划的未建票/未释放字样保留其时间与对象；本节登记后来事实，不改写前文 gate 定义。
 
-- **G0-F1 已有限释放**：CS-R2 设计独立 requirements/standards PASS 的范围是固定设计 source_inspection。仅释放 CS-T01 的合同/schema/精确版本/最小候选接口准备，原执行者为 `/root/cuilan_authority_implement`，本次未改派或覆盖现场。
-- **F1 已有作者固定候选，尚待独立判断**：`f96474f6d85d5bb6eb765f8c881d5f7aa7600e4f` / tree `ee9e2618a63541099e2242e1e93c4749fa95c484`。总控已分派独立合同/代码审查；作者 handoff 待补读。本节不宣称 F1 已独立 PASS 或已供下游消费。
-- **正式模型包已交接**：`77ace28f526ce9ad905b1842b7353e48e251423c` / tree `006fc92d3cd261bddf22f698871e44b6434be36e`。作者状态为 `COMPONENT_DESIGN_EVIDENCE_COMPLETE_WITH_COMBINED_INCONCLUSIVE`：28 个范围内正向结果、98 个负控或见证、5 个未穷尽配置。独立模型复核与实现映射尚待；该交接不覆盖完整组合未穷尽范围，不扩大 D1 释放。
-- **T04 有局部 P0 准备**：`c4b1674eebbdfbfbdacdde30beddb665c1af06b4` / tree `a88beb0fdfbe923462f1f60b6ae7417425eb7a6b`，parent `35d8759`，两文件的 production profile/受控 NPC 适配器防绕行准备。独立需求/标准 PASS_WITHIN_SCOPE，现有 5 项替身边界检查在独立快照 5 PASS、exit 0；未执行浏览器、PostgreSQL 或 E2。它不是 D4/E2 完成，也不释放完整 T04。
-- **D1、T02/T03/T04 完整实施及整体工程验收仍按原 gate 分别释放**；建票、文档可读、部分源码或模型存在均不是解除条件。IC/E2/FM/V2/M29、主线合并及部署保持各自证据边界。
-
+- **G0-F1 历史与后续 G0-D1 裁决**：原 G0-F1 只释放合同/schema/精确版本准备；总控在 2026-11-14 08:53 UTC 的 v15 记录明确采用 CS-R2 为候选实现基线并释放 G0-D1。CS-T01 原执行者 `/root/cuilan_authority_implement` 在独立冻结 F1 后继续完整权威候选；本次没有改派或覆盖现场。这是实施范围的释放，不是完整形式或产品门槛通过。
+- **F1 已固定并作为消费基线**：`f96474f6d85d5bb6eb765f8c881d5f7aa7600e4f` / tree `ee9e2618a63541099e2242e1e93c4749fa95c484`，parent `35d8759`，22 文件。总控接收的作者合同检查为 59/59、0 fail/0 skip，两个生成器、schema 和 TypeScript 消费者检查完成；runtime/DB/browser NOT_RUN。本轮补充独立代码/合同审查仍在进行，不将作者证据写成独立 PASS，也不否认已经发生的消费基线接受。
+- **T02/T03 已有明确释放**：T02 已按固定 F1 分派给 `/root/cuilan_scene_consent_design`，角色为 worker-implement、独占 controller 工作树，v15 截点待 ACK，不预填已运行；T03 的 F1 消费与隔离候选实现已释放，v15 截点仍待执行槽位分派。实际领取/工作区以后续 Issue 记录为准，不能抢占旧 writer。
+- **正式模型包已交接，组合未知保持**：`77ace28f526ce9ad905b1842b7353e48e251423c` / tree `006fc92d3cd261bddf22f698871e44b6434be36e`。作者状态为 `COMPONENT_DESIGN_EVIDENCE_COMPLETE_WITH_COMBINED_INCONCLUSIVE`：28 个 PASS_WITHIN_SCOPE、98 个 COUNTEREXAMPLE（60 负控、37 见证、1 旧缺口方向探针）、5 个 INCONCLUSIVE；131 个选定配置中 126 符合预声明，不是 131 个正向 PASS。两用途完整效果与四个完整缓存组合未穷尽；独立模型复核、实现对应及 FM/V2 仍待，不把组件结果改为机械组合证明。
+- **T04-A 已接受为可整合候选**：`c4b1674eebbdfbfbdacdde30beddb665c1af06b4` / tree `a88beb0fdfbe923462f1f60b6ae7417425eb7a6b`，parent `35d8759`，两文件的 production profile/受控 NPC 适配器防绕行准备。原独立 reviewer 两轴 PASS，并执行 11 次禁用/2 次合法替身调用；本轮另一独立快照的现有 5 项边界检查也为 5 PASS、exit 0，分别保留证据身份，不相加成产品验收。无真实浏览器/PostgreSQL/E2，不等于完整 D4/E2 或全局宿主安全沙箱。
+- **仍待完成的门槛**：D1 尚无 v15 收到的完成候选；T02/T03 实施与独立候选检查、完整 T04/IC/E2/FM/V2/M29、主线合并及部署分别保留实际证据边界。建票不代总控新增 release，也不关闭任何实施票。
 本文件继续作为规范依赖/产物条件的唯一来源；活动归属、实际释放、候选与结果由 [#34 的 CS-R2 接续记录](https://github.com/gbcdby/xiyou/issues/34)及对应 Issues 维护。本节是本次发布时点的事实快照，不新建长期并行状态表。新默认 v3 尚未因本次文档发布而启用，原 65 PNG/18 批准图、world/layout、当前业务文件全部未改。
