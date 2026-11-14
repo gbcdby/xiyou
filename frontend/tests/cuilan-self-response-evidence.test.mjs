@@ -1,9 +1,115 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { assertCompleteReport, caseIds, holdSubmissions, holdCommittedReceipt, deferLeaseMaintenance } from './cuilan-self-response-support.mjs';
+import { createHash } from 'node:crypto';
+import { EventEmitter } from 'node:events';
+import { createReadStream } from 'node:fs';
+import { mkdtemp, readFile, readdir, rm, stat } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { constants as bufferConstants } from 'node:buffer';
+import { assertCompleteReport, caseIds, holdSubmissions, holdCommittedReceipt, deferLeaseMaintenance, saveCuilanReportJSON, createCuilanReportCollector, finalizeCuilanReport } from './cuilan-self-response-support.mjs';
 import { assertRestartFaultReport } from './cuilan-self-response-restart.mjs';
 import { assertBothActiveEffects, assertSharedStopTransaction, assertOriginalReceiptRead, tracePersonalTransactions } from '../../backend/test-support/personal-shared-effects.mjs';
 import { waitForPersonalWithdrawals } from '../../backend/test-support/cuilan-personal-restart-worker.mjs';
+
+test('完整报告分段字节与原JSON一致，含Date/toJSON、共享引用和跨块中文emoji/转义', async t => {
+  const directory = await mkdtemp(join(tmpdir(), 'cuilan-json-')); t.after(() => rm(directory, { recursive: true, force: true }));
+  const shared = { value: '中文😀\\\n\t"', undef: undefined, number: -0 }, keys = [];
+  const value = { first: shared, second: shared, date: new Date('2026-11-14T00:00:00.000Z'), numbers: [NaN, Infinity, -Infinity, -0],
+    omitted: undefined, fn() {}, symbol: Symbol('not JSON'), holes: [, undefined, () => {}, Symbol('array null')],
+    boxed: [new Number(3), new String('字'), new Boolean(false)], boundary: 'a'.repeat(8191) + '😀中文' + '\uD800' + 'z'.repeat(8190) + '😀',
+    custom: { toJSON(key) { keys.push(key); return { key, value: '本人' }; } } };
+  const expected = JSON.stringify(value, null, 2) + '\n'; keys.length = 0;
+  const path = join(directory, 'result.json'), saved = await saveCuilanReportJSON(path, value, { chunkBytes: 7 });
+  const actual = await readFile(path); assert.equal(actual.toString(), expected); assert.deepEqual(keys, ['custom']);
+  assert.equal(saved.bytes, Buffer.byteLength(expected)); assert.equal(saved.sha256, createHash('sha256').update(expected).digest('hex'));
+  assert.deepEqual(JSON.parse(actual), JSON.parse(expected));
+  for (const unsupported of [1n, { self: null }]) {
+    if (typeof unsupported === 'object') unsupported.self = unsupported;
+    await assert.rejects(saveCuilanReportJSON(join(directory, 'invalid.json'), unsupported), TypeError);
+  }
+  assert.deepEqual(await readdir(directory), ['result.json'], '错误写入不能留下被误认完整的部分JSON或临时文件');
+});
+
+test('停采集保留已开始的异步结果，排空后写入期间输入被冻结', async t => {
+  const directory = await mkdtemp(join(tmpdir(), 'cuilan-cutoff-')); t.after(() => rm(directory, { recursive: true, force: true }));
+  const emitter = new EventEmitter(), rows = [], failures = [], collector = createCuilanReportCollector(error => failures.push(error)); let release;
+  const ready = new Promise(resolve => { release = resolve; });
+  collector.observe(emitter, 'response', async function(value) { assert.equal(this, emitter); await ready; rows.push(value); });
+  emitter.emit('response', 'already-started');
+  const report = { assessment: 'CHECKS_COMPLETE', source: { tree: 'source' }, authority: rows, cleanup: [] }, calls = [];
+  const finish = finalizeCuilanReport({ report, output: directory, stopCollecting: collector.stop, resources: [['browser', true, async () => { calls.push('close'); }]],
+    readSource: async () => ({ tree: 'source' }), audit: async () => { report.assessment = 'PASS'; }, diagnostic: value => calls.push(value),
+    save: async (path, value) => { assert.throws(() => rows.push('during-save'), TypeError); return saveCuilanReportJSON(path, value); } });
+  emitter.emit('response', 'after-cutoff'); release(); await finish;
+  assert.deepEqual(rows, ['already-started']); assert.deepEqual(failures, []); assert.equal(emitter.listenerCount('response'), 0);
+  const result = JSON.parse(await readFile(join(directory, 'result.json'), 'utf8'));
+  assert.deepEqual(result.authority, ['already-started']); assert.equal(result.collectionCutoff.pending, 0); assert.equal(result.assessment, 'PASS');
+  assert.equal(calls[0], 'close'); assert.equal(calls[1].completeReportSaved, true);
+});
+
+test('首/末保存、restore与单项清理失败均不截断其余资源/sourceEnd及既有stdout fallback', async () => {
+  const closed = [], messages = [], source = { tree: 'actual-source' }, report = { assessment: 'CHECKS_COMPLETE', source, authority: [{ worldEvents: [{ real: true }] }], cleanup: [] };
+  await finalizeCuilanReport({ report, output: '/not-written', restorers: [{ close() { throw new Error('restore failed'); } }],
+    stopCollecting: async () => ({ pending: 0 }), resources: ['browser', 'vite', 'server', 'postgres'].map(name => [name, true, async () => { closed.push(name); if (name === 'browser') throw new Error('close failed'); }]),
+    readSource: async () => { closed.push('sourceEnd'); return { ...source }; }, audit: async () => {}, save: async () => { throw new Error('save failed'); }, diagnostic: value => messages.push(value) });
+  assert.deepEqual(closed, ['browser', 'vite', 'server', 'postgres', 'sourceEnd']); assert.deepEqual(report.sourceEnd, source); assert.equal(report.assessment, 'FAIL');
+  assert.equal(report.cleanup.length, 4); assert.equal(report.resourcesClosed, false);
+  assert.deepEqual(report.evidenceErrors.map(row => row.stage), ['restore:0', 'save:result-before-cleanup.json', 'cleanup:browser', 'save:result.json']);
+  assert.equal(messages[0].type, 'cuilan-report-finalization'); assert.equal(messages[0].completeReportSaved, false); assert.deepEqual(messages[0].sourceEnd, source);
+});
+
+test('永不结算的响应有界退出，仍逐项清理并记录sourceEnd失败，不能保存变化中数据或PASS', async () => {
+  const emitter = new EventEmitter(), collector = createCuilanReportCollector(() => {}, { drainTimeoutMs: 5 }), calls = [], messages = [];
+  collector.observe(emitter, 'response', () => new Promise(() => {})); emitter.emit('response');
+  const report = { assessment: 'CHECKS_COMPLETE', source: { tree: 'actual-start' }, authority: [], cleanup: [] };
+  await finalizeCuilanReport({ report, output: '/not-written', stopCollecting: collector.stop,
+    resources: ['browser', 'vite', 'server', 'postgres'].map(name => [name, true, async () => { calls.push(name); }]),
+    readSource: async () => { calls.push('sourceEnd'); throw new Error('actual source read failed'); }, audit: async () => {}, save: async () => { assert.fail('未排空禁止保存'); }, diagnostic: value => messages.push(value) });
+  assert.deepEqual(calls, ['browser', 'vite', 'server', 'postgres', 'sourceEnd']); assert.equal(report.assessment, 'FAIL'); assert.equal(report.sourceEnd, undefined);
+  assert.match(report.sourceEndError.message, /actual source read failed/); assert.equal(messages[0].collectionSealed, false); assert.equal(messages[0].completeReportSaved, false);
+  assert.deepEqual(report.evidenceErrors.map(row => row.stage), ['stop-collection', 'sourceEnd', 'stop-collection-after-cleanup']);
+});
+
+test('保存永不结算也在期限触发真实abort并继续四资源/sourceEnd与缺证fallback', async () => {
+  const calls = [], messages = [], aborted = [], report = { assessment: 'CHECKS_COMPLETE', source: { tree: 'start' }, authority: [], cleanup: [] };
+  await finalizeCuilanReport({ report, output: '/not-written', stopCollecting: async () => ({ pending: 0 }), saveTimeoutMs: 5,
+    resources: ['browser', 'vite', 'server', 'postgres'].map(name => [name, true, async () => { calls.push(name); }]),
+    readSource: async () => { calls.push('sourceEnd'); return { tree: 'actual-end' }; }, audit: async () => {},
+    save: (path, _report, { signal }) => new Promise(() => { signal.addEventListener('abort', () => aborted.push(path), { once: true }); }), diagnostic: value => messages.push(value) });
+  assert.deepEqual(calls, ['browser', 'vite', 'server', 'postgres', 'sourceEnd']); assert.equal(aborted.length, 2); assert.equal(report.assessment, 'FAIL');
+  assert.equal(messages[0].completeReportSaved, false); assert.deepEqual(messages[0].sourceEnd, { tree: 'actual-end' });
+  assert.ok(messages[0].saves.every(row => row.status === 'FAIL' && row.aborted)); assert.ok(report.evidenceErrors.every(row => /保存超时/.test(row.message)));
+});
+
+test('实际writer写出字节后abort会停止流且不rename部分JSON', { timeout: 30000 }, async t => {
+  const directory = await mkdtemp(join(tmpdir(), 'cuilan-abort-json-')); t.after(() => rm(directory, { recursive: true, force: true }));
+  const controller = new AbortController(), path = join(directory, 'result.json'); let settled = false, sawBytes = false;
+  const writing = saveCuilanReportJSON(path, { worldEvents: Array(8193).fill({ payload: 'a'.repeat(65536) }) }, { signal: controller.signal }).finally(() => { settled = true; });
+  const rejected = assert.rejects(writing);
+  while (!settled && !sawBytes) {
+    for (const name of await readdir(directory)) if (name.startsWith('result.json.tmp-') && (await stat(join(directory, name))).size > 0) sawBytes = true;
+    if (!sawBytes) await new Promise(setImmediate);
+  }
+  assert.equal(sawBytes, true, '必须在真实流已落字节而尚未完成时取消'); controller.abort(new Error('受控中途取消'));
+  await rejected; assert.deepEqual(await readdir(directory), [], '取消后没有完整文件或未关闭的临时输出');
+});
+
+test('完整ASCII历史超过V8单字符串上限仍流式保存，逐字节摘要与长度不丢记录', { timeout: 120000 }, async t => {
+  const directory = await mkdtemp(join(tmpdir(), 'cuilan-large-json-')); t.after(() => rm(directory, { recursive: true, force: true }));
+  const text = 'e'.repeat(65536), count = Math.ceil(bufferConstants.MAX_STRING_LENGTH / text.length) + 1;
+  const report = { worldEvents: Array(count).fill({ payload: text }) }, path = join(directory, 'result.json');
+  const prefix = '{\n  "worldEvents": [\n', entry = '    {\n      "payload": "' + text + '"\n    }', separator = ',\n', suffix = '\n  ]\n}\n';
+  const expected = createHash('sha256'); expected.update(prefix); let expectedBytes = Buffer.byteLength(prefix) + Buffer.byteLength(suffix);
+  for (let index = 0; index < count; index++) { if (index) { expected.update(separator); expectedBytes += separator.length; } expected.update(entry); expectedBytes += entry.length; } expected.update(suffix);
+  assert.ok(expectedBytes > bufferConstants.MAX_STRING_LENGTH, '纯ASCII字符数与字节数都超过实际Node的单字符串上限');
+  const saved = await saveCuilanReportJSON(path, report), actual = createHash('sha256'); let bytes = 0;
+  for await (const chunk of createReadStream(path)) { actual.update(chunk); bytes += chunk.length; }
+  assert.equal(bytes, expectedBytes); assert.equal((await stat(path)).size, expectedBytes); assert.equal(saved.bytes, expectedBytes);
+  const actualSha256 = actual.digest('hex'), expectedSha256 = expected.digest('hex');
+  assert.equal(actualSha256, expectedSha256); assert.equal(saved.sha256, expectedSha256);
+  t.diagnostic(JSON.stringify({ kind: 'synthetic-serialization-only', records: count, maxStringLength: bufferConstants.MAX_STRING_LENGTH, bytes, sha256: saved.sha256 }));
+});
 
 test('B真实void等待契约之后保留两条实际C2及Receipt，经IPC序列化仍完整', async () => {
   const rows = ['appearance', 'private_items'].map(consentId => ({ intent_id: 'intent-' + consentId, actor_id: 'cuilan', request: { action: { kind: 'withdraw_consent', consentId } }, execution_context: { mode: 'scene-policy' }, receipt: { publicReceipt: { status: 'Accepted', clientActionId: 'action-' + consentId } } }));

@@ -1,4 +1,11 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+import { createWriteStream } from 'node:fs';
+import { mkdir, rename, rm } from 'node:fs/promises';
+import { dirname } from 'node:path';
+import { Readable } from 'node:stream';
+import { pipeline } from 'node:stream/promises';
+import { types } from 'node:util';
 import { gaolaoPersonalProfile, validateSpatial } from '../../protocol/spatial.mjs';
 import { contentDigest } from '../../content/index.mjs';
 import { until } from './network-support.mjs';
@@ -7,6 +14,155 @@ import { assertBothActiveEffects, assertSharedStopTransaction, assertOriginalRec
 
 export const productionProfile = 'production-cuilan-v1';
 export const caseIds = Object.freeze(['P-01', 'P-02', 'P-03', 'P-04', 'P-05', 'P-06']);
+
+const omittedJSONValue = Symbol('omitted JSON value');
+function jsonValue(value, key) {
+  if (value !== null && ['object', 'function', 'bigint'].includes(typeof value)) {
+    const toJSON = value.toJSON; if (typeof toJSON === 'function') value = toJSON.call(value, key);
+  }
+  if (types.isNumberObject(value)) value = +value;
+  else if (types.isStringObject(value)) value = String(value);
+  else if (types.isBooleanObject(value)) value = Boolean.prototype.valueOf.call(value);
+  else if (types.isBigIntObject(value)) value = BigInt.prototype.valueOf.call(value);
+  if (typeof value === 'bigint') throw new TypeError('Do not know how to serialize a BigInt');
+  return ['undefined', 'function', 'symbol'].includes(typeof value) ? omittedJSONValue : value;
+}
+function* jsonStringParts(value, quoted = true) {
+  if (quoted) yield '"';
+  for (let start = 0; start < value.length;) {
+    let end = Math.min(start + 8192, value.length);
+    // 不拆开合法 UTF-16 代理对，否则分段 stringify/UTF-8 编码会改变原值。
+    if (end < value.length && /[\uD800-\uDBFF]/.test(value[end - 1]) && /[\uDC00-\uDFFF]/.test(value[end])) end--;
+    const part = value.slice(start, end); yield quoted ? JSON.stringify(part).slice(1, -1) : part; start = end;
+  }
+  if (quoted) yield '"';
+}
+function* jsonParts(value, depth, ancestors) {
+  if (value === null || typeof value === 'number' || typeof value === 'boolean') { yield JSON.stringify(value); return; }
+  if (typeof value === 'string') { yield* jsonStringParts(value); return; }
+  if (JSON.isRawJSON?.(value)) { yield* jsonStringParts(value.rawJSON, false); return; }
+  if (ancestors.has(value)) throw new TypeError('Converting circular structure to JSON');
+  ancestors.add(value);
+  try {
+    const array = Array.isArray(value), keys = array ? undefined : Object.keys(value), length = array ? value.length : keys.length;
+    yield array ? '[' : '{'; let first = true;
+    for (let index = 0; index < length; index++) {
+      const key = array ? String(index) : keys[index], child = jsonValue(value[key], key);
+      if (!array && child === omittedJSONValue) continue;
+      yield (first ? '\n' : ',\n') + '  '.repeat(depth + 1); first = false;
+      if (!array) { yield* jsonStringParts(key); yield ': '; }
+      yield* jsonParts(child === omittedJSONValue ? null : child, depth + 1, ancestors);
+    }
+    if (!first) yield '\n' + '  '.repeat(depth);
+    yield array ? ']' : '}';
+  } finally { ancestors.delete(value); }
+}
+function* reportJSONChunks(report, chunkBytes) {
+  const value = jsonValue(report, '');
+  if (value === omittedJSONValue) throw new TypeError('报告根值必须可序列化为 JSON');
+  let buffers = [], bytes = 0;
+  for (const part of (function* () { yield* jsonParts(value, 0, new Set()); yield '\n'; })()) {
+    const buffer = Buffer.from(part);
+    for (let start = 0; start < buffer.length;) {
+      const length = Math.min(chunkBytes - bytes, buffer.length - start);
+      buffers.push(buffer.subarray(start, start + length)); bytes += length; start += length;
+      if (bytes === chunkBytes) { yield Buffer.concat(buffers, bytes); buffers = []; bytes = 0; }
+    }
+  }
+  if (bytes) yield Buffer.concat(buffers, bytes);
+}
+
+/** 完整保留原 JSON 格式和值；任意数组/对象都逐项写出，不把历史事件拼成一个 V8 字符串。 */
+export async function saveCuilanReportJSON(path, report, { chunkBytes = 65536, signal } = {}) {
+  assert.ok(Number.isSafeInteger(chunkBytes) && chunkBytes > 0 && chunkBytes <= 65536, '报告写入块必须有界');
+  signal?.throwIfAborted();
+  await mkdir(dirname(path), { recursive: true });
+  signal?.throwIfAborted();
+  const temporary = path + '.tmp-' + crypto.randomUUID(), hash = createHash('sha256'); let bytes = 0;
+  function* chunks() { for (const chunk of reportJSONChunks(report, chunkBytes)) { bytes += chunk.length; hash.update(chunk); yield chunk; } }
+  try {
+    await pipeline(Readable.from(chunks(), { objectMode: false }), createWriteStream(temporary, { flags: 'wx' }), { signal });
+    signal?.throwIfAborted();
+    await rename(temporary, path);
+    return { bytes, sha256: hash.digest('hex') };
+  } finally { await rm(temporary, { force: true }); }
+}
+
+/** 停止新采集后排空已经开始的异步读取；不改变产品网络请求或回包。 */
+export function createCuilanReportCollector(onError, { drainTimeoutMs = 15000 } = {}) {
+  const pending = new Set(), detach = new Set(); let stoppedAt;
+  function observe(target, event, listener) {
+    if (stoppedAt) return target;
+    function handler(...args) {
+      if (stoppedAt) return;
+      try {
+        const result = listener.apply(this, args);
+        if (result && typeof result.then === 'function') {
+          const task = Promise.resolve(result).catch(onError).finally(() => pending.delete(task)); pending.add(task);
+        }
+      } catch (error) { onError(error); }
+    }
+    target.on(event, handler); detach.add(() => target.off(event, handler)); return target;
+  }
+  async function stop() {
+    stoppedAt ??= new Date().toISOString();
+    for (const remove of detach) { try { remove(); } catch (error) { onError(error); } } detach.clear();
+    let timer;
+    try {
+      await Promise.race([Promise.all([...pending]), new Promise((_, reject) => { timer = setTimeout(() => reject(new Error('证据采集排空超时，不能把仍变化的数据保存为完整报告')), drainTimeoutMs); })]);
+    } finally { clearTimeout(timer); }
+    return { stoppedAt, drainedAt: new Date().toISOString(), pending: pending.size };
+  }
+  return { observe, stop };
+}
+function freezeCollectedReport(report) {
+  const seen = new WeakSet();
+  function freeze(value) {
+    if (!value || typeof value !== 'object' || seen.has(value)) return;
+    seen.add(value); for (const child of Object.values(value)) freeze(child); Object.freeze(value);
+  }
+  for (const [key, value] of Object.entries(report)) if (!['cleanup', 'evidenceErrors'].includes(key)) freeze(value);
+}
+
+/** 保存和清场各自留真实结果；首份保存失败也不能跳过清理或 sourceEnd。 */
+export async function finalizeCuilanReport({ report, output, restorers = [], stopCollecting, resources, readSource, audit, save = saveCuilanReportJSON, saveTimeoutMs = 120000, diagnostic = value => console.error(JSON.stringify(value)) }) {
+  report.cleanup ??= []; report.evidenceErrors ??= [];
+  const saves = []; let sealed = false;
+  const fail = (stage, error) => { report.assessment = 'FAIL'; report.evidenceErrors.push({ stage, message: error.message, stack: error.stack }); };
+  async function seal() { report.collectionCutoff = await stopCollecting(); freezeCollectedReport(report); sealed = true; }
+  async function saveReport(file) {
+    const controller = new AbortController(); let timer;
+    try {
+      assert.ok(Number.isSafeInteger(saveTimeoutMs) && saveTimeoutMs > 0, '报告保存必须有明确期限');
+      const expired = new Promise((_, reject) => {
+        timer = setTimeout(() => { const error = new Error(`完整报告保存超时（${saveTimeoutMs} ms）`); controller.abort(error); reject(error); }, saveTimeoutMs);
+      });
+      // 期限同时取消实际流；不能只停止等待而让旧写入继续 rename。
+      const result = await Promise.race([save(output + '/' + file, report, { signal: controller.signal }), expired]);
+      saves.push({ file, status: 'PASS', ...result });
+    } catch (error) { fail('save:' + file, error); saves.push({ file, status: 'FAIL', aborted: controller.signal.aborted }); }
+    finally { clearTimeout(timer); }
+  }
+  try {
+    for (const [index, restore] of [...restorers].entries()) { try { await restore.close(); } catch (error) { fail('restore:' + index, error); } }
+    try { await seal(); } catch (error) { fail('stop-collection', error); }
+    if (sealed) await saveReport('result-before-cleanup.json');
+  } finally {
+    for (const [name, created, close] of resources) {
+      if (!created) { report.cleanup.push({ name, status: 'NOT_CREATED' }); continue; }
+      try { await close(); report.cleanup.push({ name, status: 'PASS' }); }
+      catch (error) { report.cleanup.push({ name, status: 'FAIL', error: error.message }); fail('cleanup:' + name, error); }
+    }
+    report.resourcesClosed = report.cleanup.every(row => ['PASS', 'NOT_CREATED'].includes(row.status)); report.finishedAt = new Date().toISOString();
+    try { report.sourceEnd = await readSource(); } catch (error) { report.sourceEndError = { message: error.message, stack: error.stack }; fail('sourceEnd', error); }
+    // 若先前排空超时，关闭浏览器后再有界排空；未封存的数据绝不能边变化边保存或判 PASS。
+    if (!sealed) { try { await seal(); } catch (error) { fail('stop-collection-after-cleanup', error); } }
+    try { await audit(); } catch (error) { report.finalAuditError = error.stack; fail('final-audit', error); }
+    if (report.evidenceErrors.length) report.assessment = 'FAIL';
+    if (sealed) await saveReport('result.json');
+    diagnostic({ type: 'cuilan-report-finalization', assessment: report.assessment, source: report.source, sourceEnd: report.sourceEnd, sourceEndError: report.sourceEndError, cleanup: report.cleanup, evidenceErrors: report.evidenceErrors, collectionSealed: sealed, completeReportSaved: saves.some(row => row.file === 'result.json' && row.status === 'PASS'), saves });
+  }
+}
 
 /** 只允许完整真实候选报告通过；单元替身和编写阶段不能借此升级成 E2。 */
 export function assertCompleteReport(report) {

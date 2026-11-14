@@ -10,7 +10,7 @@ import { accepted, take, share, cleanupPublic } from '../../backend/test-support
 import { sampleSharedPersonalEffects, assertBothActiveEffects, assertSharedStoppedEffects, assertSharedStopTransaction, assertOriginalReceiptRead, tracePersonalTransactions } from '../../backend/test-support/personal-shared-effects.mjs';
 import { repository, sourceIdentity, saveJSON, sha256, until, sleep } from './network-support.mjs';
 import { browserRoom, snapshot, clientState, openReading } from './gaolao-real-support.mjs';
-import { productionProfile, caseIds, assertCompleteReport, clickAction, askAppearance, describeItems, askItems, personalState, cancelPersonal, returnItem, holdSubmissions, holdCommittedReceipt, deferLeaseMaintenance, authoritativeState, sceneDecision, assertRoomIdentity } from './cuilan-self-response-support.mjs';
+import { productionProfile, caseIds, assertCompleteReport, clickAction, askAppearance, describeItems, askItems, personalState, cancelPersonal, returnItem, holdSubmissions, holdCommittedReceipt, deferLeaseMaintenance, authoritativeState, sceneDecision, assertRoomIdentity, createCuilanReportCollector, finalizeCuilanReport } from './cuilan-self-response-support.mjs';
 
 const output = resolve(process.env.FRONTEND_EVIDENCE_DIR || resolve(repository, '.agent-output/cuilan-production-browser'));
 await mkdir(output, { recursive: true });
@@ -26,6 +26,7 @@ const report = {
 };
 let database, server, browser, activeRoom, serverPort, activeCase;
 const vites = [], rooms = [], restorers = new Set();
+const collector = createCuilanReportCollector(error => report.pageErrors.push({ message: '证据采集失败：' + error.message }));
 const workflow = resolve(repository, '.github/workflows/cuilan-self-response.yml');
 report.workflowSha256 = sha256(await readFile(workflow));
 await saveJSON(resolve(output, 'startup.json'), { source: report.source, startedAt: report.startedAt, command: 'node frontend/tests/cuilan-self-response-browser.mjs', workflowSha256: report.workflowSha256 });
@@ -44,19 +45,19 @@ async function picture(room, label, player = 0) {
 }
 function instrumentPage(page) {
   const pageId = crypto.randomUUID();
-  page.on('request', request => {
+  collector.observe(page, 'request', request => {
     const url = new URL(request.url());
     if (['http:', 'https:'].includes(url.protocol) && !['127.0.0.1', 'localhost'].includes(url.hostname)) report.externalRequests.push({ pageId, origin: url.origin, path: url.pathname });
     if (url.pathname === '/api/sessions' && request.method() === 'POST') report.creationRequests.push({ pageId, request: request.postDataJSON() });
   });
-  page.on('websocket', socket => socket.on('framesent', frame => {
+  collector.observe(page, 'websocket', socket => collector.observe(socket, 'framesent', frame => {
     const text = String(frame.payload); if (!/^42\d*\[/.test(text)) return;
     try {
       const [event, value] = JSON.parse(text.replace(/^42\d*/, ''));
       if (event === 'player.action.request') report.wireActions.push({ pageId, request: JSON.parse(value) });
     } catch (error) { report.pageErrors.push({ message: '实际动作帧无法读取：' + error.message }); }
   }));
-  page.on('response', async response => {
+  collector.observe(page, 'response', async response => {
     if (!/\/actions\//.test(new URL(response.url()).pathname) || !response.ok()) return;
     try { report.httpReceipts.push({ pageId, receivedAt: new Date().toISOString(), receipt: await response.json(), viewId: (await snapshot(page))?.viewId }); } catch (error) { report.pageErrors.push({ message: '实际收据响应无法读取：' + error.message }); }
   });
@@ -82,7 +83,7 @@ async function startFrontend(contentVersion) {
 async function newRoom(baseURL, contentVersion, { count = 2, defaultEntry = false } = {}) {
   // getter 只为同一实际服务器重启换 runtime；生产适配器重绑仍限固定三 NPC。
   const facade = { get runtime() { return server.runtime; } };
-  const room = await browserRoom({ server: facade, browser: instrumentedBrowser, baseURL, contentVersion, count, profile: productionProfile, report });
+  const room = await browserRoom({ server: facade, browser: instrumentedBrowser, baseURL, contentVersion, count, profile: productionProfile, report, observe: collector.observe });
   room.report = report; room.baseURL = baseURL; rooms.push(room); activeRoom = room;
   report.rooms.push(await assertRoomIdentity(room, database.pool, { defaultEntry }));
   assert.ok(report.creationRequests.some(row => row.request.contentVersion === contentVersion && row.request.capabilities.includes('gaolao-personal-consent-v1')));
@@ -395,6 +396,9 @@ async function leaseFault(baseURL) {
   const active = sampleSharedPersonalEffects(before, context); assertBothActiveEffects(active);
   report.leaseFault.sharedEffects = { before: active, applyReceipt, originalTake: original };
   const actor = before.characters[actorId], connectionId = actor.activeConnectionId;
+  const viewBeforeFault = await snapshot(room.pages[player]), oldView = viewBeforeFault?.viewId;
+  assert.ok(oldView, '租约故障前保留本次真实页面的原 view 身份');
+  report.leaseFault.viewBeforeFault = { viewId: oldView, snapshotSeq: viewBeforeFault.snapshotSeq, observedAt: new Date().toISOString() };
   const gate = deferLeaseMaintenance(server.runtime, room.sessionId, connectionId); restorers.add(gate);
   const trace = tracePersonalTransactions(server.runtime, room.sessionId, context); restorers.add(trace);
   try {
@@ -434,7 +438,6 @@ async function leaseFault(baseURL) {
     report.leaseFault.samples.push({ at: new Date().toISOString(), phase: 'expired-and-checked', leases: expired, epochAtExpiry: atExpiry.characters[actorId].controlEpoch, rejected, calls: { ...gate.calls }, windowEvents, firstInvalidation: invalidation });
     assert.ok(gate.calls.droppedHeartbeat > 0 && gate.calls.otherHeartbeat > 0 && gate.calls.deferredMaintenance > 0);
   } finally { gate.close(); restorers.delete(gate); trace.close(); restorers.delete(trace); }
-  const oldView = (await snapshot(room.pages[player])).viewId;
   await recoverPlayer(room, player); await until(async () => !(await snapshot(room.pages[0])).projection.paused, '故障恢复后人数和控制恢复');
   assert.notEqual((await snapshot(room.pages[player])).viewId, oldView);
   const newView = await snapshot(room.pages[player]), remaining = newView.projection.chapter.privateReturns.find(row => row.returnContextId === context.acquisitionId);
@@ -486,20 +489,13 @@ try {
     report.failureTail ??= []; report.failureTail.push({ player, snapshot: await snapshot(page).catch(() => null), client: await clientState(page).catch(() => null), visibleText: await page.locator('body').innerText().catch(() => '') });
   }
 } finally {
-  for (const restore of restorers) restore.close(); restorers.clear();
-  await saveJSON(resolve(output, 'result-before-cleanup.json'), report);
-  for (const [name, created, close] of [['browser', Boolean(browser), () => browser.close()], ...vites.map((vite, index) => ['vite-' + index, true, () => vite.close()]), ['server', Boolean(server), () => server.close()], ['postgres', Boolean(database), () => database.stop()]]) {
-    if (!created) { report.cleanup.push({ name, status: 'NOT_CREATED' }); continue; }
-    try { await close(); report.cleanup.push({ name, status: 'PASS' }); }
-    catch (error) { report.cleanup.push({ name, status: 'FAIL', error: error.message }); }
-  }
-  report.resourcesClosed = report.cleanup.every(row => ['PASS', 'NOT_CREATED'].includes(row.status)); report.finishedAt = new Date().toISOString();
-  report.sourceEnd = await sourceIdentity();
-  try {
-    assert.equal(sha256(await readFile(workflow)), report.workflowSha256);
-    if (report.assessment === 'CHECKS_COMPLETE') { assertCompleteReport(report); report.assessment = 'PASS'; }
-  } catch (error) { report.assessment = 'FAIL'; report.finalAuditError = error.stack; }
-  await saveJSON(resolve(output, 'result.json'), report);
+  await finalizeCuilanReport({ report, output, restorers, stopCollecting: collector.stop,
+    resources: [['browser', Boolean(browser), () => browser.close()], ...vites.map((vite, index) => ['vite-' + index, true, () => vite.close()]), ['server', Boolean(server), () => server.close()], ['postgres', Boolean(database), () => database.stop()]],
+    readSource: sourceIdentity, audit: async () => {
+      assert.equal(sha256(await readFile(workflow)), report.workflowSha256);
+      if (report.assessment === 'CHECKS_COMPLETE') { assertCompleteReport(report); report.assessment = 'PASS'; }
+    } });
+  restorers.clear();
   console.log(JSON.stringify({ assessment: report.assessment, cases: report.cases.map(row => ({ id: row.id, status: row.status })), output }));
   if (report.assessment !== 'PASS') process.exitCode = 1;
 }

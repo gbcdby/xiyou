@@ -204,7 +204,7 @@ export async function humanAction(page, action, report, player) {
   return waitHumanReceipt(page, previousIds, action, report, player, label);
 }
 
-export async function browserRoom({ server, browser, baseURL, count, contentVersion, profile = 'legacy-controlled-v1', report }) {
+export async function browserRoom({ server, browser, baseURL, count, contentVersion, profile = 'legacy-controlled-v1', report, observe = (target, event, listener) => target.on(event, listener) }) {
   assert.ok(['legacy-controlled-v1', 'production-cuilan-v1'].includes(profile), '未知高老庄浏览器 profile，不得静默降级为受控本人');
   const production = profile === 'production-cuilan-v1';
   assert.ok(!production || typeof contentVersion === 'string', '生产 profile 必须显式固定内容版本，不得沿用旧回归默认值');
@@ -214,8 +214,8 @@ export async function browserRoom({ server, browser, baseURL, count, contentVers
   for (let index = 0; index < count; index++) {
     const context = await browser.newContext({ viewport: { width: 1600, height: 1000 }, deviceScaleFactor: 1 }); contexts.push(context);
     const page = await context.newPage(); pages.push(page); page.setDefaultTimeout(5000);
-    page.on('pageerror', error => report.pageErrors.push({ count, player: index, message: error.message }));
-    page.on('response', async response => {
+    observe(page, 'pageerror', error => report.pageErrors.push({ count, player: index, message: error.message }));
+    observe(page, 'response', async response => {
       if (!response.url().includes('/recap?')) return;
       try {
         const text = await response.text(); const result = JSON.parse(text);
