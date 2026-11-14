@@ -1,0 +1,683 @@
+{
+  "schema_version": 1,
+  "tool": {
+    "version": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "source": {
+    "commit": "76d98e137f5220518b072650ba6af8001966ea23",
+    "tree": "18287fbcde9590c6ce83a82ee747dfafaccdfe46",
+    "revision": "CS-R1",
+    "mode": "design/check",
+    "implementation_status": "NOT_ASSESSED"
+  },
+  "model": {
+    "root": "model",
+    "entry": "PersonalRecovery.tla"
+  },
+  "profiles": {
+    "recovery-appearance": {
+      "config": "recovery-appearance.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "SingleUnsettled",
+        "OriginalIdentityStable",
+        "ReceiptStable",
+        "EffectAtMostOnce",
+        "PendingPurposesPreserved",
+        "CapacitySufficient"
+      ],
+      "expected_properties": [
+        "BothPurposesProgress"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "MaxIntents": 4,
+          "FailuresBefore": 1,
+          "FailuresAfter": 1,
+          "AllowRestart": true,
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 10000,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。",
+        "活性只对已允许评估的有限语义/内部提交/恢复/已提交首次通知加弱公平；不假设旁观NPC离开。"
+      ]
+    },
+    "recovery-private": {
+      "config": "recovery-private.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "SingleUnsettled",
+        "OriginalIdentityStable",
+        "ReceiptStable",
+        "EffectAtMostOnce",
+        "PendingPurposesPreserved",
+        "CapacitySufficient"
+      ],
+      "expected_properties": [
+        "BothPurposesProgress"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "private_items",
+          "MaxIntents": 4,
+          "FailuresBefore": 1,
+          "FailuresAfter": 1,
+          "AllowRestart": true,
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 10000,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。",
+        "活性只对已允许评估的有限语义/内部提交/恢复/已提交首次通知加弱公平；不假设旁观NPC离开。"
+      ]
+    },
+    "recovery-expanded-capacity": {
+      "config": "recovery-expanded-capacity.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "SingleUnsettled",
+        "OriginalIdentityStable",
+        "ReceiptStable",
+        "EffectAtMostOnce",
+        "PendingPurposesPreserved",
+        "CapacitySufficient"
+      ],
+      "expected_properties": [
+        "BothPurposesProgress"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "MaxIntents": 5,
+          "FailuresBefore": 1,
+          "FailuresAfter": 1,
+          "AllowRestart": true,
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 10000,
+        "note": "容量从4到5；检查原边界未阻断必需新尝试。",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。",
+        "活性只对已允许评估的有限语义/内部提交/恢复/已提交首次通知加弱公平；不假设旁观NPC离开。"
+      ]
+    },
+    "recovery-retry-bound": {
+      "config": "recovery-retry-bound.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "SingleUnsettled",
+        "OriginalIdentityStable",
+        "ReceiptStable",
+        "EffectAtMostOnce",
+        "PendingPurposesPreserved",
+        "CapacitySufficient"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "MaxIntents": 4,
+          "FailuresBefore": 4,
+          "FailuresAfter": 0,
+          "AllowRestart": true,
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 10000,
+        "note": "允许技术故障超过3次，检查进入人工待恢复且身份仍保留；不承诺活性。",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "recovery-negative-type": {
+      "config": "recovery-negative-type.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "MaxIntents": 4,
+          "FailuresBefore": 1,
+          "FailuresAfter": 1,
+          "AllowRestart": true,
+          "Fault": "type",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "recovery-negative-unknown-new-id": {
+      "config": "recovery-negative-unknown-new-id.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "SingleUnsettled"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "MaxIntents": 4,
+          "FailuresBefore": 1,
+          "FailuresAfter": 1,
+          "AllowRestart": true,
+          "Fault": "unknown-new-id",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "recovery-negative-rewrite-original": {
+      "config": "recovery-negative-rewrite-original.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "OriginalIdentityStable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "MaxIntents": 4,
+          "FailuresBefore": 1,
+          "FailuresAfter": 1,
+          "AllowRestart": true,
+          "Fault": "rewrite-original",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "recovery-negative-receipt-after-validation": {
+      "config": "recovery-negative-receipt-after-validation.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "ReceiptStable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "MaxIntents": 4,
+          "FailuresBefore": 1,
+          "FailuresAfter": 1,
+          "AllowRestart": true,
+          "Fault": "receipt-after-validation",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "recovery-negative-repeat-effect": {
+      "config": "recovery-negative-repeat-effect.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "EffectAtMostOnce"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "MaxIntents": 4,
+          "FailuresBefore": 1,
+          "FailuresAfter": 1,
+          "AllowRestart": true,
+          "Fault": "repeat-effect",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "recovery-negative-consume-all": {
+      "config": "recovery-negative-consume-all.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "PendingPurposesPreserved"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "MaxIntents": 4,
+          "FailuresBefore": 1,
+          "FailuresAfter": 1,
+          "AllowRestart": true,
+          "Fault": "consume-all",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "recovery-negative-recovery-drops-other": {
+      "config": "recovery-negative-recovery-drops-other.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "PendingPurposesPreserved"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "MaxIntents": 4,
+          "FailuresBefore": 1,
+          "FailuresAfter": 1,
+          "AllowRestart": true,
+          "Fault": "recovery-drops-other",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "recovery-negative-capacity": {
+      "config": "recovery-negative-capacity.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "CapacitySufficient"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "MaxIntents": 2,
+          "FailuresBefore": 1,
+          "FailuresAfter": 1,
+          "AllowRestart": true,
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 10,
+        "note": "故意过小容量应使义务报错，不能让边界挡住工作后声称通过。",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "recovery-witness-both-complete": {
+      "config": "recovery-witness-both-complete.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "MaxIntents": 4,
+          "FailuresBefore": 1,
+          "FailuresAfter": 1,
+          "AllowRestart": true,
+          "Fault": "none",
+          "Probe": "both-complete"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "recovery-witness-unknown-before": {
+      "config": "recovery-witness-unknown-before.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "MaxIntents": 4,
+          "FailuresBefore": 1,
+          "FailuresAfter": 1,
+          "AllowRestart": true,
+          "Fault": "none",
+          "Probe": "unknown-before"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "recovery-witness-unknown-after": {
+      "config": "recovery-witness-unknown-after.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "MaxIntents": 4,
+          "FailuresBefore": 1,
+          "FailuresAfter": 1,
+          "AllowRestart": true,
+          "Fault": "none",
+          "Probe": "unknown-after"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "recovery-witness-new-while-unknown": {
+      "config": "recovery-witness-new-while-unknown.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "MaxIntents": 4,
+          "FailuresBefore": 1,
+          "FailuresAfter": 1,
+          "AllowRestart": true,
+          "Fault": "none",
+          "Probe": "new-while-unknown"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "recovery-witness-restart-recovered": {
+      "config": "recovery-witness-restart-recovered.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "MaxIntents": 4,
+          "FailuresBefore": 1,
+          "FailuresAfter": 1,
+          "AllowRestart": true,
+          "Fault": "none",
+          "Probe": "restart-recovered"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "recovery-witness-retry-exhausted": {
+      "config": "recovery-witness-retry-exhausted.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "MaxIntents": 4,
+          "FailuresBefore": 4,
+          "FailuresAfter": 0,
+          "AllowRestart": true,
+          "Fault": "none",
+          "Probe": "retry-exhausted"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    }
+  }
+}

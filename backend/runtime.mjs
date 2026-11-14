@@ -15,6 +15,7 @@ import { readRecap } from './recap.mjs';
 import { parseStrictJSON } from '../protocol/index.mjs';
 import { parseSpatial, validateSpatial } from '../protocol/spatial.mjs';
 import { isGaolao } from '../game/gaolao-world.mjs';
+import { stopPersonalForEvent } from '../game/gaolao-personal.mjs';
 import { isSpatial, ensureView } from '../game/spatial-world.mjs';
 import * as spatial from './spatial-runtime.mjs';
 import * as scenePolicy from './scene-policy.mjs';
@@ -103,6 +104,7 @@ export class AuthorityRuntime extends EventEmitter {
       client, row, content: row.content_snapshot, state: structuredClone(row.state), events: [], invalidated: new Map(), afterCommit: [], afterFinish: [], cause,
       time: new Date(Math.max(runtime.now(), new Date(row.logical_time).getTime())).toISOString(), clockTouched: false,
       emit(kind, payload, audience = everyone(tx.state), eventCause = tx.cause) {
+        if (['session.finished','session.aborted'].includes(kind)) stopPersonalForEvent(tx, {kind});
         if (kind === 'control.changed') {
           const oldActor = ownRecord(tx.state.characters, payload.actorId);
           const oldConnection = oldActor?.activeConnectionId;
@@ -113,7 +115,9 @@ export class AuthorityRuntime extends EventEmitter {
         const sessionSeq = increment(tx.state.sessionSeq);
         const candidate = { schemaVersion: isSpatial(tx.state) ? 2 : 1, sessionId: row.session_id, sessionSeq, eventId: `${row.session_id}:E${sessionSeq}`, causedBy: eventCause ?? { principalId: 'system', actionId: 'spatial-view' }, serverTime: tx.time, audience, kind, payload };
         const event = isSpatial(tx.state) ? candidate : validateContract('WorldEvent', candidate);
-        tx.state = reduceWorld(tx.state, event, tx.content); tx.events.push(event); return event;
+        tx.state = reduceWorld(tx.state, event, tx.content); tx.events.push(event);
+        if(kind==='control.changed')stopPersonalForEvent(tx,event);
+        return event;
       },
     };
     return tx;
@@ -222,7 +226,7 @@ export class AuthorityRuntime extends EventEmitter {
     let content;
     try { content = await loadContent(contentVersion); }
     catch { throw new RuntimeError('INVALID_MESSAGE', '内容版本当前不可用。'); }
-    if (content.protocolCapability === 'spatial-v2') spatial.requireSpatialCapability(capabilities);
+    if (content.protocolCapability === 'spatial-v2') spatial.requireSpatialCapability(capabilities, content);
     const client = await this.pool.connect();
     try {
       await client.query('BEGIN');
@@ -252,13 +256,13 @@ export class AuthorityRuntime extends EventEmitter {
   }
   async listSessions(token) {
     const user = await this.authenticate(token);
-    const rows = (await this.pool.query("SELECT session_id,name,jsonb_array_length(state->'members') AS player_count,state->>'phase' AS phase,state->>'protocolCapability' AS capability,state->>'contentVersion' AS content_version FROM sessions s WHERE NOT archived AND (state->>'phase'='Lobby' OR EXISTS (SELECT 1 FROM session_access a WHERE a.session_id=s.session_id AND a.user_id=$1 AND a.active)) ORDER BY session_id", [user.userId])).rows;
-    return rows.map(row => ({ sessionId: row.session_id, name: row.name, playerCount: row.player_count, phase: row.phase, ...(row.capability === 'spatial-v2' ? { protocolCapability: 'spatial-v2', contentVersion: row.content_version, requiredCapabilities: ['spatial-v2'] } : {}) }));
+    const rows = (await this.pool.query("SELECT session_id,name,jsonb_array_length(state->'members') AS player_count,state->>'phase' AS phase,state->>'protocolCapability' AS capability,state->>'contentVersion' AS content_version,jsonb_build_object('contentVersion',state->>'contentVersion','chapterVersion',state->>'chapterVersion','mapVersion',state->>'mapVersion','variantId',state->>'variantId','reducerVersion',state->>'reducerVersion') AS profile FROM sessions s WHERE NOT archived AND (state->>'phase'='Lobby' OR EXISTS (SELECT 1 FROM session_access a WHERE a.session_id=s.session_id AND a.user_id=$1 AND a.active)) ORDER BY session_id", [user.userId])).rows;
+    return rows.map(row => ({ sessionId: row.session_id, name: row.name, playerCount: row.player_count, phase: row.phase, ...(row.capability === 'spatial-v2' ? { protocolCapability: 'spatial-v2', contentVersion: row.content_version, requiredCapabilities: spatial.requiredSpatialCapabilities(row.profile) } : {}) }));
   }
   async join(token, sessionId, { nonce, capabilities = [] }) {
     await this.authenticate(token);
     return this.locked(sessionId, { kind: 'join' }, async tx => {
-      if (isSpatial(tx.state)) spatial.requireSpatialCapability(capabilities);
+      if (isSpatial(tx.state)) spatial.requireSpatialCapability(capabilities, tx.state);
       const user = await this.authenticate(token, tx.client);
       if (tx.state.members.some(m => m.userId === user.userId)) await this.access(tx.client, tx.row, token);
       tx.cause = { principalId: user.principalId, actionId: nonce };
@@ -321,7 +325,7 @@ export class AuthorityRuntime extends EventEmitter {
     await this.authenticate(token);
     return this.locked(sessionId, { kind: 'snapshot' }, async tx => {
       const user = await this.access(tx.client, tx.row, token);
-      if (isSpatial(tx.state)) { spatial.requireSpatialCapability(capabilities); await spatial.advanceSpatialTime(tx); return spatial.snapshotSpatial(tx, user.actorId, { capabilities }); }
+      if (isSpatial(tx.state)) { spatial.requireSpatialCapability(capabilities, tx.state); await spatial.advanceSpatialTime(tx); return spatial.snapshotSpatial(tx, user.actorId, { capabilities }); }
       return validateContract('AuthorizedSnapshot', { schemaVersion: 1, type: 'world.snapshot', sessionId, viewId: `${user.actorId}:http-v1`, snapshotSeq: tx.state.sessionSeq, projection: authorizedProjection(tx.state, tx.content, user.actorId) });
     });
   }
@@ -423,7 +427,7 @@ export class AuthorityRuntime extends EventEmitter {
       if (isSpatial(tx.state)) {
         // 取得同会话行锁后再裁定选择代次；不能旋转一个已不允许安装的旧选择。
         if (scope.generation < connection.viewScopeFence) throw new RuntimeError('RESYNC_REQUIRED', '当前连接已经采用较新的会话选择。');
-        spatial.requireSpatialCapability(connection.capabilities); await spatial.advanceSpatialTime(tx);
+        spatial.requireSpatialCapability(connection.capabilities, tx.state); await spatial.advanceSpatialTime(tx);
         const current = tx.state.characters[user.actorId];
         // 另一条只读连接不能借订阅撤销当前控制者的引用；真正接管才更换控制视图。
         const heldElsewhere = current.mode === 'HumanControlled' && current.activeConnectionId !== handle.connectionId;

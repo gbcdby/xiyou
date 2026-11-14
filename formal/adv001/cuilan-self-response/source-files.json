@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "source_commit": "76d98e137f5220518b072650ba6af8001966ea23",
+  "source_tree": "18287fbcde9590c6ce83a82ee747dfafaccdfe46",
+  "design": "CS-R1",
+  "implementation_status": "NOT_ASSESSED",
+  "files": {
+    "docs/specs/gaolao-scene-policy.md": {
+      "sha256": "6bd14003d119e15a70ac73a82f4da47ca2bea1e4d9eeb186c3bedba158add6e7",
+      "bytes": 103696
+    },
+    "docs/specs/adv-protocol.md": {
+      "sha256": "6ad29d23e40a2ea025e7e8bb2d6040ffc1fb5cb1d940f5b18c1cf52f57607ed4",
+      "bytes": 33120
+    },
+    "docs/specs/README.md": {
+      "sha256": "79a3657ae59b370caedc377686496555308b0f4f88b2cdf2f3f4efd2a1ee9aca",
+      "bytes": 4485
+    },
+    "AGENTS.md": {
+      "sha256": "9e173fff03f73b349c9c7469d10613a99fad53e085967b90f83ab435ccc190c4",
+      "bytes": 2843
+    },
+    "docs/engineering.md": {
+      "sha256": "cb8bb1125eb52a85d3fc0afd0b4131be9bf40d143e03a20181de4e72b9bd4559",
+      "bytes": 7822
+    },
+    "docs/agents/workflow.md": {
+      "sha256": "13baab7f28f0f444eb4988bd3675c48413ef3f838f0efda1e8037fae84820877",
+      "bytes": 4984
+    },
+    "formal/adv001/scene-policy/model/SceneRequest.tla": {
+      "sha256": "b426837ae8704ce9610edd613ee97728b85947ac103f6629ebe98323e537bea1",
+      "bytes": 19696
+    },
+    "formal/adv001/scene-policy/model/SceneFollow.tla": {
+      "sha256": "61c550a71cdeaced28c77bb44347b9f355b015018032fe6e988dfb62b8cb3049",
+      "bytes": 11282
+    },
+    "formal/adv001/follow-proposal/model/FollowProposal.tla": {
+      "sha256": "8613b929dea9a4c711ed0f93eb29d76497922e4fe6062062fa61e2f76e92d82b",
+      "bytes": 17531
+    },
+    ".agents/skills/worker-tla/scripts/run_tlc.py": {
+      "sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "bytes": 25755
+    }
+  }
+}

@@ -1,0 +1,85 @@
+name: 翠兰本人生产流程
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cuilan-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  production-cuilan:
+    name: 两人正常页面、独立租约与进程故障
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      CI: 'true'
+      CHROMIUM_ARGS: '[]'
+      FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-cuilan-self-response
+      CUILAN_RESTART_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/cuilan-process-restart
+    steps:
+      - name: 读取固定候选
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: 准备 Node.js 24
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            frontend/package-lock.json
+      - name: 安装已锁定依赖
+        id: dependencies
+        run: |
+          npm ci
+          npm ci --prefix frontend
+      - name: 核对检查器与控制边界
+        run: node --test frontend/tests/cuilan-self-response-*.test.mjs
+      - name: B真实双用途生效后进程恢复与原收据
+        if: ${{ !cancelled() && steps.dependencies.outcome == 'success' }}
+        timeout-minutes: 5
+        shell: bash
+        # 单列真实PG/HTTP/Socket生产scene故障；固定测试钟，不冒称普通Vue样本。
+        run: |
+          mkdir -p "$CUILAN_RESTART_EVIDENCE_DIR"
+          set -o pipefail
+          CUILAN_EXPECTED_TREE="$(git rev-parse 'HEAD^{tree}')" npm run test:fault:cuilan-restart --prefix frontend 2>&1 | tee "$CUILAN_RESTART_EVIDENCE_DIR/stdout.log"
+      - name: 安装已锁定 Chromium
+        id: chromium
+        if: ${{ !cancelled() && steps.dependencies.outcome == 'success' }}
+        working-directory: frontend
+        run: npx --no-install playwright install --with-deps chromium
+      - name: 真实两人本人流程与单列三人租约故障
+        if: ${{ !cancelled() && steps.dependencies.outcome == 'success' && steps.chromium.outcome == 'success' }}
+        timeout-minutes: 38
+        shell: bash
+        # 不覆写默认高老庄内容，不配置或调用外部模型；新流程不替代旧A2、P0-P8或900秒。
+        run: |
+          mkdir -p "$FRONTEND_EVIDENCE_DIR"
+          set -o pipefail
+          CUILAN_EXPECTED_TREE="$(git rev-parse 'HEAD^{tree}')" npm run test:browser:cuilan-self-response --prefix frontend 2>&1 | tee "$FRONTEND_EVIDENCE_DIR/stdout.log"
+      - name: 保留具名证据与失败尾段
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: cuilan-production-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            .agent-output/ci/browser-cuilan-self-response/startup.json
+            .agent-output/ci/browser-cuilan-self-response/result-before-cleanup.json
+            .agent-output/ci/browser-cuilan-self-response/result.json
+            .agent-output/ci/browser-cuilan-self-response/stdout.log
+            .agent-output/ci/browser-cuilan-self-response/*.png
+            .agent-output/ci/cuilan-process-restart/startup.json
+            .agent-output/ci/cuilan-process-restart/result-before-cleanup.json
+            .agent-output/ci/cuilan-process-restart/result.json
+            .agent-output/ci/cuilan-process-restart/stdout.log
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 7

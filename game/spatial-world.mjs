@@ -1,8 +1,9 @@
 import { gaolaoObjectVisual } from '../content/gaolao-object-visuals.mjs';
 import { randomBytes } from 'node:crypto';
-import { validateSpatial } from '../protocol/spatial.mjs';
+import { validateSpatial, gaolaoPersonalProfile } from '../protocol/spatial.mjs';
 import { distance, clearSegment } from './spatial-geometry.mjs';
-import { isGaolao, setupGaolaoState, observerName, projectGaolao, gaolaoOperations } from './gaolao-world.mjs';
+import { isGaolao, emptyGaolaoChapter, setupGaolaoState, observerName, projectGaolao, gaolaoOperations } from './gaolao-world.mjs';
+import { createPersonalState } from './gaolao-personal-contract.mjs';
 import { RuleError } from './rules.mjs';
 import { visibleAppearance } from './spatial-appearance.mjs';
 export const opaqueRef = () => 'R' + randomBytes(24).toString('base64url');
@@ -17,13 +18,13 @@ function safeProjection(value) {
     }
 }
 export function emptySpatialWorld(sessionId, content) {
-    return { sessionId, sessionSeq: '0', protocolCapability: 'spatial-v2', contentVersion: content.contentVersion, reducerVersion: content.reducerVersion, chapterVersion: content.chapterVersion, mapVersion: content.mapVersion, variantId: content.variantId, hostUserId: null, seed: null, phase: 'Lobby', members: [], characters: {}, items: {}, targets: {}, observations: {}, claims: {}, cooperations: {}, views: {}, sceneTimeMs: 0, wallAnchorMs: null, paused: true, onlineMembershipVersion: '0', ending: null };
+    return { sessionId, sessionSeq: '0', protocolCapability: 'spatial-v2', contentVersion: content.contentVersion, reducerVersion: content.reducerVersion, chapterVersion: content.chapterVersion, mapVersion: content.mapVersion, variantId: content.variantId, hostUserId: null, seed: null, phase: 'Lobby', members: [], characters: {}, items: {}, targets: {}, observations: {}, claims: {}, cooperations: {}, views: {}, sceneTimeMs: 0, wallAnchorMs: null, paused: true, onlineMembershipVersion: '0', ending: null, ...(gaolaoPersonalProfile(content)?{chapter:{...emptyGaolaoChapter(),...createPersonalState()}}:{}) };
 }
 function actor(id, name, actorKind = 'human') {
     return { characterId: id, name, appearanceName: name, appearanceEpoch: '0', kind: actorKind === 'human' ? 'human' : 'core_npc', actorKind, sceneId: null, position: null, facing: 'S', spatialRevision: '0', resourceRevision: '0', controlEpoch: '0', mode: 'Revoked', activeConnectionId: null, graceDeadlineAt: null, movement: null, planVersion: '0', capabilities: ['move_to', 'stop_move', 'inspect', 'take_item', 'put_item', 'transfer_item', 'reclaim_public_item', 'cooperate', 'interact', 'speak', 'make_claim', 'share_evidence', 'wait'] };
 }
 export function reduceSpatialWorld(previous, event, content) {
-    if (!['spatial-world-v2','gaolao-world-v1'].includes(previous.reducerVersion) || content.reducerVersion !== previous.reducerVersion || event.schemaVersion !== 2 || event.sessionId !== previous.sessionId || event.sessionSeq !== next(previous.sessionSeq))
+    if ((!['spatial-world-v2','gaolao-world-v1'].includes(previous.reducerVersion) && !(gaolaoPersonalProfile(previous)&&gaolaoPersonalProfile(content))) || content.reducerVersion !== previous.reducerVersion || event.schemaVersion !== 2 || event.sessionId !== previous.sessionId || event.sessionSeq !== next(previous.sessionSeq))
         throw new Error('空间事件不属于当前解释器的连续前缀。');
     // 旧版本曾在终态记录 spatial.view；保留原日志回放，新读取由 ensureView 保持只读。
     if (['Finished', 'Aborted'].includes(previous.phase) && event.kind !== 'spatial.view')

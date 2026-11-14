@@ -1,9 +1,10 @@
 import released from '../assets/gaolao-object-art.json' with { type: 'json' };
 import type { ItemViewV2, TargetViewV2, SnapshotV2 } from '../../../game/spatial-types.ts';
+import { gaolaoPersonalProfile, gaolaoPersonalProfiles } from '../../../protocol/spatial.mjs';
 
 export type ObjectArtSurface = 'map' | 'inventory';
 export type ObjectArtVariant = 'loose' | 'fixed' | 'icon' | 'default' | 'closed' | 'open';
-export type ObjectArtContext = { sessionId: string; viewId: string; contentVersion: string; mapVersion: string; sceneId: string | null };
+export type ObjectArtContext = { sessionId: string; viewId: string; contentVersion: string; mapVersion: string; sceneId: string | null; chapterVersion?: string; reducerVersion?: string; variantId?: string };
 export type ObjectArtAsset = { file: string; width: number; height: number; pivot: { x: number; y: number }; scale: number; layer: 'object'; offset?: { x: number; y: number } };
 export type ObjectArtCatalog = Readonly<Record<string, { contentVersion: string; mapVersion: string; sceneId: string; variants: Partial<Record<ObjectArtVariant, ObjectArtAsset>> }>>;
 export type ObjectArtFrame = { file: string; variant: ObjectArtVariant; layer: 'object'; bounds: { x: number; y: number; width: number; height: number } };
@@ -13,7 +14,15 @@ type PublicObject = ItemViewV2 | TargetViewV2;
 /** 已获准的明确条目；构建检查校验 JSON 合同，缺变体或 scope 不匹配时仍保留原图形与操作。 */
 export const objectArtCatalog = released as ObjectArtCatalog;
 export function objectArtContext(snapshot: SnapshotV2): ObjectArtContext {
-  return { sessionId: snapshot.sessionId, viewId: snapshot.viewId, contentVersion: snapshot.projection.contentVersion, mapVersion: snapshot.projection.mapVersion, sceneId: snapshot.projection.scene?.sceneId ?? null };
+  const p = snapshot.projection;
+  return { sessionId: snapshot.sessionId, viewId: snapshot.viewId, contentVersion: p.contentVersion, mapVersion: p.mapVersion, sceneId: p.scene?.sceneId ?? null, chapterVersion: p.chapterVersion, reducerVersion: p.reducerVersion, variantId: p.variantId };
+}
+/** 仅固定新默认复用同几何 catalog；不以版本前缀或未知布局借用默认资源。 */
+export function objectArtContentVersion(context: ObjectArtContext): string | null {
+  if (!gaolaoPersonalProfiles.some(profile => profile.contentVersion === context.contentVersion)) return context.contentVersion;
+  const profile = gaolaoPersonalProfile(context);
+  if (!profile) return null;
+  return profile.contentVersion === 'gaolaozhuang-scene-v3' ? 'gaolaozhuang-scene-v2' : profile.contentVersion;
 }
 export const objectInstanceKey = (context: ObjectArtContext, object: PublicObject) => JSON.stringify([context.sessionId, context.viewId, object.entityRef]);
 /** 同一ref换图或重试也必须撤销旧几何；未失败不等于已经画出图片。 */
@@ -52,7 +61,7 @@ export function selectObjectArt(object: PublicObject, context: ObjectArtContext,
   const variant = objectVisualVariant(object, context, surface), key = object.visualKey;
   if (variant === 'hidden' || variant === 'invalid' || !key || !Object.hasOwn(catalog, key)) return null;
   const entry = catalog[key];
-  if (entry.contentVersion !== context.contentVersion || entry.mapVersion !== context.mapVersion || entry.sceneId !== context.sceneId || !Object.hasOwn(entry.variants, variant)) return null;
+  if (entry.contentVersion !== objectArtContentVersion(context) || entry.mapVersion !== context.mapVersion || entry.sceneId !== context.sceneId || !Object.hasOwn(entry.variants, variant)) return null;
   const asset = entry.variants[variant];
   if (!asset) return null;
   // 文件只来自静态目录的明确条目，绝不从 key/ref/name 拼接路径。

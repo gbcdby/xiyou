@@ -4,6 +4,8 @@
 
 本模块落实 [#34](https://github.com/gbcdby/xiyou/issues/34) 下已采纳的 [scene_role N1–N6 合同](../docs/specs/gaolao-scene-policy.md)，发布工作归 [PR47](https://github.com/gbcdby/xiyou/pull/47)。本轮基础为 main `201f18349e0baca60a00f3b5ccaa32dc5278b101` / tree `730527715b46e39b077079515f95b74fc8f7d403`，与原实施输入 `819c8290` 完整同树。公开设计 blob 为 `f206953fe093d4d0a3e36bd773cf6a1819fadc47`。
 
+以上及下列 N1～N6 段落保留原 v1 实施范围。2026-11-14 的 **CS-T02** 在冻结 F1 `f96474f6d85d5bb6eb765f8c881d5f7aa7600e4f` / tree `ee9e2618a63541099e2242e1e93c4749fa95c484` 上增加 v2 控制器；新增范围与检查边界见文末，不把旧运行证据改记为新个人用途通过。唯一行为依据为 CS-R2，接点见 [F1 协议](../protocol/gaolao-personal-consent-v1.md)，Ticket/组合释放见 [CS-T02](../docs/specs/gaolao-cuilan-self-response-tasks.md)。
+
 只有两个新内容版本登记 `gaolao-cuilan-v1`：`gaolaozhuang-scene-v2` 与 `gaolaozhuang-tools-east-scene-v2`，章节版本均为 `gaolaozhuang-chapter-v2`。旧内容文件与旧 Session 快照保持原义；不能用新代码给旧局补写人物知识。客户端创建新局时须选择新版本，旧前端默认创建入口的映射属于独立配套。
 
 `createAuthorityServer` 创建并关闭一个 `attachScenePolicies` 实例；`createAIServer` 返回同一个 `scenePolicy`，另保留自主 NPC 的 `ai` 实例。重复 attach 返回已有实例。当前配置只登记真实翠兰；高太公和见证人的已有规则互动不被改成新自动选择。场景控制器不持有 Gateway，不调用 `ai_runs`、模型预留或三自主 NPC 调度接口。合法场景世界事件仍沿原受众规则提供给相关自主 NPC。
@@ -104,3 +106,34 @@ R-GZ-SP-IMPL-STD-001 的依赖一致性回归位于 `backend/tests/scene-policy-
 R-GZ-SP-IMPL-STD-002 的结果去重回归位于 `backend/tests/scene-policy-result-dedup.test.mjs`：原撤回被暂停拒绝，正常初始化已捕获旧语义后 resume 在读取前送达或真实 COMMIT 后迟通知，以及原拒绝 COMMIT 返回丢失时先恢复原身份。核对新尝试关联、不可变旧 Rejected、成功后再 resume 去重、旧通知重放/无关移动及纯恢复。原独立暂停/resume 红灯保留；作者检查仍不代替独立复审。
 
 这些是作者检查入口与实现说明，不代表独立需求/标准审查、TLC、新 UI 默认入口、完整 A3、真实模型供应商或发布已通过。新增形式化边界见 [scene 影响报告](../formal/adv001/scene-policy-impact.md)；后续必须对冻结源码单独核对。
+
+## CS-T02：v2 个人用途与安置后存活
+
+仅完整登记的 `gaolaozhuang-scene-v3 / gaolaozhuang-tools-east-scene-v3`、chapter-v3、`gaolao-world-v2`、原 layout/variant 和 `gaolao-cuilan-v2` 启用新增分支。内部 Snapshot 显式携带 `gaolao-personal-consent-v1` 能力。旧 v1/scene-v2 继续走原策略/解释；本控制器只登记真实翠兰，不处理八戒钉耙，不进入 Gateway 或三自主 NPC 模型队列。
+
+救援判断保持原相对顺序。safe/settled 只使救援无新动作；等待实际随行也不挡住合法私物请求的 C3。随后优先处理具有本份持久通知的本人撤回，再按原请求 sourceSeq 检查两用途 proposed。期限意向来自本人实际收到的不可变请求；reusable 由生产策略提交 decline，single_use 仍须满足当前范围/来源/系统资格。缺源、坏版本或失效提议只产生内部无动作/工程状态；不冒充本人拒绝。安置前私物可实际 defer，旧 deferred 不自动升级。
+
+### v2 私有依据与提交重验
+
+| 分支 | 保存及重验的边界 |
+| --- | --- |
+| rescue/follow | 仍保存原来源、follow/plan/route、epoch/view/ref、完整 guards；仅另加 branch。v1 的比较规则完全保留。v2 无 targetRevision 参数的动作保留 subjectRevision 作准备记录，但不因另一个人用途单纯推进该公开版本而失效；interact 的当前目标版本仍是实际参数/守卫。 |
+| appearance/private_items response | 只导入共享 personalDecisionBinding 与 ownPersonalSource；personal 完整保存原提议/当前两版本/term/scope/proof/notice，sources 保存本用途的严格来源 binding。重验当前原提议、实际收到水位、本人来源、公开地点/枚举名目、自己安置依据与请求者本地资格；不读远处实时私物或旁人控制身份。 |
+| personal withdraw | 同一原请求、完整旧 proof/对应 notice、本人当前授权/来源、内容与 view/ref。旧请求者/执行者的当前 epoch、在线或距离不参与选择及绑定比较；系统已停权本身不等于本人已经 withdrawn。 |
+
+两个 parser 都拒绝额外/缺失字段；v2 personal 的来源用途、scope 摘要、精确版本、原提议/实际接受版本关系及通知归属另行核验。来源和本次请求 receivedSeq 不得晚于实际评估水位。准备记录不可变；首次提交仅重算原 branch 的当前选择，不能把另一用途新请求的优先级当成原动作参数改变。原 Receipt 仍先于首次领域校验读取。
+
+### 两用途待办与原 Unknown
+
+v2 的一次 prepared 只证明预留了一个动作，**不消费全局已读语义水位**。原 pending/last 和初始化扫描保留到原意图已收束、完整有限候选扫描确定无动作后再消费。因此，即使本次实际提交返回及通知均丢失，原语义仍能推动另一份已读待答；Rejected 或 NO_CHANGE 也不需要伪造成功通知。
+
+prepare 依优先级逐项核对持久逻辑步骤：已成功的步骤跳过；同依据且尚无晚于原 Rejected 的真实语义也只跳过该步骤，继续检查另一用途。仍至多预留一份，不批量提交选择、不增加持久队列。无动作才确认水位；等待旧拒绝缓存时仍只消费实际收到的 semanticSeq，不能以较大的读取水位吞迟通知。有限合法请求处理后静止，不由普通时钟或坐标强刷。
+
+Unknown 始终先恢复原 ID/完整原文/Receipt，不消费 pending，也不建立新选择；三次技术重试耗尽后保留原意图和水位，仅记一次私有耗尽通知及 `retryExhausted` 状态。新通知不重置次数，显式恢复才接替。没有新增 personalResultSeq 或其他由 Receipt 生成语义的通道；纯查询旧结果不触发新评估。旧 v1 的预留时消费行为保留。
+
+### 作者检查入口与未覆盖
+
+- `node --test backend/tests/scene-personal-*.test.mjs`：纯策略、F1 来源/basis 合同及调度返回窗口。`scene-personal-fixture` 只是类型/选择切面，不写数据库，不算真实本人接受或生产初始化；调度替身不算权威一次效果。
+- `node --test --test-concurrency=1 backend/tests/scene-policy-*.test.mjs`：既有 scene-v2 的真实 PG/HTTP/Socket 定向回归，包括 N1～N6、两路线、旧结果去重与恢复。保留其旧内容范围。
+
+新 v3 的真实提交/持久来源/投影及双用途效果必须在固定 D1+D2 组合上另查；F1 单独没有这些运行接线。真实两人页面、T04/E2、独立 V2、形式实现对应 FM、真实 provider、真人/真机与发布均不由上述局部检查替代。形式参考为固定 `77ace28` 的组件结果，其五项未穷尽和实现对应 NOT_RUN 边界保留。

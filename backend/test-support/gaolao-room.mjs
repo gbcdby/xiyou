@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import { loadContent } from '../../content/index.mjs';
-import { validateSpatial } from '../../protocol/spatial.mjs';
+import { validateSpatial, gaolaoPersonalProfile } from '../../protocol/spatial.mjs';
 export async function gaolaoRoom(runtime,clock,count=2,contentVersion='gaolaozhuang-v1'){
-  const content=await loadContent(contentVersion),users=[],handles=[],actors=new Map(),caps=['spatial-v2'];
+  const content=await loadContent(contentVersion),users=[],handles=[],actors=new Map(),caps=['spatial-v2',...(gaolaoPersonalProfile(content)?['gaolao-personal-consent-v1']:[])];
   for(let i=0;i<count;i++)users.push(await runtime.guest({name:`同行者${i+1}`}));
   const {sessionId}=await runtime.create(users[0].token,{nonce:crypto.randomUUID(),contentVersion,capabilities:caps});
   for(const u of users)await runtime.join(u.token,sessionId,{nonce:crypto.randomUUID(),capabilities:caps});

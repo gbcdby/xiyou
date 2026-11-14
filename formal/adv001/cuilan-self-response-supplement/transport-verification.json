@@ -1,0 +1,369 @@
+{
+  "schema_version": 1,
+  "tool": {
+    "version": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "source": {
+    "commit": "1a7f45ddfeca0d25fb3714e1ce45980b225d5bde",
+    "tree": "6b0130cd6838bf052504994527f05e29aabf521e",
+    "revision": "CS-R2 supplement S1",
+    "mode": "check/design",
+    "base_formal_commit": "77ace28f526ce9ad905b1842b7353e48e251423c",
+    "implementation_status": "NOT_ASSESSED"
+  },
+  "model": {
+    "root": "model",
+    "entry": "ObserverSnapshotTransport.tla"
+  },
+  "profiles": {
+    "transport-complete": {
+      "config": "transport-complete.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "ObserverBound",
+        "ViewBound",
+        "NoRollback",
+        "WholeSnapshot",
+        "ReceiptReadOnly"
+      ],
+      "expected_properties": [
+        "EventuallyCurrent"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 100,
+        "note": "完整payload参数化equality接口；两observer/两view/三seq，不重放原七个后态。",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。",
+        "payload是完整、合法、按observer过滤的不可分割值；同observer/view/seq唯一。",
+        "最新完整快照持续可投递时仅对DeliverLatest弱公平；不假设网络天然公平。"
+      ]
+    },
+    "transport-negative-type": {
+      "config": "transport-negative-type.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "type",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。",
+        "payload是完整、合法、按observer过滤的不可分割值；同observer/view/seq唯一。",
+        "最新完整快照持续可投递时仅对DeliverLatest弱公平；不假设网络天然公平。"
+      ]
+    },
+    "transport-negative-wrong-observer": {
+      "config": "transport-negative-wrong-observer.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "ObserverBound"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "wrong-observer",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。",
+        "payload是完整、合法、按observer过滤的不可分割值；同observer/view/seq唯一。",
+        "最新完整快照持续可投递时仅对DeliverLatest弱公平；不假设网络天然公平。"
+      ]
+    },
+    "transport-negative-old-view": {
+      "config": "transport-negative-old-view.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "ViewBound"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "old-view",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。",
+        "payload是完整、合法、按observer过滤的不可分割值；同observer/view/seq唯一。",
+        "最新完整快照持续可投递时仅对DeliverLatest弱公平；不假设网络天然公平。"
+      ]
+    },
+    "transport-negative-old-seq": {
+      "config": "transport-negative-old-seq.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoRollback"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "old-seq",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。",
+        "payload是完整、合法、按observer过滤的不可分割值；同observer/view/seq唯一。",
+        "最新完整快照持续可投递时仅对DeliverLatest弱公平；不假设网络天然公平。"
+      ]
+    },
+    "transport-negative-partial-payload": {
+      "config": "transport-negative-partial-payload.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "WholeSnapshot"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "partial-payload",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。",
+        "payload是完整、合法、按observer过滤的不可分割值；同observer/view/seq唯一。",
+        "最新完整快照持续可投递时仅对DeliverLatest弱公平；不假设网络天然公平。"
+      ]
+    },
+    "transport-negative-receipt-overwrite": {
+      "config": "transport-negative-receipt-overwrite.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "ReceiptReadOnly"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "receipt-overwrite",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。",
+        "payload是完整、合法、按observer过滤的不可分割值；同observer/view/seq唯一。",
+        "最新完整快照持续可投递时仅对DeliverLatest弱公平；不假设网络天然公平。"
+      ]
+    },
+    "transport-negative-live-miss-same-slot": {
+      "config": "transport-negative-live-miss-same-slot.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [],
+      "expected_properties": [
+        "EventuallyCurrent"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "miss-same-slot",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。",
+        "payload是完整、合法、按observer过滤的不可分割值；同observer/view/seq唯一。",
+        "最新完整快照持续可投递时仅对DeliverLatest弱公平；不假设网络天然公平。"
+      ]
+    },
+    "transport-negative-live-receipt-overwrite": {
+      "config": "transport-negative-live-receipt-overwrite.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [],
+      "expected_properties": [
+        "EventuallyCurrent"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "receipt-overwrite",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。",
+        "payload是完整、合法、按observer过滤的不可分割值；同observer/view/seq唯一。",
+        "最新完整快照持续可投递时仅对DeliverLatest弱公平；不假设网络天然公平。"
+      ]
+    },
+    "transport-witness-both-observers-current": {
+      "config": "transport-witness-both-observers-current.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoTransportWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Probe": "both-observers-current"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。",
+        "payload是完整、合法、按observer过滤的不可分割值；同observer/view/seq唯一。",
+        "最新完整快照持续可投递时仅对DeliverLatest弱公平；不假设网络天然公平。"
+      ]
+    },
+    "transport-witness-late-old-accepted": {
+      "config": "transport-witness-late-old-accepted.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoTransportWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Probe": "late-old-accepted"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。",
+        "payload是完整、合法、按observer过滤的不可分割值；同observer/view/seq唯一。",
+        "最新完整快照持续可投递时仅对DeliverLatest弱公平；不假设网络天然公平。"
+      ]
+    }
+  }
+}

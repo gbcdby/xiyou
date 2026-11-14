@@ -1,0 +1,447 @@
+{
+  "schema_version": 1,
+  "tool": {
+    "version": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "source": {
+    "commit": "1a7f45ddfeca0d25fb3714e1ce45980b225d5bde",
+    "tree": "6b0130cd6838bf052504994527f05e29aabf521e",
+    "revision": "CS-R2 supplement S1",
+    "mode": "check/design",
+    "base_formal_commit": "77ace28f526ce9ad905b1842b7353e48e251423c",
+    "implementation_status": "NOT_ASSESSED"
+  },
+  "model": {
+    "root": "model",
+    "entry": "ReturnSnapshotCut.tla"
+  },
+  "profiles": {
+    "returns-constructor": {
+      "config": "returns-constructor.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "SnapshotType",
+        "ReturnCompleteness",
+        "ObserverIsolation",
+        "AcquisitionIdentity",
+        "CurrentReferences",
+        "ReturnTargets",
+        "CompleteObservable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "none",
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1000,
+        "note": "同一权威动作生成的最小动态切面；包含双持有人，不声称全世界组合。",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "returns-negative-type": {
+      "config": "returns-negative-type.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "SnapshotType"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "none",
+          "Fault": "snapshot-type",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "returns-negative-omit-letter": {
+      "config": "returns-negative-omit-letter.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "ReturnCompleteness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "none",
+          "Fault": "return-omit-letter",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "returns-negative-current-only": {
+      "config": "returns-negative-current-only.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "ReturnCompleteness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "none",
+          "Fault": "return-current-only",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "returns-negative-leak": {
+      "config": "returns-negative-leak.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "ObserverIsolation"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "none",
+          "Fault": "return-leak",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "returns-negative-wrong-acquisition": {
+      "config": "returns-negative-wrong-acquisition.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "AcquisitionIdentity"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "none",
+          "Fault": "return-wrong-acquisition",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "returns-negative-old-view": {
+      "config": "returns-negative-old-view.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "CurrentReferences"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "none",
+          "Fault": "return-old-view",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "returns-negative-synthesize-owner": {
+      "config": "returns-negative-synthesize-owner.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "CurrentReferences"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "none",
+          "Fault": "return-synthesize-owner",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "returns-negative-wrong-origin": {
+      "config": "returns-negative-wrong-origin.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "ReturnTargets"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "none",
+          "Fault": "return-wrong-origin",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "returns-negative-drop-quota": {
+      "config": "returns-negative-drop-quota.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "CompleteObservable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "none",
+          "Fault": "snapshot-drop-quota",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "returns-witness-mixed-holders": {
+      "config": "returns-witness-mixed-holders.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoReturnWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "none",
+          "Fault": "none",
+          "Probe": "mixed-holders"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "returns-witness-mixed-new-view-null": {
+      "config": "returns-witness-mixed-new-view-null.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoReturnWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "none",
+          "Fault": "none",
+          "Probe": "mixed-new-view-null"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "returns-witness-same-slot-two-items": {
+      "config": "returns-witness-same-slot-two-items.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoReturnWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "none",
+          "Fault": "none",
+          "Probe": "same-slot-two-items"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "returns-witness-restored-not-delivered": {
+      "config": "returns-witness-restored-not-delivered.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoReturnWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "none",
+          "Fault": "none",
+          "Probe": "restored-not-delivered"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    }
+  }
+}

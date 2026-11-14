@@ -12,7 +12,7 @@ before(async () => {
 });
 after(async () => { await runtime?.close(); await db?.stop(); });
 
-for (const version of ['gaolaozhuang-v1', 'gaolaozhuang-tools-east-v1']) {
+for (const version of ['gaolaozhuang-v1', 'gaolaozhuang-tools-east-v1', 'gaolaozhuang-scene-v3', 'gaolaozhuang-tools-east-scene-v3']) {
   test(`R32REQ004：${version} 的可见物主公布私物请求，仍须本人按范围与版本授权`, async t => {
     const r = await gaolaoRoom(runtime, clock, 2, version);
     const initial = (await r.snapshot(0)).projection;

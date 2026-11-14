@@ -1,0 +1,21 @@
+{
+  "commit": "1a7f45ddfeca0d25fb3714e1ce45980b225d5bde",
+  "tree": "6b0130cd6838bf052504994527f05e29aabf521e",
+  "parent": "76d98e137f5220518b072650ba6af8001966ea23",
+  "revision": "CS-R2",
+  "implementation_status": "NOT_ASSESSED",
+  "files": {
+    "docs/specs/gaolao-scene-policy.md": {
+      "sha256": "3fdfbe7aecc05e086fcf5bb7a7e822221116828e2c263b156ef56b432ec463a7",
+      "bytes": 118052
+    },
+    "docs/specs/adv-protocol.md": {
+      "sha256": "dbda10688c0977e8a88b3cea74b1a2d918fa685f5706b89fb0a020bc66e26eb5",
+      "bytes": 33310
+    },
+    "docs/specs/README.md": {
+      "sha256": "8fe7b33cb10b5eeed5d8b89074f68c775b520372f332802049e95b28132b6e3d",
+      "bytes": 4515
+    }
+  }
+}

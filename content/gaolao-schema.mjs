@@ -1,5 +1,6 @@
 import { object, array, ref, integer, lit, text, en, spatialSchema } from '../protocol/spatial-schema.mjs';
 import { findPath, inPolygon } from '../game/spatial-geometry.mjs';
+import { gaolaoPersonalProfile, gaolaoPersonalProfiles } from '../protocol/spatial.mjs';
 const id=ref('Id'), point=ref('Position'), ids=array(id);
 const at=object({sceneId:id,position:point});
 const destination=object({destinationId:id,label:text(120),sceneId:id,position:point});
@@ -16,13 +17,24 @@ export const gaolaoDefs={
     sources:array(object({sourceId:id,kind:en('archive','testimony','material'),label:text(240),beforeArrivalDays:integer(36500),category:en('Evidence','Claim'),statement:text(2000),fields:array(ref('FactField'),32)}),8),
     privateItems:array(object({itemId:id,ownerId:id}),8),
     endings:array(object({endingCode:en('GZ-E01','GZ-E02','GZ-E03'),decisionActorIds:ids,departureActorIds:ids,waitingActorIds:ids}),3),
-    sceneRolePolicies:array(object({actorId:id,policyVersion:lit('gaolao-cuilan-v1')}),1),
+    sceneRolePolicies:array(object({actorId:id,policyVersion:en('gaolao-cuilan-v1','gaolao-cuilan-v2')}),1),
+    personalSourceSpecs:array(object({purpose:en('appearance','private_items'),sourceId:id,revision:lit(1)}),2),
     routeSpecs:array(object({routeSpecId:id,revision:lit(1),sourceId:id,destinationId:id,anchors:array(object({sceneId:id,anchorId:id}),12),exitAnchors:array(object({sceneId:id,anchorId:id}),3)}),2),
-  },['sceneRolePolicies','routeSpecs']),
+  },['sceneRolePolicies','routeSpecs','personalSourceSpecs']),
 };
 export function validateGaolaoContent(c){
-  if(c.reducerVersion!=='gaolao-world-v1'){if(c.chapterRules)throw new Error('旧空间解释器不得加载高老庄规则。');return;}
+  const personal=gaolaoPersonalProfile(c),registered=gaolaoPersonalProfiles.some(profile=>profile.contentVersion===c.contentVersion);
+  if((registered||c.reducerVersion==='gaolao-world-v2'||c.chapterVersion==='gaolaozhuang-chapter-v3')&&!personal)throw new Error('个人许可内容必须匹配完整登记版本。');
+  if(!['gaolao-world-v1','gaolao-world-v2'].includes(c.reducerVersion)){if(c.chapterRules)throw new Error('旧空间解释器不得加载高老庄规则。');return;}
   const r=c.chapterRules;if(!r)throw new Error('高老庄解释器缺少章节规则。');
+  if(!personal&&(r.personalSourceSpecs||r.sceneRolePolicies?.some(policy=>policy.policyVersion==='gaolao-cuilan-v2')||r.sources.some(source=>['cuilan-appearance-boundaries-v1','cuilan-private-items-v1'].includes(source.sourceId))))throw new Error('旧内容不能注入个人许可语义或本人新来源。');
+  if(personal){
+    if(r.personalSourceSpecs?.length!==2)throw new Error('新本人策略必须有两份有限声明。');
+    for(const [purpose,sourceId] of [['appearance','cuilan-appearance-boundaries-v1'],['private_items','cuilan-private-items-v1']]){
+      const spec=r.personalSourceSpecs.find(spec=>spec.purpose===purpose),source=r.sources.find(source=>source.sourceId===sourceId);
+      if(spec?.sourceId!==sourceId||spec.revision!==1||source?.kind!=='testimony'||source.category!=='Claim'||source.beforeArrivalDays!==0)throw new Error('本人偏好只能来自对应本局声明，不能升级为世界事实。');
+    }
+  }
   const expected={'2':[['A','B','D'],['C','E']],'3':[['A','B'],['C'],['D','E']],'4':[['A'],['B'],['C'],['D','E']],'5':[['A'],['B'],['C'],['D'],['E']]};
   if(JSON.stringify(r.partyRoles)!==JSON.stringify(expected))throw new Error('人数职责与冻结章节合同不符。');
   if(new Set(r.roles.map(x=>x.roleId)).size!==5)throw new Error('职责配置不完整。');
@@ -37,7 +49,7 @@ export function validateGaolaoContent(c){
   if(c.operations.find(o=>o.operationId==='gz-lock-support'&&o.kind==='cooperation')?.requiredCount!==2)throw new Error('门撑必须保留两人解法。');
   if(new Set(r.sources.map(s=>s.sourceId)).size!==r.sources.length)throw new Error('原始证据来源标识重复。');
   if(r.sceneRolePolicies||r.routeSpecs){
-    if(c.chapterVersion!=='gaolaozhuang-chapter-v2'||c.mapVersion!=='gaolao-layout-v1.1'||r.sceneRolePolicies?.length!==1||r.sceneRolePolicies[0].actorId!==r.people.cuilan||r.routeSpecs?.length!==2)throw new Error('场景本人策略必须绑定新章节及固定路线。');
+    if(c.chapterVersion!==(personal?'gaolaozhuang-chapter-v3':'gaolaozhuang-chapter-v2')||c.mapVersion!=='gaolao-layout-v1.1'||r.sceneRolePolicies?.length!==1||r.sceneRolePolicies[0].actorId!==r.people.cuilan||r.sceneRolePolicies[0].policyVersion!==(personal?'gaolao-cuilan-v2':'gaolao-cuilan-v1')||r.routeSpecs?.length!==2)throw new Error('场景本人策略必须绑定对应章节、策略及固定路线。');
     for(const [name,destination] of [['front','front-guest-room'],['tea','tea-back-room']]){
       const route=r.routeSpecs.find(x=>x.routeSpecId===`cuilan-${name}-public-v1`),source=r.sources.find(x=>x.sourceId===`cuilan-route-${name}-v1`);
       if(!route||route.destinationId!==destination||route.sourceId!==source?.sourceId||source.kind!=='archive'||source.category!=='Evidence'||source.beforeArrivalDays!==0)throw new Error('场景本人图记与路线必须一一绑定。');

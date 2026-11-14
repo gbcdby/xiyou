@@ -22,5 +22,13 @@
   "gaolaozhuang-tools-east-scene-v2": {
     "reducerVersion": "gaolao-world-v1",
     "sha256": "2e6ce04bc500671e28a8026e1615953fea5e46e2b8c3c7781787f10231e0b917"
+  },
+  "gaolaozhuang-scene-v3": {
+    "reducerVersion": "gaolao-world-v2",
+    "sha256": "9fe67da426ec0d8cfb8d28ccc58dcfaf07d45da13a57371c808fd783dd04fce6"
+  },
+  "gaolaozhuang-tools-east-scene-v3": {
+    "reducerVersion": "gaolao-world-v2",
+    "sha256": "5afb3fda35fdc0143513406dc1f69392c597c32ee925de088f7f649b02e7c1ff"
   }
 }

@@ -1,0 +1,121 @@
+{
+  "base_commit": "77ace28f526ce9ad905b1842b7353e48e251423c",
+  "normal_dependency_same": true,
+  "entries": [
+    {
+      "profile": "recovery-appearance",
+      "run": "matrix-r1/recovery-appearance",
+      "source": {
+        "commit": "76d98e137f5220518b072650ba6af8001966ea23",
+        "tree": "18287fbcde9590c6ce83a82ee747dfafaccdfe46",
+        "revision": "CS-R1",
+        "mode": "design/check",
+        "implementation_status": "NOT_ASSESSED"
+      },
+      "statistics": {
+        "generated_states": 66165,
+        "distinct_states": 15984,
+        "remaining_states": 0
+      },
+      "evidence_hashes": {
+        "result.json": "5d8b78691f9eeb27227d9418aded4e00eaa9efac06fb722735df5bec154092b0",
+        "manifest.json": "ef20d139b52dcda76f0117faeecacbf91db39eb77e494e208bd9faf31a7a2fce",
+        "messages.json": "3c005d43d55589449f6a9e1e83f36bb84c19a6022205b66cf26afafde3ff65b8",
+        "tlc.log": "5f761762aa192921e5ce41fb2a0599d5c587756fb822048cf0b519c7589e3583"
+      },
+      "input_hashes": {
+        "PersonalRecovery.tla": "a986e81b2dfb6e366181b5892acfe0b0d399e006ad75f99d406e4bc826445b07",
+        "recovery-appearance.cfg": "1a1d640a10a69a1d3aafd50ef950ce3d5b7d3fb45ed79abb20f1231051144a16"
+      },
+      "configured_invariants": [
+        "TypeOK",
+        "SingleUnsettled",
+        "OriginalIdentityStable",
+        "ReceiptStable",
+        "EffectAtMostOnce",
+        "PendingPurposesPreserved",
+        "CapacitySufficient"
+      ],
+      "configured_properties": [
+        "BothPurposesProgress"
+      ]
+    },
+    {
+      "profile": "recovery-private",
+      "run": "matrix-r1/recovery-private",
+      "source": {
+        "commit": "76d98e137f5220518b072650ba6af8001966ea23",
+        "tree": "18287fbcde9590c6ce83a82ee747dfafaccdfe46",
+        "revision": "CS-R1",
+        "mode": "design/check",
+        "implementation_status": "NOT_ASSESSED"
+      },
+      "statistics": {
+        "generated_states": 66165,
+        "distinct_states": 15984,
+        "remaining_states": 0
+      },
+      "evidence_hashes": {
+        "result.json": "50652caff4f87878905385adfd8d57c6aa6642902590e18c45aee377d47f0aad",
+        "manifest.json": "ef20d139b52dcda76f0117faeecacbf91db39eb77e494e208bd9faf31a7a2fce",
+        "messages.json": "03aad85c55d91c3272910e9d1d8ad3611a7908f8370c0892a088fbcbbe709e46",
+        "tlc.log": "e6060cdab5d8bed7d86ec33bd1f087c945b4dc26886339b9dc1a1b4e28a6db2f"
+      },
+      "input_hashes": {
+        "PersonalRecovery.tla": "a986e81b2dfb6e366181b5892acfe0b0d399e006ad75f99d406e4bc826445b07",
+        "recovery-private.cfg": "362d55c284b1deb434f605496caa946b58f61e80c9b587314b9c4ad779463737"
+      },
+      "configured_invariants": [
+        "TypeOK",
+        "SingleUnsettled",
+        "OriginalIdentityStable",
+        "ReceiptStable",
+        "EffectAtMostOnce",
+        "PendingPurposesPreserved",
+        "CapacitySufficient"
+      ],
+      "configured_properties": [
+        "BothPurposesProgress"
+      ]
+    },
+    {
+      "profile": "recovery-expanded-capacity",
+      "run": "matrix-r1/recovery-expanded-capacity",
+      "source": {
+        "commit": "76d98e137f5220518b072650ba6af8001966ea23",
+        "tree": "18287fbcde9590c6ce83a82ee747dfafaccdfe46",
+        "revision": "CS-R1",
+        "mode": "design/check",
+        "implementation_status": "NOT_ASSESSED"
+      },
+      "statistics": {
+        "generated_states": 66165,
+        "distinct_states": 15984,
+        "remaining_states": 0
+      },
+      "evidence_hashes": {
+        "result.json": "12e48f15c288ed39a313417251136343d695ef3103d61b32cd44d009137350bf",
+        "manifest.json": "ef20d139b52dcda76f0117faeecacbf91db39eb77e494e208bd9faf31a7a2fce",
+        "messages.json": "d48168f191e9e71f8211107a9f345e99b098a317b34c76c73d7305e6cd80e618",
+        "tlc.log": "2aeb81b5d934e48fe754773c5f843adead7b681bdff7fbcccb3c5b3e94c3fbe2"
+      },
+      "input_hashes": {
+        "PersonalRecovery.tla": "a986e81b2dfb6e366181b5892acfe0b0d399e006ad75f99d406e4bc826445b07",
+        "recovery-expanded-capacity.cfg": "6aed15a8150f61324cc2728e6391993ae0fff111435c6d00c6f1f95f8fb4c425"
+      },
+      "configured_invariants": [
+        "TypeOK",
+        "SingleUnsettled",
+        "OriginalIdentityStable",
+        "ReceiptStable",
+        "EffectAtMostOnce",
+        "PendingPurposesPreserved",
+        "CapacitySufficient"
+      ],
+      "configured_properties": [
+        "BothPurposesProgress"
+      ]
+    }
+  ],
+  "note": "No new normal run; source remains CS-R1. New temporal negative uses the identical module and LiveSpec under explicit legal-domain task assumption."
+}

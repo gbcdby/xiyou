@@ -1,0 +1,1889 @@
+{
+  "cas-different-purpose": {
+    "manifest": "cas-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "SingleCommitPerPublicRevision",
+      "NoThirdPartyOverwrite"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 20,
+    "target": null,
+    "note": ""
+  },
+  "cas-same-purpose": {
+    "manifest": "cas-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "SingleCommitPerPublicRevision",
+      "NoThirdPartyOverwrite"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": null,
+    "note": ""
+  },
+  "cas-negative-type": {
+    "manifest": "cas-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "TypeOK"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "TypeOK",
+    "note": ""
+  },
+  "cas-negative-skip-cas": {
+    "manifest": "cas-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "SingleCommitPerPublicRevision"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "SingleCommitPerPublicRevision",
+    "note": ""
+  },
+  "cas-negative-overwrite": {
+    "manifest": "cas-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoThirdPartyOverwrite"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoThirdPartyOverwrite",
+    "note": ""
+  },
+  "cas-witness-concurrent": {
+    "manifest": "cas-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "cas-witness-both-purposes": {
+    "manifest": "cas-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "consent-appearance": {
+    "manifest": "consent-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "OwnDecisionOnly",
+      "PurposeRequestIsolation",
+      "ScopeBinding",
+      "ActiveRequiresCurrent",
+      "ReceiptDoesNotReactivate",
+      "EffectAtMostOnce",
+      "DecisionBasisRechecked",
+      "NoThirdPartyReplacement",
+      "OwnerCanCloseInvalidated",
+      "SafetyAndHistoryDurable"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 30000,
+    "target": null,
+    "note": ""
+  },
+  "consent-private": {
+    "manifest": "consent-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "OwnDecisionOnly",
+      "PurposeRequestIsolation",
+      "ScopeBinding",
+      "ActiveRequiresCurrent",
+      "ReceiptDoesNotReactivate",
+      "EffectAtMostOnce",
+      "DecisionBasisRechecked",
+      "NoThirdPartyReplacement",
+      "OwnerCanCloseInvalidated",
+      "SafetyAndHistoryDurable"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 30000,
+    "target": null,
+    "note": ""
+  },
+  "consent-owner-epoch": {
+    "manifest": "consent-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "OwnDecisionOnly",
+      "PurposeRequestIsolation",
+      "ScopeBinding",
+      "ActiveRequiresCurrent",
+      "ReceiptDoesNotReactivate",
+      "EffectAtMostOnce",
+      "DecisionBasisRechecked",
+      "NoThirdPartyReplacement",
+      "OwnerCanCloseInvalidated",
+      "SafetyAndHistoryDurable"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1000,
+    "target": null,
+    "note": ""
+  },
+  "consent-source": {
+    "manifest": "consent-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "OwnDecisionOnly",
+      "PurposeRequestIsolation",
+      "ScopeBinding",
+      "ActiveRequiresCurrent",
+      "ReceiptDoesNotReactivate",
+      "EffectAtMostOnce",
+      "DecisionBasisRechecked",
+      "NoThirdPartyReplacement",
+      "OwnerCanCloseInvalidated",
+      "SafetyAndHistoryDurable"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1000,
+    "target": null,
+    "note": ""
+  },
+  "consent-local": {
+    "manifest": "consent-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "OwnDecisionOnly",
+      "PurposeRequestIsolation",
+      "ScopeBinding",
+      "ActiveRequiresCurrent",
+      "ReceiptDoesNotReactivate",
+      "EffectAtMostOnce",
+      "DecisionBasisRechecked",
+      "NoThirdPartyReplacement",
+      "OwnerCanCloseInvalidated",
+      "SafetyAndHistoryDurable"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1000,
+    "target": null,
+    "note": ""
+  },
+  "consent-pause": {
+    "manifest": "consent-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "OwnDecisionOnly",
+      "PurposeRequestIsolation",
+      "ScopeBinding",
+      "ActiveRequiresCurrent",
+      "ReceiptDoesNotReactivate",
+      "EffectAtMostOnce",
+      "DecisionBasisRechecked",
+      "NoThirdPartyReplacement",
+      "OwnerCanCloseInvalidated",
+      "SafetyAndHistoryDurable"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1000,
+    "target": null,
+    "note": ""
+  },
+  "consent-terminal": {
+    "manifest": "consent-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "OwnDecisionOnly",
+      "PurposeRequestIsolation",
+      "ScopeBinding",
+      "ActiveRequiresCurrent",
+      "ReceiptDoesNotReactivate",
+      "EffectAtMostOnce",
+      "DecisionBasisRechecked",
+      "NoThirdPartyReplacement",
+      "OwnerCanCloseInvalidated",
+      "SafetyAndHistoryDurable"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1000,
+    "target": null,
+    "note": ""
+  },
+  "consent-revoke": {
+    "manifest": "consent-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "OwnDecisionOnly",
+      "PurposeRequestIsolation",
+      "ScopeBinding",
+      "ActiveRequiresCurrent",
+      "ReceiptDoesNotReactivate",
+      "EffectAtMostOnce",
+      "DecisionBasisRechecked",
+      "NoThirdPartyReplacement",
+      "OwnerCanCloseInvalidated",
+      "SafetyAndHistoryDurable"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1000,
+    "target": null,
+    "note": ""
+  },
+  "consent-third-party": {
+    "manifest": "consent-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "OwnDecisionOnly",
+      "PurposeRequestIsolation",
+      "ScopeBinding",
+      "ActiveRequiresCurrent",
+      "ReceiptDoesNotReactivate",
+      "EffectAtMostOnce",
+      "DecisionBasisRechecked",
+      "NoThirdPartyReplacement",
+      "OwnerCanCloseInvalidated",
+      "SafetyAndHistoryDurable"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1000,
+    "target": null,
+    "note": ""
+  },
+  "consent-declined": {
+    "manifest": "consent-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "OwnDecisionOnly",
+      "PurposeRequestIsolation",
+      "ScopeBinding",
+      "ActiveRequiresCurrent",
+      "ReceiptDoesNotReactivate",
+      "EffectAtMostOnce",
+      "DecisionBasisRechecked",
+      "NoThirdPartyReplacement",
+      "OwnerCanCloseInvalidated",
+      "SafetyAndHistoryDurable"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1000,
+    "target": null,
+    "note": ""
+  },
+  "consent-deferred": {
+    "manifest": "consent-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "OwnDecisionOnly",
+      "PurposeRequestIsolation",
+      "ScopeBinding",
+      "ActiveRequiresCurrent",
+      "ReceiptDoesNotReactivate",
+      "EffectAtMostOnce",
+      "DecisionBasisRechecked",
+      "NoThirdPartyReplacement",
+      "OwnerCanCloseInvalidated",
+      "SafetyAndHistoryDurable"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1000,
+    "target": null,
+    "note": ""
+  },
+  "consent-negative-type": {
+    "manifest": "consent-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "TypeOK"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "TypeOK",
+    "note": ""
+  },
+  "consent-negative-cancel-as-withdraw": {
+    "manifest": "consent-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "OwnDecisionOnly"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "OwnDecisionOnly",
+    "note": ""
+  },
+  "consent-negative-wrong-request": {
+    "manifest": "consent-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "PurposeRequestIsolation"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "PurposeRequestIsolation",
+    "note": ""
+  },
+  "consent-negative-wrong-withdraw": {
+    "manifest": "consent-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "PurposeRequestIsolation"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "PurposeRequestIsolation",
+    "note": ""
+  },
+  "consent-negative-wrong-scope": {
+    "manifest": "consent-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ScopeBinding"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "ScopeBinding",
+    "note": ""
+  },
+  "consent-negative-skip-invalidation": {
+    "manifest": "consent-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ActiveRequiresCurrent"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "ActiveRequiresCurrent",
+    "note": ""
+  },
+  "consent-negative-receipt-reactivates": {
+    "manifest": "consent-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ReceiptDoesNotReactivate"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "ReceiptDoesNotReactivate",
+    "note": ""
+  },
+  "consent-negative-repeat-effect": {
+    "manifest": "consent-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "EffectAtMostOnce"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "EffectAtMostOnce",
+    "note": ""
+  },
+  "consent-negative-stale-basis": {
+    "manifest": "consent-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "DecisionBasisRechecked"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "DecisionBasisRechecked",
+    "note": ""
+  },
+  "consent-negative-third-party": {
+    "manifest": "consent-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoThirdPartyReplacement"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoThirdPartyReplacement",
+    "note": ""
+  },
+  "consent-negative-old-participant-epoch": {
+    "manifest": "consent-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "OwnerCanCloseInvalidated"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "OwnerCanCloseInvalidated",
+    "note": ""
+  },
+  "consent-negative-rollback": {
+    "manifest": "consent-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "SafetyAndHistoryDurable"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "SafetyAndHistoryDurable",
+    "note": ""
+  },
+  "consent-witness-both-accepted": {
+    "manifest": "consent-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "consent-witness-cancel-before": {
+    "manifest": "consent-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "consent-witness-accept-before": {
+    "manifest": "consent-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "consent-witness-stale-response": {
+    "manifest": "consent-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "consent-witness-stale-withdraw": {
+    "manifest": "consent-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "consent-witness-c2-after-epoch": {
+    "manifest": "consent-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "consent-witness-replay-closed": {
+    "manifest": "consent-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "consent-witness-declined": {
+    "manifest": "consent-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "consent-witness-deferred": {
+    "manifest": "consent-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "effects-private": {
+    "manifest": "effects-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "AtomicAppearanceStop",
+      "AtomicPrivateStop",
+      "PurposeAndTakerAuthorized",
+      "CustodyProvenance",
+      "PrivateOwnerOnly",
+      "RestitutionEnabled",
+      "ReturnEntryRetained",
+      "ReceiptNeverReactivates",
+      "ConfirmedProjectionOnly",
+      "SafetyAndKnowledgeDurable",
+      "CompletedItemNotRetaken",
+      "RemainingItemEntitlement",
+      "ReturnPreservesClosureCause",
+      "ReturnContextPrivate",
+      "CurrentReturnReference"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1000,
+    "target": null,
+    "note": "R2物件级投影；删除无关全局历史计数，加入逐物消费/完整观察投影/两view/历史裁剪。旧模型结果保留。"
+  },
+  "effects-appearance": {
+    "manifest": "effects-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "AtomicAppearanceStop",
+      "AtomicPrivateStop",
+      "PurposeAndTakerAuthorized",
+      "CustodyProvenance",
+      "PrivateOwnerOnly",
+      "RestitutionEnabled",
+      "ReturnEntryRetained",
+      "ReceiptNeverReactivates",
+      "ConfirmedProjectionOnly",
+      "SafetyAndKnowledgeDurable",
+      "CompletedItemNotRetaken",
+      "RemainingItemEntitlement",
+      "ReturnPreservesClosureCause",
+      "ReturnContextPrivate",
+      "CurrentReturnReference"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 100,
+    "target": null,
+    "note": ""
+  },
+  "effects-restart-private": {
+    "manifest": "effects-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "AtomicAppearanceStop",
+      "AtomicPrivateStop",
+      "PurposeAndTakerAuthorized",
+      "CustodyProvenance",
+      "PrivateOwnerOnly",
+      "RestitutionEnabled",
+      "ReturnEntryRetained",
+      "ReceiptNeverReactivates",
+      "ConfirmedProjectionOnly",
+      "SafetyAndKnowledgeDurable",
+      "CompletedItemNotRetaken",
+      "RemainingItemEntitlement",
+      "ReturnPreservesClosureCause",
+      "ReturnContextPrivate",
+      "CurrentReturnReference"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1000,
+    "target": null,
+    "note": ""
+  },
+  "effects-both": {
+    "manifest": "effects-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "AtomicAppearanceStop",
+      "AtomicPrivateStop",
+      "PurposeAndTakerAuthorized",
+      "CustodyProvenance",
+      "PrivateOwnerOnly",
+      "RestitutionEnabled",
+      "ReturnEntryRetained",
+      "ReceiptNeverReactivates",
+      "ConfirmedProjectionOnly",
+      "SafetyAndKnowledgeDurable",
+      "CompletedItemNotRetaken",
+      "RemainingItemEntitlement",
+      "ReturnPreservesClosureCause",
+      "ReturnContextPrivate",
+      "CurrentReturnReference"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1000,
+    "target": null,
+    "note": "两用途世界效果的有限交错，仍非全产品组合精化。"
+  },
+  "effects-cooperative-return": {
+    "manifest": "effects-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "AtomicAppearanceStop",
+      "AtomicPrivateStop",
+      "PurposeAndTakerAuthorized",
+      "CustodyProvenance",
+      "PrivateOwnerOnly",
+      "RestitutionEnabled",
+      "ReturnEntryRetained",
+      "ReceiptNeverReactivates",
+      "ConfirmedProjectionOnly",
+      "SafetyAndKnowledgeDurable",
+      "CompletedItemNotRetaken",
+      "RemainingItemEntitlement",
+      "ReturnPreservesClosureCause",
+      "ReturnContextPrivate",
+      "CurrentReturnReference"
+    ],
+    "properties": [
+      "CooperativeReturns",
+      "ProjectionEventuallyCurrent"
+    ],
+    "minimum_distinct_states": 1000,
+    "target": null,
+    "note": ""
+  },
+  "effects-r1-current-only": {
+    "manifest": "effects-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ReturnEntryRetained"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "ReturnEntryRetained",
+    "note": "R1设计缺口探针；不是隔离缺陷实现，也不是生产运行失败。"
+  },
+  "effects-negative-type": {
+    "manifest": "effects-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "TypeOK"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "TypeOK",
+    "note": ""
+  },
+  "effects-negative-split-stop": {
+    "manifest": "effects-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "AtomicAppearanceStop"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "AtomicAppearanceStop",
+    "note": ""
+  },
+  "effects-negative-split-private": {
+    "manifest": "effects-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "AtomicPrivateStop"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "AtomicPrivateStop",
+    "note": ""
+  },
+  "effects-negative-cross-purpose": {
+    "manifest": "effects-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "PurposeAndTakerAuthorized"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "PurposeAndTakerAuthorized",
+    "note": ""
+  },
+  "effects-negative-wrong-taker": {
+    "manifest": "effects-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "PurposeAndTakerAuthorized"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "PurposeAndTakerAuthorized",
+    "note": ""
+  },
+  "effects-negative-old-capability": {
+    "manifest": "effects-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "PurposeAndTakerAuthorized"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "PurposeAndTakerAuthorized",
+    "note": ""
+  },
+  "effects-negative-reassign-custody": {
+    "manifest": "effects-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "CustodyProvenance"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "CustodyProvenance",
+    "note": ""
+  },
+  "effects-negative-public-return": {
+    "manifest": "effects-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "PrivateOwnerOnly"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "PrivateOwnerOnly",
+    "note": ""
+  },
+  "effects-negative-return-needs-active": {
+    "manifest": "effects-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "RestitutionEnabled"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "RestitutionEnabled",
+    "note": ""
+  },
+  "effects-negative-receipt-reactivates": {
+    "manifest": "effects-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ReceiptNeverReactivates"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "ReceiptNeverReactivates",
+    "note": ""
+  },
+  "effects-negative-ui-receipt-overwrite": {
+    "manifest": "effects-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ConfirmedProjectionOnly"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "ConfirmedProjectionOnly",
+    "note": ""
+  },
+  "effects-negative-rollback": {
+    "manifest": "effects-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "SafetyAndKnowledgeDurable"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "SafetyAndKnowledgeDurable",
+    "note": ""
+  },
+  "effects-negative-retake-completed": {
+    "manifest": "effects-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "CompletedItemNotRetaken"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "CompletedItemNotRetaken",
+    "note": ""
+  },
+  "effects-negative-first-item-closes-all": {
+    "manifest": "effects-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "RemainingItemEntitlement"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "RemainingItemEntitlement",
+    "note": ""
+  },
+  "effects-negative-return-rewrites-history": {
+    "manifest": "effects-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ReturnPreservesClosureCause"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "ReturnPreservesClosureCause",
+    "note": ""
+  },
+  "effects-negative-leak-return": {
+    "manifest": "effects-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ReturnContextPrivate"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "ReturnContextPrivate",
+    "note": ""
+  },
+  "effects-negative-stale-return-view": {
+    "manifest": "effects-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "CurrentReturnReference"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "CurrentReturnReference",
+    "note": ""
+  },
+  "effects-negative-history-trims-return": {
+    "manifest": "effects-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ReturnEntryRetained"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "ReturnEntryRetained",
+    "note": ""
+  },
+  "effects-witness-old-return": {
+    "manifest": "effects-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "effects-witness-old-return-new-slot": {
+    "manifest": "effects-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "effects-witness-new-slot-old-custody": {
+    "manifest": "effects-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "effects-witness-late-old-receipt": {
+    "manifest": "effects-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "effects-witness-restored-origin": {
+    "manifest": "effects-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "effects-witness-first-return-second-held": {
+    "manifest": "effects-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "effects-witness-new-grant-retake": {
+    "manifest": "effects-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "effects-witness-old-return-refresh-prune": {
+    "manifest": "effects-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "effects-witness-appearance-stopped": {
+    "manifest": "effects-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "effects-witness-restart-new": {
+    "manifest": "effects-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "effects-negative-live-return": {
+    "manifest": "effects-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 13,
+    "invariants": [],
+    "properties": [
+      "CooperativeReturns"
+    ],
+    "minimum_distinct_states": 10,
+    "target": null,
+    "note": ""
+  },
+  "effects-negative-missed-projection": {
+    "manifest": "effects-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 13,
+    "invariants": [],
+    "properties": [
+      "ProjectionEventuallyCurrent"
+    ],
+    "minimum_distinct_states": 10,
+    "target": null,
+    "note": ""
+  },
+  "recovery-appearance": {
+    "manifest": "recovery-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "SingleUnsettled",
+      "OriginalIdentityStable",
+      "ReceiptStable",
+      "EffectAtMostOnce",
+      "PendingPurposesPreserved",
+      "CapacitySufficient"
+    ],
+    "properties": [
+      "BothPurposesProgress"
+    ],
+    "minimum_distinct_states": 10000,
+    "target": null,
+    "note": ""
+  },
+  "recovery-private": {
+    "manifest": "recovery-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "SingleUnsettled",
+      "OriginalIdentityStable",
+      "ReceiptStable",
+      "EffectAtMostOnce",
+      "PendingPurposesPreserved",
+      "CapacitySufficient"
+    ],
+    "properties": [
+      "BothPurposesProgress"
+    ],
+    "minimum_distinct_states": 10000,
+    "target": null,
+    "note": ""
+  },
+  "recovery-expanded-capacity": {
+    "manifest": "recovery-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "SingleUnsettled",
+      "OriginalIdentityStable",
+      "ReceiptStable",
+      "EffectAtMostOnce",
+      "PendingPurposesPreserved",
+      "CapacitySufficient"
+    ],
+    "properties": [
+      "BothPurposesProgress"
+    ],
+    "minimum_distinct_states": 10000,
+    "target": null,
+    "note": "容量从4到5；检查原边界未阻断必需新尝试。"
+  },
+  "recovery-retry-bound": {
+    "manifest": "recovery-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "SingleUnsettled",
+      "OriginalIdentityStable",
+      "ReceiptStable",
+      "EffectAtMostOnce",
+      "PendingPurposesPreserved",
+      "CapacitySufficient"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10000,
+    "target": null,
+    "note": "允许技术故障超过3次，检查进入人工待恢复且身份仍保留；不承诺活性。"
+  },
+  "recovery-negative-type": {
+    "manifest": "recovery-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "TypeOK"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "TypeOK",
+    "note": ""
+  },
+  "recovery-negative-unknown-new-id": {
+    "manifest": "recovery-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "SingleUnsettled"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "SingleUnsettled",
+    "note": ""
+  },
+  "recovery-negative-rewrite-original": {
+    "manifest": "recovery-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "OriginalIdentityStable"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "OriginalIdentityStable",
+    "note": ""
+  },
+  "recovery-negative-receipt-after-validation": {
+    "manifest": "recovery-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ReceiptStable"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "ReceiptStable",
+    "note": ""
+  },
+  "recovery-negative-repeat-effect": {
+    "manifest": "recovery-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "EffectAtMostOnce"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "EffectAtMostOnce",
+    "note": ""
+  },
+  "recovery-negative-consume-all": {
+    "manifest": "recovery-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "PendingPurposesPreserved"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "PendingPurposesPreserved",
+    "note": ""
+  },
+  "recovery-negative-recovery-drops-other": {
+    "manifest": "recovery-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "PendingPurposesPreserved"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "PendingPurposesPreserved",
+    "note": ""
+  },
+  "recovery-negative-capacity": {
+    "manifest": "recovery-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "CapacitySufficient"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "CapacitySufficient",
+    "note": "故意过小容量应使义务报错，不能让边界挡住工作后声称通过。"
+  },
+  "recovery-witness-both-complete": {
+    "manifest": "recovery-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "recovery-witness-unknown-before": {
+    "manifest": "recovery-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "recovery-witness-unknown-after": {
+    "manifest": "recovery-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "recovery-witness-new-while-unknown": {
+    "manifest": "recovery-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "recovery-witness-restart-recovered": {
+    "manifest": "recovery-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "recovery-witness-retry-exhausted": {
+    "manifest": "recovery-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "terms-reusable-remedy": {
+    "manifest": "terms-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "ScopeTermImmutable",
+      "NoReusableGrant",
+      "StrictTermBasis",
+      "OnlyOwnerDeclines",
+      "NoReusableUse"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 100,
+    "target": null,
+    "note": ""
+  },
+  "terms-single-use": {
+    "manifest": "terms-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "ScopeTermImmutable",
+      "NoReusableGrant",
+      "StrictTermBasis",
+      "OnlyOwnerDeclines",
+      "NoReusableUse"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": null,
+    "note": ""
+  },
+  "terms-before-settlement": {
+    "manifest": "terms-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "ScopeTermImmutable",
+      "NoReusableGrant",
+      "StrictTermBasis",
+      "OnlyOwnerDeclines",
+      "NoReusableUse"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 100,
+    "target": null,
+    "note": ""
+  },
+  "terms-negative-type": {
+    "manifest": "terms-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "TypeOK"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "TypeOK",
+    "note": ""
+  },
+  "terms-negative-edit-old-scope": {
+    "manifest": "terms-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ScopeTermImmutable"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "ScopeTermImmutable",
+    "note": ""
+  },
+  "terms-negative-generic-grant": {
+    "manifest": "terms-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoReusableGrant"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoReusableGrant",
+    "note": ""
+  },
+  "terms-negative-drop-term-basis": {
+    "manifest": "terms-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "StrictTermBasis"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "StrictTermBasis",
+    "note": ""
+  },
+  "terms-negative-schema-declines": {
+    "manifest": "terms-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "OnlyOwnerDeclines"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "OnlyOwnerDeclines",
+    "note": ""
+  },
+  "terms-witness-both-remedies": {
+    "manifest": "terms-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "terms-witness-private-deferred": {
+    "manifest": "terms-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "terms-witness-authority-rejected": {
+    "manifest": "terms-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "terms-witness-single-use-permitted": {
+    "manifest": "terms-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "terms-use-defense-appearance": {
+    "manifest": "terms-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "ScopeTermImmutable",
+      "StrictTermBasis",
+      "OnlyOwnerDeclines",
+      "NoReusableUse"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": null,
+    "note": "独立使用守卫的故障注入切面：上游已错误保存reusable accepted；不声称该初态是正常设计可达。NoReusableGrant有意不适用于此故障切面。"
+  },
+  "terms-negative-use-defense-appearance": {
+    "manifest": "terms-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoReusableUse"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoReusableUse",
+    "note": "与相同故障切面正对照，仅移除使用时single_use重验。"
+  },
+  "terms-use-defense-private_items": {
+    "manifest": "terms-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "ScopeTermImmutable",
+      "StrictTermBasis",
+      "OnlyOwnerDeclines",
+      "NoReusableUse"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": null,
+    "note": "独立使用守卫的故障注入切面：上游已错误保存reusable accepted；不声称该初态是正常设计可达。NoReusableGrant有意不适用于此故障切面。"
+  },
+  "terms-negative-use-defense-private_items": {
+    "manifest": "terms-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoReusableUse"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoReusableUse",
+    "note": "与相同故障切面正对照，仅移除使用时single_use重验。"
+  },
+  "authority-private": {
+    "manifest": "authority-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "AtomicAppearanceStop",
+      "AtomicPrivateStop",
+      "PurposeAndTakerAuthorized",
+      "CustodyProvenance",
+      "PrivateOwnerOnly",
+      "RestitutionEnabled",
+      "ReturnEntryRetained",
+      "ReceiptNeverReactivates",
+      "SafetyAndKnowledgeDurable",
+      "CompletedItemNotRetaken",
+      "RemainingItemEntitlement",
+      "ReturnPreservesClosureCause",
+      "ReturnContextPrivate",
+      "CurrentReturnReference"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1000,
+    "target": null,
+    "note": "R2服务器Effects组件；完整归还集合派生包含在观察接口中，缓存消费不在本组件。"
+  },
+  "authority-restart-private": {
+    "manifest": "authority-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "AtomicAppearanceStop",
+      "AtomicPrivateStop",
+      "PurposeAndTakerAuthorized",
+      "CustodyProvenance",
+      "PrivateOwnerOnly",
+      "RestitutionEnabled",
+      "ReturnEntryRetained",
+      "ReceiptNeverReactivates",
+      "SafetyAndKnowledgeDurable",
+      "CompletedItemNotRetaken",
+      "RemainingItemEntitlement",
+      "ReturnPreservesClosureCause",
+      "ReturnContextPrivate",
+      "CurrentReturnReference"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1000,
+    "target": null,
+    "note": ""
+  },
+  "authority-both": {
+    "manifest": "authority-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "AtomicAppearanceStop",
+      "AtomicPrivateStop",
+      "PurposeAndTakerAuthorized",
+      "CustodyProvenance",
+      "PrivateOwnerOnly",
+      "RestitutionEnabled",
+      "ReturnEntryRetained",
+      "ReceiptNeverReactivates",
+      "SafetyAndKnowledgeDurable",
+      "CompletedItemNotRetaken",
+      "RemainingItemEntitlement",
+      "ReturnPreservesClosureCause",
+      "ReturnContextPrivate",
+      "CurrentReturnReference"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1000,
+    "target": null,
+    "note": ""
+  },
+  "authority-cooperative-return": {
+    "manifest": "authority-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "AtomicAppearanceStop",
+      "AtomicPrivateStop",
+      "PurposeAndTakerAuthorized",
+      "CustodyProvenance",
+      "PrivateOwnerOnly",
+      "RestitutionEnabled",
+      "ReturnEntryRetained",
+      "ReceiptNeverReactivates",
+      "SafetyAndKnowledgeDurable",
+      "CompletedItemNotRetaken",
+      "RemainingItemEntitlement",
+      "ReturnPreservesClosureCause",
+      "ReturnContextPrivate",
+      "CurrentReturnReference"
+    ],
+    "properties": [
+      "CooperativeReturns"
+    ],
+    "minimum_distinct_states": 1000,
+    "target": null,
+    "note": ""
+  },
+  "authority-negative-current-only": {
+    "manifest": "authority-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ReturnEntryRetained"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "ReturnEntryRetained",
+    "note": ""
+  },
+  "authority-negative-first-item-closes-all": {
+    "manifest": "authority-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "RemainingItemEntitlement"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "RemainingItemEntitlement",
+    "note": ""
+  },
+  "authority-negative-retake-completed": {
+    "manifest": "authority-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "CompletedItemNotRetaken"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "CompletedItemNotRetaken",
+    "note": ""
+  },
+  "authority-witness-new-grant-retake": {
+    "manifest": "authority-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "authority-witness-old-return-new-slot": {
+    "manifest": "authority-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "projection-owner": {
+    "manifest": "projection-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "CompleteSnapshot",
+      "NoRollback",
+      "CurrentViewOnly",
+      "ReceiptDoesNotChangeSnapshot"
+    ],
+    "properties": [
+      "EventuallyCurrent"
+    ],
+    "minimum_distinct_states": 100,
+    "target": null,
+    "note": "七个合法私物后态的完整快照传输实例；非所有Effects历史的组合证明。"
+  },
+  "projection-origin": {
+    "manifest": "projection-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "CompleteSnapshot",
+      "NoRollback",
+      "CurrentViewOnly",
+      "ReceiptDoesNotChangeSnapshot"
+    ],
+    "properties": [
+      "EventuallyCurrent"
+    ],
+    "minimum_distinct_states": 100,
+    "target": null,
+    "note": ""
+  },
+  "projection-negative-type": {
+    "manifest": "projection-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "TypeOK"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "TypeOK",
+    "note": ""
+  },
+  "projection-negative-current-only": {
+    "manifest": "projection-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "CompleteSnapshot"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "CompleteSnapshot",
+    "note": ""
+  },
+  "projection-negative-stale-view": {
+    "manifest": "projection-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "CompleteSnapshot"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "CompleteSnapshot",
+    "note": ""
+  },
+  "projection-negative-accept-old-seq": {
+    "manifest": "projection-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoRollback"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoRollback",
+    "note": ""
+  },
+  "projection-negative-accept-old-view": {
+    "manifest": "projection-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "CurrentViewOnly"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "CurrentViewOnly",
+    "note": ""
+  },
+  "projection-negative-receipt-overwrite": {
+    "manifest": "projection-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ReceiptDoesNotChangeSnapshot"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "ReceiptDoesNotChangeSnapshot",
+    "note": ""
+  },
+  "projection-witness-new-view-old-holding": {
+    "manifest": "projection-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "projection-witness-late-accepted": {
+    "manifest": "projection-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "projection-witness-same-slot-change": {
+    "manifest": "projection-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "projection-witness-origin-not-delivered": {
+    "manifest": "projection-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 10,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "projection-negative-receipt-liveness": {
+    "manifest": "projection-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 13,
+    "invariants": [],
+    "properties": [
+      "EventuallyCurrent"
+    ],
+    "minimum_distinct_states": 10,
+    "target": null,
+    "note": "旧Accepted持续晚到可与合法最新投影交替；若错误写当前快照，弱公平送达也无法最终稳定。"
+  }
+}

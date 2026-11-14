@@ -1,0 +1,27 @@
+# 补证运行与模型修正记录
+
+本文件只追加本轮真实诊断和表示修正；原包77ace28/原131配置及5个未完不变。
+
+## 运行前合同
+
+CONTRACT.md首次运行前SHA256为d7ec09f86c3099f748708161bf329c9408072a9126882790fbb122227afe297d。清单54项：7正向、47负控/见证，包含3条真正时间负控；后续没有新增范围或修改公平性。
+
+## 初轮两项工具诊断
+
+- fence-negative-type：TLC rc75，2 distinct；None原用整数0与tuple request比较触发TLC异常。改为同形tuple哨兵，不改变合法请求、动作或性质。原日志保留为TOOL_ERROR；修正后该负控rc12，12 distinct。
+- recovery-negative-both-purposes-progress：TLC rc255；依赖在deps子目录、cfg在根时，TLC无法找到配置。只将完全相同字节的PersonalRecovery放到同一model目录，SHA a986e81b2dfb6e366181b5892acfe0b0d399e006ad75f99d406e4bc826445b07保持。修正后实际rc13，5,081 distinct、queue=0，目标BothPurposesProgress。
+- ownerRef=null在模型内使用同形tagged-null record以避免TLC异型相等比较；它不是新增wire对象，实际接口仍对应null。
+
+## 返还来源版本表示修正
+
+在串行队列运行期间，根据R2 §13.2.1对“历史ID/版本解释原取得来源”的规定，并只读核对68d2ccb的game/gaolao-personal.mjs实际取得/投影字段，发现初稿Row把lifecycleVersion写为当前open/stopped/superseded分类。改为不可变sourceLifecycleVersion，抽象为取得身份(q,item)对应的原版本token；实际模式另由delivery_pending/return_only表达。加强AcquisitionIdentity检查这个原版本token，不让新slot或停权改写它。
+
+核对运行快照后确认：首个returns-constructor已经捕获旧输入SHA 02def91a1e456a69239885034d2a7022d75c2c13cccf720885feeb5d5c0f004a，而非修正后SHA 52c903cd0b7006ca66a7796bde9031811a163e7d78a8720eba71bab2abcd6cb2；旧运行以60秒TIMEOUT保留，不能宣称修正发生在它启动前。受影响constructor/负控/混合持有人见证会按相同60秒上限重跑，以新依赖hash选取结论。
+
+这是模型字段表示修正，不是R2设计或实现缺陷。原mixed-holders见证仅检查世界holder/取得/grant，不涉及该字段，但仍将相关新模型配置按修正后输入重新固定；不把先前输入SHA覆盖。完整实现对应尚未执行。
+
+## 单项共享扩时授权
+
+root在收到原60秒真实下界与有限边界后，仅授权fence-shared同一配置一次最多300秒。启动前所有先前owned TLC运行均已完成；本次单进程/1 worker，不并发竞争大图。SharedControlEffects.tla SHA 151baf3544b2401bc0fdb2f0ce3fdf8e0feb449024227f2b35dee6e7bd3c7108，fence-shared.cfg SHA 090548cd8f19744ec80c554af84a2a3484d06a0fac1274c9e1045e20a974cd61，与原60秒及四个诊断正向相同。只改新独立manifest的timeout_seconds=300，manifest SHA 82a5657214957b3b1b3e29026008476c8ae7c76508adf7ff9ed307817cc3abeb。ReturnSnapshotOperators未被SharedControlEffects导入，它的来源版本修正不影响该共享图。
+
+修正后returns-constructor仍以默认60秒实际超时，未申请/运行延长。原60秒constructor旧输入超时、修正后新输入超时分开保留。verify.py最终将默认与最大jobs都固定为1，以便复现既定运行政策；这不改变任何TLA/CFG输入或已运行判据。

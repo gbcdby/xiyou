@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "tool": {
+    "version": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "source": {
+    "commit": "1a7f45ddfeca0d25fb3714e1ce45980b225d5bde",
+    "tree": "6b0130cd6838bf052504994527f05e29aabf521e",
+    "revision": "CS-R2 supplement S1",
+    "mode": "check/design",
+    "base_formal_commit": "77ace28f526ce9ad905b1842b7353e48e251423c",
+    "implementation_status": "NOT_ASSESSED"
+  },
+  "model": {
+    "root": "model",
+    "entry": "SharedControlEffects.tla"
+  },
+  "profiles": {
+    "fence-shared": {
+      "config": "fence-shared.cfg",
+      "timeout_seconds": 300,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "GrantCurrent",
+        "AtomicEffects",
+        "ControlFrames",
+        "AuthorityUse",
+        "QuotaCorrect",
+        "CustodyStable",
+        "AcquisitionEvidence",
+        "ResumptionReadOnly",
+        "ReceiptReadOnly",
+        "TerminalClosed"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "any",
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1000,
+        "note": "两用途/每用途旧新请求/两物；全配置保留一次Restart-Resume-Terminal。任意四actor各变化一次；不是单actor结果的合并。",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    }
+  }
+}

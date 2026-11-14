@@ -1,13 +1,18 @@
 import { opaqueRef, next, entityRef, canSee, inRange, unoccluded } from './spatial-world.mjs';
 import {spatialSchema} from '../protocol/spatial-schema.mjs';
-export const isGaolao = state => state.reducerVersion === 'gaolao-world-v1';
+import { gaolaoPersonalProfile } from '../protocol/spatial.mjs';
+import { createPersonalState } from './gaolao-personal-contract.mjs';
+import { projectPersonal, isPersonalConsent } from './gaolao-personal.mjs';
+export const isGaolao = state => state.reducerVersion === 'gaolao-world-v1' || !!gaolaoPersonalProfile(state);
 export const chapterPeople = content => content.chapterRules.people;
+export const emptyGaolaoChapter = () => ({consents:{},consentSlots:{},follows:{},decisions:{},knownDecisions:{},provenance:{},sourceTokens:{},identityKnowledge:{},progressKnown:{},borrowedItems:[],contact:false,retreated:false,cuilanSafe:false,safeRecord:null,accountsCompared:false,explanations:{},route:'undecided',disguise:null,recruitmentEnded:false,endProposal:null,endVersion:'0',departureArrangement:null,onlineActorIds:[]});
 export function setupGaolaoState(state, content) {
   if (!isGaolao(state)) return;
   const groups=content.chapterRules.partyRoles[String(state.members.length)];
   state.members.forEach((m,i)=>{const a=state.characters[m.characterId],roles=groups[i];a.responsibilities=roles;a.name=content.chapterRules.roles.find(r=>r.roleId===roles[0]).name;a.appearanceName=a.name;a.capabilities.push('propose_follow','respond_consent','withdraw_consent','request_end','confirm_end');});
   for(const a of Object.values(state.characters)) if(a.kind!=='human')a.capabilities.push('respond_consent','withdraw_consent');
-  state.chapter={consents:{},consentSlots:{},follows:{},decisions:{},knownDecisions:{},provenance:{},sourceTokens:{},identityKnowledge:{},progressKnown:{},borrowedItems:[],contact:false,retreated:false,cuilanSafe:false,safeRecord:null,accountsCompared:false,explanations:{},route:'undecided',disguise:null,recruitmentEnded:false,endProposal:null,endVersion:'0',departureArrangement:null,onlineActorIds:[]};
+  state.chapter={...emptyGaolaoChapter(),...(gaolaoPersonalProfile(state)?createPersonalState():{})};
+  if(gaolaoPersonalProfile(state))for(const member of state.members)state.characters[member.characterId].capabilities.push('cancel_personal_request');
 }
 export function changeChapter(tx, update) { const chapter=structuredClone(tx.state.chapter);update(chapter);tx.emit('gaolao.chapter',{chapter});return tx.state.chapter; }
 export function observerName(state, observerId, actor) {
@@ -23,7 +28,7 @@ export function observeGaolao(tx,observerId,{statement,fields=[],category='World
   const seq=sourceSeq??next(tx.state.sessionSeq);
   const observation={observationRef,category,statement,sourceSeq:seq,fields:structuredClone(fields),shareable,...(sourceId?{source:{sourceRef:token,kind,label,beforeArrivalDays,receivedSeq:next(tx.state.sessionSeq)}}:{})};
   tx.emit('spatial.observation',{observerId,observation},{humanCharacterIds:[observerId],coreNpcCharacterIds:[observerId],proxyCharacterIds:shareable?[observerId]:[]});
-  if(sourceId)changeChapter(tx,c=>{c.provenance[observerId]??={};c.provenance[observerId][observationRef]={sourceId,...structuredClone(metadata),...(tx.content.chapterRules.sceneRolePolicies&&observerId===tx.content.chapterRules.people.cuilan&&['rescue-contact','cuilan-route-front-v1','cuilan-route-tea-v1'].includes(sourceId)?{retainedObservation:structuredClone(observation)}:{})};});
+  if(sourceId)changeChapter(tx,c=>{c.provenance[observerId]??={};c.provenance[observerId][observationRef]={sourceId,...structuredClone(metadata),...(tx.content.chapterRules.sceneRolePolicies&&observerId===tx.content.chapterRules.people.cuilan&&(['rescue-contact','cuilan-route-front-v1','cuilan-route-tea-v1'].includes(sourceId)||gaolaoPersonalProfile(tx.state)&&(metadata.personalSource||metadata.personalRequest))?{retainedObservation:structuredClone(observation)}:{})};});
   return observation;
 }
 export const knowsSource=(state,actorId,sourceId)=>Object.values(state.chapter.provenance[actorId]??{}).some(m=>m.sourceId===sourceId);
@@ -56,7 +61,7 @@ export function gaolaoOperations(state,content,observerId,entity){
   // 未识破时两个同貌对象提供同一类请求入口；只有规则解析真身后才能授予许可。
   if(observer.kind==='human'){
     const appearsCuilan=id===p.cuilan||state.chapter.disguise?.actorId===id;
-    if(appearsCuilan)ops.push('gz-request-appearance');
+    if(appearsCuilan){ops.push('gz-request-appearance');if(gaolaoPersonalProfile(state))ops.push('gz-describe-private-items');}
     if(appearsCuilan||content.chapterRules.privateItems.some(item=>item.ownerId===id))ops.push('gz-request-private-items');
     if([p.tang,p.bajie].includes(id)&&entity.appearanceName!=='翠兰')ops.push('gz-invite-meeting');
     if(id===p.witness)ops.push('gz-hear-witness');
@@ -72,10 +77,10 @@ export function projectGaolao(state,content,actorId,view){
   // 当前用途槽必须保留；剩余位置才给最近历史。持久同意与发生时事件不删改。
   const current=allowed.filter(x=>currentIds.has(x.consentId)),remaining=spatialSchema.$defs.ChapterViewV2.properties.consents.maxItems-current.length;
   const history=remaining>0?allowed.filter(x=>!currentIds.has(x.consentId)).slice(-remaining):[];
-  const consents=[...current,...history].sort(chronological).map(x=>({consentId:x.consentId,subjectRef:r(x.subjectId),requesterRef:r(x.requesterId),purpose:x.purpose,scope:{...(x.scope.destinationId?{destinationId:x.scope.destinationId}:{}),...(x.scope.leaderId?{leaderRef:r(x.scope.leaderId)}:{}),...(x.scope.itemIds?{itemRefs:x.scope.itemIds.map(r)}:{})},version:x.version,status:x.status,sourceSeq:x.sourceSeq}));
+  const consents=[...current,...history].sort(chronological).map(x=>({consentId:x.consentId,subjectRef:r(x.subjectId),requesterRef:r(x.requesterId),purpose:x.purpose,scope:{...(x.scope.destinationId?{destinationId:x.scope.destinationId}:{}),...(x.scope.leaderId?{leaderRef:r(x.scope.leaderId)}:{}),...(x.scope.itemIds&&!isPersonalConsent(state,content,x)?{itemRefs:x.scope.itemIds.map(r)}:{})},version:x.version,status:x.status,sourceSeq:x.sourceSeq}));
   const follows=Object.values(c.follows).filter(x=>[x.subjectId,x.leaderId,x.requesterId].includes(actorId)).map(x=>({followId:x.followId,subjectRef:r(x.subjectId),leaderRef:r(x.leaderId),destinationId:x.destinationId,planVersion:x.planVersion,consentId:x.consentId,consentVersion:x.consentVersion,status:x.status,reason:x.reason??''}));
   const known={...(c.knownDecisions[actorId]??{}),...(c.decisions[actorId]?{[actorId]:c.decisions[actorId]}:{})};
   const decisions=Object.values(known).map(x=>({decisionId:x.decisionId,subjectRef:r(x.subjectId),purpose:x.purpose,version:x.version,status:x.status,sourceSeq:x.sourceSeq}));
   const e=c.endProposal,endProposal=a.kind==='human'&&e?{proposalId:e.proposalId,proposalVersion:e.proposalVersion,scope:e.scope,onlineMembershipVersion:e.onlineMembershipVersion,requiredCount:e.requiredIds.length,confirmedCount:e.confirmedIds.length,ownConfirmed:e.confirmedIds.includes(actorId),status:e.status}:null;
-  return {chapterId:'gaolaozhuang',responsibilities:a.responsibilities??[],progress:Object.values(c.progressKnown[actorId]??{}),consents,follows,decisions,destinations:[...content.chapterRules.safeDestinations.map(({destinationId,label,sceneId,position})=>({destinationId,label,sceneId,position,purpose:'follow'})),...content.chapterRules.meetingDestinations.map(x=>({...x,purpose:'meeting'})),{destinationId:'departure',label:'离庄出发点',...content.chapterRules.departure,purpose:'departure'},...content.chapterRules.waiting.map((x,i)=>({destinationId:'waiting-'+i,label:'公开等待或归处',...x,purpose:'waiting'}))],endProposal,publicItems:a.kind==='human'?content.items.filter(x=>x.publicBorrowable).map(x=>({itemRef:r(x.itemId),name:x.name,borrowed:c.borrowedItems.includes(x.itemId),returned:c.borrowedItems.includes(x.itemId)&&publicItemsReturned({...state,chapter:{...c,borrowedItems:[x.itemId]}},content)})):[],...(actorId===p.wukong||c.identityKnowledge[actorId]?.[p.wukong]?{route:c.route}:{})};
+  return {chapterId:'gaolaozhuang',responsibilities:a.responsibilities??[],progress:Object.values(c.progressKnown[actorId]??{}),consents,follows,decisions,destinations:[...content.chapterRules.safeDestinations.map(({destinationId,label,sceneId,position})=>({destinationId,label,sceneId,position,purpose:'follow'})),...content.chapterRules.meetingDestinations.map(x=>({...x,purpose:'meeting'})),{destinationId:'departure',label:'离庄出发点',...content.chapterRules.departure,purpose:'departure'},...content.chapterRules.waiting.map((x,i)=>({destinationId:'waiting-'+i,label:'公开等待或归处',...x,purpose:'waiting'}))],endProposal,publicItems:a.kind==='human'?content.items.filter(x=>x.publicBorrowable&&state.items[x.itemId]).map(x=>({itemRef:r(x.itemId),name:x.name,borrowed:c.borrowedItems.includes(x.itemId),returned:c.borrowedItems.includes(x.itemId)&&publicItemsReturned({...state,chapter:{...c,borrowedItems:[x.itemId]}},content)})):[],...(actorId===p.wukong||c.identityKnowledge[actorId]?.[p.wukong]?{route:c.route}:{}),...projectPersonal(state,content,actorId,view)};
 }

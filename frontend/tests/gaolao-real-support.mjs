@@ -15,6 +15,7 @@ const operationLabels = {
   'gz-read-ledger': '阅读旧饭账', 'gz-hear-witness': '询问见证人', 'gz-release-support': '撤收门撑',
   'gz-check-appearance': '核验同貌人物', 'gz-reveal-identity': '当面说明已知身份', 'gz-plan-departure': '通知离庄安排',
 };
+const productionNpcKeys = Object.freeze(['tang', 'wukong', 'bajie']);
 
 export async function closeReading(page) {
   const pane = page.locator('.spatial-reading-pane');
@@ -84,6 +85,7 @@ async function visibleRecipient(page, reference, selectLabel) {
 export async function waitHumanReceipt(page, previousIds, expected, report, player, label) {
   const draft = await until(async () => (await clientState(page)).actions.find(draft => {
     if (previousIds.includes(draft.id)) return false;
+    if (expected.clientActionId !== undefined && draft.id !== expected.clientActionId) return false;
     const action = JSON.parse(draft.raw).action;
     return action.kind === expected.kind && (expected.operationId === undefined || action.operationId === expected.operationId);
   }), label + '已从页面发出');
@@ -202,14 +204,18 @@ export async function humanAction(page, action, report, player) {
   return waitHumanReceipt(page, previousIds, action, report, player, label);
 }
 
-export async function browserRoom({ server, browser, baseURL, count, contentVersion = 'gaolaozhuang-v1', report }) {
+export async function browserRoom({ server, browser, baseURL, count, contentVersion, profile = 'legacy-controlled-v1', report, observe = (target, event, listener) => target.on(event, listener) }) {
+  assert.ok(['legacy-controlled-v1', 'production-cuilan-v1'].includes(profile), '未知高老庄浏览器 profile，不得静默降级为受控本人');
+  const production = profile === 'production-cuilan-v1';
+  assert.ok(!production || typeof contentVersion === 'string', '生产 profile 必须显式固定内容版本，不得沿用旧回归默认值');
+  if (contentVersion === undefined) contentVersion = 'gaolaozhuang-v1';
   const content = await loadContent(contentVersion), pages = [], contexts = [], users = [], actors = new Map();
   let sessionId;
   for (let index = 0; index < count; index++) {
     const context = await browser.newContext({ viewport: { width: 1600, height: 1000 }, deviceScaleFactor: 1 }); contexts.push(context);
     const page = await context.newPage(); pages.push(page); page.setDefaultTimeout(5000);
-    page.on('pageerror', error => report.pageErrors.push({ count, player: index, message: error.message }));
-    page.on('response', async response => {
+    observe(page, 'pageerror', error => report.pageErrors.push({ count, player: index, message: error.message }));
+    observe(page, 'response', async response => {
       if (!response.url().includes('/recap?')) return;
       try {
         const text = await response.text(); const result = JSON.parse(text);
@@ -237,29 +243,50 @@ export async function browserRoom({ server, browser, baseURL, count, contentVers
     await until(async () => (await clientState(page)).inputReady, '页面取得当前角色控制');
   }
   for (const page of pages) await until(async () => !(await snapshot(page)).projection.paused, '所有玩家恢复后场景实际运行');
-  for (const [key, actorId] of Object.entries(content.chapterRules.people)) {
-    const configured = content.npcs.find(npc => npc.characterId === actorId);
-    actors.set(key, { handle: await server.runtime.bindInternal(sessionId, actorId, configured.actorKind === 'scene_role' ? 'scene_role' : 'core_npc'), internal: true });
-  }
+  const npcKeys = production ? productionNpcKeys : Object.keys(content.chapterRules.people);
+  // 身份来自初始化时已核的内容；重启后不能从返回的可写 content 对象重新解释角色。
+  const npcBindings = Object.freeze(npcKeys.map(key => {
+    const actorId = content.chapterRules.people[key], configured = content.npcs.find(npc => npc.characterId === actorId);
+    if (production) assert.equal(configured?.actorKind, key === 'bajie' ? 'chapter_autonomous' : 'persistent_core', '生产 profile 只能绑定登记的三自主 NPC');
+    return Object.freeze({ key, actorId, kind: configured.actorKind === 'scene_role' ? 'scene_role' : 'core_npc' });
+  }));
+  const bindControlledNpcs = async () => {
+    for (const { key, actorId, kind } of npcBindings) {
+      actors.set(key, { handle: await server.runtime.bindInternal(sessionId, actorId, kind), internal: true });
+    }
+  };
+  await bindControlledNpcs();
+  (report.harnessProfiles ??= []).push({ sessionId, count, profile, expectedContentVersion: contentVersion, controlledNpcRoles: [...npcKeys] });
+  // 所有被 move/go/interact 捕获的路径都从这里取 actor；外层覆盖 room.send 无法改变该边界。
+  const actorFor = key => {
+    if (production && !(Number.isInteger(key) && key >= 0 && key < count) && !productionNpcKeys.includes(key)) {
+      throw new Error('生产 profile 不允许操作该角色：' + String(key));
+    }
+    const actor = actors.get(key);
+    assert.ok(actor, '当前 profile 未登记该角色：' + String(key));
+    return actor;
+  };
   const read = async key => {
-    const actor = actors.get(key); const value = actor.internal ? await server.runtime.observeInternal(actor.handle) : await snapshot(actor.page);
+    const actor = actorFor(key); const value = actor.internal ? await server.runtime.observeInternal(actor.handle) : await snapshot(actor.page);
     validateSpatial('SnapshotV2', value); return value;
   };
   const send = async (key, action) => {
-    const actor = actors.get(key);
+    const actor = actorFor(key);
     if (!actor.internal) return humanAction(actor.page, action, report, key);
     const intentId = crypto.randomUUID(); const reserved = await server.runtime.reserveSpatialIntent(actor.handle, intentId, action);
     const receipt = await server.runtime.submitSpatialIntent(actor.handle, intentId);
-    report.npcActions.push({ role: key, intentId, action: reserved.action, receipt });
+    report.npcActions.push({ profile, role: key, intentId, action: reserved.action, receipt });
     return receipt;
   };
   const move = async (key, sceneId, position) => {
-    const actor = actors.get(key); const before = (await read(key)).projection.movement?.movementCommandSeq;
     const receipt = await send(key, { kind: 'move_to', sceneId, destination: position });
     assert.equal(receipt.status, 'Accepted', '本次路线受理：' + receipt.code);
     return until(async () => {
-      const p = (await read(key)).projection;
-      if (p.movement?.movementCommandSeq === before) return false;
+      const current = await read(key), p = current.projection;
+      // 控制恢复后 commandSeq 可从 1 重新开始；本次 Receipt 的路线身份不跨 epoch 混用。
+      if (BigInt(current.snapshotSeq) < BigInt(receipt.observedSeq)
+        || p.movement?.movementId !== receipt.result.movementId
+        || p.movement?.planVersion !== receipt.result.planVersion) return false;
       if (['blocked', 'cancelled'].includes(p.movement?.status)) throw new Error(`实际导航中止 ${key}: ${p.movement.reason}`);
       return p.movement?.status === 'arrived' && p.self.sceneId === sceneId && samePosition(p.self.position, position) ? p : false;
     }, '真实路线到达原精确目标');
@@ -269,7 +296,7 @@ export async function browserRoom({ server, browser, baseURL, count, contentVers
     if (s.projection.self.sceneId !== where.sceneId) {
       const scene = content.scenes.find(scene => scene.sceneId === s.projection.self.sceneId), exit = scene.exits.find(exit => exit.destinationSceneId === where.sceneId);
       assert.ok(exit, '跨场景须存在公开出口');
-      if (actors.get(key).internal) await move(key, scene.sceneId, scene.anchors.find(anchor => anchor.anchorId === exit.anchorId).position);
+      if (actorFor(key).internal) await move(key, scene.sceneId, scene.anchors.find(anchor => anchor.anchorId === exit.anchorId).position);
       else {
         const page = pages[key]; await closeReading(page); await openObjects(page);
         const beforeIds = (await clientState(page)).actions.map(action => action.id);
@@ -295,5 +322,15 @@ export async function browserRoom({ server, browser, baseURL, count, contentVers
     return send(key, { kind: 'interact', targetRef: e.entityRef, operationId, expectedTargetRevision: e.resourceRevision, ...(parameters ? { parameters } : {}) });
   };
   const at = (sceneId, anchorId) => ({ sceneId, position: content.scenes.find(scene => scene.sceneId === sceneId).anchors.find(anchor => anchor.anchorId === anchorId).position });
-  return { count, pages, contexts, users, content, sessionId, actors, runtime: server.runtime, snapshot: read, send, move, go, entity, interact, role: roleId => content.chapterRules.partyRoles[String(count)].findIndex(group => group.includes(roleId)), at, C: id => at('gaolao-courtyard', id), R: id => at('gaolao-village-road', id), step: async (ms = 1000) => sleep(ms), close: async () => { for (const context of contexts) await context.close(); } };
+  return {
+    count, pages, contexts, users, content, sessionId, profile,
+    // 旧回归保留原接口；生产 profile 不交出可篡改 actor 表或可任意 bind/reserve 的 runtime。
+    ...(!production ? { actors, runtime: server.runtime } : {}),
+    ...(production ? { rebindControlledNpcs: bindControlledNpcs } : {}),
+    snapshot: read, send, move, go, entity, interact,
+    role: roleId => content.chapterRules.partyRoles[String(count)].findIndex(group => group.includes(roleId)),
+    at, C: id => at('gaolao-courtyard', id), R: id => at('gaolao-village-road', id),
+    step: async (ms = 1000) => sleep(ms),
+    close: async () => { for (const context of contexts) await context.close(); },
+  };
 }

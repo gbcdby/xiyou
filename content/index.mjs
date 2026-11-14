@@ -13,6 +13,8 @@ const registry = new Map([
   ['gaolaozhuang-tools-east-v1', new URL('./fixtures/gaolaozhuang-tools-east-v1.json', import.meta.url)],
   ['gaolaozhuang-scene-v2', new URL('./fixtures/gaolaozhuang-scene-v2.json', import.meta.url)],
   ['gaolaozhuang-tools-east-scene-v2', new URL('./fixtures/gaolaozhuang-tools-east-scene-v2.json', import.meta.url)],
+  ['gaolaozhuang-scene-v3', new URL('./fixtures/gaolaozhuang-scene-v3.json', import.meta.url)],
+  ['gaolaozhuang-tools-east-scene-v3', new URL('./fixtures/gaolaozhuang-tools-east-scene-v3.json', import.meta.url)],
   ['spatial-graybox-v2', new URL('./fixtures/spatial-graybox-v2.json', import.meta.url)],
 ]);
 

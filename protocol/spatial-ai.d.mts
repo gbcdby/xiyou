@@ -12,6 +12,10 @@ export interface SpatialAIContracts {
   EntityRef: T.EntityRef;
   DecimalString: T.DecimalString;
   GaolaoInteractionV2: T.GaolaoInteractionV2;
+  PersonalAppearanceParametersV1: T.PersonalAppearanceParametersV1;
+  PersonalPermissionTermV1: T.PersonalPermissionTermV1;
+  PersonalRequestReplacementV1: T.PersonalRequestReplacementV1;
+  PersonalPrivateItemsParametersV1: T.PersonalPrivateItemsParametersV1;
   SpatialContextV2: T.SpatialContextV2;
   SpatialModelProjectionV2: T.SpatialModelProjectionV2;
   SpatialModelSelfV2: T.SpatialModelSelfV2;
@@ -39,6 +43,15 @@ export interface SpatialAIContracts {
   FollowViewV2: T.FollowViewV2;
   DecisionViewV2: T.DecisionViewV2;
   EndProposalViewV2: T.EndProposalViewV2;
+  PersonalRequestViewV1: T.PersonalRequestViewV1;
+  PersonalPurposeV1: T.PersonalPurposeV1;
+  PersonalLifecycleV1: T.PersonalLifecycleV1;
+  PersonalExecutionStateV1: T.PersonalExecutionStateV1;
+  PersonalReasonCodeV1: T.PersonalReasonCodeV1;
+  PersonalRequestScopeViewV1: T.PersonalRequestScopeViewV1;
+  PersonalOriginV1: T.PersonalOriginV1;
+  PrivateItemOfferV1: T.PrivateItemOfferV1;
+  PrivateReturnViewV1: T.PrivateReturnViewV1;
   SpatialModelToolV2: T.SpatialModelToolV2;
   SpatialModelGoalV2: T.SpatialModelGoalV2;
   SpatialDecisionContextV2: T.SpatialDecisionContextV2;

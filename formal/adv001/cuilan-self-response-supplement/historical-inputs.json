@@ -1,0 +1,23 @@
+{
+  "note": "Exact distinct historical TLA/CFG bytes retained in Git, not copied into Library. Current bytes are in model/. Old base package remains unchanged.",
+  "historical": [
+    {
+      "path": "historical-inputs/dee5ded8c3cc76426f70494a0e1790f612fbfdffc8c10c8a58eca6d7cc3371df/ReturnSnapshotOperators.tla",
+      "first_observed_run": "initial/fence-negative-type",
+      "original_input_path": "ReturnSnapshotOperators.tla",
+      "sha256": "dee5ded8c3cc76426f70494a0e1790f612fbfdffc8c10c8a58eca6d7cc3371df"
+    },
+    {
+      "path": "historical-inputs/74b9fb6a488880a61043b1b525ec8d8720daa2c45da380118ec667534799c138/SharedControlEffects.tla",
+      "first_observed_run": "initial/fence-negative-type",
+      "original_input_path": "SharedControlEffects.tla",
+      "sha256": "74b9fb6a488880a61043b1b525ec8d8720daa2c45da380118ec667534799c138"
+    },
+    {
+      "path": "historical-inputs/02def91a1e456a69239885034d2a7022d75c2c13cccf720885feeb5d5c0f004a/ReturnSnapshotOperators.tla",
+      "first_observed_run": "initial-corrected/fence-negative-type",
+      "original_input_path": "ReturnSnapshotOperators.tla",
+      "sha256": "02def91a1e456a69239885034d2a7022d75c2c13cccf720885feeb5d5c0f004a"
+    }
+  ]
+}

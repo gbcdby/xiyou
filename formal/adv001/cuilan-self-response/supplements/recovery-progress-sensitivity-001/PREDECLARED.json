@@ -1,0 +1,38 @@
+{
+  "finding": "R-CS-FORMAL-LIVE-SENS-001",
+  "created_at_utc": "2026-11-14T09:08:01.574314+00:00",
+  "author_role_switch": "本轮从原77ace独立审查者切换为补充形式候选作者；新增产物须另由独立审查者复核。",
+  "base_commit": "77ace28f526ce9ad905b1842b7353e48e251423c",
+  "base_tree": "006fc92d3cd261bddf22f698871e44b6434be36e",
+  "profile": "recovery-negative-progress-consume-all",
+  "expected_status": "COUNTEREXAMPLE",
+  "expected_tlc_exit_code": 13,
+  "expected_runner_exit_code": 2,
+  "expected_temporal_property": "BothPurposesProgress",
+  "required_evidence": [
+    "非空初态",
+    "原TLC temporal violation/rc13",
+    "唯一启用时间性质为BothPurposesProgress",
+    "轨迹含consume-all误清另一用途待办后该用途不能进展的循环或无限停滞"
+  ],
+  "timeout_seconds": 60,
+  "workers": 1,
+  "heap_mb": 512,
+  "positive_inputs_before": {
+    "model/PersonalRecovery.tla": "a986e81b2dfb6e366181b5892acfe0b0d399e006ad75f99d406e4bc826445b07",
+    "model/recovery-appearance.cfg": "1a1d640a10a69a1d3aafd50ef950ce3d5b7d3fb45ed79abb20f1231051144a16",
+    "model/recovery-private.cfg": "362d55c284b1deb434f605496caa946b58f61e80c9b587314b9c4ad779463737",
+    "model/recovery-expanded-capacity.cfg": "6aed15a8150f61324cc2728e6391993ae0fff111435c6d00c6f1f95f8fb4c425",
+    "recovery-verification.json": "ef20d139b52dcda76f0117faeecacbf91db39eb77e494e208bd9faf31a7a2fce",
+    "expectations.json": "ffad9676f0cb81e1880dd1ff74e61895db26596adad4a237b716853ad93aeb7a",
+    "RUN_INDEX.json": "4c57e1a73af38fec8e5e0bc7cc8b631d5d891b4be9f8c0d6fa63827007b6b6df"
+  },
+  "new_config_sha256": "db3120608f356094eac3f293c64bf82300bb6f288bc93dbb804475562458e62e",
+  "new_manifest_sha256": "03c7cb55d745508d294e3bb826d2b6a3e8ccb90a8d509884da89b0ce5382e810",
+  "overlap_check": {
+    "latest_dispatch": "v15明确77ace模型冻结；未见该LIVE-SENS补充",
+    "base_worktree": "clean",
+    "current_team": "本轮4位，未有其他本轮模型writer",
+    "limitation": "本会话不能枚举或控制旧会话Agent；不改旧worktree，不复用旧run目录。"
+  }
+}

@@ -1,0 +1,911 @@
+{
+  "schema_version": 1,
+  "tool": {
+    "version": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "source": {
+    "commit": "1a7f45ddfeca0d25fb3714e1ce45980b225d5bde",
+    "tree": "6b0130cd6838bf052504994527f05e29aabf521e",
+    "revision": "CS-R2 supplement S1",
+    "mode": "check/design",
+    "base_formal_commit": "77ace28f526ce9ad905b1842b7353e48e251423c",
+    "implementation_status": "NOT_ASSESSED"
+  },
+  "model": {
+    "root": "model",
+    "entry": "SharedControlEffects.tla"
+  },
+  "profiles": {
+    "fence-subject": {
+      "config": "fence-subject.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "GrantCurrent",
+        "AtomicEffects",
+        "ControlFrames",
+        "AuthorityUse",
+        "QuotaCorrect",
+        "CustodyStable",
+        "AcquisitionEvidence",
+        "ResumptionReadOnly",
+        "ReceiptReadOnly",
+        "TerminalClosed"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "C",
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1000,
+        "note": "两用途/每用途旧新请求/两物；全配置保留一次Restart-Resume-Terminal。单actor诊断切面，不冒充多个actor顺序组合。",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "fence-requester-p1": {
+      "config": "fence-requester-p1.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "GrantCurrent",
+        "AtomicEffects",
+        "ControlFrames",
+        "AuthorityUse",
+        "QuotaCorrect",
+        "CustodyStable",
+        "AcquisitionEvidence",
+        "ResumptionReadOnly",
+        "ReceiptReadOnly",
+        "TerminalClosed"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "p1",
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1000,
+        "note": "两用途/每用途旧新请求/两物；全配置保留一次Restart-Resume-Terminal。单actor诊断切面，不冒充多个actor顺序组合。",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "fence-requester-p2": {
+      "config": "fence-requester-p2.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "GrantCurrent",
+        "AtomicEffects",
+        "ControlFrames",
+        "AuthorityUse",
+        "QuotaCorrect",
+        "CustodyStable",
+        "AcquisitionEvidence",
+        "ResumptionReadOnly",
+        "ReceiptReadOnly",
+        "TerminalClosed"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "p2",
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1000,
+        "note": "两用途/每用途旧新请求/两物；全配置保留一次Restart-Resume-Terminal。单actor诊断切面，不冒充多个actor顺序组合。",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "fence-performer": {
+      "config": "fence-performer.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "GrantCurrent",
+        "AtomicEffects",
+        "ControlFrames",
+        "AuthorityUse",
+        "QuotaCorrect",
+        "CustodyStable",
+        "AcquisitionEvidence",
+        "ResumptionReadOnly",
+        "ReceiptReadOnly",
+        "TerminalClosed"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "W",
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1000,
+        "note": "两用途/每用途旧新请求/两物；全配置保留一次Restart-Resume-Terminal。单actor诊断切面，不冒充多个actor顺序组合。",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "fence-shared": {
+      "config": "fence-shared.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "GrantCurrent",
+        "AtomicEffects",
+        "ControlFrames",
+        "AuthorityUse",
+        "QuotaCorrect",
+        "CustodyStable",
+        "AcquisitionEvidence",
+        "ResumptionReadOnly",
+        "ReceiptReadOnly",
+        "TerminalClosed"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "any",
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1000,
+        "note": "两用途/每用途旧新请求/两物；全配置保留一次Restart-Resume-Terminal。任意四actor各变化一次；不是单actor结果的合并。",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "fence-negative-type": {
+      "config": "fence-negative-type.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "any",
+          "Fault": "type",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "fence-negative-miss-subject": {
+      "config": "fence-negative-miss-subject.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "GrantCurrent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "C",
+          "Fault": "miss-subject",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "fence-negative-miss-performer": {
+      "config": "fence-negative-miss-performer.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "GrantCurrent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "W",
+          "Fault": "miss-performer",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "fence-negative-split-appearance": {
+      "config": "fence-negative-split-appearance.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "AtomicEffects"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "W",
+          "Fault": "split-appearance",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "fence-negative-split-private": {
+      "config": "fence-negative-split-private.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "AtomicEffects"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "C",
+          "Fault": "split-private",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "fence-negative-overinvalidate": {
+      "config": "fence-negative-overinvalidate.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "ControlFrames"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "W",
+          "Fault": "overinvalidate",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "fence-negative-refresh-proof": {
+      "config": "fence-negative-refresh-proof.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "ControlFrames"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "p1",
+          "Fault": "refresh-proof",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "fence-negative-stale-use": {
+      "config": "fence-negative-stale-use.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "AuthorityUse"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "p1",
+          "Fault": "stale-use",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "fence-negative-retake": {
+      "config": "fence-negative-retake.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "QuotaCorrect"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "none",
+          "Fault": "retake",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "fence-negative-first-closes-all": {
+      "config": "fence-negative-first-closes-all.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "QuotaCorrect"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "none",
+          "Fault": "first-closes-all",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "fence-negative-reassign": {
+      "config": "fence-negative-reassign.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "CustodyStable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "none",
+          "Fault": "reassign-acquisition",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "fence-negative-control-moves": {
+      "config": "fence-negative-control-moves.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "CustodyStable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "C",
+          "Fault": "control-moves-item",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "fence-negative-acquisition-evidence": {
+      "config": "fence-negative-acquisition-evidence.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "AcquisitionEvidence"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "none",
+          "Fault": "reassign-acquisition",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "fence-negative-resume": {
+      "config": "fence-negative-resume.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "ResumptionReadOnly"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "any",
+          "Fault": "resume-reactivates",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "fence-negative-receipt": {
+      "config": "fence-negative-receipt.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "ReceiptReadOnly"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "any",
+          "Fault": "receipt-reactivates",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "fence-negative-terminal": {
+      "config": "fence-negative-terminal.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TerminalClosed"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "none",
+          "Fault": "terminal-residue",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "fence-witness-performer-isolation": {
+      "config": "fence-witness-performer-isolation.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "W",
+          "Fault": "none",
+          "Probe": "selective-preserved"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "fence-witness-requester-isolation": {
+      "config": "fence-witness-requester-isolation.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "p1",
+          "Fault": "none",
+          "Probe": "selective-preserved"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "fence-witness-restart-dual": {
+      "config": "fence-witness-restart-dual.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "any",
+          "Fault": "none",
+          "Probe": "restart-dual"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "fence-witness-terminal-dual": {
+      "config": "fence-witness-terminal-dual.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "any",
+          "Fault": "none",
+          "Probe": "terminal-dual"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "fence-witness-late-old-take": {
+      "config": "fence-witness-late-old-take.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "none",
+          "Fault": "none",
+          "Probe": "late-old-take"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "fence-witness-old-first-rejected": {
+      "config": "fence-witness-old-first-rejected.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "any",
+          "Fault": "none",
+          "Probe": "old-first-rejected"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    },
+    "fence-witness-two-actors-after-use": {
+      "config": "fence-witness-two-actors-after-use.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "ChangedActor": "any",
+          "Fault": "none",
+          "Probe": "two-actors-after-use"
+        },
+        "minimum_distinct_states": 1,
+        "note": "",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。"
+      ]
+    }
+  }
+}

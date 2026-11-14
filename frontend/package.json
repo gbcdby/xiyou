@@ -13,6 +13,8 @@
     "test": "node --test tests/*.test.mjs",
     "test:browser": "node tests/browser-check.mjs",
     "test:browser:gaolao": "node tests/gaolao-real-browser.mjs",
+    "test:browser:cuilan-self-response": "node tests/cuilan-self-response-browser.mjs",
+    "test:fault:cuilan-restart": "node tests/cuilan-self-response-restart.mjs",
     "test:browser:spatial-retention": "node tests/spatial-retention-browser.mjs",
     "preview": "vite preview --host 127.0.0.1"
   },

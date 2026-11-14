@@ -4,6 +4,9 @@ import { findPath,pointAlongPath,facingAlongPath,distance,inPolygon,clearSegment
 import {scenePolicy,routeSources,createPolicyRoute,policyRouteValid,checkPolicyLeader,policyLocalPath,actualFrontExit,policySummary} from './gaolao-policy-route.mjs';
 import { isGaolao,chapterPeople,changeChapter,consentFor,consentVersion,observeGaolao,observeConsentChange,knowsSource,nearbyObservers,recordProgress,currentDecision,publicItemsReturned } from './gaolao-world.mjs';
 import {cancelGaolaoNavigation} from './gaolao-navigation.mjs';
+import { personalSources } from './gaolao-personal-contract.mjs';
+import { gaolaoPersonalProfile } from '../protocol/spatial.mjs';
+import { personalInteraction, cancelPersonalRequest, respondPersonal, isPersonalConsent, checkPersonalAppearance, startedPersonalAppearance, endedPersonalAppearance, checkPersonalItem } from './gaolao-personal.mjs';
 const refuse=code=>{throw new RuleError(code);};
 const actorEvent=(tx,a)=>tx.emit('spatial.actor',{actor:a});
 const near=(tx,a,b)=>{if(!inRange(tx.state,tx.content,a,b,tx.content.movement.interactionRadius))refuse('OUT_OF_RANGE');if(!unoccluded(tx.state,tx.content,a,b))refuse('OCCLUDED');};
@@ -17,7 +20,7 @@ function targetField(tx,id,key,label,value){const t=structuredClone(tx.state.tar
 function cancelDeparture(tx){const arrangement=tx.state.chapter.departureArrangement;if(!arrangement)return;changeChapter(tx,c=>{c.departureArrangement=null;});for(const id of arrangement.recipientIds)cancelGaolaoNavigation(tx,id,d=>d.departure?.sourceSeq===arrangement.sourceSeq,'当事人安排或决定已经变化。');}
 function endFacts(tx){return [{key:'safe',label:'真实本人已安全安置',value:tx.state.chapter.cuilanSafe},{key:'open',label:'后宅可自由出入',value:doorOpen(tx)},{key:'returned',label:'本队借出公共物实际归还',value:publicItemsReturned(tx.state,tx.content)},{key:'compared',label:'材料送达及真实会面已完成',value:tx.state.chapter.accountsCompared},{key:'recruitmentEnded',label:'团队明确结束未决招徒',value:tx.state.chapter.recruitmentEnded}];}
 function finish(tx,code){const names={'GZ-E01':['自愿同行','双方有效选择已经落实为实际同行。救援与入队分别记录。'],'GZ-E02':['各走各路','已经安全分别；未达成同行不代表所有财物或承诺已和解。'],'GZ-E03':['暂告一段','按当前实际进展结束；尚未完成的事项保持未完成。']};tx.emit('session.finished',{endingCode:code,title:names[code][0],summary:names[code][1],facts:endFacts(tx)});}
-function releaseAppearance(tx){const d=tx.state.chapter.disguise;if(!d)return;const a=tx.state.characters[d.actorId],witnesses=nearbyObservers(tx,a).filter(id=>canSee(tx.state,tx.content,id,a));changeChapter(tx,c=>{c.disguise=null;c.route='public';for(const id of witnesses){c.identityKnowledge[id]??={};c.identityKnowledge[id][a.characterId]=next(tx.state.sessionSeq);}});actorEvent(tx,{...a,appearanceName:a.name,appearanceEpoch:next(a.appearanceEpoch),resourceRevision:next(a.resourceRevision),motionViews:{},movement:a.movement?{...a.movement,status:'cancelled',reason:'外观已经改变。'}:null});for(const id of witnesses)observeGaolao(tx,id,{statement:'亲眼看到外貌解除，确认了眼前人的身份。',fields:[{key:'identity',label:'本人显现身份',value:a.name}]});}
+export function releaseAppearance(tx){const d=tx.state.chapter.disguise;if(!d)return;const a=tx.state.characters[d.actorId],witnesses=nearbyObservers(tx,a).filter(id=>canSee(tx.state,tx.content,id,a));changeChapter(tx,c=>{c.disguise=null;c.route='public';for(const id of witnesses){c.identityKnowledge[id]??={};c.identityKnowledge[id][a.characterId]=next(tx.state.sessionSeq);}});actorEvent(tx,{...a,appearanceName:a.name,appearanceEpoch:next(a.appearanceEpoch),resourceRevision:next(a.resourceRevision),motionViews:{},movement:a.movement?{...a.movement,status:'cancelled',reason:'外观已经改变。'}:null});for(const id of witnesses)observeGaolao(tx,id,{statement:'亲眼看到外貌解除，确认了眼前人的身份。',fields:[{key:'identity',label:'本人显现身份',value:a.name}]});}
 function consentRequest(tx,actorId,subjectId,purpose,scope,expectedVersion,performerId=null){
   if(consentVersion(tx.state,subjectId,purpose)!==expectedVersion)refuse('CONSENT_STALE');
   const previous=consentFor(tx.state,subjectId,purpose),consent={consentId:opaqueRef(),subjectId,requesterId:actorId,purpose,scope,version:next(expectedVersion),status:'proposed',decidedBy:null,sourceSeq:next(tx.state.sessionSeq),...(performerId?{performerId}:{})};
@@ -75,6 +78,10 @@ export function initializeGaolao(tx){if(!isGaolao(tx.state))return;const r=tx.co
     if(knowsSource(tx.state,p.cuilan,route.sourceId))continue;
     const source=r.sources.find(s=>s.sourceId===route.sourceId);
     observeGaolao(tx,p.cuilan,{...source,fields:[...source.fields,...route.knowledge.landmarks.map(a=>({key:a.anchorId,label:'公开路线锚点 '+a.anchorId,value:`${a.sceneId} (${a.position.x},${a.position.y})`}))],metadata:{routeKnowledge:route.knowledge,routeDigest:route.digest}});
+  }
+  for(const source of personalSources(tx.content)){
+    if(knowsSource(tx.state,p.cuilan,source.sourceId))continue;
+    observeGaolao(tx,p.cuilan,{...source.knowledge.declaration,shareable:false,metadata:{personalSource:source}});
   }
 }
 export function updateGaolaoPresence(tx){if(!isGaolao(tx.state)||!tx.state.chapter)return;const ids=[...tx.liveActorIds].sort();if(JSON.stringify(ids)!==JSON.stringify(tx.state.chapter.onlineActorIds)){changeChapter(tx,c=>{c.onlineActorIds=ids;if(c.endProposal?.status==='pending')c.endProposal.status='invalidated';});tx.emit('gaolao.membership',{version:next(tx.state.onlineMembershipVersion)});}}
@@ -135,8 +142,9 @@ export function checkGaolaoMovement(tx,actorId,action){
   const destination=tx.content.chapterRules.departure;
   if([p.tang,p.wukong,p.bajie].includes(actorId)&&action.sceneId===destination.sceneId&&distance(action.destination,destination.position)<=90&&!tx.state.chapter.departureArrangement)refuse('NOT_READY');
 }
-export function checkGaolaoItem(tx,actorId,item,action){
+export function checkGaolaoItem(tx,actorId,item,action,request){
   if(!isGaolao(tx.state))return;
+  if(checkPersonalItem(tx,actorId,item,action,request))return;
   const privateItem=tx.content.chapterRules.privateItems.find(x=>x.itemId===item.itemId);
   if(privateItem&&privateItem.ownerId!==actorId){const consent=consentFor(tx.state,privateItem.ownerId,'private_items');if(!consent||consent.status!=='accepted'||consent.requesterId!==actorId||!consent.scope.itemIds.includes(item.itemId))refuse('CONSENT_REQUIRED');}
   if(item.publicBorrowable&&action.kind==='take_item')changeChapter(tx,c=>{if(!c.borrowedItems.includes(item.itemId))c.borrowedItems.push(item.itemId);});
@@ -159,13 +167,15 @@ function requestEnd(tx,actorId,principalKind,action){
 }
 export function applyGaolaoAction(tx,actorId,principalKind,request){
   const a=tx.state.characters[actorId],action=request.action,p=chapterPeople(tx.content),r=tx.content.chapterRules;
+  if(action.kind==='cancel_personal_request')return cancelPersonalRequest(tx,actorId,principalKind,action);
   if(action.kind==='propose_follow')return followProposal(tx,actorId,principalKind,request);
-  if(['respond_consent','withdraw_consent'].includes(action.kind)){if(!['human','core_npc','scene_role'].includes(principalKind))refuse('RULE_VIOLATION');return consentResponse(tx,actorId,action);}
+  if(['respond_consent','withdraw_consent'].includes(action.kind)){if(!['human','core_npc','scene_role'].includes(principalKind))refuse('RULE_VIOLATION');const consent=tx.state.chapter.consents[action.consentId];if(isPersonalConsent(tx.state,tx.content,consent))return respondPersonal(tx,actorId,principalKind,request,consent);return consentResponse(tx,actorId,action);}
   if(['request_end','confirm_end'].includes(action.kind))return requestEnd(tx,actorId,principalKind,action);
   if(action.kind!=='interact'||!action.operationId.startsWith('gz-'))return null;
   const target=resolveRef(tx,actorId,action.targetRef,request.viewId),op=action.operationId,params=action.parameters;
   near(tx,a,target);if(target.resourceRevision!==action.expectedTargetRevision)refuse('STALE_PRECONDITION');
   if(principalKind==='proxy')refuse('RULE_VIOLATION');
+  const personal=personalInteraction(tx,actorId,principalKind,request,target);if(personal!==null)return personal;
   if(op==='gz-contact'){
     if(target.targetId!==r.contactTargetId||!inRange(tx.state,tx.content,tx.state.characters[p.cuilan],r.contactInside,30))refuse('NOT_READY');
     // 侧窗是内容明确的近距联络通道，不是步行穿墙或全院广播。
@@ -196,14 +206,15 @@ export function applyGaolaoAction(tx,actorId,principalKind,request){
   }
   if(op==='gz-apply-appearance'){
     own(actorId,target,p.wukong,principalKind);const c=tx.state.chapter.consents[params.consentId],d=r.meetingDestinations.find(d=>d.destinationId===c?.scope.destinationId);
+    if(gaolaoPersonalProfile(tx.state))checkPersonalAppearance(tx,c,actorId,params.expectedConsentVersion);
     if(!c||c.subjectId!==p.cuilan||c.purpose!=='appearance'||c.status!=='accepted'||c.version!==params.expectedConsentVersion||consentFor(tx.state,p.cuilan,'appearance')?.consentId!==c.consentId)refuse('CONSENT_REQUIRED');
     if(!tx.state.chapter.cuilanSafe||!d||!inRange(tx.state,tx.content,a,d,90)||tx.state.chapter.disguise)refuse('NOT_READY');
-    const witnesses=nearbyObservers(tx,a).filter(id=>canSee(tx.state,tx.content,id,a));changeChapter(tx,ch=>{ch.disguise={actorId,consentId:c.consentId,consentVersion:c.version};ch.route='disguise';for(const id of [actorId,...witnesses]){ch.identityKnowledge[id]??={};ch.identityKnowledge[id][actorId]=next(tx.state.sessionSeq);}});actorEvent(tx,{...a,appearanceName:'翠兰',appearanceEpoch:next(a.appearanceEpoch),resourceRevision:next(a.resourceRevision),motionViews:{},movement:a.movement?{...a.movement,status:'cancelled',reason:'外观已经改变。'}:null});for(const id of witnesses)observeGaolao(tx,id,{statement:'亲眼看见悟空按本次许可借用外貌。'});return {};
+    const witnesses=nearbyObservers(tx,a).filter(id=>canSee(tx.state,tx.content,id,a));changeChapter(tx,ch=>{ch.disguise={actorId,consentId:c.consentId,consentVersion:c.version};ch.route='disguise';for(const id of [actorId,...witnesses]){ch.identityKnowledge[id]??={};ch.identityKnowledge[id][actorId]=next(tx.state.sessionSeq);}});actorEvent(tx,{...a,appearanceName:'翠兰',appearanceEpoch:next(a.appearanceEpoch),resourceRevision:next(a.resourceRevision),motionViews:{},movement:a.movement?{...a.movement,status:'cancelled',reason:'外观已经改变。'}:null});for(const id of witnesses)observeGaolao(tx,id,{statement:'亲眼看见悟空按本次许可借用外貌。'});if(gaolaoPersonalProfile(tx.state))startedPersonalAppearance(tx,c);return {};
   }
-  if(op==='gz-release-appearance'){own(actorId,target,p.wukong,principalKind);releaseAppearance(tx);return {};}
+  if(op==='gz-release-appearance'){own(actorId,target,p.wukong,principalKind);if(!endedPersonalAppearance(tx))releaseAppearance(tx);return {};}
   if(op==='gz-reveal-identity'){
     if(target.characterId!==p.wukong||!tx.state.chapter.disguise||!(actorId===p.wukong||tx.state.chapter.identityKnowledge[actorId]?.[p.wukong]))refuse('RULE_VIOLATION');
-    const ids=nearbyObservers(tx,a);changeChapter(tx,c=>{c.route='public';for(const id of ids){c.identityKnowledge[id]??={};c.identityKnowledge[id][p.wukong]=next(tx.state.sessionSeq);}});for(const id of ids)observeGaolao(tx,id,{statement:'现场获知：眼前借用外貌的人是孙悟空。'});bump(tx,p.wukong);return {};
+    const ids=nearbyObservers(tx,a);changeChapter(tx,c=>{c.route='public';for(const id of ids){c.identityKnowledge[id]??={};c.identityKnowledge[id][p.wukong]=next(tx.state.sessionSeq);}});const disclosure=tx.events.at(-1);for(const id of ids)observeGaolao(tx,id,{statement:'现场获知：眼前借用外貌的人是孙悟空。'});endedPersonalAppearance(tx,true,disclosure);bump(tx,p.wukong);return {};
   }
   if(op==='gz-check-appearance'){
     if(!tx.state.chapter.disguise||![p.wukong,p.cuilan].includes(target.characterId)||![p.wukong,p.cuilan].every(id=>canSee(tx.state,tx.content,actorId,tx.state.characters[id])))refuse('NOT_READY');
@@ -239,6 +250,7 @@ export function applyGaolaoAction(tx,actorId,principalKind,request){
     human(tx,actorId,principalKind);if(target.targetId!==r.returnTargetId)refuse('TARGET_UNAVAILABLE');const item=resolveRef(tx,actorId,params.itemRef,request.viewId);if(!item.itemId||!item.publicBorrowable||item.lockedBy||item.resourceRevision!==params.expectedItemRevision||item.location.kind!=='character'||item.location.characterId!==actorId)refuse('STALE_PRECONDITION');tx.emit('spatial.item',{item:{...item,resourceRevision:next(item.resourceRevision),location:{kind:'ground',sceneId:target.sceneId,position:target.position}}});return {};
   }
   if(op==='gz-request-private-items'){
+    if(!Array.isArray(params?.itemRefs)||typeof params.expectedConsentVersion!=='string')refuse('RULE_VIOLATION');
     human(tx,actorId,principalKind);const items=params.itemRefs.map(ref=>resolveRef(tx,actorId,ref,request.viewId));if(!target.characterId||items.some(i=>!r.privateItems.some(p=>p.itemId===i.itemId&&p.ownerId===target.characterId)))refuse('CONSENT_REQUIRED');consentRequest(tx,actorId,target.characterId,'private_items',{itemIds:items.map(i=>i.itemId)},params.expectedConsentVersion);return {};
   }
   if(op==='gz-plan-departure'){

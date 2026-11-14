@@ -45,18 +45,22 @@ export async function attachScenePolicies({runtime,retryIntervalMs=100,log=()=>{
       const prepared=await runtime.prepareScenePolicy(a.handle,{semanticSeq:a.pendingSemanticSeq});a.evaluations++;
       if(prepared.kind==='recovery'){a.needsRecovery=true;a.intentId=prepared.intentId;await recoverOriginal(a);a.phase='Idle';return;}
       // 返回不能覆盖在读前、读后或 COMMIT 返回期间收到的更晚语义。
-      consume(a,prepared.consumeThroughSeq??prepared.evaluatedThroughSeq);a.reason=prepared.reason??null;
+      // v2 一次预留不代表两用途已处理；保留原语义，直到有限扫描确认没有可执行步骤。
+      // Receipt 恢复不制造信号；即使本次提交/返回/通知丢失，原 pending 仍推动剩余步骤。
+      if(a.policyVersion!=='gaolao-cuilan-v2'||prepared.kind==='idle')consume(a,prepared.consumeThroughSeq??prepared.evaluatedThroughSeq);
+      a.reason=prepared.reason??null;
       if(prepared.kind==='prepared'){
         a.intentId=prepared.intentId;a.needsRecovery=true;
         a.lastReceipt=await runtime.submitSpatialIntent(a.handle,prepared.intentId);
         await recoverOriginal(a);
       }
-      a.retries=0;a.phase='Idle';
+      a.retries=0;a.retryExhausted=false;a.phase='Idle';
     }catch(error){
       a.error=error.code??'INTERNAL_ERROR';
       if(technical(error)){
         a.phase='Unknown';a.needsRecovery=true;
         if(!closed&&!a.terminal&&a.retries<3){a.retries++;a.timer=setTimeout(()=>{a.timer=null;enqueue(a,true);},retryIntervalMs);a.timer.unref?.();}
+        else if(!closed&&!a.terminal&&!a.retryExhausted){a.retryExhausted=true;log('场景本人策略技术重试已耗尽，保留原步骤与待办，等待显式恢复。',{sessionId:a.sessionId,intentId:a.intentId,code:a.error,technicalRetries:a.retries});}
       }else{a.phase='Unavailable';log('场景本人策略停止，保留原步骤等待核查。',{sessionId:a.sessionId,code:a.error});}
     }
   }
@@ -68,7 +72,7 @@ export async function attachScenePolicies({runtime,retryIntervalMs=100,log=()=>{
       if(!row||closed)return;
       const content=await loadContent(row.content_version),policy=content.chapterRules.sceneRolePolicies[0],handle=await runtime.bindInternal(sessionId,policy.actorId,'scene_role');
       if(closed)return;
-      const a={sessionId,actorId:policy.actorId,handle,phase:'Idle',running:false,terminal:false,bootstrap:true,needsRecovery:true,retries:0,timer:null,lastSemanticSeq:'0',pendingSemanticSeq:'0',intentId:null,evaluations:0,recoveries:0,lastReceipt:null,error:null};
+      const a={sessionId,actorId:policy.actorId,policyVersion:policy.policyVersion,handle,phase:'Idle',running:false,terminal:false,bootstrap:true,needsRecovery:true,retries:0,retryExhausted:false,timer:null,lastSemanticSeq:'0',pendingSemanticSeq:'0',intentId:null,evaluations:0,recoveries:0,lastReceipt:null,error:null};
       actors.set(sessionId,a);enqueue(a);
     })();
     registrations.set(sessionId,promise);
@@ -90,8 +94,8 @@ export async function attachScenePolicies({runtime,retryIntervalMs=100,log=()=>{
     }
   };
   runtime.on('commit',onCommit);
-  const attachment={register,status(){return {closed,actors:[...actors.values()].map(a=>({sessionId:a.sessionId,actorId:a.actorId,phase:a.phase,intentId:a.intentId,error:a.error,lastReceipt:a.lastReceipt,evaluations:a.evaluations,recoveries:a.recoveries,technicalRetries:a.retries,lastSemanticSeq:a.lastSemanticSeq,pendingSemanticSeq:a.pendingSemanticSeq,bootstrap:a.bootstrap}))};},
-    recover(sessionId){const a=actors.get(sessionId);if(!a||closed)return;clearTimeout(a.timer);a.timer=null;a.retries=0;a.needsRecovery=true;a.phase='Idle';if(a.terminal){a.running=true;return track(recoverOriginal(a).finally(()=>{a.running=false;}));}enqueue(a);},
+  const attachment={register,status(){return {closed,actors:[...actors.values()].map(a=>({sessionId:a.sessionId,actorId:a.actorId,phase:a.phase,intentId:a.intentId,error:a.error,lastReceipt:a.lastReceipt,evaluations:a.evaluations,recoveries:a.recoveries,technicalRetries:a.retries,retryExhausted:a.retryExhausted,lastSemanticSeq:a.lastSemanticSeq,pendingSemanticSeq:a.pendingSemanticSeq,bootstrap:a.bootstrap}))};},
+    recover(sessionId){const a=actors.get(sessionId);if(!a||closed)return;clearTimeout(a.timer);a.timer=null;a.retries=0;a.retryExhausted=false;a.needsRecovery=true;a.phase='Idle';if(a.terminal){a.running=true;return track(recoverOriginal(a).finally(()=>{a.running=false;}));}enqueue(a);},
     close(){if(closing)return closing;closed=true;runtime.off('commit',onCommit);for(const a of actors.values()){clearTimeout(a.timer);a.timer=null;}return closing=(async()=>{await Promise.allSettled([...registrations.values()]);while(tasks.size)await Promise.allSettled([...tasks]);attachments.delete(runtime);})();}
   };
   attachments.set(runtime,attachment);

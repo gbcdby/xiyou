@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { canonicalize } from '../protocol/index.mjs';
-import { validateSpatial, parseSpatial } from '../protocol/spatial.mjs';
+import { validateSpatial, parseSpatial, gaolaoPersonalProfile } from '../protocol/spatial.mjs';
 import { RuntimeError } from './errors.mjs';
 import { RuleError } from '../game/rules.mjs';
 import { encodeJsonbText, decodeJsonbText } from './jsonb-text.mjs';
@@ -20,9 +20,14 @@ function compatibleControlResponse(response, capabilities) {
     if (!hasObjectVisual(capabilities)) for (const object of [...projection.items, ...projection.targets]) delete object.visualKey;
     return copy;
 }
-export function requireSpatialCapability(capabilities) {
-    if (!Array.isArray(capabilities) || !capabilities.includes('spatial-v2'))
-        throw new RuntimeError('UPGRADE_REQUIRED', '此章节需要 spatial-v2 客户端。');
+export const requiredSpatialCapabilities = value => ['spatial-v2', ...(value && gaolaoPersonalProfile(value) ? ['gaolao-personal-consent-v1'] : [])];
+export function requireSpatialCapability(capabilities, value) {
+    const requiredCapabilities = requiredSpatialCapabilities(value);
+    if (!Array.isArray(capabilities) || requiredCapabilities.some(capability => !capabilities.includes(capability))) {
+        const error = new RuntimeError('UPGRADE_REQUIRED', '客户端尚未声明此章节需要的能力。');
+        error.requiredCapabilities = requiredCapabilities;
+        throw error;
+    }
 }
 export async function highWater(tx, actor) { const row = (await tx.client.query('SELECT handled_seq FROM spatial_command_sources WHERE session_id=$1 AND actor_id=$2 AND control_epoch=$3', [tx.row.session_id, actor.characterId, actor.controlEpoch])).rows[0]; return row?.handled_seq ?? '0'; }
 export async function advanceSpatialTime(tx) {
@@ -34,6 +39,12 @@ export async function advanceSpatialTime(tx) {
         const row = (await tx.client.query('SELECT active,lease_until FROM connections WHERE connection_id=$1', [a.activeConnectionId])).rows[0];
         if (row)
             leases.push({ actorId: a.characterId, active: row.active, until: Date.parse(row.lease_until) });
+    }
+    // 新个人许可不能在已知租约失效后等待后台下一轮才撤销控制围栏。
+    // 使用同一真实 control.changed 事件，随后停权/借貌解除/通知仍属于本事务。
+    if (gaolaoPersonalProfile(tx.state)) for (const actor of actors) {
+        const lease = leases.find(lease => lease.actorId === actor.characterId);
+        if (!lease?.active || lease.until <= wall) tx.emit('control.changed', { actorId: actor.characterId, mode: 'GracePeriod', controlEpoch: next(actor.controlEpoch), activeConnectionId: null, graceDeadlineAt: new Date(wall + tx.content.timing.gracePeriodSeconds * 1000).toISOString() });
     }
     tx.liveActorIds = new Set(leases.filter(l => l.active && l.until > wall).map(l => l.actorId));
     updateGaolaoPresence(tx);
@@ -87,6 +98,7 @@ export async function controlSpatial(runtime, handle, request) {
         const user = await runtime.access(tx.client, tx.row, connection.token);
         if (!isSpatial(tx.state))
             throw new RuntimeError('INVALID_MESSAGE');
+        requireSpatialCapability(connection.capabilities, tx.state);
         tx.cause = { principalId: user.principalId, actionId: request.nonce, actorId: user.actorId };
         const prior = await runtime.knownNonce(tx, user.principalId, request.nonce, request);
         if (prior) {
@@ -117,8 +129,10 @@ export async function controlSpatial(runtime, handle, request) {
 }
 export async function executeSpatial(runtime, tx, request, principal, authorized, options = {}) {
     tx.cause = { principalId: principal.principalId, actionId: request.clientActionId, actorId: principal.actorId };
-    await advanceSpatialTime(tx);
+    const personal = !!gaolaoPersonalProfile(tx.state);
+    if (!personal) await advanceSpatialTime(tx);
     const semanticDigest = digest(request), key = [request.sessionId, principal.principalId, request.clientActionId];
+    tx.requestDigest = semanticDigest;
     const prior = (await tx.client.query('SELECT receipt,semantic_digest,actor_id FROM action_receipts WHERE session_id=$1 AND principal_id=$2 AND client_action_id=$3', key)).rows[0];
     if (prior) {
         if (prior.actor_id !== principal.actorId)
@@ -127,6 +141,9 @@ export async function executeSpatial(runtime, tx, request, principal, authorized
             throw new RuntimeError('ACTION_ID_REUSE');
         return prior.receipt.publicReceipt;
     }
+    // 新版本先收束原结果；只有首次请求才推进当前时间及授权围栏。
+    // 当前新记录损坏、控制变更或终态不能吞掉已有合法历史 Receipt。
+    if (personal) await advanceSpatialTime(tx);
     let code = 'OK', status = 'Accepted', result = {}, before = tx.state, eventCount = tx.events.length;
     try {
         const actor = tx.state.characters[principal.actorId];
@@ -183,6 +200,7 @@ export async function submitSpatial(runtime, handle, raw) {
             const user = await runtime.access(tx.client, tx.row, connection.token);
             if (!isSpatial(tx.state))
                 throw new RuntimeError('INVALID_MESSAGE');
+            requireSpatialCapability(connection.capabilities, tx.state);
             return executeSpatial(runtime, tx, request, { ...user, principalKind: 'human' }, async (actor) => actor.mode === 'HumanControlled' && actor.activeConnectionId === handle.connectionId && await runtime.liveConnection(tx, handle));
         });
     }
@@ -205,6 +223,7 @@ export async function syncSpatial(runtime, handle, request) {
     requireSpatialCapability(connection.capabilities);
     return runtime.locked(request.sessionId, { kind: 'spatial-sync' }, async (tx) => {
         const user = await runtime.access(tx.client, tx.row, connection.token), view = runtime.connectionView(handle), ended = ['Finished', 'Aborted'].includes(tx.state.phase), binding = view?.terminalBinding ?? tx.state.views[user.actorId], actor = tx.state.characters[user.actorId];
+        requireSpatialCapability(connection.capabilities, tx.state);
         if (ended && !await runtime.liveConnection(tx, handle)) throw new RuntimeError('UNAUTHENTICATED');
         if (view?.terminalBinding && (!ended || view.cursor !== tx.state.sessionSeq)) throw new RuntimeError('RESYNC_REQUIRED');
         if (!view?.active || view.viewId !== request.viewId || binding?.viewId !== request.viewId || view.sessionId !== request.sessionId || view.actorId !== user.actorId || BigInt(request.cursor) > BigInt(tx.state.sessionSeq) || BigInt(request.cursor) < BigInt(binding?.createdAtSeq ?? '0'))

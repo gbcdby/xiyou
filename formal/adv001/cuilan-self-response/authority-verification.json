@@ -1,0 +1,378 @@
+{
+  "schema_version": 1,
+  "tool": {
+    "version": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "source": {
+    "commit": "1a7f45ddfeca0d25fb3714e1ce45980b225d5bde",
+    "tree": "6b0130cd6838bf052504994527f05e29aabf521e",
+    "revision": "CS-R2",
+    "mode": "design/check",
+    "implementation_status": "NOT_ASSESSED"
+  },
+  "model": {
+    "root": "model",
+    "entry": "AuthorityEffects.tla"
+  },
+  "profiles": {
+    "authority-private": {
+      "config": "authority-private.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "AtomicAppearanceStop",
+        "AtomicPrivateStop",
+        "PurposeAndTakerAuthorized",
+        "CustodyProvenance",
+        "PrivateOwnerOnly",
+        "RestitutionEnabled",
+        "ReturnEntryRetained",
+        "ReceiptNeverReactivates",
+        "SafetyAndKnowledgeDurable",
+        "CompletedItemNotRetaken",
+        "RemainingItemEntitlement",
+        "ReturnPreservesClosureCause",
+        "ReturnContextPrivate",
+        "CurrentReturnReference"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "UsePurpose": "private_items",
+          "ProjectionMode": "item-ledger",
+          "Fault": "none",
+          "Probe": "none",
+          "EnableEnvironment": false
+        },
+        "minimum_distinct_states": 1000,
+        "note": "R2服务器Effects组件；完整归还集合派生包含在观察接口中，缓存消费不在本组件。",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "authority-restart-private": {
+      "config": "authority-restart-private.cfg",
+      "timeout_seconds": 300,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "AtomicAppearanceStop",
+        "AtomicPrivateStop",
+        "PurposeAndTakerAuthorized",
+        "CustodyProvenance",
+        "PrivateOwnerOnly",
+        "RestitutionEnabled",
+        "ReturnEntryRetained",
+        "ReceiptNeverReactivates",
+        "SafetyAndKnowledgeDurable",
+        "CompletedItemNotRetaken",
+        "RemainingItemEntitlement",
+        "ReturnPreservesClosureCause",
+        "ReturnContextPrivate",
+        "CurrentReturnReference"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "UsePurpose": "private_items",
+          "ProjectionMode": "item-ledger",
+          "Fault": "none",
+          "Probe": "none",
+          "EnableEnvironment": true
+        },
+        "minimum_distinct_states": 1000,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ],
+        "time_budget_note": "同一重启/双用途具体风险的权威分层；原60秒独立结果保留，仅补一次300秒。"
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "authority-both": {
+      "config": "authority-both.cfg",
+      "timeout_seconds": 300,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "AtomicAppearanceStop",
+        "AtomicPrivateStop",
+        "PurposeAndTakerAuthorized",
+        "CustodyProvenance",
+        "PrivateOwnerOnly",
+        "RestitutionEnabled",
+        "ReturnEntryRetained",
+        "ReceiptNeverReactivates",
+        "SafetyAndKnowledgeDurable",
+        "CompletedItemNotRetaken",
+        "RemainingItemEntitlement",
+        "ReturnPreservesClosureCause",
+        "ReturnContextPrivate",
+        "CurrentReturnReference"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "UsePurpose": "both",
+          "ProjectionMode": "item-ledger",
+          "Fault": "none",
+          "Probe": "none",
+          "EnableEnvironment": false
+        },
+        "minimum_distinct_states": 1000,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ],
+        "time_budget_note": "同一重启/双用途具体风险的权威分层；原60秒独立结果保留，仅补一次300秒。"
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "authority-cooperative-return": {
+      "config": "authority-cooperative-return.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "AtomicAppearanceStop",
+        "AtomicPrivateStop",
+        "PurposeAndTakerAuthorized",
+        "CustodyProvenance",
+        "PrivateOwnerOnly",
+        "RestitutionEnabled",
+        "ReturnEntryRetained",
+        "ReceiptNeverReactivates",
+        "SafetyAndKnowledgeDurable",
+        "CompletedItemNotRetaken",
+        "RemainingItemEntitlement",
+        "ReturnPreservesClosureCause",
+        "ReturnContextPrivate",
+        "CurrentReturnReference"
+      ],
+      "expected_properties": [
+        "CooperativeReturns"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "UsePurpose": "private_items",
+          "ProjectionMode": "item-ledger",
+          "Fault": "none",
+          "Probe": "none",
+          "EnableEnvironment": false
+        },
+        "minimum_distinct_states": 1000,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。",
+        "归还活性条件是持有人真实合作到达/有效引用持续成立，并对正常交回动作弱公平；不承诺离线者回来。"
+      ]
+    },
+    "authority-negative-current-only": {
+      "config": "authority-negative-current-only.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "ReturnEntryRetained"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "UsePurpose": "private_items",
+          "ProjectionMode": "current-only",
+          "Fault": "none",
+          "Probe": "none",
+          "EnableEnvironment": false
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "authority-negative-first-item-closes-all": {
+      "config": "authority-negative-first-item-closes-all.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "RemainingItemEntitlement"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "UsePurpose": "private_items",
+          "ProjectionMode": "item-ledger",
+          "Fault": "first-item-closes-all",
+          "Probe": "none",
+          "EnableEnvironment": false
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "authority-negative-retake-completed": {
+      "config": "authority-negative-retake-completed.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "CompletedItemNotRetaken"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "UsePurpose": "private_items",
+          "ProjectionMode": "item-ledger",
+          "Fault": "retake-completed",
+          "Probe": "none",
+          "EnableEnvironment": false
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "authority-witness-new-grant-retake": {
+      "config": "authority-witness-new-grant-retake.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "UsePurpose": "private_items",
+          "ProjectionMode": "item-ledger",
+          "Fault": "none",
+          "Probe": "new-grant-retake",
+          "EnableEnvironment": false
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "authority-witness-old-return-new-slot": {
+      "config": "authority-witness-old-return-new-slot.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "UsePurpose": "private_items",
+          "ProjectionMode": "item-ledger",
+          "Fault": "none",
+          "Probe": "old-return-new-slot",
+          "EnableEnvironment": false
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    }
+  }
+}
