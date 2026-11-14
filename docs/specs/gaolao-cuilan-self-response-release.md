@@ -1,5 +1,8 @@
 # CS-R2 依赖、接口与释放矩阵
 
+> 2026-11-14 共享记录已发布：五个 CS-T 标识已映射到真实 GitHub Issues，后续有限释放及当前候选见文末[共享记录发布登记](#共享记录发布登记)。以下原计划正文保留其创建时状态，不据此否认后来已发生的建票或 G0-F1 释放。
+
+
 日期：2026-11-14 UTC。对应 [Ticket 草案](gaolao-cuilan-self-response-tasks.md) 固定 CS-R2。**本文件是本计划依赖关系的唯一来源**；下表只声明将来解除条件，所有实现/运行 gate 当前均未释放。状态 `PLANNED_NOT_RELEASED / DESIGN_REVIEW_PASS_FORMAL_PENDING`。
 
 规划完成、接口可消费、作者候选可集成、Ticket 完成、独立验收、实际合并与部署是不同事实。CS-R2 设计双轴 PASS 不能自动满足其中任何工程 gate；正式 TLA 尚未收到，不能用旧模型结果代填。
@@ -123,3 +126,16 @@ F1 必须覆盖如下并各有至少一个有效样本和针对风险的拒绝�
 | PR/合并/部署 | 本计划未执行 | 唯一 land/release 的实时事实；原 PR54 静态成果保留原范围 |
 
 一般实施没有新的人工作业许可问题；未释放是 root 尚待采用和正式形式输入的**技术/设计 gate**，不是要求用户再次批准日常动作。新协议具体命名、生成位置、数据索引属于 T01 在冻结合同内的实施选择；如果需要改变人格偏好、私物用途/接收者、同意/恢复含义或旧版本保证，则是返回设计的实际范围变化。
+
+
+## 共享记录发布登记
+
+2026-11-14：已建立 [CS-T01/#55](https://github.com/gbcdby/xiyou/issues/55)、[CS-T02/#56](https://github.com/gbcdby/xiyou/issues/56)、[CS-T03/#57](https://github.com/gbcdby/xiyou/issues/57)、[CS-T04/#58](https://github.com/gbcdby/xiyou/issues/58)、[CS-T05/#59](https://github.com/gbcdby/xiyou/issues/59)。原 `35d8759` 计划的未建票/未释放字样保留其时间与对象；本节登记后来事实，不改写前文 gate 定义。
+
+- **G0-F1 已有限释放**：CS-R2 设计独立 requirements/standards PASS 的范围是固定设计 source_inspection。仅释放 CS-T01 的合同/schema/精确版本/最小候选接口准备，原执行者为 `/root/cuilan_authority_implement`，本次未改派或覆盖现场。
+- **F1 已有作者固定候选，尚待独立判断**：`f96474f6d85d5bb6eb765f8c881d5f7aa7600e4f` / tree `ee9e2618a63541099e2242e1e93c4749fa95c484`。总控已分派独立合同/代码审查；作者 handoff 待补读。本节不宣称 F1 已独立 PASS 或已供下游消费。
+- **正式模型包已交接**：`77ace28f526ce9ad905b1842b7353e48e251423c` / tree `006fc92d3cd261bddf22f698871e44b6434be36e`。作者状态为 `COMPONENT_DESIGN_EVIDENCE_COMPLETE_WITH_COMBINED_INCONCLUSIVE`：28 个范围内正向结果、98 个负控或见证、5 个未穷尽配置。独立模型复核与实现映射尚待；该交接不覆盖完整组合未穷尽范围，不扩大 D1 释放。
+- **T04 有局部 P0 准备**：`c4b1674eebbdfbfbdacdde30beddb665c1af06b4` / tree `a88beb0fdfbe923462f1f60b6ae7417425eb7a6b`，parent `35d8759`，两文件的 production profile/受控 NPC 适配器防绕行准备。独立需求/标准 PASS_WITHIN_SCOPE，现有 5 项替身边界检查在独立快照 5 PASS、exit 0；未执行浏览器、PostgreSQL 或 E2。它不是 D4/E2 完成，也不释放完整 T04。
+- **D1、T02/T03/T04 完整实施及整体工程验收仍按原 gate 分别释放**；建票、文档可读、部分源码或模型存在均不是解除条件。IC/E2/FM/V2/M29、主线合并及部署保持各自证据边界。
+
+本文件继续作为规范依赖/产物条件的唯一来源；活动归属、实际释放、候选与结果由 [#34 的 CS-R2 接续记录](https://github.com/gbcdby/xiyou/issues/34)及对应 Issues 维护。本节是本次发布时点的事实快照，不新建长期并行状态表。新默认 v3 尚未因本次文档发布而启用，原 65 PNG/18 批准图、world/layout、当前业务文件全部未改。

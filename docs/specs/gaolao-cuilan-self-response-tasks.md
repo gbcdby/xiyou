@@ -1,5 +1,8 @@
 # 翠兰借貌与私物本人回应：实施 Ticket 草案
 
+> 2026-11-14 共享记录已发布：五个 CS-T 标识已映射到真实 GitHub Issues，后续有限释放及当前候选见文末[共享记录发布登记](#共享记录发布登记)。以下原计划正文保留其创建时状态，不据此否认后来已发生的建票或 G0-F1 释放。
+
+
 ## 1. 固定输入与本次终点
 
 本文件是 `GZ-SCENE-CUILAN-SELF-RESPONSE-001 / CS-R2` 的本地拆票候选，日期 **2026-11-14 UTC**。规划结果 `COMPLETE`；所有下列 Ticket 均为 **`PLANNED_NOT_RELEASED`**，共同设计门槛为 **`DESIGN_REVIEW_PASS_FORMAL_PENDING`**。没有创建 GitHub Issue、领取实现、修改公共分支或执行产品验收。
@@ -183,3 +186,20 @@ M29 是对当前新候选与既有有效证据的逐项关系表：原证据保�
 本规划实际进行了：固定 R2/基线身份和三文档差额读取；项目规则读取；协议、内容、authority、scene、UI、harness、CI 的定向源码核对；草案链接/编号/依赖/覆盖与写入所有权静态检查。未执行业务、数据库、浏览器、TLC、真实 provider、真人/真机、出图或部署。
 
 根调度者下一步是审本计划、接收正式 R2 TLA 及实现义务，并按 release 的 G0/F1 实际释放；这不是已经分派。计划修订若改变 Spec 行为、版本兼容承诺、写入归属或证据 scope，须固定新计划 commit/tree 并列受影响 gates；旧计划不改写为已经实施。
+
+
+## 共享记录发布登记
+
+2026-11-14：原固定计划 `35d8759aac469eba5a8d9d4b94a787a3e62330c5` 已按相同五项结果建立以下真实 Issues。上文“草案、未建 Issue、PLANNED_NOT_RELEASED”保留为该作者快照，不代表本节之后尚未保存任务；没有重新拆票或改变行为合同。
+
+| 稳定标识 | 实际任务 |
+| --- | --- |
+| CS-T01 | [#55](https://github.com/gbcdby/xiyou/issues/55) |
+| CS-T02 | [#56](https://github.com/gbcdby/xiyou/issues/56) |
+| CS-T03 | [#57](https://github.com/gbcdby/xiyou/issues/57) |
+| CS-T04 | [#58](https://github.com/gbcdby/xiyou/issues/58) |
+| CS-T05 | [#59](https://github.com/gbcdby/xiyou/issues/59) |
+
+五票的范围、负责人/当前归属、实际产物与完成状态以各 Issue 为准；依赖与产物解除条件继续遵守本计划的 [release 矩阵](gaolao-cuilan-self-response-release.md)，本次实际采用/释放接续见其发布登记及 [#34](https://github.com/gbcdby/xiyou/issues/34)。不再维护另一份可变任务状态清单。
+
+当前只沿用 G0-F1 的有限释放。CS-T01 的作者 F1 候选 `f96474f6d85d5bb6eb765f8c881d5f7aa7600e4f` 已固定，独立审查中，作者 handoff 待补读；不是 F1 已通过或 D1/下游已放行。五票均保持 open。新文档 PR 只保存共享依据，不自动合并、不关闭实施票。

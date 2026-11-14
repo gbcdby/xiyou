@@ -1,5 +1,8 @@
 # CS-R2 验收覆盖与证据边界
 
+> 2026-11-14 共享记录已发布：五个 CS-T 标识已映射到真实 GitHub Issues，后续有限释放及当前候选见文末[共享记录发布登记](#共享记录发布登记)。以下原计划正文保留其创建时状态，不据此否认后来已发生的建票或 G0-F1 释放。
+
+
 日期：2026-11-14 UTC。固定输入、临时 Ticket 和唯一依赖来源分别见 [tasks](gaolao-cuilan-self-response-tasks.md) / [release](gaolao-cuilan-self-response-release.md)。本文件是**计划矩阵**；其中所有新业务、浏览器、数据库、TLC 和 provider 执行项当前均 **NOT_RUN**，不得从表格存在或静态双轴 PASS 推定运行通过。
 
 每个 GZ-CS 编号的整体结论归 CS-T05。T01/T02/T03 的责任表示提供实现和本票范围证据，T04 提供固定 IC 的正常页面与技术检查；作者局部 PASS 不能相加成为独立整体验收。正式形式结果单独接收，不混到产品 PASS 数量。
@@ -99,3 +102,12 @@ M29 每条证据记录最少包含原 subject/content/variant/人数/profile/日
 - T04 首先产生两人最小证据，T05 对照真实候选核定新增范围，然后 root 根据 M29 差额推进必要更广验证。现有有效证据只复用它实际支持的范围。
 - 所有产品/环境/未执行问题分别记 `FAIL / ENVIRONMENT_BLOCKED / NOT_RUN`；本机 AF_UNIX EPERM 不代表产品失败或 PASS，改到正常 Actions 环境须另有真实 run。
 - 测试与实现双方都不能更改事实/路径/期限偏好来补绿。发生 Spec 语义变化交回设计；只修实现时保留失败证据并对新候选复核相关范围。
+
+
+## 共享记录发布登记
+
+2026-11-14：本覆盖矩阵的责任标识已映射到真实任务：[CS-T01/#55](https://github.com/gbcdby/xiyou/issues/55)、[CS-T02/#56](https://github.com/gbcdby/xiyou/issues/56)、[CS-T03/#57](https://github.com/gbcdby/xiyou/issues/57)、[CS-T04/#58](https://github.com/gbcdby/xiyou/issues/58)、[CS-T05/#59](https://github.com/gbcdby/xiyou/issues/59)。GZ-CS-01～12、C-V01～08、N-01～11、P-01～06 以及 #29 差额义务原文保持。
+
+建票不产生新的产品验收结果。F1 作者候选已固定但独立审查未完成；模型包已交接但独立模型复核和实现映射待做；T04 局部适配器的 5 个替身边界检查仅支撑对应准备范围，没有浏览器/PostgreSQL/E2 结果。最新发布时点和准确候选见 [release 发布登记](gaolao-cuilan-self-response-release.md#共享记录发布登记)；实际证据按相应 Issue 和固定 subject 维护。
+
+新两人技术路径、更广 2/3/4/5 人/分支与长时证据、真实 provider、真人四局、真机及正式艺术继续分别判断。本次保存共享记录不关闭 #23/#29/#33/#34，不启动后续章节、EXT-001 或新增部署。
