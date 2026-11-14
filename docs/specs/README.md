@@ -12,6 +12,7 @@
 | --- | --- | --- |
 | [ADV-001：无战斗多人叙事冒险与首章高老庄](narrative-adventure.md) | v0.2 及实施接续：共用行走/交互、高老庄玩法、三 NPC/乔装/随行边界与验收 | [汇总与 Tickets #23](https://github.com/gbcdby/xiyou/issues/23)、[验收 #29](https://github.com/gbcdby/xiyou/issues/29)；[PR #24](https://github.com/gbcdby/xiyou/pull/24) 保留设计修订来源 |
 | [ADV-001：共用空间协议](adv-protocol.md) | adv-protocol-v1：权威空间、授权投影、动作与恢复合同；实现绑定有效修订 | [合同与模型 #27](https://github.com/gbcdby/xiyou/issues/27) |
+| [高老庄场景角色与本人回应](gaolao-scene-policy.md) | N1～N6 已采用；CS-R2 已采用为候选实现基线、G0-D1 已释放；F1 已作为消费基线，T02/T03 隔离实现已释放；独立审查与当前归属以任务记录为准 | [五票及实际 Issue 映射](gaolao-cuilan-self-response-tasks.md#共享记录发布登记)、[生产角色 #34](https://github.com/gbcdby/xiyou/issues/34)、[验收 #29](https://github.com/gbcdby/xiyou/issues/29) |
 | [GZ-VIS-01：高老庄视觉基准](gaolaozhuang-visual.md) | v1.1：已采用的场景/UI/尺度与状态语义；正式素材和运行效果另行验收 | [视觉基准 #28](https://github.com/gbcdby/xiyou/issues/28)、[客户端 #33](https://github.com/gbcdby/xiyou/issues/33) |
 | [ADV-001：CH02五庄观保留详案](narrative-adventure-wuzhuang.md) | 同一 v0.2 的后续 A4 范围；保留果数、两条路线和原 ADV-AC-07/08/09，本轮暂缓 | 同一 [#23](https://github.com/gbcdby/xiyou/issues/23)，不是另一个已实施 Spec |
 | [VS-001：首个可玩切片](vertical-slice.md) | M0–M4：协议、无 AI 联机、单 AI、双 AI、第一机制关 | [汇总 #2](https://github.com/gbcdby/xiyou/issues/2)、[设计 #3](https://github.com/gbcdby/xiyou/issues/3)、[任务目录](vertical-slice-tasks.md) |
