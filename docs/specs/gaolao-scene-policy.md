@@ -9,6 +9,14 @@
 - 实施验收沿用 GZ-SP-01～08 全部判据；新业务、真实两客户端路径、故障恢复、TLC 和完整 A3 释放当前仍为 NOT_RUN / NOT_RELEASED。下文历史标题中的 PROPOSED 不改成领域枚举或运行状态；后续实现与独立验收分别取证。
 - 明确保留五项约束：原 Receipt 优先于首次领域重验；scene_role 可信内部授权；scenePolicyBasis 严格白名单且提交时原子重验；整段越界前守卫与本人实际 C13 退出；Unknown 原身份与独立 pending 语义、不进入 Gateway / ai_runs / 三自主模型预算。借貌、私物、招募和已 settled 后搬迁不在本次新增选择内。
 
+### 0.1 借貌与私物本人回应的新增候选（2026-11-14）
+
+**第 10～17 节为 `GZ-SCENE-CUILAN-SELF-RESPONSE-001 / CS-R2`，状态 PROPOSED，供独立需求轴、标准轴增量复审；设计作者没有作出采用、实现或验收通过声明。** 第 0 节的 ADOPTED 只指 N1～N6；第 1～9 节保留原 D2-R1 的设计历史。新增候选明确补充原来排除的 `appearance / private_items`，不扩大为借貌者替本人决定、三自主模型队列、招募或已安置后的搬迁。本文没有修改业务、内容包、机器 schema、模型或测试。
+
+候选观察基线为本地 `2e46abfc528c21824ad5eb2b93d91a6cc7c532a8` / tree `b54f1b52b3588ac2dc28c108e6b55f04bd059675`。这是固定源码观察身份；不据此推定关联 PR 已合并、运行通过或已部署。N1～N6、SP06 与已有原请求恢复行为继续作为兼容义务。第 10～17 节的执行验证、TLC、独立审查及正式采用均 **NOT_RUN / NOT_ADOPTED**。
+
+CS-R2 从已冻结 CS-R1 `76d98e137f5220518b072650ba6af8001966ea23` / tree `18287fbcde9590c6ce83a82ee747dfafaccdfe46` 接续。R1 独立审查的 requirements/standards 均为 **FAIL**：`R-CS-RETURN-PROJECTION-001`、`R-CS-PREFERENCE-001` 为 OPEN 阻断。审查者 `/root/a1_a3_next_work_inventory`、2026-11-14 的终结报告 SHA-256 为 `ca95394ab845c79ee1f0ded60e86ee6e819509483bb4e635d91217f5f780c840`。本稿修正候选见 §17.4，作者不自行关闭 finding；R1 结果与原提交不改写。独立形式工作另绑定其实际模型/候选，不以本稿预告为 TLC 通过。
+
 ## 1. 对象、状态与本轮修订
 
 - **设计标识：GZ-SCENE-POLICY-D2，修订 D2-R1。本文是待独立需求轴、标准轴审查的 PROPOSED 设计，尚未放行。** 新增人物知识与选择没有被用户逐项批准，也没有因本作者成文而生效。
@@ -40,7 +48,7 @@
 | 翠兰，§6.5(3)，退让 | 本人已获该来源、自身位置/epoch、当前公开地图、登记 C06 锚点、原步骤持久结果。 | 普通 move_to → 真实到达 → 本人 gz-step-back。原守卫验本人、contact、距离不超过 20；不替悟空破锁，不代玩家准备门撑。重复 contact 不把已安置者拉回后宅。 |
 | 翠兰，§6.5(4)、§9.7，随行 | 本人的当前 consent/follow、真实领路者与本次地点。 | 原协议已支持 propose → 本人回应 → accepted/following → arrived；初次选择函数是第 3–4 节的新提案，不能从 action 合法或测试手工 accept 推出。 |
 | 翠兰，§6.5(5)、§9.7，确认 | 本人当前有效接受、同一 consentId/version、followId/planVersion、真实 arrived。 | 本人 gz-confirm-settlement 重验地图、双方 epoch、当前许可、实际位置/区域、自由出口，再 settled/CuilanSafe。旧到达、假翠兰、已撤回许可均不能安置；安全事实单调保持。 |
-| 翠兰，借貌/私物 | 仅本人确实收到的 purpose/scope。 | 无固定回应依据，继续内部 defer，不产生 accept/decline/defer/withdraw 选择事件；无回应不能写成拒绝。救援与路线资料不授予借貌、包裹、信件权限。 |
+| 翠兰，借貌/私物 | 仅本人确实收到的 purpose/scope。 | 原 D2-R1 / 当前观察基线没有固定回应依据，继续内部 defer；无回应不能写成拒绝。第 10～17 节提出新的本人选择合同，尚未实现。救援与路线资料始终不授予借貌、包裹、信件权限。 |
 | 高太公 | 本人稳定目标和合法现场消息。 | 保留原互动；无新增专属主动动作，不代表女儿同意婚事、随行、借貌。 |
 | 茶棚见证人 | 调用者近距、无遮挡、有效 ref/revision。 | 原 gz-hear-witness 产生固定 tea-witness Claim，保留独立来源与到访前 5 日；不主动广播，不自动送给师徒或八戒，不升级为全知事实。 |
 
@@ -257,7 +265,7 @@ respond_consent/withdraw_consent 没有 reason 参数；可观察理由通过已
 | GZ-SP-07 信息、频率与预算 | 检查策略输入、查询、日志和参与者观察白名单；去茶棚前没有庄外 live 状态查询。连续 following tick、无关移动/clock 时评估计数不增长，资格边界变化仅唤醒一次。模型关闭/预算耗尽不影响 scene；三自主公平调度仍独立。 | E 私密内容/远处实时地图/真实身份泄漏；scene 进入 Gateway/ai_runs；每帧评估、重复对白或把 fallback 当同意。 |
 | GZ-SP-08 暂缓、拒绝、撤回后的可玩补救 | 用正常玩家移动让有效提议的领路者离位→实际 deferred；回到近处新提议→accept。已近距但在错误路线范围→实际 declined；返回范围或换合格领路者新提议→accept。途中越界→生产策略本人 withdraw；现场新提议恢复；庄外改选前院经返回连接完成。反向覆盖尚未到达前院客房时，在 guest-passage 中首次改约茶棚，以及未 settled 客房改去茶棚、退出过道中暂缓/撤回后由原或新合格领路者再次提议，均以 front + tea 的新依据经 C13 实际完成茶棚安置；不只测 C11 单点。分别核对内部 defer 与真实人物回应的事件/版本。 | 暂缓/拒绝永久卡死；只能重约前院或手动代移才能出过道；同一旧许可自动改 accept；技术失败伪拒绝；修改旧历史或借测试代答绕开补救；只走前院便报两处通过。 |
 
-地图版本不匹配用契约反例确认旧资料/旧许可被拒绝，不伪造当前章节支持热迁移。生产路径不存在的动态障碍可单列受控守卫样本，不能冒充两客户端已经通过某个未实现的交互。全章乔装/私物自主回应仍未定义，本文不会把两处救援闭环等同完整首章分支完成。
+地图版本不匹配用契约反例确认旧资料/旧许可被拒绝，不伪造当前章节支持热迁移。生产路径不存在的动态障碍可单列受控守卫样本，不能冒充两客户端已经通过某个未实现的交互。D2-R1 未定义全章乔装/私物自主回应；第 10～17 节另给 CS-R2 候选，仍不把两处救援闭环等同完整首章分支完成。
 
 ## 9. 变更依据、采用门槛与交接
 
@@ -289,4 +297,346 @@ respond_consent/withdraw_consent 没有 reason 参数；可观察理由通过已
 
 需求轴须检查两条真实可完成路径、有限人物选择、E 职责、拒绝后补救及没有扩张借貌/私物权限；标准轴须检查授权白名单、所有新谓词原子重验、原身份/一次效果、路线与 epoch 围栏、Unknown 水位及不进入模型队列。新增私有 plan/basis 与步进约束需向 #27/AP-01/02/03/04/06 提供变更映射并由形式化职责评估范围；既有 core 8df 的 40/40 恢复模型不覆盖这些知识、路径、场景选择或重启枚举，不能转记新候选 PASS。
 
+## 10. CS-R2：目标、事实与新增取舍
+
+本候选使正常玩家在救援、安置之后，能够向真实翠兰提出本次借貌或私物处理请求，由生产 `scene_role` 自己接受、拒绝、暂缓或撤回，再由原权威事务实施效果。请求、本人决定、许可是否仍可用、实际借貌/取物分别记录；玩家按钮、聊天、Receipt Accepted、模型故障和测试输入均不能代替本人决定。
+
+任务目录沿用 [#23](https://github.com/gbcdby/xiyou/issues/23)，共同合同/模型入口 [#27](https://github.com/gbcdby/xiyou/issues/27)，客户端与生产本人策略入口 [#33](https://github.com/gbcdby/xiyou/issues/33) / [#34](https://github.com/gbcdby/xiyou/issues/34)，整体验收入口 [#29](https://github.com/gbcdby/xiyou/issues/29)。`GZ-SCENE-CUILAN-SELF-RESPONSE-001` 是本次设计标识，不伪装为已经创建的独立 GitHub Issue；本设计不拆票或分派后续工作。
+
+### 10.1 当前实现观察与必须补齐的接口
+
+| 固定基线中的事实 | 设计影响 |
+| --- | --- |
+| [纯策略](../../game/gaolao-scene-policy.mjs) 只处理 follow；`safe/settled` 直接返回内部 defer。[适配层](../../backend/scene-policy.mjs) 只读 follow 槽，basis 的 purpose 为字面量 follow。 | 增加两种用途的选择及判别式 basis；结束救援不等于停掉角色。不能只更改测试 contentVersion。 |
+| [规则](../../game/gaolao-rules.mjs) 已有借貌/私物请求及本人 respond/withdraw；只有新 follow 回应要求 `scenePolicyAuthorization`。`consentRequest` 把被替换者直接标 withdrawn。 | 新内容中的两种用途也必须验证生产策略依据；取消、替换、本人撤回要分开。旧 follow 行为不借此改写。 |
+| 借貌已检查真实翠兰、当前许可、悟空与登记会面点；私物守卫主要检查当前接受、请求者和 itemIds。 | 新使用合同须明确使用边界、交回对象、使用结束、授权失效及归还例外，不能由一个 accepted 放行任意转交。 |
+| [当前表单](../../frontend/src/domain/gaolao-actions.ts) 从缺失的私有许可取版本 0；私物仅能选当前可见 itemRef。[引用解析](../../game/spatial-world.mjs) 要求当前可见，私物由他人持有时还受额外限制。 | 非参与者不能猜槽版本；本人安置后，玩家无法同时看见后宅私物。新增本人主动说明的有限清单引用，不能放宽普通远处实体操作。 |
+| [Consent/Resources](../../formal/adv001/README.md) 与 [SceneRequest/SceneFollow](../../formal/adv001/scene-policy/README.md) 有自己的有限检查范围。 | 既有结果不覆盖新增用途竞争、请求结束和外貌/私物效果的原子性，见第 16 节。 |
+
+这些是源码观察，不是新运行失败或对既有 N1～N6 验收的撤销。
+
+### 10.2 需求依据与具体推荐
+
+| 条件或行为 | 依据、性质及保留的路线 |
+| --- | --- |
+| 借貌请求在本人安全后提出；悟空是实际借貌者，仍需他自己的执行意图。 | **已有要求**：[主 Spec](narrative-adventure.md) §6.6。本人接受不自动调用悟空 apply，不让玩家控制悟空，不把翠兰加入三自主队列。 |
+| 三处 `rear-meeting / front-meeting / road-meeting` 均可提出借貌。 | **保留现有范围**：三个地点来自当前 `meetingDestinations`。本候选不采用 rear-only 常量；只以本人知道的公开地点、明确范围及与其安置区分离为条件。前院客房和茶棚后间两种安置均支持这些请求。 |
+| 借貌限本次查问/会面；不代本人表达婚事、物权、原谅或承诺；解除或本次公开揭明后不能凭旧许可再次启用。 | 前半为 **已有边界**（§6.6）；“本次使用到解除/公开揭明为止、不反复启用”是 **新增有限范围 CS-N1**。它保留全部公开调停路线；下一次借貌需要新请求。无墙钟同意期限。 |
+| 翠兰逐次决定这一次明确的借貌或取物安排，不答应以后沿用；请求者可以询问两种意向，她实际收到 reusable 意向时明确拒绝。 | **CS-N2 的 R2 修正**：用请求内 `permissionTerm: single_use / reusable` 表达可被询问的期限意向。它来自本人实际收到的摘要，不是隐藏控制/角色分类或远处旁人状态。她的来源声明“这一次说清楚我会考虑；以后再用，请再问我”。拒绝后改为 single_use 新提议即可，保留三地点、两安置与两件私物的合格路径。R1 的所有旁人围听一律拒绝被替代。 |
+| 私物可在救援前提出，但她会明确“先安顿好我，再谈这次取物”；安置后需重新提出。 | **新增选择 CS-N3**，不是新的请求合法性硬门槛。主 Spec §6.5/6.8 允许取物稍后处理且不得交换救援；因此救援不等待私物接受，旧 deferred 不自动变 accept。 |
+| 本次私物用途固定为 `retrieve_to_owner`：枚举包裹/信件、由请求者原样取送到真实物主本人；允许两件任选或同时请求。 | **新增有界授权范围 CS-N4**，落实主 Spec 的取回/按本人许可收拾，不声称主 Spec 禁止她作其他财物决定。此许可不授权拆阅、分享内容、转交第三人、当公共物领回或改变物主。其他处理用途仍需另行设计，不能默认为已同意。 |
+| 安排的绑定控制身份变化使授权立即不可继续使用；翠兰收到自己这份安排已中断的授权通知后，会撤回旧许可，邀请重新说明。 | 围栏与授权失效是 **已有技术原则**；收到中断后作出明确撤回是 **新增人物偏好 CS-N5**。系统失效与本人 withdrawn 分开，缺少本人资格/来源时只能显示失效未回应。第 13、15 节约束原子性与恢复。 |
+
+CS-N2/3/5 保留基于本人来源和这次请求的实际选择；不把某地点、信件或一个不能强令离开的旁观 NPC 设为永久拒绝原因。single_use 仍只是请求，必须满足其余条件并由生产本人 accept 才可用；不是玩家勾选即授权。新增代价是本人边界来源、请求 lifecycle 和少量协议/UI 增量。独立需求审查须评估这一具体人物偏好；作者推荐不等于已经采用。
+
+## 11. 本人知识、有限选择与安置后的响应
+
+### 11.1 两份新增本人来源
+
+新内容开局只向真实翠兰各写一次普通、持久的本人 Observation/provenance；`sourceSeq/receivedSeq` 为实际提交水位。来源落出最近 256 条、重连或重启仍按原身份读取，不补造过去，不给旧 Session 注入。偏好作为本人声明保留 `Claim` 语义；物主、实际到达、位置和转交事实仍由规则分别检查。
+
+| 新 sourceId | 本人知道/愿意说明的有限内容 | 不授予的信息或权限 |
+| --- | --- | --- |
+| `cuilan-appearance-boundaries-v1` | CS-N1/2/5 的本人表态；三个登记会面点的名称、固定公开位置及已有借貌边界（目的地周围 90 单位）；两处安置房间/出口与这些范围分离。 | 不包含远处实时人物、障碍、证言、八戒想法或未获得的身份。资料不证明会面点现在已准备好；悟空实际应用/行走时另验当前空间事实。 |
+| `cuilan-private-items-v1` | 本人的包裹与信件这两个固定名目、她知道的原放物处 C07、CS-N2/3/4/5 的表态；只同意说明名称和“取回本人”的请求方式。 | 不包含信件正文、包裹内物、其他人的物权/笔记或远处当前位置。初始放物处是资料，不是实时追踪；搬运许可不变成阅读许可。 |
+
+两份来源各绑定 `contentVersion/chapterVersion/mapVersion/sourceRevision/digest`。查询白名单分别限该 actor、本局、对应 purpose 的 sourceId；N1 两页 route 来源仍只服务 follow。本人实际收到的本次请求摘要、安置记录、自己的物件交接结果、自己的许可中断/借貌公开结束通知是其他合法输入，必须有真实事件/来源与受众，不能从玩家文字中认定已接受。
+
+R2 不按旁人的 actorKind、在线/控制模式或是否愿意离开决定 C5，也不将这些隐藏宿主字段包装成“本人知道”的资格布尔量。本人实际收到的请求摘要包含 permissionTerm 与本次地点/物件/用途；两份来源包含她逐次授权的偏好。这两类合法输入足够决定 C5。其他人单纯可见、可听或一直停留均不触发 C5；只有他们真正造成的、本文已经声明的独立世界变化（例如当前出口受阻或合法公开揭明）才按对应规则处理。原动作的当前授权、控制 epoch 仍是系统提交守卫，失效时不能伪称本人因隐藏控制状态拒绝。
+
+### 11.2 玩家入口与两份目的独立
+
+借貌沿 `gz-request-appearance`，页面明确“悟空、本次查问/会面、所选地点与可用边界；翠兰留在自己的安置点”。三处地点都保留。没有可确认安置事实时，原规则拒绝 NOT_READY，不伪造翠兰的 defer。
+
+两个请求表单都说明：**这是向本人提出的询问，尚未得到同意。** 期限意向默认选择“仅这次安排”（single_use），也可明确询问“以后可否沿用这次许可”（reusable）；后者仅在首章本局内询问后续重复使用，不涉及后章/跨会话。它只是请求意向，页面不得显示成产品提供了未来通用授权能力。一次私物安排可以覆盖本次枚举的两件物、各自一次真实取送，不把 single_use 误解成整份许可只允许一次 take 或只允许一件。意向随本次 proposed 摘要真实送达本人、保存且进入不可变 scope/scopeDigest；不能由 schema 提前拒绝 reusable 来冒充她作了 decline。已 declined 的请求改问 single_use，必须明确提交新的请求身份并重新通过公开 revision CAS，不能编辑旧 scope、沿旧 nonce 改参数或自动升级原结果。
+
+私物新增近距 `gz-describe-private-items`：真实玩家使用当前本人 ref/revision，原距离/LOS/控制守卫通过后，只取得本人已声明愿意说明的两项 `optionRef + 名称 + 原样取回说明`。这是固定内容说明，不是 accept；即使两人都看到同样的包裹名称，也没有物品操作权。每个 optionRef 是服务端绑定的有限请求名目，不是可用于 take/inspect/transfer 的 EntityRef。详见第 14 节。
+
+玩家选择一项或两项后用 `gz-request-private-items` 提出 `retrieve_to_owner`。本人安置在任一地点时均能接收此请求，不要求她回后宅看物件。接受也不声称物件还在原处；玩家须真实走到可见物件旁，用当前物品引用和 revision 操作。没有发现或不能取到的物件列为待办，不能凭清单传送到手。
+
+### 11.3 当前请求的决策表
+
+按表自上而下；C0/C1 是系统无动作，C2～C7 是实际本人动作。每次新 proposed 至多提交一次 accept/decline/defer。任何新意义或参数均须重新请求，不把 deferred 自动升为 accepted。
+
+| 选择 ID | 当前输入与判断 | 生产输出及可观察结果 |
+| --- | --- | --- |
+| CS-C0 | 原 scene 动作 Unknown；非 Running、paused、终态或本人执行资格失效。 | 按第 15 节先收束原结果/停止新选择。沉默、超时、非法输入均无新同意；UI 区分等待和技术状态。 |
+| CS-C1 | 所需本人来源缺失/摘要错配，或本次动作引用的 purpose/consentId/版本/lifecycle 不匹配；拟回应 proposed 的 proposalBinding 已失效。 | 内部无动作及具体工程/重提原因；不生成 declined/deferred。非法用途/冒充真身/伪造名目由规则拒绝，不包装为人物拒绝。accepted proof 已被合法标为失效不是本条阻止 C2 的理由。 |
+| CS-C2 | 当前 accepted、lifecycle=open，且 reasonCode 为 binding_invalidated 或 appearance_disclosed，具有对应本份 grant 的持久通知；本人当前授权/来源有效。 | 按 CS-N5 / CS-N1 提交 `withdraw_consent`。execution 已 ended/return_only 不妨碍此本人决定；旧参与者不必仍在线或保持旧 epoch。明确 withdrawn 仍要等本次提交，不以恢复成功冒充撤回。 |
+| CS-C3 | private_items 合法 proposed，但本人尚未完成安置。 | `respond_consent(defer)`：“先把我安顿好，再重新说这次取物。”本轮私物请求不影响开门/随行；到达后不自动重答。 |
+| CS-C4 | 请求曾合法送达且身份版本仍有效，但请求者目前不近距/不可见/LOS 不通；或本人当前自由出口局部确实受阻。 | `respond_consent(defer)`：“这次先缓一缓，回到我这里/把当前出口恢复后再说。”无远处路径猜测；版本失效优先走 C1。 |
+| CS-C5 | 请求曾合法送达、请求者近距可见且无 C0～C4 情形；本人收到的 permissionTerm=reusable。 | `respond_consent(decline)`：“这一次说清楚我会考虑；以后再用，请再问我。”拒绝的是沿用意向，不把已有合法请求改成同意。玩家改为 single_use 提出新请求，无须任何旁人移动、改控或答应；旧 declined 保留。 |
+| CS-C6 | appearance：本人已安置、来源/请求当前、permissionTerm=single_use、无 C4 情形；选定三个已知登记点之一，本次外观范围与本人安置区/自由出口分离；执行者固定为悟空。 | `respond_consent(accept)`，只授予当前明确范围。既不读取远处会面准备，也不替悟空提交 apply。若新内容几何不满足分离，是内容校验/设计阻塞，不能偷偷删掉一个原合法地点。 |
+| CS-C7 | private_items：本人已安置、来源/请求当前、permissionTerm=single_use、无 C4 情形；请求为本人的非空枚举名目，固定用途 retrieve_to_owner，经手人是本次请求者。 | `respond_consent(accept)`，包裹/信件同等可选；不依赖本人远看当前物件位置。具体取/还仍逐次检查物权、持有、距离、版本和许可。 |
+| CS-C8 | 已有决定、没有新的 proposed，也没有 C2 通知。 | 无新选择；不会反复对白、补发同意、永久惩罚拒绝者或把另一用途的 grant 搬过来。 |
+
+accept 的前置均重验；不把“有权作出选择”与“已经选择”混为一谈。私物清单无须包含许可才可显示，但其引用不能作为权限。`CuilanSafe`/safeRecord 单调保持；安置后的 follow 搬迁仍不在本设计。
+
+reusable 是合法请求枚举，非法未知枚举仍由 schema 拒绝。grant 不存在 reusable 类型：权威对本内容的 accepted 再独立核对 permissionTerm=single_use、当前明确范围及对应 scene basis；一份 reusable 请求不能因直接内部 accept、模型输出或晚收据变为通用许可。真实本人未完成 C5 时只能显示 proposed/等待，不预写 declined。这个“可询问、由本人拒绝”的入口与“可执行授权”的边界必须分别验收。
+
+## 12. 请求身份、决定与 lifecycle
+
+### 12.1 唯一权威与状态归属
+
+沿用 `chapter.consents / consentSlots` 和 Session 权威事件，不建第二套授权账本。两个新增用途各只有一个当前槽。新内容增加按 consentId 索引的 `personalRequests` 私有辅助记录，记录请求结束与使用，不把非本人行为写进决定字段。
+
+| 记录 | 必需语义与写者 |
+| --- | --- |
+| consent | 原 `consentId/subjectId/requesterId/purpose/scope/version/status/decidedBy/sourceSeq`；scope 一经创建不可改。status 仍为 proposed/accepted/declined/deferred/withdrawn；只有真实本人可信动作写后三种回应或 withdrawn。 |
+| personalRequest | `consentId/lifecycleVersion/lifecycle(open,cancelled,superseded,closed)/reasonCode/transitionActor/transitionSeq`，另保存不可变 proposalBinding。请求者只能结束自己的安排；规则负责替换、完成及技术失效记录。闭集 reasonCode 区分 requester_cancelled、replaced_by_requester、replaced_after_closed、replaced_after_invalidation、proposal_invalidated、owner_declined、owner_deferred、owner_withdrew、fulfilled、usage_ended、appearance_disclosed、binding_invalidated、session_ended。 |
+| proposalBinding | 首次提议的 subject/requester/appearance performer 真实身份及控制版本、scopeDigest、内容版本、提议授权来源水位。原提议身份不在接受时补成最新值；失效则重提。它不是 accepted proof。 |
+| execution | 与该记录绑定的 `state(none,ready,active,return_only,ended)`、不可变 accepted proof、借貌使用是否已开始/结束、私物实际经手记录及返还结果。权威规则写；UI/策略不能直接改位置/外貌或伪造完成。 |
+| accepted proof | 本人 accept **实际生成的** consentVersion、actionId/digest、subject/requester/performer 控制版本、scopeDigest、当前内容及来源版本。原 prepare basis 不回写；仅一次真实接受可建立 proof。 |
+
+正常 open 且尚无结束/失效原因时 reasonCode 为 null。执行进度只推进 lifecycleVersion，不刷新 accepted proof 的控制版本或来源。新内容的 respond 只接受当前 open/proposed；不能在原 accepted、declined、deferred、withdrawn 或 closed 上重新回答。withdraw 则按 C2 的当前 accepted/open/通知守卫，不能借普通内部调用绕过本人策略。
+
+`consent.version` 沿原用途单调版本语义增长；响应/撤回必须匹配它。仅请求取消/使用进度/失效等 lifecycle 变化增加 `lifecycleVersion`，保留最后的本人决定和决定归因。新请求从当前槽版本继续增加，不因换 consentId 重置 0；外部不能用缓存最大值推算下一版。使用检查同时检查当前槽、两类版本/状态及 accepted proof，不能只看 status=accepted。
+
+### 12.2 并发提议、取消和替换
+
+两个新用途的普通提议使用交互已有的 `expectedTargetRevision`，取当前合法可见真实人物版本；不要求非参与者读私有槽或传 0。事务内核对该公开 revision、请求者身份、scope 和当前用途槽，再分配 consentId。每次提议、决定或影响请求可用性的 lifecycle 变化同事务推进主体 resourceRevision；同一公开 revision 的并发请求至多一个首次提交。
+
+| 情形 | 必须发生的事务结果 |
+| --- | --- |
+| 当前无安排，或此前已 declined/deferred/withdrawn/closed/失效且不可继续使用。 | 新玩家可用当前公开版本提议，不必读前人的私有记录。旧请求历史保留；必要时记 superseded，reason 区分 replaced_after_closed / replaced_after_invalidation，不改其本人决定。 |
+| 同一用途有待答 proposed 或仍有效 accepted，另一玩家竞争。 | 不覆盖、不替别人取消或撤回。返回不含原请求者、范围或版本的 NOT_READY；刷新当前可见对象后等待/继续其他任务。并发两个用途也接受公开 revision 的串行 CAS，失败者刷新后重新明确提交，不自动换版本重发。 |
+| 原请求者明确改约。 | 必须显式附 `replacement{consentId,expectedConsentVersion,expectedLifecycleVersion}`；三者及 requester 均匹配。原请求记 superseded/replaced_by_requester，并终止其继续使用；新请求仍是 proposed。旧 private custody 保留归还通路。缺 replacement 不能静默覆盖有效安排。 |
+| 原请求者取消待答或放弃使用已接受的安排。 | 以原 consentId/两版本提交 `cancel_personal_request`。记 cancelled/requester_cancelled，原 status/decidedBy 保留；结束效果与 Receipt 同事务。页面写“你已取消/放弃使用”，不能写“翠兰撤回”。 |
+| 本人撤回。 | 仅本人可信 `withdraw_consent`，匹配原 consentId/version 和当前 lifecycle，实际写 withdrawn，记 closed/owner_withdrew。不是玩家取消的别名。 |
+| 取消与本人回应竞争。 | 原身份 Receipt 优先，然后两版本 CAS；先提交的一方获胜，迟到首次动作拒绝。取消先行则旧 accept 无效；accept 先行则取消方读回原结果和新版本后可再明确取消。不得给旧取消自动更新版本。 |
+| 旧响应/撤回与新提议乱序。 | 旧 consentId 已不在当前槽或生命周期不符，拒绝旧首次动作。保留其原 Receipt；任何历史/同名/旧 basis 都不能作用于新请求。 |
+
+新请求替换的是已明确允许结束的请求，不继承 accept、物件集合、执行者或使用进度。appearance 与 private_items 不相互覆盖；两者都不替换 follow，不读取 follow grant 作为授权。
+
+### 12.3 转移摘要
+
+| 输入 | 本人决定轴 | 请求/使用轴及世界效果 |
+| --- | --- | --- |
+| 正常提出 | 新 proposed | open + none；保存 proposalBinding，无借貌/取物权。 |
+| 待答提议绑定失效 | 保持 proposed，未发生本人决定 | closed + none，reason proposal_invalidated；旧首次回应拒绝，需新请求。 |
+| 本人 accept | accepted，版本增加 | open + ready，建立新 accepted proof；无自动 apply/取物。 |
+| 本人 decline / defer | declined / deferred，版本增加 | closed + none，保留具体补救；新请求才重新选择。 |
+| 首次合法借貌 / 实际取物 | accepted 不改成第二次同意 | ready→active；分别改变真实悟空外貌/真实物品持有，旧 proof 不重写。 |
+| 请求者取消 / 自己替换 | 保留上次本人决定 | cancelled / superseded；外貌解除；已经拿到的私物进入 return_only，未拿到者无权继续拿。 |
+| accepted 后绑定失效 / 借貌公开揭明 | 保留 accepted 历史，未伪造撤回 | lifecycle 保持 open，reason 分别为 binding_invalidated / appearance_disclosed；原子停用授权并持久通知：外貌解除，已持私物 return_only，无持物则 ended。后续 C2 可提交 withdrawn，或由新提议明确取代这个已失效安排。 |
+| 本人 withdraw | withdrawn，版本增加 | closed；与失效同样安全终止继续使用，保持真实位置及所有历史。 |
+| 悟空自愿解除 / 私物全部实际送到本人 | 保留实际 accepted 历史 | closed + ended，reason usage_ended / fulfilled；不能再次凭旧许可启用。单件送回只记该件，不冒称全部返还。 |
+
+请求结束不删除未交回物品或旧观察。闭合请求仍可保有 return_only 的有限补救记录；这不是当前 active grant，也不占用新的提议槽。
+
+仍在玩家手中的旧物通过独立的 `chapter.privateReturns` 投影与行囊入口继续可操作，不能只在 `personalRequests/currentConsents` 内查找；完整选择规则、身份和收束条件见 §13.2.1。这是 R2 对旧请求被新槽/历史裁剪挤掉问题的补充。
+
+## 13. 权威效果、撤回和物权补救
+
+### 13.1 借貌
+
+只有真实悟空的既有 `gz-apply-appearance` 意图能使用 appearance grant。最终事务重验本人/目的、当前槽、scopeDigest、permissionTerm=single_use、accepted proof、请求的 expectedConsentVersion、当前 lifecycle/execution 仍可执行、参与者控制版本、Running/未暂停、真实悟空与本次登记地点的现有距离/空间条件。使用请求不必增加公开 lifecycle 参数：关闭/失效/已消费的旧生命周期不重新打开，当前不可执行即拒绝。悟空自己的愿意由其正常意图链提供，不由 scene 策略预留。
+
+本次范围沿已有目的地 90 单位边界；借貌期间的整个实际移动段保持在该范围，不能只检查终点或先越界后纠正。换地点必须先结束旧使用、再提出新请求。外貌与真实实体分开；借貌不获得翠兰的背包、物权、随行/会面同意或私人知识。
+
+撤回、请求取消/替换、绑定失效、当前许可的公开揭明，以及悟空自愿解除，都必须在各自权威事务内关闭旧使用并运行现有解除语义：真实悟空恢复外貌，appearanceEpoch/resourceRevision 前进，依赖旧外貌的活动移动/引用失效，路线可继续公开调停。事件发生时实际看见/听见者保留合法身份知识；不向全房间补发身份，也不删除历史。公开揭明的许可参与者通知只说“本次借貌的隐瞒已经结束”，不带远处受众、坐标或他们的其他知识。
+
+公开揭明终止本次授权是 CS-N1 的范围结束，不能等待 scene 的下一次回调才停止继续冒用。随后 C2 的实际 owner withdraw 才能显示“翠兰已撤回”；未运行该动作时显示“本次使用已结束，等待本人后续回应”。自愿解除正常关闭使用，不假称翠兰撤回。
+
+### 13.2 私物：物主、持有人和许可分开
+
+真实物主仍由 `chapterRules.privateItems` 绑定；item.location 的当前持有人不是物主。新 grant 只授权本次请求者拿取枚举物、原样携带并直接交给真实翠兰；不授权转给同行、同貌悟空、公共归还点、拆阅/分享或把私物归入离线公共领回。八戒的钉耙仍走其自己的授权，不纳入本策略。
+
+每次 take/transfer/put 都核对实际 itemRevision、唯一位置/持有人、当前合法 EntityRef、距离/LOS、操作对象与原经手/这份 grant 的执行关联。新 take 还必须独立核对 permissionTerm=single_use 以及该物未在本 grant 下成功取过，不能只信策略曾接受。归还走 §13.2.1 的独立原经手守卫，不要求失效 grant 复活。目录 optionRef 不能用于这些操作。许可不遥测、预留或复制物件；另一玩家持有时不能凭新同意夺走。已借物的原经手记录绑定真实 itemId、取得动作和旧 consentId，但仅在可信域使用；公开投影不泄漏远处持有人。
+
+每件成功取出后，其本次 take 机会已消费；真实交回该件不会消耗另一枚举物尚未使用的机会，也不会因另一件仍待处理而重新可取。放回原处不重开该件机会，再次取送需新请求。新的请求不改写一个已持物的原取得依据；其后来真实返还可以满足新请求中同一物件的结果，但不能伪称新请求造成了过去的取物。接受时已由真实本人持有的项只记“已经在本人处，无需再取”，不发新取还事件；全部枚举项已在本人处时可按现有事实闭合为 fulfilled。放回原处始终不等于本人实收。
+
+**撤回不锁死归还。** 对有真实经手记录、当前确由该玩家持有的这件物，保留以下两条窄 restitution，不要求旧 grant 仍 accepted：
+
+- 走到真实物主附近，按当前 item/本人引用与版本 `transfer_item`，只允许实际交还物主；同貌悟空不匹配真实物主，不能代收。
+- 走回该件物品的内容登记原放物处，按当前版本/距离 `put_item` 放回原处。此项只记“放回原处/仍未送到本人”，不记已交还；放到任意公共地面不属于补救。
+
+这两条只是处理既有持有的能力，不恢复新的 take/read/转交权；不替玩家走路，不跨场景传送，不偷偷更换物主。授予新的同意也不接管他人手中的私物。离线持有人未回来时，同伴不能走公共领回捷径；可以等待其重连后实际归还，或把该事如实列为未完成。主 Spec §6.9 的完整分别/公共物收尾不以私人遗留强行卡死，也不把遗留写成圆满。
+
+#### 13.2.1 独立于用途槽的返还上下文与正常入口
+
+**权威选择集合：** 对当前观察者本人持有的每件翠兰私物，若存在对应这次实际取得的持久经手记录，投影必须包含一项 `privateReturns`。选择依据为当前 `item.location`、实际取得动作/原 consentId 和真实物主，不是 `consentSlots`、原请求是否 current/open/accepted、最近 256 条观察/许可、同一用途最新版本或客户端缓存。原 grant 仍有效时可显示“本次取送尚待交回”，原 grant 已关闭/失效时显示“只能归还”；这两个显示都不增加授权。
+
+R1 已要求保存的经手记录继续作为原事实来源，包含本次取得身份、item、真实持有人、真实物主、原 consentId/实际接受版本及登记原处依据；R2 不另建可被客户端修改的物权账本。每件当前持物只对应这次取得的一项上下文，旧已完成的取得不能冒充当前取得。两件物分别处理，一件交回不消除另一件的待办。当前内容最多两件，集合容量应完整容纳这两件，不与最近历史共享裁剪预算；以后内容扩量须同步改容量，不能静默丢项。
+
+**当前投影至少保留：** 不透明 `returnContextId`（绑定本次实际取得，跨重连仍识别同一事实，不是授权 token）、`originalConsentId`、`acceptedConsentVersion`、`sourceLifecycleVersion`、当前 `itemRef/itemRevision`、`mode(delivery_pending,return_only)`、本人已授权说明的物主标签、`origin{sceneId,position,label}`。真实物主当前合法可见时再给本视图 `ownerRef`，否则为 null；不能泄露远处实时坐标或按同名对象补齐。origin 是原接受中已说明的登记原处，不是物件/人物追踪。历史 ID 和版本用来解释原经手来源，不能解释为旧 accepted 又成为当前可用许可。只有真实持有人收到这一操作上下文；新请求者或旁人不因此获知旧持有人的位置、清单或指令入口。
+
+**正常 UI：** 行囊中对应物件固定显示“归还这件私物”区，直接消费 privateReturns，不能先经 `currentConsents` 过滤或要求旧请求仍在当前许可卡。提供“交回本人”和“放回原处”两种明确入口。交回只在当前可见对象中找到该 ownerRef 后可发起，玩家先用正常地图行走靠近；不按名字选择同貌人物。放回使用已说明的原处坐标，玩家须先实际走到近距，不能默认“放在脚边”。远距/不可见/暂停时保留说明和入口并显示缺少的正常步骤，不伪报已可提交；不发送任意他人 recipient 或任意地面位置来试探权限。
+
+两条入口仍构造普通 `transfer_item / put_item`，使用当前 envelope、当前物品引用/revision 和明确的归还目标；不新增特权通道。服务端在提交时独立核验当前控制资格、真实持有、本次原取得记录、真实物主/登记原处、距离/LOS/可放置条件及版本，不要求旧 consentId 仍在当前槽或当前 grant 可用。另一新请求不能重写原取得依据、替换物主，或使其他人接管这件物；给客户端 returnContextId 也不能绕过这些检查。
+
+**恢复与结束：** grant 失效/取消/撤回/被新提议替代、原记录落出最近历史、断线换 epoch、页面刷新/新 view 后，权威从当前真实持有与持久取得记录重新投影同一上下文，换发当前 item/owner 引用与版本；不新增墙钟授权期限。旧 UI 请求先按原身份读 Receipt；确定结果后需要的新动作取当前投影重新构造，不重写旧 nonce。归还过程中 Unknown 不使上下文在客户端提前消失；服务器已完成的实际交接则由后续权威投影移除。
+
+只有实际处置物品才收束相应持物待办：实际交给物主后记 delivered_to_owner，并移除该物的私有返还上下文；实际放回登记原处后记 restored_origin，物品真实落地、持物待办移除，但仍明确“未送到本人”，不使原取送安排 fulfilled。取消、被新槽覆盖、历史裁剪、时间经过或一份旧 Accepted Receipt 均不能移除它。`privateReturns=[]` 只说明当前没有需要从本人手中归还的物，不等于所有私人物件已交到物主。终态只展示真实剩余事项，不恢复执行权限。
+
+### 13.3 原子性与授权失效
+
+所有会使当前 grant 不可用的变化，在原 Session 事务中同时处理：许可/请求记录、execution、外貌解除或私物 return_only、相关版本、授权 Observation 与原 Receipt。并发 apply/take 与撤回/取消只能按同一权威顺序发生：使用先提交则保留真实效果历史并随后终止；撤回先提交则旧首次使用拒绝。不能出现已提交撤回而下一事务仍能继续冒用/取物的窗口。
+
+绑定的 subject/requester/appearance performer 控制 epoch 变化、scene 本人资格撤销、内容/地图错配或终态会使继续使用失效。控制变化提交时即执行上述安全收束；尚未接受的请求按 proposal_invalidated 结束，不生成撤回。终态另记 closed/session_ended，保留尚未归还记录，不再等待 C2。此类收束不是新增本人决定，也不回滚已完成的救援。单纯房间因另一位非参与者离线而暂停，不伪造某个角色撤回；暂停期间不发新的选择/取物/借貌，恢复不延长或复活已失效 grant。
+
+中断通知必须从本次 accepted proof 的真实失效事件产生，只给这份许可参与者，使用不泄漏控制内部细节的文字“这次经手/执行安排已中断，请重新确认”；不能让客户端上报 notice 或把超时推测当事实。本人新控制身份恢复并收到这份持久通知后，按 CS-N5 作 C2；若其来源/身份无法恢复，留在失效未回应，不能由权威层直接写 withdrawn。
+
+事务提交后的快照/事件投影从同一提交结果生成，不向外发送“许可已关闭、外貌/操作权仍有效”的中间视图。既有原 Receipt 读回先于首次领域重验，不要求历史成功重新满足今天的距离、控制或人物偏好。
+
+## 14. 模块、接口与反馈合同
+
+### 14.1 职责
+
+| 层 | 新增职责 | 保持的边界 |
+| --- | --- | --- |
+| 内容与本人来源 | 两份有限声明、三个会面点的已知边界、两件私物名目及原放物处；新 content/章节版本。 | 无远处实时事实，不修改旧局知识，不加模型/美术资源。 |
+| `game/gaolao-scene-policy` | 从本人合法输入按 C0～C8 选择同意动作。 | 纯判断；不写世界、不搬动物品、不替悟空 apply。 |
+| `backend/scene-policy` | 按 purpose 查询白名单，构造不可变 basis、原预留、提交时重算同一选择。 | 不读取全局私密数据，不把 public 自报字段当授权。 |
+| 领域规则/authority | CAS、真实同意事件、lifecycle、使用/返还守卫、失效收束；同事务保存事件与 Receipt。 | 唯一世界状态和物权；拒绝冒充、跨用途和旧绑定。 |
+| 投影/前端 | 当前请求+本人决定+可用性分别显示；另按真实持物投影 privateReturns 并提供行囊内的独立归还入口。提供有限清单/取消/显式改约，保留 Unknown 原请求。 | 不提供“代翠兰同意”按钮，不依靠本地乐观状态发放能力；不由当前用途槽或历史裁剪决定旧物能否归还。 |
+
+### 14.2 拟议公开增量（新内容限定，尚未入机器 schema）
+
+`interact` 的 targetRef/expectedTargetRevision 和原 envelope 身份字段继续使用。以下是闭集形状的设计合同，不是已经可调用的生产接口；实施时须同步 [机器协议](../../protocol/gaolao-v2.md)、schema、生成类型、客户端和内容校验。
+
+| 入口 | 参数/返回的最小语义 |
+| --- | --- |
+| `gz-describe-private-items` | 参数为空；向合法请求者和本人形成不可分享的目录说明。返回/投影 `offerRef, subjectRef, sourceRef, sourceRevision, options[{optionRef,label,handling}]`，最多两项，handling 固定 retrieve_to_owner。 |
+| `gz-request-appearance` | parameters 为 `destinationId,permissionTerm`，另可有显式 replacement；permissionTerm 仅为 single_use / reusable 的请求意向。当前公开 targetRevision 是首次提议 CAS。执行者、用途和实际可用边界由内容/规则决定并完整显示，不接受客户端改 performer。 |
+| `gz-request-private-items` | parameters 为 `offerRef,itemOptionRefs,permissionTerm`（物件 1～2 个、去重）和可选 replacement；permissionTerm 同上。实际可用用途固定 retrieve_to_owner，接收者固定目录真正物主。普通 EntityRef 或另一玩家的 optionRef 不能替代。 |
+| `replacement` | 闭集 `{consentId,expectedConsentVersion,expectedLifecycleVersion}`，只供原请求者显式替换仍开放的安排；范围随新请求重新绑定。 |
+| `cancel_personal_request` | 新公开 action：`consentId,expectedConsentVersion,expectedLifecycleVersion`；只取消自己的 appearance/private_items 请求。无借此取消别人的安排/本人决定/follow 的权限。 |
+| 本人 `respond_consent / withdraw_consent` | 原公开参数形状不变；新内容只允许相应可信 scene_policy basis。lifecycle 与范围由服务端私有 basis 绑定，不让玩家多传一个“已经同意”的字段。 |
+| `chapter.personalRequests` | 参与者当前请求的 `consentId,lifecycleVersion,lifecycle,executionState,reasonCode,reason` 及已授权名目/permissionTerm 摘要；与现有 consents 用 ID 关联。它不是旧持物归还入口的来源；不暴露真实 actorId、basis、epoch、远处 item position。 |
+| `chapter.privateReturns` | 独立的物件级集合，字段与完整保留义务见 §13.2.1。按观察者真实持有和本次实际取得构造，不从当前请求/最近许可裁剪后重建；0～2 项覆盖本内容全部待交回物件。只授予展示普通窄归还动作的上下文，不是新的 consent/通用 grant。 |
+
+目录 token 服务端绑定 session、请求者、真实物主、view、内容/来源修订及有限物品集合。换视图后重新近距询问取得新 token；旧原请求的 Receipt 仍可按原身份恢复。token 只为“向这位物主请求这件物”解析，不进入普通 resolveRef 的远处豁免。物主以后是否接受、物件现在在哪里，是两件不同的事。目录与许可说明非分享性；没有复制整份 privateItems/content。
+
+延续现有同貌对象的入口策略：未识破者看到的两张同貌人物卡不能仅靠新增 availableOperations 或目录图标区别真身；不预先加载真正翠兰的私物清单。只有实际近距询问通过真实主体与来源守卫才返回该目录。把目录 token 用在另一同貌对象、其他观察者或另一房间时统一拒绝，不输出“真身为谁”、内部 actorKind 或目标的隐藏数据。实际归还也必须解析真实物主，不能按名字寻找“翠兰”。
+
+新正常表单不得从 `consents=[]` 构造私有版本 0。未参与旧安排的人只看公开 targetRevision 与自己的结果。Receipt Accepted 对请求操作仅表示“请求已登记，等本人回应”；对 respond(defer) 表示“本人暂缓动作已提交”。最终 UI 还要用投影确认实际决定及执行可用性。
+
+沿用现有 [SpatialSession 的 Receipt 处理](../../frontend/src/network/spatial-session.ts)和 [SpatialView](../../frontend/src/domain/spatial-view.ts)：Receipt 只收束原动作历史并触发 sync，当前授权/返还集合只由合法 session/view/generation/seq 的权威投影更新。不得用旧 Accepted 回填 active，也不新增个人用途专属的第二套状态合并器。该边界保留为 GZ-CS-08/10 的迟返回验收，不将 R1 的 `R-CS-UI-RECEIPT-001` 已驳回疑点重新当作设计阻断。
+
+### 14.3 私有 basis 的判别式
+
+新 `policyVersion=gaolao-cuilan-v2` 的 basis 用显式分支 `rescue/follow/appearance/private_items`；不能把现有 `purpose: follow` 扩成任意字符串后继续读 follow 槽。旧 `gaolao-cuilan-v1` 的闭集 parser 和动作依赖保留。
+
+| 分支 | 必须绑定并在首次提交同事务重验 |
+| --- | --- |
+| 全部分支 | 当前真实 scene 主体/授权、policy/content/chapter/map 版本；原 actionId、requestDigest、stepKey、原来源引用/摘要/receivedSeq、本人 view/ref/epoch；原请求/attempt 关系。Running/paused 在每次提交重新判定，不能用全局 sessionSeq 相等代替相关版本。 |
+| follow/rescue | 原 N1～N6 的全部来源、许可、follow/plan/route、双 epoch 和动作依赖；不加入两个新用途的槽或私物状态作无关失效条件。 |
+| appearance response | 当前该用途 consentId/version/status、scopeDigest（包含实际收到的 permissionTerm）、lifecycleVersion/open、本次请求来源、safeRecord 绑定、请求者与执行者的绑定身份/控制版本；本人借貌来源；当前近距/可见/LOS/局部出口。没有旁人的控制/身份资格依赖。 |
+| private response | 当前 private_items 请求/两版本、原目录与来源修订、枚举物/用途/permissionTerm/真实物主/请求者；safeRecord 或尚未安置事实；当前本地请求者/出口。不把远处物件实时位置或旁人资格当选择输入。 |
+| personal withdraw | 当前原 consentId/version/用途、lifecycle、旧 grant 的不可变 accepted proof、该 grant 对应的持久中断/结束通知及来源、本人当前 epoch/授权。**不**要求已经中断的请求者仍在线、近距或保持旧 epoch；这些条件不是撤回的依赖。 |
+
+提交重算相同 choice、同一 stepKey/action/参数和该分支真实依赖。不能把旧 accept 原文改为 decline/defer 后复用动作 ID；也不能拿新快照重填旧 basis。本人决定成功后，新的 accepted proof 绑定实际产生的同意版本，旧 prepare basis 不可变。
+
+判断依据使用本次相关分支：另一用途请求、无关玩家行走、不同物件变化不使当前合法回应反复过期；同一请求的范围、当前角色控制、本人资料、需要的本地条件变化必须重验。私有严格白名单及公开注入拒绝覆盖新增嵌套结构；不得输出全状态、远处坐标或其他人的私密观察。
+
+### 14.4 玩家反馈与合法替代
+
+| 可见结果 | 正常玩家可以做的下一步 |
+| --- | --- |
+| 等待本人 / 技术 Unknown | 保留原请求卡片和 nonce；查询/恢复原结果。不会出现“超时默认同意”。技术错误不装作人物说“不”。 |
+| 拒绝以后沿用许可 | 当前或另一合格请求者保持正常近距条件，将意向改为“仅这次安排”，使用新请求身份与当前公开 revision 提议。其他人可以继续停留，无须让任何 NPC 离开；三地点与两件私物选项不移除。 |
+| 暂缓 | 按具体理由先完成安置、恢复当前出口或返回近处，再新提议；不靠重复发同一 nonce 改写已提交的 deferred。 |
+| 借貌不愿/撤回/被结束 | 提示现有外间、庄口、庄外公开会面与查账/证人路线；悟空可用真实外貌继续。安置与既有证据不回滚。 |
+| 私物撤回/失效且已持有 | 行囊从独立 privateReturns 显示“只能交回本人或放回原处”及两种按钮；新请求占槽、历史裁剪或重连不挤掉旧持物入口。未持物者不再拿取，未完成物件保留；放回原处不显示本人实收。 |
+| 自己取消或改约 | 显示实际归因和新 proposed，绝不把它写成翠兰主动撤回。第三方只看到自己无权覆盖的通用反馈。 |
+
+理由是一次授权 Observation/投影字段，不新增自动反复 speak。旁观者不收到完整请求，历史也不按后来识破身份重写。
+
+## 15. 调度、Unknown、恢复与兼容
+
+同一翠兰仍只有一个 scene 控制器、一个未收束原意图，不创建两个用途各自竞争写的控制器。先处理原 Unknown；随后检查共同权限与 Running/paused。已有救援撤回、退让/安置等可执行安全步骤保持原相对顺序；follow 的“等待实际行走”不阻止对已经收到的私物请求作 C3。安置完成只关闭救援分支，仍扫描两个新增用途。
+
+个人用途先处理有确切通知的撤回，再处理 proposed；同级按原请求 `sourceSeq` 排序。只生成当前动作，不预留整批本人选择。一个动作提交后，自己的状态变化必须成为相关语义通知，使另一用途的待答请求仍能被评估；不能因为消费了一个全局读水位，把第二份已读未答请求吞掉。持续 Running、权限稳定、有限请求且技术故障最终结束时，两用途都须得到机会。无需新的持久队列；当前槽、来源和原意图记录足以重建待办。
+
+新增相关唤醒只含：两用途的当前请求/决定/lifecycle（新请求带有不可变 permissionTerm）；本人新增合法来源和许可通知；本次请求者控制/本地资格；安置/自由出口的真实变化；原 Running/resume。R2 不因旁人走近/离开或其隐藏控制模式变动触发 C5 重选。每 tick 移动和全局无关事件不触发新选择。notify 是私有进程语义，不扩充公共感知权。持物返还上下文随原权威物品/经手状态投影，不依赖 scene 再作决定才出现。
+
+原 §6 的 Receipt 优先、nonce/原摘要、一次效果、确定拒绝与 Unknown、独立 pending/last 水位及最多三次自动技术重试保持。新 stepKey 至少含 `purpose:consentId:consentVersion:lifecycleVersion:response-or-withdraw`；重试仍沿旧 intent/actionId 原文。确定 Rejected 收束后，只有依据真实改变或原拒绝之后已收到相关语义，才可建立关联的新 attempt；不能因一次 read/recovery 成功就产生新选择。
+
+进程重启仍先执行现有控制围栏/暂停。私有 personal grant 在绑定失效事务收束；读取原 receipt/未决 intent 后，当前内容按本人持久来源和真实状态重新扫描。旧 accepted 不自动续用，旧 proposed 不能借新 epoch 自动接受；缺独立需求时恢复不额外发动作。原撤回通知仍在、当前原请求未被取代、本人已合法恢复且房间 Running 时，才用新当前 basis 执行 C2。授权撤销时只做可授权的原结果读取，不能为“恢复”另绑定更大身份；终态不再作新本人选择。
+
+建议新内容为 `gaolaozhuang-scene-v3 / gaolaozhuang-tools-east-scene-v3`、章节 `gaolaozhuang-chapter-v3`，登记 `gaolao-cuilan-v2` 并声明新增客户端能力 `gaolao-personal-consent-v1`。旧 v1/scene-v2、旧 N1～N6 basis 和存档照旧；不热替换本局内容或把新个人偏好赋给旧人物。新客户端能力与 schema 的具体协商接入沿现有 capability 机制实现；不支持该能力的客户端进入新内容前给出明确升级/选择旧内容提示，不能运行中静默丢弃 lifecycle 后误显有效同意。
+
+## 16. 形式化交接：新增状态与性质
+
+此候选存在实质并发风险，需交给独立 `worker-tla` 评估/建模；设计作者未启动该角色、未运行 TLC，也未把下面的推导称为证明。现有 [SceneRequest](../../formal/adv001/scene-policy/model/SceneRequest.tla) 只抽象一个逻辑效果，[SceneFollow](../../formal/adv001/scene-policy/model/SceneFollow.tla) 限随行围栏，[Consent](../../formal/adv001/model/Consent.tla) 限安置，[Resources](../../formal/adv001/model/Resources.tla) 限合作/公共领回；均不直接证明本合同的跨用途/私物恢复。
+
+建议最小状态为：两个真人、真实翠兰与悟空、两种 purpose、两件私物、每用途至多三份请求、有限递增 consent/lifecycle/control 版本；当前槽、不可变 scope（含两值 permissionTerm）/来源是否合法、本人决定、request lifecycle、accepted proof、借貌 ready/active/ended、私物 ground/holder/owner、逐物取得/实收/放回记录与 restitution 资格、safe 单调位、Running/paused/terminal、原 intent/Receipt/Unknown、有限重复/乱序通知和一次重启。R2 增加与当前槽/裁剪历史独立的 privateReturns 派生集合、当前 view/ref 与投影代际；不另建授权账本或收据合并器。把连续几何抽象为近距/可见/范围内布尔条件，不能用模型假定所有请求总能满足这些条件。
+
+| 性质/负控方向 | 最小必须探索的交错与失败判据 |
+| --- | --- |
+| 本人决定唯一归因 / 代答负控 | 玩家取消/替换不能写 accepted/withdrawn 或 decidedBy=翠兰；合法 scene 本人动作才能产生决定。 |
+| 用途与范围隔离 / 错槽负控 | follow accept 不授权外貌/物件；appearance 不授权 private_items；旧/不同 scope、请求者、item、执行者不能混用。 |
+| 请求意向与实际授权 / 通用许可负控 | reusable 可合法 proposed 并由生产本人 declined，但权威 accept/apply/take 只能使用 single_use；改问须新身份/新公开 CAS。两件各可取送一次；送回第一件不耗尽第二件，同一件放回不重开原 take 机会。 |
+| 当前请求唯一与 CAS / 覆盖负控 | 两真人同 revision 竞争、同人显式替换、第三方覆盖 active、旧 basis 迟提交；至多一个有效当前安排，终态历史不被改写。 |
+| 原子终止 / 拆事务负控 | apply/take 与 withdraw/cancel/replace/控制变化并发；终止先提交后无新使用，使用先提交保留历史再关闭，不残留活的外貌或新取物权。 |
+| 物主/持有唯一与补救 / 禁归还和公共领回负控 | 取物后撤回仍能实际交回真物主；不给第三人、同貌者或离线公共领回；返还不复制、不传送，不恢复 take。 |
+| 旧持物返还投影 / current-only 与历史裁剪负控 | p1 已取物→失效/取消→p2 新请求占槽→p1 换 view/重连/历史落窗；原取得物仍逐件出现在 p1 privateReturns，不泄给 p2、不迁移取得记录。仅实收/放回清除对应持物项，放回不能冒称 delivered/fulfilled。 |
+| 原 Receipt 与一次效果 / 重放和重写负控 | COMMIT 成功返回丢失、响应/撤回/取还重复、同 ID 改 scope、旧 epoch 原结果读取；原结果稳定，效果一次，Unknown 不另发新身份。取消/失效后的旧 Accepted 合法重放只返历史 Receipt，不能复活 grant 或覆盖当前投影；旧 request 的延迟 response/withdraw 不改新 request 或另一 purpose。 |
+| 两用途待办与局部依赖 / 吞水位和全局版本负控 | appearance 与 private 同时待答，一个完成后另一仍可评估；旁人无关行走不饿死；本次请求者近距/可见或出口事实等真正依赖变化不能漏唤醒。C5 不读取隐藏 actorKind/在线控制资格。 |
+| 恢复与授权失效 / 旧 grant 复活负控 | paused、重启、主体/请求者/执行者换 epoch、撤权、终态；先原恢复再独立选择，失效不伪作拒绝，同意不因恢复复活。 |
+| 安全与历史保持 / 回滚负控 | 所有取消/拒绝/撤回/结束都不清 `CuilanSafe`，不撤销他人已经合法收到的身份事实。 |
+
+可达见证至少包含：两种用途各一次 single_use accepted 与 reusable 的真实 declined；私物安置前真实 deferred；accept→实际使用→失效→本人 withdrawn；取物后 withdrawal→本人实收；取两件→先还一件/另一件仍可处理；旧持物请求 superseded 后重连→从独立入口归还；取消先于 accept 与 accept 先于取消；不同用途并行待答；Unknown 与晚到新提议；三处会面/两处安置作为内容等价类。活性只在两人在线、参与者合作、引用/来源稳定、原请求恢复最终收束等明确假设下讨论，不承诺离线持有人一定回来。不得加入“非参与 NPC 最终离开/答应玩家”公平性；他们持续停留时，仅把 reusable 改成新的 single_use 就能解除 C5，其他真实条件仍另验。
+
+影响映射：AP-01/04 检查借貌外观/路径/引用及历史；AP-02 检查暂停与无追赶；AP-03 增补个人用途，不削弱原 SettlementAuthorized/SafetyDurable；AP-05 增补私物 custody/restitution 与独立返还投影；AP-06 保持 scene 直接模型成本零并检查两用途串行公平。N1～N6、SP06 的来源、前院支线/C13、两路线恢复、公开提议 CAS 和原 64/40 等历史结果保留原 subject/scope，不改名为 CS-R1/R2 通过。
+
+## 17. 可观察验收、交接与当前结论
+
+### 17.1 最小两人生产点击路径
+
+后续实现验收至少用两个正常玩家客户端，选择新内容、完整服务器/数据库和真实页面。翠兰必须由生产 scene 生成 respond/withdraw/移动/确认；禁止 `send('cuilan',...)`、代其 go、写 accepted、改章节/物权、把绕过策略的内部 handle 叫正常页面。三自主 NPC 如使用已有受控 provider 须单独标 profile；它可提供悟空自己的合法意图，不代表真实 provider 质量，更不能替翠兰作决定。
+
+1. 两人正常联络、检查铜封、协作门撑、送达事实；悟空经自己的合法链开门。玩家正常提议并实际带路，生产翠兰接受、走到安置点、确认。分别有前院客房与茶棚后间样本，保留 GZ-SP-01～08/SP06 证据身份。
+2. 两人通过正常表单向本人询问借貌能否在本局以后沿用（reusable），确认 proposed 摘要实际送达，随后观察生产本人 declined 及“以后再用，请再问我”的理由。按当前公开版本另提 single_use 新请求，分别在三个登记会面点的样本中观察本人 accepted；旧 declined 不改写。旁观 NPC 可以仍在可见听闻范围，不要求他们离开或服从。真实翠兰仍在安置点；她的同意不会自动让悟空借貌。
+3. 在本人身边询问私物清单，选包裹/信件（覆盖单项及两项）请求取回；同样取得 reusable 的实际 declined→新 single_use accepted。玩家实际走回 C07 看见、拿起枚举物，按每件各一次取送；先交回第一件不妨碍处理第二件。其他玩家、同貌悟空和未枚举物没有因此获得权利。另一份 appearance 的状态不被这个请求改写。
+4. 本次请求者正常断线并重连形成真实绑定中断：两人不足时房间暂停，旧 grant 已停止使用；两人恢复后生产翠兰收到自己这份安排的中断通知并实际提交 withdrawn。旧请求原 Receipt 保持，旧 apply/take 不能继续。若该时点先被新请求替换，不得冒称覆盖了本人撤回样本，需另取真实 C2 样本。
+5. 已拿私物的 A 取消/失效后，B 正常新提议占据 private_items 当前槽；A 重连取得新视图，旧取得记录和行囊归还入口仍在，不依赖当前许可卡或最近历史。A 正常行走后逐件点击“交回本人”或“放回原处”；同貌者不接替物主，B 的新许可不能接管 A 手中之物。实交本人只清相应持物待办；放回只记未送达、不重开原 grant 的 take。随后可新请求尚未处理的物件；拒绝/撤回不要求重做救援。旧历史落窗后的相同入口义务另由 GZ-CS-06 覆盖。
+6. appearance 的实际使用与公开揭明样本由悟空自身意图链执行 apply，玩家从合法观察获得身份后当面揭明；确认即时解除/公开路线，再观察本人 C2 撤回。自愿解除、玩家取消和真实本人撤回分别取证。无真实 provider 时此项只算受控 NPC 的生产技术路径。
+
+步骤 4 同时给两种用途各取独立样本，不能用全房间重启让两个用途一起变化代替“某个无关参与者变化不影响另一份许可”的检查。新断线或重启所带来的私物剩余事项如实保留，不能为验收强行归还。
+
+### 17.2 稳定验收矩阵
+
+以下全部是待执行义务，当前 **NOT_RUN**；静态阅读和设计作者自查不转记为生产 PASS。
+
+| 验收 ID | 检查对象与输入 | 可观察结果与失败判据 |
+| --- | --- | --- |
+| GZ-CS-01 本人来源与安置后存活 | 新两内容变体；各一次实际安置后请求；来源落窗/恢复。 | 来源只归本人且可持久读取；settled 后两用途仍自然回应。借 route/follow 来源授权、导出私密 content、safe 后永久沉默均失败。 |
+| GZ-CS-02 借貌本人选择 | 三地点×两安置点的内容/选择等价检查；正常页面 reusable proposed→本人 declined→新 single_use accepted；离位/出口真实阻塞另取 deferred 样本。 | 意向实际送达、scope/digest/新身份与公开 CAS 完整；不能 schema 代拒绝、自动修改旧请求或以勾选代同意。旁观 NPC 持续停留无需配合；隐藏控制模式不改变 C5。三地点实际空间应用另核同一范围。 |
+| GZ-CS-03 私物入口与选择 | 安置前合法请求→真实 deferred；安置后清单；两物单选/同选；reusable 拒绝→新 single_use 接受。 | 未要求本人/物件同屏；optionRef 不成为远处操作权；不泄露正文/追踪位置；旧 deferred 不自动接受。两安置点均保留正常路径，不要求移动旁观 NPC。 |
+| GZ-CS-04 实际使用与物权 | 当前许可下悟空真实 apply；玩家真实拿取/送还；两件各一次与先还一件；同貌主体、其他玩家、非枚举物和第三方转交。 | 权威独立限制 single_use；两件许可不因第一件完成整体耗尽，同一物归还/放回不重开旧 take。外貌与真身分离；单一持有、物主不变；不自动执行或复制/传送，未完成物如实保留。 |
+| GZ-CS-05 本人撤回与即时停用 | 实际使用后真实控制中断、恢复后本人 withdrawn；借貌公开揭明；故意延迟 scene 回调。 | 失效事务立即解除/禁新使用；本人动作后才称撤回；历史与 CuilanSafe 保持。依赖下一次模型/scene 回调才停用失败。 |
+| GZ-CS-06 私物撤回后补救 | A 已持一件/两件→撤回/取消/换 epoch→B 新请求占槽；A 重连换 view、旧请求落出历史窗口；正常行囊逐件实交本人/放回原处。 | privateReturns 仍完整列 A 实际持物及原取得身份、新 ref/revision；当前槽/历史裁剪不挤掉入口。实交才记实收；放回不记 delivered/fulfilled；不能读、新拿、转给第三人或公共领回。离线不伪归还，未处置另一件不消失。 |
+| GZ-CS-07 请求归因与竞争 | 自己取消、显式替换；另一玩家同版本竞争/覆盖；不同用途并发；新槽与旧持物并存。 | 取消/替换/本人撤回分轴准确；同版至多一提交，无空槽猜0，无第三方改掉现有效许可；新请求不接管旧经手记录或持物，不泄露其清单/位置。 |
+| GZ-CS-08 旧依据/Unknown/乱序 | prepare→commit 间改 scope/permissionTerm、控制、来源/本地条件；COMMIT 返回丢失、重复与晚通知、旧撤回与新请求交错；失效后重放旧 Accepted actionId。 | 原 nonce 原文和历史 Receipt 稳定，原动作先收束；旧 basis 不迁移；一次效果。旧 Accepted 只更新原动作历史并 sync，不复活授权或覆盖当前投影；旧 response/withdraw 不改新请求或另一用途。 |
+| GZ-CS-09 暂停/重启/授权撤销 | 一人/全员离线、重启、恢复、终态、scene 身份撤权/来源缺失。 | 无新同意/补跑、旧 grant 不复活；授权内原结果可核对，缺来源标技术阻塞；Unknown 不伪同意/拒绝。 |
+| GZ-CS-10 感知、投影和引用 | 所有参与者/旁人快照、事件、Receipt、重连、复盘及工具输入；新 view 的旧 optionRef/itemRef；原持物的独立归还区与迟到 Accepted。 | 发生时受众、无真实ID/隐藏角色/私物正文/远处位置；返回上下文只归实际持有人，物主不可见时不补造引用；旧 ref 不跨人跨局复用。沿既有视图代际/seq 接收当前投影，旧收据不回退有效权；新 schema 缺支持明确阻止进入。 |
+| GZ-CS-11 现有行为不回退 | N1～N6、GZ-SP-01～08、SP06（含 C13 退出、暂停换领路者/重提）定向影响验证。 | 救援路线、本人选择与旧恢复义务仍成立；新增两个用途不污染 follow basis/槽，不改变已验历史范围。 |
+| GZ-CS-12 预算与有限活性 | 无外部模型配置；两用途同待答及无关行走；原 Unknown 重试耗尽。 | scene 直接 Gateway/ai_runs 成本为零，不进三自主队列；有限合法待办不饥饿；重试有界，耗尽保留真实待恢复状态。 |
+
+动态障碍、精确提交窗口或错误来源若当前生产页面没有相应操作，可用独立契约/故障注入样本覆盖并标明；不能拿这类样本冒充正常玩家已经走过的路径。2 人路径只释放本任务新增的生产本人回应技术范围；[#29](https://github.com/gbcdby/xiyou/issues/29) 仍需按主 Spec §13.3 做 2/3/4/5 人、2/5 人不同乔装/公开及入队/分别分支、五客户端 900 秒等更广技术覆盖。真实 provider 因果质量、真人四局、真机及完整艺术均独立保留未完成，不能因本设计或上述技术检查而放行。
+
+### 17.3 交接状态与实施自由度
+
+推荐采用候选为 **CS-R2**；两项修订的设计范围 **COMPLETE**，采用、R2 独立需求轴/标准轴增量复审、业务实现/运行验收及绑定 R2 的 TLC 尚待各自负责人取证。R1 的双轴 FAIL 保留；作者不代独立复审关闭 finding。正式语义归属只有本文；[共用协议](adv-protocol.md) 和 [Spec 索引](README.md)仅给候选入口，不另建 ADR 或平行状态表。
+
+R1 作者曾作有限资料测量（2026-11-14，固定 §0.1 tree）：在两个 scene-v2 内容变体的登记安置中心，用现有 `clearSegment` 检查到固定 NPC 出生点的线段。高太公距前院中心约 232 单位、见证人距茶棚中心约 203 单位，均在 240 听闻半径内但返回遮挡。此四样本不覆盖全部 20 单位安置容差、真实 NPC 移动或页面操作，不能否定独立审查指出的动态停留反例，也不是 R2 修正依据或生产 PASS。R2 移除围听判据；实际本人决定和无需 NPC 配合的补救由 GZ-CS-02/03 另验。
+
+另按默认 scene-v2 的多边形/出口线段测量，同场景的三个会面中心距对应安置房间、通道及出口的最近距离分别约为 366.27（rear/front-guest）、749.85（front/front-guest）、494.49（road/tea-back），均大于既有借貌半径 90；跨场景不相交。它支持“不因新增分离条件删掉现有三个地点”的静态设计判断，不证明完整可走路径、实际借貌或动态场景已验收。
+
+实施可选择内部函数拆分、索引和复用字段的存储细节，但必须保留两轴归因、scope 不变、原身份/Receipt、严格 purpose basis、授权与效果同事务、逐物使用及独立返还上下文。不得以实现简便把候选缩成默认 accept、schema 代本人拒绝、测试脚本本人代答、只支持单一会面点或让私物永远无法正常提出/归还。
+
+后续按原总控/有效 Tickets 进入独立审查与必要形式化工作；本作者没有分派。更改逐次授权偏好、借貌范围/生命周期、私物用途/接收者、请求替换权、原子性、恢复或对旧内容的承诺时，须返回本设计并重新评估受影响验收。没有需要用户另行确认的一般执行权限缺口；具体人物取舍由本候选独立需求审查评价，不假称已获采纳。
+
 本设计交回原总控安排双轴审查。实施、真实验收、合并与阶段释放分别取证；本文不接管后续调度。
+
+### 17.4 CS-R2 对独立 finding 的修订映射
+
+| Finding 与 R1 结论 | R2 具体修订与验收入口 | 当前结论边界 |
+| --- | --- | --- |
+| R-CS-RETURN-PROJECTION-001：P2/medium OPEN 阻断。旧请求被新槽替换后，current-only 投影可能丢归还入口。 | §12.3、13.2.1、14.2：逐物 privateReturns 从真实持有/持久原取得事实构造，不受槽/历史裁剪；独立行囊入口、当前引用和安全目标、实收/原处分开。§16 交错与 GZ-CS-06/07/10 覆盖新槽、两物、断线恢复和历史落窗。 | 作者已给修正候选，仍待原 reviewer 固定 R2 增量复审及独立 TLA 适配；不自行标 VERIFIED/CLOSED。 |
+| R-CS-PREFERENCE-001：P2/medium OPEN 阻断。所有旁观实体触发拒绝、补救依赖不可强令 NPC 离开。 | §10.2～11.3、13、14：以实际收到的 permissionTerm 代替围听。reusable 是本局询问，生产本人真实拒绝；single_use 必须新身份/CAS、受权威范围守卫且按件消费。没有隐藏在线/控制资格，没有 NPC 离开公平性。§17.1、GZ-CS-02/03/04 保留三地点、两安置、两物和正常补救。 | 这是新人物偏好的修正推荐，非主 Spec 原硬要求；独立预核未见明确冲突不等于正式通过。仍待固定 R2 双轴复审。 |
+| R-CS-UI-RECEIPT-001：独立审查 DISMISSED 为阻断。 | §14.2 保持既有 Receipt 历史+sync、SpatialView 代际/seq 接收投影；GZ-CS-08/10 保留旧 Accepted 迟到不能回退权限/当前返还状态的实施验收。 | 不增建第二套合并机制，不把已驳回疑点计为新修复或新增阻断。 |
+
+R2 只修正文档合同；无业务、测试、内容、schema、形式模型或公共分支写入。固定候选的实际提交/tree 由交接提供，不把未执行的运行验收或尚未返回的形式结果写成通过。
