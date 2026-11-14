@@ -330,6 +330,132 @@
       "width": 1586,
       "height": 992,
       "sha256": "51c77eddb5f29727ab6a324398b71d48bcee1f3a828ae3e470f1e6ae190b5115"
+    },
+    {
+      "file": "static-v1/scenes/courtyard-rear-v3/base.png",
+      "bytes": 3491493,
+      "width": 1586,
+      "height": 992,
+      "sha256": "773d764cfea18cfedd7d010f4cbb1cded08c238de8ff3773c4b51b5e9e7e5150"
+    },
+    {
+      "file": "static-v1/scenes/courtyard-rear-v3/foreground/left-post.png",
+      "bytes": 8830,
+      "width": 28,
+      "height": 162,
+      "sha256": "e9821901d1216319a8f03e09d7098a48a9acc94d95b8f9f481c83f5fd287a444"
+    },
+    {
+      "file": "static-v1/scenes/courtyard-rear-v3/foreground/right-post.png",
+      "bytes": 9618,
+      "width": 30,
+      "height": 172,
+      "sha256": "7e96a30801cef38059490576b792f1266827f093d35b974535811b718a801ba2"
+    },
+    {
+      "file": "static-v1/scenes/courtyard-rear-v3/foreground/lintel.png",
+      "bytes": 7385,
+      "width": 258,
+      "height": 17,
+      "sha256": "ae042e8bf22360f2854255df9090e66beb02cb20fcb944cdd5f3b4a5668a5bb4"
+    },
+    {
+      "file": "static-v1/scenes/courtyard-rear-v3/foreground/step-face.png",
+      "bytes": 4688,
+      "width": 118,
+      "height": 19,
+      "sha256": "fe43528e0a05719626733e1190a35949946c16a2690b0262926834520bfd2750"
+    },
+    {
+      "file": "static-v1/scenes/courtyard-rear-v3/replace-mask.png",
+      "bytes": 8570,
+      "width": 1586,
+      "height": 992,
+      "sha256": "71958b61a338e61cb0371ed69c7b1cceeb868414b15d80ffe8b38d50423fca7d"
+    },
+    {
+      "file": "static-v1/objects/timber-door/closed.png",
+      "bytes": 1840689,
+      "width": 1254,
+      "height": 1254,
+      "sha256": "fdbbb6aa5d4b04ea21b744b3153543fae6460c2cf0ba75ae575937b17af8b854"
+    },
+    {
+      "file": "static-v1/objects/timber-door/open.png",
+      "bytes": 651470,
+      "width": 1254,
+      "height": 1254,
+      "sha256": "a9f4524367acf0495bd2d286739d21e392f8a2ac04ee4f8b90581f719a2b5c2b"
+    },
+    {
+      "file": "static-v1/objects/cloth-parcel.png",
+      "bytes": 1111516,
+      "width": 1254,
+      "height": 1254,
+      "sha256": "3f0523ce53c2c5262dea2312897b4a377c571cb0a144ecb1df972567e5750ff4"
+    },
+    {
+      "file": "static-v1/objects/folded-letter.png",
+      "bytes": 829815,
+      "width": 1254,
+      "height": 1254,
+      "sha256": "557a25a567256d506d23308a6c2aad95762db83119d5bbefaa50e2fc7d2df7ae"
+    },
+    {
+      "file": "static-v1/objects/hemp-rope-loose.png",
+      "bytes": 1138086,
+      "width": 1254,
+      "height": 1254,
+      "sha256": "2d333379118006c89c6913139459cd7d4ac8454c233c7bd2ebb86cfaf0f69a38"
+    },
+    {
+      "file": "static-v1/objects/ledger-book.png",
+      "bytes": 1660336,
+      "width": 1254,
+      "height": 1254,
+      "sha256": "5b0308091cd81aa6d0a4e3484f9fb324bccabc07b45aa7d6c3be7be78bedded3"
+    },
+    {
+      "file": "static-v1/objects/farm-rake.png",
+      "bytes": 473910,
+      "width": 1254,
+      "height": 1254,
+      "sha256": "21453bbac758c364f8ce3ccd758311706f2531c67fb0f7f1797ba977b2a3cae1"
+    },
+    {
+      "file": "static-v1/scenes/village-tea-r2/base.png",
+      "bytes": 3822004,
+      "width": 1586,
+      "height": 992,
+      "sha256": "113ffd51efe32a9e450b42d5656d4f128f81044017846da0f4f961bfff4846f7"
+    },
+    {
+      "file": "static-v1/scenes/village-tea-r2/floor.png",
+      "bytes": 29382,
+      "width": 1586,
+      "height": 992,
+      "sha256": "447ae4777f8b2d6c4d25398f6750d7216cde03f833a87eb46e226e888dbae6f3"
+    },
+    {
+      "file": "static-v1/scenes/village-tea-r2/replace-mask.png",
+      "bytes": 10861,
+      "width": 1586,
+      "height": 992,
+      "sha256": "10fa148d11afacfec899112a48f6dbf632b924d001cddbcde84d24cff7b148a8"
+    },
+    {
+      "file": "static-v1/scenes/village-tea-r2/foreground/fixed-open-leaf.png",
+      "bytes": 12185,
+      "width": 48,
+      "height": 112,
+      "sha256": "45cb73f0da9744e0322a2ff2a32310e76aa0a8d9cff8216546301e778e013a72"
+    },
+    {
+      "file": "static-v1/scenes/village-tea-r2/foreground/entry-eaves-post.png",
+      "bytes": 15029,
+      "width": 33,
+      "height": 181,
+      "sha256": "39d6df1465cd24721eaff647f88f09afbd4cf5278c8a9b776d50f8a36c70f151"
     }
   ]
 }

@@ -6,7 +6,7 @@
 | --- | --- |
 | 归属 | [#33](https://github.com/gbcdby/xiyou/issues/33)；主 Spec [ADV-001](../docs/specs/narrative-adventure.md) / [#23](https://github.com/gbcdby/xiyou/issues/23)，正式运行验收交 [#29](https://github.com/gbcdby/xiyou/issues/29) |
 | 标识 | `GZ-OBJ-01 / v0.1`，2026-11-13；有效身份以保存本文的提交为准 |
-| 状态 | **设计已通过独立需求/工程标准审查并由主控采纳；本提交提供有界实现候选，正式素材未接入。** 本文补充 GZ-VIS-01，不建立另一套任务或进度来源 |
+| 状态 | **设计已通过独立需求/工程标准审查并由主控采纳；机制建立时提供有界实现候选，正式素材当时未接入。2026-11-14 的有限生产登记见 [GZ-VIS-01 §2.3](../docs/specs/gaolaozhuang-visual.md#23-三处室内与门分层的已采纳补充)。** 登记不等于独立运行、艺术或整体验收；本文补充 GZ-VIS-01，不建立另一套任务或进度来源 |
 | 已采纳设计 | `fca8296b699f828f7ae7dd4ee3b424036d8eb125`；本版仅更新实施状态，不改变该设计边界 |
 | 设计时核读源码 | `6b71dff96439553b336dd523b2126b7c51f6fa83`，tree `8ed5516ea77f1b299ac2482aa2b24cfa4bdd385e` |
 | 素材事实来源 | 本地 `798bae37f940e77e2d48c7ce1b07c948790420d1`，tree `3874175dc4b9042e02d8fada8203ff520929bca4`；该候选的 `docs/design-direction/gaolaozhuang-v1/object-art-binding-handoff.md`、`production-inventory.md` 及 `gaolaozhuang-public-tools-v1/assets-manifest.json`。本文不纳入或公开其图片 |
@@ -16,7 +16,7 @@
 
 ### 0.1 设计基线的已观察事实
 
-| 来源 | 当前行为及设计约束 |
+| 来源 | 设计基线的行为及约束 |
 | --- | --- |
 | [spatial-schema.mjs](spatial-schema.mjs) 的 `object`、`ItemViewV2`、`TargetViewV2` | `additionalProperties:false`；Item/Target 没有公开美术键。新增 optional 字段只能保证新 reader 读旧 DTO，不能保证旧 reader 读新 DTO |
 | [spatial-world.mjs](../game/spatial-world.mjs) 的 `canSee`、`spatialProjection` | 先过滤可见对象；Item 还排除 consumed，且他人持有的非 publicBorrowable 私物不投影。输出 opaque ref、公开位置/ownerRef、fields；不输出 itemId/targetId |
@@ -87,18 +87,18 @@ type TargetVisualExtensionV1 = { visualKey?: ObjectVisualKeyV1 };
 | 渲染选择 | `frontend/src/domain/gaolao-object-art.ts` 这样的纯选择器只接受已授权 DTO、当前画布上下文与 catalog，返回已登记图或 null；不发世界动作、不查隐藏对象 |
 | 地图与行囊 | `SpatialMap.vue` 保留原 ground/scene 过滤、引用、点选/键盘路径；`SpatialInventoryPane.vue` 保留本人授权 inventory、fields 与操作。图像只是其中一层，缺图仍可操作 |
 
-推荐初始映射如下。**键可先输出，资源未释放就保持 catalog 空缺；表中“保留”不表示已有图片。**
+已采纳的有限映射如下。**键可先输出，资源未释放就保持 catalog 空缺；未登记条目或变体继续回退。** 下表资源处理按 2026-11-14 的有限生产登记更新，具体文件与 scope 统一见[运行图像说明](../frontend/public/assets/gaolaozhuang/README.md)；不把登记状态当作运行或艺术结论。
 
 | 服务端内部内容键（仅在可信表） | 公开 visualKey | 可见含义 / 当前资源处理 |
 | --- | --- | --- |
-| `gz-rope` | `hemp-rope` | 普通麻绳外形；散放/行囊有本地候选，固定层未制，均未接产品 |
-| `gz-brace` | `timber-brace` | 木制门撑；图片未制，全部回退 |
-| `gz-parcel` | `cloth-parcel` | 包裹外表；不含所有者或内装内容，资源未制 |
-| `gz-letter` | `folded-letter` | 折叠信件外表；不烘秘密正文、称谓或人物身份，资源未制 |
-| `gz-rake` | `farm-rake` | 独立农具；不因人物造型自动生成持有物，资源未制 |
-| `gz-door` | `timber-door` | 门本体；封闭/开放的正式分层未制，保持目标回退 |
+| `gz-rope` | `hemp-rope` | 普通麻绳外形；loose/icon 已登记，fixed 层仍缺失，固定态继续回退 |
+| `gz-brace` | `timber-brace` | 木制门撑；无已登记图片，全部回退 |
+| `gz-parcel` | `cloth-parcel` | 包裹外表；loose/icon 已登记，不含所有者或内装内容 |
+| `gz-letter` | `folded-letter` | 折叠信件外表；loose/icon 已登记，不烘秘密正文、称谓或人物身份 |
+| `gz-rake` | `farm-rake` | 独立农具；loose/icon 仅在庄外 scope 登记，不因人物造型自动生成持有物 |
+| `gz-door` | `timber-door` | 门本体；closed/open 已登记并与后宅组配对，仍只按当前授权目标和资源就绪情况选图或回退 |
 | `gz-support` | `support-point` | 可接近的承力交互点；不在目标图中包含推测的工具装配 |
-| `gz-ledger` | `ledger-book` | 账册外表；正文/证据独立授权，资源未制 |
+| `gz-ledger` | `ledger-book` | 账册 default 已登记；正文/证据仍独立授权 |
 | `gz-return` | `tool-return-point` | 借还位置；不另叠已有棚架或自动画已借出的工具 |
 | `gz-window` | `side-window` | 侧窗目标；不画透墙人物/私物 |
 | `gz-meeting-C10`、`gz-meeting-C19`、`gz-meeting-R10` | `meeting-point` | 允许同类外观共用 key；仅这三条明确映射，保持三个独立 ref 与位置，不新增永久地面剧情图标 |
@@ -139,18 +139,18 @@ key 表示类别，不表示实例。同貌的两个 Item/Target 可以同 key�
 
 ## 5. 资源、位置与失败恢复
 
-1. 地面 loose 图直接用 `location.position` 作根点。已核读麻绳清单：1254×1254；`groundPivot=(627,680)`；最终倍率 `32/1003`，不叠乘二次缩放。128/40 图标是同一整帧等比显示。这里只规定将来接入的几何，不把本地未发布文件硬填为可用 URL。
+1. 地面 loose 图直接用 `location.position` 作根点。已核读麻绳清单：1254×1254；`groundPivot=(627,680)`；最终倍率 `32/1003`，不叠乘二次缩放。128/40 图标是同一整帧等比显示。这些几何现由本批目录登记；文件仍须来自明确已释放条目，不能把其他本地未发布文件硬填为可用 URL。
 2. 固定 brace 与 rope 必须是**各自独立的可组合层**，每层锚定自己 Item 的实际位置；当前两者固定后同为 (1250,425)。不使用含两件工具的合成图驱动单个 Item；缺某件投影/资源，只回退该件。support Target 不能兼画一套工具而重复计数。
-3. Target.position 保持交互/导航位置。未来门层在已审 `contentVersion/mapVersion/sceneId/visualKey` catalog 中使用显式局部偏移：C01 (1250,425) 对门图位 (1250,365) 为 (0,-60)；借还点 (315,390) 对架面 (315,345) 为 (0,-45)。这两个偏移仅说明既定 scene-v2 布局，不适用于任意地图或其他 target；未匹配布局/未审素材时不启用对应层。像素、图中心与 target.position 均不替换服务端碰撞或接近点。
+3. Target.position 保持交互/导航位置。门层在已审 `contentVersion/mapVersion/sceneId/visualKey` catalog 中使用显式局部偏移：C01 (1250,425) 对门图位 (1250,365) 的 (0,-60) 已登记；借还点 (315,390) 对架面 (315,345) 的 (0,-45) 仍为设计对应量，该目标未登记新图。这两个偏移仅说明既定 scene-v2 布局，不适用于任意地图或其他 target；未匹配布局/未审素材时不启用对应层。像素、图中心与 target.position 均不替换服务端碰撞或接近点。
 4. 底图已经画有敞开的门、台阶、棚架；门状态必须在制作阶段修补/拆分**同一建筑**，不能把完整新门或底座再叠上去。室内、前景和门层未就绪时继续现有目标占位与文字，并明确正式环境视觉仍未完成。资源接线通过不证明底图闭门表现或任意落点遮挡已正确。
 5. absent key、未知合法 key、已知 key 但没有已释放 variant：直接原几何/文字回退，**不请求猜出的路径、不显示 key/内部身份、不无休止重试**。已登记文件发生加载/解码失败时才使用既有“部分图像暂未载入，仍可继续操作／重新载入图像”恢复方式；重试只重载资源，不重发游戏动作。
 6. 加载中也先显示占位。选择变体/视图/实体可见性改变时，旧请求完成不得把过期图挂回新状态。地图选择环、已有命中区、键盘焦点、可读标签、操作反馈均保留；图像 alpha/尺寸不能反向改变可达性或动作资格。错误统计仅覆盖当前已授权实例请求，不查询隐藏实体。
 
-当前可执行的代码范围是协商、生产者、纯选择器与回退消费者；完整美术绑定依赖已释放的资源。麻绳散放态本地静态结论只覆盖指定 128/40、深浅底和两个 ground 示例；门撑、fixed rope、其余道具、门/室内分层、任意位置前景遮挡、正式应用视觉仍为缺口，不因本合同而转为 ready。
+机制建立时先完成协商、生产者、纯选择器与回退消费者；当时麻绳散放态的本地静态结论只覆盖指定 128/40、深浅底和两个 ground 示例，保留该历史范围。2026-11-14 已登记的六个物件键与两个场景组见 [GZ-VIS-01 §2.3](../docs/specs/gaolaozhuang-visual.md#23-三处室内与门分层的已采纳补充)。门撑、fixed rope、前院客房与全场前景仍为制作/登记缺口；已登记资源的独立运行、艺术、任意落点遮挡及 A1–A3 整体验收仍须对应证据，不能从本合同或登记推定 ready。
 
 ## 6. 稳定验收与最小验证
 
-以下 `GZ-OBJ-AC-*` 是 #33 对 ADV-AC-02/03/04/05/06/14、GZ-AC-02/04/05/11 的局部细化，不替换原编号，也不降低 #29 整章门槛。下表是验收条件；运行结论须对应实现候选的真实证据，作者自查不代替独立审查。当前发布 catalog 为空，正式图片、背景分层和艺术验收仍为 **NOT_RUN**。
+以下 `GZ-OBJ-AC-*` 是 #33 对 ADV-AC-02/03/04/05/06/14、GZ-AC-02/04/05/11 的局部细化，不替换原编号，也不降低 #29 整章门槛。下表是验收条件；运行结论须对应实现候选的真实证据，作者自查不代替独立审查。发布 catalog 为空、正式图片/背景分层/艺术验收 **NOT_RUN** 是机制建立阶段的历史记录；当前有限登记以[运行图像说明](../frontend/public/assets/gaolaozhuang/README.md)为准，原历史记录不回写，下列独立运行、艺术及整章门槛也不因登记自动通过。
 
 | ID | 输入与检查对象 | 可观察通过条件 / 失败判据 |
 | --- | --- | --- |
@@ -180,4 +180,4 @@ key 表示类别，不表示实例。同貌的两个 Item/Target 可以同 key�
 
 实现者可决定小组件拆分、资源缓存库及具体文件名；不能扩大读取受众、把私物目录打包进前端、以名称/opaqueRef 选图、改既有坐标/规则、将缺图写成完整正式视觉，或在本票中引入通用插件系统。
 
-真正未完成的输入是各资源的制作、释放和图层对齐，按资源条目阻断对应艺术验收，不阻断安全回退代码。若后续要求真实的单侧安装、独立“解封关闭”阶段、按可见工具以外信息显示完整装配，或将新外观变体和隐藏身份关联，则属于世界/感知语义变化，须回到既有 #23/#33 设计记录重新裁定，不能从本合同自动推出。
+未登记资源的制作/释放与各条目尚缺的图层对齐、运行和艺术证据，按本文件第5节及 GZ-VIS-01 第6节逐项保留，不阻断安全回退代码。若后续要求真实的单侧安装、独立“解封关闭”阶段、按可见工具以外信息显示完整装配，或将新外观变体和隐藏身份关联，则属于世界/感知语义变化，须回到既有 #23/#33 设计记录重新裁定，不能从本合同自动推出。

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { objectArtCatalog, objectDisplayFields, objectInstanceKey, objectVisualVariant, selectObjectArt, objectArtRequestKey, readyObjectArtFrame } from '../src/domain/gaolao-object-art.ts';
+import { objectDisplayFields, objectInstanceKey, objectVisualVariant, selectObjectArt, objectArtRequestKey, readyObjectArtFrame } from '../src/domain/gaolao-object-art.ts';
 
 const context = { sessionId: 'fixture-session', viewId: 'fixture-view', contentVersion: 'gaolaozhuang-scene-v2', mapVersion: 'fixture-map', sceneId: 'yard' };
 const ref = letter => 'R' + letter.repeat(32);
@@ -11,7 +11,7 @@ const catalog = { 'hemp-rope': entry({ loose: asset, icon: { ...asset, scale: 40
 const fixed = value => ({ key: 'fixed', label: '已固定', value });
 
 test('未释放/未知/继承键均回退；不能从名称、ref或key猜资源路径', () => {
-  assert.deepEqual(objectArtCatalog, {});
+  assert.equal(selectObjectArt(item, context, 'map', {}), null, '明确空目录保留占位');
   assert.equal(selectObjectArt(item, context, 'map'), null);
   for (const visualKey of [undefined, 'future-object', 'constructor']) assert.equal(selectObjectArt({ ...item, visualKey }, context, 'map', catalog), null);
   const prototype = { 'hemp-rope': catalog['hemp-rope'] };

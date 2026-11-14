@@ -1,1 +1,322 @@
-{}
+{
+  "gaolao-courtyard": {
+    "enabled": true,
+    "groupVersion": "gaolao-rear-room-v3",
+    "contentVersion": "gaolaozhuang-scene-v2",
+    "mapVersion": "gaolao-layout-v1.1",
+    "sceneId": "gaolao-courtyard",
+    "source": {
+      "file": "/assets/gaolaozhuang/scenes/courtyard.png",
+      "pixelSize": {
+        "width": 1586,
+        "height": 992
+      },
+      "sha256": "f5df307eaea03188e823a279cb3df3a65b1b6a7931c329294cd6b79e4c0d510a"
+    },
+    "base": {
+      "file": "/assets/gaolaozhuang/static-v1/scenes/courtyard-rear-v3/base.png",
+      "pixelSize": {
+        "width": 1586,
+        "height": 992
+      },
+      "sourceCrop": {
+        "x": 0,
+        "y": 0,
+        "width": 1586,
+        "height": 992
+      },
+      "worldRect": {
+        "x": 0,
+        "y": 0,
+        "width": 1600,
+        "height": 1000
+      },
+      "sha256": "773d764cfea18cfedd7d010f4cbb1cded08c238de8ff3773c4b51b5e9e7e5150"
+    },
+    "floors": [],
+    "foreground": [
+      {
+        "id": "rear-entry-left-post",
+        "depthY": 395,
+        "file": "/assets/gaolaozhuang/static-v1/scenes/courtyard-rear-v3/foreground/left-post.png",
+        "pixelSize": {
+          "width": 28,
+          "height": 162
+        },
+        "sourceCrop": {
+          "x": 1122,
+          "y": 200,
+          "width": 28,
+          "height": 162
+        },
+        "worldRect": {
+          "x": 1131.9041614123582,
+          "y": 201.61290322580646,
+          "width": 28.247162673392182,
+          "height": 163.30645161290323
+        },
+        "bounds": {
+          "x": 1131.9041614123582,
+          "y": 201.61290322580646,
+          "width": 28.247162673392182,
+          "height": 163.30645161290323
+        },
+        "sha256": "e9821901d1216319a8f03e09d7098a48a9acc94d95b8f9f481c83f5fd287a444"
+      },
+      {
+        "id": "rear-entry-right-post",
+        "depthY": 395,
+        "file": "/assets/gaolaozhuang/static-v1/scenes/courtyard-rear-v3/foreground/right-post.png",
+        "pixelSize": {
+          "width": 30,
+          "height": 172
+        },
+        "sourceCrop": {
+          "x": 1343,
+          "y": 209,
+          "width": 30,
+          "height": 172
+        },
+        "worldRect": {
+          "x": 1354.8549810844893,
+          "y": 210.68548387096774,
+          "width": 30.264817150063053,
+          "height": 173.38709677419354
+        },
+        "bounds": {
+          "x": 1354.8549810844893,
+          "y": 210.68548387096774,
+          "width": 30.264817150063053,
+          "height": 173.38709677419354
+        },
+        "sha256": "7e96a30801cef38059490576b792f1266827f093d35b974535811b718a801ba2"
+      },
+      {
+        "id": "rear-entry-lintel",
+        "depthY": 395,
+        "file": "/assets/gaolaozhuang/static-v1/scenes/courtyard-rear-v3/foreground/lintel.png",
+        "pixelSize": {
+          "width": 258,
+          "height": 17
+        },
+        "sourceCrop": {
+          "x": 1119,
+          "y": 196,
+          "width": 258,
+          "height": 17
+        },
+        "worldRect": {
+          "x": 1128.8776796973518,
+          "y": 197.58064516129033,
+          "width": 260.27742749054227,
+          "height": 17.137096774193548
+        },
+        "bounds": {
+          "x": 1128.8776796973518,
+          "y": 197.58064516129033,
+          "width": 260.27742749054227,
+          "height": 17.137096774193548
+        },
+        "sha256": "ae042e8bf22360f2854255df9090e66beb02cb20fcb944cdd5f3b4a5668a5bb4"
+      },
+      {
+        "id": "rear-entry-step-face",
+        "depthY": 395,
+        "file": "/assets/gaolaozhuang/static-v1/scenes/courtyard-rear-v3/foreground/step-face.png",
+        "pixelSize": {
+          "width": 118,
+          "height": 19
+        },
+        "sourceCrop": {
+          "x": 1176,
+          "y": 358,
+          "width": 118,
+          "height": 19
+        },
+        "worldRect": {
+          "x": 1186.3808322824716,
+          "y": 360.88709677419354,
+          "width": 119.04161412358134,
+          "height": 19.153225806451612
+        },
+        "bounds": {
+          "x": 1186.3808322824716,
+          "y": 360.88709677419354,
+          "width": 119.04161412358134,
+          "height": 19.153225806451612
+        },
+        "sha256": "fe43528e0a05719626733e1190a35949946c16a2690b0262926834520bfd2750"
+      }
+    ],
+    "replaceMask": {
+      "file": "/assets/gaolaozhuang/static-v1/scenes/courtyard-rear-v3/replace-mask.png",
+      "pixelSize": {
+        "width": 1586,
+        "height": 992
+      },
+      "sourceCrop": {
+        "x": 0,
+        "y": 0,
+        "width": 1586,
+        "height": 992
+      },
+      "worldRect": {
+        "x": 0,
+        "y": 0,
+        "width": 1600,
+        "height": 1000
+      },
+      "sha256": "71958b61a338e61cb0371ed69c7b1cceeb868414b15d80ffe8b38d50423fca7d"
+    },
+    "door": {
+      "visualKey": "timber-door",
+      "targetPosition": {
+        "x": 1250,
+        "y": 425
+      },
+      "depthY": 395,
+      "neutralBounds": {
+        "x": 1210,
+        "y": 350,
+        "width": 80,
+        "height": 45
+      },
+      "objectArtVersion": "gaolao-rear-door-v3"
+    }
+  },
+  "gaolao-village-road": {
+    "enabled": true,
+    "contentVersion": "gaolaozhuang-scene-v2",
+    "mapVersion": "gaolao-layout-v1.1",
+    "sceneId": "gaolao-village-road",
+    "source": {
+      "file": "/assets/gaolaozhuang/scenes/village-road.png",
+      "pixelSize": {
+        "width": 1586,
+        "height": 992
+      },
+      "sha256": "51c77eddb5f29727ab6a324398b71d48bcee1f3a828ae3e470f1e6ae190b5115"
+    },
+    "foreground": [
+      {
+        "id": "tea-fixed-open-leaf",
+        "depthY": 325,
+        "file": "/assets/gaolaozhuang/static-v1/scenes/village-tea-r2/foreground/fixed-open-leaf.png",
+        "pixelSize": {
+          "width": 48,
+          "height": 112
+        },
+        "sourceCrop": {
+          "x": 502,
+          "y": 185,
+          "width": 48,
+          "height": 112
+        },
+        "worldRect": {
+          "x": 506.4312736443884,
+          "y": 186.49193548387098,
+          "width": 48.423707440100884,
+          "height": 112.90322580645162
+        },
+        "sha256": "45cb73f0da9744e0322a2ff2a32310e76aa0a8d9cff8216546301e778e013a72",
+        "bounds": {
+          "x": 506.4312736443884,
+          "y": 186.49193548387098,
+          "width": 48.423707440100884,
+          "height": 112.90322580645162
+        }
+      },
+      {
+        "id": "tea-entry-eaves-post",
+        "depthY": 355,
+        "file": "/assets/gaolaozhuang/static-v1/scenes/village-tea-r2/foreground/entry-eaves-post.png",
+        "pixelSize": {
+          "width": 33,
+          "height": 181
+        },
+        "sourceCrop": {
+          "x": 606,
+          "y": 161,
+          "width": 33,
+          "height": 181
+        },
+        "worldRect": {
+          "x": 611.3493064312736,
+          "y": 162.2983870967742,
+          "width": 33.29129886506936,
+          "height": 182.45967741935485
+        },
+        "sha256": "39d6df1465cd24721eaff647f88f09afbd4cf5278c8a9b776d50f8a36c70f151",
+        "bounds": {
+          "x": 611.3493064312736,
+          "y": 162.2983870967742,
+          "width": 33.29129886506936,
+          "height": 182.45967741935485
+        }
+      }
+    ],
+    "groupVersion": "gaolao-tea-floor-proof-v2-r2",
+    "base": {
+      "file": "/assets/gaolaozhuang/static-v1/scenes/village-tea-r2/base.png",
+      "pixelSize": {
+        "width": 1586,
+        "height": 992
+      },
+      "sourceCrop": {
+        "x": 0,
+        "y": 0,
+        "width": 1586,
+        "height": 992
+      },
+      "worldRect": {
+        "x": 0,
+        "y": 0,
+        "width": 1600,
+        "height": 1000
+      },
+      "sha256": "113ffd51efe32a9e450b42d5656d4f128f81044017846da0f4f961bfff4846f7"
+    },
+    "floors": [
+      {
+        "file": "/assets/gaolaozhuang/static-v1/scenes/village-tea-r2/floor.png",
+        "pixelSize": {
+          "width": 1586,
+          "height": 992
+        },
+        "sourceCrop": {
+          "x": 0,
+          "y": 0,
+          "width": 1586,
+          "height": 992
+        },
+        "worldRect": {
+          "x": 0,
+          "y": 0,
+          "width": 1600,
+          "height": 1000
+        },
+        "sha256": "447ae4777f8b2d6c4d25398f6750d7216cde03f833a87eb46e226e888dbae6f3"
+      }
+    ],
+    "replaceMask": {
+      "file": "/assets/gaolaozhuang/static-v1/scenes/village-tea-r2/replace-mask.png",
+      "pixelSize": {
+        "width": 1586,
+        "height": 992
+      },
+      "sourceCrop": {
+        "x": 0,
+        "y": 0,
+        "width": 1586,
+        "height": 992
+      },
+      "worldRect": {
+        "x": 0,
+        "y": 0,
+        "width": 1600,
+        "height": 1000
+      },
+      "sha256": "10fa148d11afacfec899112a48f6dbf632b924d001cddbcde84d24cff7b148a8"
+    }
+  }
+}

@@ -49,3 +49,23 @@
 !/gaocai/walk/se/07.png
 !/scenes/courtyard.png
 !/scenes/village-road.png
+
+# 2026-11-14：GZ-STATIC-PROPOSED-PUBLICATION-18-V2 精确批准集合。
+!/static-v1/scenes/courtyard-rear-v3/base.png
+!/static-v1/scenes/courtyard-rear-v3/foreground/left-post.png
+!/static-v1/scenes/courtyard-rear-v3/foreground/right-post.png
+!/static-v1/scenes/courtyard-rear-v3/foreground/lintel.png
+!/static-v1/scenes/courtyard-rear-v3/foreground/step-face.png
+!/static-v1/scenes/courtyard-rear-v3/replace-mask.png
+!/static-v1/objects/timber-door/closed.png
+!/static-v1/objects/timber-door/open.png
+!/static-v1/objects/cloth-parcel.png
+!/static-v1/objects/folded-letter.png
+!/static-v1/objects/hemp-rope-loose.png
+!/static-v1/objects/ledger-book.png
+!/static-v1/objects/farm-rake.png
+!/static-v1/scenes/village-tea-r2/base.png
+!/static-v1/scenes/village-tea-r2/floor.png
+!/static-v1/scenes/village-tea-r2/replace-mask.png
+!/static-v1/scenes/village-tea-r2/foreground/fixed-open-leaf.png
+!/static-v1/scenes/village-tea-r2/foreground/entry-eaves-post.png

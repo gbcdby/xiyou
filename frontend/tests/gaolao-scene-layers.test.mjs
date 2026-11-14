@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { selectSceneDoor, selectSceneLayerGroup, sceneLayerCatalog, validSceneLayerGroup, sceneLayerPresentation, orderSceneEntries, foregroundOpacity } from '../src/domain/gaolao-scene-layers.ts';
+import { selectSceneDoor, selectSceneLayerGroup, validSceneLayerGroup, sceneLayerPresentation, orderSceneEntries, foregroundOpacity } from '../src/domain/gaolao-scene-layers.ts';
 import { sceneLayerFixtures } from './scene-layer-fixtures.mjs';
 
 const context = { sessionId: 'scene-fixture', viewId: 'view-one', contentVersion: 'gaolaozhuang-scene-v2', mapVersion: 'gaolao-layout-v1.1', sceneId: 'gaolao-courtyard' };
@@ -41,8 +41,7 @@ test('静态组未就绪时即使门资源可用也保持中性，授权目标�
 });
 
 test('空目录、未启用、未知scope和继承登记均不接管原背景', () => {
-  assert.deepEqual(sceneLayerCatalog, {});
-  assert.equal(selectSceneLayerGroup(context), null);
+  assert.equal(selectSceneLayerGroup(context, {}), null, '明确空目录完整保留原背景');
   const groups = { [context.sceneId]: group };
   assert.equal(selectSceneLayerGroup(context, groups), group);
   assert.equal(selectSceneLayerGroup(context, Object.create(groups)), null);

@@ -18,8 +18,8 @@ const sameScope = (group: SceneLayerGroup, context: ObjectArtContext) =>
   group.contentVersion === context.contentVersion && group.mapVersion === context.mapVersion && group.sceneId === context.sceneId;
 
 export type SceneLayerCatalog = Readonly<Record<string, SceneLayerGroup>>;
-/** 只有已获准发布的明确条目进入此目录；当前空目录完整保留原场景。 */
-export const sceneLayerCatalog: SceneLayerCatalog = released;
+/** 只有已获准发布的明确条目进入此目录；JSON 由构建检查和运行时组校验共同约束。 */
+export const sceneLayerCatalog = released as SceneLayerCatalog;
 export function selectSceneLayerGroup(context: ObjectArtContext, catalog: SceneLayerCatalog = sceneLayerCatalog): SceneLayerGroup | null {
   if (context.contentVersion !== 'gaolaozhuang-scene-v2' || context.mapVersion !== 'gaolao-layout-v1.1' || !['gaolao-courtyard', 'gaolao-village-road'].includes(context.sceneId ?? '')) return null;
   if (!context.sceneId || !Object.hasOwn(catalog, context.sceneId)) return null;
