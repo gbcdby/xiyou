@@ -10,8 +10,8 @@ export type ObjectArtFrame = { file: string; variant: ObjectArtVariant; layer: '
 export type ObjectArtResourceState = { instanceKey: string; requestKey: string; ready: boolean; failed: boolean };
 type PublicObject = ItemViewV2 | TargetViewV2;
 
-/** 已释放目录目前为空；缺正式资源时保留原图形与操作。 */
-export const objectArtCatalog: ObjectArtCatalog = released;
+/** 已获准的明确条目；构建检查校验 JSON 合同，缺变体或 scope 不匹配时仍保留原图形与操作。 */
+export const objectArtCatalog = released as ObjectArtCatalog;
 export function objectArtContext(snapshot: SnapshotV2): ObjectArtContext {
   return { sessionId: snapshot.sessionId, viewId: snapshot.viewId, contentVersion: snapshot.projection.contentVersion, mapVersion: snapshot.projection.mapVersion, sceneId: snapshot.projection.scene?.sceneId ?? null };
 }

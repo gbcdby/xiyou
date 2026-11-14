@@ -9,6 +9,7 @@ import { accepted, take, share } from '../../backend/test-support/gaolao-room.mj
 import { repository, sourceIdentity, saveJSON, sha256, until } from './network-support.mjs';
 import { browserRoom, snapshot, selectObject, openReading, closeReading } from './gaolao-real-support.mjs';
 import { checkObjectResources } from './object-visual-resources.mjs';
+import { objectArtContext, objectInstanceKey, selectObjectArt } from '../src/domain/gaolao-object-art.ts';
 
 const baseline = process.argv.includes('--baseline');
 const output = resolve(process.env.FRONTEND_EVIDENCE_DIR || resolve(repository, '.agent-output/object-visuals/browser'));
@@ -21,10 +22,18 @@ async function state(name, player = 0) {
   const current = await snapshot(room.pages[player]); report.samples ??= {}; report.samples[name] = current;
   const visibleGround = current.projection.items.filter(item => item.location.kind === 'ground' && item.location.sceneId === current.projection.scene.sceneId);
   await until(async () => await room.pages[player].locator('.spatial-item').count() === visibleGround.length, name + '地面数量与当前投影相等');
-  assert.equal(await room.pages[player].locator('.spatial-object-art image').count(), 0, '正式目录为空，只显示占位');
+  const context = objectArtContext(current);
   for (const item of visibleGround) {
-    const transform = await room.pages[player].locator(`.spatial-item[aria-label="选择${item.name}"]`).getAttribute('transform');
+    const element = room.pages[player].locator(`.spatial-item[aria-label="选择${item.name}"]`);
+    const transform = await element.getAttribute('transform');
     assert.equal(transform, `translate(${item.location.position.x} ${item.location.position.y})`);
+    const art = element.locator('.spatial-object-art'), frame = selectObjectArt(item, context, 'map');
+    assert.equal(await art.getAttribute('data-object-instance'), objectInstanceKey(context, item), '每张图绑定当前授权ref');
+    await until(async () => await art.locator('image').count() === (frame ? 1 : 0), name + '当前变体显示或按目录缺口回退');
+    if (frame) {
+      assert.equal(await art.locator('image').getAttribute('href'), frame.file);
+      assert.equal(await art.getAttribute('data-object-variant'), frame.variant);
+    }
   }
   return current.projection;
 }
@@ -104,7 +113,7 @@ try {
     assert.ok(returned.items.every(item => item.location.kind !== 'held' || item.location.ownerRef !== returned.self.entityRef));
     await picture(page, 'returned-ground.png');
     assert.ok(report.npcActions.every(action => action.role !== 'cuilan'));
-    check('scene-v2正常UI：选物/拾取/本人行囊/prepare-ready-cancel/独立固定/本人退让后开门/撤收/再拾取/实际归还', { humanReceipts: report.humanActions.length, productionCuilan: true, emptyReleasedCatalog: true });
+    check('scene-v2正常UI：选物/拾取/本人行囊/prepare-ready-cancel/独立固定/本人退让后开门/撤收/再拾取/实际归还', { humanReceipts: report.humanActions.length, productionCuilan: true, releasedStaticCatalog: true });
     await saveJSON(resolve(output, 'authorized-samples.json'), report.samples);
     await checkObjectResources({ browser, output, report, samples: report.samples });
   }

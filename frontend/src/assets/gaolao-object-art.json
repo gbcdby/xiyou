@@ -1,1 +1,210 @@
-{}
+{
+  "timber-door": {
+    "version": "gaolao-rear-door-v3",
+    "contentVersion": "gaolaozhuang-scene-v2",
+    "mapVersion": "gaolao-layout-v1.1",
+    "sceneId": "gaolao-courtyard",
+    "variants": {
+      "closed": {
+        "file": "/assets/gaolaozhuang/static-v1/objects/timber-door/closed.png",
+        "width": 1254,
+        "height": 1254,
+        "pivot": {
+          "x": 589.0112228425464,
+          "y": 1038.7528844306155
+        },
+        "scale": 0.19300559700514067,
+        "layer": "object",
+        "offset": {
+          "x": 0,
+          "y": -60
+        }
+      },
+      "open": {
+        "file": "/assets/gaolaozhuang/static-v1/objects/timber-door/open.png",
+        "width": 1254,
+        "height": 1254,
+        "pivot": {
+          "x": 589.0112228425464,
+          "y": 1038.7528844306155
+        },
+        "scale": 0.19300559700514067,
+        "layer": "object",
+        "offset": {
+          "x": 0,
+          "y": -60
+        }
+      }
+    }
+  },
+  "cloth-parcel": {
+    "contentVersion": "gaolaozhuang-scene-v2",
+    "mapVersion": "gaolao-layout-v1.1",
+    "sceneId": "gaolao-courtyard",
+    "variants": {
+      "loose": {
+        "file": "/assets/gaolaozhuang/static-v1/objects/cloth-parcel.png",
+        "width": 1254,
+        "height": 1254,
+        "pivot": {
+          "x": 620,
+          "y": 940
+        },
+        "scale": 0.03455723542116631,
+        "layer": "object",
+        "offset": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "icon": {
+        "file": "/assets/gaolaozhuang/static-v1/objects/cloth-parcel.png",
+        "width": 1254,
+        "height": 1254,
+        "pivot": {
+          "x": 627,
+          "y": 627
+        },
+        "scale": 0.03189792663476874,
+        "layer": "object",
+        "offset": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    }
+  },
+  "folded-letter": {
+    "contentVersion": "gaolaozhuang-scene-v2",
+    "mapVersion": "gaolao-layout-v1.1",
+    "sceneId": "gaolao-courtyard",
+    "variants": {
+      "loose": {
+        "file": "/assets/gaolaozhuang/static-v1/objects/folded-letter.png",
+        "width": 1254,
+        "height": 1254,
+        "pivot": {
+          "x": 624,
+          "y": 650
+        },
+        "scale": 0.0226628895184136,
+        "layer": "object",
+        "offset": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "icon": {
+        "file": "/assets/gaolaozhuang/static-v1/objects/folded-letter.png",
+        "width": 1254,
+        "height": 1254,
+        "pivot": {
+          "x": 627,
+          "y": 627
+        },
+        "scale": 0.03189792663476874,
+        "layer": "object",
+        "offset": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    }
+  },
+  "hemp-rope": {
+    "contentVersion": "gaolaozhuang-scene-v2",
+    "mapVersion": "gaolao-layout-v1.1",
+    "sceneId": "gaolao-courtyard",
+    "variants": {
+      "loose": {
+        "file": "/assets/gaolaozhuang/static-v1/objects/hemp-rope-loose.png",
+        "width": 1254,
+        "height": 1254,
+        "pivot": {
+          "x": 627,
+          "y": 680
+        },
+        "scale": 0.031904287138584245,
+        "layer": "object",
+        "offset": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "icon": {
+        "file": "/assets/gaolaozhuang/static-v1/objects/hemp-rope-loose.png",
+        "width": 1254,
+        "height": 1254,
+        "pivot": {
+          "x": 627,
+          "y": 627
+        },
+        "scale": 0.03189792663476874,
+        "layer": "object",
+        "offset": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    }
+  },
+  "ledger-book": {
+    "contentVersion": "gaolaozhuang-scene-v2",
+    "mapVersion": "gaolao-layout-v1.1",
+    "sceneId": "gaolao-courtyard",
+    "variants": {
+      "default": {
+        "file": "/assets/gaolaozhuang/static-v1/objects/ledger-book.png",
+        "width": 1254,
+        "height": 1254,
+        "pivot": {
+          "x": 624,
+          "y": 645
+        },
+        "scale": 0.023090586145648313,
+        "layer": "object",
+        "offset": {
+          "x": 32,
+          "y": -100
+        }
+      }
+    }
+  },
+  "farm-rake": {
+    "contentVersion": "gaolaozhuang-scene-v2",
+    "mapVersion": "gaolao-layout-v1.1",
+    "sceneId": "gaolao-village-road",
+    "variants": {
+      "loose": {
+        "file": "/assets/gaolaozhuang/static-v1/objects/farm-rake.png",
+        "width": 1254,
+        "height": 1254,
+        "pivot": {
+          "x": 627,
+          "y": 640
+        },
+        "scale": 0.046473029045643155,
+        "layer": "object",
+        "offset": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "icon": {
+        "file": "/assets/gaolaozhuang/static-v1/objects/farm-rake.png",
+        "width": 1254,
+        "height": 1254,
+        "pivot": {
+          "x": 627,
+          "y": 627
+        },
+        "scale": 0.03189792663476874,
+        "layer": "object",
+        "offset": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    }
+  }
+}

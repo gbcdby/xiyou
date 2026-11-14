@@ -64,6 +64,16 @@ jobs:
       - name: 安装已锁定 Playwright 对应的 Chromium
         working-directory: frontend
         run: npx --no-install playwright install --with-deps chromium
+      - name: 首章默认静态资源限定浏览器验收
+        timeout-minutes: 5
+        shell: bash
+        env:
+          FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-static-release
+        # 默认生产catalog与public URL；受控authority前置不计作真实导航/物权流程。
+        run: |
+          mkdir -p "$FRONTEND_EVIDENCE_DIR"
+          set -o pipefail
+          node frontend/tests/static-release-browser.mjs 2>&1 | tee "$FRONTEND_EVIDENCE_DIR/stdout.log"
       - name: 真实多人空间浏览器检查
         env:
           FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-spatial
@@ -94,6 +104,10 @@ jobs:
             .agent-output/ci/browser-gaolao/result.json
             .agent-output/ci/browser-gaolao/result-before-cleanup.json
             .agent-output/ci/browser-gaolao/*.png
+            .agent-output/ci/browser-static-release/startup.json
+            .agent-output/ci/browser-static-release/stdout.log
+            .agent-output/ci/browser-static-release/postgres.log
+            .agent-output/ci/browser-static-release/run/result.json
           include-hidden-files: true
           if-no-files-found: warn
           retention-days: 7
