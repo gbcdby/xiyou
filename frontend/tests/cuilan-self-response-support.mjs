@@ -20,10 +20,13 @@ function jsonValue(value, key) {
   if (value !== null && ['object', 'function', 'bigint'].includes(typeof value)) {
     const toJSON = value.toJSON; if (typeof toJSON === 'function') value = toJSON.call(value, key);
   }
-  if (types.isNumberObject(value)) value = +value;
-  else if (types.isStringObject(value)) value = String(value);
-  else if (types.isBooleanObject(value)) value = Boolean.prototype.valueOf.call(value);
-  else if (types.isBigIntObject(value)) value = BigInt.prototype.valueOf.call(value);
+  // 原始字段占报告绝大多数；仅对象需要包装类型检查，toJSON 仍先且只调用一次。
+  if (value !== null && typeof value === 'object') {
+    if (types.isNumberObject(value)) value = +value;
+    else if (types.isStringObject(value)) value = String(value);
+    else if (types.isBooleanObject(value)) value = Boolean.prototype.valueOf.call(value);
+    else if (types.isBigIntObject(value)) value = BigInt.prototype.valueOf.call(value);
+  }
   if (typeof value === 'bigint') throw new TypeError('Do not know how to serialize a BigInt');
   return ['undefined', 'function', 'symbol'].includes(typeof value) ? omittedJSONValue : value;
 }
@@ -37,39 +40,56 @@ function* jsonStringParts(value, quoted = true) {
   }
   if (quoted) yield '"';
 }
-function* jsonParts(value, depth, ancestors) {
+function* jsonParts(value, depth, ancestors, indentation) {
   if (value === null || typeof value === 'number' || typeof value === 'boolean') { yield JSON.stringify(value); return; }
-  if (typeof value === 'string') { yield* jsonStringParts(value); return; }
+  if (typeof value === 'string') {
+    if (value.length <= 8192) yield JSON.stringify(value);
+    else yield* jsonStringParts(value);
+    return;
+  }
   if (JSON.isRawJSON?.(value)) { yield* jsonStringParts(value.rawJSON, false); return; }
   if (ancestors.has(value)) throw new TypeError('Converting circular structure to JSON');
   ancestors.add(value);
   try {
     const array = Array.isArray(value), keys = array ? undefined : Object.keys(value), length = array ? value.length : keys.length;
+    const currentIndent = indentation[depth] ??= '  '.repeat(depth), childIndent = indentation[depth + 1] ??= currentIndent + '  ';
     yield array ? '[' : '{'; let first = true;
     for (let index = 0; index < length; index++) {
       const key = array ? String(index) : keys[index], child = jsonValue(value[key], key);
       if (!array && child === omittedJSONValue) continue;
-      yield (first ? '\n' : ',\n') + '  '.repeat(depth + 1); first = false;
-      if (!array) { yield* jsonStringParts(key); yield ': '; }
-      yield* jsonParts(child === omittedJSONValue ? null : child, depth + 1, ancestors);
+      yield (first ? '\n' : ',\n') + childIndent; first = false;
+      if (!array) {
+        if (key.length <= 8192) yield JSON.stringify(key) + ': ';
+        else { yield* jsonStringParts(key); yield ': '; }
+      }
+      yield* jsonParts(child === omittedJSONValue ? null : child, depth + 1, ancestors, indentation);
     }
-    if (!first) yield '\n' + '  '.repeat(depth);
+    if (!first) yield '\n' + currentIndent;
     yield array ? ']' : '}';
   } finally { ancestors.delete(value); }
 }
 function* reportJSONChunks(report, chunkBytes) {
   const value = jsonValue(report, '');
   if (value === omittedJSONValue) throw new TypeError('报告根值必须可序列化为 JSON');
-  let buffers = [], bytes = 0;
-  for (const part of (function* () { yield* jsonParts(value, 0, new Set()); yield '\n'; })()) {
-    const buffer = Buffer.from(part);
+  // 先有界合并文本，再做 UTF-8 编码；避免每个标点、缩进和短字段都分配 Buffer。
+  // 仅按完整文本片段合并，不拆 UTF-16 代理对；长字符串本身仍分段转义。
+  function* encoded() {
+    let parts = [], characters = 0;
+    for (const part of (function* () { yield* jsonParts(value, 0, new Set(), ['']); yield '\n'; })()) {
+      parts.push(part); characters += part.length;
+      if (characters >= chunkBytes) { yield Buffer.from(parts.join('')); parts = []; characters = 0; }
+    }
+    if (parts.length) yield Buffer.from(parts.join(''));
+  }
+  let chunk = Buffer.allocUnsafe(chunkBytes), bytes = 0;
+  for (const buffer of encoded()) {
     for (let start = 0; start < buffer.length;) {
       const length = Math.min(chunkBytes - bytes, buffer.length - start);
-      buffers.push(buffer.subarray(start, start + length)); bytes += length; start += length;
-      if (bytes === chunkBytes) { yield Buffer.concat(buffers, bytes); buffers = []; bytes = 0; }
+      buffer.copy(chunk, bytes, start, start + length); bytes += length; start += length;
+      if (bytes === chunkBytes) { yield chunk; chunk = Buffer.allocUnsafe(chunkBytes); bytes = 0; }
     }
   }
-  if (bytes) yield Buffer.concat(buffers, bytes);
+  if (bytes) yield chunk.subarray(0, bytes);
 }
 
 /** 完整保留原 JSON 格式和值；任意数组/对象都逐项写出，不把历史事件拼成一个 V8 字符串。 */

@@ -1,0 +1,142 @@
+# 惰性草案：位于 frontend/tests，不会注册为 GitHub workflow。
+# root 按实际 V2 释放 M29 后，唯一 publisher 再决定落位/触发；不由准备提交启动。
+name: M29限定人数分支与五端连续运行
+
+on:
+  push:
+    branches: ['verify/cs-r2-m29']
+  workflow_dispatch:
+    inputs:
+      release_ref:
+        description: 'root实际V2/M29释放记录的准确引用；不是新授权申请'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: m29-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  CI: 'true'
+  CHROMIUM_ARGS: '[]'
+  # push启用前由publisher填入已存在的真实释放引用；不得用此占位冒称已释放。
+  M29_RELEASE_REF: ${{ inputs.release_ref || 'NOT_RELEASED' }}
+
+jobs:
+  short-cases:
+    name: ${{ matrix.case_id }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        case_id:
+          - M29-2-PUBLIC-E01
+          - M29-2-PUBLIC-E02
+          - M29-2-DISGUISE-E01
+          - M29-2-DISGUISE-E02
+          - M29-5-PUBLIC-E01
+          - M29-5-DISGUISE-E01
+          - M29-5-DISGUISE-E02
+          - M29-3-PUBLIC-E01
+          - M29-4-DISGUISE-E02
+    env:
+      FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/m29/${{ matrix.case_id }}
+    steps:
+      - name: 读取固定候选
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: 准备已约定Node24
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            frontend/package-lock.json
+      - name: 安装已锁依赖与Chromium
+        run: |
+          npm ci
+          npm ci --prefix frontend
+          cd frontend
+          npx --no-install playwright install --with-deps chromium
+      - name: 固定单场正常生产本人完整章
+        shell: bash
+        env:
+          M29_CASE: ${{ matrix.case_id }}
+        run: |
+          mkdir -p "$FRONTEND_EVIDENCE_DIR"
+          set -o pipefail
+          M29_EXPECTED_TREE="$(git rev-parse 'HEAD^{tree}')" node frontend/tests/cuilan-m29-browser.mjs --execute --case "$M29_CASE" 2>&1 | tee "$FRONTEND_EVIDENCE_DIR/stdout.log"
+      - name: 保留原始证据及失败清理记录
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: m29-${{ matrix.case_id }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            .agent-output/ci/m29/${{ matrix.case_id }}/startup.json
+            .agent-output/ci/m29/${{ matrix.case_id }}/result-before-cleanup.json
+            .agent-output/ci/m29/${{ matrix.case_id }}/result.json
+            .agent-output/ci/m29/${{ matrix.case_id }}/capture/
+            .agent-output/ci/m29/${{ matrix.case_id }}/authority/
+            .agent-output/ci/m29/${{ matrix.case_id }}/result-write-error.json
+            .agent-output/ci/m29/${{ matrix.case_id }}/*.png
+            .agent-output/ci/m29/${{ matrix.case_id }}/stdout.log
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 7
+
+  five-client-continuous:
+    name: 五人公开分别兼连续900秒
+    needs: short-cases
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    env:
+      FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/m29/M29-5-PUBLIC-E02
+    steps:
+      - name: 读取同一固定候选
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: 准备已约定Node24
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            frontend/package-lock.json
+      - name: 安装已锁依赖与Chromium
+        run: |
+          npm ci
+          npm ci --prefix frontend
+          cd frontend
+          npx --no-install playwright install --with-deps chromium
+      - name: 五个真实客户端同局连续正常操作
+        shell: bash
+        run: |
+          mkdir -p "$FRONTEND_EVIDENCE_DIR"
+          set -o pipefail
+          M29_EXPECTED_TREE="$(git rev-parse 'HEAD^{tree}')" node frontend/tests/cuilan-m29-browser.mjs --execute --case M29-5-PUBLIC-E02 2>&1 | tee "$FRONTEND_EVIDENCE_DIR/stdout.log"
+      - name: 保留连续原始时序与失败清理记录
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: m29-M29-5-PUBLIC-E02-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            .agent-output/ci/m29/M29-5-PUBLIC-E02/startup.json
+            .agent-output/ci/m29/M29-5-PUBLIC-E02/result-before-cleanup.json
+            .agent-output/ci/m29/M29-5-PUBLIC-E02/result.json
+            .agent-output/ci/m29/M29-5-PUBLIC-E02/capture/
+            .agent-output/ci/m29/M29-5-PUBLIC-E02/authority/
+            .agent-output/ci/m29/M29-5-PUBLIC-E02/result-write-error.json
+            .agent-output/ci/m29/M29-5-PUBLIC-E02/*.png
+            .agent-output/ci/m29/M29-5-PUBLIC-E02/stdout.log
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 7

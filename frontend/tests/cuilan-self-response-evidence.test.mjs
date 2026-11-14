@@ -31,6 +31,25 @@ test('完整报告分段字节与原JSON一致，含Date/toJSON、共享引用�
   assert.deepEqual(await readdir(directory), ['result.json'], '错误写入不能留下被误认完整的部分JSON或临时文件');
 });
 
+test('对象密集历史逐字段原值、键序与getter/toJSON调用顺序跨块保持', async t => {
+  const directory = await mkdtemp(join(tmpdir(), 'cuilan-dense-json-')); t.after(() => rm(directory, { recursive: true, force: true }));
+  const calls = [], shared = { sourceId: '本人来源😀', permissionTerm: 'single_use', nullable: null, flags: [true, false] };
+  const report = { authority: [{ worldEvents: Array.from({ length: 4096 }, (_, index) => ({
+    sessionSeq: String(index + 1), kind: 'gaolao.chapter', payload: { chapter: {
+      consentSlots: { private_items: '许可-' + index, appearance: null },
+      consents: { ['许可-' + index]: { status: 'proposed', version: '1', scope: { itemIds: ['物品'], permissionTerm: 'single_use' } } },
+      personalRequests: { get current() { calls.push('get:' + index); return { toJSON(key) { calls.push('json:' + index + ':' + key); return { proof: shared, ready: false }; } }; } },
+      retainedSource: shared, extra: Object.fromEntries(Array.from({ length: 16 }, (_, field) => ['字段' + field, { value: field, text: '中文与\\引号"及😀', omitted: undefined }])),
+    } },
+  })) }] };
+  const expected = JSON.stringify(report, null, 2) + '\n', expectedCalls = [...calls]; calls.length = 0;
+  const path = join(directory, 'result.json'), saved = await saveCuilanReportJSON(path, report);
+  const actual = await readFile(path);
+  assert.equal(actual.toString(), expected); assert.deepEqual(calls, expectedCalls);
+  assert.equal(calls.length, 8192, '每条记录的getter及toJSON各一次，不能为估算大小或分段重复求值');
+  assert.equal(saved.bytes, actual.length); assert.equal(saved.sha256, createHash('sha256').update(actual).digest('hex'));
+});
+
 test('停采集保留已开始的异步结果，排空后写入期间输入被冻结', async t => {
   const directory = await mkdtemp(join(tmpdir(), 'cuilan-cutoff-')); t.after(() => rm(directory, { recursive: true, force: true }));
   const emitter = new EventEmitter(), rows = [], failures = [], collector = createCuilanReportCollector(error => failures.push(error)); let release;
