@@ -279,12 +279,14 @@ export async function browserRoom({ server, browser, baseURL, count, contentVers
     return receipt;
   };
   const move = async (key, sceneId, position) => {
-    const before = (await read(key)).projection.movement?.movementCommandSeq;
     const receipt = await send(key, { kind: 'move_to', sceneId, destination: position });
     assert.equal(receipt.status, 'Accepted', '本次路线受理：' + receipt.code);
     return until(async () => {
-      const p = (await read(key)).projection;
-      if (p.movement?.movementCommandSeq === before) return false;
+      const current = await read(key), p = current.projection;
+      // 控制恢复后 commandSeq 可从 1 重新开始；本次 Receipt 的路线身份不跨 epoch 混用。
+      if (BigInt(current.snapshotSeq) < BigInt(receipt.observedSeq)
+        || p.movement?.movementId !== receipt.result.movementId
+        || p.movement?.planVersion !== receipt.result.planVersion) return false;
       if (['blocked', 'cancelled'].includes(p.movement?.status)) throw new Error(`实际导航中止 ${key}: ${p.movement.reason}`);
       return p.movement?.status === 'arrived' && p.self.sceneId === sceneId && samePosition(p.self.position, position) ? p : false;
     }, '真实路线到达原精确目标');
