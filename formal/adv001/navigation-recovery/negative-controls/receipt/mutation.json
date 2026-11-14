@@ -1,0 +1,10 @@
+{
+  "description": "错误变体：处理公开投影时未经原Receipt确认，先绑定当前队列计划",
+  "expected_status": "COUNTEREXAMPLE",
+  "expected_exit": 12,
+  "expected_invariant": "ReceiptBound",
+  "source_model_sha256": "708f6e24234221b3eb6b707f899906740a9ca370bf388231a0214ed68ba596a7",
+  "mutant_model_sha256": "c47fdb392061dcfd0a9562d9baadd4e867284b27f6c21948aa54d5b9be00e89a",
+  "original": "  /\\ c'=[c EXCEPT !.drain=TRUE]",
+  "replacement": "  /\\ c'=[c EXCEPT !.drain=TRUE, !.bound=IF c.q \\in Ids THEN c.q ELSE @]"
+}

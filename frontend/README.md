@@ -26,7 +26,7 @@ npm run dev
 
 `/demo` 是独立的静态界面演示：只使用手写且通过公开契约校验的授权 DTO，醒目标注“无真实联机”，所有世界动作停用。演示数据的 `contentVersion` 是 `ui-demo-v1`，不作为实际内容或玩法验收材料。
 
-大厅默认创建 `gaolaozhuang-v1` 高老庄章，可用公开配置 `VITE_GAOLAO_CONTENT_VERSION` 指定同类已发布内容。明确选择行走灰盒时使用 `spatial-graybox-v2`，由 `VITE_SPATIAL_CONTENT_VERSION` 替换；选择“山间通路·旧版玩法”仍使用 `trust-repair-fixture-v1`，由 `VITE_CONTENT_VERSION` 替换。前端不导入完整 `content` 配置、服务端状态、内部受众或 NPC 信念。
+未设置 `VITE_GAOLAO_CONTENT_VERSION` 时，大厅默认创建 `gaolaozhuang-scene-v2` 高老庄章；显式配置仍按原值选择同类已发布内容，包括回归或兼容所需的旧版。工具东侧的新场景可显式配置为 `gaolaozhuang-tools-east-scene-v2`；页面仍只有一个高老庄选项。加入或恢复已有房间沿用其存储的内容版本，不随新默认值迁移。明确选择行走灰盒时使用 `spatial-graybox-v2`，由 `VITE_SPATIAL_CONTENT_VERSION` 替换；选择“山间通路·旧版玩法”仍使用 `trust-repair-fixture-v1`，由 `VITE_CONTENT_VERSION` 替换。前端不导入完整 `content` 配置、服务端状态、内部受众或 NPC 信念。
 
 ### 浏览器检查
 

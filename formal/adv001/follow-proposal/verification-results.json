@@ -1,0 +1,4591 @@
+{
+  "schema_version": 1,
+  "assessment": "PASS_WITHIN_SCOPE",
+  "model_sha256": "8613b929dea9a4c711ed0f93eb29d76497922e4fe6062062fa61e2f76e92d82b",
+  "requirements_source": "MODEL_CONTRACT.md",
+  "source_mapping": "source-identity.json",
+  "selected_run_ids": [
+    "bounded-positive-r2/positive-identity-legacy",
+    "bounded-positive-r2/positive-identity-public",
+    "bounded-positive-r2/positive-mixed",
+    "bounded-positive-r2/positive-public",
+    "bounded-sensitivity-r2/negative-auto-accept",
+    "bounded-sensitivity-r2/negative-digest",
+    "bounded-sensitivity-r2/negative-duplicate",
+    "bounded-sensitivity-r2/negative-legacy-stale",
+    "bounded-sensitivity-r2/negative-mixed-race",
+    "bounded-sensitivity-r2/negative-move-revision",
+    "bounded-sensitivity-r2/negative-owner",
+    "bounded-sensitivity-r2/negative-privacy",
+    "bounded-sensitivity-r2/negative-public-race",
+    "bounded-sensitivity-r2/negative-public-stale",
+    "bounded-sensitivity-r2/negative-receipt-order",
+    "bounded-sensitivity-r2/negative-schema",
+    "bounded-sensitivity-r2/negative-scope",
+    "bounded-sensitivity-r2/negative-type",
+    "bounded-sensitivity-r2/negative-unavailable",
+    "bounded-sensitivity-r2/witness-mixed-competition",
+    "bounded-sensitivity-r2/witness-movement",
+    "bounded-sensitivity-r2/witness-new-leader",
+    "bounded-sensitivity-r2/witness-public-competition",
+    "bounded-sensitivity-r2/witness-replay-old-control",
+    "bounded-sensitivity-r2/witness-unknown-replay"
+  ],
+  "selected_count": {
+    "positive_completed": 4,
+    "negative_controls_expected_raw12": 15,
+    "reachability_witnesses_expected_raw12": 6
+  },
+  "historical_scope_status": "三个旧宽交叉检查仍为INCONCLUSIVE/TIMEOUT/raw143，未被新配置替代；prototype工具错误及修订前见证保留。",
+  "original_outputs_in_repository": false,
+  "original_outputs_notice": "原始result/log/messages与输入快照在私有完整证据包保留，未随仓库提交；本文件保存其SHA，正式运行可按README重新产生。不得把临时运行目录说成公开证据链接。",
+  "statistics_notice": "不同profile状态数不相加作单一状态空间；初态反例未报告统计时保留null。",
+  "independence": "本文件为模型作者结果摘要，独立模型/源码审查与真实实现验收另行记录。",
+  "run_count": 51,
+  "tools": {
+    "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0": {
+      "version_label": "v1.7.4 / TLC 2.19",
+      "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+      "reported_version": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)",
+      "java_version": "openjdk version \"21.0.13\" 2026-10-20\nOpenJDK Runtime Environment (build 21.0.13+9-1-deb13u2-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.13+9-1-deb13u2-Debian, mixed mode, sharing)",
+      "java_version_probe_sha256": "0912e18313acf085ce5e54d61cd22f5d74e837de6bd8edd5dc8be3e89ebc0826",
+      "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a"
+    },
+    "7d0c27a113cf9864f847c89ab402b0a40d29ecbb83a05b72a5fb0f0591d06f81": {
+      "version_label": "v1.7.4 / TLC 2.19",
+      "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+      "reported_version": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)",
+      "java_version": "openjdk version \"21.0.13\" 2026-10-20\nOpenJDK Runtime Environment (build 21.0.13+9-1-deb13u2-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.13+9-1-deb13u2-Debian, mixed mode, sharing)",
+      "java_version_probe_sha256": "0261ac56038ad2a639ba4ee7fd13c95d31d3fea077e94c3b7c27b11bfe010429",
+      "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "java_version_probe_notice": {
+        "text": "Java版本探测额外输出，非TLC运行warning；原始输出已保留，公开摘要不含运行目录。",
+        "sha256": "ad3e77bab11b6d60b51260399588bb532f841886e444183f21a8522675cb1772"
+      }
+    }
+  },
+  "input_sets": {
+    "d8992cd45cc1108dbc7bae0ceb2590f789727d9e4c588b538e5212819efe01f5": [
+      {
+        "path": "FollowProposal.tla",
+        "sha256": "8613b929dea9a4c711ed0f93eb29d76497922e4fe6062062fa61e2f76e92d82b",
+        "bytes": 17531
+      },
+      {
+        "path": "negative-auto-accept.cfg",
+        "sha256": "5ac76f071f694526f0c4718dd55d910fd7a26f325c6de34ffdb9f6a8f9b41904",
+        "bytes": 121
+      },
+      {
+        "path": "negative-digest.cfg",
+        "sha256": "2b11fb72b7005ab46aef250774ded2c8bca46d11d7c153a4001c13778489b1e0",
+        "bytes": 127
+      },
+      {
+        "path": "negative-duplicate.cfg",
+        "sha256": "df202fb41af905dd96b08e863a77c385e5a2ab5e6a6c455a6f90c0cc6190c868",
+        "bytes": 123
+      },
+      {
+        "path": "negative-legacy-stale.cfg",
+        "sha256": "16991f559a64cfcc9f745931cccf73ef9da8f7d84868972c08a692d376fb2209",
+        "bytes": 129
+      },
+      {
+        "path": "negative-mixed-race.cfg",
+        "sha256": "9746e246ca2c48ff74555dfd52a82f9a4c8906582bbc1a0fae45b6b175839a84",
+        "bytes": 134
+      },
+      {
+        "path": "negative-move-revision.cfg",
+        "sha256": "6637bbb003976c5a9af11445ef144591cdeb27db545bc8fdc1c8aef7c8c647c9",
+        "bytes": 125
+      },
+      {
+        "path": "negative-owner.cfg",
+        "sha256": "04fb6b26b41ebcf82ad43238dfd8e56848b3397b1281057541a2d73e35d6e35f",
+        "bytes": 134
+      },
+      {
+        "path": "negative-privacy.cfg",
+        "sha256": "632da388a21cee0179b956a1539a71acb5fb00f2d3e30dc275e000f0ee560a72",
+        "bytes": 127
+      },
+      {
+        "path": "negative-public-race.cfg",
+        "sha256": "83714c752712c4ee396f8a598e069ecedbccfa9011a4f7db5c16726c8f52f837",
+        "bytes": 135
+      },
+      {
+        "path": "negative-public-stale.cfg",
+        "sha256": "7f936505b39696224c6f1165e726c63d1163696919b0275fa9407b15f37aeb4d",
+        "bytes": 130
+      },
+      {
+        "path": "negative-receipt-order.cfg",
+        "sha256": "6e5e8dce38dc1e49111ee72e71a4a4e622d355a4a277fb925b7ff8a517447132",
+        "bytes": 131
+      },
+      {
+        "path": "negative-schema.cfg",
+        "sha256": "694d891194288907c99535e0f6717623589dafe2dffaccb8a1163d2331632435",
+        "bytes": 124
+      },
+      {
+        "path": "negative-scope.cfg",
+        "sha256": "586de77da5db8819642dc754a7c0b56a7af20b8f6b9af8102f290acefc791655",
+        "bytes": 123
+      },
+      {
+        "path": "negative-type.cfg",
+        "sha256": "7ea21f720cb9e3f90a67ef39b5fb0c2c1d1d9f10a3e9e51b9041c8f02261ac50",
+        "bytes": 111
+      },
+      {
+        "path": "negative-unavailable.cfg",
+        "sha256": "14920496981a1fb6218eebfeb0b712332e0f9656c76f150d675b1218fe3e64b6",
+        "bytes": 137
+      },
+      {
+        "path": "positive-identity-legacy.cfg",
+        "sha256": "8e809b36349ca02399f30cfe8926f77ad97439d9bb53ff3184c963739406dfdd",
+        "bytes": 318
+      },
+      {
+        "path": "positive-identity-public.cfg",
+        "sha256": "fde4639e78084740ceb2b3baedd4159b7bb8cc6e7917e6cc0ef2f783726d5964",
+        "bytes": 319
+      },
+      {
+        "path": "positive-mixed.cfg",
+        "sha256": "6e71bb18fb4ebf6f964d1528c738742dda1b70455ce004b71eae0bc52d26ff13",
+        "bytes": 321
+      },
+      {
+        "path": "positive-public.cfg",
+        "sha256": "e064df3e8fbc01b3be57d097701d4d84f14fdc19c47f85538584850ef7589a75",
+        "bytes": 322
+      },
+      {
+        "path": "witness-mixed-competition.cfg",
+        "sha256": "79cdb50ce934ca9dae2cb2ca7a4b9d702e502bb86bdf664fe9b637cb8e6ca2c3",
+        "bytes": 124
+      },
+      {
+        "path": "witness-movement.cfg",
+        "sha256": "aca318d0a36e32a49cb7e11d10e69837eb3422574cc8ead5afdd7c48b2bfc779",
+        "bytes": 119
+      },
+      {
+        "path": "witness-new-leader.cfg",
+        "sha256": "24465fcdd3f88aba62b34a30e83553399455f62c53b88f810114062b22fdc74a",
+        "bytes": 120
+      },
+      {
+        "path": "witness-public-competition.cfg",
+        "sha256": "7b75d57b7e9d53405984b344c2c44a342d2e1d0e07df38fac1e101eea425f6b7",
+        "bytes": 125
+      },
+      {
+        "path": "witness-replay-old-control.cfg",
+        "sha256": "ef75bb95bf85153f766a52663c5310d986031f21fb617bc19a33303378317b64",
+        "bytes": 128
+      },
+      {
+        "path": "witness-unknown-replay.cfg",
+        "sha256": "a83983bad5510dd277837905de9930269c9f60877cfd2f59c0bd9b840026abd8",
+        "bytes": 124
+      }
+    ],
+    "5fff7f3596a5b0c74f5250d7dd1ee6513ac722ed660055c400f3555b60fb3128": [
+      {
+        "path": "FollowProposal.tla",
+        "sha256": "a67e84448e28fbb3232093e3d3ddf77f958dfe803eb30b205385b555af9df905",
+        "bytes": 16402
+      },
+      {
+        "path": "negative-auto-accept.cfg",
+        "sha256": "5ac76f071f694526f0c4718dd55d910fd7a26f325c6de34ffdb9f6a8f9b41904",
+        "bytes": 121
+      },
+      {
+        "path": "negative-digest.cfg",
+        "sha256": "2b11fb72b7005ab46aef250774ded2c8bca46d11d7c153a4001c13778489b1e0",
+        "bytes": 127
+      },
+      {
+        "path": "negative-duplicate.cfg",
+        "sha256": "df202fb41af905dd96b08e863a77c385e5a2ab5e6a6c455a6f90c0cc6190c868",
+        "bytes": 123
+      },
+      {
+        "path": "negative-legacy-stale.cfg",
+        "sha256": "16991f559a64cfcc9f745931cccf73ef9da8f7d84868972c08a692d376fb2209",
+        "bytes": 129
+      },
+      {
+        "path": "negative-mixed-race.cfg",
+        "sha256": "9746e246ca2c48ff74555dfd52a82f9a4c8906582bbc1a0fae45b6b175839a84",
+        "bytes": 134
+      },
+      {
+        "path": "negative-move-revision.cfg",
+        "sha256": "6637bbb003976c5a9af11445ef144591cdeb27db545bc8fdc1c8aef7c8c647c9",
+        "bytes": 125
+      },
+      {
+        "path": "negative-owner.cfg",
+        "sha256": "04fb6b26b41ebcf82ad43238dfd8e56848b3397b1281057541a2d73e35d6e35f",
+        "bytes": 134
+      },
+      {
+        "path": "negative-privacy.cfg",
+        "sha256": "632da388a21cee0179b956a1539a71acb5fb00f2d3e30dc275e000f0ee560a72",
+        "bytes": 127
+      },
+      {
+        "path": "negative-public-race.cfg",
+        "sha256": "83714c752712c4ee396f8a598e069ecedbccfa9011a4f7db5c16726c8f52f837",
+        "bytes": 135
+      },
+      {
+        "path": "negative-public-stale.cfg",
+        "sha256": "7f936505b39696224c6f1165e726c63d1163696919b0275fa9407b15f37aeb4d",
+        "bytes": 130
+      },
+      {
+        "path": "negative-receipt-order.cfg",
+        "sha256": "6e5e8dce38dc1e49111ee72e71a4a4e622d355a4a277fb925b7ff8a517447132",
+        "bytes": 131
+      },
+      {
+        "path": "negative-schema.cfg",
+        "sha256": "694d891194288907c99535e0f6717623589dafe2dffaccb8a1163d2331632435",
+        "bytes": 124
+      },
+      {
+        "path": "negative-scope.cfg",
+        "sha256": "586de77da5db8819642dc754a7c0b56a7af20b8f6b9af8102f290acefc791655",
+        "bytes": 123
+      },
+      {
+        "path": "negative-type.cfg",
+        "sha256": "7ea21f720cb9e3f90a67ef39b5fb0c2c1d1d9f10a3e9e51b9041c8f02261ac50",
+        "bytes": 111
+      },
+      {
+        "path": "negative-unavailable.cfg",
+        "sha256": "14920496981a1fb6218eebfeb0b712332e0f9656c76f150d675b1218fe3e64b6",
+        "bytes": 137
+      },
+      {
+        "path": "positive-identity-legacy.cfg",
+        "sha256": "8e809b36349ca02399f30cfe8926f77ad97439d9bb53ff3184c963739406dfdd",
+        "bytes": 318
+      },
+      {
+        "path": "positive-identity-public.cfg",
+        "sha256": "fde4639e78084740ceb2b3baedd4159b7bb8cc6e7917e6cc0ef2f783726d5964",
+        "bytes": 319
+      },
+      {
+        "path": "positive-mixed.cfg",
+        "sha256": "6e71bb18fb4ebf6f964d1528c738742dda1b70455ce004b71eae0bc52d26ff13",
+        "bytes": 321
+      },
+      {
+        "path": "positive-public.cfg",
+        "sha256": "e064df3e8fbc01b3be57d097701d4d84f14fdc19c47f85538584850ef7589a75",
+        "bytes": 322
+      },
+      {
+        "path": "witness-mixed-competition.cfg",
+        "sha256": "79cdb50ce934ca9dae2cb2ca7a4b9d702e502bb86bdf664fe9b637cb8e6ca2c3",
+        "bytes": 124
+      },
+      {
+        "path": "witness-movement.cfg",
+        "sha256": "aca318d0a36e32a49cb7e11d10e69837eb3422574cc8ead5afdd7c48b2bfc779",
+        "bytes": 119
+      },
+      {
+        "path": "witness-new-leader.cfg",
+        "sha256": "24465fcdd3f88aba62b34a30e83553399455f62c53b88f810114062b22fdc74a",
+        "bytes": 120
+      },
+      {
+        "path": "witness-public-competition.cfg",
+        "sha256": "7b75d57b7e9d53405984b344c2c44a342d2e1d0e07df38fac1e101eea425f6b7",
+        "bytes": 125
+      },
+      {
+        "path": "witness-replay-old-control.cfg",
+        "sha256": "ef75bb95bf85153f766a52663c5310d986031f21fb617bc19a33303378317b64",
+        "bytes": 128
+      },
+      {
+        "path": "witness-unknown-replay.cfg",
+        "sha256": "a83983bad5510dd277837905de9930269c9f60877cfd2f59c0bd9b840026abd8",
+        "bytes": 124
+      }
+    ],
+    "ff952221a60d5423d49fb6bfd5c6132213569d16aac833f001d8a3dd8176bf3d": [
+      {
+        "path": "FollowProposal.tla",
+        "sha256": "a932c3ea412001ce1232796c918e4a767bf50a048c96bbbe1dad86e66bff7651",
+        "bytes": 15965
+      },
+      {
+        "path": "negative-auto-accept.cfg",
+        "sha256": "5ac76f071f694526f0c4718dd55d910fd7a26f325c6de34ffdb9f6a8f9b41904",
+        "bytes": 121
+      },
+      {
+        "path": "negative-digest.cfg",
+        "sha256": "2b11fb72b7005ab46aef250774ded2c8bca46d11d7c153a4001c13778489b1e0",
+        "bytes": 127
+      },
+      {
+        "path": "negative-duplicate.cfg",
+        "sha256": "df202fb41af905dd96b08e863a77c385e5a2ab5e6a6c455a6f90c0cc6190c868",
+        "bytes": 123
+      },
+      {
+        "path": "negative-legacy-stale.cfg",
+        "sha256": "16991f559a64cfcc9f745931cccf73ef9da8f7d84868972c08a692d376fb2209",
+        "bytes": 129
+      },
+      {
+        "path": "negative-mixed-race.cfg",
+        "sha256": "9746e246ca2c48ff74555dfd52a82f9a4c8906582bbc1a0fae45b6b175839a84",
+        "bytes": 134
+      },
+      {
+        "path": "negative-move-revision.cfg",
+        "sha256": "6637bbb003976c5a9af11445ef144591cdeb27db545bc8fdc1c8aef7c8c647c9",
+        "bytes": 125
+      },
+      {
+        "path": "negative-owner.cfg",
+        "sha256": "04fb6b26b41ebcf82ad43238dfd8e56848b3397b1281057541a2d73e35d6e35f",
+        "bytes": 134
+      },
+      {
+        "path": "negative-privacy.cfg",
+        "sha256": "632da388a21cee0179b956a1539a71acb5fb00f2d3e30dc275e000f0ee560a72",
+        "bytes": 127
+      },
+      {
+        "path": "negative-public-race.cfg",
+        "sha256": "83714c752712c4ee396f8a598e069ecedbccfa9011a4f7db5c16726c8f52f837",
+        "bytes": 135
+      },
+      {
+        "path": "negative-public-stale.cfg",
+        "sha256": "7f936505b39696224c6f1165e726c63d1163696919b0275fa9407b15f37aeb4d",
+        "bytes": 130
+      },
+      {
+        "path": "negative-receipt-order.cfg",
+        "sha256": "6e5e8dce38dc1e49111ee72e71a4a4e622d355a4a277fb925b7ff8a517447132",
+        "bytes": 131
+      },
+      {
+        "path": "negative-schema.cfg",
+        "sha256": "694d891194288907c99535e0f6717623589dafe2dffaccb8a1163d2331632435",
+        "bytes": 124
+      },
+      {
+        "path": "negative-scope.cfg",
+        "sha256": "586de77da5db8819642dc754a7c0b56a7af20b8f6b9af8102f290acefc791655",
+        "bytes": 123
+      },
+      {
+        "path": "negative-type.cfg",
+        "sha256": "7ea21f720cb9e3f90a67ef39b5fb0c2c1d1d9f10a3e9e51b9041c8f02261ac50",
+        "bytes": 111
+      },
+      {
+        "path": "negative-unavailable.cfg",
+        "sha256": "14920496981a1fb6218eebfeb0b712332e0f9656c76f150d675b1218fe3e64b6",
+        "bytes": 137
+      },
+      {
+        "path": "positive-identity-legacy.cfg",
+        "sha256": "8e809b36349ca02399f30cfe8926f77ad97439d9bb53ff3184c963739406dfdd",
+        "bytes": 318
+      },
+      {
+        "path": "positive-identity-public.cfg",
+        "sha256": "fde4639e78084740ceb2b3baedd4159b7bb8cc6e7917e6cc0ef2f783726d5964",
+        "bytes": 319
+      },
+      {
+        "path": "positive-mixed.cfg",
+        "sha256": "6e71bb18fb4ebf6f964d1528c738742dda1b70455ce004b71eae0bc52d26ff13",
+        "bytes": 321
+      },
+      {
+        "path": "positive-public.cfg",
+        "sha256": "e064df3e8fbc01b3be57d097701d4d84f14fdc19c47f85538584850ef7589a75",
+        "bytes": 322
+      },
+      {
+        "path": "witness-mixed-competition.cfg",
+        "sha256": "79cdb50ce934ca9dae2cb2ca7a4b9d702e502bb86bdf664fe9b637cb8e6ca2c3",
+        "bytes": 124
+      },
+      {
+        "path": "witness-movement.cfg",
+        "sha256": "aca318d0a36e32a49cb7e11d10e69837eb3422574cc8ead5afdd7c48b2bfc779",
+        "bytes": 119
+      },
+      {
+        "path": "witness-new-leader.cfg",
+        "sha256": "24465fcdd3f88aba62b34a30e83553399455f62c53b88f810114062b22fdc74a",
+        "bytes": 120
+      },
+      {
+        "path": "witness-public-competition.cfg",
+        "sha256": "7b75d57b7e9d53405984b344c2c44a342d2e1d0e07df38fac1e101eea425f6b7",
+        "bytes": 125
+      },
+      {
+        "path": "witness-replay-old-control.cfg",
+        "sha256": "ef75bb95bf85153f766a52663c5310d986031f21fb617bc19a33303378317b64",
+        "bytes": 128
+      },
+      {
+        "path": "witness-unknown-replay.cfg",
+        "sha256": "a83983bad5510dd277837905de9930269c9f60877cfd2f59c0bd9b840026abd8",
+        "bytes": 124
+      }
+    ],
+    "6f7886da7674e85fdaab0dae397baf4c32c500a9e95410039ce5422b47a0eafe": [
+      {
+        "path": "FollowProposal.tla",
+        "sha256": "e77aafba9e73058ab352764177e7cfda15087247ed5b323e49d4e4cf477aa195",
+        "bytes": 15976
+      },
+      {
+        "path": "negative-auto-accept.cfg",
+        "sha256": "5ac76f071f694526f0c4718dd55d910fd7a26f325c6de34ffdb9f6a8f9b41904",
+        "bytes": 121
+      },
+      {
+        "path": "negative-digest.cfg",
+        "sha256": "2b11fb72b7005ab46aef250774ded2c8bca46d11d7c153a4001c13778489b1e0",
+        "bytes": 127
+      },
+      {
+        "path": "negative-duplicate.cfg",
+        "sha256": "df202fb41af905dd96b08e863a77c385e5a2ab5e6a6c455a6f90c0cc6190c868",
+        "bytes": 123
+      },
+      {
+        "path": "negative-legacy-stale.cfg",
+        "sha256": "16991f559a64cfcc9f745931cccf73ef9da8f7d84868972c08a692d376fb2209",
+        "bytes": 129
+      },
+      {
+        "path": "negative-mixed-race.cfg",
+        "sha256": "9746e246ca2c48ff74555dfd52a82f9a4c8906582bbc1a0fae45b6b175839a84",
+        "bytes": 134
+      },
+      {
+        "path": "negative-move-revision.cfg",
+        "sha256": "6637bbb003976c5a9af11445ef144591cdeb27db545bc8fdc1c8aef7c8c647c9",
+        "bytes": 125
+      },
+      {
+        "path": "negative-owner.cfg",
+        "sha256": "04fb6b26b41ebcf82ad43238dfd8e56848b3397b1281057541a2d73e35d6e35f",
+        "bytes": 134
+      },
+      {
+        "path": "negative-privacy.cfg",
+        "sha256": "632da388a21cee0179b956a1539a71acb5fb00f2d3e30dc275e000f0ee560a72",
+        "bytes": 127
+      },
+      {
+        "path": "negative-public-race.cfg",
+        "sha256": "83714c752712c4ee396f8a598e069ecedbccfa9011a4f7db5c16726c8f52f837",
+        "bytes": 135
+      },
+      {
+        "path": "negative-public-stale.cfg",
+        "sha256": "7f936505b39696224c6f1165e726c63d1163696919b0275fa9407b15f37aeb4d",
+        "bytes": 130
+      },
+      {
+        "path": "negative-receipt-order.cfg",
+        "sha256": "6e5e8dce38dc1e49111ee72e71a4a4e622d355a4a277fb925b7ff8a517447132",
+        "bytes": 131
+      },
+      {
+        "path": "negative-schema.cfg",
+        "sha256": "694d891194288907c99535e0f6717623589dafe2dffaccb8a1163d2331632435",
+        "bytes": 124
+      },
+      {
+        "path": "negative-scope.cfg",
+        "sha256": "586de77da5db8819642dc754a7c0b56a7af20b8f6b9af8102f290acefc791655",
+        "bytes": 123
+      },
+      {
+        "path": "negative-type.cfg",
+        "sha256": "7ea21f720cb9e3f90a67ef39b5fb0c2c1d1d9f10a3e9e51b9041c8f02261ac50",
+        "bytes": 111
+      },
+      {
+        "path": "negative-unavailable.cfg",
+        "sha256": "14920496981a1fb6218eebfeb0b712332e0f9656c76f150d675b1218fe3e64b6",
+        "bytes": 137
+      },
+      {
+        "path": "positive-identity-legacy.cfg",
+        "sha256": "8e809b36349ca02399f30cfe8926f77ad97439d9bb53ff3184c963739406dfdd",
+        "bytes": 318
+      },
+      {
+        "path": "positive-identity-public.cfg",
+        "sha256": "fde4639e78084740ceb2b3baedd4159b7bb8cc6e7917e6cc0ef2f783726d5964",
+        "bytes": 319
+      },
+      {
+        "path": "positive-mixed.cfg",
+        "sha256": "6e71bb18fb4ebf6f964d1528c738742dda1b70455ce004b71eae0bc52d26ff13",
+        "bytes": 321
+      },
+      {
+        "path": "positive-public.cfg",
+        "sha256": "e064df3e8fbc01b3be57d097701d4d84f14fdc19c47f85538584850ef7589a75",
+        "bytes": 322
+      },
+      {
+        "path": "witness-mixed-competition.cfg",
+        "sha256": "79cdb50ce934ca9dae2cb2ca7a4b9d702e502bb86bdf664fe9b637cb8e6ca2c3",
+        "bytes": 124
+      },
+      {
+        "path": "witness-movement.cfg",
+        "sha256": "aca318d0a36e32a49cb7e11d10e69837eb3422574cc8ead5afdd7c48b2bfc779",
+        "bytes": 119
+      },
+      {
+        "path": "witness-new-leader.cfg",
+        "sha256": "24465fcdd3f88aba62b34a30e83553399455f62c53b88f810114062b22fdc74a",
+        "bytes": 120
+      },
+      {
+        "path": "witness-public-competition.cfg",
+        "sha256": "7b75d57b7e9d53405984b344c2c44a342d2e1d0e07df38fac1e101eea425f6b7",
+        "bytes": 125
+      },
+      {
+        "path": "witness-replay-old-control.cfg",
+        "sha256": "ef75bb95bf85153f766a52663c5310d986031f21fb617bc19a33303378317b64",
+        "bytes": 128
+      },
+      {
+        "path": "witness-unknown-replay.cfg",
+        "sha256": "a83983bad5510dd277837905de9930269c9f60877cfd2f59c0bd9b840026abd8",
+        "bytes": 124
+      }
+    ]
+  },
+  "scopes": {
+    "75fc0f1c6d1a14bc41211b8e4bebf1f937d546af2a74dda2d2bf5b3c4b024456": {
+      "actors": 2,
+      "nonces_per_authenticated_actor": 2,
+      "attempts_per_nonce": 2,
+      "capture_per_source": 1,
+      "subject_semantic_changes": 1,
+      "movement_events": 1,
+      "view_and_epoch_rotations_per_actor": {
+        "Focus": 1,
+        "Other": 0
+      },
+      "invalid_context_changes": 1,
+      "covered_interleavings_and_faults": [
+        "单个公开或legacy捕获，2次提交、每个认证主体2个nonce，原串或1个变参维度",
+        "一次总环境变化：respond/withdraw/Move/view/epoch/view+epoch/一个具体访问或范围失效",
+        "原Receipt重复、异文同nonce、跨owner、确认丢失后原串重试；合法/非法目的地与并发依据变参"
+      ],
+      "excluded_behaviors": [
+        "PG故障实现、密码学、JSON解析及decimal大数",
+        "真实几何、全章路径/动画、本人自然语言决定",
+        "三个以上参与者或无限请求/重启、完整Consent/Nav组合",
+        "一次轨迹内多种不同变参的连续组合；竞争轨迹最多3次提交，身份轨迹最多2次提交",
+        "旧宽交叉配置的多种环境变化连续组合未穷尽；本族结论不代替它。组合安全性的源码单调性论证见MODEL_CONTRACT.md。"
+      ],
+      "liveness": "NOT_CHECKED",
+      "total_submit_calls": 2,
+      "altered_field_dimensions_per_trace": 1,
+      "total_environment_changes": 1,
+      "environment_changes_independent": false,
+      "view_and_epoch_combined_change": true
+    },
+    "7545ce4a0b7486735cdca39596fc153f9ea7f159f6ccc89dc634576051aa523a": {
+      "actors": 2,
+      "nonces_per_authenticated_actor": 2,
+      "attempts_per_nonce": 2,
+      "capture_per_source": 1,
+      "subject_semantic_changes": 1,
+      "movement_events": 1,
+      "view_and_epoch_rotations_per_actor": 0,
+      "invalid_context_changes": 0,
+      "covered_interleavings_and_faults": [
+        "两个公开捕获，或legacy与公开捕获；两提交顺序、3次总提交、每主体2个nonce",
+        "一次respond或withdraw与读取/提交交错，加一次无语义Move",
+        "相同基线一次效果、原串Receipt及确认丢失后重试；其它身份/范围保持合法"
+      ],
+      "excluded_behaviors": [
+        "PG故障实现、密码学、JSON解析及decimal大数",
+        "真实几何、全章路径/动画、本人自然语言决定",
+        "三个以上参与者或无限请求/重启、完整Consent/Nav组合",
+        "一次轨迹内多种不同变参的连续组合；竞争轨迹最多3次提交，身份轨迹最多2次提交",
+        "旧宽交叉配置的多种环境变化连续组合未穷尽；本族结论不代替它。组合安全性的源码单调性论证见MODEL_CONTRACT.md。"
+      ],
+      "liveness": "NOT_CHECKED",
+      "total_submit_calls": 3,
+      "altered_field_dimensions_per_trace": 1,
+      "total_environment_changes": "one subject semantic change plus one Move; no identity/scope change",
+      "environment_changes_independent": true,
+      "view_and_epoch_combined_change": false
+    },
+    "165d12903981c7bf857b69b2153218c148ec1e13dda79dc40644d006ba40908a": {
+      "actors": 2,
+      "nonces_per_authenticated_actor": 2,
+      "attempts_per_nonce": 2,
+      "capture_per_source": 1,
+      "subject_semantic_changes": 1,
+      "movement_events": 1,
+      "view_and_epoch_rotations_per_actor": 1,
+      "invalid_context_changes": 1,
+      "covered_interleavings_and_faults": [
+        "公开参数读与提交分开；新/新及legacy/新串行提交的两顺序",
+        "本人回应或撤回/视图及控制更新/范围失效与首次执行",
+        "原Receipt重复、异文同nonce、跨owner、确认丢失后原串重试",
+        "闭合新旧格式与非当事方许可受众"
+      ],
+      "excluded_behaviors": [
+        "PG故障实现、密码学、JSON解析及decimal大数",
+        "真实几何、全章路径/动画、本人自然语言决定",
+        "三个以上参与者或无限请求/重启、完整Consent/Nav组合",
+        "一次轨迹内多种不同变参的连续组合；竞争轨迹最多3次提交，身份轨迹最多2次提交"
+      ],
+      "liveness": "NOT_CHECKED",
+      "total_submit_calls": 3,
+      "altered_field_dimensions_per_trace": 1
+    },
+    "3f07dde529f0745423a39392380de7ab42952b0f3ca37aae8c8b2b63e172d182": {
+      "actors": 2,
+      "nonces_per_authenticated_actor": 2,
+      "attempts_per_nonce": 2,
+      "capture_per_source": 1,
+      "subject_semantic_changes": 1,
+      "movement_events": 1,
+      "view_and_epoch_rotations_per_actor": 1,
+      "invalid_context_changes": 1,
+      "covered_interleavings_and_faults": [
+        "公开参数读与提交分开；新/新及legacy/新串行提交的两顺序",
+        "本人回应或撤回/视图及控制更新/范围失效与首次执行",
+        "原Receipt重复、异文同nonce、跨owner、确认丢失后原串重试",
+        "闭合新旧格式与非当事方许可受众"
+      ],
+      "excluded_behaviors": [
+        "PG故障实现、密码学、JSON解析及decimal大数",
+        "真实几何、全章路径/动画、本人自然语言决定",
+        "三个以上参与者或无限请求/重启、完整Consent/Nav组合",
+        "一次轨迹内多种不同变参的连续组合；竞争轨迹最多3次提交，身份轨迹最多2次提交"
+      ],
+      "liveness": "NOT_CHECKED",
+      "total_submit_calls": 2,
+      "altered_field_dimensions_per_trace": 1
+    },
+    "f2b869f4f5a7fba3fd5974fdfbab7ac1534172d9a483232336fc1d77405a62af": {
+      "actors": 2,
+      "nonces_per_authenticated_actor": 2,
+      "attempts_per_nonce": 2,
+      "capture_per_source": 1,
+      "subject_semantic_changes": 1,
+      "movement_events": 1,
+      "view_and_epoch_rotations_per_actor": 1,
+      "invalid_context_changes": 1,
+      "covered_interleavings_and_faults": [
+        "公开参数读与提交分开；新/新及legacy/新串行提交的两顺序",
+        "本人回应或撤回/视图及控制更新/范围失效与首次执行",
+        "原Receipt重复、异文同nonce、跨owner、确认丢失后原串重试",
+        "闭合新旧格式与非当事方许可受众"
+      ],
+      "excluded_behaviors": [
+        "PG故障实现、密码学、JSON解析及decimal大数",
+        "真实几何、全章路径/动画、本人自然语言决定",
+        "三个以上参与者或无限请求/重启、完整Consent/Nav组合"
+      ],
+      "liveness": "NOT_CHECKED"
+    }
+  },
+  "assumption_sets": {
+    "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57": [
+      "单Session锁定事务把规则检查、私有槽/计划/公开revision更新与Receipt保存一起提交，原Receipt在事务之外确认；只核提议效果，不要求恢复原Receipt时权威时钟或其他导航完全不变。",
+      "nonce键属于当前认证会话/主体，完整解析请求按语义摘要比较；哈希碰撞、JSON序列化和SQL隔离实现不在TLC中。",
+      "只有已授权的既有回应/撤回能改变私有槽；本模型不重新证明其本人资格、路径、到达或本人选择逻辑。",
+      "公共人物resourceRevision本来可见；隐私性质只禁止新增读取他人许可/随行内容，不声称阻止从公开语义版本推断“状态曾改变”。",
+      "有界安全性与可达见证，不假设网络最终成功，不声称活性/任意请求量/任意故障次数/整个章节组合。"
+    ]
+  },
+  "runs": [
+    {
+      "id": "bounded-positive-r2/positive-identity-legacy",
+      "selected": true,
+      "profile": "positive-identity-legacy",
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "completed": true,
+      "raw_exit": 0,
+      "runner_exit": 0,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "PublicProposalAvailable",
+          "VersionFenced",
+          "RevisionAccounting",
+          "SingleBaselineCommit",
+          "AtMostOnce",
+          "ReceiptStable",
+          "NonceDigestBound",
+          "ReceiptOwnerScoped",
+          "ScopeAuthorized",
+          "SchemaExclusive",
+          "ConsentPrivate",
+          "ProposalOnly"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "PublicProposalAvailable",
+          "VersionFenced",
+          "RevisionAccounting",
+          "SingleBaselineCommit",
+          "AtMostOnce",
+          "ReceiptStable",
+          "NonceDigestBound",
+          "ReceiptOwnerScoped",
+          "ScopeAuthorized",
+          "SchemaExclusive",
+          "ConsentPrivate",
+          "ProposalOnly"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 317064,
+        "distinct_states": 115718,
+        "remaining_states": 0
+      },
+      "last_reported_progress": {
+        "depth": 5,
+        "reported_at_tool_local": "2026-11-13 06:10:45",
+        "generated_states": 317064,
+        "distinct_states": 115718,
+        "remaining_states": 0,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:10:25.347006+00:00",
+      "finished_at": "2026-11-13T14:10:45.949689+00:00",
+      "duration_seconds": 20.602717,
+      "resource_parameters": {
+        "workers": 2,
+        "heap_mb": 1024,
+        "timeout_seconds": 120
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "d8992cd45cc1108dbc7bae0ceb2590f789727d9e4c588b538e5212819efe01f5",
+      "runner_manifest_sha256": "28eb215fc5ea1765bef8d4b828a3f70df111e9f8af27779b62aac31cb874b62f",
+      "scope_id": "75fc0f1c6d1a14bc41211b8e4bebf1f937d546af2a74dda2d2bf5b3c4b024456",
+      "parameters": {
+        "Scenario": "identity",
+        "LegacyFirst": true,
+        "Fault": "none"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [],
+      "original_output_sha256": {
+        "result.json": "53808267364263135cdba0d06c4c13c61e6b1d4c035b28103cb623d5587ad6a4",
+        "tlc.log": "2f3b2120edb4090ab81bcd60552857687a80dc330ceb3bbd28c45f1ecf7b6dbe",
+        "messages.json": "0bab55e70acce20cc76f84c75aee0f442d624795ae2ade8b92396faf989873a1"
+      }
+    },
+    {
+      "id": "bounded-positive-r2/positive-identity-public",
+      "selected": true,
+      "profile": "positive-identity-public",
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "completed": true,
+      "raw_exit": 0,
+      "runner_exit": 0,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "PublicProposalAvailable",
+          "VersionFenced",
+          "RevisionAccounting",
+          "SingleBaselineCommit",
+          "AtMostOnce",
+          "ReceiptStable",
+          "NonceDigestBound",
+          "ReceiptOwnerScoped",
+          "ScopeAuthorized",
+          "SchemaExclusive",
+          "ConsentPrivate",
+          "ProposalOnly"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "PublicProposalAvailable",
+          "VersionFenced",
+          "RevisionAccounting",
+          "SingleBaselineCommit",
+          "AtMostOnce",
+          "ReceiptStable",
+          "NonceDigestBound",
+          "ReceiptOwnerScoped",
+          "ScopeAuthorized",
+          "SchemaExclusive",
+          "ConsentPrivate",
+          "ProposalOnly"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 318176,
+        "distinct_states": 116334,
+        "remaining_states": 0
+      },
+      "last_reported_progress": {
+        "depth": 5,
+        "reported_at_tool_local": "2026-11-13 06:10:44",
+        "generated_states": 318176,
+        "distinct_states": 116334,
+        "remaining_states": 0,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:10:25.152441+00:00",
+      "finished_at": "2026-11-13T14:10:44.797203+00:00",
+      "duration_seconds": 19.644825,
+      "resource_parameters": {
+        "workers": 2,
+        "heap_mb": 1024,
+        "timeout_seconds": 120
+      },
+      "tool_id": "7d0c27a113cf9864f847c89ab402b0a40d29ecbb83a05b72a5fb0f0591d06f81",
+      "model_inputs_id": "d8992cd45cc1108dbc7bae0ceb2590f789727d9e4c588b538e5212819efe01f5",
+      "runner_manifest_sha256": "28eb215fc5ea1765bef8d4b828a3f70df111e9f8af27779b62aac31cb874b62f",
+      "scope_id": "75fc0f1c6d1a14bc41211b8e4bebf1f937d546af2a74dda2d2bf5b3c4b024456",
+      "parameters": {
+        "Scenario": "identity",
+        "LegacyFirst": false,
+        "Fault": "none"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [],
+      "original_output_sha256": {
+        "result.json": "3366232533553bd28355e5c57c7fc98498b7d28e54aa3105e0cb28fa51937c7a",
+        "tlc.log": "18166ab811594e1e4997e8a456ff312e8f2f971c2d4ff3ac09971cf73c631d20",
+        "messages.json": "03c20a802743a64131168d0b94176fd31eb1481228faabb86fb349484b9329df"
+      }
+    },
+    {
+      "id": "bounded-positive-r2/positive-mixed",
+      "selected": true,
+      "profile": "positive-mixed",
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "completed": true,
+      "raw_exit": 0,
+      "runner_exit": 0,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "PublicProposalAvailable",
+          "VersionFenced",
+          "RevisionAccounting",
+          "SingleBaselineCommit",
+          "AtMostOnce",
+          "ReceiptStable",
+          "NonceDigestBound",
+          "ReceiptOwnerScoped",
+          "ScopeAuthorized",
+          "SchemaExclusive",
+          "ConsentPrivate",
+          "ProposalOnly"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "PublicProposalAvailable",
+          "VersionFenced",
+          "RevisionAccounting",
+          "SingleBaselineCommit",
+          "AtMostOnce",
+          "ReceiptStable",
+          "NonceDigestBound",
+          "ReceiptOwnerScoped",
+          "ScopeAuthorized",
+          "SchemaExclusive",
+          "ConsentPrivate",
+          "ProposalOnly"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 84917,
+        "distinct_states": 26228,
+        "remaining_states": 0
+      },
+      "last_reported_progress": {
+        "depth": 8,
+        "reported_at_tool_local": "2026-11-13 06:10:24",
+        "generated_states": 84917,
+        "distinct_states": 26228,
+        "remaining_states": 0,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:10:19.545929+00:00",
+      "finished_at": "2026-11-13T14:10:25.095764+00:00",
+      "duration_seconds": 5.549872,
+      "resource_parameters": {
+        "workers": 2,
+        "heap_mb": 1024,
+        "timeout_seconds": 120
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "d8992cd45cc1108dbc7bae0ceb2590f789727d9e4c588b538e5212819efe01f5",
+      "runner_manifest_sha256": "28eb215fc5ea1765bef8d4b828a3f70df111e9f8af27779b62aac31cb874b62f",
+      "scope_id": "7545ce4a0b7486735cdca39596fc153f9ea7f159f6ccc89dc634576051aa523a",
+      "parameters": {
+        "Scenario": "competition",
+        "LegacyFirst": true,
+        "Fault": "none"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [],
+      "original_output_sha256": {
+        "result.json": "ee2f0187e148f09f1f8aed1a53c03ea8f0e97b9c9cf3ae997fbe705573a2e206",
+        "tlc.log": "afb3fd799392c549aae8da4f4186b33604b280c4c581b8533c2d2d777ec357bd",
+        "messages.json": "d82ba8f8815574318e294625e85c3d021b49ad3ad352b8f50bb860aff157faa6"
+      }
+    },
+    {
+      "id": "bounded-positive-r2/positive-public",
+      "selected": true,
+      "profile": "positive-public",
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "completed": true,
+      "raw_exit": 0,
+      "runner_exit": 0,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "PublicProposalAvailable",
+          "VersionFenced",
+          "RevisionAccounting",
+          "SingleBaselineCommit",
+          "AtMostOnce",
+          "ReceiptStable",
+          "NonceDigestBound",
+          "ReceiptOwnerScoped",
+          "ScopeAuthorized",
+          "SchemaExclusive",
+          "ConsentPrivate",
+          "ProposalOnly"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "PublicProposalAvailable",
+          "VersionFenced",
+          "RevisionAccounting",
+          "SingleBaselineCommit",
+          "AtMostOnce",
+          "ReceiptStable",
+          "NonceDigestBound",
+          "ReceiptOwnerScoped",
+          "ScopeAuthorized",
+          "SchemaExclusive",
+          "ConsentPrivate",
+          "ProposalOnly"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 88101,
+        "distinct_states": 27620,
+        "remaining_states": 0
+      },
+      "last_reported_progress": {
+        "depth": 8,
+        "reported_at_tool_local": "2026-11-13 06:10:24",
+        "generated_states": 88101,
+        "distinct_states": 27620,
+        "remaining_states": 0,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:10:19.540183+00:00",
+      "finished_at": "2026-11-13T14:10:25.296314+00:00",
+      "duration_seconds": 5.756167,
+      "resource_parameters": {
+        "workers": 2,
+        "heap_mb": 1024,
+        "timeout_seconds": 120
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "d8992cd45cc1108dbc7bae0ceb2590f789727d9e4c588b538e5212819efe01f5",
+      "runner_manifest_sha256": "28eb215fc5ea1765bef8d4b828a3f70df111e9f8af27779b62aac31cb874b62f",
+      "scope_id": "7545ce4a0b7486735cdca39596fc153f9ea7f159f6ccc89dc634576051aa523a",
+      "parameters": {
+        "Scenario": "competition",
+        "LegacyFirst": false,
+        "Fault": "none"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [],
+      "original_output_sha256": {
+        "result.json": "e8a95a98d84688a0937fde650814ecf2c10b0052423c03acf366c56eabcb06df",
+        "tlc.log": "c940906affb29827abf7bf906927e8102826b2ffbe08325521e469b03cce6194",
+        "messages.json": "32ba594fc464ed66a4340845fc3cfaf15e0e3f3a41dfb8b37525cb11ebc76334"
+      }
+    },
+    {
+      "id": "bounded-sensitivity-r2/negative-auto-accept",
+      "selected": true,
+      "profile": "negative-auto-accept",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "ProposalOnly"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "ProposalOnly"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 88,
+        "distinct_states": 88,
+        "remaining_states": 72
+      },
+      "last_reported_progress": {
+        "depth": 3,
+        "reported_at_tool_local": "2026-11-13 06:10:44",
+        "generated_states": 88,
+        "distinct_states": 88,
+        "remaining_states": 72,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:10:44.279689+00:00",
+      "finished_at": "2026-11-13T14:10:45.379994+00:00",
+      "duration_seconds": 1.100393,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "d8992cd45cc1108dbc7bae0ceb2590f789727d9e4c588b538e5212819efe01f5",
+      "runner_manifest_sha256": "28eb215fc5ea1765bef8d4b828a3f70df111e9f8af27779b62aac31cb874b62f",
+      "scope_id": "75fc0f1c6d1a14bc41211b8e4bebf1f937d546af2a74dda2d2bf5b3c4b024456",
+      "parameters": {
+        "Scenario": "identity",
+        "LegacyFirst": false,
+        "Fault": "auto-accept"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "853e9e3a7b0e12b6b7b39d8a51ca63784cbe83a041ce081641e243d88171011f",
+        "tlc.log": "6944170a2b7e0379dfdd98e03d49fc1a5d91fd7d664c376c0face55348072b75",
+        "messages.json": "980a57f3da8628c8310b291312899605ea24b74633c4eb9617f351211e40c5d8"
+      },
+      "target": "ProposalOnly",
+      "violated_messages": [
+        "Invariant ProposalOnly is violated."
+      ],
+      "trace_state_count": 3
+    },
+    {
+      "id": "bounded-sensitivity-r2/negative-digest",
+      "selected": true,
+      "profile": "negative-digest",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "NonceDigestBound"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "NonceDigestBound"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 1067,
+        "distinct_states": 790,
+        "remaining_states": 702
+      },
+      "last_reported_progress": {
+        "depth": 4,
+        "reported_at_tool_local": "2026-11-13 06:10:38",
+        "generated_states": 1067,
+        "distinct_states": 790,
+        "remaining_states": 702,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:10:37.373922+00:00",
+      "finished_at": "2026-11-13T14:10:38.645036+00:00",
+      "duration_seconds": 1.27115,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "d8992cd45cc1108dbc7bae0ceb2590f789727d9e4c588b538e5212819efe01f5",
+      "runner_manifest_sha256": "28eb215fc5ea1765bef8d4b828a3f70df111e9f8af27779b62aac31cb874b62f",
+      "scope_id": "75fc0f1c6d1a14bc41211b8e4bebf1f937d546af2a74dda2d2bf5b3c4b024456",
+      "parameters": {
+        "Scenario": "identity",
+        "LegacyFirst": false,
+        "Fault": "ignore-digest"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "5698aa8efad6cb98fea8d2f4f57ec005053e7199a555feb561748ed7050a4201",
+        "tlc.log": "ec1eae82c85e20f8e7c04bb38365119a2c80c75701f5c03c489428ff0c6ec053",
+        "messages.json": "08a81748bbe26684d453a7a7929b99939f3c9081f3bcc984830eac15d43ea0d5"
+      },
+      "target": "NonceDigestBound",
+      "violated_messages": [
+        "Invariant NonceDigestBound is violated."
+      ],
+      "trace_state_count": 4
+    },
+    {
+      "id": "bounded-sensitivity-r2/negative-duplicate",
+      "selected": true,
+      "profile": "negative-duplicate",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "AtMostOnce"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "AtMostOnce"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 1102,
+        "distinct_states": 819,
+        "remaining_states": 730
+      },
+      "last_reported_progress": {
+        "depth": 4,
+        "reported_at_tool_local": "2026-11-13 06:10:32",
+        "generated_states": 1102,
+        "distinct_states": 819,
+        "remaining_states": 730,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:10:31.268178+00:00",
+      "finished_at": "2026-11-13T14:10:32.835820+00:00",
+      "duration_seconds": 1.567673,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "d8992cd45cc1108dbc7bae0ceb2590f789727d9e4c588b538e5212819efe01f5",
+      "runner_manifest_sha256": "28eb215fc5ea1765bef8d4b828a3f70df111e9f8af27779b62aac31cb874b62f",
+      "scope_id": "75fc0f1c6d1a14bc41211b8e4bebf1f937d546af2a74dda2d2bf5b3c4b024456",
+      "parameters": {
+        "Scenario": "identity",
+        "LegacyFirst": false,
+        "Fault": "reexecute-known"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "7ef6e5689818fb921ff7eb212704974102989bdf25faf5c7b445182f07e9b991",
+        "tlc.log": "0e6b34c2cbab691feb6df53481195ca3a4c7650fc3b1716c8042117ce0257af1",
+        "messages.json": "bb6212b1f9377fe1adfeedd4010d7ee3189fffa15452906afd326d0cdd7489cb"
+      },
+      "target": "AtMostOnce",
+      "violated_messages": [
+        "Invariant AtMostOnce is violated."
+      ],
+      "trace_state_count": 4
+    },
+    {
+      "id": "bounded-sensitivity-r2/negative-legacy-stale",
+      "selected": true,
+      "profile": "negative-legacy-stale",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "VersionFenced"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "VersionFenced"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 597,
+        "distinct_states": 491,
+        "remaining_states": 427
+      },
+      "last_reported_progress": {
+        "depth": 3,
+        "reported_at_tool_local": "2026-11-13 06:10:26",
+        "generated_states": 597,
+        "distinct_states": 491,
+        "remaining_states": 427,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:10:25.369217+00:00",
+      "finished_at": "2026-11-13T14:10:27.071816+00:00",
+      "duration_seconds": 1.702661,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "d8992cd45cc1108dbc7bae0ceb2590f789727d9e4c588b538e5212819efe01f5",
+      "runner_manifest_sha256": "28eb215fc5ea1765bef8d4b828a3f70df111e9f8af27779b62aac31cb874b62f",
+      "scope_id": "75fc0f1c6d1a14bc41211b8e4bebf1f937d546af2a74dda2d2bf5b3c4b024456",
+      "parameters": {
+        "Scenario": "identity",
+        "LegacyFirst": true,
+        "Fault": "skip-legacy-version"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "f27941e6e28954eaae0f94c8040d08460c69def421e0504d142c52d4a07010b7",
+        "tlc.log": "97d72f2fbc0dc3d4db4bfcfb468d923c5c04cef7f864f89af69e7fc148c9f622",
+        "messages.json": "a76ab9cfa2823cafe551e88213cb1c2a33d1cfe71d9c9798518fabdbd44e53d4"
+      },
+      "target": "VersionFenced",
+      "violated_messages": [
+        "Invariant VersionFenced is violated."
+      ],
+      "trace_state_count": 3
+    },
+    {
+      "id": "bounded-sensitivity-r2/negative-mixed-race",
+      "selected": true,
+      "profile": "negative-mixed-race",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "SingleBaselineCommit"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "SingleBaselineCommit"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 265,
+        "distinct_states": 183,
+        "remaining_states": 151
+      },
+      "last_reported_progress": {
+        "depth": 5,
+        "reported_at_tool_local": "2026-11-13 06:10:29",
+        "generated_states": 265,
+        "distinct_states": 183,
+        "remaining_states": 151,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:10:28.396365+00:00",
+      "finished_at": "2026-11-13T14:10:29.810940+00:00",
+      "duration_seconds": 1.414617,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "d8992cd45cc1108dbc7bae0ceb2590f789727d9e4c588b538e5212819efe01f5",
+      "runner_manifest_sha256": "28eb215fc5ea1765bef8d4b828a3f70df111e9f8af27779b62aac31cb874b62f",
+      "scope_id": "7545ce4a0b7486735cdca39596fc153f9ea7f159f6ccc89dc634576051aa523a",
+      "parameters": {
+        "Scenario": "competition",
+        "LegacyFirst": true,
+        "Fault": "no-legacy-bump"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "f6e5702c817eb4f4b05522cfebd5df4ebc71e7a9282467e6c569aa86d8866b2f",
+        "tlc.log": "9ec2619c7642b193dab0f34070aa3aed5c735084aec29832c20fac06a60529cc",
+        "messages.json": "35976a60c2a4b9df4a365c06fc74ba39764eb15cc97a5c20e6c30e97c2e95c85"
+      },
+      "target": "SingleBaselineCommit",
+      "violated_messages": [
+        "Invariant SingleBaselineCommit is violated."
+      ],
+      "trace_state_count": 5
+    },
+    {
+      "id": "bounded-sensitivity-r2/negative-move-revision",
+      "selected": true,
+      "profile": "negative-move-revision",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "RevisionAccounting"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "RevisionAccounting"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 18,
+        "distinct_states": 18,
+        "remaining_states": 16
+      },
+      "last_reported_progress": {
+        "depth": 2,
+        "reported_at_tool_local": "2026-11-13 06:10:30",
+        "generated_states": 18,
+        "distinct_states": 18,
+        "remaining_states": 16,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:10:29.881744+00:00",
+      "finished_at": "2026-11-13T14:10:31.208410+00:00",
+      "duration_seconds": 1.326711,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "d8992cd45cc1108dbc7bae0ceb2590f789727d9e4c588b538e5212819efe01f5",
+      "runner_manifest_sha256": "28eb215fc5ea1765bef8d4b828a3f70df111e9f8af27779b62aac31cb874b62f",
+      "scope_id": "75fc0f1c6d1a14bc41211b8e4bebf1f937d546af2a74dda2d2bf5b3c4b024456",
+      "parameters": {
+        "Scenario": "identity",
+        "LegacyFirst": false,
+        "Fault": "move-bump"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "a18cdd54877110773d6aee92dc40a2afef2995a4fee225b6f5d30869a7e35393",
+        "tlc.log": "1f2441df9055d48af982a1f78de72dd0303ade7904b6f7a9858d98c70c8c58b2",
+        "messages.json": "1d7bba3ee85945628170003fd4b24a5bf68de215c86e2cccaa08f2c23c51c9e9"
+      },
+      "target": "RevisionAccounting",
+      "violated_messages": [
+        "Invariant RevisionAccounting is violated."
+      ],
+      "trace_state_count": 2
+    },
+    {
+      "id": "bounded-sensitivity-r2/negative-owner",
+      "selected": true,
+      "profile": "negative-owner",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "ReceiptOwnerScoped"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "ReceiptOwnerScoped"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 1062,
+        "distinct_states": 787,
+        "remaining_states": 699
+      },
+      "last_reported_progress": {
+        "depth": 4,
+        "reported_at_tool_local": "2026-11-13 06:10:39",
+        "generated_states": 1062,
+        "distinct_states": 787,
+        "remaining_states": 699,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:10:38.695776+00:00",
+      "finished_at": "2026-11-13T14:10:40.266556+00:00",
+      "duration_seconds": 1.570813,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "d8992cd45cc1108dbc7bae0ceb2590f789727d9e4c588b538e5212819efe01f5",
+      "runner_manifest_sha256": "28eb215fc5ea1765bef8d4b828a3f70df111e9f8af27779b62aac31cb874b62f",
+      "scope_id": "75fc0f1c6d1a14bc41211b8e4bebf1f937d546af2a74dda2d2bf5b3c4b024456",
+      "parameters": {
+        "Scenario": "identity",
+        "LegacyFirst": false,
+        "Fault": "global-receipt-key"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "010df6b71bafe8e435bdbbbed7cfcf33f159319e3e51251b63e6f1dbff2f0e18",
+        "tlc.log": "7574257e678c7120932fa159754b7d3c6ac3a2c182e4da213bd9650fa0cbbe84",
+        "messages.json": "55c3c0532903ed4c446eb4665fa9f6096a6d9900ba5be34c5eda0f4a987fe4f9"
+      },
+      "target": "ReceiptOwnerScoped",
+      "violated_messages": [
+        "Invariant ReceiptOwnerScoped is violated."
+      ],
+      "trace_state_count": 4
+    },
+    {
+      "id": "bounded-sensitivity-r2/negative-privacy",
+      "selected": true,
+      "profile": "negative-privacy",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "ConsentPrivate"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "ConsentPrivate"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": null,
+        "distinct_states": null,
+        "remaining_states": null
+      },
+      "last_reported_progress": null,
+      "started_at": "2026-11-13T14:10:42.916873+00:00",
+      "finished_at": "2026-11-13T14:10:44.214942+00:00",
+      "duration_seconds": 1.298103,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "d8992cd45cc1108dbc7bae0ceb2590f789727d9e4c588b538e5212819efe01f5",
+      "runner_manifest_sha256": "28eb215fc5ea1765bef8d4b828a3f70df111e9f8af27779b62aac31cb874b62f",
+      "scope_id": "7545ce4a0b7486735cdca39596fc153f9ea7f159f6ccc89dc634576051aa523a",
+      "parameters": {
+        "Scenario": "competition",
+        "LegacyFirst": false,
+        "Fault": "leak-private"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2107
+      ],
+      "original_output_sha256": {
+        "result.json": "b5cde1f75df7b4923e0da725225279c9aee12e3494f595acd85eabe24311679e",
+        "tlc.log": "a044e438d3514eb32c1b20a2725f1bd795d7a7cfbc80010abe3a72d674056d9d",
+        "messages.json": "840e85e9cf6a818bc22e115c82f4ed0818f48e2916c28cf12264ff5385ce8820"
+      },
+      "target": "ConsentPrivate",
+      "violated_messages": [
+        "Invariant ConsentPrivate is violated by the initial state:"
+      ],
+      "trace_state_count": 1
+    },
+    {
+      "id": "bounded-sensitivity-r2/negative-public-race",
+      "selected": true,
+      "profile": "negative-public-race",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "SingleBaselineCommit"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "SingleBaselineCommit"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 91,
+        "distinct_states": 59,
+        "remaining_states": 47
+      },
+      "last_reported_progress": {
+        "depth": 4,
+        "reported_at_tool_local": "2026-11-13 06:10:27",
+        "generated_states": 91,
+        "distinct_states": 59,
+        "remaining_states": 47,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:10:27.141829+00:00",
+      "finished_at": "2026-11-13T14:10:28.334239+00:00",
+      "duration_seconds": 1.192461,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "d8992cd45cc1108dbc7bae0ceb2590f789727d9e4c588b538e5212819efe01f5",
+      "runner_manifest_sha256": "28eb215fc5ea1765bef8d4b828a3f70df111e9f8af27779b62aac31cb874b62f",
+      "scope_id": "7545ce4a0b7486735cdca39596fc153f9ea7f159f6ccc89dc634576051aa523a",
+      "parameters": {
+        "Scenario": "competition",
+        "LegacyFirst": false,
+        "Fault": "no-public-bump"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "84e80acb45b708f90d48c67b6ca84aa9dd2ab147d03aa4396547bb4efebea36b",
+        "tlc.log": "7dd6325ba8d261c70b4b6c8e13d8736cf565766a40b6eb96bc13a3e73df02565",
+        "messages.json": "23586f58e318e153e691c1e1b0667ffb4a72ca1367c3e3e07b0d192efb5bf969"
+      },
+      "target": "SingleBaselineCommit",
+      "violated_messages": [
+        "Invariant SingleBaselineCommit is violated."
+      ],
+      "trace_state_count": 4
+    },
+    {
+      "id": "bounded-sensitivity-r2/negative-public-stale",
+      "selected": true,
+      "profile": "negative-public-stale",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "VersionFenced"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "VersionFenced"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 598,
+        "distinct_states": 492,
+        "remaining_states": 428
+      },
+      "last_reported_progress": {
+        "depth": 3,
+        "reported_at_tool_local": "2026-11-13 06:10:24",
+        "generated_states": 598,
+        "distinct_states": 492,
+        "remaining_states": 428,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:10:23.992622+00:00",
+      "finished_at": "2026-11-13T14:10:25.326617+00:00",
+      "duration_seconds": 1.334031,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "d8992cd45cc1108dbc7bae0ceb2590f789727d9e4c588b538e5212819efe01f5",
+      "runner_manifest_sha256": "28eb215fc5ea1765bef8d4b828a3f70df111e9f8af27779b62aac31cb874b62f",
+      "scope_id": "75fc0f1c6d1a14bc41211b8e4bebf1f937d546af2a74dda2d2bf5b3c4b024456",
+      "parameters": {
+        "Scenario": "identity",
+        "LegacyFirst": false,
+        "Fault": "skip-public-version"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "88ee9b81e94cb5f9818ba70ff8fcc82bfd4bddbe5997b4c0d8e7cb19edbe351a",
+        "tlc.log": "cd79c8b76840bc01a00142575fcaaf9a1cb648c28bdc973959fbbfb82157df77",
+        "messages.json": "3f353312ed4c8342e7a084cf77a0cddc885cde75dbf95647ab477df4a503f3f1"
+      },
+      "target": "VersionFenced",
+      "violated_messages": [
+        "Invariant VersionFenced is violated."
+      ],
+      "trace_state_count": 3
+    },
+    {
+      "id": "bounded-sensitivity-r2/negative-receipt-order",
+      "selected": true,
+      "profile": "negative-receipt-order",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "ReceiptStable"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "ReceiptStable"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 20917,
+        "distinct_states": 13063,
+        "remaining_states": 12278
+      },
+      "last_reported_progress": {
+        "depth": 5,
+        "reported_at_tool_local": "2026-11-13 06:10:36",
+        "generated_states": 20917,
+        "distinct_states": 13063,
+        "remaining_states": 12278,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:10:32.896627+00:00",
+      "finished_at": "2026-11-13T14:10:37.302186+00:00",
+      "duration_seconds": 4.405634,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "d8992cd45cc1108dbc7bae0ceb2590f789727d9e4c588b538e5212819efe01f5",
+      "runner_manifest_sha256": "28eb215fc5ea1765bef8d4b828a3f70df111e9f8af27779b62aac31cb874b62f",
+      "scope_id": "75fc0f1c6d1a14bc41211b8e4bebf1f937d546af2a74dda2d2bf5b3c4b024456",
+      "parameters": {
+        "Scenario": "identity",
+        "LegacyFirst": false,
+        "Fault": "guard-before-receipt"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "10a57336a4af3de3d028ff0b998f5cfc1b54f6d6dc86cc97feb8e9f1954b96ad",
+        "tlc.log": "d1ca164c81646c60588193a6da17fb27f532fb41c14733b8d0095db6b7305158",
+        "messages.json": "3d1d7354b2149962ef2c8eb961140f4757269ccc7dc2595b36d048670151e574"
+      },
+      "target": "ReceiptStable",
+      "violated_messages": [
+        "Invariant ReceiptStable is violated."
+      ],
+      "trace_state_count": 5
+    },
+    {
+      "id": "bounded-sensitivity-r2/negative-schema",
+      "selected": true,
+      "profile": "negative-schema",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "SchemaExclusive"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "SchemaExclusive"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 425,
+        "distinct_states": 355,
+        "remaining_states": 307
+      },
+      "last_reported_progress": {
+        "depth": 3,
+        "reported_at_tool_local": "2026-11-13 06:10:42",
+        "generated_states": 425,
+        "distinct_states": 355,
+        "remaining_states": 307,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:10:41.526568+00:00",
+      "finished_at": "2026-11-13T14:10:42.873505+00:00",
+      "duration_seconds": 1.346977,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "d8992cd45cc1108dbc7bae0ceb2590f789727d9e4c588b538e5212819efe01f5",
+      "runner_manifest_sha256": "28eb215fc5ea1765bef8d4b828a3f70df111e9f8af27779b62aac31cb874b62f",
+      "scope_id": "75fc0f1c6d1a14bc41211b8e4bebf1f937d546af2a74dda2d2bf5b3c4b024456",
+      "parameters": {
+        "Scenario": "identity",
+        "LegacyFirst": false,
+        "Fault": "open-schema"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "30c3cc44b914bde4c3e1cf177c81896e06929c9f2830739c3524384d3f7f7edf",
+        "tlc.log": "b274822b511166c241d1a89ce979b376a583cd3774c29994df134c9605ced40c",
+        "messages.json": "525fb37ff05db0b7a5621add3469ad825360febbb4a2223d6816f798148b8c83"
+      },
+      "target": "SchemaExclusive",
+      "violated_messages": [
+        "Invariant SchemaExclusive is violated."
+      ],
+      "trace_state_count": 3
+    },
+    {
+      "id": "bounded-sensitivity-r2/negative-scope",
+      "selected": true,
+      "profile": "negative-scope",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "ScopeAuthorized"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "ScopeAuthorized"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 87,
+        "distinct_states": 87,
+        "remaining_states": 71
+      },
+      "last_reported_progress": {
+        "depth": 3,
+        "reported_at_tool_local": "2026-11-13 06:10:41",
+        "generated_states": 87,
+        "distinct_states": 87,
+        "remaining_states": 71,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:10:40.327565+00:00",
+      "finished_at": "2026-11-13T14:10:41.475039+00:00",
+      "duration_seconds": 1.147511,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "d8992cd45cc1108dbc7bae0ceb2590f789727d9e4c588b538e5212819efe01f5",
+      "runner_manifest_sha256": "28eb215fc5ea1765bef8d4b828a3f70df111e9f8af27779b62aac31cb874b62f",
+      "scope_id": "75fc0f1c6d1a14bc41211b8e4bebf1f937d546af2a74dda2d2bf5b3c4b024456",
+      "parameters": {
+        "Scenario": "identity",
+        "LegacyFirst": false,
+        "Fault": "skip-scope"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "6fb68049baa6501faca5b6d29dd70ae676b5356dc23fc68e15ca3e74dd5f93c7",
+        "tlc.log": "242c98d934107b8d14f84090c6dd957babb4f88a0e76f2bc7c9dadbfca04932a",
+        "messages.json": "612e71301f61985c5700a4d473c72abf855270560020db6238e2cb5c8b261fc5"
+      },
+      "target": "ScopeAuthorized",
+      "violated_messages": [
+        "Invariant ScopeAuthorized is violated."
+      ],
+      "trace_state_count": 3
+    },
+    {
+      "id": "bounded-sensitivity-r2/negative-type",
+      "selected": true,
+      "profile": "negative-type",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": null,
+        "distinct_states": null,
+        "remaining_states": null
+      },
+      "last_reported_progress": null,
+      "started_at": "2026-11-13T14:10:20.950397+00:00",
+      "finished_at": "2026-11-13T14:10:22.364548+00:00",
+      "duration_seconds": 1.414197,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "d8992cd45cc1108dbc7bae0ceb2590f789727d9e4c588b538e5212819efe01f5",
+      "runner_manifest_sha256": "28eb215fc5ea1765bef8d4b828a3f70df111e9f8af27779b62aac31cb874b62f",
+      "scope_id": "7545ce4a0b7486735cdca39596fc153f9ea7f159f6ccc89dc634576051aa523a",
+      "parameters": {
+        "Scenario": "competition",
+        "LegacyFirst": false,
+        "Fault": "type"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2107
+      ],
+      "original_output_sha256": {
+        "result.json": "598aa9859af11e6f784f2dc6f38ce25ccbfe594874fcc8239432da4544fd0321",
+        "tlc.log": "80a3e6c8772d15a7bc4cd3e50340910f6b357bcb90b8867186c1b9a163116e9c",
+        "messages.json": "999b1da1b462a4f6329e5e3419c64cdc0d67a71749c424d9387b40142ebc50d1"
+      },
+      "target": "TypeOK",
+      "violated_messages": [
+        "Invariant TypeOK is violated by the initial state:"
+      ],
+      "trace_state_count": 1
+    },
+    {
+      "id": "bounded-sensitivity-r2/negative-unavailable",
+      "selected": true,
+      "profile": "negative-unavailable",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "PublicProposalAvailable"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "PublicProposalAvailable"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 88,
+        "distinct_states": 88,
+        "remaining_states": 72
+      },
+      "last_reported_progress": {
+        "depth": 3,
+        "reported_at_tool_local": "2026-11-13 06:10:23",
+        "generated_states": 88,
+        "distinct_states": 88,
+        "remaining_states": 72,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:10:22.431176+00:00",
+      "finished_at": "2026-11-13T14:10:23.932722+00:00",
+      "duration_seconds": 1.501585,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "d8992cd45cc1108dbc7bae0ceb2590f789727d9e4c588b538e5212819efe01f5",
+      "runner_manifest_sha256": "28eb215fc5ea1765bef8d4b828a3f70df111e9f8af27779b62aac31cb874b62f",
+      "scope_id": "75fc0f1c6d1a14bc41211b8e4bebf1f937d546af2a74dda2d2bf5b3c4b024456",
+      "parameters": {
+        "Scenario": "identity",
+        "LegacyFirst": false,
+        "Fault": "private-fallback"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "92af3ce09ecef4417e07c4d415439af2bcaf79035daaa91c8a1f1194203e76c8",
+        "tlc.log": "b3ff16ca1f490760be79a8ec5e9224b3422b0b9a959c174dd50c6f9930cb4e80",
+        "messages.json": "600a5c006c7e35e1d1bb797284ff45c8509d4cafdb7c822cf28e22f1f3434eaa"
+      },
+      "target": "PublicProposalAvailable",
+      "violated_messages": [
+        "Invariant PublicProposalAvailable is violated."
+      ],
+      "trace_state_count": 3
+    },
+    {
+      "id": "bounded-sensitivity-r2/witness-mixed-competition",
+      "selected": true,
+      "profile": "witness-mixed-competition",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "NoCompetitionWitness"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "NoCompetitionWitness"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 265,
+        "distinct_states": 187,
+        "remaining_states": 155
+      },
+      "last_reported_progress": {
+        "depth": 5,
+        "reported_at_tool_local": "2026-11-13 06:10:48",
+        "generated_states": 265,
+        "distinct_states": 187,
+        "remaining_states": 155,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:10:47.852068+00:00",
+      "finished_at": "2026-11-13T14:10:48.944964+00:00",
+      "duration_seconds": 1.092929,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "d8992cd45cc1108dbc7bae0ceb2590f789727d9e4c588b538e5212819efe01f5",
+      "runner_manifest_sha256": "28eb215fc5ea1765bef8d4b828a3f70df111e9f8af27779b62aac31cb874b62f",
+      "scope_id": "7545ce4a0b7486735cdca39596fc153f9ea7f159f6ccc89dc634576051aa523a",
+      "parameters": {
+        "Scenario": "competition",
+        "LegacyFirst": true,
+        "Fault": "none"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "373441cd088bc03627bcedabbad90989faf22dd288df9695843532145569ec7b",
+        "tlc.log": "bd2148a08d5357574f5d14cb52a1e9be49c340c8da5a0661ab48b92b83ede0c3",
+        "messages.json": "816395a908f35fcab942ea6f70d2edd6e4909580eaf70776b5c923d431f402e0"
+      },
+      "target": "NoCompetitionWitness",
+      "violated_messages": [
+        "Invariant NoCompetitionWitness is violated."
+      ],
+      "trace_state_count": 5
+    },
+    {
+      "id": "bounded-sensitivity-r2/witness-movement",
+      "selected": true,
+      "profile": "witness-movement",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "NoMovementWitness"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "NoMovementWitness"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 710,
+        "distinct_states": 572,
+        "remaining_states": 498
+      },
+      "last_reported_progress": {
+        "depth": 4,
+        "reported_at_tool_local": "2026-11-13 06:10:55",
+        "generated_states": 710,
+        "distinct_states": 572,
+        "remaining_states": 498,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:10:53.880019+00:00",
+      "finished_at": "2026-11-13T14:10:55.522019+00:00",
+      "duration_seconds": 1.642034,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "d8992cd45cc1108dbc7bae0ceb2590f789727d9e4c588b538e5212819efe01f5",
+      "runner_manifest_sha256": "28eb215fc5ea1765bef8d4b828a3f70df111e9f8af27779b62aac31cb874b62f",
+      "scope_id": "75fc0f1c6d1a14bc41211b8e4bebf1f937d546af2a74dda2d2bf5b3c4b024456",
+      "parameters": {
+        "Scenario": "identity",
+        "LegacyFirst": false,
+        "Fault": "none"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "1b5e5fc23dc0764cd76e32bb0807e6653d5b6a244a699b843c315179dc598296",
+        "tlc.log": "f4b979497e3dc3b9a20e16cba097e25b66f214a0c7bad097f456148c1782a1f1",
+        "messages.json": "3d64138bccacb049c6c4aaa88ddde2965e620ce36a4fa9cc77dc2cbd523f5707"
+      },
+      "target": "NoMovementWitness",
+      "violated_messages": [
+        "Invariant NoMovementWitness is violated."
+      ],
+      "trace_state_count": 4
+    },
+    {
+      "id": "bounded-sensitivity-r2/witness-new-leader",
+      "selected": true,
+      "profile": "witness-new-leader",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "NoNewLeaderWitness"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "NoNewLeaderWitness"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 88,
+        "distinct_states": 88,
+        "remaining_states": 72
+      },
+      "last_reported_progress": {
+        "depth": 3,
+        "reported_at_tool_local": "2026-11-13 06:10:46",
+        "generated_states": 88,
+        "distinct_states": 88,
+        "remaining_states": 72,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:10:45.450817+00:00",
+      "finished_at": "2026-11-13T14:10:46.433976+00:00",
+      "duration_seconds": 0.983192,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "d8992cd45cc1108dbc7bae0ceb2590f789727d9e4c588b538e5212819efe01f5",
+      "runner_manifest_sha256": "28eb215fc5ea1765bef8d4b828a3f70df111e9f8af27779b62aac31cb874b62f",
+      "scope_id": "75fc0f1c6d1a14bc41211b8e4bebf1f937d546af2a74dda2d2bf5b3c4b024456",
+      "parameters": {
+        "Scenario": "identity",
+        "LegacyFirst": false,
+        "Fault": "none"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "196fccd420ab0ba31db847b8813a9871bf0b3b23218489d150ed4fc145ed6d07",
+        "tlc.log": "cd211e65862882b345f169e90755e6aaae70b22799441a88023d0c44e08e8620",
+        "messages.json": "373d1390b4c99eb6624da7fdb0d6bb2a33b07c46650128bf3824a67b3a6b0458"
+      },
+      "target": "NoNewLeaderWitness",
+      "violated_messages": [
+        "Invariant NoNewLeaderWitness is violated."
+      ],
+      "trace_state_count": 3
+    },
+    {
+      "id": "bounded-sensitivity-r2/witness-public-competition",
+      "selected": true,
+      "profile": "witness-public-competition",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "NoCompetitionWitness"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "NoCompetitionWitness"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 265,
+        "distinct_states": 187,
+        "remaining_states": 155
+      },
+      "last_reported_progress": {
+        "depth": 5,
+        "reported_at_tool_local": "2026-11-13 06:10:47",
+        "generated_states": 265,
+        "distinct_states": 187,
+        "remaining_states": 155,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:10:46.490703+00:00",
+      "finished_at": "2026-11-13T14:10:47.718252+00:00",
+      "duration_seconds": 1.227587,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "d8992cd45cc1108dbc7bae0ceb2590f789727d9e4c588b538e5212819efe01f5",
+      "runner_manifest_sha256": "28eb215fc5ea1765bef8d4b828a3f70df111e9f8af27779b62aac31cb874b62f",
+      "scope_id": "7545ce4a0b7486735cdca39596fc153f9ea7f159f6ccc89dc634576051aa523a",
+      "parameters": {
+        "Scenario": "competition",
+        "LegacyFirst": false,
+        "Fault": "none"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "128475b1fcdbd2aef45db3fa8ffd9eef0e47088e0f68ea4d3e248ed839a4c051",
+        "tlc.log": "0c8b77d43f77043d45db12af029260e22038f84f4c5fe16c27dbde5d788ea4cb",
+        "messages.json": "3007a6edd563d6e51c8902427250260fc9e7c0befcf7bdb8686cd300a028e862"
+      },
+      "target": "NoCompetitionWitness",
+      "violated_messages": [
+        "Invariant NoCompetitionWitness is violated."
+      ],
+      "trace_state_count": 5
+    },
+    {
+      "id": "bounded-sensitivity-r2/witness-replay-old-control",
+      "selected": true,
+      "profile": "witness-replay-old-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "NoReplayAfterRotateWitness"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "NoReplayAfterRotateWitness"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 21310,
+        "distinct_states": 13304,
+        "remaining_states": 12498
+      },
+      "last_reported_progress": {
+        "depth": 5,
+        "reported_at_tool_local": "2026-11-13 06:10:52",
+        "generated_states": 21310,
+        "distinct_states": 13304,
+        "remaining_states": 12498,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:10:48.984648+00:00",
+      "finished_at": "2026-11-13T14:10:52.521823+00:00",
+      "duration_seconds": 3.537207,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "d8992cd45cc1108dbc7bae0ceb2590f789727d9e4c588b538e5212819efe01f5",
+      "runner_manifest_sha256": "28eb215fc5ea1765bef8d4b828a3f70df111e9f8af27779b62aac31cb874b62f",
+      "scope_id": "75fc0f1c6d1a14bc41211b8e4bebf1f937d546af2a74dda2d2bf5b3c4b024456",
+      "parameters": {
+        "Scenario": "identity",
+        "LegacyFirst": false,
+        "Fault": "none"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "e96ea19724c69de42e68bb239b11301de074aefbccf5edaf86986587a8594d18",
+        "tlc.log": "773859435f6229d5507623edb372c11ecf5cabc9e59c390549486d4eb24975d2",
+        "messages.json": "6c9292f386ef0a628adaba715b2805c6052e9d50c4bcdf63af46a407696a0a6b"
+      },
+      "target": "NoReplayAfterRotateWitness",
+      "violated_messages": [
+        "Invariant NoReplayAfterRotateWitness is violated."
+      ],
+      "trace_state_count": 5
+    },
+    {
+      "id": "bounded-sensitivity-r2/witness-unknown-replay",
+      "selected": true,
+      "profile": "witness-unknown-replay",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "NoUnknownReplayWitness"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "NoUnknownReplayWitness"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 1422,
+        "distinct_states": 1033,
+        "remaining_states": 936
+      },
+      "last_reported_progress": {
+        "depth": 4,
+        "reported_at_tool_local": "2026-11-13 06:10:53",
+        "generated_states": 1422,
+        "distinct_states": 1033,
+        "remaining_states": 936,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:10:52.568161+00:00",
+      "finished_at": "2026-11-13T14:10:53.837818+00:00",
+      "duration_seconds": 1.269689,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "d8992cd45cc1108dbc7bae0ceb2590f789727d9e4c588b538e5212819efe01f5",
+      "runner_manifest_sha256": "28eb215fc5ea1765bef8d4b828a3f70df111e9f8af27779b62aac31cb874b62f",
+      "scope_id": "75fc0f1c6d1a14bc41211b8e4bebf1f937d546af2a74dda2d2bf5b3c4b024456",
+      "parameters": {
+        "Scenario": "identity",
+        "LegacyFirst": false,
+        "Fault": "none"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "762793910d508f73e4607da1a58f5c553c34785ec7c42748f3463ced2b1cf4b1",
+        "tlc.log": "0257fef2ae0ae937034c6db9f523a55f8be4d014c32d65f63f4531aa590ffd68",
+        "messages.json": "7c4626c4873f5b9edc19c6b63b90bdcb53abf592969773152f8e93b65904cd4f"
+      },
+      "target": "NoUnknownReplayWitness",
+      "violated_messages": [
+        "Invariant NoUnknownReplayWitness is violated."
+      ],
+      "trace_state_count": 4
+    },
+    {
+      "id": "positive-competition-r1/positive-mixed",
+      "selected": false,
+      "profile": "positive-mixed",
+      "status": "INCONCLUSIVE",
+      "reason": "TIMEOUT",
+      "completed": false,
+      "raw_exit": 143,
+      "runner_exit": 3,
+      "wrapper_meets_predeclared_expectation": false,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "PublicProposalAvailable",
+          "VersionFenced",
+          "RevisionAccounting",
+          "SingleBaselineCommit",
+          "AtMostOnce",
+          "ReceiptStable",
+          "NonceDigestBound",
+          "ReceiptOwnerScoped",
+          "ScopeAuthorized",
+          "SchemaExclusive",
+          "ConsentPrivate",
+          "ProposalOnly"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "PublicProposalAvailable",
+          "VersionFenced",
+          "RevisionAccounting",
+          "SingleBaselineCommit",
+          "AtMostOnce",
+          "ReceiptStable",
+          "NonceDigestBound",
+          "ReceiptOwnerScoped",
+          "ScopeAuthorized",
+          "SchemaExclusive",
+          "ConsentPrivate",
+          "ProposalOnly"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": null,
+        "distinct_states": null,
+        "remaining_states": null
+      },
+      "last_reported_progress": {
+        "depth": 7,
+        "reported_at_tool_local": "2026-11-13 05:57:57",
+        "generated_states": 38368,
+        "distinct_states": 28018,
+        "remaining_states": 25485,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T13:57:54.054725+00:00",
+      "finished_at": "2026-11-13T13:58:54.557296+00:00",
+      "duration_seconds": 60.502714,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "5fff7f3596a5b0c74f5250d7dd1ee6513ac722ed660055c400f3555b60fb3128",
+      "runner_manifest_sha256": "6d91eb4e871bbd87a5d15cc7ce26c683ac061e64a0a859d7386b5f3cb761e606",
+      "scope_id": "165d12903981c7bf857b69b2153218c148ec1e13dda79dc40644d006ba40908a",
+      "parameters": {
+        "Scenario": "competition",
+        "LegacyFirst": true,
+        "Fault": "none"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [],
+      "original_output_sha256": {
+        "result.json": "e671e712b75d5e9b0148b017a81dbefaa129fa21a7db44b9bdbfcddddd34eff2",
+        "tlc.log": "5f5934da96d02ff09e8e6ae96f6d0669df68cbe68ac0dcace147195988302e58",
+        "messages.json": "cdc647be698ff4532d5272e7e364eaeb37cfc81bf2fe5d320d8dd5ca0eddb06c"
+      }
+    },
+    {
+      "id": "positive-competition-r1/positive-public",
+      "selected": false,
+      "profile": "positive-public",
+      "status": "INCONCLUSIVE",
+      "reason": "TIMEOUT",
+      "completed": false,
+      "raw_exit": 143,
+      "runner_exit": 3,
+      "wrapper_meets_predeclared_expectation": false,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "PublicProposalAvailable",
+          "VersionFenced",
+          "RevisionAccounting",
+          "SingleBaselineCommit",
+          "AtMostOnce",
+          "ReceiptStable",
+          "NonceDigestBound",
+          "ReceiptOwnerScoped",
+          "ScopeAuthorized",
+          "SchemaExclusive",
+          "ConsentPrivate",
+          "ProposalOnly"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "PublicProposalAvailable",
+          "VersionFenced",
+          "RevisionAccounting",
+          "SingleBaselineCommit",
+          "AtMostOnce",
+          "ReceiptStable",
+          "NonceDigestBound",
+          "ReceiptOwnerScoped",
+          "ScopeAuthorized",
+          "SchemaExclusive",
+          "ConsentPrivate",
+          "ProposalOnly"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": null,
+        "distinct_states": null,
+        "remaining_states": null
+      },
+      "last_reported_progress": {
+        "depth": 7,
+        "reported_at_tool_local": "2026-11-13 05:57:57",
+        "generated_states": 37847,
+        "distinct_states": 27709,
+        "remaining_states": 25200,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T13:57:54.054724+00:00",
+      "finished_at": "2026-11-13T13:58:54.557497+00:00",
+      "duration_seconds": 60.502876,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "5fff7f3596a5b0c74f5250d7dd1ee6513ac722ed660055c400f3555b60fb3128",
+      "runner_manifest_sha256": "6d91eb4e871bbd87a5d15cc7ce26c683ac061e64a0a859d7386b5f3cb761e606",
+      "scope_id": "165d12903981c7bf857b69b2153218c148ec1e13dda79dc40644d006ba40908a",
+      "parameters": {
+        "Scenario": "competition",
+        "LegacyFirst": false,
+        "Fault": "none"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [],
+      "original_output_sha256": {
+        "result.json": "4d8fda0cb557d97824b1dbc21c2ab391d8140e6e1333b8269e573da0d7fadbca",
+        "tlc.log": "3b53c7c244d29012a12e14eba9b418bebc683ff9741d33107b50fe30cf863962",
+        "messages.json": "54a501f4f55b4a526b950eeb312a12f22ee8762ec01e5b9ff6a1742ff4411bcf"
+      }
+    },
+    {
+      "id": "positive-public-r2/positive-public",
+      "selected": false,
+      "profile": "positive-public",
+      "status": "INCONCLUSIVE",
+      "reason": "TIMEOUT",
+      "completed": false,
+      "raw_exit": 143,
+      "runner_exit": 3,
+      "wrapper_meets_predeclared_expectation": false,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "PublicProposalAvailable",
+          "VersionFenced",
+          "RevisionAccounting",
+          "SingleBaselineCommit",
+          "AtMostOnce",
+          "ReceiptStable",
+          "NonceDigestBound",
+          "ReceiptOwnerScoped",
+          "ScopeAuthorized",
+          "SchemaExclusive",
+          "ConsentPrivate",
+          "ProposalOnly"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "PublicProposalAvailable",
+          "VersionFenced",
+          "RevisionAccounting",
+          "SingleBaselineCommit",
+          "AtMostOnce",
+          "ReceiptStable",
+          "NonceDigestBound",
+          "ReceiptOwnerScoped",
+          "ScopeAuthorized",
+          "SchemaExclusive",
+          "ConsentPrivate",
+          "ProposalOnly"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": null,
+        "distinct_states": null,
+        "remaining_states": null
+      },
+      "last_reported_progress": {
+        "depth": 9,
+        "reported_at_tool_local": "2026-11-13 06:05:22",
+        "generated_states": 4996981,
+        "distinct_states": 2150467,
+        "remaining_states": 1692737,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:03:18.532483+00:00",
+      "finished_at": "2026-11-13T14:06:19.107615+00:00",
+      "duration_seconds": 180.575167,
+      "resource_parameters": {
+        "workers": 2,
+        "heap_mb": 1024,
+        "timeout_seconds": 180
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "5fff7f3596a5b0c74f5250d7dd1ee6513ac722ed660055c400f3555b60fb3128",
+      "runner_manifest_sha256": "a55c0d0a94ae230651017ef32c5ff0dba26e9ff6192ddc8b01f62b3a42c2e3b6",
+      "scope_id": "165d12903981c7bf857b69b2153218c148ec1e13dda79dc40644d006ba40908a",
+      "parameters": {
+        "Scenario": "competition",
+        "LegacyFirst": false,
+        "Fault": "none"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [],
+      "original_output_sha256": {
+        "result.json": "a3222d4e01e563651b2bb78e381ca5b5992083cd2232240ec4c52cd55a446c05",
+        "tlc.log": "f74dc24a8e5efd63492b8a9e87f28aaea7baae603cb3b767cedb11689f3efb07",
+        "messages.json": "dcd69e3f56e795f2274e4d5acbd4163db654017bd4c36348ff5be095bf3517ec"
+      }
+    },
+    {
+      "id": "sensitivity-r1/negative-auto-accept",
+      "selected": false,
+      "profile": "negative-auto-accept",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "ProposalOnly"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "ProposalOnly"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 79,
+        "distinct_states": 79,
+        "remaining_states": 65
+      },
+      "last_reported_progress": {
+        "depth": 3,
+        "reported_at_tool_local": "2026-11-13 06:03:41",
+        "generated_states": 79,
+        "distinct_states": 79,
+        "remaining_states": 65,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:03:40.905745+00:00",
+      "finished_at": "2026-11-13T14:03:41.973599+00:00",
+      "duration_seconds": 1.067888,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "5fff7f3596a5b0c74f5250d7dd1ee6513ac722ed660055c400f3555b60fb3128",
+      "runner_manifest_sha256": "a55c0d0a94ae230651017ef32c5ff0dba26e9ff6192ddc8b01f62b3a42c2e3b6",
+      "scope_id": "3f07dde529f0745423a39392380de7ab42952b0f3ca37aae8c8b2b63e172d182",
+      "parameters": {
+        "Scenario": "identity",
+        "LegacyFirst": false,
+        "Fault": "auto-accept"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "5fcb9ac89e19eee80084ec4c1ec2c347a39b412eba57a8d9a0ddf9db3c762926",
+        "tlc.log": "bc632e3ce2ebfe8f0604102155c0affdbd2990464abc6af9263d0f0d239c6b3f",
+        "messages.json": "51b366981826807f4e23fe3dd60931445e3102fd6f99f425c46aeea17600137f"
+      },
+      "target": "ProposalOnly",
+      "violated_messages": [
+        "Invariant ProposalOnly is violated."
+      ],
+      "trace_state_count": 3
+    },
+    {
+      "id": "sensitivity-r1/negative-digest",
+      "selected": false,
+      "profile": "negative-digest",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "NonceDigestBound"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "NonceDigestBound"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 1236,
+        "distinct_states": 856,
+        "remaining_states": 777
+      },
+      "last_reported_progress": {
+        "depth": 4,
+        "reported_at_tool_local": "2026-11-13 06:03:35",
+        "generated_states": 1236,
+        "distinct_states": 856,
+        "remaining_states": 777,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:03:34.804313+00:00",
+      "finished_at": "2026-11-13T14:03:36.085548+00:00",
+      "duration_seconds": 1.281264,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "5fff7f3596a5b0c74f5250d7dd1ee6513ac722ed660055c400f3555b60fb3128",
+      "runner_manifest_sha256": "a55c0d0a94ae230651017ef32c5ff0dba26e9ff6192ddc8b01f62b3a42c2e3b6",
+      "scope_id": "3f07dde529f0745423a39392380de7ab42952b0f3ca37aae8c8b2b63e172d182",
+      "parameters": {
+        "Scenario": "identity",
+        "LegacyFirst": false,
+        "Fault": "ignore-digest"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "f46d2c8d8538bbebb70a920e2ba0aaacb54200f3883066689f7432562ec1b1a4",
+        "tlc.log": "7fe0e93b80fa15696a18f7f75d2c47bd541a6a2694d6effbc2769c88b673829a",
+        "messages.json": "4f12982256f098ebd3b0d1a3bae16eaf7b4db44aad9c67621d003978aac96877"
+      },
+      "target": "NonceDigestBound",
+      "violated_messages": [
+        "Invariant NonceDigestBound is violated."
+      ],
+      "trace_state_count": 4
+    },
+    {
+      "id": "sensitivity-r1/negative-duplicate",
+      "selected": false,
+      "profile": "negative-duplicate",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "AtMostOnce"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "AtMostOnce"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 1272,
+        "distinct_states": 884,
+        "remaining_states": 804
+      },
+      "last_reported_progress": {
+        "depth": 4,
+        "reported_at_tool_local": "2026-11-13 06:03:30",
+        "generated_states": 1272,
+        "distinct_states": 884,
+        "remaining_states": 804,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:03:28.923179+00:00",
+      "finished_at": "2026-11-13T14:03:30.395294+00:00",
+      "duration_seconds": 1.472149,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "5fff7f3596a5b0c74f5250d7dd1ee6513ac722ed660055c400f3555b60fb3128",
+      "runner_manifest_sha256": "a55c0d0a94ae230651017ef32c5ff0dba26e9ff6192ddc8b01f62b3a42c2e3b6",
+      "scope_id": "3f07dde529f0745423a39392380de7ab42952b0f3ca37aae8c8b2b63e172d182",
+      "parameters": {
+        "Scenario": "identity",
+        "LegacyFirst": false,
+        "Fault": "reexecute-known"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "10292aec148c6e4b14914893969aec451fe8c49ec3ce043895c1f6cf2b7e6828",
+        "tlc.log": "c0969a954b7f72fa7d0063528c0bcd72c6d342828aa0c3928a68413eb02430e2",
+        "messages.json": "4b81fa2f70b06e872dd1bfc35724103d6fbfaabeb3741c541e6827611da38a8a"
+      },
+      "target": "AtMostOnce",
+      "violated_messages": [
+        "Invariant AtMostOnce is violated."
+      ],
+      "trace_state_count": 4
+    },
+    {
+      "id": "sensitivity-r1/negative-legacy-stale",
+      "selected": false,
+      "profile": "negative-legacy-stale",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "VersionFenced"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "VersionFenced"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 640,
+        "distinct_states": 512,
+        "remaining_states": 450
+      },
+      "last_reported_progress": {
+        "depth": 4,
+        "reported_at_tool_local": "2026-11-13 06:03:25",
+        "generated_states": 640,
+        "distinct_states": 512,
+        "remaining_states": 450,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:03:24.220097+00:00",
+      "finished_at": "2026-11-13T14:03:25.511658+00:00",
+      "duration_seconds": 1.291603,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "5fff7f3596a5b0c74f5250d7dd1ee6513ac722ed660055c400f3555b60fb3128",
+      "runner_manifest_sha256": "a55c0d0a94ae230651017ef32c5ff0dba26e9ff6192ddc8b01f62b3a42c2e3b6",
+      "scope_id": "3f07dde529f0745423a39392380de7ab42952b0f3ca37aae8c8b2b63e172d182",
+      "parameters": {
+        "Scenario": "identity",
+        "LegacyFirst": true,
+        "Fault": "skip-legacy-version"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "d4b09481df867d2431873fa5cfce1a53f24e4821302e6830dca70394062152f6",
+        "tlc.log": "348a8cee4a9a7938de41c4d4a7d4c15eb25046720e6a0cef517da80f44074be1",
+        "messages.json": "7f4b674339d65e8d88370bca83e54f314c85b9f9749d4c99e2775adb29bb58bc"
+      },
+      "target": "VersionFenced",
+      "violated_messages": [
+        "Invariant VersionFenced is violated."
+      ],
+      "trace_state_count": 4
+    },
+    {
+      "id": "sensitivity-r1/negative-mixed-race",
+      "selected": false,
+      "profile": "negative-mixed-race",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "SingleBaselineCommit"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "SingleBaselineCommit"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 522,
+        "distinct_states": 409,
+        "remaining_states": 363
+      },
+      "last_reported_progress": {
+        "depth": 5,
+        "reported_at_tool_local": "2026-11-13 06:03:27",
+        "generated_states": 522,
+        "distinct_states": 409,
+        "remaining_states": 363,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:03:26.656953+00:00",
+      "finished_at": "2026-11-13T14:03:27.848012+00:00",
+      "duration_seconds": 1.191089,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "5fff7f3596a5b0c74f5250d7dd1ee6513ac722ed660055c400f3555b60fb3128",
+      "runner_manifest_sha256": "a55c0d0a94ae230651017ef32c5ff0dba26e9ff6192ddc8b01f62b3a42c2e3b6",
+      "scope_id": "165d12903981c7bf857b69b2153218c148ec1e13dda79dc40644d006ba40908a",
+      "parameters": {
+        "Scenario": "competition",
+        "LegacyFirst": true,
+        "Fault": "no-legacy-bump"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "db85e5db4169de101a2af5312775ebf63da83ed0e81592a7b886284ce674425d",
+        "tlc.log": "c3bf1e6fba2d89ced4d5bfb5fb1809a380946b1c970ce6421dfd9d6bea5d95f7",
+        "messages.json": "bf6e3ad002114b652d3e2435c74cf5fb9f43823301ec4d7e5b6ca33acb5e201b"
+      },
+      "target": "SingleBaselineCommit",
+      "violated_messages": [
+        "Invariant SingleBaselineCommit is violated."
+      ],
+      "trace_state_count": 5
+    },
+    {
+      "id": "sensitivity-r1/negative-move-revision",
+      "selected": false,
+      "profile": "negative-move-revision",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "RevisionAccounting"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "RevisionAccounting"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 16,
+        "distinct_states": 16,
+        "remaining_states": 14
+      },
+      "last_reported_progress": {
+        "depth": 2,
+        "reported_at_tool_local": "2026-11-13 06:03:28",
+        "generated_states": 16,
+        "distinct_states": 16,
+        "remaining_states": 14,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:03:27.905754+00:00",
+      "finished_at": "2026-11-13T14:03:28.884327+00:00",
+      "duration_seconds": 0.978611,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "5fff7f3596a5b0c74f5250d7dd1ee6513ac722ed660055c400f3555b60fb3128",
+      "runner_manifest_sha256": "a55c0d0a94ae230651017ef32c5ff0dba26e9ff6192ddc8b01f62b3a42c2e3b6",
+      "scope_id": "3f07dde529f0745423a39392380de7ab42952b0f3ca37aae8c8b2b63e172d182",
+      "parameters": {
+        "Scenario": "identity",
+        "LegacyFirst": false,
+        "Fault": "move-bump"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "7000487a10772d63a7e25a8f085d5a925b178e46d69398016d470c485ef59ee3",
+        "tlc.log": "2c384c88c9db134c6f64c0b91b46f2f619d185edd70e4663f35d20402df1e5f9",
+        "messages.json": "fdb381996d70066dedf92fe90cbedc8a2f8944f5d836ee16c0341e8ae8f24391"
+      },
+      "target": "RevisionAccounting",
+      "violated_messages": [
+        "Invariant RevisionAccounting is violated."
+      ],
+      "trace_state_count": 2
+    },
+    {
+      "id": "sensitivity-r1/negative-owner",
+      "selected": false,
+      "profile": "negative-owner",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "ReceiptOwnerScoped"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "ReceiptOwnerScoped"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 1231,
+        "distinct_states": 853,
+        "remaining_states": 774
+      },
+      "last_reported_progress": {
+        "depth": 4,
+        "reported_at_tool_local": "2026-11-13 06:03:37",
+        "generated_states": 1231,
+        "distinct_states": 853,
+        "remaining_states": 774,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:03:36.126621+00:00",
+      "finished_at": "2026-11-13T14:03:37.448633+00:00",
+      "duration_seconds": 1.322046,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "5fff7f3596a5b0c74f5250d7dd1ee6513ac722ed660055c400f3555b60fb3128",
+      "runner_manifest_sha256": "a55c0d0a94ae230651017ef32c5ff0dba26e9ff6192ddc8b01f62b3a42c2e3b6",
+      "scope_id": "3f07dde529f0745423a39392380de7ab42952b0f3ca37aae8c8b2b63e172d182",
+      "parameters": {
+        "Scenario": "identity",
+        "LegacyFirst": false,
+        "Fault": "global-receipt-key"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "0e3f38b5f4ed19baa59e99037a45883fb96484c82ae6013d97c6fc6699f9064e",
+        "tlc.log": "4b19369da0fd7c911e54b607098cd79c44261b32f17e7b88909be457d92f157a",
+        "messages.json": "966480b0023cc1ffff89172014468e2f2daac5cd10e1dff287888130cbd50e5c"
+      },
+      "target": "ReceiptOwnerScoped",
+      "violated_messages": [
+        "Invariant ReceiptOwnerScoped is violated."
+      ],
+      "trace_state_count": 4
+    },
+    {
+      "id": "sensitivity-r1/negative-privacy",
+      "selected": false,
+      "profile": "negative-privacy",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "ConsentPrivate"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "ConsentPrivate"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": null,
+        "distinct_states": null,
+        "remaining_states": null
+      },
+      "last_reported_progress": null,
+      "started_at": "2026-11-13T14:03:39.894601+00:00",
+      "finished_at": "2026-11-13T14:03:40.863711+00:00",
+      "duration_seconds": 0.969144,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "5fff7f3596a5b0c74f5250d7dd1ee6513ac722ed660055c400f3555b60fb3128",
+      "runner_manifest_sha256": "a55c0d0a94ae230651017ef32c5ff0dba26e9ff6192ddc8b01f62b3a42c2e3b6",
+      "scope_id": "165d12903981c7bf857b69b2153218c148ec1e13dda79dc40644d006ba40908a",
+      "parameters": {
+        "Scenario": "competition",
+        "LegacyFirst": false,
+        "Fault": "leak-private"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2107
+      ],
+      "original_output_sha256": {
+        "result.json": "c402420c13d28a33ff57c5af241d6c4911c5cbc9090fb9618a6d40a5b93ab26e",
+        "tlc.log": "49edcd836ce13fbbe63010638dd543a3930a2a5815be36fe134464a5196ff594",
+        "messages.json": "9827e6e0125a24da538bf422923068936feb3235c20fc3ab0c528cb98350a502"
+      },
+      "target": "ConsentPrivate",
+      "violated_messages": [
+        "Invariant ConsentPrivate is violated by the initial state:"
+      ],
+      "trace_state_count": 1
+    },
+    {
+      "id": "sensitivity-r1/negative-public-race",
+      "selected": false,
+      "profile": "negative-public-race",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "SingleBaselineCommit"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "SingleBaselineCommit"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 82,
+        "distinct_states": 73,
+        "remaining_states": 61
+      },
+      "last_reported_progress": {
+        "depth": 4,
+        "reported_at_tool_local": "2026-11-13 06:03:26",
+        "generated_states": 82,
+        "distinct_states": 73,
+        "remaining_states": 61,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:03:25.584324+00:00",
+      "finished_at": "2026-11-13T14:03:26.615348+00:00",
+      "duration_seconds": 1.031062,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "5fff7f3596a5b0c74f5250d7dd1ee6513ac722ed660055c400f3555b60fb3128",
+      "runner_manifest_sha256": "a55c0d0a94ae230651017ef32c5ff0dba26e9ff6192ddc8b01f62b3a42c2e3b6",
+      "scope_id": "165d12903981c7bf857b69b2153218c148ec1e13dda79dc40644d006ba40908a",
+      "parameters": {
+        "Scenario": "competition",
+        "LegacyFirst": false,
+        "Fault": "no-public-bump"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "f9984ccbabd5e2b80feecfe476d8191cda7c58ca2c9d67145c2e7b608d0fc804",
+        "tlc.log": "4b22e43e55fabc377c631e8634063b3c418df619dfd33f72ba3c8ff8ee28b05e",
+        "messages.json": "bd6c440fe170b005f385b8cf858997ead10386f6674d84502ad1b9167ac78bd2"
+      },
+      "target": "SingleBaselineCommit",
+      "violated_messages": [
+        "Invariant SingleBaselineCommit is violated."
+      ],
+      "trace_state_count": 4
+    },
+    {
+      "id": "sensitivity-r1/negative-public-stale",
+      "selected": false,
+      "profile": "negative-public-stale",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "VersionFenced"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "VersionFenced"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 641,
+        "distinct_states": 513,
+        "remaining_states": 451
+      },
+      "last_reported_progress": {
+        "depth": 4,
+        "reported_at_tool_local": "2026-11-13 06:03:23",
+        "generated_states": 641,
+        "distinct_states": 513,
+        "remaining_states": 451,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:03:22.679679+00:00",
+      "finished_at": "2026-11-13T14:03:24.164710+00:00",
+      "duration_seconds": 1.485064,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "5fff7f3596a5b0c74f5250d7dd1ee6513ac722ed660055c400f3555b60fb3128",
+      "runner_manifest_sha256": "a55c0d0a94ae230651017ef32c5ff0dba26e9ff6192ddc8b01f62b3a42c2e3b6",
+      "scope_id": "3f07dde529f0745423a39392380de7ab42952b0f3ca37aae8c8b2b63e172d182",
+      "parameters": {
+        "Scenario": "identity",
+        "LegacyFirst": false,
+        "Fault": "skip-public-version"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "ded2751b54de96cd4f66e17c9624a9c54212b89df9ca5995b300fe2d0c10600b",
+        "tlc.log": "e4763f15a4cb6242269e29b3bc6387cea2f722bad5c91e3672f045887388c7e1",
+        "messages.json": "9a04acbfdfcf37dc73419be9f561889eab997be17ad2a9092df2d4f9204427a0"
+      },
+      "target": "VersionFenced",
+      "violated_messages": [
+        "Invariant VersionFenced is violated."
+      ],
+      "trace_state_count": 4
+    },
+    {
+      "id": "sensitivity-r1/negative-receipt-order",
+      "selected": false,
+      "profile": "negative-receipt-order",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "ReceiptStable"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "ReceiptStable"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 27797,
+        "distinct_states": 16976,
+        "remaining_states": 16128
+      },
+      "last_reported_progress": {
+        "depth": 5,
+        "reported_at_tool_local": "2026-11-13 06:03:34",
+        "generated_states": 27797,
+        "distinct_states": 16976,
+        "remaining_states": 16128,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:03:30.450567+00:00",
+      "finished_at": "2026-11-13T14:03:34.762377+00:00",
+      "duration_seconds": 4.311844,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "5fff7f3596a5b0c74f5250d7dd1ee6513ac722ed660055c400f3555b60fb3128",
+      "runner_manifest_sha256": "a55c0d0a94ae230651017ef32c5ff0dba26e9ff6192ddc8b01f62b3a42c2e3b6",
+      "scope_id": "3f07dde529f0745423a39392380de7ab42952b0f3ca37aae8c8b2b63e172d182",
+      "parameters": {
+        "Scenario": "identity",
+        "LegacyFirst": false,
+        "Fault": "guard-before-receipt"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "782c1b91fc216619ca09145f51d4382287a32e9563b74e29dcbf712ca8157118",
+        "tlc.log": "d704df0ec478b186907f9bd7686eb9ede45fa28958f0f3736ee0dbd341b02ce5",
+        "messages.json": "d6f8c6446a142bda3dac4508cb7fe685c2c7ab4f5d4e5d40b84effd4f07cc4a9"
+      },
+      "target": "ReceiptStable",
+      "violated_messages": [
+        "Invariant ReceiptStable is violated."
+      ],
+      "trace_state_count": 5
+    },
+    {
+      "id": "sensitivity-r1/negative-schema",
+      "selected": false,
+      "profile": "negative-schema",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "SchemaExclusive"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "SchemaExclusive"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 456,
+        "distinct_states": 370,
+        "remaining_states": 324
+      },
+      "last_reported_progress": {
+        "depth": 3,
+        "reported_at_tool_local": "2026-11-13 06:03:39",
+        "generated_states": 456,
+        "distinct_states": 370,
+        "remaining_states": 324,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:03:38.636427+00:00",
+      "finished_at": "2026-11-13T14:03:39.842666+00:00",
+      "duration_seconds": 1.206281,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "5fff7f3596a5b0c74f5250d7dd1ee6513ac722ed660055c400f3555b60fb3128",
+      "runner_manifest_sha256": "a55c0d0a94ae230651017ef32c5ff0dba26e9ff6192ddc8b01f62b3a42c2e3b6",
+      "scope_id": "3f07dde529f0745423a39392380de7ab42952b0f3ca37aae8c8b2b63e172d182",
+      "parameters": {
+        "Scenario": "identity",
+        "LegacyFirst": false,
+        "Fault": "open-schema"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "cc7382ee40b539d83423bd601e5874ec0710fb53021a002bc824ccb6649d9638",
+        "tlc.log": "11bb094787270f913603f3d45a06e551250bd7b8faf91ae9721275f670d86c4e",
+        "messages.json": "2a7944ab9fd81185bd482e4e540ca86983c03e0386bf95740aff15bae4c4a555"
+      },
+      "target": "SchemaExclusive",
+      "violated_messages": [
+        "Invariant SchemaExclusive is violated."
+      ],
+      "trace_state_count": 3
+    },
+    {
+      "id": "sensitivity-r1/negative-scope",
+      "selected": false,
+      "profile": "negative-scope",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "ScopeAuthorized"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "ScopeAuthorized"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 78,
+        "distinct_states": 78,
+        "remaining_states": 64
+      },
+      "last_reported_progress": {
+        "depth": 3,
+        "reported_at_tool_local": "2026-11-13 06:03:38",
+        "generated_states": 78,
+        "distinct_states": 78,
+        "remaining_states": 64,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:03:37.489381+00:00",
+      "finished_at": "2026-11-13T14:03:38.522775+00:00",
+      "duration_seconds": 1.033428,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "5fff7f3596a5b0c74f5250d7dd1ee6513ac722ed660055c400f3555b60fb3128",
+      "runner_manifest_sha256": "a55c0d0a94ae230651017ef32c5ff0dba26e9ff6192ddc8b01f62b3a42c2e3b6",
+      "scope_id": "3f07dde529f0745423a39392380de7ab42952b0f3ca37aae8c8b2b63e172d182",
+      "parameters": {
+        "Scenario": "identity",
+        "LegacyFirst": false,
+        "Fault": "skip-scope"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "e0dc34f1795257c001f7bd94241af5dfc467c1059a8f542f321662bd6f3ec87f",
+        "tlc.log": "d256ab4b2be81dd9bea970b26616f48302858f14ed61080d58b6fca23c48bb8a",
+        "messages.json": "093c04b8718fc24b1acc435cd26f261050f6b36a2074c9ed79a8db0d90a51b4a"
+      },
+      "target": "ScopeAuthorized",
+      "violated_messages": [
+        "Invariant ScopeAuthorized is violated."
+      ],
+      "trace_state_count": 3
+    },
+    {
+      "id": "sensitivity-r1/negative-type",
+      "selected": false,
+      "profile": "negative-type",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": null,
+        "distinct_states": null,
+        "remaining_states": null
+      },
+      "last_reported_progress": null,
+      "started_at": "2026-11-13T14:03:19.834254+00:00",
+      "finished_at": "2026-11-13T14:03:21.166977+00:00",
+      "duration_seconds": 1.332758,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "5fff7f3596a5b0c74f5250d7dd1ee6513ac722ed660055c400f3555b60fb3128",
+      "runner_manifest_sha256": "a55c0d0a94ae230651017ef32c5ff0dba26e9ff6192ddc8b01f62b3a42c2e3b6",
+      "scope_id": "165d12903981c7bf857b69b2153218c148ec1e13dda79dc40644d006ba40908a",
+      "parameters": {
+        "Scenario": "competition",
+        "LegacyFirst": false,
+        "Fault": "type"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2107
+      ],
+      "original_output_sha256": {
+        "result.json": "728d3c2d347d997a560f616d770b58bc0a11f779a91ff37c1c8019f2780ba139",
+        "tlc.log": "f1b4e3eb5b7c8727f36ed22be74ca2b6d8251216c7619a17569985cf7a02b679",
+        "messages.json": "b53f227b19bb11a76884f788e7c4e3a3377d32e2983b99496c2d4e29a802ab1a"
+      },
+      "target": "TypeOK",
+      "violated_messages": [
+        "Invariant TypeOK is violated by the initial state:"
+      ],
+      "trace_state_count": 1
+    },
+    {
+      "id": "sensitivity-r1/negative-unavailable",
+      "selected": false,
+      "profile": "negative-unavailable",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "PublicProposalAvailable"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "PublicProposalAvailable"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 79,
+        "distinct_states": 79,
+        "remaining_states": 65
+      },
+      "last_reported_progress": {
+        "depth": 3,
+        "reported_at_tool_local": "2026-11-13 06:03:22",
+        "generated_states": 79,
+        "distinct_states": 79,
+        "remaining_states": 65,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:03:21.221437+00:00",
+      "finished_at": "2026-11-13T14:03:22.631329+00:00",
+      "duration_seconds": 1.40993,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "5fff7f3596a5b0c74f5250d7dd1ee6513ac722ed660055c400f3555b60fb3128",
+      "runner_manifest_sha256": "a55c0d0a94ae230651017ef32c5ff0dba26e9ff6192ddc8b01f62b3a42c2e3b6",
+      "scope_id": "3f07dde529f0745423a39392380de7ab42952b0f3ca37aae8c8b2b63e172d182",
+      "parameters": {
+        "Scenario": "identity",
+        "LegacyFirst": false,
+        "Fault": "private-fallback"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "b69f55db2dc3abefe1c279ae2d21ad0fe5e8e2269bfead3968ecbbe8ea7a637b",
+        "tlc.log": "31c66458968ecf3862358f32cc53365e5f0ade1348de3a3273489fc129720f1f",
+        "messages.json": "93ccfe725c6ab73773843b172f400054a88d7cc13070fcc13e92ac64ac404a09"
+      },
+      "target": "PublicProposalAvailable",
+      "violated_messages": [
+        "Invariant PublicProposalAvailable is violated."
+      ],
+      "trace_state_count": 3
+    },
+    {
+      "id": "sensitivity-r1/witness-mixed-competition",
+      "selected": false,
+      "profile": "witness-mixed-competition",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "NoCompetitionWitness"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "NoCompetitionWitness"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 522,
+        "distinct_states": 413,
+        "remaining_states": 367
+      },
+      "last_reported_progress": {
+        "depth": 5,
+        "reported_at_tool_local": "2026-11-13 06:03:45",
+        "generated_states": 522,
+        "distinct_states": 413,
+        "remaining_states": 367,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:03:44.379338+00:00",
+      "finished_at": "2026-11-13T14:03:45.550246+00:00",
+      "duration_seconds": 1.170942,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "5fff7f3596a5b0c74f5250d7dd1ee6513ac722ed660055c400f3555b60fb3128",
+      "runner_manifest_sha256": "a55c0d0a94ae230651017ef32c5ff0dba26e9ff6192ddc8b01f62b3a42c2e3b6",
+      "scope_id": "165d12903981c7bf857b69b2153218c148ec1e13dda79dc40644d006ba40908a",
+      "parameters": {
+        "Scenario": "competition",
+        "LegacyFirst": true,
+        "Fault": "none"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "b703c8a0433a702a0404b61a21d1a4edcca4341485fa52b42c58f490cd0ba4ca",
+        "tlc.log": "fe84fbcb6e823462d90966722ab4c20055413bbff6902d20fc252d106a7afbd8",
+        "messages.json": "d3a920cd3273b814af2702a4a9989134a349d4f64d7fd5bb652bd6286cfc74e0"
+      },
+      "target": "NoCompetitionWitness",
+      "violated_messages": [
+        "Invariant NoCompetitionWitness is violated."
+      ],
+      "trace_state_count": 5
+    },
+    {
+      "id": "sensitivity-r1/witness-movement",
+      "selected": false,
+      "profile": "witness-movement",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "NoMovementWitness"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "NoMovementWitness"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 720,
+        "distinct_states": 574,
+        "remaining_states": 510
+      },
+      "last_reported_progress": {
+        "depth": 4,
+        "reported_at_tool_local": "2026-11-13 06:03:51",
+        "generated_states": 720,
+        "distinct_states": 574,
+        "remaining_states": 510,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:03:51.004616+00:00",
+      "finished_at": "2026-11-13T14:03:52.182995+00:00",
+      "duration_seconds": 1.178413,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "5fff7f3596a5b0c74f5250d7dd1ee6513ac722ed660055c400f3555b60fb3128",
+      "runner_manifest_sha256": "a55c0d0a94ae230651017ef32c5ff0dba26e9ff6192ddc8b01f62b3a42c2e3b6",
+      "scope_id": "3f07dde529f0745423a39392380de7ab42952b0f3ca37aae8c8b2b63e172d182",
+      "parameters": {
+        "Scenario": "identity",
+        "LegacyFirst": false,
+        "Fault": "none"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "8fed57afe5ec6322ca5fb81bdb234a679727295e988baa25d8e4723dce02ba12",
+        "tlc.log": "dbfbfc97200aeea868e94a5a46e606fb75777466d24d339f5cfcc46349f2eca6",
+        "messages.json": "95034805afad16836bbb9b406291ffc908745dcef44c5d5c56af3a6e52109e5b"
+      },
+      "target": "NoMovementWitness",
+      "violated_messages": [
+        "Invariant NoMovementWitness is violated."
+      ],
+      "trace_state_count": 4
+    },
+    {
+      "id": "sensitivity-r1/witness-new-leader",
+      "selected": false,
+      "profile": "witness-new-leader",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "NoNewLeaderWitness"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "NoNewLeaderWitness"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 79,
+        "distinct_states": 79,
+        "remaining_states": 65
+      },
+      "last_reported_progress": {
+        "depth": 3,
+        "reported_at_tool_local": "2026-11-13 06:03:42",
+        "generated_states": 79,
+        "distinct_states": 79,
+        "remaining_states": 65,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:03:42.024310+00:00",
+      "finished_at": "2026-11-13T14:03:43.102467+00:00",
+      "duration_seconds": 1.078194,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "5fff7f3596a5b0c74f5250d7dd1ee6513ac722ed660055c400f3555b60fb3128",
+      "runner_manifest_sha256": "a55c0d0a94ae230651017ef32c5ff0dba26e9ff6192ddc8b01f62b3a42c2e3b6",
+      "scope_id": "3f07dde529f0745423a39392380de7ab42952b0f3ca37aae8c8b2b63e172d182",
+      "parameters": {
+        "Scenario": "identity",
+        "LegacyFirst": false,
+        "Fault": "none"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "682e4d250b9511e1d2e81d1f8447aa8e53edd7ce200700bca9e33e7974590695",
+        "tlc.log": "64f83c9af42d36d5e1316bf10678e8713fbf725eb41d49d231a1a9f3cb7173ab",
+        "messages.json": "4944c27c7e6371a2a80568c08617b80a05970f1b1ee65e5d58a9c07304f73c96"
+      },
+      "target": "NoNewLeaderWitness",
+      "violated_messages": [
+        "Invariant NoNewLeaderWitness is violated."
+      ],
+      "trace_state_count": 3
+    },
+    {
+      "id": "sensitivity-r1/witness-public-competition",
+      "selected": false,
+      "profile": "witness-public-competition",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "NoCompetitionWitness"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "NoCompetitionWitness"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 522,
+        "distinct_states": 413,
+        "remaining_states": 367
+      },
+      "last_reported_progress": {
+        "depth": 5,
+        "reported_at_tool_local": "2026-11-13 06:03:43",
+        "generated_states": 522,
+        "distinct_states": 413,
+        "remaining_states": 367,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:03:43.149306+00:00",
+      "finished_at": "2026-11-13T14:03:44.340765+00:00",
+      "duration_seconds": 1.191494,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "5fff7f3596a5b0c74f5250d7dd1ee6513ac722ed660055c400f3555b60fb3128",
+      "runner_manifest_sha256": "a55c0d0a94ae230651017ef32c5ff0dba26e9ff6192ddc8b01f62b3a42c2e3b6",
+      "scope_id": "165d12903981c7bf857b69b2153218c148ec1e13dda79dc40644d006ba40908a",
+      "parameters": {
+        "Scenario": "competition",
+        "LegacyFirst": false,
+        "Fault": "none"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "36f166428e74d26228a0501f71aebecb7413189f8b40985dffe580c749af7cc2",
+        "tlc.log": "1b085ab75157e73ce8e1ec5c33a93e559b981b3a1aef2406f6c7567822bcd194",
+        "messages.json": "d0be00945d1d3eb6ac1fe980a7130dc0d9dc963f69e8f3f7f475d7f0d9ff1e77"
+      },
+      "target": "NoCompetitionWitness",
+      "violated_messages": [
+        "Invariant NoCompetitionWitness is violated."
+      ],
+      "trace_state_count": 5
+    },
+    {
+      "id": "sensitivity-r1/witness-replay-old-control",
+      "selected": false,
+      "profile": "witness-replay-old-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "NoReplayAfterRotateWitness"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "NoReplayAfterRotateWitness"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 28368,
+        "distinct_states": 17310,
+        "remaining_states": 16438
+      },
+      "last_reported_progress": {
+        "depth": 5,
+        "reported_at_tool_local": "2026-11-13 06:03:49",
+        "generated_states": 28368,
+        "distinct_states": 17310,
+        "remaining_states": 16438,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:03:45.608422+00:00",
+      "finished_at": "2026-11-13T14:03:49.577360+00:00",
+      "duration_seconds": 3.968977,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "5fff7f3596a5b0c74f5250d7dd1ee6513ac722ed660055c400f3555b60fb3128",
+      "runner_manifest_sha256": "a55c0d0a94ae230651017ef32c5ff0dba26e9ff6192ddc8b01f62b3a42c2e3b6",
+      "scope_id": "3f07dde529f0745423a39392380de7ab42952b0f3ca37aae8c8b2b63e172d182",
+      "parameters": {
+        "Scenario": "identity",
+        "LegacyFirst": false,
+        "Fault": "none"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "b30281aa1bd4039968530912b9fd20d2e37746e0b839bfd6a32a17ada3d883b2",
+        "tlc.log": "6c330587e6a6a58208fb0b17d6cfe36b3cde21a4048cc5db9ef8357f82e99eb0",
+        "messages.json": "9abbfaa35735ed05732cba318f1c85e7a5fcca0fcf09a3725ef583c9066853b6"
+      },
+      "target": "NoReplayAfterRotateWitness",
+      "violated_messages": [
+        "Invariant NoReplayAfterRotateWitness is violated."
+      ],
+      "trace_state_count": 5
+    },
+    {
+      "id": "sensitivity-r1/witness-unknown-replay",
+      "selected": false,
+      "profile": "witness-unknown-replay",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "NoUnknownReplayWitness"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "NoUnknownReplayWitness"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 1600,
+        "distinct_states": 1102,
+        "remaining_states": 1014
+      },
+      "last_reported_progress": {
+        "depth": 4,
+        "reported_at_tool_local": "2026-11-13 06:03:50",
+        "generated_states": 1600,
+        "distinct_states": 1102,
+        "remaining_states": 1014,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T14:03:49.621935+00:00",
+      "finished_at": "2026-11-13T14:03:50.955521+00:00",
+      "duration_seconds": 1.333622,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "5fff7f3596a5b0c74f5250d7dd1ee6513ac722ed660055c400f3555b60fb3128",
+      "runner_manifest_sha256": "a55c0d0a94ae230651017ef32c5ff0dba26e9ff6192ddc8b01f62b3a42c2e3b6",
+      "scope_id": "3f07dde529f0745423a39392380de7ab42952b0f3ca37aae8c8b2b63e172d182",
+      "parameters": {
+        "Scenario": "identity",
+        "LegacyFirst": false,
+        "Fault": "none"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "8b967e4a755eef716a35997c95978ab3081528a4e6c344b493d05cab5ff366a8",
+        "tlc.log": "efc15b244eda50bde5e1ec2439086d88fde575cbe988abc1b42fa1878d312842",
+        "messages.json": "84b3af589f0eb89c75385006189cde4035d94d2d158b930ef54f98f130d398d6"
+      },
+      "target": "NoUnknownReplayWitness",
+      "violated_messages": [
+        "Invariant NoUnknownReplayWitness is violated."
+      ],
+      "trace_state_count": 4
+    },
+    {
+      "id": "syntax-and-witness-r1/witness-new-leader",
+      "selected": false,
+      "profile": "witness-new-leader",
+      "status": "TOOL_ERROR",
+      "reason": "TLC_REPORTED_ERROR",
+      "completed": false,
+      "raw_exit": 75,
+      "runner_exit": 4,
+      "wrapper_meets_predeclared_expectation": false,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "NoNewLeaderWitness"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "NoNewLeaderWitness"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 5,
+        "distinct_states": 5,
+        "remaining_states": 3
+      },
+      "last_reported_progress": {
+        "depth": 2,
+        "reported_at_tool_local": "2026-11-13 05:54:14",
+        "generated_states": 5,
+        "distinct_states": 5,
+        "remaining_states": 3,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T13:54:13.361168+00:00",
+      "finished_at": "2026-11-13T13:54:14.649780+00:00",
+      "duration_seconds": 1.288667,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "ff952221a60d5423d49fb6bfd5c6132213569d16aac833f001d8a3dd8176bf3d",
+      "runner_manifest_sha256": "095de10244169d69d462a7a6e4c36213ed9232fece0c147dcd306faaefb9ece4",
+      "scope_id": "f2b869f4f5a7fba3fd5974fdfbab7ac1534172d9a483232336fc1d77405a62af",
+      "parameters": {
+        "Scenario": "identity",
+        "LegacyFirst": false,
+        "Fault": "none"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        1000,
+        2103,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "6c369089021f2f29e53a29c42c4925dc891b70b9b53c7c27bd3660611da526ad",
+        "tlc.log": "9d84c2a6e6227a217b031848e1823c8be5ed476790e26baf330195b9c24de298",
+        "messages.json": "50c9c06c321ac02799c216962a9616dba98f841aca91685da20be15c5b9cf247"
+      }
+    },
+    {
+      "id": "syntax-and-witness-r2/witness-new-leader",
+      "selected": false,
+      "profile": "witness-new-leader",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "wrapper_meets_predeclared_expectation": true,
+      "checks_exact": true,
+      "checks": {
+        "expected_invariants": [
+          "NoNewLeaderWitness"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "NoNewLeaderWitness"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "statistics": {
+        "generated_states": 24,
+        "distinct_states": 24,
+        "remaining_states": 21
+      },
+      "last_reported_progress": {
+        "depth": 3,
+        "reported_at_tool_local": "2026-11-13 05:55:30",
+        "generated_states": 24,
+        "distinct_states": 24,
+        "remaining_states": 21,
+        "note": "最后一条实际TLC进度；未穷尽时不能当结束总量"
+      },
+      "started_at": "2026-11-13T13:55:29.469900+00:00",
+      "finished_at": "2026-11-13T13:55:30.844438+00:00",
+      "duration_seconds": 1.374572,
+      "resource_parameters": {
+        "workers": 1,
+        "heap_mb": 512,
+        "timeout_seconds": 60
+      },
+      "tool_id": "d47464059eb3c1234d37da724b5397f61e94e0b46305e080aad367fa1f84a2c0",
+      "model_inputs_id": "6f7886da7674e85fdaab0dae397baf4c32c500a9e95410039ce5422b47a0eafe",
+      "runner_manifest_sha256": "095de10244169d69d462a7a6e4c36213ed9232fece0c147dcd306faaefb9ece4",
+      "scope_id": "f2b869f4f5a7fba3fd5974fdfbab7ac1534172d9a483232336fc1d77405a62af",
+      "parameters": {
+        "Scenario": "identity",
+        "LegacyFirst": false,
+        "Fault": "none"
+      },
+      "assumptions_id": "1f88ba6f571752c11554fa1bc128bb017c2c7231da677dd0120b7c2d5c5fda57",
+      "implementation_status": "NOT_ASSESSED",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ],
+      "original_output_sha256": {
+        "result.json": "5503ce368ea926eaf09fab30b99e28290e10e99ce17c670f8193d5413f53c609",
+        "tlc.log": "dad7db99abd027e38908450510e2ae09bcbeaa5d00fa913492e6dcb861e68998",
+        "messages.json": "fc4af02f95b36ca10d85021a4ec025d3bc1f9081bfa11dca346df7fea1be436a"
+      },
+      "target": "NoNewLeaderWitness",
+      "violated_messages": [
+        "Invariant NoNewLeaderWitness is violated."
+      ],
+      "trace_state_count": 3
+    }
+  ]
+}

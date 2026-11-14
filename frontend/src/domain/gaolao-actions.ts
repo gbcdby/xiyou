@@ -31,12 +31,12 @@ export function requestMeetingOrAppearance(target: GaolaoTarget | null, operatio
   return gaolaoInteraction({ kind: 'interact', targetRef: target.entityRef, operationId, expectedTargetRevision: target.resourceRevision, parameters: { destinationId, expectedConsentVersion: consent?.version || '0' } });
 }
 export function proposeFollow(projection: ProjectionV2, subjectRef: string, leaderRef: string, destinationId: string, canAct: boolean): ActionV2 | null {
-  const chapter = projection.chapter;
+  const chapter = projection.chapter, subject = projection.entities.find(person => person.entityRef === subjectRef);
   if (!canAct || !chapter || !projection.self.capabilities.includes('propose_follow')
-    || !projection.entities.some(person => person.entityRef === subjectRef && person.entityRef !== projection.self.entityRef && person.position && person.sceneId === projection.self.sceneId)
+    || !subject || subject.resourceRevision === undefined || subject.entityRef === projection.self.entityRef || !subject.position || subject.sceneId !== projection.self.sceneId
     || !projection.entities.some(person => person.entityRef === leaderRef && person.position && person.sceneId === projection.self.sceneId)
     || !chapter.destinations.some(destination => destination.purpose === 'follow' && destination.destinationId === destinationId)) return null;
-  return validateSpatial('ActionV2', { kind: 'propose_follow', subjectRef, leaderRef, destinationId, expectedConsentVersion: currentConsent(chapter, subjectRef, 'follow')?.version || '0' });
+  return validateSpatial('ActionV2', { kind: 'propose_follow', subjectRef, leaderRef, destinationId, expectedTargetRevision: subject.resourceRevision });
 }
 export function returnPublicItem(target: GaolaoTarget | null, itemRef: string, projection: ProjectionV2, canAct: boolean): GaolaoInteractionV2 | null {
   const item = projection.items.find(item => item.entityRef === itemRef && item.publicBorrowable && item.location.kind === 'held' && item.location.ownerRef === projection.self.entityRef);

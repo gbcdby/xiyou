@@ -23,7 +23,7 @@ export function observeGaolao(tx,observerId,{statement,fields=[],category='World
   const seq=sourceSeq??next(tx.state.sessionSeq);
   const observation={observationRef,category,statement,sourceSeq:seq,fields:structuredClone(fields),shareable,...(sourceId?{source:{sourceRef:token,kind,label,beforeArrivalDays,receivedSeq:next(tx.state.sessionSeq)}}:{})};
   tx.emit('spatial.observation',{observerId,observation},{humanCharacterIds:[observerId],coreNpcCharacterIds:[observerId],proxyCharacterIds:shareable?[observerId]:[]});
-  if(sourceId)changeChapter(tx,c=>{c.provenance[observerId]??={};c.provenance[observerId][observationRef]={sourceId,...structuredClone(metadata)};});
+  if(sourceId)changeChapter(tx,c=>{c.provenance[observerId]??={};c.provenance[observerId][observationRef]={sourceId,...structuredClone(metadata),...(tx.content.chapterRules.sceneRolePolicies&&observerId===tx.content.chapterRules.people.cuilan&&['rescue-contact','cuilan-route-front-v1','cuilan-route-tea-v1'].includes(sourceId)?{retainedObservation:structuredClone(observation)}:{})};});
   return observation;
 }
 export const knowsSource=(state,actorId,sourceId)=>Object.values(state.chapter.provenance[actorId]??{}).some(m=>m.sourceId===sourceId);

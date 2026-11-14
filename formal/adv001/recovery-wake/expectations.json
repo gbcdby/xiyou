@@ -1,0 +1,507 @@
+{
+  "positive-resume-observation": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "OriginalRequestPreserved",
+      "OldEffectAtMostOnce",
+      "RecoveryDoesNotPlan",
+      "PendingSemanticPreserved",
+      "PlannedForFreshCause",
+      "AuthorizedAdmission",
+      "AutomaticRetryBound",
+      "OnlyContextConsumes",
+      "UnknownKeepsOriginalOutcome"
+    ],
+    "properties": [],
+    "target": null,
+    "minimum_distinct_states": 50
+  },
+  "positive-observation-resume": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "OriginalRequestPreserved",
+      "OldEffectAtMostOnce",
+      "RecoveryDoesNotPlan",
+      "PendingSemanticPreserved",
+      "PlannedForFreshCause",
+      "AuthorizedAdmission",
+      "AutomaticRetryBound",
+      "OnlyContextConsumes",
+      "UnknownKeepsOriginalOutcome"
+    ],
+    "properties": [],
+    "target": null,
+    "minimum_distinct_states": 50
+  },
+  "positive-ordinary": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "OriginalRequestPreserved",
+      "OldEffectAtMostOnce",
+      "RecoveryDoesNotPlan",
+      "PendingSemanticPreserved",
+      "PlannedForFreshCause",
+      "AuthorizedAdmission",
+      "AutomaticRetryBound",
+      "OnlyContextConsumes",
+      "UnknownKeepsOriginalOutcome"
+    ],
+    "properties": [],
+    "target": null,
+    "minimum_distinct_states": 50
+  },
+  "positive-batch": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "OriginalRequestPreserved",
+      "OldEffectAtMostOnce",
+      "RecoveryDoesNotPlan",
+      "PendingSemanticPreserved",
+      "PlannedForFreshCause",
+      "AuthorizedAdmission",
+      "AutomaticRetryBound",
+      "OnlyContextConsumes",
+      "UnknownKeepsOriginalOutcome"
+    ],
+    "properties": [],
+    "target": null,
+    "minimum_distinct_states": 50
+  },
+  "positive-control": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "OriginalRequestPreserved",
+      "OldEffectAtMostOnce",
+      "RecoveryDoesNotPlan",
+      "PendingSemanticPreserved",
+      "PlannedForFreshCause",
+      "AuthorizedAdmission",
+      "AutomaticRetryBound",
+      "OnlyContextConsumes",
+      "UnknownKeepsOriginalOutcome"
+    ],
+    "properties": [],
+    "target": null,
+    "minimum_distinct_states": 50
+  },
+  "positive-terminal": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "OriginalRequestPreserved",
+      "OldEffectAtMostOnce",
+      "RecoveryDoesNotPlan",
+      "PendingSemanticPreserved",
+      "PlannedForFreshCause",
+      "AuthorizedAdmission",
+      "AutomaticRetryBound",
+      "OnlyContextConsumes",
+      "UnknownKeepsOriginalOutcome"
+    ],
+    "properties": [],
+    "target": null,
+    "minimum_distinct_states": 50
+  },
+  "positive-unknown": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "OriginalRequestPreserved",
+      "OldEffectAtMostOnce",
+      "RecoveryDoesNotPlan",
+      "PendingSemanticPreserved",
+      "PlannedForFreshCause",
+      "AuthorizedAdmission",
+      "AutomaticRetryBound",
+      "OnlyContextConsumes",
+      "UnknownKeepsOriginalOutcome"
+    ],
+    "properties": [],
+    "target": null,
+    "minimum_distinct_states": 50
+  },
+  "positive-budget": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "OriginalRequestPreserved",
+      "OldEffectAtMostOnce",
+      "RecoveryDoesNotPlan",
+      "PendingSemanticPreserved",
+      "PlannedForFreshCause",
+      "AuthorizedAdmission",
+      "AutomaticRetryBound",
+      "OnlyContextConsumes",
+      "UnknownKeepsOriginalOutcome"
+    ],
+    "properties": [],
+    "target": null,
+    "minimum_distinct_states": 50
+  },
+  "live-resume-observation": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "OriginalRequestPreserved",
+      "OldEffectAtMostOnce",
+      "RecoveryDoesNotPlan",
+      "PendingSemanticPreserved",
+      "PlannedForFreshCause",
+      "AuthorizedAdmission",
+      "AutomaticRetryBound",
+      "OnlyContextConsumes",
+      "UnknownKeepsOriginalOutcome"
+    ],
+    "properties": [
+      "SemanticProgress"
+    ],
+    "target": null,
+    "minimum_distinct_states": 50
+  },
+  "live-batch": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "OriginalRequestPreserved",
+      "OldEffectAtMostOnce",
+      "RecoveryDoesNotPlan",
+      "PendingSemanticPreserved",
+      "PlannedForFreshCause",
+      "AuthorizedAdmission",
+      "AutomaticRetryBound",
+      "OnlyContextConsumes",
+      "UnknownKeepsOriginalOutcome"
+    ],
+    "properties": [
+      "SemanticProgress"
+    ],
+    "target": null,
+    "minimum_distinct_states": 50
+  },
+  "live-control": {
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "OriginalRequestPreserved",
+      "OldEffectAtMostOnce",
+      "RecoveryDoesNotPlan",
+      "PendingSemanticPreserved",
+      "PlannedForFreshCause",
+      "AuthorizedAdmission",
+      "AutomaticRetryBound",
+      "OnlyContextConsumes",
+      "UnknownKeepsOriginalOutcome"
+    ],
+    "properties": [
+      "SemanticProgress"
+    ],
+    "target": null,
+    "minimum_distinct_states": 50
+  },
+  "negative-type": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "TypeOK"
+    ],
+    "properties": [],
+    "target": "TypeOK",
+    "minimum_distinct_states": 1
+  },
+  "negative-identity": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "OriginalRequestPreserved"
+    ],
+    "properties": [],
+    "target": "OriginalRequestPreserved",
+    "minimum_distinct_states": 1
+  },
+  "negative-repeat-effect": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "OldEffectAtMostOnce"
+    ],
+    "properties": [],
+    "target": "OldEffectAtMostOnce",
+    "minimum_distinct_states": 1
+  },
+  "negative-recovery-plan": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "RecoveryDoesNotPlan"
+    ],
+    "properties": [],
+    "target": "RecoveryDoesNotPlan",
+    "minimum_distinct_states": 1
+  },
+  "negative-clear-newer": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "PendingSemanticPreserved"
+    ],
+    "properties": [],
+    "target": "PendingSemanticPreserved",
+    "minimum_distinct_states": 1
+  },
+  "negative-ordinary": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "PlannedForFreshCause"
+    ],
+    "properties": [],
+    "target": "PlannedForFreshCause",
+    "minimum_distinct_states": 1
+  },
+  "negative-duplicate": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "PlannedForFreshCause"
+    ],
+    "properties": [],
+    "target": "PlannedForFreshCause",
+    "minimum_distinct_states": 1
+  },
+  "negative-gate": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "AuthorizedAdmission"
+    ],
+    "properties": [],
+    "target": "AuthorizedAdmission",
+    "minimum_distinct_states": 1
+  },
+  "negative-overretry": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "AutomaticRetryBound"
+    ],
+    "properties": [],
+    "target": "AutomaticRetryBound",
+    "minimum_distinct_states": 1
+  },
+  "negative-pending-spin": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "AutomaticRetryBound"
+    ],
+    "properties": [],
+    "target": "AutomaticRetryBound",
+    "minimum_distinct_states": 1
+  },
+  "negative-recovery-consume": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "OnlyContextConsumes"
+    ],
+    "properties": [],
+    "target": "OnlyContextConsumes",
+    "minimum_distinct_states": 1
+  },
+  "old25c-counterexample": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 13,
+    "invariants": [],
+    "properties": [
+      "SemanticProgress"
+    ],
+    "target": "SemanticProgress",
+    "minimum_distinct_states": 1
+  },
+  "witness-before-read": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "target": "NoWitness",
+    "minimum_distinct_states": 1
+  },
+  "witness-during-read": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "target": "NoWitness",
+    "minimum_distinct_states": 1
+  },
+  "witness-receipt": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "target": "NoWitness",
+    "minimum_distinct_states": 1
+  },
+  "witness-context-race": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "target": "NoWitness",
+    "minimum_distinct_states": 1
+  },
+  "witness-duplicate": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "target": "NoWitness",
+    "minimum_distinct_states": 1
+  },
+  "witness-batch": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "target": "NoWitness",
+    "minimum_distinct_states": 1
+  },
+  "witness-retry-bound": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "target": "NoWitness",
+    "minimum_distinct_states": 1
+  },
+  "witness-explicit": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "target": "NoWitness",
+    "minimum_distinct_states": 1
+  },
+  "witness-blocked": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "target": "NoWitness",
+    "minimum_distinct_states": 1
+  },
+  "witness-terminal": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "target": "NoWitness",
+    "minimum_distinct_states": 1
+  },
+  "witness-pure-recovery": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "target": "NoWitness",
+    "minimum_distinct_states": 1
+  },
+  "witness-prepared-pause": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "target": "NoWitness",
+    "minimum_distinct_states": 1
+  },
+  "negative-unknown-reject": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "UnknownKeepsOriginalOutcome"
+    ],
+    "properties": [],
+    "target": "UnknownKeepsOriginalOutcome",
+    "minimum_distinct_states": 1
+  },
+  "witness-before-read-observation": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "target": "NoWitness",
+    "minimum_distinct_states": 1
+  },
+  "witness-during-read-observation": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "target": "NoWitness",
+    "minimum_distinct_states": 1
+  },
+  "witness-receipt-observation": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "target": "NoWitness",
+    "minimum_distinct_states": 1
+  },
+  "witness-reserve-race": {
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "target": "NoWitness",
+    "minimum_distinct_states": 1
+  }
+}

@@ -2,6 +2,35 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/gbcdby/xiyou/protocol/spatial-v2",
   "$defs": {
+    "SpatialClientCapability": {
+      "enum": [
+        "spatial-v2",
+        "spatial-appearance-v1",
+        "spatial-object-visual-v1"
+      ]
+    },
+    "ObjectVisualKeyV1": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[a-z][a-z0-9-]{0,63}(?![\\s\\S])"
+    },
+    "AppearanceIdV2": {
+      "enum": [
+        "neutral",
+        "gaocai",
+        "courtyard-helper",
+        "carpenter",
+        "kitchen-helper",
+        "woodcutter",
+        "tang",
+        "wukong",
+        "bajie",
+        "cuilan",
+        "gao",
+        "witness"
+      ]
+    },
     "GaolaoInteractionV2": {
       "oneOf": [
         {
@@ -749,6 +778,34 @@
             "kind",
             "evidenceRef",
             "recipientRefs"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "propose_follow"
+            },
+            "subjectRef": {
+              "$ref": "#/$defs/EntityRef"
+            },
+            "destinationId": {
+              "$ref": "#/$defs/Id"
+            },
+            "leaderRef": {
+              "$ref": "#/$defs/EntityRef"
+            },
+            "expectedTargetRevision": {
+              "$ref": "#/$defs/DecimalString"
+            }
+          },
+          "required": [
+            "kind",
+            "subjectRef",
+            "destinationId",
+            "leaderRef",
+            "expectedTargetRevision"
           ],
           "additionalProperties": false
         },
@@ -1738,6 +1795,9 @@
         "appearanceEpoch": {
           "$ref": "#/$defs/DecimalString"
         },
+        "appearanceId": {
+          "$ref": "#/$defs/AppearanceIdV2"
+        },
         "sceneId": {
           "oneOf": [
             {
@@ -1811,6 +1871,9 @@
         },
         "appearanceEpoch": {
           "$ref": "#/$defs/DecimalString"
+        },
+        "appearanceId": {
+          "$ref": "#/$defs/AppearanceIdV2"
         },
         "sceneId": {
           "oneOf": [
@@ -1944,6 +2007,9 @@
         },
         "reclaimHolderEpoch": {
           "$ref": "#/$defs/DecimalString"
+        },
+        "visualKey": {
+          "$ref": "#/$defs/ObjectVisualKeyV1"
         }
       },
       "required": [
@@ -1989,6 +2055,9 @@
             "$ref": "#/$defs/FactField"
           },
           "maxItems": 32
+        },
+        "visualKey": {
+          "$ref": "#/$defs/ObjectVisualKeyV1"
         }
       },
       "required": [

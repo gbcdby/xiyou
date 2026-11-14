@@ -14,8 +14,9 @@ test('真实PG：章节角色装配、内部scene_role身份及严格授权DTO',
   for(const bad of ['gz-wukong','gz-cuilan','principalId','actorKind','characterId'])assert.ok(!JSON.stringify(s).includes(bad),bad);
   assert.deepEqual(await runtime.replay(r.sessionId),(await db.pool.query('SELECT state FROM sessions WHERE session_id=$1',[r.sessionId])).rows[0].state);
   const own=await r.snapshot('cuilan');assert.equal(own.projection.self.name,'翠兰');
-  await assert.rejects(runtime.prepareDecisionContext(r.actors.get('bajie').handle),{code:'UPGRADE_REQUIRED'});
-  await assert.rejects(runtime.prepareDecision(r.actors.get('bajie').handle),{code:'UPGRADE_REQUIRED'});
+  const prepared=await runtime.prepareDecisionContext(r.actors.get('bajie').handle);assert.equal(prepared.decision.schemaVersion,2);assert.deepEqual(prepared.context.decision,{decisionId:prepared.decision.decisionId});
+  assert.equal((await runtime.prepareDecision(r.actors.get('bajie').handle)).schemaVersion,2);
+  await assert.rejects(runtime.prepareDecisionContext(r.actors.get('cuilan').handle),{code:'FORBIDDEN'});
 });
 test('真实PG：受信非移动意图保留NUL原文与原Receipt，系统终止后复盘仍完整',async()=>{
   const r=await gaolaoRoom(runtime,clock,2),handle=r.actors.get('bajie').handle,intentId=crypto.randomUUID(),text='原文\u0000与字面\\0、\\u0000均保留。',action={kind:'speak',text,channel:'public',recipientRefs:[]};

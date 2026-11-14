@@ -7,10 +7,10 @@ import { RuntimeError } from './errors.mjs';
 import { ownRecord } from '../game/records.mjs';
 import { isSpatial } from '../game/spatial-world.mjs';
 import { refreshGoals, buildContextBasis } from './ai/context.mjs';
+import { prepareSpatialDecision, submitSpatialDecision, submitSpatialDecisionFallback, spatialDecisionReceipt } from './ai/spatial-decisions.mjs';
 
 async function authorizeRegionDecision(runtime, tx, principal) {
   await runtime.authorizeInternal(tx, principal);
-  if (isSpatial(tx.state)) throw new RuntimeError('UPGRADE_REQUIRED', '空间章节必须使用授权空间上下文与有限意图入口。');
 }
 
 const currentMode = principal => principal.principalKind === 'core_npc' ? 'CoreNPCControlled' : 'AIProxyControlled';
@@ -32,6 +32,7 @@ export async function prepareDecision(runtime, handle, options = {}) {
   return runtime.locked(principal.sessionId, { kind: 'prepare-decision' }, async tx => {
     await authorizeRegionDecision(runtime, tx, principal);
     await runtime.deadline(tx);
+    if (isSpatial(tx.state)) return (await prepareSpatialDecision(tx, principal, options)).decision;
     const actor = ownRecord(tx.state.characters, principal.actorId);
     if (tx.state.phase !== 'Running' || actor?.mode !== currentMode(principal)) return new RuntimeError('FORBIDDEN', '该角色当前不能创建新决策。');
     return prepareRecord(tx, principal, options);
@@ -44,6 +45,7 @@ export async function prepareDecisionContext(runtime, handle) {
   return runtime.locked(principal.sessionId, { kind: 'prepare-decision-context' }, async tx => {
     await authorizeRegionDecision(runtime, tx, principal);
     await runtime.deadline(tx);
+    if (isSpatial(tx.state)) return prepareSpatialDecision(tx, principal);
     const actor = ownRecord(tx.state.characters, principal.actorId);
     if (tx.state.phase !== 'Running' || actor?.mode !== currentMode(principal)) return new RuntimeError('FORBIDDEN', '该角色当前不能创建新决策。');
     const sources = await refreshGoals(tx, principal);
@@ -124,6 +126,8 @@ export async function decisionState(runtime, handle, decisionId) {
 }
 
 export async function submitIntent(runtime, handle, decisionId, raw) {
+  const record = await decisionState(runtime, handle, decisionId);
+  if (record.schemaVersion === 2) return submitSpatialDecision(runtime, handle, record, raw);
   const principal = runtime.internal(handle);
   let intent;
   try { intent = parseProposedIntent(raw, decisionId); }
@@ -170,6 +174,8 @@ export async function submitIntent(runtime, handle, decisionId, raw) {
 
 /** 受限等待是独立系统命令；调度器是否再请求模型由 #9 决定。 */
 export async function submitFallback(runtime, handle, decisionId) {
+  const record = await decisionState(runtime, handle, decisionId);
+  if (record.schemaVersion === 2) return submitSpatialDecisionFallback(runtime, handle, record);
   const principal = runtime.internal(handle);
   let semanticDigest;
   return runtime.confirmOutcome(() => runtime.locked(principal.sessionId, { kind: 'fallback' }, async tx => {
@@ -182,4 +188,11 @@ export async function submitFallback(runtime, handle, decisionId) {
       validate() { if (!['Expired', 'Rejected'].includes(record.status)) throw new RuleError('DECISION_STALE'); },
     });
   }), () => runtime.internalReceipt(handle, `${decisionId}:fallback`, true), () => semanticDigest);
+}
+
+export async function decisionReceipt(runtime, handle, decisionId, system = false) {
+  const record = await decisionState(runtime, handle, decisionId);
+  if (record.schemaVersion === 2) return spatialDecisionReceipt(runtime, handle, decisionId, system);
+  const receipt = await runtime.internalReceipt(handle, `${decisionId}:${system ? 'fallback' : 'submit'}`, system);
+  return receipt ? { receipt, semanticDigest: receipt.semanticDigest } : null;
 }

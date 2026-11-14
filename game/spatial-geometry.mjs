@@ -232,6 +232,15 @@ export function findPath(scene, start, goal, enabled = () => true) {
     }
     return path;
 }
+/** 当前站姿取最后实际经过的非零段；与绘制端的八向角度及零长度约定一致。 */
+export function facingAlongPath(path, previousFacing) {
+    for (let i = path.length - 1; i > 0; i--) {
+        const from = path[i - 1], through = path[i];
+        if (distance(from, through) > 0)
+            return ['E', 'SE', 'S', 'SW', 'W', 'NW', 'N', 'NE'][(Math.round(Math.atan2(through.y - from.y, through.x - from.x) / (Math.PI / 4)) + 8) % 8];
+    }
+    return previousFacing;
+}
 export function pointAlongPath(path, travel) {
     for (let i = 1; i < path.length; i++) {
         const length = distance(path[i - 1], path[i]);

@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "source_revision": "0ac2bf5f34e49f4508daac74b1d6b38196f15ad6",
+  "source_tree": "047cdcc3a4a2a7239e29e66b31796d5098e6c491",
+  "model_sha256": "cefc90a3bc05805ade0e60c2d253d520c15fd52f0f35c85dd649d17d503334ae",
+  "manifest_sha256": "0a5a8a0c51d26a6cb47619cf388bace41b1e64e9c159b0510d6169f4a975f0a8",
+  "contract_sha256": "782983172b61f5b094fb6a3ba73554f160cffb96f7f611d53f3041760817f678",
+  "expectations_sha256": "1dfdfae2ba1a55066d5018c3b91dfadc21f2c8fed4af6f8ba80206c6e5fd2dc8",
+  "wrapper_sha256": "d5ac0db42735542f6423e0d085973f10faae2863ffdc3ee013d056ec23beb8ec",
+  "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+  "tool": {
+    "version": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "reported_tool_version": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)",
+  "java_version": "openjdk version \"21.0.13\" 2026-10-20\nOpenJDK Runtime Environment (build 21.0.13+9-1-deb13u2-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.13+9-1-deb13u2-Debian, mixed mode, sharing)",
+  "evidence_archive": "runs.tar.gz",
+  "evidence_archive_sha256": "a1aad3319aef02bd06b15fffc612a1b9b5b2f3bbaacaa4806035db26e2afe8a4",
+  "results_sha256": "d153cc795d44fd7036f3a4176bbd0d770a8e9049d62b3773777e501d59dac0d8",
+  "audit_sha256": "02378510553e1cbb6ed30bcce804eefaa253d36cedc6581c62730dc50d13332e",
+  "model_files": [
+    {
+      "path": "model/RecoveryWake.tla",
+      "sha256": "cefc90a3bc05805ade0e60c2d253d520c15fd52f0f35c85dd649d17d503334ae"
+    },
+    {
+      "path": "model/live-batch.cfg",
+      "sha256": "8358950e58f215d403964c02bae6887b8afecc0ddeedf7286704ec17d640a1f9"
+    },
+    {
+      "path": "model/live-control.cfg",
+      "sha256": "f8eb7a33dd3bbe28b912ed7d80088af389bc78b71d5c264abe32d61cc87b210a"
+    },
+    {
+      "path": "model/live-resume-observation.cfg",
+      "sha256": "9713350d9968cc8dd4ae8f62e5a4c7ed7c411776ff78d283f9aabe46e29a0d87"
+    },
+    {
+      "path": "model/negative-clear-newer.cfg",
+      "sha256": "963a3cff9413e3d8153da1b23cd48ac83d5d90cfde0342f76d9af63437e86a0c"
+    },
+    {
+      "path": "model/negative-duplicate.cfg",
+      "sha256": "f99f2d755471e595c545dd4be853a2c1c61f42f1912148552a31a3f2aeb549ce"
+    },
+    {
+      "path": "model/negative-gate.cfg",
+      "sha256": "ee8967d083e2f16c273629cb8158d6a3f3118eec1881442eee66ab2550312a32"
+    },
+    {
+      "path": "model/negative-identity.cfg",
+      "sha256": "f367158d58f2aac3881125d54f3772a49ec06734b3edf19c38d6cdfb5129c4f8"
+    },
+    {
+      "path": "model/negative-ordinary.cfg",
+      "sha256": "3f18d7999f33b5535952dbfdf8939ff39cd8808f0c99c4f418c54874e1c69f80"
+    },
+    {
+      "path": "model/negative-overretry.cfg",
+      "sha256": "4ea6403ab4f9d389997ca75966ef54756c694623c5989980004bdae8010409d6"
+    },
+    {
+      "path": "model/negative-pending-spin.cfg",
+      "sha256": "1b8767dcbf2029373b6df363a8fad5431a068e442904fc77671d61a6b6dd9215"
+    },
+    {
+      "path": "model/negative-recovery-consume.cfg",
+      "sha256": "4cec07408d4e327797438c20562711bfe1f7c367354c375f727647d5cacfc080"
+    },
+    {
+      "path": "model/negative-recovery-plan.cfg",
+      "sha256": "3a0a2ed8ce1cd42aa14ad3643282fa595368ef22505b464bf1d566ab36d77610"
+    },
+    {
+      "path": "model/negative-repeat-effect.cfg",
+      "sha256": "b0fc97c6ae839bf7f5717e47b9bf51cf399cf92bc9cb91ff7f420317fd9de718"
+    },
+    {
+      "path": "model/negative-type.cfg",
+      "sha256": "ead2528c833ed8cd99b566a675bed2bc0dd60432c5b62d6695b152646eb341d5"
+    },
+    {
+      "path": "model/negative-unknown-reject.cfg",
+      "sha256": "572086facc3b8e999b7c07b2a7e9530725982aa2bd63fc5f129d46c7cd091651"
+    },
+    {
+      "path": "model/old25c-counterexample.cfg",
+      "sha256": "1ad68853e1528a74ff85939534997f17f60ba91363cd4e0df58339832409c286"
+    },
+    {
+      "path": "model/positive-batch.cfg",
+      "sha256": "62d228976b8b107be2917699ccba60a6d96044c2ae6b01865b8684224044ff88"
+    },
+    {
+      "path": "model/positive-budget.cfg",
+      "sha256": "967115672ebe7b6136891135213c5c3fc54cb4fdbe4c26671cb64dae1950a4eb"
+    },
+    {
+      "path": "model/positive-control.cfg",
+      "sha256": "6214826d012eaee7b9472721a7ae041c116d724bdcfa90c2acc2b4ae28555eb2"
+    },
+    {
+      "path": "model/positive-observation-resume.cfg",
+      "sha256": "b1a8749618b4a61426484d55febc5afd9421e7f6e96b953a8a21e324abc30486"
+    },
+    {
+      "path": "model/positive-ordinary.cfg",
+      "sha256": "1e5a4a54069775011f3d7212c7986cecd2fc1640841dee9d38f896ca83a544d4"
+    },
+    {
+      "path": "model/positive-resume-observation.cfg",
+      "sha256": "263264bc588fa2ae09595d3efd19f9dfb2967fe2f9a84035779c3947093afc62"
+    },
+    {
+      "path": "model/positive-terminal.cfg",
+      "sha256": "8acedbe2d0aae604b139a5b6e0923eccc3e91ddba1522a14d227896b5f5e39a8"
+    },
+    {
+      "path": "model/positive-unknown.cfg",
+      "sha256": "3b389baf3cdd4088369f3433f6e0b46319a04e633b410093e54a7d9540680cbc"
+    },
+    {
+      "path": "model/witness-batch.cfg",
+      "sha256": "c9c49e4947edf06a42b0b2c754388efa8aa124aaf2608e3635cc724e0d69bcef"
+    },
+    {
+      "path": "model/witness-before-read-observation.cfg",
+      "sha256": "d218ebab1766b962477c51522ab5141823d0f10dd7b1b60a35c2071621b6e471"
+    },
+    {
+      "path": "model/witness-before-read.cfg",
+      "sha256": "5298bb480c6438733f3718d757f6c2c05fbb43c55bf5065145cd7114392c300e"
+    },
+    {
+      "path": "model/witness-blocked.cfg",
+      "sha256": "6d8c5bd1adbd994065f17a796c7e9dca8688ead5e9462a26c350d5ccbe784254"
+    },
+    {
+      "path": "model/witness-context-race.cfg",
+      "sha256": "7779ea78f5a87f2ba5d1a3132a5e6cf3a3f8d9e1603f9df17a91f9ab6bb3d1d5"
+    },
+    {
+      "path": "model/witness-duplicate.cfg",
+      "sha256": "f457265c029d9a1970b4132aa79c1820b1c374d11b17df07fe0a9878e9277e78"
+    },
+    {
+      "path": "model/witness-during-read-observation.cfg",
+      "sha256": "35953d8dd739eaeaa6e3851fae3cef6501b7c6eee1471d5e9fdf86942b7f0c14"
+    },
+    {
+      "path": "model/witness-during-read.cfg",
+      "sha256": "a569d3acb72e9e759ba14f0fc552d80cd4edb546b5223adbdcc908f7ef74fde7"
+    },
+    {
+      "path": "model/witness-explicit.cfg",
+      "sha256": "317ecc4afb3fe0d7335f84ad60443d205265d421b2c1fad81680e981ad0da0a2"
+    },
+    {
+      "path": "model/witness-prepared-pause.cfg",
+      "sha256": "6a35ee2bec847d4e064081b4980d4c66f915df562ae3865f05a21a977bf02c0d"
+    },
+    {
+      "path": "model/witness-pure-recovery.cfg",
+      "sha256": "ea125971d36eb6e39b8b5adb84dfb9b8b09ac4f688d39fefe223567a311e003e"
+    },
+    {
+      "path": "model/witness-receipt-observation.cfg",
+      "sha256": "8f988cdd34176b793547c5d0ec13d4060a9f940686d5a23b3d7397e805c52612"
+    },
+    {
+      "path": "model/witness-receipt.cfg",
+      "sha256": "e0acb28908a9b0aa8f033f7e3827aed4a4e08afbc9ce4e077403b1604167c7bd"
+    },
+    {
+      "path": "model/witness-reserve-race.cfg",
+      "sha256": "8470747428f5bdde38d21cb8db0592ae08c6f14b50ffd065fac91dd0b7b9caff"
+    },
+    {
+      "path": "model/witness-retry-bound.cfg",
+      "sha256": "436bdcfb7996d70dcde5b69ced5518b118db85f1145e643c82becb7f63ad0611"
+    },
+    {
+      "path": "model/witness-terminal.cfg",
+      "sha256": "413f8e3173643999291cb11f3c34ebb0de3917e5e194b73b4c06fbcfa7407686"
+    }
+  ]
+}

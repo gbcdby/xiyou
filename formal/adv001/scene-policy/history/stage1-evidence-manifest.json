@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "archive_name": "scene-policy-stage-evidence.tar.gz",
+  "archive_sha256": "b9adc92c8cad6a6c9d8201985743620f3a2d8dfcbe36eccbceddb85c450d3947",
+  "archive_bytes": 2361570,
+  "file_count": 6480,
+  "excluded_reproducible_runtime_data": [
+    "jar copies (fixed SHA recorded)",
+    "TLC temporary state database",
+    "runtime-home",
+    "tmp"
+  ],
+  "history": {
+    "first-old9b": "MODEL_ERROR: 字符串词法错误；不是产品失败",
+    "second-old9b": "MODEL_ERROR: 空序列前空格词法错误；不是产品失败",
+    "first-model-withdraw-old9b": "MODEL_ERROR: 受控外部窗口可错过导致死锁；不是产品失败",
+    "first-model-withdraw-fixed": "MODEL_ERROR: 同一受控窗口死锁；不是产品失败",
+    "window-model-withdraw-old9b": "早期模型真实活性反例，版本不同",
+    "window-model-withdraw-fixed": "早期模型有限通过，版本不同",
+    "request-round1": "实际TLC结果保留；初版汇总只识别固定活性目标导致3项误判，后续修正封装并重跑",
+    "follow-round1": "早期路线检查",
+    "matrix-final-01": "旧请求版本33项加当前相同路线17项，50项均符合当时判据",
+    "cached-rejection-probe": "本阶段STD-002首次实际反例，282个不同状态",
+    "request-checkpoint-02": "当前请求模型35项实际结果",
+    "external-evidence": "仅读取和保全的既有产品探针证据；非本任务产品运行"
+  },
+  "full_inventory": {
+    "name": "evidence-files.json",
+    "sha256": "0e6ca6a28259651f13f6c3a8119616766dee44b868e456bf54d9ab38cddf2af4",
+    "bytes": 1415350,
+    "availability": "与原始日志归档并列保存；Git结果摘要含52项实际输入与日志hash。"
+  }
+}

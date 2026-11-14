@@ -43,7 +43,7 @@ async function create() {
   busy.value = true; notice.value = '';
   if (!createNonce) createNonce = crypto.randomUUID();
   try {
-    const room = chapterMode.value === 'gaolao' ? await api.createSpatial(createNonce, import.meta.env.VITE_GAOLAO_CONTENT_VERSION || 'gaolaozhuang-v1') : chapterMode.value === 'spatial' ? await api.createSpatial(createNonce, import.meta.env.VITE_SPATIAL_CONTENT_VERSION || 'spatial-graybox-v2') : await api.create(createNonce, contentVersion);
+    const room = chapterMode.value === 'gaolao' ? await api.createSpatial(createNonce, import.meta.env.VITE_GAOLAO_CONTENT_VERSION || 'gaolaozhuang-scene-v2') : chapterMode.value === 'spatial' ? await api.createSpatial(createNonce, import.meta.env.VITE_SPATIAL_CONTENT_VERSION || 'spatial-graybox-v2') : await api.create(createNonce, contentVersion);
     busy.value = false; await join(room.sessionId, chapterMode.value === 'region' ? 'region-v1' : 'spatial-v2');
     if (!notice.value) createNonce = '';
   } catch (error) { notice.value = explain(error); }

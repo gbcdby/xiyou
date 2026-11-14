@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "feature": "SP06 公开随行提议并发身份",
+  "modes": [
+    "design",
+    "check",
+    "align"
+  ],
+  "requirements": [
+    "#23",
+    "#29 GZ-SP06/GZ-SP08",
+    "#33",
+    "#34",
+    "docs/specs/adv-protocol.md §6"
+  ],
+  "source_identity": "source-identity.json",
+  "runtime": {
+    "language": "Node.js/TypeScript/Vue",
+    "tested_node": "v24.22.1",
+    "authority": "PostgreSQL-backed Session runtime",
+    "serialization": "locked Session row FOR UPDATE transaction"
+  },
+  "model_boundary": "MODEL_CONTRACT.md",
+  "mapping": "MODEL_SOURCE_MAP.md",
+  "tool": {
+    "tlc": "2.19 / tools v1.7.4",
+    "jar_sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+    "runner": "../../../.agents/skills/worker-tla/scripts/run_tlc.py",
+    "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a"
+  },
+  "ci": "独立必需验收，未新增到现有20分钟CI；既有产品测试仍由原CI收集",
+  "implementation_status": "独立PG与GUI另列运行证据；TLC原始NOT_ASSESSED不改写",
+  "unknowns": [
+    "未做refinement/无限状态证明",
+    "不模拟真实数据库崩溃、密码学或JSON解析",
+    "不验证真实LLM或整章全部恢复组合"
+  ]
+}

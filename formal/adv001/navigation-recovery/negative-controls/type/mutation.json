@@ -1,0 +1,10 @@
+{
+  "description": "错误变体：首段接受后把命令高水位写成负数",
+  "expected_status": "COUNTEREXAMPLE",
+  "expected_exit": 12,
+  "expected_invariant": "TypeOK",
+  "source_model_sha256": "708f6e24234221b3eb6b707f899906740a9ca370bf388231a0214ed68ba596a7",
+  "mutant_model_sha256": "b413d0ea20841189968513b3a46fd78b2e813220dd44ee37fc9601cfbe5b5a84",
+  "original": "!.done[i]=\"Accepted\", !.high=FirstSeq(i),",
+  "replacement": "!.done[i]=\"Accepted\", !.high=-1,"
+}

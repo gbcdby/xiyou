@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "feature": "错误变体：首段接受后把命令高水位写成负数",
+  "tool": {
+    "version": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "model": {
+    "root": "model",
+    "entry": "NavRecovery.tla"
+  },
+  "requirements": [
+    {
+      "id": "NAV-01/03",
+      "statement": "原首段的确定 Receipt、当前计划与真实显示身份汇合前不得发第二段；Unknown 恢复不换身份。",
+      "properties": [
+        "NoPrematureCrossing",
+        "ReceiptBound"
+      ]
+    },
+    {
+      "id": "NAV-02/04/05",
+      "statement": "已取消/替换或真实已知围栏失效的队列不能被迟响应复活；第二段最多发一次。",
+      "properties": [
+        "NoCancelledRevival",
+        "AtMostOneContinuation"
+      ]
+    },
+    {
+      "id": "NAV-PROGRESS",
+      "statement": "在合法稳定环境及交付/内部步骤弱公平下，真实早到显示与迟 Receipt 最终允许第二段。",
+      "properties": [
+        "ContinuationProgress"
+      ]
+    }
+  ],
+  "profiles": {
+    "negative-type": {
+      "config": "negative.cfg",
+      "timeout_seconds": 30,
+      "workers": 1,
+      "heap_mb": 256,
+      "expected_invariants": [
+        "TypeOK"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Adversarial": false,
+          "MaxQueues": 1,
+          "OldSeq": 1,
+          "ForceUnknown": false
+        },
+        "covered_interleavings_and_faults": [
+          "Receipt/公开投影/真实显示回调独立到达、有限重复",
+          "同号历史 movement 与旧 epoch 高序号",
+          "Unknown 后原身份恢复、取消/替换和迟响应",
+          "当前高水位、已知授权围栏与一次暂停/恢复"
+        ],
+        "excluded_behaviors": [
+          "真实权限/DB/几何",
+          "跨进程持久化队列",
+          "无限消息/任意数量连续点击",
+          "实际跨场景效果；这里只计第二段发出"
+        ],
+        "liveness": "NOT_CHECKED",
+        "negative_control": "错误变体：首段接受后把命令高水位写成负数"
+      },
+      "assumptions": [
+        "投影按序应用；旧/重复批次不回退。",
+        "原 Receipt 身份真实、不可变；同一控制 epoch 的输入命令号唯一。",
+        "视觉事件只在该公开计划实际显示 settled 时产生；浮点位置和动画算法未建模。",
+        "活性配置只用一份未取消的合法计划，原结果最终 Accepted，恢复、首次有效送达及内部启用动作弱公平；暂停最终恢复。"
+      ]
+    }
+  }
+}

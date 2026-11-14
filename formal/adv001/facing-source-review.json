@@ -1,0 +1,380 @@
+{
+  "schema_version": 1,
+  "mode": "align-source-delta",
+  "scope": "CUI-OBS-01；高老庄首章朝向写回对既有恢复与场景模型覆盖切片的影响。",
+  "status": {
+    "covered_transition_delta": "IN_SYNC",
+    "overall_mapping": "PARTIAL",
+    "tlc_this_review": "NOT_RUN",
+    "product_execution_this_review": "NOT_RUN",
+    "machine_checked_refinement": "NOT_PERFORMED"
+  },
+  "identities": {
+    "public_main": {
+      "commit": "573c7c135e8cce8155ad2bb4367be64252f1d7e9",
+      "tree": "1eab282a0a5b875ccc8581d612b59e606fd3c1d2",
+      "provenance": "合并交接给出的公开身份；本次未访问远端，使用本地等价整树。"
+    },
+    "local_equivalent_base": {
+      "commit": "04f245310de24538ccde1eb629e3363d9b2410e7",
+      "tree": "1eab282a0a5b875ccc8581d612b59e606fd3c1d2"
+    },
+    "product_base": {
+      "commit": "955850241093332353cbb8b84fc2a7df40ecb827",
+      "tree": "b23c8f7aa296799c38767a2cb438bcc98602582c"
+    },
+    "facing_fix": {
+      "commit": "45969a982cef55c6dfc93d5c91df6c7dc27dcdbd",
+      "tree": "456db52414a07c9f68a83ca13804c247fd90f45e",
+      "parent": "955850241093332353cbb8b84fc2a7df40ecb827"
+    },
+    "mechanical_composition": {
+      "commit": "3e8bddf5a2662e7af5338a0fe7b14933036e90b5",
+      "tree": "db1c616b1f061890b36643dd17381b9afe5f9456",
+      "parent": "04f245310de24538ccde1eb629e3363d9b2410e7",
+      "changed_files": [
+        "backend/tests/spatial-facing.test.mjs",
+        "game/gaolao-rules.mjs",
+        "game/spatial-geometry.mjs",
+        "game/spatial-rules.mjs"
+      ]
+    }
+  },
+  "source_files": {
+    "backend/ai/orchestrator.mjs": {
+      "git_blob": "adc051b3ead230d3c1c29376dcd40884fc941062",
+      "sha256": "a8245cddfcbce12bde5252377ee683342e94069adf0a61acfc9435c4d1654036",
+      "bytes": 17371
+    },
+    "backend/ai/persistence.mjs": {
+      "git_blob": "f9cd0be07b0092cd13b1c4eebfef1131eab125ce",
+      "sha256": "70d97c8f17314596267d72c22faca4916364560ee6a06c1bde43538c5ea9b031",
+      "bytes": 6099
+    },
+    "backend/ai/spatial-context.mjs": {
+      "git_blob": "2468a4e498a9cd09b14b353b10fe346468d93257",
+      "sha256": "ff459a16a22d9476ff5cde4cea099e1fad8d37f1512754b5b1b61a86f0b97cf4",
+      "bytes": 4808
+    },
+    "backend/ai/spatial-decisions.mjs": {
+      "git_blob": "49e61f419d7798ebff9e71da9019639198471e94",
+      "sha256": "476710dd550ed1ec6b23d23419164cdd88f4b401eea9aacbe9682a423923400f",
+      "bytes": 18914
+    },
+    "backend/ai/spatial-runtime.md": {
+      "git_blob": "23e7172e78c6c792808b5a467e4796685c569c31",
+      "sha256": "dc6b74a03df65fff0ac4b0158fac656edece3bf735cc6c0d3c68e4d785ced0cc",
+      "bytes": 10146
+    },
+    "backend/decisions.mjs": {
+      "git_blob": "f201ff0759a19d1357ef4466dbd04ea85ce1528e",
+      "sha256": "fb4c659d8971e85bb464c3d28d6a7e44cd44267d8124463acff28fdca668016f",
+      "bytes": 15001
+    },
+    "backend/migrations/008-scene-policy.sql": {
+      "git_blob": "c9dc0e2f1fbfe151338b9e263bf1366483ea78e9",
+      "sha256": "a9c119f17436db64f0bf9d426df1f1732eec4b4c38a29f1b669fa499d80645b3",
+      "bytes": 444
+    },
+    "backend/runtime.mjs": {
+      "git_blob": "6971c618c33e969370cce69f6cc545dbb50c4db3",
+      "sha256": "110444dddaff072e6e67c316d7c81a621ada64419739ba705fda4ca549a8d22f",
+      "bytes": 59121
+    },
+    "backend/scene-policy-runtime.md": {
+      "git_blob": "960a4d4eb22295abfcfa176b2761341c089c8f6a",
+      "sha256": "82eda0a93e42f7fac8e84727fae9c2f60dca3445582bca9e4d3ccbc040e51575",
+      "bytes": 16354
+    },
+    "backend/scene-policy-runtime.mjs": {
+      "git_blob": "660d85c56b87893b3c90de6b7b3f074b028a04ef",
+      "sha256": "3f6f0107842e82709dbad4f9fcfcf3140689bcf552bf90ecb3ba713080d79710",
+      "bytes": 7357
+    },
+    "backend/scene-policy.mjs": {
+      "git_blob": "faaa2137703e443dab223e73cea55beb4f3eecaa",
+      "sha256": "290826e0c204bcc9241705d51256b90e5923f5a55bb6539d5511e18798109edd",
+      "bytes": 17776
+    },
+    "backend/spatial-runtime.mjs": {
+      "git_blob": "dffd874896255bc19e9d5ffd021e9813f4d70493",
+      "sha256": "fd1619eca6e232c9a796af2f52cb49a3cc486ccc9cf47a9b7c9ec885b59981ce",
+      "bytes": 22837
+    },
+    "backend/tests/scene-policy-result-dedup.test.mjs": {
+      "git_blob": "f5b89f4e5070636bb361243184874d4fe9783b61",
+      "sha256": "724f14499bd2279b093f2d9293278a9d4ab120c177a64060927cd19f816069a1",
+      "bytes": 8885
+    },
+    "backend/tests/spatial-facing.test.mjs": {
+      "git_blob": "aacfa7de3712ba98258ca76ddcdbeca818a4b98c",
+      "sha256": "8f080c6cdb1f99a54061f7886181191606f0a1bae12daf6485c7a6703cb24404",
+      "bytes": 10666
+    },
+    "docs/specs/adv-protocol.md": {
+      "git_blob": "4269ef53f9eb81989f3f6a866880319bab04c2b8",
+      "sha256": "8a124c275b3548b7ee65118086eb46197de33a2778a1b577264308adf4e8e220",
+      "bytes": 28617
+    },
+    "docs/specs/gaolao-scene-policy.md": {
+      "git_blob": "f206953fe093d4d0a3e36bd773cf6a1819fadc47",
+      "sha256": "23c0ce7459016c0c48be19c6996473e46d768a1c724d42a292ae49b481f03adf",
+      "bytes": 51070
+    },
+    "formal/adv001/scene-policy-impact.md": {
+      "git_blob": "d007ed443fb3da5b23171270e1f6c5de23a64970",
+      "sha256": "06d73243bb0326b0dcccea3c54d4e63340cfde690a6401b58ef1ec43fca2acc9",
+      "bytes": 12912
+    },
+    "game/gaolao-policy-route.mjs": {
+      "git_blob": "95e9d3a4900ca2c56c1241c0cd66975a942ff095",
+      "sha256": "edec97133c1ab1ac70fd2d2109817acba289a8c31eb29ed7864f4faa02abab6d",
+      "bytes": 10034
+    },
+    "game/gaolao-rules.mjs": {
+      "git_blob": "23e152616bf3df67907db78411082ea229fe82ca",
+      "sha256": "4901e002d86d082738af8c64c8a233d9ad8017cffa8cafd80c8bc39e63413175",
+      "bytes": 37803
+    },
+    "game/gaolao-scene-policy.mjs": {
+      "git_blob": "4713ef2e6829ebbe068ee73b26344eae2b7611f9",
+      "sha256": "c241fe5ae79cf68046a8da4b5af52e5a1a3946912fefe09c16a2b7c05a514dee",
+      "bytes": 2859
+    },
+    "game/spatial-geometry.mjs": {
+      "git_blob": "8c337bf9e4213267d916444e6907add1581ac3f1",
+      "sha256": "02d0e6f8e72645ca850ed7f2068e5136b52c1b23fc54337b15bd7c7d103e54f3",
+      "bytes": 15303
+    },
+    "game/spatial-rules.mjs": {
+      "git_blob": "d87f195a946aca49657dd76c5730588b8a2dab6a",
+      "sha256": "99b540a7442817ff4b97ff6497b84b984c5f5f6b39b0df52a2df0380aa73203e",
+      "bytes": 21849
+    },
+    "game/spatial-world.mjs": {
+      "git_blob": "315520dc13277fb846b4f8c554c24d2be835961e",
+      "sha256": "64d3525eb9532bbf4008e84876190968b917489893d5d233ea7ad1a913130368",
+      "bytes": 15759
+    },
+    "protocol/index.mjs": {
+      "git_blob": "ce818149e9c4121d50a1adc6185f33e28aca7999",
+      "sha256": "a28bee237d590a5586cc844c7b0bdb234ff9b1719c15775ad55c9a2ce275aa3b",
+      "bytes": 19760
+    },
+    "protocol/node.mjs": {
+      "git_blob": "609042f920c02660f7f9f7a7991f2f10566001b5",
+      "sha256": "fcbf2da0fd72566e8af112dd615224bb5a18c1c9ae23fafc4739b6aa9b69754a",
+      "bytes": 411
+    },
+    "protocol/spatial.mjs": {
+      "git_blob": "2c5fa3f5ab5ba8717c20ee3735d3a5ca4faa4111",
+      "sha256": "a4a5269e5118d3ebdc57c88350b2898601e9cd52dc7aad91ce282ed1d6341eec",
+      "bytes": 7246
+    }
+  },
+  "exact_delta_decomposition": {
+    "game/spatial-geometry.mjs": {
+      "status": "EXACT_REMAINDER_MATCH",
+      "baseline_sha256": "1310d5da26338543c13909d9e641da82fb9166797466483b677126bc771f9ab7",
+      "candidate_sha256": "02d0e6f8e72645ca850ed7f2068e5136b52c1b23fc54337b15bd7c7d103e54f3",
+      "normalized_sha256": "1310d5da26338543c13909d9e641da82fb9166797466483b677126bc771f9ab7"
+    },
+    "game/spatial-rules.mjs": {
+      "status": "EXACT_REMAINDER_MATCH",
+      "baseline_sha256": "2d5427a451e759a4b09eeceb4ed1c4a4fff3b10d60538d8ffbba8af2028aac81",
+      "candidate_sha256": "99b540a7442817ff4b97ff6497b84b984c5f5f6b39b0df52a2df0380aa73203e",
+      "normalized_sha256": "2d5427a451e759a4b09eeceb4ed1c4a4fff3b10d60538d8ffbba8af2028aac81"
+    },
+    "game/gaolao-rules.mjs": {
+      "status": "EXACT_REMAINDER_MATCH",
+      "baseline_sha256": "1860259156b9a5e427abcd250331e3198bc1cef4cb234bfc7aa776ef97723492",
+      "candidate_sha256": "4901e002d86d082738af8c64c8a233d9ad8017cffa8cafd80c8bc39e63413175",
+      "normalized_sha256": "1860259156b9a5e427abcd250331e3198bc1cef4cb234bfc7aa776ef97723492"
+    }
+  },
+  "decomposition_scope": "只在内存移除已审查的 helper/import/facing 赋值及纯距离表达式提取；其余文本逐字一致。这是差异核对，不是执行测试或源码精化证明。",
+  "recovery_profile_comparison": [
+    {
+      "path": "backend/runtime.mjs",
+      "status": "PREEXISTING_SCENE_EXTENSION",
+      "historical_sha256": "5414b71f77343a0259143dc59936dbe1aa234c7018cd2511f375dd949abfb477",
+      "baseline_sha256": "110444dddaff072e6e67c316d7c81a621ada64419739ba705fda4ca549a8d22f",
+      "candidate_sha256": "110444dddaff072e6e67c316d7c81a621ada64419739ba705fda4ca549a8d22f"
+    },
+    {
+      "path": "backend/decisions.mjs",
+      "status": "UNCHANGED",
+      "historical_sha256": "fb4c659d8971e85bb464c3d28d6a7e44cd44267d8124463acff28fdca668016f",
+      "baseline_sha256": "fb4c659d8971e85bb464c3d28d6a7e44cd44267d8124463acff28fdca668016f",
+      "candidate_sha256": "fb4c659d8971e85bb464c3d28d6a7e44cd44267d8124463acff28fdca668016f"
+    },
+    {
+      "path": "backend/ai/orchestrator.mjs",
+      "status": "UNCHANGED",
+      "historical_sha256": "a8245cddfcbce12bde5252377ee683342e94069adf0a61acfc9435c4d1654036",
+      "baseline_sha256": "a8245cddfcbce12bde5252377ee683342e94069adf0a61acfc9435c4d1654036",
+      "candidate_sha256": "a8245cddfcbce12bde5252377ee683342e94069adf0a61acfc9435c4d1654036"
+    },
+    {
+      "path": "backend/ai/persistence.mjs",
+      "status": "UNCHANGED",
+      "historical_sha256": "70d97c8f17314596267d72c22faca4916364560ee6a06c1bde43538c5ea9b031",
+      "baseline_sha256": "70d97c8f17314596267d72c22faca4916364560ee6a06c1bde43538c5ea9b031",
+      "candidate_sha256": "70d97c8f17314596267d72c22faca4916364560ee6a06c1bde43538c5ea9b031"
+    },
+    {
+      "path": "backend/ai/spatial-decisions.mjs",
+      "status": "UNCHANGED",
+      "historical_sha256": "476710dd550ed1ec6b23d23419164cdd88f4b401eea9aacbe9682a423923400f",
+      "baseline_sha256": "476710dd550ed1ec6b23d23419164cdd88f4b401eea9aacbe9682a423923400f",
+      "candidate_sha256": "476710dd550ed1ec6b23d23419164cdd88f4b401eea9aacbe9682a423923400f"
+    },
+    {
+      "path": "backend/ai/spatial-runtime.md",
+      "status": "UNCHANGED",
+      "historical_sha256": "dc6b74a03df65fff0ac4b0158fac656edece3bf735cc6c0d3c68e4d785ced0cc",
+      "baseline_sha256": "dc6b74a03df65fff0ac4b0158fac656edece3bf735cc6c0d3c68e4d785ced0cc",
+      "candidate_sha256": "dc6b74a03df65fff0ac4b0158fac656edece3bf735cc6c0d3c68e4d785ced0cc"
+    },
+    {
+      "path": "docs/specs/adv-protocol.md",
+      "status": "UNCHANGED",
+      "historical_sha256": "8a124c275b3548b7ee65118086eb46197de33a2778a1b577264308adf4e8e220",
+      "baseline_sha256": "8a124c275b3548b7ee65118086eb46197de33a2778a1b577264308adf4e8e220",
+      "candidate_sha256": "8a124c275b3548b7ee65118086eb46197de33a2778a1b577264308adf4e8e220"
+    },
+    {
+      "path": "game/spatial-rules.mjs",
+      "status": "FACING_DELTA",
+      "historical_sha256": "2d5427a451e759a4b09eeceb4ed1c4a4fff3b10d60538d8ffbba8af2028aac81",
+      "baseline_sha256": "2d5427a451e759a4b09eeceb4ed1c4a4fff3b10d60538d8ffbba8af2028aac81",
+      "candidate_sha256": "99b540a7442817ff4b97ff6497b84b984c5f5f6b39b0df52a2df0380aa73203e"
+    },
+    {
+      "path": "protocol/node.mjs",
+      "status": "UNCHANGED",
+      "historical_sha256": "fcbf2da0fd72566e8af112dd615224bb5a18c1c9ae23fafc4739b6aa9b69754a",
+      "baseline_sha256": "fcbf2da0fd72566e8af112dd615224bb5a18c1c9ae23fafc4739b6aa9b69754a",
+      "candidate_sha256": "fcbf2da0fd72566e8af112dd615224bb5a18c1c9ae23fafc4739b6aa9b69754a"
+    },
+    {
+      "path": "protocol/index.mjs",
+      "status": "UNCHANGED",
+      "historical_sha256": "a28bee237d590a5586cc844c7b0bdb234ff9b1719c15775ad55c9a2ce275aa3b",
+      "baseline_sha256": "a28bee237d590a5586cc844c7b0bdb234ff9b1719c15775ad55c9a2ce275aa3b",
+      "candidate_sha256": "a28bee237d590a5586cc844c7b0bdb234ff9b1719c15775ad55c9a2ce275aa3b"
+    }
+  ],
+  "scene_source_comparison": [
+    {
+      "path": "docs/specs/gaolao-scene-policy.md",
+      "status": "UNCHANGED",
+      "historical_sha256": "23c0ce7459016c0c48be19c6996473e46d768a1c724d42a292ae49b481f03adf",
+      "candidate_sha256": "23c0ce7459016c0c48be19c6996473e46d768a1c724d42a292ae49b481f03adf"
+    },
+    {
+      "path": "formal/adv001/scene-policy-impact.md",
+      "status": "UNCHANGED",
+      "historical_sha256": "06d73243bb0326b0dcccea3c54d4e63340cfde690a6401b58ef1ec43fca2acc9",
+      "candidate_sha256": "06d73243bb0326b0dcccea3c54d4e63340cfde690a6401b58ef1ec43fca2acc9"
+    },
+    {
+      "path": "backend/scene-policy.mjs",
+      "status": "UNCHANGED",
+      "historical_sha256": "290826e0c204bcc9241705d51256b90e5923f5a55bb6539d5511e18798109edd",
+      "candidate_sha256": "290826e0c204bcc9241705d51256b90e5923f5a55bb6539d5511e18798109edd"
+    },
+    {
+      "path": "backend/scene-policy-runtime.mjs",
+      "status": "UNCHANGED",
+      "historical_sha256": "3f6f0107842e82709dbad4f9fcfcf3140689bcf552bf90ecb3ba713080d79710",
+      "candidate_sha256": "3f6f0107842e82709dbad4f9fcfcf3140689bcf552bf90ecb3ba713080d79710"
+    },
+    {
+      "path": "backend/scene-policy-runtime.md",
+      "status": "UNCHANGED",
+      "historical_sha256": "82eda0a93e42f7fac8e84727fae9c2f60dca3445582bca9e4d3ccbc040e51575",
+      "candidate_sha256": "82eda0a93e42f7fac8e84727fae9c2f60dca3445582bca9e4d3ccbc040e51575"
+    },
+    {
+      "path": "backend/spatial-runtime.mjs",
+      "status": "UNCHANGED",
+      "historical_sha256": "fd1619eca6e232c9a796af2f52cb49a3cc486ccc9cf47a9b7c9ec885b59981ce",
+      "candidate_sha256": "fd1619eca6e232c9a796af2f52cb49a3cc486ccc9cf47a9b7c9ec885b59981ce"
+    },
+    {
+      "path": "backend/runtime.mjs",
+      "status": "UNCHANGED",
+      "historical_sha256": "110444dddaff072e6e67c316d7c81a621ada64419739ba705fda4ca549a8d22f",
+      "candidate_sha256": "110444dddaff072e6e67c316d7c81a621ada64419739ba705fda4ca549a8d22f"
+    },
+    {
+      "path": "backend/migrations/008-scene-policy.sql",
+      "status": "UNCHANGED",
+      "historical_sha256": "a9c119f17436db64f0bf9d426df1f1732eec4b4c38a29f1b669fa499d80645b3",
+      "candidate_sha256": "a9c119f17436db64f0bf9d426df1f1732eec4b4c38a29f1b669fa499d80645b3"
+    },
+    {
+      "path": "game/gaolao-scene-policy.mjs",
+      "status": "UNCHANGED",
+      "historical_sha256": "c241fe5ae79cf68046a8da4b5af52e5a1a3946912fefe09c16a2b7c05a514dee",
+      "candidate_sha256": "c241fe5ae79cf68046a8da4b5af52e5a1a3946912fefe09c16a2b7c05a514dee"
+    },
+    {
+      "path": "game/gaolao-policy-route.mjs",
+      "status": "UNCHANGED",
+      "historical_sha256": "edec97133c1ab1ac70fd2d2109817acba289a8c31eb29ed7864f4faa02abab6d",
+      "candidate_sha256": "edec97133c1ab1ac70fd2d2109817acba289a8c31eb29ed7864f4faa02abab6d"
+    },
+    {
+      "path": "game/gaolao-rules.mjs",
+      "status": "FACING_DELTA",
+      "historical_sha256": "1860259156b9a5e427abcd250331e3198bc1cef4cb234bfc7aa776ef97723492",
+      "candidate_sha256": "4901e002d86d082738af8c64c8a233d9ad8017cffa8cafd80c8bc39e63413175"
+    },
+    {
+      "path": "backend/tests/scene-policy-result-dedup.test.mjs",
+      "status": "UNCHANGED",
+      "historical_sha256": "724f14499bd2279b093f2d9293278a9d4ab120c177a64060927cd19f816069a1",
+      "candidate_sha256": "724f14499bd2279b093f2d9293278a9d4ab120c177a64060927cd19f816069a1"
+    }
+  ],
+  "historical_artifacts": {
+    "baseline_commit": "04f245310de24538ccde1eb629e3363d9b2410e7",
+    "protected_file_count": 129,
+    "model_hashes": {
+      "formal/adv001/recovery-wake/model/RecoveryWake.tla": "cefc90a3bc05805ade0e60c2d253d520c15fd52f0f35c85dd649d17d503334ae",
+      "formal/adv001/scene-policy/model/SceneFollow.tla": "61c550a71cdeaced28c77bb44347b9f355b015018032fe6e988dfb62b8cb3049",
+      "formal/adv001/scene-policy/model/SceneRequest.tla": "b426837ae8704ce9610edd613ee97728b85947ac103f6629ebe98323e537bea1"
+    },
+    "configuration_file_count": 104,
+    "protected_files_manifest_sha256": "335d669e56593d3c79271a5c3c9ecd02d009927b5ad425b5d26a3d6af898c6f4",
+    "preserved_identity_files": {
+      "formal/adv001/recovery-wake/project-profile.json": "fb91e3455deacbf515b94bef18cd2022223714cca7f6521c6f469d7465d06a82",
+      "formal/adv001/recovery-wake/identity.json": "8c11346470e0be3af0ff3a3e917e3a861d4bb372aca004df1ca04d7279727460",
+      "formal/adv001/recovery-wake/results.json": "d153cc795d44fd7036f3a4176bbd0d770a8e9049d62b3773777e501d59dac0d8",
+      "formal/adv001/scene-policy/source-files.json": "fcf5dc3b400b465ea9fcd9073abaa08398173ed8d8c7946f7d3e7d262662ced6",
+      "formal/adv001/scene-policy/identity.json": "20b4d718cdf58fe8d654a975bd12436204fd0b9ea1cb9f406d6f5463972a7fca",
+      "formal/adv001/scene-policy/results.json": "851dddca0c77514302daf1ee26b98f0024995b639600f78fdf3f5e14d4c9b7f1"
+    },
+    "recovery_criteria": 40,
+    "scene_criteria": 64,
+    "reuse_meaning": "保持历史模型、配置、判据及日志身份。没有对朝向候选重新运行这些项目，也不把旧结果扩为新源码的完整证明。"
+  },
+  "assumptions": [
+    "现有合法路径由有限、有效的点组成；新增 helper 同步、无副作用并终止。",
+    "原事务原子性、授权、幂等持久化、调度与通知送达等模型前提不变。",
+    "本次未证明既有 scene 扩展的完整总调用图、通知总性或跨进程恢复。"
+  ],
+  "observable_change": "既有 facing 值进入 actor 事件、授权快照及未来 AI context；旧请求与已保存上下文不回写。完整输出或未来 provider 行为不要求与基线相同。",
+  "excluded": [
+    "朝向八向角度及边界正确性",
+    "连续几何与真实碰撞",
+    "绘制与冷视图",
+    "SQL/授权算法",
+    "HTTP/Socket/重启验收",
+    "跨进程通知",
+    "LLM输出",
+    "整体产品或后续章节证明"
+  ]
+}

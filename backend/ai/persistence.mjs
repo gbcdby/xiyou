@@ -3,6 +3,9 @@ import { canonicalize, parseProposedIntent, intentSemanticDigestSync } from '../
 import { ownRecord } from '../../game/records.mjs';
 import { RuntimeError } from '../errors.mjs';
 import { encodeOutput, decodeStoredOutput, outputStringDigest } from './output.mjs';
+import { parseSpatialProposedIntent } from '../../protocol/spatial-ai.mjs';
+import { spatialIntentSemanticDigestSync } from '../../protocol/spatial-ai-node.mjs';
+import { encodeJsonbText, decodeJsonbText } from '../jsonb-text.mjs';
 
 const digest = value => createHash('sha256').update(canonicalize(value)).digest('hex');
 const mode = principal => principal.principalKind === 'core_npc' ? 'CoreNPCControlled' : 'AIProxyControlled';
@@ -23,12 +26,16 @@ export async function reserveCall(runtime, handle, prepared, configuration, maxC
     const record = (await tx.client.query('SELECT record FROM decisions WHERE session_id=$1 AND decision_id=$2 AND actor_id=$3', [principal.sessionId, prepared.decision.decisionId, principal.actorId])).rows[0]?.record;
     const actor = ownRecord(tx.state.characters, principal.actorId);
     if (!record || record.status !== 'Pending' || tx.state.phase !== 'Running' || actor.mode !== mode(principal) || actor.controlEpoch !== record.controlEpoch || tx.time >= record.deadlineAt) return { reserved: false, reason: 'STALE' };
-    if (canonicalize(record) !== canonicalize(prepared.context.decision) || prepared.context.sessionId !== principal.sessionId || prepared.context.actorId !== principal.actorId || prepared.context.principalKind !== principal.principalKind) throw new RuntimeError('FORBIDDEN', '上下文必须匹配本次可信决策。');
+    const matched = record.schemaVersion === 2
+      ? canonicalize(record) === canonicalize(prepared.decision) && record.contextDigest === digest(prepared.context) && prepared.context.schemaVersion === 2 && prepared.context.decision.decisionId === record.decisionId
+      : canonicalize(record) === canonicalize(prepared.context.decision) && prepared.context.actorId === principal.actorId && prepared.context.principalKind === principal.principalKind;
+    if (!matched || prepared.context.sessionId !== principal.sessionId) throw new RuntimeError('FORBIDDEN', '上下文必须匹配本次可信决策。');
     const existing = await tx.client.query('SELECT 1 FROM ai_runs WHERE session_id=$1 AND decision_id=$2', [principal.sessionId, record.decisionId]);
     if (existing.rowCount) return { reserved: false, reason: 'EXISTS' };
     const count = Number((await tx.client.query('SELECT count(*) FROM ai_runs WHERE session_id=$1', [principal.sessionId])).rows[0].count);
     if (count >= maxCalls) return { reserved: false, reason: 'CALL_BUDGET' };
-    await tx.client.query("INSERT INTO ai_runs(session_id,decision_id,actor_id,principal_kind,context,context_digest,configuration,status,created_at) VALUES($1,$2,$3,$4,$5,$6,$7,'Reserved',$8)", [principal.sessionId, record.decisionId, principal.actorId, principal.principalKind, prepared.context, digest(prepared.context), configuration, tx.time]);
+    const encoded = record.schemaVersion === 2 ? encodeJsonbText(prepared.context) : { value: prepared.context, encoding: null };
+    await tx.client.query("INSERT INTO ai_runs(session_id,decision_id,actor_id,principal_kind,context,context_digest,configuration,status,created_at,context_text_encoding) VALUES($1,$2,$3,$4,$5,$6,$7,'Reserved',$8,$9)", [principal.sessionId, record.decisionId, principal.actorId, principal.principalKind, encoded.value, digest(prepared.context), configuration, tx.time, encoded.encoding]);
     return { reserved: true };
   });
 }
@@ -44,7 +51,11 @@ export async function saveOutput(runtime, handle, decisionId, output) {
       if (decodeStoredOutput(run) !== (output.rawText ?? null) || run.semantic_digest !== (output.semanticDigest ?? null)) throw new RuntimeError('ACTION_ID_REUSE', '该决定已保存另一份输出。');
       return;
     }
-    if (output.status === 'Valid' && intentSemanticDigestSync(parseProposedIntent(output.rawText, decisionId)) !== output.semanticDigest) throw new RuntimeError('INVALID_MESSAGE', '模型输出摘要不匹配。');
+    const context = decodeJsonbText(run.context, run.context_text_encoding);
+    if (output.status === 'Valid') {
+      const semanticDigest = context.schemaVersion === 2 ? spatialIntentSemanticDigestSync(parseSpatialProposedIntent(output.rawText, decisionId, context)) : intentSemanticDigestSync(parseProposedIntent(output.rawText, decisionId));
+      if (semanticDigest !== output.semanticDigest) throw new RuntimeError('INVALID_MESSAGE', '模型输出摘要不匹配。');
+    }
     const { rawText, ...metadata } = output;
     const encoded = encodeOutput(rawText);
     if (typeof rawText === 'string') metadata.outputStringDigest = outputStringDigest(rawText);

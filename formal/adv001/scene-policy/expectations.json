@@ -1,0 +1,1044 @@
+{
+  "req-withdraw-return": {
+    "manifest": "request-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "RequestImmutable",
+      "ReceiptStable",
+      "EffectOnce",
+      "CurrentChoiceAtCommit",
+      "ExecutionLinkCurrent",
+      "SingleUnsettled",
+      "SemanticRetained",
+      "RecoveryNoConsumption",
+      "FreshEvaluationCause",
+      "RetryBound",
+      "SceneBudgetSeparate",
+      "CapacitySufficient",
+      "ReceiptWatermarkStable",
+      "AttemptLinked",
+      "RejectedAttemptAuthorized",
+      "RejectedWaitKeepsInputBoundary",
+      "TrustedPrepareInput"
+    ],
+    "properties": [
+      "DecisionProgress",
+      "SemanticProgress"
+    ],
+    "target": null,
+    "minimum_distinct_states": 20
+  },
+  "req-common-change": {
+    "manifest": "request-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "RequestImmutable",
+      "ReceiptStable",
+      "EffectOnce",
+      "CurrentChoiceAtCommit",
+      "ExecutionLinkCurrent",
+      "SingleUnsettled",
+      "SemanticRetained",
+      "RecoveryNoConsumption",
+      "FreshEvaluationCause",
+      "RetryBound",
+      "SceneBudgetSeparate",
+      "CapacitySufficient",
+      "ReceiptWatermarkStable",
+      "AttemptLinked",
+      "RejectedAttemptAuthorized",
+      "RejectedWaitKeepsInputBoundary",
+      "TrustedPrepareInput"
+    ],
+    "properties": [
+      "DecisionProgress",
+      "SemanticProgress"
+    ],
+    "target": null,
+    "minimum_distinct_states": 20
+  },
+  "req-response-dependency": {
+    "manifest": "request-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "RequestImmutable",
+      "ReceiptStable",
+      "EffectOnce",
+      "CurrentChoiceAtCommit",
+      "ExecutionLinkCurrent",
+      "SingleUnsettled",
+      "SemanticRetained",
+      "RecoveryNoConsumption",
+      "FreshEvaluationCause",
+      "RetryBound",
+      "SceneBudgetSeparate",
+      "CapacitySufficient",
+      "ReceiptWatermarkStable",
+      "AttemptLinked",
+      "RejectedAttemptAuthorized",
+      "RejectedWaitKeepsInputBoundary",
+      "TrustedPrepareInput"
+    ],
+    "properties": [
+      "DecisionProgress",
+      "SemanticProgress"
+    ],
+    "target": null,
+    "minimum_distinct_states": 20
+  },
+  "req-settlement-unrelated": {
+    "manifest": "request-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "RequestImmutable",
+      "ReceiptStable",
+      "EffectOnce",
+      "CurrentChoiceAtCommit",
+      "ExecutionLinkCurrent",
+      "SingleUnsettled",
+      "SemanticRetained",
+      "RecoveryNoConsumption",
+      "FreshEvaluationCause",
+      "RetryBound",
+      "SceneBudgetSeparate",
+      "CapacitySufficient",
+      "ReceiptWatermarkStable",
+      "AttemptLinked",
+      "RejectedAttemptAuthorized",
+      "RejectedWaitKeepsInputBoundary",
+      "TrustedPrepareInput"
+    ],
+    "properties": [
+      "DecisionProgress"
+    ],
+    "target": null,
+    "minimum_distinct_states": 20
+  },
+  "req-retreat-unrelated": {
+    "manifest": "request-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "RequestImmutable",
+      "ReceiptStable",
+      "EffectOnce",
+      "CurrentChoiceAtCommit",
+      "ExecutionLinkCurrent",
+      "SingleUnsettled",
+      "SemanticRetained",
+      "RecoveryNoConsumption",
+      "FreshEvaluationCause",
+      "RetryBound",
+      "SceneBudgetSeparate",
+      "CapacitySufficient",
+      "ReceiptWatermarkStable",
+      "AttemptLinked",
+      "RejectedAttemptAuthorized",
+      "RejectedWaitKeepsInputBoundary",
+      "TrustedPrepareInput"
+    ],
+    "properties": [
+      "DecisionProgress"
+    ],
+    "target": null,
+    "minimum_distinct_states": 20
+  },
+  "req-noop-late": {
+    "manifest": "request-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "RequestImmutable",
+      "ReceiptStable",
+      "EffectOnce",
+      "CurrentChoiceAtCommit",
+      "ExecutionLinkCurrent",
+      "SingleUnsettled",
+      "SemanticRetained",
+      "RecoveryNoConsumption",
+      "FreshEvaluationCause",
+      "RetryBound",
+      "SceneBudgetSeparate",
+      "CapacitySufficient",
+      "ReceiptWatermarkStable",
+      "AttemptLinked",
+      "RejectedAttemptAuthorized",
+      "RejectedWaitKeepsInputBoundary",
+      "TrustedPrepareInput"
+    ],
+    "properties": [
+      "DecisionProgress",
+      "SemanticProgress"
+    ],
+    "target": null,
+    "minimum_distinct_states": 20
+  },
+  "req-noise": {
+    "manifest": "request-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "RequestImmutable",
+      "ReceiptStable",
+      "EffectOnce",
+      "CurrentChoiceAtCommit",
+      "ExecutionLinkCurrent",
+      "SingleUnsettled",
+      "SemanticRetained",
+      "RecoveryNoConsumption",
+      "FreshEvaluationCause",
+      "RetryBound",
+      "SceneBudgetSeparate",
+      "CapacitySufficient",
+      "ReceiptWatermarkStable",
+      "AttemptLinked",
+      "RejectedAttemptAuthorized",
+      "RejectedWaitKeepsInputBoundary",
+      "TrustedPrepareInput"
+    ],
+    "properties": [
+      "DecisionProgress"
+    ],
+    "target": null,
+    "minimum_distinct_states": 20
+  },
+  "req-unknown-restart": {
+    "manifest": "request-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "RequestImmutable",
+      "ReceiptStable",
+      "EffectOnce",
+      "CurrentChoiceAtCommit",
+      "ExecutionLinkCurrent",
+      "SingleUnsettled",
+      "SemanticRetained",
+      "RecoveryNoConsumption",
+      "FreshEvaluationCause",
+      "RetryBound",
+      "SceneBudgetSeparate",
+      "CapacitySufficient",
+      "ReceiptWatermarkStable",
+      "AttemptLinked",
+      "RejectedAttemptAuthorized",
+      "RejectedWaitKeepsInputBoundary",
+      "TrustedPrepareInput"
+    ],
+    "properties": [],
+    "target": null,
+    "minimum_distinct_states": 20
+  },
+  "req-retry-exhaustion": {
+    "manifest": "request-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "RequestImmutable",
+      "ReceiptStable",
+      "EffectOnce",
+      "CurrentChoiceAtCommit",
+      "ExecutionLinkCurrent",
+      "SingleUnsettled",
+      "SemanticRetained",
+      "RecoveryNoConsumption",
+      "FreshEvaluationCause",
+      "RetryBound",
+      "SceneBudgetSeparate",
+      "CapacitySufficient",
+      "ReceiptWatermarkStable",
+      "AttemptLinked",
+      "RejectedAttemptAuthorized",
+      "RejectedWaitKeepsInputBoundary",
+      "TrustedPrepareInput"
+    ],
+    "properties": [],
+    "target": null,
+    "minimum_distinct_states": 20
+  },
+  "req-durable-step": {
+    "manifest": "request-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "RequestImmutable",
+      "ReceiptStable",
+      "EffectOnce",
+      "CurrentChoiceAtCommit",
+      "ExecutionLinkCurrent",
+      "SingleUnsettled",
+      "SemanticRetained",
+      "RecoveryNoConsumption",
+      "FreshEvaluationCause",
+      "RetryBound",
+      "SceneBudgetSeparate",
+      "CapacitySufficient",
+      "ReceiptWatermarkStable",
+      "AttemptLinked",
+      "RejectedAttemptAuthorized",
+      "RejectedWaitKeepsInputBoundary",
+      "TrustedPrepareInput"
+    ],
+    "properties": [],
+    "target": null,
+    "minimum_distinct_states": 20
+  },
+  "req-terminal": {
+    "manifest": "request-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "RequestImmutable",
+      "ReceiptStable",
+      "EffectOnce",
+      "CurrentChoiceAtCommit",
+      "ExecutionLinkCurrent",
+      "SingleUnsettled",
+      "SemanticRetained",
+      "RecoveryNoConsumption",
+      "FreshEvaluationCause",
+      "RetryBound",
+      "SceneBudgetSeparate",
+      "CapacitySufficient",
+      "ReceiptWatermarkStable",
+      "AttemptLinked",
+      "RejectedAttemptAuthorized",
+      "RejectedWaitKeepsInputBoundary",
+      "TrustedPrepareInput"
+    ],
+    "properties": [],
+    "target": null,
+    "minimum_distinct_states": 20
+  },
+  "req-authority": {
+    "manifest": "request-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "RequestImmutable",
+      "ReceiptStable",
+      "EffectOnce",
+      "CurrentChoiceAtCommit",
+      "ExecutionLinkCurrent",
+      "SingleUnsettled",
+      "SemanticRetained",
+      "RecoveryNoConsumption",
+      "FreshEvaluationCause",
+      "RetryBound",
+      "SceneBudgetSeparate",
+      "CapacitySufficient",
+      "ReceiptWatermarkStable",
+      "AttemptLinked",
+      "RejectedAttemptAuthorized",
+      "RejectedWaitKeepsInputBoundary",
+      "TrustedPrepareInput"
+    ],
+    "properties": [],
+    "target": null,
+    "minimum_distinct_states": 20
+  },
+  "req-old9b-counterexample": {
+    "manifest": "request-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 13,
+    "invariants": [],
+    "properties": [
+      "DecisionProgress"
+    ],
+    "target": null,
+    "minimum_distinct_states": 20
+  },
+  "req-global-seq-counterexample": {
+    "manifest": "request-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 13,
+    "invariants": [],
+    "properties": [
+      "DecisionProgress"
+    ],
+    "target": null,
+    "minimum_distinct_states": 20
+  },
+  "req-missing-wake-counterexample": {
+    "manifest": "request-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 13,
+    "invariants": [],
+    "properties": [
+      "DecisionProgress"
+    ],
+    "target": null,
+    "minimum_distinct_states": 20
+  },
+  "req-negative-rewrite": {
+    "manifest": "request-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "RequestImmutable"
+    ],
+    "properties": [],
+    "target": "RequestImmutable",
+    "minimum_distinct_states": 20
+  },
+  "req-negative-receipt-order": {
+    "manifest": "request-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ReceiptStable"
+    ],
+    "properties": [],
+    "target": "ReceiptStable",
+    "minimum_distinct_states": 20
+  },
+  "req-negative-repeat-effect": {
+    "manifest": "request-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "EffectOnce"
+    ],
+    "properties": [],
+    "target": "EffectOnce",
+    "minimum_distinct_states": 20
+  },
+  "req-negative-stale-basis": {
+    "manifest": "request-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "CurrentChoiceAtCommit"
+    ],
+    "properties": [],
+    "target": "CurrentChoiceAtCommit",
+    "minimum_distinct_states": 20
+  },
+  "req-negative-drop-common": {
+    "manifest": "request-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "CurrentChoiceAtCommit"
+    ],
+    "properties": [],
+    "target": "CurrentChoiceAtCommit",
+    "minimum_distinct_states": 20
+  },
+  "req-negative-old-version": {
+    "manifest": "request-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ExecutionLinkCurrent"
+    ],
+    "properties": [],
+    "target": "ExecutionLinkCurrent",
+    "minimum_distinct_states": 20
+  },
+  "req-negative-clear-newer": {
+    "manifest": "request-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "SemanticRetained"
+    ],
+    "properties": [],
+    "target": "SemanticRetained",
+    "minimum_distinct_states": 20
+  },
+  "req-negative-recovery-consume": {
+    "manifest": "request-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "RecoveryNoConsumption"
+    ],
+    "properties": [],
+    "target": "RecoveryNoConsumption",
+    "minimum_distinct_states": 20
+  },
+  "req-negative-ordinary": {
+    "manifest": "request-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "FreshEvaluationCause"
+    ],
+    "properties": [],
+    "target": "FreshEvaluationCause",
+    "minimum_distinct_states": 20
+  },
+  "req-negative-duplicate": {
+    "manifest": "request-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "FreshEvaluationCause"
+    ],
+    "properties": [],
+    "target": "FreshEvaluationCause",
+    "minimum_distinct_states": 20
+  },
+  "req-negative-pending-spin": {
+    "manifest": "request-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "RetryBound"
+    ],
+    "properties": [],
+    "target": "RetryBound",
+    "minimum_distinct_states": 20
+  },
+  "req-negative-volatile-dedup": {
+    "manifest": "request-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "EffectOnce"
+    ],
+    "properties": [],
+    "target": "EffectOnce",
+    "minimum_distinct_states": 20
+  },
+  "req-negative-scene-budget": {
+    "manifest": "request-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "SceneBudgetSeparate"
+    ],
+    "properties": [],
+    "target": "SceneBudgetSeparate",
+    "minimum_distinct_states": 20
+  },
+  "req-witness-late": {
+    "manifest": "request-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "target": "NoWitness",
+    "minimum_distinct_states": 20
+  },
+  "req-witness-replay": {
+    "manifest": "request-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "target": "NoWitness",
+    "minimum_distinct_states": 20
+  },
+  "req-witness-restart": {
+    "manifest": "request-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "target": "NoWitness",
+    "minimum_distinct_states": 20
+  },
+  "req-witness-indirect": {
+    "manifest": "request-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "target": "NoWitness",
+    "minimum_distinct_states": 20
+  },
+  "req-witness-retry": {
+    "manifest": "request-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "target": "NoWitness",
+    "minimum_distinct_states": 20
+  },
+  "follow-tea-safety": {
+    "manifest": "follow-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "OriginAndSources",
+      "ExitBySubject",
+      "WholePathFence",
+      "CurrentExecutionFence",
+      "PausedNeedsProposal",
+      "SettlementCurrent",
+      "ArrivalStillGuarded",
+      "SafetyDurable"
+    ],
+    "properties": [],
+    "target": null,
+    "minimum_distinct_states": 20
+  },
+  "follow-front-safety": {
+    "manifest": "follow-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "OriginAndSources",
+      "ExitBySubject",
+      "WholePathFence",
+      "CurrentExecutionFence",
+      "PausedNeedsProposal",
+      "SettlementCurrent",
+      "ArrivalStillGuarded",
+      "SafetyDurable"
+    ],
+    "properties": [],
+    "target": null,
+    "minimum_distinct_states": 20
+  },
+  "follow-tea-live": {
+    "manifest": "follow-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "OriginAndSources",
+      "ExitBySubject",
+      "WholePathFence",
+      "CurrentExecutionFence",
+      "PausedNeedsProposal",
+      "SettlementCurrent",
+      "ArrivalStillGuarded",
+      "SafetyDurable"
+    ],
+    "properties": [
+      "RouteProgress"
+    ],
+    "target": null,
+    "minimum_distinct_states": 20
+  },
+  "follow-front-live": {
+    "manifest": "follow-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "OriginAndSources",
+      "ExitBySubject",
+      "WholePathFence",
+      "CurrentExecutionFence",
+      "PausedNeedsProposal",
+      "SettlementCurrent",
+      "ArrivalStillGuarded",
+      "SafetyDurable"
+    ],
+    "properties": [
+      "RouteProgress"
+    ],
+    "target": null,
+    "minimum_distinct_states": 20
+  },
+  "follow-negative-u-first": {
+    "manifest": "follow-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "OriginAndSources"
+    ],
+    "properties": [],
+    "target": "OriginAndSources",
+    "minimum_distinct_states": 20
+  },
+  "follow-negative-leader-exit": {
+    "manifest": "follow-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ExitBySubject"
+    ],
+    "properties": [],
+    "target": "ExitBySubject",
+    "minimum_distinct_states": 20
+  },
+  "follow-negative-carry-exit": {
+    "manifest": "follow-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ExitBySubject"
+    ],
+    "properties": [],
+    "target": "ExitBySubject",
+    "minimum_distinct_states": 20
+  },
+  "follow-negative-endpoint-only": {
+    "manifest": "follow-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WholePathFence"
+    ],
+    "properties": [],
+    "target": "WholePathFence",
+    "minimum_distinct_states": 20
+  },
+  "follow-negative-move-before-check": {
+    "manifest": "follow-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WholePathFence"
+    ],
+    "properties": [],
+    "target": "WholePathFence",
+    "minimum_distinct_states": 20
+  },
+  "follow-negative-stale-binding": {
+    "manifest": "follow-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "CurrentExecutionFence"
+    ],
+    "properties": [],
+    "target": "CurrentExecutionFence",
+    "minimum_distinct_states": 20
+  },
+  "follow-negative-auto-resume": {
+    "manifest": "follow-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "PausedNeedsProposal"
+    ],
+    "properties": [],
+    "target": "PausedNeedsProposal",
+    "minimum_distinct_states": 20
+  },
+  "follow-negative-stale-confirm": {
+    "manifest": "follow-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "SettlementCurrent"
+    ],
+    "properties": [],
+    "target": "SettlementCurrent",
+    "minimum_distinct_states": 20
+  },
+  "follow-negative-arrived-skip": {
+    "manifest": "follow-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ArrivalStillGuarded"
+    ],
+    "properties": [],
+    "target": "ArrivalStillGuarded",
+    "minimum_distinct_states": 20
+  },
+  "follow-witness-route": {
+    "manifest": "follow-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "target": "NoWitness",
+    "minimum_distinct_states": 20
+  },
+  "follow-witness-reproposal": {
+    "manifest": "follow-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "target": "NoWitness",
+    "minimum_distinct_states": 20
+  },
+  "follow-witness-overlap": {
+    "manifest": "follow-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "target": "NoWitness",
+    "minimum_distinct_states": 20
+  },
+  "follow-witness-leader-first": {
+    "manifest": "follow-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "target": "NoWitness",
+    "minimum_distinct_states": 20
+  },
+  "req-cached-rejection-counterexample": {
+    "manifest": "request-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 13,
+    "invariants": [],
+    "properties": [
+      "DecisionProgress"
+    ],
+    "target": null,
+    "minimum_distinct_states": 20
+  },
+  "req-resume-after-rejection": {
+    "manifest": "request-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "RequestImmutable",
+      "ReceiptStable",
+      "EffectOnce",
+      "CurrentChoiceAtCommit",
+      "ExecutionLinkCurrent",
+      "SingleUnsettled",
+      "SemanticRetained",
+      "RecoveryNoConsumption",
+      "FreshEvaluationCause",
+      "RetryBound",
+      "SceneBudgetSeparate",
+      "CapacitySufficient",
+      "ReceiptWatermarkStable",
+      "AttemptLinked",
+      "RejectedAttemptAuthorized",
+      "RejectedWaitKeepsInputBoundary",
+      "TrustedPrepareInput"
+    ],
+    "properties": [
+      "DecisionProgress",
+      "SemanticProgress"
+    ],
+    "target": null,
+    "minimum_distinct_states": 20
+  },
+  "req-resume-before-read-late-input": {
+    "manifest": "request-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "RequestImmutable",
+      "ReceiptStable",
+      "EffectOnce",
+      "CurrentChoiceAtCommit",
+      "ExecutionLinkCurrent",
+      "SingleUnsettled",
+      "SemanticRetained",
+      "RecoveryNoConsumption",
+      "FreshEvaluationCause",
+      "RetryBound",
+      "SceneBudgetSeparate",
+      "CapacitySufficient",
+      "ReceiptWatermarkStable",
+      "AttemptLinked",
+      "RejectedAttemptAuthorized",
+      "RejectedWaitKeepsInputBoundary",
+      "TrustedPrepareInput"
+    ],
+    "properties": [
+      "DecisionProgress",
+      "SemanticProgress"
+    ],
+    "target": null,
+    "minimum_distinct_states": 20
+  },
+  "req-resume-late-delivery": {
+    "manifest": "request-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "RequestImmutable",
+      "ReceiptStable",
+      "EffectOnce",
+      "CurrentChoiceAtCommit",
+      "ExecutionLinkCurrent",
+      "SingleUnsettled",
+      "SemanticRetained",
+      "RecoveryNoConsumption",
+      "FreshEvaluationCause",
+      "RetryBound",
+      "SceneBudgetSeparate",
+      "CapacitySufficient",
+      "ReceiptWatermarkStable",
+      "AttemptLinked",
+      "RejectedAttemptAuthorized",
+      "RejectedWaitKeepsInputBoundary",
+      "TrustedPrepareInput"
+    ],
+    "properties": [
+      "DecisionProgress",
+      "SemanticProgress"
+    ],
+    "target": null,
+    "minimum_distinct_states": 20
+  },
+  "req-rejected-return-unknown": {
+    "manifest": "request-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "RequestImmutable",
+      "ReceiptStable",
+      "EffectOnce",
+      "CurrentChoiceAtCommit",
+      "ExecutionLinkCurrent",
+      "SingleUnsettled",
+      "SemanticRetained",
+      "RecoveryNoConsumption",
+      "FreshEvaluationCause",
+      "RetryBound",
+      "SceneBudgetSeparate",
+      "CapacitySufficient",
+      "ReceiptWatermarkStable",
+      "AttemptLinked",
+      "RejectedAttemptAuthorized",
+      "RejectedWaitKeepsInputBoundary",
+      "TrustedPrepareInput"
+    ],
+    "properties": [
+      "DecisionProgress",
+      "SemanticProgress"
+    ],
+    "target": null,
+    "minimum_distinct_states": 20
+  },
+  "req-negative-wide-consume": {
+    "manifest": "request-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "RejectedWaitKeepsInputBoundary"
+    ],
+    "properties": [],
+    "target": "RejectedWaitKeepsInputBoundary",
+    "minimum_distinct_states": 20
+  },
+  "req-wide-last-counterexample": {
+    "manifest": "request-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 13,
+    "invariants": [],
+    "properties": [
+      "DecisionProgress"
+    ],
+    "target": null,
+    "minimum_distinct_states": 20
+  },
+  "req-negative-recovery-watermark": {
+    "manifest": "request-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ReceiptWatermarkStable"
+    ],
+    "properties": [],
+    "target": "ReceiptWatermarkStable",
+    "minimum_distinct_states": 20
+  },
+  "req-negative-global-signal": {
+    "manifest": "request-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "RejectedAttemptAuthorized"
+    ],
+    "properties": [],
+    "target": "RejectedAttemptAuthorized",
+    "minimum_distinct_states": 20
+  },
+  "req-negative-skip-recovery": {
+    "manifest": "request-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "SingleUnsettled"
+    ],
+    "properties": [],
+    "target": "SingleUnsettled",
+    "minimum_distinct_states": 20
+  },
+  "req-negative-wrong-parent": {
+    "manifest": "request-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "AttemptLinked"
+    ],
+    "properties": [],
+    "target": "AttemptLinked",
+    "minimum_distinct_states": 20
+  },
+  "req-witness-captured-late": {
+    "manifest": "request-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "target": "NoWitness",
+    "minimum_distinct_states": 20
+  },
+  "req-witness-late-delivery": {
+    "manifest": "request-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "target": "NoWitness",
+    "minimum_distinct_states": 20
+  },
+  "req-witness-rejected-recovered": {
+    "manifest": "request-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "target": "NoWitness",
+    "minimum_distinct_states": 20
+  }
+}

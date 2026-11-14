@@ -5,7 +5,7 @@
 | 项目 | 内容 |
 | --- | --- |
 | 合同标识 | `adv-protocol-v1`；唯一内容身份是保存本文件的提交 |
-| 当前增量 | `r2`：修正独立需求审查 R-27-REQ-001，新增移动命令发出顺序围栏；原 `edc8b82` 与原运行证据保留 |
+| 当前增量 | `r2`：修正独立需求审查 R-27-REQ-001，新增移动命令发出顺序围栏；原 `edc8b82` 与原运行证据保留。2026-11-13 的 SP06 兼容增量见第 6 节：新领路者使用合法可见人物版本提议，关联 [#33](https://github.com/gbcdby/xiyou/issues/33) / [#34](https://github.com/gbcdby/xiyou/issues/34)；其模型与运行验收单独核对 |
 | 工作 | [#27](https://github.com/gbcdby/xiyou/issues/27)，父 [ADV-001 #23](https://github.com/gbcdby/xiyou/issues/23) |
 | 输入 | [ADV-001 v0.2](https://github.com/gbcdby/xiyou/blob/2dc4fb4332860b60127e654b61bdae4925a5e61f/docs/specs/narrative-adventure.md)，代码基线 `60e68a83cac2bd5d45b410a64545730a2a1c3eb4` |
 | 模式 | `design`；契约和有限模型，业务实现对应为 `NOT_ASSESSED` |
@@ -73,7 +73,7 @@
 | `interact` | `targetRef, operationId, expectedTargetRevision`；内容声明的有限参数 | 执行已登记的有限操作；参数不能包含任意事实/同意/到达旗标 |
 | `share_evidence` | `evidenceRef, recipientRefs` | 合法证据送达；不把陈述升级为世界事实 |
 | `speak / make_claim` | `text, channel, recipientRefs` | 生成发言/陈述；受众由发生时空间计算，队聊不进入 NPC 感知 |
-| `propose_follow` | `subjectRef, destinationId, leaderRef, expectedConsentVersion` | 提议绑定真实本人、目的地、带路者与新计划版本；未获同意不开始跟随 |
+| `propose_follow` | `subjectRef, destinationId, leaderRef, expectedTargetRevision`；兼容旧 `expectedConsentVersion`，两者只取其一 | 新提议使用当前可见人物版本，绑定真实本人、目的地、带路者与新计划版本；未获同意不开始跟随，详见第 6 节 |
 | `respond_consent / withdraw_consent` | `consentId, expectedConsentVersion, response`（仅回应需要） | 只有该同意主体的可信执行身份可接受/拒绝/撤回；玩家请求不能代替翠兰回应 |
 | `cooperate` | `operationId, operationVersion, phase:prepare/ready/cancel` | 登记当前本人就位；最后满足条件时同事务提交一次效果 |
 | `reclaim_public_item` | `itemRef, holderRef, expectedItemRevision, expectedHolderEpoch` | 全部领回前提重验后转移一次；不扩展托管权限 |
@@ -164,6 +164,8 @@ Ref 不可猜只降低枚举风险，真正权限仍在每次服务端解析时�
 
 渲染文字也属于投影：不能把内部 JSON、错误对象、真实ID或全知谜题名字直接插入 message/label。固定事实字段采用各自出口的 allowlist，未获知的身份用当前合法称呼或未知，不靠任意字符串替换遮盖。
 
+首章物件与目标的已采纳美术接线合同见 [GZ-OBJ-01 / v0.1](../../protocol/spatial-object-visual-v1.md)：经现有 capability 机制为已授权 Item/Target 增加可选 visualKey，世界状态仍复用 location/fixed/open。设计已通过独立需求/工程标准审查并采纳，本提交提供有界实现候选；正式资源目录仍为空。实施不得扩大投影、输出内部内容键或绕过旧严格 reader 的协商边界，运行与正式艺术结论分别依候选证据记录。
+
 ### 5.3 发生时受众与历史
 
 对话和事件的受众按**事件发生时**权威位置、墙/门、频道与身份知识计算并持久化。队聊仅真人通道；后来靠近、后来重连、后来识破都不补发当时无权听到的内容。合法转述是带来源的新事件，不倒改旧受众。
@@ -174,6 +176,14 @@ Ref 不可猜只降低枚举风险，真正权限仍在每次服务端解析时�
 
 同意记录 `{consentId, subjectId, purpose, scope, version, status, decidedBy, sourceSeq}` 与随行计划 `{followId, subjectId, leaderId, destinationId, routeVersion, planVersion, consentId, consentVersion, status}` 分开。`purpose` 至少区分随行、借貌、私物处理、会面与加入；一次许可不能变成其他用途的许可。
 
+**SP06 新领路者入口（2026-11-13，#33 / #34）：** 未参与上一份同意的人不能读取其许可或路线，自己的 `consents/follows` 为空仍可合法提出新的安排。正常客户端只从自己当前可见人物 DTO 取得 `entityRef/resourceRevision`，发送 `expectedTargetRevision`；缺少该公开版本时不能退回私有同意版本 `0`。私有同意槽的版本、先前请求者、领路者、目的地与路线不新增到公开投影。
+
+规则先保留原真实主体、请求者/本人/领路者近距无遮挡、真人在线、开门和合法目的地守卫，再比较当前人物 `resourceRevision`，旧值拒绝为 `STALE_PRECONDITION`。比较成功后在同一 Session 锁定事务内读取私有 follow 槽当前版本，创建新的 `proposed`，并增加本人人物 `resourceRevision`；原回应/撤回也增加这个版本。该版本原已公开，仅表示人物语义状态变化，不是私有同意版本；普通行走只推进 `spatialRevision`，其它语义变化可以保守地使准备中的提议过期。新入口不新增授权服务或同意能力，不改变 policyRoute 的资料、起点、路线或本人选择语义。
+
+闭合 schema 同时保留旧 `expectedConsentVersion` 形态并执行其原精确同意版本守卫；不得同时提交两种版本或都不提交。新旧格式成功提议均在同一事务内增加人物版本，避免旧格式成功后旧公开参数仍可覆盖它。同一公开版本的并发提议至多一个提交。purpose 由动作种类固定，subject、requester、view、epoch、leader 与 destination 由原引用解析、认证主体及完整请求摘要共同绑定，不能把一次提议用于另一范围。
+
+已保存原 Receipt 的相同 nonce 原串继续先恢复原结果；换视图或 epoch 不把已提交请求重新执行，同 nonce 改范围/依据仍为 `ACTION_ID_REUSE`。尚未处理的新 nonce 则须通过当前 epoch、view/ref 与当前版本守卫，不能将旧依据自动改成最新版本再提交。此兼容增量只处理随行提议；其它用途的许可、本人回应、隐私受众、一次效果与原历史合同不变。
+
 同一主体最多一个有效随行计划。提议为 `proposed`，真实本人接受后为 `accepted/following`；合法到达后为 `arrived`，真实本人确认才 `settled`。`paused/withdrawn/cancelled` 分别保留原因。只有可信主体等于真实本人，或按内容声明为该本人的可信场景策略，才可写接受/撤回/确认；父亲、玩家、乔装悟空和客户端字段均不能代答。
 
 改变领路者/目的地/用途增加计划/同意版本，旧许可不复用；原同意撤回同事务取消相关活动计划。领路者掉线、人数不足、路线阻断时在当前安全位置暂停，不擅自更换带路者；恢复由本人重新确认需要变化的安排。原样重试不能产生第二计划，旧到达绑定的计划/同意版本失效后不能安置。
@@ -182,11 +192,19 @@ Ref 不可猜只降低枚举风险，真正权限仍在每次服务端解析时�
 
 唐僧接受与八戒自愿加入分别提交各自决定、各自版本，并由合法通知送达悟空。移动到出发点只是准备；最后 `join_party` 同事务重验两个仍有效的决定、真实三人到达、对应 GZ-E01 其余事实、Session 未结束，再生成入队与同行结果。撤回使未完成计划失效；降级可以沿仍有效安排导航，不能生成接受/加入决定。
 
+### 6.1 借貌与私物生产本人回应的新增设计入口
+
+2026-11-14 的 [GZ-SCENE-CUILAN-SELF-RESPONSE-001 / CS-R2](gaolao-scene-policy.md) §10～17 提出新内容限定的生产 scene_role 合同：安置后继续回应 appearance/private_items；本人的决定与请求者取消/替换、使用结束/失效分开；新请求采用公开人物 revision；本人有限私物清单不放宽远处 EntityRef；本人同意、借貌停用及私物归还分别有明确职责。R2 修订为本人实际收到期限意向后逐次选择，以及独立于当前请求槽的逐物归还上下文。该候选的严格 purpose basis、原子效果、请求恢复、兼容、验收和 TLA 输入以该文为唯一语义归属；R1 独立双轴 FAIL 历史及 R2 待复审状态亦见该文。
+
+**状态为 PROPOSED，尚未采用/实现；本节不改变上文有效 follow/SP06 合同或现有机器 schema。** 新用途的接受/撤回仍只能来自真实本人；旧 follow grant 不跨用途。候选涉及 AP-01～05 与 scene 调度边界，不能用既有有限模型结论直接宣称新增行为已验证。
+
 ## 7. 合作、物权与离线领回
 
 合作记录绑定 `operationId/version/targetRevision/participants/readyEpochs/anchors/phase`。prepare/ready 只登记真实已在线主体及其就位；最终提交同时重验所有必需真人、epoch、当前位置/距离、物件/目标版本、同意和场景可推进。只提交一次目标效果与消耗。任何未提交成员取消/掉线/离位使对应 ready 失效，不能用旧 ready 合成成功。
 
-门撑/支架锁定后成为独立持久事实，不再以安装者持续在线为前提；断线/释放按钮不拆掉已锁支撑。版本与 Receipt 防止重试重复扣料或重复完成。任何随行/合作请求失败不丢物。
+门撑/支架锁定后成为独立持久事实，不再以安装者持续在线为前提；断线或合作取消按钮不拆掉已锁支撑。版本与 Receipt 防止重试重复扣料或重复完成。任何随行/合作请求失败不丢物。
+
+2026-11-13 已采纳物件接线的语义澄清：上段的取消不等于章内明确的撤收操作。当前高老庄规则允许门开放后的合法 `gz-release-support` 清除工具 lockedBy/fixed，位置保持不变；target.locked 与 cooperation.phase 仍记录合作曾提交。装配视觉须依据当前授权工具位置/fixed，不能让历史 locked 使已撤收工具重新出现。此处核对既有行为，不新增撤收前提或改变规则；具体来源与已采纳映射见 GZ-OBJ-01。
 
 离线领回只允许章节在借出前登记并告知的 `publicBorrowable=true` 集合。事务内同时核对：同队在线 requester、holder 已超过宽限且处于受限托管、holder 当前 epoch、物品当前 owner/revision、双方同场景近距且无遮挡、没有已提交操作占用。重连先提交则领回失败；领回先提交则重连看到已转移真实归属。不得把“系统可领回”实现为代理 AI 自己赠送或跨地图召回。私人包裹/信件/钉耙/笔记不在集合，能力重新授权也不转移其私密记忆。
 

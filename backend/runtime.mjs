@@ -17,6 +17,7 @@ import { parseSpatial, validateSpatial } from '../protocol/spatial.mjs';
 import { isGaolao } from '../game/gaolao-world.mjs';
 import { isSpatial, ensureView } from '../game/spatial-world.mjs';
 import * as spatial from './spatial-runtime.mjs';
+import * as scenePolicy from './scene-policy.mjs';
 import { encodeJsonbText, decodeJsonbText } from './jsonb-text.mjs';
 
 const digest = value => createHash('sha256').update(typeof value === 'string' ? value : canonicalize(value)).digest('hex');
@@ -56,6 +57,8 @@ export class AuthorityRuntime extends EventEmitter {
       await client.query(await readFile(new URL('./migrations/004-spatial.sql', import.meta.url), 'utf8'));
       await client.query(await readFile(new URL('./migrations/005-spatial-text-encoding.sql', import.meta.url), 'utf8'));
       await client.query(await readFile(new URL('./migrations/006-spatial-intent-context.sql', import.meta.url), 'utf8'));
+      await client.query(await readFile(new URL('./migrations/007-spatial-ai-context.sql', import.meta.url), 'utf8'));
+      await client.query(await readFile(new URL('./migrations/008-scene-policy.sql', import.meta.url), 'utf8'));
       await client.query('COMMIT');
     } catch (error) { await client.query('ROLLBACK').catch(() => {}); throw error; }
     finally { client.release(); }
@@ -149,7 +152,11 @@ export class AuthorityRuntime extends EventEmitter {
       for (const effect of tx.afterCommit) await effect();
       await this.hooks.afterCommit?.({ command: command.kind, sessionId, events: tx.events });
       await this.applyControlEffects(tx);
-      if (tx.events.length) this.emit('commit', { sessionId, events: tx.events });
+      // 仅进程内提交订阅者使用事务起点；不写入 WorldEvent、客户端投影或模型上下文。
+      if (tx.events.length) {
+        const policyWake=isSpatial(tx.row.state)?scenePolicy.scenePolicyWake(tx):null;
+        this.emit('commit', { sessionId, events: tx.events, ...(isSpatial(tx.row.state) ? { spatialPauseBefore: tx.row.state.paused } : {}), ...(policyWake?{scenePolicyWake:policyWake}:{}) });
+      }
     } catch (error) {
       if (!committed) await client.query('ROLLBACK').catch(() => {});
       if (committed || committing) throw new RuntimeError('OUTCOME_UNKNOWN', '提交结果尚未确认，请查询原动作身份。');
@@ -314,7 +321,7 @@ export class AuthorityRuntime extends EventEmitter {
     await this.authenticate(token);
     return this.locked(sessionId, { kind: 'snapshot' }, async tx => {
       const user = await this.access(tx.client, tx.row, token);
-      if (isSpatial(tx.state)) { spatial.requireSpatialCapability(capabilities); await spatial.advanceSpatialTime(tx); return spatial.snapshotSpatial(tx, user.actorId); }
+      if (isSpatial(tx.state)) { spatial.requireSpatialCapability(capabilities); await spatial.advanceSpatialTime(tx); return spatial.snapshotSpatial(tx, user.actorId, { capabilities }); }
       return validateContract('AuthorizedSnapshot', { schemaVersion: 1, type: 'world.snapshot', sessionId, viewId: `${user.actorId}:http-v1`, snapshotSeq: tx.state.sessionSeq, projection: authorizedProjection(tx.state, tx.content, user.actorId) });
     });
   }
@@ -421,7 +428,7 @@ export class AuthorityRuntime extends EventEmitter {
         // 另一条只读连接不能借订阅撤销当前控制者的引用；真正接管才更换控制视图。
         const heldElsewhere = current.mode === 'HumanControlled' && current.activeConnectionId !== handle.connectionId;
         const terminalBinding = terminal(tx.state) ? ensureView(tx, user.actorId, { rotate: true }) : null;
-        const snapshot = await spatial.snapshotSpatial(tx, user.actorId, { connectionId: handle.connectionId, rotate: !heldElsewhere, binding: terminalBinding });
+        const snapshot = await spatial.snapshotSpatial(tx, user.actorId, { connectionId: handle.connectionId, rotate: !heldElsewhere, binding: terminalBinding, capabilities: connection.capabilities });
         this.stageSpatialView(tx, handle, { active: true, sessionId, actorId: user.actorId, userId: user.userId, viewId: snapshot.viewId, cursor: snapshot.snapshotSeq, handle, ownedEpoch: current.activeConnectionId === handle.connectionId ? current.controlEpoch : null, schemaVersion: 2, ...(terminalBinding ? { terminalBinding } : {}) }, scope);
         return snapshot;
       }
@@ -593,6 +600,7 @@ export class AuthorityRuntime extends EventEmitter {
   prepareDecisionContext(handle) { return decisions.prepareDecisionContext(this, handle); }
   recoverDecisions(handle) { return decisions.recoverDecisions(this, handle); }
   decisionState(handle, decisionId) { return decisions.decisionState(this, handle, decisionId); }
+  decisionReceipt(handle, decisionId, system = false) { return decisions.decisionReceipt(this, handle, decisionId, system); }
   submitIntent(handle, decisionId, raw) { return decisions.submitIntent(this, handle, decisionId, raw); }
   settleDecision(handle, decisionId, status) { return decisions.settleDecision(this, handle, decisionId, status); }
   submitFallback(handle, decisionId) { return decisions.submitFallback(this, handle, decisionId); }
@@ -663,7 +671,7 @@ export class AuthorityRuntime extends EventEmitter {
       await this.authorizeInternal(tx, principal);
       const actor = ownRecord(tx.state.characters, principal.actorId);
       if (!actor || actor.mode !== (principal.principalKind !== 'proxy' ? 'CoreNPCControlled' : 'AIProxyControlled') && !(isGaolao(tx.state)&&['Finished','Aborted'].includes(tx.state.phase))) throw new RuntimeError('FORBIDDEN', '该角色当前没有内部控制授权。');
-      if (isSpatial(tx.state)) return spatial.snapshotSpatial(tx, principal.actorId, { principalKind: principal.principalKind });
+      if (isSpatial(tx.state)) return spatial.snapshotSpatial(tx, principal.actorId, { principalKind: principal.principalKind, capabilities: ['spatial-v2', 'spatial-appearance-v1'] });
       return {
         sessionId: principal.sessionId, snapshotSeq: tx.state.sessionSeq,
         projection: authorizedProjection(tx.state, tx.content, principal.actorId, { principalKind: principal.principalKind }),
@@ -681,6 +689,8 @@ export class AuthorityRuntime extends EventEmitter {
   reserveSpatialIntent(handle, intentId, action) { return spatial.reserveSpatialIntent(this, handle, intentId, action); }
   reserveSpatialFallback(handle,intentId,action,reason) { return spatial.reserveSpatialIntent(this,handle,intentId,action,{mode:'fallback',reason}); }
   submitSpatialIntent(handle, intentId) { return spatial.submitSpatialIntent(this, handle, intentId); }
+  prepareScenePolicy(handle,options) { return scenePolicy.prepareScenePolicy(this,handle,options); }
+  recoverScenePolicy(handle) { return scenePolicy.recoverScenePolicy(this,handle); }
   async authorizeInternal(tx, principal) {
     const actor = ownRecord(tx.state.characters, principal.actorId);
     if (principal.sessionId !== tx.row.session_id || !actor || (principal.principalKind !== 'proxy' ? actor.kind !== 'core_npc' : actor.kind !== 'human')) throw new RuntimeError('FORBIDDEN', '内部主体绑定失效。');

@@ -69,7 +69,7 @@
 <g><circle cx="645" cy="390" r="17" fill="#fff9eb" stroke="#365e52" stroke-width="2"/><text x="645" y="390" class="anchor">C13</text></g>
 <path d="M315 390L315 345" stroke="#76572e" stroke-width="1.5" stroke-dasharray="3 4"/><path d="M315 339L321 345L315 351L309 345Z" fill="#fff8e9" stroke="#76572e" stroke-width="2"/>
 <g><circle cx="315" cy="390" r="17" fill="#fff9eb" stroke="#365e52" stroke-width="2"/><text x="315" y="390" class="anchor">C14</text></g>
-<path d="M260 405L260 340" stroke="#76572e" stroke-width="1.5" stroke-dasharray="3 4"/><path d="M260 334L266 340L260 346L254 340Z" fill="#fff8e9" stroke="#76572e" stroke-width="2"/>
+<path d="M260 405L292 305" stroke="#76572e" stroke-width="1.5" stroke-dasharray="3 4"/><path d="M292 299L298 305L292 311L286 305Z" fill="#fff8e9" stroke="#76572e" stroke-width="2"/>
 <g><circle cx="260" cy="405" r="17" fill="#fff9eb" stroke="#365e52" stroke-width="2"/><text x="260" y="405" class="anchor">C15</text></g>
 <path d="M365 425L365 350" stroke="#76572e" stroke-width="1.5" stroke-dasharray="3 4"/><path d="M365 344L371 350L365 356L359 350Z" fill="#fff8e9" stroke="#76572e" stroke-width="2"/>
 <g><circle cx="365" cy="425" r="17" fill="#fff9eb" stroke="#365e52" stroke-width="2"/><text x="365" y="425" class="anchor">C16</text></g>

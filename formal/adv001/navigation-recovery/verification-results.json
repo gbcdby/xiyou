@@ -1,0 +1,1603 @@
+{
+  "schemaVersion": 1,
+  "description": "从固定原始记录整理的正式结果摘要，不是原始运行日志，也不表示重新执行。",
+  "rawEvidenceIncludedInRepository": false,
+  "sourceArchive": {
+    "fileCount": 303,
+    "totalBytes": 949509,
+    "filesManifestSHA256": "d96f27eee2884b1a687558cfe2a50141520ba16923fe37f182123844f137c091",
+    "digestMeaning": "完整原始包排序文件清单的紧凑 UTF-8 JSON SHA256；不是 ZIP 摘要。"
+  },
+  "inputManifest": "input-manifest.json",
+  "runs": [
+    {
+      "run": "historical-matrix-02--negative-double",
+      "profile": "negative-double",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "rawExit": 12,
+      "timedOut": false,
+      "interrupted": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "AtMostOneContinuation"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "AtMostOneContinuation"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "keep-after-send",
+          "Adversarial": false,
+          "MaxQueues": 1,
+          "OldSeq": 0,
+          "ForceUnknown": false
+        },
+        "covered_interleavings_and_faults": [
+          "Receipt/公开投影/真实显示回调独立到达、有限重复",
+          "同号历史 movement 与旧 epoch 高序号",
+          "Unknown 后原身份恢复、取消/替换和迟响应",
+          "当前高水位、已知授权围栏与一次暂停/恢复"
+        ],
+        "excluded_behaviors": [
+          "真实权限/DB/几何",
+          "跨进程持久化队列",
+          "无限消息/任意数量连续点击",
+          "实际跨场景效果；这里只计第二段发出"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "投影按序应用；旧/重复批次不回退。",
+        "原 Receipt 身份真实、不可变；同一控制 epoch 的输入命令号唯一。",
+        "视觉事件只在该公开计划实际显示 settled 时产生；浮点位置和动画算法未建模。",
+        "活性配置只用一份未取消的合法计划，原结果最终 Accepted，恢复、首次有效送达及内部启用动作弱公平；暂停最终恢复。"
+      ],
+      "inputSet": "positive",
+      "manifestSHA256": "04c92ef2e77f7816f478a6b87c2ad9abe1bc7a390d9d0b30706af94f8c9ce0ff",
+      "runnerSHA256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool": {
+        "version_label": "v1.7.4 / TLC 2.19",
+        "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+        "java_version": "openjdk version \"21.0.13\" 2026-10-20\nOpenJDK Runtime Environment (build 21.0.13+9-1-deb13u2-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.13+9-1-deb13u2-Debian, mixed mode, sharing)",
+        "reported_version": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)"
+      },
+      "resultSHA256": "4a7a0c3c3e5cbea6193d099b228160560f4a74db3aca36adc03044e4765e558d",
+      "logSHA256": "52d3c7964ea4ba735835d670628febba698006c7c15ed47583cd240020b4ea28",
+      "messagesSHA256": "3ce6acce8e2714e886d92783cf145c01a2733b336bc933b476ede7315be34736",
+      "startedAt": "2026-11-13T12:17:10.458007+00:00",
+      "finishedAt": "2026-11-13T12:17:12.093649+00:00",
+      "durationSeconds": 1.635682,
+      "statistics": {
+        "generated_states": 43911,
+        "distinct_states": 12839,
+        "remaining_states": 4873
+      },
+      "messageCodes": [
+        2110,
+        2121,
+        2185,
+        2186,
+        2187,
+        2189,
+        2190,
+        2194,
+        2199,
+        2200,
+        2217,
+        2219,
+        2220,
+        2262,
+        2268
+      ],
+      "errorCodes": [
+        2110,
+        2121
+      ],
+      "warningCodes": []
+    },
+    {
+      "run": "historical-matrix-02--negative-drop-early",
+      "profile": "negative-drop-early",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "rawExit": 13,
+      "timedOut": false,
+      "interrupted": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "NoPrematureCrossing",
+          "AtMostOneContinuation",
+          "NoCancelledRevival",
+          "ReceiptBound"
+        ],
+        "expected_properties": [
+          "ContinuationProgress"
+        ],
+        "configured_invariants": [
+          "TypeOK",
+          "NoPrematureCrossing",
+          "AtMostOneContinuation",
+          "NoCancelledRevival",
+          "ReceiptBound"
+        ],
+        "configured_properties": [
+          "ContinuationProgress"
+        ],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "LiveSpec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "drop-early-visual",
+          "Adversarial": false,
+          "MaxQueues": 1,
+          "OldSeq": 0,
+          "ForceUnknown": false
+        },
+        "covered_interleavings_and_faults": [
+          "Receipt/公开投影/真实显示回调独立到达、有限重复",
+          "同号历史 movement 与旧 epoch 高序号",
+          "Unknown 后原身份恢复、取消/替换和迟响应",
+          "当前高水位、已知授权围栏与一次暂停/恢复"
+        ],
+        "excluded_behaviors": [
+          "真实权限/DB/几何",
+          "跨进程持久化队列",
+          "无限消息/任意数量连续点击",
+          "实际跨场景效果；这里只计第二段发出"
+        ],
+        "liveness": "ContinuationProgress"
+      },
+      "assumptions": [
+        "投影按序应用；旧/重复批次不回退。",
+        "原 Receipt 身份真实、不可变；同一控制 epoch 的输入命令号唯一。",
+        "视觉事件只在该公开计划实际显示 settled 时产生；浮点位置和动画算法未建模。",
+        "活性配置只用一份未取消的合法计划，原结果最终 Accepted，恢复、首次有效送达及内部启用动作弱公平；暂停最终恢复。"
+      ],
+      "inputSet": "positive",
+      "manifestSHA256": "04c92ef2e77f7816f478a6b87c2ad9abe1bc7a390d9d0b30706af94f8c9ce0ff",
+      "runnerSHA256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool": {
+        "version_label": "v1.7.4 / TLC 2.19",
+        "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+        "java_version": "openjdk version \"21.0.13\" 2026-10-20\nOpenJDK Runtime Environment (build 21.0.13+9-1-deb13u2-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.13+9-1-deb13u2-Debian, mixed mode, sharing)",
+        "reported_version": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)"
+      },
+      "resultSHA256": "afb9a742add98b18052773ad500e9b369d18d70af5e2ce22d6e6d8679a08c1fe",
+      "logSHA256": "391e981d8d6806b8f7fbef1b40b9bf6fd89e38f0bd1d80b8104364ee3d780512",
+      "messagesSHA256": "af1540d6d87447cf94355d23e920c3a876efb7e36df9f0349b4f05275d63ccb8",
+      "startedAt": "2026-11-13T12:17:02.316927+00:00",
+      "finishedAt": "2026-11-13T12:17:06.630063+00:00",
+      "durationSeconds": 4.313174,
+      "statistics": {
+        "generated_states": 90225,
+        "distinct_states": 22948,
+        "remaining_states": 5873
+      },
+      "messageCodes": [
+        2116,
+        2185,
+        2186,
+        2187,
+        2189,
+        2190,
+        2192,
+        2199,
+        2200,
+        2212,
+        2217,
+        2218,
+        2219,
+        2220,
+        2262,
+        2264,
+        2267
+      ],
+      "errorCodes": [
+        2116,
+        2264
+      ],
+      "warningCodes": []
+    },
+    {
+      "run": "historical-matrix-02--negative-map-key",
+      "profile": "negative-map-key",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "rawExit": 13,
+      "timedOut": false,
+      "interrupted": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "NoPrematureCrossing",
+          "AtMostOneContinuation",
+          "NoCancelledRevival",
+          "ReceiptBound"
+        ],
+        "expected_properties": [
+          "ContinuationProgress"
+        ],
+        "configured_invariants": [
+          "TypeOK",
+          "NoPrematureCrossing",
+          "AtMostOneContinuation",
+          "NoCancelledRevival",
+          "ReceiptBound"
+        ],
+        "configured_properties": [
+          "ContinuationProgress"
+        ],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "LiveSpec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "map-sequence",
+          "Adversarial": false,
+          "MaxQueues": 1,
+          "OldSeq": 1,
+          "ForceUnknown": false
+        },
+        "covered_interleavings_and_faults": [
+          "Receipt/公开投影/真实显示回调独立到达、有限重复",
+          "同号历史 movement 与旧 epoch 高序号",
+          "Unknown 后原身份恢复、取消/替换和迟响应",
+          "当前高水位、已知授权围栏与一次暂停/恢复"
+        ],
+        "excluded_behaviors": [
+          "真实权限/DB/几何",
+          "跨进程持久化队列",
+          "无限消息/任意数量连续点击",
+          "实际跨场景效果；这里只计第二段发出"
+        ],
+        "liveness": "ContinuationProgress"
+      },
+      "assumptions": [
+        "投影按序应用；旧/重复批次不回退。",
+        "原 Receipt 身份真实、不可变；同一控制 epoch 的输入命令号唯一。",
+        "视觉事件只在该公开计划实际显示 settled 时产生；浮点位置和动画算法未建模。",
+        "活性配置只用一份未取消的合法计划，原结果最终 Accepted，恢复、首次有效送达及内部启用动作弱公平；暂停最终恢复。"
+      ],
+      "inputSet": "positive",
+      "manifestSHA256": "04c92ef2e77f7816f478a6b87c2ad9abe1bc7a390d9d0b30706af94f8c9ce0ff",
+      "runnerSHA256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool": {
+        "version_label": "v1.7.4 / TLC 2.19",
+        "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+        "java_version": "openjdk version \"21.0.13\" 2026-10-20\nOpenJDK Runtime Environment (build 21.0.13+9-1-deb13u2-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.13+9-1-deb13u2-Debian, mixed mode, sharing)",
+        "reported_version": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)"
+      },
+      "resultSHA256": "d1def60772d61fd7de18c2496b3698a230721296fc8bdc53ef8e826d532cc425",
+      "logSHA256": "0a83f59564133f4a4b54e1d8ceb3cc3788eddb41841776614ba7ba49ec54e7ad",
+      "messagesSHA256": "e2dcb38cab12c094064b66cd37d81da85995e45049f5141c718bb3fe79ffa9b6",
+      "startedAt": "2026-11-13T12:17:06.703061+00:00",
+      "finishedAt": "2026-11-13T12:17:09.233171+00:00",
+      "durationSeconds": 2.530143,
+      "statistics": {
+        "generated_states": 43123,
+        "distinct_states": 9000,
+        "remaining_states": 0
+      },
+      "messageCodes": [
+        2116,
+        2185,
+        2186,
+        2187,
+        2189,
+        2190,
+        2192,
+        2199,
+        2200,
+        2212,
+        2217,
+        2218,
+        2219,
+        2220,
+        2262,
+        2264,
+        2267
+      ],
+      "errorCodes": [
+        2116,
+        2264
+      ],
+      "warningCodes": []
+    },
+    {
+      "run": "historical-matrix-02--negative-revive",
+      "profile": "negative-revive",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "rawExit": 12,
+      "timedOut": false,
+      "interrupted": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "NoCancelledRevival"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "NoCancelledRevival"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "revive-cancelled",
+          "Adversarial": true,
+          "MaxQueues": 1,
+          "OldSeq": 0,
+          "ForceUnknown": false
+        },
+        "covered_interleavings_and_faults": [
+          "Receipt/公开投影/真实显示回调独立到达、有限重复",
+          "同号历史 movement 与旧 epoch 高序号",
+          "Unknown 后原身份恢复、取消/替换和迟响应",
+          "当前高水位、已知授权围栏与一次暂停/恢复"
+        ],
+        "excluded_behaviors": [
+          "真实权限/DB/几何",
+          "跨进程持久化队列",
+          "无限消息/任意数量连续点击",
+          "实际跨场景效果；这里只计第二段发出"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "投影按序应用；旧/重复批次不回退。",
+        "原 Receipt 身份真实、不可变；同一控制 epoch 的输入命令号唯一。",
+        "视觉事件只在该公开计划实际显示 settled 时产生；浮点位置和动画算法未建模。",
+        "活性配置只用一份未取消的合法计划，原结果最终 Accepted，恢复、首次有效送达及内部启用动作弱公平；暂停最终恢复。"
+      ],
+      "inputSet": "positive",
+      "manifestSHA256": "04c92ef2e77f7816f478a6b87c2ad9abe1bc7a390d9d0b30706af94f8c9ce0ff",
+      "runnerSHA256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool": {
+        "version_label": "v1.7.4 / TLC 2.19",
+        "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+        "java_version": "openjdk version \"21.0.13\" 2026-10-20\nOpenJDK Runtime Environment (build 21.0.13+9-1-deb13u2-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.13+9-1-deb13u2-Debian, mixed mode, sharing)",
+        "reported_version": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)"
+      },
+      "resultSHA256": "f93b93e3732aa9e36a8e32897055a81fbb152136cf6f7dfde28c5b1fa2d3a069",
+      "logSHA256": "f7d553166983ec8c57b6f606cbc4f2deca74ce325f2706cac238440d78a9e48c",
+      "messagesSHA256": "4910f7f618a9d4d9e51ec15cbf6329ee22171baaaf132c89c7f4d46ea6965f64",
+      "startedAt": "2026-11-13T12:17:09.285087+00:00",
+      "finishedAt": "2026-11-13T12:17:10.407387+00:00",
+      "durationSeconds": 1.122335,
+      "statistics": {
+        "generated_states": 344,
+        "distinct_states": 213,
+        "remaining_states": 178
+      },
+      "messageCodes": [
+        2110,
+        2121,
+        2185,
+        2186,
+        2187,
+        2189,
+        2190,
+        2194,
+        2199,
+        2200,
+        2217,
+        2219,
+        2220,
+        2262,
+        2268
+      ],
+      "errorCodes": [
+        2110,
+        2121
+      ],
+      "warningCodes": []
+    },
+    {
+      "run": "historical-matrix-02--old-history-live",
+      "profile": "old-history-live",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "rawExit": 13,
+      "timedOut": false,
+      "interrupted": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK"
+        ],
+        "expected_properties": [
+          "ContinuationProgress"
+        ],
+        "configured_invariants": [
+          "TypeOK"
+        ],
+        "configured_properties": [
+          "ContinuationProgress"
+        ],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "LiveSpec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "old-sequence",
+          "Adversarial": false,
+          "MaxQueues": 1,
+          "OldSeq": 5,
+          "ForceUnknown": false
+        },
+        "covered_interleavings_and_faults": [
+          "Receipt/公开投影/真实显示回调独立到达、有限重复",
+          "同号历史 movement 与旧 epoch 高序号",
+          "Unknown 后原身份恢复、取消/替换和迟响应",
+          "当前高水位、已知授权围栏与一次暂停/恢复"
+        ],
+        "excluded_behaviors": [
+          "真实权限/DB/几何",
+          "跨进程持久化队列",
+          "无限消息/任意数量连续点击",
+          "实际跨场景效果；这里只计第二段发出"
+        ],
+        "liveness": "ContinuationProgress"
+      },
+      "assumptions": [
+        "投影按序应用；旧/重复批次不回退。",
+        "原 Receipt 身份真实、不可变；同一控制 epoch 的输入命令号唯一。",
+        "视觉事件只在该公开计划实际显示 settled 时产生；浮点位置和动画算法未建模。",
+        "活性配置只用一份未取消的合法计划，原结果最终 Accepted，恢复、首次有效送达及内部启用动作弱公平；暂停最终恢复。"
+      ],
+      "inputSet": "positive",
+      "manifestSHA256": "04c92ef2e77f7816f478a6b87c2ad9abe1bc7a390d9d0b30706af94f8c9ce0ff",
+      "runnerSHA256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool": {
+        "version_label": "v1.7.4 / TLC 2.19",
+        "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+        "java_version": "openjdk version \"21.0.13\" 2026-10-20\nOpenJDK Runtime Environment (build 21.0.13+9-1-deb13u2-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.13+9-1-deb13u2-Debian, mixed mode, sharing)",
+        "reported_version": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)"
+      },
+      "resultSHA256": "a7e92323c6896460d3c003f677c457338d1a3a4855a65f9c046a5b44ecbb16b5",
+      "logSHA256": "def14db818de88865257d660d7240741ab8813c38b03c2b6b8128b4cdbe18505",
+      "messagesSHA256": "2373b6f7797ba3d55fd94ad1af3efc8fcdab5e065a0fe4cbcaffe5b90c5aa259",
+      "startedAt": "2026-11-13T12:16:52.564008+00:00",
+      "finishedAt": "2026-11-13T12:16:56.810919+00:00",
+      "durationSeconds": 4.246948,
+      "statistics": {
+        "generated_states": 94888,
+        "distinct_states": 24663,
+        "remaining_states": 6349
+      },
+      "messageCodes": [
+        2116,
+        2185,
+        2186,
+        2187,
+        2189,
+        2190,
+        2192,
+        2199,
+        2200,
+        2212,
+        2217,
+        2218,
+        2219,
+        2220,
+        2262,
+        2264,
+        2267
+      ],
+      "errorCodes": [
+        2116,
+        2264
+      ],
+      "warningCodes": []
+    },
+    {
+      "run": "historical-matrix-02--old-same-seq",
+      "profile": "old-same-seq",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "rawExit": 12,
+      "timedOut": false,
+      "interrupted": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "NoPrematureCrossing"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "NoPrematureCrossing"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "old-sequence",
+          "Adversarial": false,
+          "MaxQueues": 1,
+          "OldSeq": 1,
+          "ForceUnknown": false
+        },
+        "covered_interleavings_and_faults": [
+          "Receipt/公开投影/真实显示回调独立到达、有限重复",
+          "同号历史 movement 与旧 epoch 高序号",
+          "Unknown 后原身份恢复、取消/替换和迟响应",
+          "当前高水位、已知授权围栏与一次暂停/恢复"
+        ],
+        "excluded_behaviors": [
+          "真实权限/DB/几何",
+          "跨进程持久化队列",
+          "无限消息/任意数量连续点击",
+          "实际跨场景效果；这里只计第二段发出"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "投影按序应用；旧/重复批次不回退。",
+        "原 Receipt 身份真实、不可变；同一控制 epoch 的输入命令号唯一。",
+        "视觉事件只在该公开计划实际显示 settled 时产生；浮点位置和动画算法未建模。",
+        "活性配置只用一份未取消的合法计划，原结果最终 Accepted，恢复、首次有效送达及内部启用动作弱公平；暂停最终恢复。"
+      ],
+      "inputSet": "positive",
+      "manifestSHA256": "04c92ef2e77f7816f478a6b87c2ad9abe1bc7a390d9d0b30706af94f8c9ce0ff",
+      "runnerSHA256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool": {
+        "version_label": "v1.7.4 / TLC 2.19",
+        "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+        "java_version": "openjdk version \"21.0.13\" 2026-10-20\nOpenJDK Runtime Environment (build 21.0.13+9-1-deb13u2-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.13+9-1-deb13u2-Debian, mixed mode, sharing)",
+        "reported_version": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)"
+      },
+      "resultSHA256": "eb0d0c26717398e59f9b8eac17b6697d1f0edbf7744848b0ddaf0382238b33de",
+      "logSHA256": "3148ab369b183ef6b3c92150e1ae1a48ed1bb7d304359c5472f7f5dc81f35133",
+      "messagesSHA256": "4caf0a7deccc3068a286a4090a1f3160ca69a4b3bbf09ba9368825e549a4ac1a",
+      "startedAt": "2026-11-13T12:16:56.888108+00:00",
+      "finishedAt": "2026-11-13T12:16:57.961948+00:00",
+      "durationSeconds": 1.073877,
+      "statistics": {
+        "generated_states": 181,
+        "distinct_states": 103,
+        "remaining_states": 73
+      },
+      "messageCodes": [
+        2110,
+        2121,
+        2185,
+        2186,
+        2187,
+        2189,
+        2190,
+        2194,
+        2199,
+        2200,
+        2217,
+        2219,
+        2220,
+        2262,
+        2268
+      ],
+      "errorCodes": [
+        2110,
+        2121
+      ],
+      "warningCodes": []
+    },
+    {
+      "run": "historical-matrix-02--old-unknown-history-live",
+      "profile": "old-unknown-history-live",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "rawExit": 13,
+      "timedOut": false,
+      "interrupted": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK"
+        ],
+        "expected_properties": [
+          "ContinuationProgress"
+        ],
+        "configured_invariants": [
+          "TypeOK"
+        ],
+        "configured_properties": [
+          "ContinuationProgress"
+        ],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "LiveSpec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "old-sequence",
+          "Adversarial": false,
+          "MaxQueues": 1,
+          "OldSeq": 5,
+          "ForceUnknown": true
+        },
+        "covered_interleavings_and_faults": [
+          "Receipt/公开投影/真实显示回调独立到达、有限重复",
+          "同号历史 movement 与旧 epoch 高序号",
+          "Unknown 后原身份恢复、取消/替换和迟响应",
+          "当前高水位、已知授权围栏与一次暂停/恢复"
+        ],
+        "excluded_behaviors": [
+          "真实权限/DB/几何",
+          "跨进程持久化队列",
+          "无限消息/任意数量连续点击",
+          "实际跨场景效果；这里只计第二段发出"
+        ],
+        "liveness": "ContinuationProgress"
+      },
+      "assumptions": [
+        "投影按序应用；旧/重复批次不回退。",
+        "原 Receipt 身份真实、不可变；同一控制 epoch 的输入命令号唯一。",
+        "视觉事件只在该公开计划实际显示 settled 时产生；浮点位置和动画算法未建模。",
+        "活性配置只用一份未取消的合法计划，原结果最终 Accepted，恢复、首次有效送达及内部启用动作弱公平；暂停最终恢复。"
+      ],
+      "inputSet": "positive",
+      "manifestSHA256": "04c92ef2e77f7816f478a6b87c2ad9abe1bc7a390d9d0b30706af94f8c9ce0ff",
+      "runnerSHA256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool": {
+        "version_label": "v1.7.4 / TLC 2.19",
+        "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+        "java_version": "openjdk version \"21.0.13\" 2026-10-20\nOpenJDK Runtime Environment (build 21.0.13+9-1-deb13u2-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.13+9-1-deb13u2-Debian, mixed mode, sharing)",
+        "reported_version": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)"
+      },
+      "resultSHA256": "aec448ed42be5fcdcacf6524d9857e958c267d574e20bea98e03653aa7ce3a27",
+      "logSHA256": "d7e20e537d9e461a1b8723bfaffb4e4ab45d085b4a16f8c365486d29de7931f4",
+      "messagesSHA256": "9d60341e6713344af90b4e20dad9952d885ec36c8badc6ef59167e52abcdc6c6",
+      "startedAt": "2026-11-13T12:16:58.003859+00:00",
+      "finishedAt": "2026-11-13T12:17:02.250867+00:00",
+      "durationSeconds": 4.24704,
+      "statistics": {
+        "generated_states": 106814,
+        "distinct_states": 26240,
+        "remaining_states": 2952
+      },
+      "messageCodes": [
+        2116,
+        2185,
+        2186,
+        2187,
+        2189,
+        2190,
+        2192,
+        2199,
+        2200,
+        2212,
+        2217,
+        2218,
+        2219,
+        2220,
+        2262,
+        2264,
+        2267
+      ],
+      "errorCodes": [
+        2116,
+        2264
+      ],
+      "warningCodes": []
+    },
+    {
+      "run": "historical-matrix-02--positive-live",
+      "profile": "positive-live",
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "completed": true,
+      "rawExit": 0,
+      "timedOut": false,
+      "interrupted": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "NoPrematureCrossing",
+          "AtMostOneContinuation",
+          "NoCancelledRevival",
+          "ReceiptBound"
+        ],
+        "expected_properties": [
+          "ContinuationProgress"
+        ],
+        "configured_invariants": [
+          "TypeOK",
+          "NoPrematureCrossing",
+          "AtMostOneContinuation",
+          "NoCancelledRevival",
+          "ReceiptBound"
+        ],
+        "configured_properties": [
+          "ContinuationProgress"
+        ],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "LiveSpec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Adversarial": false,
+          "MaxQueues": 1,
+          "OldSeq": 0,
+          "ForceUnknown": false
+        },
+        "covered_interleavings_and_faults": [
+          "Receipt/公开投影/真实显示回调独立到达、有限重复",
+          "同号历史 movement 与旧 epoch 高序号",
+          "Unknown 后原身份恢复、取消/替换和迟响应",
+          "当前高水位、已知授权围栏与一次暂停/恢复"
+        ],
+        "excluded_behaviors": [
+          "真实权限/DB/几何",
+          "跨进程持久化队列",
+          "无限消息/任意数量连续点击",
+          "实际跨场景效果；这里只计第二段发出"
+        ],
+        "liveness": "ContinuationProgress"
+      },
+      "assumptions": [
+        "投影按序应用；旧/重复批次不回退。",
+        "原 Receipt 身份真实、不可变；同一控制 epoch 的输入命令号唯一。",
+        "视觉事件只在该公开计划实际显示 settled 时产生；浮点位置和动画算法未建模。",
+        "活性配置只用一份未取消的合法计划，原结果最终 Accepted，恢复、首次有效送达及内部启用动作弱公平；暂停最终恢复。"
+      ],
+      "inputSet": "positive",
+      "manifestSHA256": "04c92ef2e77f7816f478a6b87c2ad9abe1bc7a390d9d0b30706af94f8c9ce0ff",
+      "runnerSHA256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool": {
+        "version_label": "v1.7.4 / TLC 2.19",
+        "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+        "java_version": "openjdk version \"21.0.13\" 2026-10-20\nOpenJDK Runtime Environment (build 21.0.13+9-1-deb13u2-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.13+9-1-deb13u2-Debian, mixed mode, sharing)",
+        "reported_version": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)"
+      },
+      "resultSHA256": "ce66cab975556a4ab34daeb27d2d6ccf088bdce9306588f157e79a4be64c9faf",
+      "logSHA256": "24c9c581a23a6428a3f0cfe811cbcf5f8c5a76f4a34e3f3a3d0c064d7f26da13",
+      "messagesSHA256": "c08ce96246f91c37286406787ac060bcd0cfe6372eb10cea834109e674d316a5",
+      "startedAt": "2026-11-13T12:16:46.136621+00:00",
+      "finishedAt": "2026-11-13T12:16:52.503949+00:00",
+      "durationSeconds": 6.367359,
+      "statistics": {
+        "generated_states": 167462,
+        "distinct_states": 33660,
+        "remaining_states": 0
+      },
+      "messageCodes": [
+        2185,
+        2186,
+        2187,
+        2189,
+        2190,
+        2192,
+        2193,
+        2194,
+        2199,
+        2200,
+        2212,
+        2219,
+        2220,
+        2262,
+        2267,
+        2268
+      ],
+      "errorCodes": [],
+      "warningCodes": []
+    },
+    {
+      "run": "historical-matrix-02--positive-safety",
+      "profile": "positive-safety",
+      "status": "INCONCLUSIVE",
+      "reason": "TIMEOUT",
+      "completed": false,
+      "rawExit": 143,
+      "timedOut": true,
+      "interrupted": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "NoPrematureCrossing",
+          "AtMostOneContinuation",
+          "NoCancelledRevival",
+          "ReceiptBound"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "NoPrematureCrossing",
+          "AtMostOneContinuation",
+          "NoCancelledRevival",
+          "ReceiptBound"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Adversarial": true,
+          "MaxQueues": 2,
+          "OldSeq": 0,
+          "ForceUnknown": false
+        },
+        "covered_interleavings_and_faults": [
+          "Receipt/公开投影/真实显示回调独立到达、有限重复",
+          "同号历史 movement 与旧 epoch 高序号",
+          "Unknown 后原身份恢复、取消/替换和迟响应",
+          "当前高水位、已知授权围栏与一次暂停/恢复"
+        ],
+        "excluded_behaviors": [
+          "真实权限/DB/几何",
+          "跨进程持久化队列",
+          "无限消息/任意数量连续点击",
+          "实际跨场景效果；这里只计第二段发出"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "投影按序应用；旧/重复批次不回退。",
+        "原 Receipt 身份真实、不可变；同一控制 epoch 的输入命令号唯一。",
+        "视觉事件只在该公开计划实际显示 settled 时产生；浮点位置和动画算法未建模。",
+        "活性配置只用一份未取消的合法计划，原结果最终 Accepted，恢复、首次有效送达及内部启用动作弱公平；暂停最终恢复。"
+      ],
+      "inputSet": "positive",
+      "manifestSHA256": "04c92ef2e77f7816f478a6b87c2ad9abe1bc7a390d9d0b30706af94f8c9ce0ff",
+      "runnerSHA256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool": {
+        "version_label": "v1.7.4 / TLC 2.19",
+        "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+        "java_version": "openjdk version \"21.0.13\" 2026-10-20\nOpenJDK Runtime Environment (build 21.0.13+9-1-deb13u2-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.13+9-1-deb13u2-Debian, mixed mode, sharing)",
+        "reported_version": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)"
+      },
+      "resultSHA256": "6d07d52fbcd27547d9d9c25cd17fa268d45f37bd2c9116d30ce9a3395456a09d",
+      "logSHA256": "84b6d54c02d1d40c01ca4bd02d9adeffd6b0421967584fc983f132224d8b6305",
+      "messagesSHA256": "599dd495a19efb043b1225abae8cdea027d61e182286e763cfcb1b5f147a6a73",
+      "startedAt": "2026-11-13T12:16:46.132752+00:00",
+      "finishedAt": "2026-11-13T12:18:46.585195+00:00",
+      "durationSeconds": 120.452502,
+      "statistics": {
+        "generated_states": null,
+        "distinct_states": null,
+        "remaining_states": null
+      },
+      "messageCodes": [
+        2185,
+        2187,
+        2189,
+        2190,
+        2200,
+        2219,
+        2220,
+        2262
+      ],
+      "errorCodes": [],
+      "warningCodes": []
+    },
+    {
+      "run": "historical-matrix-02--witness-early-unknown",
+      "profile": "witness-early-unknown",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "rawExit": 12,
+      "timedOut": false,
+      "interrupted": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "NoEarlyUnknownWitness"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "NoEarlyUnknownWitness"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Adversarial": false,
+          "MaxQueues": 1,
+          "OldSeq": 0,
+          "ForceUnknown": true
+        },
+        "covered_interleavings_and_faults": [
+          "Receipt/公开投影/真实显示回调独立到达、有限重复",
+          "同号历史 movement 与旧 epoch 高序号",
+          "Unknown 后原身份恢复、取消/替换和迟响应",
+          "当前高水位、已知授权围栏与一次暂停/恢复"
+        ],
+        "excluded_behaviors": [
+          "真实权限/DB/几何",
+          "跨进程持久化队列",
+          "无限消息/任意数量连续点击",
+          "实际跨场景效果；这里只计第二段发出"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "投影按序应用；旧/重复批次不回退。",
+        "原 Receipt 身份真实、不可变；同一控制 epoch 的输入命令号唯一。",
+        "视觉事件只在该公开计划实际显示 settled 时产生；浮点位置和动画算法未建模。",
+        "活性配置只用一份未取消的合法计划，原结果最终 Accepted，恢复、首次有效送达及内部启用动作弱公平；暂停最终恢复。"
+      ],
+      "inputSet": "positive",
+      "manifestSHA256": "04c92ef2e77f7816f478a6b87c2ad9abe1bc7a390d9d0b30706af94f8c9ce0ff",
+      "runnerSHA256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool": {
+        "version_label": "v1.7.4 / TLC 2.19",
+        "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+        "java_version": "openjdk version \"21.0.13\" 2026-10-20\nOpenJDK Runtime Environment (build 21.0.13+9-1-deb13u2-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.13+9-1-deb13u2-Debian, mixed mode, sharing)",
+        "reported_version": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)"
+      },
+      "resultSHA256": "b275f5e3682af54ee9e78ed2f675a9b47216cdf72ec78290656a9e829a9ff2b5",
+      "logSHA256": "3361d58cf15f826582390e2341751b3ecca63546b4c63970708732e391fd94f9",
+      "messagesSHA256": "160a8b62fddacb490234d91a5853bcbbdbc0dc4a5ff485ebc64b0caca3d0dfcd",
+      "startedAt": "2026-11-13T12:17:12.153402+00:00",
+      "finishedAt": "2026-11-13T12:17:13.582574+00:00",
+      "durationSeconds": 1.429214,
+      "statistics": {
+        "generated_states": 26679,
+        "distinct_states": 8437,
+        "remaining_states": 3219
+      },
+      "messageCodes": [
+        2110,
+        2121,
+        2185,
+        2186,
+        2187,
+        2189,
+        2190,
+        2194,
+        2199,
+        2200,
+        2217,
+        2219,
+        2220,
+        2262,
+        2268
+      ],
+      "errorCodes": [
+        2110,
+        2121
+      ],
+      "warningCodes": []
+    },
+    {
+      "run": "independent-safety-1800s",
+      "profile": "positive-safety",
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "completed": true,
+      "rawExit": 0,
+      "timedOut": false,
+      "interrupted": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "NoPrematureCrossing",
+          "AtMostOneContinuation",
+          "NoCancelledRevival",
+          "ReceiptBound"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "NoPrematureCrossing",
+          "AtMostOneContinuation",
+          "NoCancelledRevival",
+          "ReceiptBound"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Adversarial": true,
+          "MaxQueues": 2,
+          "OldSeq": 0,
+          "ForceUnknown": false
+        },
+        "covered_interleavings_and_faults": [
+          "Receipt/公开投影/真实显示回调独立到达、有限重复",
+          "同号历史 movement 与旧 epoch 高序号",
+          "Unknown 后原身份恢复、取消/替换和迟响应",
+          "当前高水位、已知授权围栏与一次暂停/恢复"
+        ],
+        "excluded_behaviors": [
+          "真实权限/DB/几何",
+          "跨进程持久化队列",
+          "无限消息/任意数量连续点击",
+          "实际跨场景效果；这里只计第二段发出"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "投影按序应用；旧/重复批次不回退。",
+        "原 Receipt 身份真实、不可变；同一控制 epoch 的输入命令号唯一。",
+        "视觉事件只在该公开计划实际显示 settled 时产生；浮点位置和动画算法未建模。",
+        "活性配置只用一份未取消的合法计划，原结果最终 Accepted，恢复、首次有效送达及内部启用动作弱公平；暂停最终恢复。"
+      ],
+      "inputSet": "positive",
+      "manifestSHA256": "f5726b96fbb8564d8b53beb87640a2d2e59b077ed6d0b9d38210fe2087c56b61",
+      "runnerSHA256": "7105e24bbc724b565f16deb265defcf9dfa54821b085d4b640efa4e8857078eb",
+      "tool": {
+        "version_label": "v1.7.4 / TLC 2.19",
+        "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+        "java_version": "openjdk version \"21.0.13\" 2026-10-20\nOpenJDK Runtime Environment (build 21.0.13+9-1-deb13u2-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.13+9-1-deb13u2-Debian, mixed mode, sharing)",
+        "reported_version": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)"
+      },
+      "resultSHA256": "78df4dee793ce4d3fb256205457ca3c3e3093e1fb11e492768747577b3b0008a",
+      "logSHA256": "d08ef1c2494cd39bf53dbf509db5303a7ac178dffb0dccd8f6064c04217c333f",
+      "messagesSHA256": "17615ba96b348ca92f9ea3abf494a6afe5bb6209cde16a19cb0a70a8e93f26de",
+      "startedAt": "2026-11-13T12:33:55.253234+00:00",
+      "finishedAt": "2026-11-13T12:55:03.740744+00:00",
+      "durationSeconds": 1268.487574,
+      "statistics": {
+        "generated_states": 707132452,
+        "distinct_states": 88362572,
+        "remaining_states": 0
+      },
+      "messageCodes": [
+        2185,
+        2186,
+        2187,
+        2189,
+        2190,
+        2193,
+        2194,
+        2195,
+        2196,
+        2199,
+        2200,
+        2219,
+        2220,
+        2262,
+        2268
+      ],
+      "errorCodes": [],
+      "warningCodes": []
+    },
+    {
+      "run": "independent-safety-600s",
+      "profile": "positive-safety",
+      "status": "INCONCLUSIVE",
+      "reason": "TIMEOUT",
+      "completed": false,
+      "rawExit": 143,
+      "timedOut": true,
+      "interrupted": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "NoPrematureCrossing",
+          "AtMostOneContinuation",
+          "NoCancelledRevival",
+          "ReceiptBound"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "NoPrematureCrossing",
+          "AtMostOneContinuation",
+          "NoCancelledRevival",
+          "ReceiptBound"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Adversarial": true,
+          "MaxQueues": 2,
+          "OldSeq": 0,
+          "ForceUnknown": false
+        },
+        "covered_interleavings_and_faults": [
+          "Receipt/公开投影/真实显示回调独立到达、有限重复",
+          "同号历史 movement 与旧 epoch 高序号",
+          "Unknown 后原身份恢复、取消/替换和迟响应",
+          "当前高水位、已知授权围栏与一次暂停/恢复"
+        ],
+        "excluded_behaviors": [
+          "真实权限/DB/几何",
+          "跨进程持久化队列",
+          "无限消息/任意数量连续点击",
+          "实际跨场景效果；这里只计第二段发出"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "投影按序应用；旧/重复批次不回退。",
+        "原 Receipt 身份真实、不可变；同一控制 epoch 的输入命令号唯一。",
+        "视觉事件只在该公开计划实际显示 settled 时产生；浮点位置和动画算法未建模。",
+        "活性配置只用一份未取消的合法计划，原结果最终 Accepted，恢复、首次有效送达及内部启用动作弱公平；暂停最终恢复。"
+      ],
+      "inputSet": "positive",
+      "manifestSHA256": "8afc3f2c9165cfdbb00c0547e11f1ef307eb9e17e20caa865525a61c1e51158f",
+      "runnerSHA256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool": {
+        "version_label": "v1.7.4 / TLC 2.19",
+        "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+        "java_version": "openjdk version \"21.0.13\" 2026-10-20\nOpenJDK Runtime Environment (build 21.0.13+9-1-deb13u2-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.13+9-1-deb13u2-Debian, mixed mode, sharing)",
+        "reported_version": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)"
+      },
+      "resultSHA256": "930af6c52203cbe18bd93a57b46cb5143b4a9ebe316166ecf5443e25783443b5",
+      "logSHA256": "0944b2fdbfe89dbadcb298fb9049bb6a1db22b502895d8a4b0fb38a580a222d0",
+      "messagesSHA256": "bec4ec8e3859d4fad054a7e6396814900f78ce3108d219c5e6396655ad300547",
+      "startedAt": "2026-11-13T12:23:05.542551+00:00",
+      "finishedAt": "2026-11-13T12:33:06.012610+00:00",
+      "durationSeconds": 600.470103,
+      "statistics": {
+        "generated_states": null,
+        "distinct_states": null,
+        "remaining_states": null
+      },
+      "messageCodes": [
+        2185,
+        2187,
+        2189,
+        2190,
+        2200,
+        2219,
+        2220,
+        2262
+      ],
+      "errorCodes": [],
+      "warningCodes": []
+    },
+    {
+      "run": "negative-receipt",
+      "profile": "negative-receipt",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "rawExit": 12,
+      "timedOut": false,
+      "interrupted": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "ReceiptBound"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "ReceiptBound"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Adversarial": false,
+          "MaxQueues": 1,
+          "OldSeq": 1,
+          "ForceUnknown": false
+        },
+        "covered_interleavings_and_faults": [
+          "Receipt/公开投影/真实显示回调独立到达、有限重复",
+          "同号历史 movement 与旧 epoch 高序号",
+          "Unknown 后原身份恢复、取消/替换和迟响应",
+          "当前高水位、已知授权围栏与一次暂停/恢复"
+        ],
+        "excluded_behaviors": [
+          "真实权限/DB/几何",
+          "跨进程持久化队列",
+          "无限消息/任意数量连续点击",
+          "实际跨场景效果；这里只计第二段发出"
+        ],
+        "liveness": "NOT_CHECKED",
+        "negative_control": "错误变体：处理公开投影时未经原Receipt确认，先绑定当前队列计划"
+      },
+      "assumptions": [
+        "投影按序应用；旧/重复批次不回退。",
+        "原 Receipt 身份真实、不可变；同一控制 epoch 的输入命令号唯一。",
+        "视觉事件只在该公开计划实际显示 settled 时产生；浮点位置和动画算法未建模。",
+        "活性配置只用一份未取消的合法计划，原结果最终 Accepted，恢复、首次有效送达及内部启用动作弱公平；暂停最终恢复。"
+      ],
+      "inputSet": "receipt",
+      "manifestSHA256": "8e91f1283f6812b1d5af73f4f87f20924606799fcf69f9c82be2710b783f28ea",
+      "runnerSHA256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool": {
+        "version_label": "v1.7.4 / TLC 2.19",
+        "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+        "java_version": "openjdk version \"21.0.13\" 2026-10-20\nOpenJDK Runtime Environment (build 21.0.13+9-1-deb13u2-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.13+9-1-deb13u2-Debian, mixed mode, sharing)",
+        "reported_version": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)"
+      },
+      "resultSHA256": "80544cca591bf9986f3d066161cd55a201c44162a89150de8c233d4feb2df8ca",
+      "logSHA256": "c324e1c86f78052eeaa6655e7bc7fa8bb6c9ccbe5d17f46627085510b3a1ead9",
+      "messagesSHA256": "450abf5a6e4e1811dddb1b622ccb8c6cf892da500300c4726409f865a600b616",
+      "startedAt": "2026-11-13T12:25:29.543429+00:00",
+      "finishedAt": "2026-11-13T12:25:30.860300+00:00",
+      "durationSeconds": 1.316902,
+      "statistics": {
+        "generated_states": 13,
+        "distinct_states": 13,
+        "remaining_states": 10
+      },
+      "messageCodes": [
+        2110,
+        2121,
+        2185,
+        2186,
+        2187,
+        2189,
+        2190,
+        2194,
+        2199,
+        2200,
+        2217,
+        2219,
+        2220,
+        2262,
+        2268
+      ],
+      "errorCodes": [
+        2110,
+        2121
+      ],
+      "warningCodes": []
+    },
+    {
+      "run": "negative-type",
+      "profile": "negative-type",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "rawExit": 12,
+      "timedOut": false,
+      "interrupted": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Adversarial": false,
+          "MaxQueues": 1,
+          "OldSeq": 1,
+          "ForceUnknown": false
+        },
+        "covered_interleavings_and_faults": [
+          "Receipt/公开投影/真实显示回调独立到达、有限重复",
+          "同号历史 movement 与旧 epoch 高序号",
+          "Unknown 后原身份恢复、取消/替换和迟响应",
+          "当前高水位、已知授权围栏与一次暂停/恢复"
+        ],
+        "excluded_behaviors": [
+          "真实权限/DB/几何",
+          "跨进程持久化队列",
+          "无限消息/任意数量连续点击",
+          "实际跨场景效果；这里只计第二段发出"
+        ],
+        "liveness": "NOT_CHECKED",
+        "negative_control": "错误变体：首段接受后把命令高水位写成负数"
+      },
+      "assumptions": [
+        "投影按序应用；旧/重复批次不回退。",
+        "原 Receipt 身份真实、不可变；同一控制 epoch 的输入命令号唯一。",
+        "视觉事件只在该公开计划实际显示 settled 时产生；浮点位置和动画算法未建模。",
+        "活性配置只用一份未取消的合法计划，原结果最终 Accepted，恢复、首次有效送达及内部启用动作弱公平；暂停最终恢复。"
+      ],
+      "inputSet": "type",
+      "manifestSHA256": "7ed9823c3e86fc941da5e62b994feda80b25fa7718c9e30e509e8aab6805b0c7",
+      "runnerSHA256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool": {
+        "version_label": "v1.7.4 / TLC 2.19",
+        "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+        "java_version": "openjdk version \"21.0.13\" 2026-10-20\nOpenJDK Runtime Environment (build 21.0.13+9-1-deb13u2-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.13+9-1-deb13u2-Debian, mixed mode, sharing)",
+        "reported_version": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)",
+        "javaVersionProbeNotice": {
+          "category": "perf,memops",
+          "message": "原 Java 版本探测报告性能数据文件被其他进程占用（errno 11）；正式摘要移除该运行时绝对路径。此提示不是 TLC warning，原 TLC warning_codes 仍为空；原始记录未改写。",
+          "originalProbeOutputSHA256": "aa299dcc298d291ceb0bf439b3a7e2f40ac5458baf434160996029c16315e842"
+        }
+      },
+      "resultSHA256": "4e188a8d235b537abb6d7c3a83d44a11cd581e85191c4dd4e19a7a484b3e8aa7",
+      "logSHA256": "a8dbc2d68c9f866e51cb7daf1e9a888abb3f241757a2b7f0bec0536e84e943ec",
+      "messagesSHA256": "004e3142e812ff3de753a814365423bd7f243908be30ad85eed214c30c5236ca",
+      "startedAt": "2026-11-13T12:25:29.557726+00:00",
+      "finishedAt": "2026-11-13T12:25:30.914009+00:00",
+      "durationSeconds": 1.356317,
+      "statistics": {
+        "generated_states": 2,
+        "distinct_states": 2,
+        "remaining_states": 0
+      },
+      "messageCodes": [
+        2110,
+        2121,
+        2185,
+        2186,
+        2187,
+        2189,
+        2190,
+        2194,
+        2199,
+        2200,
+        2217,
+        2219,
+        2220,
+        2262
+      ],
+      "errorCodes": [
+        2110,
+        2121
+      ],
+      "warningCodes": []
+    }
+  ],
+  "profileSelections": [
+    {
+      "profile": "positive-safety",
+      "selectedRun": "independent-safety-1800s",
+      "expectedStatus": "PASS_WITHIN_SCOPE",
+      "expectedRawExit": 0,
+      "expectedTarget": null,
+      "meetsPredeclaredExpectation": true,
+      "resultSHA256": "78df4dee793ce4d3fb256205457ca3c3e3093e1fb11e492768747577b3b0008a"
+    },
+    {
+      "profile": "positive-live",
+      "selectedRun": "historical-matrix-02--positive-live",
+      "expectedStatus": "PASS_WITHIN_SCOPE",
+      "expectedRawExit": 0,
+      "expectedTarget": null,
+      "meetsPredeclaredExpectation": true,
+      "resultSHA256": "ce66cab975556a4ab34daeb27d2d6ccf088bdce9306588f157e79a4be64c9faf"
+    },
+    {
+      "profile": "old-history-live",
+      "selectedRun": "historical-matrix-02--old-history-live",
+      "expectedStatus": "COUNTEREXAMPLE",
+      "expectedRawExit": 13,
+      "expectedTarget": "ContinuationProgress",
+      "meetsPredeclaredExpectation": true,
+      "resultSHA256": "a7e92323c6896460d3c003f677c457338d1a3a4855a65f9c046a5b44ecbb16b5"
+    },
+    {
+      "profile": "old-same-seq",
+      "selectedRun": "historical-matrix-02--old-same-seq",
+      "expectedStatus": "COUNTEREXAMPLE",
+      "expectedRawExit": 12,
+      "expectedTarget": "NoPrematureCrossing",
+      "meetsPredeclaredExpectation": true,
+      "resultSHA256": "eb0d0c26717398e59f9b8eac17b6697d1f0edbf7744848b0ddaf0382238b33de"
+    },
+    {
+      "profile": "old-unknown-history-live",
+      "selectedRun": "historical-matrix-02--old-unknown-history-live",
+      "expectedStatus": "COUNTEREXAMPLE",
+      "expectedRawExit": 13,
+      "expectedTarget": "ContinuationProgress",
+      "meetsPredeclaredExpectation": true,
+      "resultSHA256": "aec448ed42be5fcdcacf6524d9857e958c267d574e20bea98e03653aa7ce3a27"
+    },
+    {
+      "profile": "negative-drop-early",
+      "selectedRun": "historical-matrix-02--negative-drop-early",
+      "expectedStatus": "COUNTEREXAMPLE",
+      "expectedRawExit": 13,
+      "expectedTarget": "ContinuationProgress",
+      "meetsPredeclaredExpectation": true,
+      "resultSHA256": "afb9a742add98b18052773ad500e9b369d18d70af5e2ce22d6e6d8679a08c1fe"
+    },
+    {
+      "profile": "negative-map-key",
+      "selectedRun": "historical-matrix-02--negative-map-key",
+      "expectedStatus": "COUNTEREXAMPLE",
+      "expectedRawExit": 13,
+      "expectedTarget": "ContinuationProgress",
+      "meetsPredeclaredExpectation": true,
+      "resultSHA256": "d1def60772d61fd7de18c2496b3698a230721296fc8bdc53ef8e826d532cc425"
+    },
+    {
+      "profile": "negative-revive",
+      "selectedRun": "historical-matrix-02--negative-revive",
+      "expectedStatus": "COUNTEREXAMPLE",
+      "expectedRawExit": 12,
+      "expectedTarget": "NoCancelledRevival",
+      "meetsPredeclaredExpectation": true,
+      "resultSHA256": "f93b93e3732aa9e36a8e32897055a81fbb152136cf6f7dfde28c5b1fa2d3a069"
+    },
+    {
+      "profile": "negative-double",
+      "selectedRun": "historical-matrix-02--negative-double",
+      "expectedStatus": "COUNTEREXAMPLE",
+      "expectedRawExit": 12,
+      "expectedTarget": "AtMostOneContinuation",
+      "meetsPredeclaredExpectation": true,
+      "resultSHA256": "4a7a0c3c3e5cbea6193d099b228160560f4a74db3aca36adc03044e4765e558d"
+    },
+    {
+      "profile": "witness-early-unknown",
+      "selectedRun": "historical-matrix-02--witness-early-unknown",
+      "expectedStatus": "COUNTEREXAMPLE",
+      "expectedRawExit": 12,
+      "expectedTarget": "NoEarlyUnknownWitness",
+      "meetsPredeclaredExpectation": true,
+      "resultSHA256": "b275f5e3682af54ee9e78ed2f675a9b47216cdf72ec78290656a9e829a9ff2b5"
+    },
+    {
+      "profile": "negative-receipt",
+      "selectedRun": "negative-receipt",
+      "expectedStatus": "COUNTEREXAMPLE",
+      "expectedRawExit": 12,
+      "expectedTarget": "ReceiptBound",
+      "meetsPredeclaredExpectation": true,
+      "resultSHA256": "80544cca591bf9986f3d066161cd55a201c44162a89150de8c233d4feb2df8ca"
+    },
+    {
+      "profile": "negative-type",
+      "selectedRun": "negative-type",
+      "expectedStatus": "COUNTEREXAMPLE",
+      "expectedRawExit": 12,
+      "expectedTarget": "TypeOK",
+      "meetsPredeclaredExpectation": true,
+      "resultSHA256": "4e188a8d235b537abb6d7c3a83d44a11cd581e85191c4dd4e19a7a484b3e8aa7"
+    }
+  ],
+  "reproductionEntrySmoke": [
+    {
+      "profile": "negative-receipt",
+      "status": "COUNTEREXAMPLE",
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "distinct_states": 13,
+      "remaining_states": 10,
+      "checks_exact": true,
+      "meets_expectation": true,
+      "result_sha256": "b38704a1c3864d96d2cda8bbd4077f85118397a8c43881c39690ba95555520cc",
+      "startedAt": "2026-11-13T13:03:23.787614+00:00",
+      "finishedAt": "2026-11-13T13:03:24.814135+00:00",
+      "inputSet": "receipt",
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "ReceiptBound"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "ReceiptBound"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "runnerSHA256": "7105e24bbc724b565f16deb265defcf9dfa54821b085d4b640efa4e8857078eb"
+    },
+    {
+      "profile": "negative-type",
+      "status": "COUNTEREXAMPLE",
+      "raw_exit": 12,
+      "runner_exit": 2,
+      "distinct_states": 2,
+      "remaining_states": 0,
+      "checks_exact": true,
+      "meets_expectation": true,
+      "result_sha256": "cd767262ed7c44ca228cdcaa7e79a3ee06eada0c57b2c4f987f12e7662489bc5",
+      "startedAt": "2026-11-13T13:03:23.780936+00:00",
+      "finishedAt": "2026-11-13T13:03:24.859911+00:00",
+      "inputSet": "type",
+      "checks": {
+        "expected_invariants": [
+          "TypeOK"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": true,
+        "deadlock_reason": null,
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "runnerSHA256": "7105e24bbc724b565f16deb265defcf9dfa54821b085d4b640efa4e8857078eb"
+    }
+  ],
+  "resources": {
+    "workers": 4,
+    "heapLimitMB": 2048,
+    "timeoutSeconds": 1800,
+    "measuredDurationSeconds": 1268.487574,
+    "maxStateFilesBytes": 3740804741,
+    "minimumFreeDiskBytes": 30008320000,
+    "measuredJVMRSS": "NOT_AVAILABLE",
+    "nativeCheckpointMinutes": 1,
+    "restartNotResume": true
+  },
+  "limits": [
+    "两个旧超时结果仍为 INCONCLUSIVE / 143；其原统计字段为 null，未伪造完成计数。",
+    "预期反例仍为 COUNTEREXAMPLE，符合预声明判据不等于 TLC 正配置通过。",
+    "原始日志、消息、输入快照和运行器绝对路径未入仓；摘要保留结果与原始文件内容哈希以便核对。",
+    "现有二十分钟 CI 不运行 TLC；该模型验收独立于 CI。",
+    "有限前端握手不证明数据库、权限、实际几何或跨场景提交，也不替代真人、真实模型或全章验收。"
+  ]
+}

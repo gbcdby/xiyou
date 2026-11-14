@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "archive_name": "scene-policy-std002-evidence.tar.gz",
+  "archive_sha256": "81789167080106c8f339d233d8909ceffec8d88944e264529e8251f5c96be50c",
+  "archive_bytes": 5990190,
+  "file_count": 9982,
+  "excluded_reproducible_runtime_data": [
+    "jar copies (fixed SHA recorded)",
+    "TLC temporary state database",
+    "runtime-home",
+    "tmp"
+  ],
+  "history": {
+    "prior-stage/scene-policy-stage1-evidence.tar.gz": "旧cb52阶段完整原始封存包，含旧001/002反例、52判据及更早模型错误；SHA保持b9adc92c8cad6a6c9d8201985743620f3a2d8dfcbe36eccbceddb85c450d3947",
+    "focused-01": "第一版细化模型六项定向检查均符合判据；非最终哈希",
+    "affected-02": "40/41符合；旧rewrite负控因string与tuple比较产生TOOL_ERROR76，是模型错误",
+    "request-final-03": "修正中的=<<词法错误导致47项TOOL_ERROR150；无业务状态穷举结论",
+    "rewrite-check-04": "最终模型的rewrite负控实际命中RequestImmutable，原始退出码12",
+    "request-final-05": "最终模型其余46项均符合预声明判据",
+    "stage1-follow": "复用的17项相同模块/配置实际日志；完整旧输入另在旧封存包",
+    "external-evidence": "仅读取的固定955独立实现复审，不是本任务产品运行"
+  },
+  "full_inventory": {
+    "name": "evidence-files.json",
+    "sha256": "6cb63a97a6d83ea7e265b9b8ea24136e185a43abfa2405a17b833bdc6c6330b6",
+    "bytes": 2186824,
+    "availability": "与原始日志归档并列保存；Git结果摘要含64项实际输入与日志hash。"
+  }
+}

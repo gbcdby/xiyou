@@ -1,0 +1,16 @@
+{
+  "original_runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+  "checkpoint_runner_sha256": "7105e24bbc724b565f16deb265defcf9dfa54821b085d4b640efa4e8857078eb",
+  "diff": "checkpoint-only.diff",
+  "model_semantics_changed": false,
+  "added_arguments": [
+    "-checkpoint",
+    "1"
+  ],
+  "timeout_seconds": 1800,
+  "workers": 4,
+  "heap_mb": 2048,
+  "predecessor": "formal-safety-r1",
+  "is_resume": false,
+  "reason": "上一轮600秒TIMEOUT且默认30分钟检查点未产生；本轮重新开始并每分钟保存原生检查点"
+}

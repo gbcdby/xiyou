@@ -1,3 +1,4 @@
+import { SPATIAL_CAPABILITIES } from './spatial-capabilities.ts';
 import { validateContract } from '../../../protocol/index.mjs';
 import { validateSpatial } from '../../../protocol/spatial.mjs';
 import type { ReceiptV2, RecapV2 } from '../../../game/spatial-types.ts';
@@ -34,7 +35,7 @@ export class HttpApi {
     let response: Response;
     const token = this.#token();
     const headers: Record<string, string> = { Accept: 'application/json' };
-    if (spatial) headers['X-Xiyou-Capabilities'] = 'spatial-v2';
+    if (spatial) headers['X-Xiyou-Capabilities'] = SPATIAL_CAPABILITIES.join(',');
     if (token) headers.Authorization = `Bearer ${token}`;
     if (body !== undefined) headers['Content-Type'] = 'application/json';
     try {
@@ -78,11 +79,11 @@ export class HttpApi {
     return { sessionId: text(data.sessionId) };
   }
   async createSpatial(nonce: string, contentVersion = 'spatial-graybox-v2'): Promise<{ sessionId: string }> {
-    const data = record(await this.#request('/sessions', { nonce, contentVersion, capabilities: ['spatial-v2'] }, undefined, true));
+    const data = record(await this.#request('/sessions', { nonce, contentVersion, capabilities: SPATIAL_CAPABILITIES }, undefined, true));
     return { sessionId: text(data.sessionId) };
   }
   async joinCompatible(sessionId: string, nonce: string): Promise<{ sessionId: string; protocolCapability: 'region-v1' | 'spatial-v2' }> {
-    const data = record(await this.#request(`/sessions/${encodeURIComponent(sessionId)}/join`, { nonce, capabilities: ['spatial-v2'] }, undefined, true));
+    const data = record(await this.#request(`/sessions/${encodeURIComponent(sessionId)}/join`, { nonce, capabilities: SPATIAL_CAPABILITIES }, undefined, true));
     // 旧房间仍返回其 v1 成员 DTO；v2 从不返回真实 actorId。
     const protocolCapability = data.protocolCapability === 'spatial-v2' || !Object.hasOwn(data, 'actorId') ? 'spatial-v2' : 'region-v1';
     if (protocolCapability === 'region-v1') text(data.actorId);
