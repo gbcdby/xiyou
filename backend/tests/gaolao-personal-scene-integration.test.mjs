@@ -9,6 +9,17 @@ import { personalSceneRoom } from '../test-support/gaolao-personal-scene-room.mj
 
 const output = new URL('../../.agent-output/cuilan-integration-20261114/', import.meta.url);
 
+function currentRequestConsent(state, subjectId, purpose, receipt) {
+  const consentId = state.chapter.consentSlots[`${subjectId}:${purpose}`];
+  const consent = state.chapter.consents[consentId];
+  assert.ok(consent, '当前用途槽必须指向实际许可，不能依赖持久对象键序');
+  assert.equal(consent.consentId, consentId);
+  assert.equal(consent.subjectId, subjectId);
+  assert.equal(consent.purpose, purpose);
+  assert.equal(state.chapter.personalRequests[consentId].proposalBinding.requestActionId, receipt.clientActionId, '当前许可必须来自本次真实请求');
+  return consent;
+}
+
 for (const [version, destinationId] of [
   ['gaolaozhuang-scene-v3', 'front-guest-room'],
   ['gaolaozhuang-tools-east-scene-v3', 'tea-back-room'],
@@ -33,25 +44,30 @@ for (const [version, destinationId] of [
   await finishSceneRoute(room, destinationId);
   const safe = room.content.chapterRules.safeDestinations.find(place => place.destinationId === destinationId);
   await room.go(0, safe);
-  accepted(await room.interact(0, '翠兰', 'gz-request-appearance', { destinationId: 'rear-meeting', permissionTerm: 'reusable' }));
+  const reusableReceipt = accepted(await room.interact(0, '翠兰', 'gz-request-appearance', { destinationId: 'rear-meeting', permissionTerm: 'reusable' }));
   await room.drain();
   let state = await room.state();
-  const declined = Object.values(state.chapter.consents).findLast(consent => consent.purpose === 'appearance');
+  const declined = currentRequestConsent(state, room.content.chapterRules.people.cuilan, 'appearance', reusableReceipt);
+  assert.equal(declined.scope.permissionTerm, 'reusable');
   assert.equal(declined.status, 'declined', JSON.stringify({ declined, status: room.sceneStatus() }));
   assert.equal(declined.decidedBy, room.content.chapterRules.people.cuilan);
-  accepted(await room.interact(0, '翠兰', 'gz-request-appearance', { destinationId: 'rear-meeting', permissionTerm: 'single_use' }));
+  const singleReceipt = accepted(await room.interact(0, '翠兰', 'gz-request-appearance', { destinationId: 'rear-meeting', permissionTerm: 'single_use' }));
   await room.drain();
   state = await room.state();
-  const appearance = Object.values(state.chapter.consents).findLast(consent => consent.purpose === 'appearance');
+  const appearance = currentRequestConsent(state, room.content.chapterRules.people.cuilan, 'appearance', singleReceipt);
   assert.notEqual(appearance.consentId, declined.consentId);
   assert.equal(appearance.status, 'accepted');
+  assert.equal(appearance.scope.permissionTerm, 'single_use');
+  assert.equal(state.chapter.personalRequests[appearance.consentId].execution.acceptedProof.consentVersion, appearance.version);
   accepted(await room.interact(0, '翠兰', 'gz-describe-private-items'));
   const offer = (await room.snapshot(0)).projection.chapter.privateItemOffers[0];
-  accepted(await room.interact(0, '翠兰', 'gz-request-private-items', { offerRef: offer.offerRef, itemOptionRefs: offer.options.map(option => option.optionRef), permissionTerm: 'single_use' }));
+  const privateReceipt = accepted(await room.interact(0, '翠兰', 'gz-request-private-items', { offerRef: offer.offerRef, itemOptionRefs: offer.options.map(option => option.optionRef), permissionTerm: 'single_use' }));
   await room.drain();
   state = await room.state();
-  const privateConsent = Object.values(state.chapter.consents).findLast(consent => consent.purpose === 'private_items');
+  const privateConsent = currentRequestConsent(state, room.content.chapterRules.people.cuilan, 'private_items', privateReceipt);
   assert.equal(privateConsent.status, 'accepted');
+  assert.equal(privateConsent.scope.permissionTerm, 'single_use');
+  assert.equal(state.chapter.personalRequests[privateConsent.consentId].execution.acceptedProof.consentVersion, privateConsent.version);
   assert.equal(state.chapter.consents[appearance.consentId].status, 'accepted');
   const item = room.content.items.find(item => room.content.chapterRules.privateItems.some(definition => definition.itemId === item.itemId && definition.ownerId === room.content.chapterRules.people.cuilan));
   await room.go(0, item); await take(room, 0, item.name);

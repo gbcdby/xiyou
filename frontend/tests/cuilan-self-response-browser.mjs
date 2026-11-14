@@ -180,10 +180,14 @@ async function appearancePlaces(room, initial) {
     let granted = initial;
     if (index > 0) { await nearOwner(room, player); accepted((await askAppearance(room, player, place.destinationId, 'single_use')).receipt); granted = await awaitDecision(room, player, 'appearance', 'accepted'); }
     await room.go('wukong', place); await room.go(player, place);
-    accepted(await room.interact('wukong', 'self', 'gz-apply-appearance', { consentId: granted.consent.consentId, expectedConsentVersion: granted.consent.version }));
+    const applyReceipt = accepted(await room.interact('wukong', 'self', 'gz-apply-appearance', { consentId: granted.consent.consentId, expectedConsentVersion: granted.consent.version }));
     await until(async () => Boolean((await state(room)).chapter.disguise), '真实悟空实际使用借貌');
     if (index === 0) {
-      const performer = (await snapshot(room.pages[player])).projection.entities.find(entity => entity.name === '孙悟空（借貌）');
+      const performer = await until(async () => {
+        const current = await snapshot(room.pages[player]);
+        if (!current || BigInt(current.snapshotSeq) < BigInt(applyReceipt.observedSeq)) return false;
+        return current.projection.entities.find(entity => entity.name === '孙悟空（借貌）' && entity.availableOperations?.includes('gz-reveal-identity'));
+      }, '本次请求者收到借貌提交后的身份与当面揭明操作', 15000);
       assert.ok(performer, '本次请求者具有实际授权身份知识');
       accepted(await room.interact(player, performer.name, 'gz-reveal-identity'));
       assert.equal((await state(room)).chapter.disguise, null, '公开结束事务立即解除外貌');
