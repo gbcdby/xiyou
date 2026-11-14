@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "tool": {
+    "version": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "source": {
+    "commit": "1a7f45ddfeca0d25fb3714e1ce45980b225d5bde",
+    "tree": "6b0130cd6838bf052504994527f05e29aabf521e",
+    "revision": "CS-R2 supplement S1",
+    "mode": "check/design",
+    "base_formal_commit": "77ace28f526ce9ad905b1842b7353e48e251423c",
+    "implementation_status": "NOT_ASSESSED"
+  },
+  "model": {
+    "root": "model",
+    "entry": "PersonalRecovery.tla"
+  },
+  "profiles": {
+    "recovery-negative-both-purposes-progress": {
+      "config": "recovery-negative-both-purposes-progress.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "SingleUnsettled",
+        "OriginalIdentityStable",
+        "ReceiptStable",
+        "EffectAtMostOnce",
+        "CapacitySufficient"
+      ],
+      "expected_properties": [
+        "BothPurposesProgress"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "MaxIntents": 4,
+          "FailuresBefore": 1,
+          "FailuresAfter": 1,
+          "AllowRestart": true,
+          "Fault": "consume-all",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "真实时间反例；不启用会先截断的PendingPurposesPreserved，原LiveSpec公平性不改。",
+        "excluded": [
+          "生产实现精化/PG结果",
+          "无限请求/无限epoch/连续几何",
+          "原5项未完配置的重跑或改名"
+        ]
+      },
+      "assumptions": [
+        "合法proposed及本人Accept需满足原CAS/Consent/Terms合同；本层不重新证明。",
+        "世界动作原子是实现义务，不是生产SQL已验证。",
+        "没有CONSTRAINT/VIEW/对称归约或随机模拟。",
+        "沿原PersonalRecovery LiveSpec；有限故障/内部提交恢复通知弱公平。task来自当前合法领域语义。",
+        "原正常15984状态对照保留原R1身份复用；本新配置仅作真正时间性质敏感性检查。"
+      ]
+    }
+  }
+}

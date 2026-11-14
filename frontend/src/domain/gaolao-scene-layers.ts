@@ -1,6 +1,6 @@
 import type { TargetViewV2 } from '../../../game/spatial-types.ts';
 import released from '../assets/gaolao-scene-layers.json' with { type: 'json' };
-import { objectArtCatalog, selectObjectArt } from './gaolao-object-art.ts';
+import { objectArtCatalog, objectArtContentVersion, selectObjectArt } from './gaolao-object-art.ts';
 import type { ObjectArtCatalog, ObjectArtContext, ObjectArtFrame } from './gaolao-object-art.ts';
 
 export type SceneRect = { x: number; y: number; width: number; height: number };
@@ -15,13 +15,13 @@ export type SceneLayerGroup = {
 };
 export type SceneDoorCatalog = Readonly<Record<string, ObjectArtCatalog[string] & { version?: string }>>;
 const sameScope = (group: SceneLayerGroup, context: ObjectArtContext) =>
-  group.contentVersion === context.contentVersion && group.mapVersion === context.mapVersion && group.sceneId === context.sceneId;
+  group.contentVersion === objectArtContentVersion(context) && group.mapVersion === context.mapVersion && group.sceneId === context.sceneId;
 
 export type SceneLayerCatalog = Readonly<Record<string, SceneLayerGroup>>;
 /** 只有已获准发布的明确条目进入此目录；JSON 由构建检查和运行时组校验共同约束。 */
 export const sceneLayerCatalog = released as SceneLayerCatalog;
 export function selectSceneLayerGroup(context: ObjectArtContext, catalog: SceneLayerCatalog = sceneLayerCatalog): SceneLayerGroup | null {
-  if (context.contentVersion !== 'gaolaozhuang-scene-v2' || context.mapVersion !== 'gaolao-layout-v1.1' || !['gaolao-courtyard', 'gaolao-village-road'].includes(context.sceneId ?? '')) return null;
+  if (objectArtContentVersion(context) !== 'gaolaozhuang-scene-v2' || context.mapVersion !== 'gaolao-layout-v1.1' || !['gaolao-courtyard', 'gaolao-village-road'].includes(context.sceneId ?? '')) return null;
   if (!context.sceneId || !Object.hasOwn(catalog, context.sceneId)) return null;
   const group = catalog[context.sceneId];
   return group?.enabled === true && sameScope(group, context) ? group : null;

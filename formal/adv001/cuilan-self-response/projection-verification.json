@@ -1,0 +1,448 @@
+{
+  "schema_version": 1,
+  "tool": {
+    "version": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "source": {
+    "commit": "1a7f45ddfeca0d25fb3714e1ce45980b225d5bde",
+    "tree": "6b0130cd6838bf052504994527f05e29aabf521e",
+    "revision": "CS-R2",
+    "mode": "design/check",
+    "implementation_status": "NOT_ASSESSED"
+  },
+  "model": {
+    "root": "model",
+    "entry": "PersonalProjection.tla"
+  },
+  "profiles": {
+    "projection-owner": {
+      "config": "projection-owner.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "CompleteSnapshot",
+        "NoRollback",
+        "CurrentViewOnly",
+        "ReceiptDoesNotChangeSnapshot"
+      ],
+      "expected_properties": [
+        "EventuallyCurrent"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Outcome": "owner",
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 100,
+        "note": "七个合法私物后态的完整快照传输实例；非所有Effects历史的组合证明。",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。",
+        "仅对最新完整快照送达加弱公平；已有传输view/generation/seq规则是组合接口义务，未对应生产源码。"
+      ]
+    },
+    "projection-origin": {
+      "config": "projection-origin.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "CompleteSnapshot",
+        "NoRollback",
+        "CurrentViewOnly",
+        "ReceiptDoesNotChangeSnapshot"
+      ],
+      "expected_properties": [
+        "EventuallyCurrent"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Outcome": "origin",
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 100,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。",
+        "仅对最新完整快照送达加弱公平；已有传输view/generation/seq规则是组合接口义务，未对应生产源码。"
+      ]
+    },
+    "projection-negative-type": {
+      "config": "projection-negative-type.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Outcome": "owner",
+          "Fault": "type",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。",
+        "仅对最新完整快照送达加弱公平；已有传输view/generation/seq规则是组合接口义务，未对应生产源码。"
+      ]
+    },
+    "projection-negative-current-only": {
+      "config": "projection-negative-current-only.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "CompleteSnapshot"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Outcome": "owner",
+          "Fault": "current-only",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。",
+        "仅对最新完整快照送达加弱公平；已有传输view/generation/seq规则是组合接口义务，未对应生产源码。"
+      ]
+    },
+    "projection-negative-stale-view": {
+      "config": "projection-negative-stale-view.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "CompleteSnapshot"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Outcome": "owner",
+          "Fault": "stale-view",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。",
+        "仅对最新完整快照送达加弱公平；已有传输view/generation/seq规则是组合接口义务，未对应生产源码。"
+      ]
+    },
+    "projection-negative-accept-old-seq": {
+      "config": "projection-negative-accept-old-seq.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoRollback"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Outcome": "owner",
+          "Fault": "accept-old-seq",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。",
+        "仅对最新完整快照送达加弱公平；已有传输view/generation/seq规则是组合接口义务，未对应生产源码。"
+      ]
+    },
+    "projection-negative-accept-old-view": {
+      "config": "projection-negative-accept-old-view.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "CurrentViewOnly"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Outcome": "owner",
+          "Fault": "accept-old-view",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。",
+        "仅对最新完整快照送达加弱公平；已有传输view/generation/seq规则是组合接口义务，未对应生产源码。"
+      ]
+    },
+    "projection-negative-receipt-overwrite": {
+      "config": "projection-negative-receipt-overwrite.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "ReceiptDoesNotChangeSnapshot"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Outcome": "owner",
+          "Fault": "receipt-overwrite",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。",
+        "仅对最新完整快照送达加弱公平；已有传输view/generation/seq规则是组合接口义务，未对应生产源码。"
+      ]
+    },
+    "projection-witness-new-view-old-holding": {
+      "config": "projection-witness-new-view-old-holding.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Outcome": "owner",
+          "Fault": "none",
+          "Probe": "new-view-old-holding"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。",
+        "仅对最新完整快照送达加弱公平；已有传输view/generation/seq规则是组合接口义务，未对应生产源码。"
+      ]
+    },
+    "projection-witness-late-accepted": {
+      "config": "projection-witness-late-accepted.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Outcome": "owner",
+          "Fault": "none",
+          "Probe": "late-accepted"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。",
+        "仅对最新完整快照送达加弱公平；已有传输view/generation/seq规则是组合接口义务，未对应生产源码。"
+      ]
+    },
+    "projection-witness-same-slot-change": {
+      "config": "projection-witness-same-slot-change.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Outcome": "owner",
+          "Fault": "none",
+          "Probe": "same-slot-change"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。",
+        "仅对最新完整快照送达加弱公平；已有传输view/generation/seq规则是组合接口义务，未对应生产源码。"
+      ]
+    },
+    "projection-witness-origin-not-delivered": {
+      "config": "projection-witness-origin-not-delivered.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Outcome": "origin",
+          "Fault": "none",
+          "Probe": "origin-not-delivered"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。",
+        "仅对最新完整快照送达加弱公平；已有传输view/generation/seq规则是组合接口义务，未对应生产源码。"
+      ]
+    },
+    "projection-negative-receipt-liveness": {
+      "config": "projection-negative-receipt-liveness.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [],
+      "expected_properties": [
+        "EventuallyCurrent"
+      ],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Outcome": "owner",
+          "Fault": "receipt-overwrite",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 10,
+        "note": "旧Accepted持续晚到可与合法最新投影交替；若错误写当前快照，弱公平送达也无法最终稳定。",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。",
+        "仅对最新完整快照送达加弱公平；已有传输view/generation/seq规则是组合接口义务，未对应生产源码。"
+      ]
+    }
+  }
+}

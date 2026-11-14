@@ -1,12 +1,28 @@
 // 由 protocol/scripts/generate-spatial.mjs 从 spatial-schema.mjs 生成；请修改唯一字段源。
 import type * as T from '../game/spatial-types.js';
 export type * from '../game/spatial-types.js';
+export type GaolaoPersonalProfile = { readonly contentVersion: "gaolaozhuang-scene-v3"; readonly chapterVersion: "gaolaozhuang-chapter-v3"; readonly reducerVersion: "gaolao-world-v2"; readonly mapVersion: "gaolao-layout-v1.1"; readonly variantId: "west-tools"; readonly policyVersion: "gaolao-cuilan-v2"; } | { readonly contentVersion: "gaolaozhuang-tools-east-scene-v3"; readonly chapterVersion: "gaolaozhuang-chapter-v3"; readonly reducerVersion: "gaolao-world-v2"; readonly mapVersion: "gaolao-layout-v1.1"; readonly variantId: "east-tools"; readonly policyVersion: "gaolao-cuilan-v2"; };
+export const gaolaoPersonalProfiles: readonly GaolaoPersonalProfile[];
+export function gaolaoPersonalProfile(value: unknown): GaolaoPersonalProfile | null;
 export function parseSpatial<K extends keyof SpatialContracts>(name: K, raw: string): SpatialContracts[K];
 export function validateSpatial<K extends keyof SpatialContracts>(name: K, value: unknown): SpatialContracts[K];
 export function gaolaoInteraction<A extends T.GaolaoInteractionV2>(value: A): A;
 export function isGaolaoInteraction(value: T.ActionV2): value is T.GaolaoInteractionV2;
 export interface SpatialContracts {
   SpatialClientCapability: T.SpatialClientCapability;
+  PersonalPermissionTermV1: T.PersonalPermissionTermV1;
+  PersonalRequestReplacementV1: T.PersonalRequestReplacementV1;
+  PersonalAppearanceParametersV1: T.PersonalAppearanceParametersV1;
+  PersonalPrivateItemsParametersV1: T.PersonalPrivateItemsParametersV1;
+  PersonalPurposeV1: T.PersonalPurposeV1;
+  PersonalLifecycleV1: T.PersonalLifecycleV1;
+  PersonalExecutionStateV1: T.PersonalExecutionStateV1;
+  PersonalReasonCodeV1: T.PersonalReasonCodeV1;
+  PersonalOriginV1: T.PersonalOriginV1;
+  PrivateItemOfferV1: T.PrivateItemOfferV1;
+  PersonalRequestScopeViewV1: T.PersonalRequestScopeViewV1;
+  PersonalRequestViewV1: T.PersonalRequestViewV1;
+  PrivateReturnViewV1: T.PrivateReturnViewV1;
   ObjectVisualKeyV1: T.ObjectVisualKeyV1;
   AppearanceIdV2: T.AppearanceIdV2;
   GaolaoInteractionV2: T.GaolaoInteractionV2;

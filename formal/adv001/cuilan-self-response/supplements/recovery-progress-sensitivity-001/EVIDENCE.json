@@ -1,0 +1,117 @@
+{
+  "finding": "R-CS-FORMAL-LIVE-SENS-001",
+  "author_status": "FIX_REPORTED",
+  "independent_review": "NOT_RUN",
+  "implementation_status": "NOT_ASSESSED",
+  "base_commit": "77ace28f526ce9ad905b1842b7353e48e251423c",
+  "predeclared_commit": "6d79ebacf8f4b99d3f1627dc1a3a4267373633f0",
+  "profile": "recovery-negative-progress-consume-all",
+  "run_id": "9da929c9-5c35-4727-8eca-b59f2ad3179f",
+  "status": "COUNTEREXAMPLE",
+  "raw_tlc_exit_code": 13,
+  "runner_exit_code_observed": 2,
+  "started_at": "2026-11-14T09:08:06.028631+00:00",
+  "finished_at": "2026-11-14T09:08:08.388967+00:00",
+  "duration_seconds": 2.360384,
+  "statistics": {
+    "generated_states": 16752,
+    "distinct_states": 5081,
+    "remaining_states": 0
+  },
+  "completed": false,
+  "nonempty_initial_states": 1,
+  "configured_invariants": [],
+  "configured_properties": [
+    "BothPurposesProgress"
+  ],
+  "checks_deadlock": true,
+  "temporal_counterexample": {
+    "tlc_code": 2116,
+    "attribution": "唯一启用PROPERTY为BothPurposesProgress；TLC2.19的temporal violation正文不直接打印性质名。",
+    "state_count_before_stuttering": 8,
+    "trace_headers": [
+      "1: <Initial predicate>",
+      "2: <Restart line 107, col 2 to line 111, col 31 of module PersonalRecovery>",
+      "3: <Resume line 112, col 11 to line 114, col 42 of module PersonalRecovery>",
+      "4: <Reserve line 36, col 2 to line 43, col 31 of module PersonalRecovery>",
+      "5: <LoseBefore line 59, col 2 to line 62, col 31 of module PersonalRecovery>",
+      "6: <Recover line 69, col 2 to line 83, col 29 of module PersonalRecovery>",
+      "7: <Commit line 45, col 2 to line 57, col 31 of module PersonalRecovery>",
+      "8: <Consume line 85, col 2 to line 94, col 31 of module PersonalRecovery>",
+      "9: Stuttering"
+    ],
+    "infinite_suffix": "状态8无限停滞；appearance known=current=1且1不在finished，pending=0令Reserve不可执行。",
+    "fairness": "原LiveSpec未变；被清掉pending的Reserve持续不enabled，内部弱公平不强迫不可执行动作；NewInput为环境输入，无公平承诺。"
+  },
+  "raw_evidence": {
+    "result.json": {
+      "sha256": "e66d86c3ac47bf0d7bd142d159ebd4be18c14ed8637072f8fa89d11c7b490254",
+      "bytes": 29653
+    },
+    "manifest.json": {
+      "sha256": "03c7cb55d745508d294e3bb826d2b6a3e8ccb90a8d509884da89b0ce5382e810",
+      "bytes": 2261
+    },
+    "messages.json": {
+      "sha256": "688f0dcc3c4046132a40c403f7cd79903d543b63675f62ba5526263212703cb4",
+      "bytes": 15136
+    },
+    "tlc.log": {
+      "sha256": "1ef90d61f9c143d563131d45547341cfbfd7398f4bcfd055dc590790d809d3e8",
+      "bytes": 15213
+    }
+  },
+  "derived_trace": {
+    "file": "trace.txt",
+    "sha256": "b548698678a062fa3f6431ed230fb4a251a9adb1de5eccb7047dbb9d6dbeeac1",
+    "meaning": "原messages.json中severity4文本按原顺序摘录，无重新模拟或改写状态。"
+  },
+  "tool": {
+    "version_label": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+    "java_path": "/usr/bin/java",
+    "java_version": "openjdk version \"21.0.13\" 2026-10-20\nOpenJDK Runtime Environment (build 21.0.13+9-1-deb13u2-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.13+9-1-deb13u2-Debian, mixed mode, sharing)",
+    "removed_environment_names": [],
+    "reported_version": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)"
+  },
+  "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+  "positive_input_preservation": {
+    "model/PersonalRecovery.tla": {
+      "before": "a986e81b2dfb6e366181b5892acfe0b0d399e006ad75f99d406e4bc826445b07",
+      "after": "a986e81b2dfb6e366181b5892acfe0b0d399e006ad75f99d406e4bc826445b07",
+      "equal": true
+    },
+    "model/recovery-appearance.cfg": {
+      "before": "1a1d640a10a69a1d3aafd50ef950ce3d5b7d3fb45ed79abb20f1231051144a16",
+      "after": "1a1d640a10a69a1d3aafd50ef950ce3d5b7d3fb45ed79abb20f1231051144a16",
+      "equal": true
+    },
+    "model/recovery-private.cfg": {
+      "before": "362d55c284b1deb434f605496caa946b58f61e80c9b587314b9c4ad779463737",
+      "after": "362d55c284b1deb434f605496caa946b58f61e80c9b587314b9c4ad779463737",
+      "equal": true
+    },
+    "model/recovery-expanded-capacity.cfg": {
+      "before": "6aed15a8150f61324cc2728e6391993ae0fff111435c6d00c6f1f95f8fb4c425",
+      "after": "6aed15a8150f61324cc2728e6391993ae0fff111435c6d00c6f1f95f8fb4c425",
+      "equal": true
+    },
+    "recovery-verification.json": {
+      "before": "ef20d139b52dcda76f0117faeecacbf91db39eb77e494e208bd9faf31a7a2fce",
+      "after": "ef20d139b52dcda76f0117faeecacbf91db39eb77e494e208bd9faf31a7a2fce",
+      "equal": true
+    },
+    "expectations.json": {
+      "before": "ffad9676f0cb81e1880dd1ff74e61895db26596adad4a237b716853ad93aeb7a",
+      "after": "ffad9676f0cb81e1880dd1ff74e61895db26596adad4a237b716853ad93aeb7a",
+      "equal": true
+    },
+    "RUN_INDEX.json": {
+      "before": "4c57e1a73af38fec8e5e0bc7cc8b631d5d891b4be9f8c0d6fa63827007b6b6df",
+      "after": "4c57e1a73af38fec8e5e0bc7cc8b631d5d891b4be9f8c0d6fa63827007b6b6df",
+      "equal": true
+    }
+  },
+  "interpretation": "仅演示BothPurposesProgress对既有consume-all错误的敏感性；不是产品缺陷、正向PASS或组合证明。原131项结果不改写。",
+  "raw_evidence_location": "本次run_id的原始隔离运行输出；具体绝对路径随交接给复核者，不作为正式文档链接。"
+}

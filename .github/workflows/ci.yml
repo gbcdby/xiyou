@@ -69,6 +69,7 @@ jobs:
         shell: bash
         env:
           FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-static-release
+          VITE_GAOLAO_CONTENT_VERSION: 'gaolaozhuang-scene-v2'
         # 默认生产catalog与public URL；受控authority前置不计作真实导航/物权流程。
         run: |
           mkdir -p "$FRONTEND_EVIDENCE_DIR"

@@ -1,7 +1,40 @@
 import { ContractError, parseStrictJSON, canonicalize } from './index.mjs';
-import { spatialSchema } from './spatial-schema.mjs';
-export { spatialSchema } from './spatial-schema.mjs';
+import { spatialSchema, gaolaoPersonalProfiles } from './spatial-schema.mjs';
+export { spatialSchema, gaolaoPersonalProfiles } from './spatial-schema.mjs';
 const fail = path => { throw new ContractError('消息不符合空间协议', path); };
+/** 精确身份匹配，不将未知同 family 内容解释成已登记的新版本。 */
+export function gaolaoPersonalProfile(value) {
+    return gaolaoPersonalProfiles.find(profile => ['contentVersion', 'chapterVersion', 'reducerVersion', 'mapVersion', 'variantId'].every(key => value?.[key] === profile[key])) ?? null;
+}
+function validatePersonalOffer(offer) {
+    if (new Set(offer.options.map(option => option.optionRef)).size !== offer.options.length) fail('$.options.optionRef');
+}
+function validatePersonalProjection(projection) {
+    const fields = ['personalRequests', 'privateItemOffers', 'privateReturns'];
+    const registeredContent = gaolaoPersonalProfiles.some(profile => profile.contentVersion === projection.contentVersion);
+    const personal = gaolaoPersonalProfile(projection);
+    if ((registeredContent || projection.reducerVersion === 'gaolao-world-v2' || projection.chapterVersion === 'gaolaozhuang-chapter-v3') && !personal) fail('$.projection.contentVersion');
+    if (!personal) {
+        if (fields.some(key => Object.hasOwn(projection.chapter ?? {}, key))) fail('$.projection.chapter');
+        return;
+    }
+    if (!projection.chapter || fields.some(key => !Object.hasOwn(projection.chapter, key))) fail('$.projection.chapter');
+    projection.chapter.privateItemOffers.forEach(validatePersonalOffer);
+    const requests = projection.chapter.personalRequests;
+    if (new Set(requests.map(request => request.purpose)).size !== requests.length) fail('$.projection.chapter.personalRequests');
+    for (const request of requests) {
+        if ((request.purpose === 'appearance') !== Object.hasOwn(request.scope, 'destinationId')) fail('$.projection.chapter.personalRequests.scope');
+        const consent = projection.chapter.consents.find(consent => consent.consentId === request.consentId);
+        if (!consent || consent.purpose !== request.purpose) fail('$.projection.chapter.personalRequests.consentId');
+    }
+    const returns = projection.chapter.privateReturns;
+    if (new Set(returns.map(entry => entry.returnContextId)).size !== returns.length || new Set(returns.map(entry => entry.itemRef)).size !== returns.length) fail('$.projection.chapter.privateReturns');
+    for (const entry of returns) {
+        const item = projection.items.find(item => item.entityRef === entry.itemRef);
+        if (item?.location.kind !== 'held' || item.location.ownerRef !== projection.self.entityRef || item.resourceRevision !== entry.itemRevision) fail('$.projection.chapter.privateReturns.itemRef');
+        if (entry.ownerRef !== null && !projection.entities.some(entity => entity.entityRef === entry.ownerRef)) fail('$.projection.chapter.privateReturns.ownerRef');
+    }
+}
 export function checkSpatialSchema(schema, value, defs = spatialSchema.$defs, path = '$') {
     if (schema.$ref)
         return checkSpatialSchema(defs[schema.$ref.split('/').at(-1)], value, defs, path);
@@ -67,6 +100,9 @@ export function validateSpatial(name, value) {
     if (!Object.hasOwn(spatialSchema.$defs, name))
         fail('$');
     checkSpatialSchema(spatialSchema.$defs[name], value);
+    if (name === 'PrivateItemOfferV1') validatePersonalOffer(value);
+    const personalProjections = name === 'ProjectionV2' ? [value] : name === 'SnapshotV2' ? [value.projection] : name === 'BatchV2' ? value.events.map(event => event.payload.projection) : name === 'ControlResponseV2' ? [value.snapshot.projection] : [];
+    personalProjections.forEach(validatePersonalProjection);
     const action = name === 'PublicEnvelope' ? value.action : name === 'ActionV2' ? value : null;
     if (action && ['speak', 'make_claim'].includes(action.kind) && ((action.channel === 'public' || action.channel === 'team') ? action.recipientRefs.length !== 0 : action.recipientRefs.length === 0))
         fail('$.action.recipientRefs');

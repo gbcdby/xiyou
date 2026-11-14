@@ -685,8 +685,168 @@
             "parameters"
           ],
           "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "interact"
+            },
+            "targetRef": {
+              "$ref": "#/$defs/EntityRef"
+            },
+            "operationId": {
+              "enum": [
+                "gz-describe-private-items"
+              ]
+            },
+            "expectedTargetRevision": {
+              "$ref": "#/$defs/DecimalString"
+            }
+          },
+          "required": [
+            "kind",
+            "targetRef",
+            "operationId",
+            "expectedTargetRevision"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "interact"
+            },
+            "targetRef": {
+              "$ref": "#/$defs/EntityRef"
+            },
+            "operationId": {
+              "enum": [
+                "gz-request-appearance"
+              ]
+            },
+            "expectedTargetRevision": {
+              "$ref": "#/$defs/DecimalString"
+            },
+            "parameters": {
+              "$ref": "#/$defs/PersonalAppearanceParametersV1"
+            }
+          },
+          "required": [
+            "kind",
+            "targetRef",
+            "operationId",
+            "expectedTargetRevision",
+            "parameters"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "interact"
+            },
+            "targetRef": {
+              "$ref": "#/$defs/EntityRef"
+            },
+            "operationId": {
+              "enum": [
+                "gz-request-private-items"
+              ]
+            },
+            "expectedTargetRevision": {
+              "$ref": "#/$defs/DecimalString"
+            },
+            "parameters": {
+              "$ref": "#/$defs/PersonalPrivateItemsParametersV1"
+            }
+          },
+          "required": [
+            "kind",
+            "targetRef",
+            "operationId",
+            "expectedTargetRevision",
+            "parameters"
+          ],
+          "additionalProperties": false
         }
       ]
+    },
+    "PersonalAppearanceParametersV1": {
+      "type": "object",
+      "properties": {
+        "destinationId": {
+          "$ref": "#/$defs/Id"
+        },
+        "permissionTerm": {
+          "$ref": "#/$defs/PersonalPermissionTermV1"
+        },
+        "replacement": {
+          "$ref": "#/$defs/PersonalRequestReplacementV1"
+        }
+      },
+      "required": [
+        "destinationId",
+        "permissionTerm"
+      ],
+      "additionalProperties": false
+    },
+    "PersonalPermissionTermV1": {
+      "enum": [
+        "single_use",
+        "reusable"
+      ]
+    },
+    "PersonalRequestReplacementV1": {
+      "type": "object",
+      "properties": {
+        "consentId": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "expectedConsentVersion": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "expectedLifecycleVersion": {
+          "$ref": "#/$defs/DecimalString"
+        }
+      },
+      "required": [
+        "consentId",
+        "expectedConsentVersion",
+        "expectedLifecycleVersion"
+      ],
+      "additionalProperties": false
+    },
+    "PersonalPrivateItemsParametersV1": {
+      "type": "object",
+      "properties": {
+        "offerRef": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "itemOptionRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/EntityRef"
+          },
+          "maxItems": 2,
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "permissionTerm": {
+          "$ref": "#/$defs/PersonalPermissionTermV1"
+        },
+        "replacement": {
+          "$ref": "#/$defs/PersonalRequestReplacementV1"
+        }
+      },
+      "required": [
+        "offerRef",
+        "itemOptionRefs",
+        "permissionTerm"
+      ],
+      "additionalProperties": false
     },
     "SpatialContextV2": {
       "type": "object",
@@ -794,7 +954,8 @@
         "reducerVersion": {
           "enum": [
             "spatial-world-v2",
-            "gaolao-world-v1"
+            "gaolao-world-v1",
+            "gaolao-world-v2"
           ]
         },
         "phase": {
@@ -1068,7 +1229,8 @@
         "gz-plan-departure",
         "gz-join-party",
         "gz-finish-separation",
-        "gz-request-private-items"
+        "gz-request-private-items",
+        "gz-describe-private-items"
       ]
     },
     "SpatialModelEntityV2": {
@@ -1840,6 +2002,27 @@
             "public",
             "disguise"
           ]
+        },
+        "personalRequests": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PersonalRequestViewV1"
+          },
+          "maxItems": 2
+        },
+        "privateItemOffers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PrivateItemOfferV1"
+          },
+          "maxItems": 1
+        },
+        "privateReturns": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PrivateReturnViewV1"
+          },
+          "maxItems": 2
         }
       },
       "required": [
@@ -2073,6 +2256,301 @@
         "confirmedCount",
         "ownConfirmed",
         "status"
+      ],
+      "additionalProperties": false
+    },
+    "PersonalRequestViewV1": {
+      "type": "object",
+      "properties": {
+        "consentId": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "purpose": {
+          "$ref": "#/$defs/PersonalPurposeV1"
+        },
+        "lifecycleVersion": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "lifecycle": {
+          "$ref": "#/$defs/PersonalLifecycleV1"
+        },
+        "executionState": {
+          "$ref": "#/$defs/PersonalExecutionStateV1"
+        },
+        "reasonCode": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/PersonalReasonCodeV1"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "permissionTerm": {
+          "$ref": "#/$defs/PersonalPermissionTermV1"
+        },
+        "scope": {
+          "$ref": "#/$defs/PersonalRequestScopeViewV1"
+        }
+      },
+      "required": [
+        "consentId",
+        "purpose",
+        "lifecycleVersion",
+        "lifecycle",
+        "executionState",
+        "reasonCode",
+        "reason",
+        "permissionTerm",
+        "scope"
+      ],
+      "additionalProperties": false
+    },
+    "PersonalPurposeV1": {
+      "enum": [
+        "appearance",
+        "private_items"
+      ]
+    },
+    "PersonalLifecycleV1": {
+      "enum": [
+        "open",
+        "cancelled",
+        "superseded",
+        "closed"
+      ]
+    },
+    "PersonalExecutionStateV1": {
+      "enum": [
+        "none",
+        "ready",
+        "active",
+        "return_only",
+        "ended"
+      ]
+    },
+    "PersonalReasonCodeV1": {
+      "enum": [
+        "requester_cancelled",
+        "replaced_by_requester",
+        "replaced_after_closed",
+        "replaced_after_invalidation",
+        "proposal_invalidated",
+        "owner_declined",
+        "owner_deferred",
+        "owner_withdrew",
+        "fulfilled",
+        "usage_ended",
+        "appearance_disclosed",
+        "binding_invalidated",
+        "session_ended"
+      ]
+    },
+    "PersonalRequestScopeViewV1": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "destinationId": {
+              "$ref": "#/$defs/Id"
+            },
+            "performerLabel": {
+              "type": "string",
+              "maxLength": 120
+            },
+            "usage": {
+              "const": "inquiry_meeting"
+            }
+          },
+          "required": [
+            "destinationId",
+            "performerLabel",
+            "usage"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "handling": {
+              "const": "retrieve_to_owner"
+            },
+            "ownerLabel": {
+              "type": "string",
+              "maxLength": 120
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "maxLength": 120
+                  },
+                  "origin": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/$defs/PersonalOriginV1"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "label",
+                  "origin"
+                ],
+                "additionalProperties": false
+              },
+              "maxItems": 2,
+              "minItems": 1
+            }
+          },
+          "required": [
+            "handling",
+            "ownerLabel",
+            "items"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "PersonalOriginV1": {
+      "type": "object",
+      "properties": {
+        "sceneId": {
+          "$ref": "#/$defs/Id"
+        },
+        "position": {
+          "$ref": "#/$defs/Position"
+        },
+        "label": {
+          "type": "string",
+          "maxLength": 120
+        }
+      },
+      "required": [
+        "sceneId",
+        "position",
+        "label"
+      ],
+      "additionalProperties": false
+    },
+    "PrivateItemOfferV1": {
+      "type": "object",
+      "properties": {
+        "offerRef": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "subjectRef": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "sourceRef": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "sourceRevision": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "optionRef": {
+                "$ref": "#/$defs/EntityRef"
+              },
+              "label": {
+                "type": "string",
+                "maxLength": 120
+              },
+              "handling": {
+                "const": "retrieve_to_owner"
+              }
+            },
+            "required": [
+              "optionRef",
+              "label",
+              "handling"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 2,
+          "minItems": 1
+        }
+      },
+      "required": [
+        "offerRef",
+        "subjectRef",
+        "sourceRef",
+        "sourceRevision",
+        "options"
+      ],
+      "additionalProperties": false
+    },
+    "PrivateReturnViewV1": {
+      "type": "object",
+      "properties": {
+        "returnContextId": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "originalConsentId": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "acceptedConsentVersion": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "sourceLifecycleVersion": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "itemRef": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "itemRevision": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "mode": {
+          "enum": [
+            "delivery_pending",
+            "return_only"
+          ]
+        },
+        "ownerLabel": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "ownerRef": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/EntityRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "origin": {
+          "$ref": "#/$defs/PersonalOriginV1"
+        }
+      },
+      "required": [
+        "returnContextId",
+        "originalConsentId",
+        "acceptedConsentVersion",
+        "sourceLifecycleVersion",
+        "itemRef",
+        "itemRevision",
+        "mode",
+        "ownerLabel",
+        "ownerRef",
+        "origin"
       ],
       "additionalProperties": false
     },

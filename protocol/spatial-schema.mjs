@@ -1,5 +1,11 @@
 import { contractSchema } from './schema.mjs';
 
+// 语义版本与地图/素材版本分开；只有逐项登记的组合可解释个人许可。
+export const gaolaoPersonalProfiles = Object.freeze([
+  Object.freeze({ contentVersion: 'gaolaozhuang-scene-v3', chapterVersion: 'gaolaozhuang-chapter-v3', reducerVersion: 'gaolao-world-v2', mapVersion: 'gaolao-layout-v1.1', variantId: 'west-tools', policyVersion: 'gaolao-cuilan-v2' }),
+  Object.freeze({ contentVersion: 'gaolaozhuang-tools-east-scene-v3', chapterVersion: 'gaolaozhuang-chapter-v3', reducerVersion: 'gaolao-world-v2', mapVersion: 'gaolao-layout-v1.1', variantId: 'east-tools', policyVersion: 'gaolao-cuilan-v2' }),
+]);
+
 // spatial-v2 的唯一字段源；region-v1 的字段源及生成产物保持不变。
 export const ref = name => ({ $ref: '#/$defs/' + name });
 export const object = (properties, optional = []) => ({ type: 'object', properties, required: Object.keys(properties).filter(k => !optional.includes(k)), additionalProperties: false });
@@ -26,9 +32,28 @@ const gaolaoInteractions = [
     chapterInteraction(['gz-recruitment-decision','gz-membership-decision'], object({ expectedDecisionVersion: revision, response: en('accept','decline','defer','withdraw') })),
     chapterInteraction(['gz-return-public'], object({ itemRef: entity, expectedItemRevision: revision })),
     chapterInteraction(['gz-request-private-items'], object({ itemRefs: { ...refs, minItems: 1, maxItems: 8, uniqueItems: true }, expectedConsentVersion: revision })),
+    chapterInteraction(['gz-describe-private-items']),
+    chapterInteraction(['gz-request-appearance'], ref('PersonalAppearanceParametersV1')),
+    chapterInteraction(['gz-request-private-items'], ref('PersonalPrivateItemsParametersV1')),
 ];
 const defs = {
-  SpatialClientCapability: en('spatial-v2', 'spatial-appearance-v1', 'spatial-object-visual-v1'),
+  SpatialClientCapability: en('spatial-v2', 'spatial-appearance-v1', 'spatial-object-visual-v1', 'gaolao-personal-consent-v1'),
+  PersonalPermissionTermV1: en('single_use', 'reusable'),
+  PersonalRequestReplacementV1: object({ consentId: entity, expectedConsentVersion: revision, expectedLifecycleVersion: revision }),
+  PersonalAppearanceParametersV1: object({ destinationId: ref('Id'), permissionTerm: ref('PersonalPermissionTermV1'), replacement: ref('PersonalRequestReplacementV1') }, ['replacement']),
+  PersonalPrivateItemsParametersV1: object({ offerRef: entity, itemOptionRefs: { ...refs, minItems: 1, maxItems: 2, uniqueItems: true }, permissionTerm: ref('PersonalPermissionTermV1'), replacement: ref('PersonalRequestReplacementV1') }, ['replacement']),
+  PersonalPurposeV1: en('appearance', 'private_items'),
+  PersonalLifecycleV1: en('open', 'cancelled', 'superseded', 'closed'),
+  PersonalExecutionStateV1: en('none', 'ready', 'active', 'return_only', 'ended'),
+  PersonalReasonCodeV1: en('requester_cancelled', 'replaced_by_requester', 'replaced_after_closed', 'replaced_after_invalidation', 'proposal_invalidated', 'owner_declined', 'owner_deferred', 'owner_withdrew', 'fulfilled', 'usage_ended', 'appearance_disclosed', 'binding_invalidated', 'session_ended'),
+  PersonalOriginV1: object({ sceneId: ref('Id'), position: point, label: text(120) }),
+  PrivateItemOfferV1: object({ offerRef: entity, subjectRef: entity, sourceRef: entity, sourceRevision: revision, options: { ...array(object({ optionRef: entity, label: text(120), handling: lit('retrieve_to_owner') }), 2), minItems: 1 } }),
+  PersonalRequestScopeViewV1: { oneOf: [
+    object({ destinationId: ref('Id'), performerLabel: text(120), usage: lit('inquiry_meeting') }),
+    object({ handling: lit('retrieve_to_owner'), ownerLabel: text(120), items: { ...array(object({ label: text(120), origin: nullable(ref('PersonalOriginV1')) }), 2), minItems: 1 } }),
+  ] },
+  PersonalRequestViewV1: object({ consentId: entity, purpose: ref('PersonalPurposeV1'), lifecycleVersion: revision, lifecycle: ref('PersonalLifecycleV1'), executionState: ref('PersonalExecutionStateV1'), reasonCode: nullable(ref('PersonalReasonCodeV1')), reason: text(500), permissionTerm: ref('PersonalPermissionTermV1'), scope: ref('PersonalRequestScopeViewV1') }),
+  PrivateReturnViewV1: object({ returnContextId: entity, originalConsentId: entity, acceptedConsentVersion: revision, sourceLifecycleVersion: revision, itemRef: entity, itemRevision: revision, mode: en('delivery_pending', 'return_only'), ownerLabel: text(120), ownerRef: nullable(entity), origin: ref('PersonalOriginV1') }),
   ObjectVisualKeyV1: { type: 'string', minLength: 1, maxLength: 64, pattern: '^[a-z][a-z0-9-]{0,63}(?![\\s\\S])' },
   AppearanceIdV2: en('neutral', 'gaocai', 'courtyard-helper', 'carpenter', 'kitchen-helper', 'woodcutter', 'tang', 'wukong', 'bajie', 'cuilan', 'gao', 'witness'),
   GaolaoInteractionV2: { oneOf: gaolaoInteractions },
@@ -60,11 +85,12 @@ const defs = {
     action('propose_follow', { subjectRef: entity, destinationId: ref('Id'), leaderRef: entity, expectedConsentVersion: revision }),
     action('respond_consent', { consentId: entity, expectedConsentVersion: revision, response: en('accept', 'decline', 'defer') }),
     action('withdraw_consent', { consentId: entity, expectedConsentVersion: revision }),
+    action('cancel_personal_request', { consentId: entity, expectedConsentVersion: revision, expectedLifecycleVersion: revision }),
     action('request_end', { proposalId: ref('Id'), proposalVersion: revision, scope: en('chapter', 'recruitment') }),
     action('confirm_end', { proposalId: ref('Id'), proposalVersion: revision }),
     action('wait'),
   ] },
-  GaolaoOperationId: en('gz-contact', 'gz-check-seal', 'gz-try-key', 'gz-step-back', 'gz-break-seal', 'gz-confirm-settlement', 'gz-pause-follow', 'gz-request-appearance', 'gz-apply-appearance', 'gz-release-appearance', 'gz-reveal-identity', 'gz-check-appearance', 'gz-read-ledger', 'gz-hear-witness', 'gz-compare-sources', 'gz-show-passage', 'gz-invite-meeting', 'gz-confirm-meeting', 'gz-recruitment-decision', 'gz-membership-decision', 'gz-release-support', 'gz-return-public', 'gz-plan-departure', 'gz-join-party', 'gz-finish-separation', 'gz-request-private-items'),
+  GaolaoOperationId: en('gz-contact', 'gz-check-seal', 'gz-try-key', 'gz-step-back', 'gz-break-seal', 'gz-confirm-settlement', 'gz-pause-follow', 'gz-request-appearance', 'gz-apply-appearance', 'gz-release-appearance', 'gz-reveal-identity', 'gz-check-appearance', 'gz-read-ledger', 'gz-hear-witness', 'gz-compare-sources', 'gz-show-passage', 'gz-invite-meeting', 'gz-confirm-meeting', 'gz-recruitment-decision', 'gz-membership-decision', 'gz-release-support', 'gz-return-public', 'gz-plan-departure', 'gz-join-party', 'gz-finish-separation', 'gz-request-private-items', 'gz-describe-private-items'),
   ChapterInteractionParameters: { oneOf: [
     object({ consentId: entity, expectedConsentVersion: revision }),
     object({ destinationId: ref('Id'), expectedConsentVersion: revision }),
@@ -72,6 +98,8 @@ const defs = {
     object({ expectedDecisionVersion: revision, response: en('accept', 'decline', 'defer', 'withdraw') }),
     object({ itemRef: entity, expectedItemRevision: revision }),
     object({ itemRefs: { ...refs, minItems: 1, maxItems: 8, uniqueItems: true }, expectedConsentVersion: revision }),
+    ref('PersonalAppearanceParametersV1'),
+    ref('PersonalPrivateItemsParametersV1'),
   ] },
   ConsentPurpose: en('follow', 'appearance', 'private_items', 'meeting', 'membership'),
   ConsentScopeViewV2: object({ destinationId: ref('Id'), leaderRef: entity, itemRefs: refs }, ['destinationId', 'leaderRef', 'itemRefs']),
@@ -79,7 +107,7 @@ const defs = {
   FollowViewV2: object({ followId: entity, subjectRef: entity, leaderRef: entity, destinationId: ref('Id'), planVersion: revision, consentId: entity, consentVersion: revision, status: en('proposed', 'accepted', 'following', 'paused', 'arrived', 'settled', 'withdrawn', 'cancelled'), reason: text(240) }),
   DecisionViewV2: object({ decisionId: entity, subjectRef: entity, purpose: en('recruitment', 'membership'), version: revision, status: en('undecided', 'accepted', 'declined', 'deferred', 'withdrawn'), sourceSeq: revision }),
   EndProposalViewV2: object({ proposalId: ref('Id'), proposalVersion: revision, scope: en('chapter', 'recruitment'), onlineMembershipVersion: revision, requiredCount: integer(5, 1), confirmedCount: integer(5), ownConfirmed: { type: 'boolean' }, status: en('pending', 'confirmed', 'invalidated') }),
-  ChapterViewV2: object({ chapterId: lit('gaolaozhuang'), responsibilities: array(en('A', 'B', 'C', 'D', 'E'), 5), progress: fieldList, consents: array(ref('ConsentViewV2')), follows: array(ref('FollowViewV2')), decisions: array(ref('DecisionViewV2')), destinations: array(object({ destinationId: ref('Id'), label: text(120), sceneId: ref('Id'), position: point, purpose: en('follow', 'meeting', 'departure', 'waiting') })), endProposal: nullable(ref('EndProposalViewV2')), publicItems: array(object({ itemRef: entity, name: text(120), borrowed: { type: 'boolean' }, returned: { type: 'boolean' } })), route: en('undecided', 'public', 'disguise') }, ['route']),
+  ChapterViewV2: object({ chapterId: lit('gaolaozhuang'), responsibilities: array(en('A', 'B', 'C', 'D', 'E'), 5), progress: fieldList, consents: array(ref('ConsentViewV2')), follows: array(ref('FollowViewV2')), decisions: array(ref('DecisionViewV2')), destinations: array(object({ destinationId: ref('Id'), label: text(120), sceneId: ref('Id'), position: point, purpose: en('follow', 'meeting', 'departure', 'waiting') })), endProposal: nullable(ref('EndProposalViewV2')), publicItems: array(object({ itemRef: entity, name: text(120), borrowed: { type: 'boolean' }, returned: { type: 'boolean' } })), route: en('undecided', 'public', 'disguise'), personalRequests: array(ref('PersonalRequestViewV1'), 2), privateItemOffers: array(ref('PrivateItemOfferV1'), 1), privateReturns: array(ref('PrivateReturnViewV1'), 2) }, ['route', 'personalRequests', 'privateItemOffers', 'privateReturns']),
   EndingViewV2: object({ title: text(120), summary: text(500), endingCode: en('GZ-E01', 'GZ-E02', 'GZ-E03'), facts: fieldList }, ['endingCode', 'facts']),
   RecapEntryV2: object({ entryRef: entity, eventSeq: revision, category: en('WorldFact', 'Evidence', 'Claim'), text: text(2000), fields: fieldList, speakerRef: entity, speakerName: text(120) }, ['speakerRef', 'speakerName']),
   RecapV2: object({ schemaVersion: lit(2), type: lit('session.recap'), sessionId: ref('Id'), throughSeq: revision, phase: en('Finished', 'Aborted'), ending: ref('EndingViewV2'), entries: array(ref('RecapEntryV2'), 100), nextBeforeSeq: nullable(revision) }),
@@ -98,11 +126,11 @@ const defs = {
   ClaimViewV2: object({ claimRef: entity, speakerRef: entity, speakerName: text(120), text: text(2000), channel: en('public', 'directed', 'team'), sourceSeq: revision }),
   CooperationViewV2: object({ operationId: ref('Id'), operationVersion: revision, phase: en('preparing', 'locked'), readyCount: integer(5), requiredCount: integer(5, 1), anchors: array(point, 5) }),
   PublicScene: object({ sceneId: ref('Id'), name: text(120), width: integer(1000000, 1), height: integer(1000000, 1), unitsPerPixel: integer(10000, 1), walkableAreas: array(object({ areaId: ref('Id'), polygon: ref('Polygon') })), obstacles: array(object({ obstacleId: ref('Id'), polygon: ref('Polygon'), exceptAreas: ids })), anchors: array(object({ anchorId: ref('Id'), position: point, label: text(120) })), exits: array(object({ exitId: ref('Id'), anchorId: ref('Id'), destinationSceneId: ref('Id'), destination: point, open: { type: 'boolean' } })) }),
-  ProjectionV2: object({ protocolCapability: lit('spatial-v2'), chapterVersion: ref('Id'), mapVersion: ref('Id'), variantId: ref('Id'), contentVersion: ref('Id'), reducerVersion: en('spatial-world-v2', 'gaolao-world-v1'), phase: en('Lobby', 'Running', 'Finished', 'Aborted'), sceneTimeMs: integer(), paused: { type: 'boolean' }, self: ref('SelfViewV2'), entities: array(ref('EntityViewV2')), items: array(ref('ItemViewV2')), targets: array(ref('TargetViewV2')), scene: nullable(ref('PublicScene')), movement: nullable(ref('PlanViewV2')), observations: array(ref('ObservationViewV2')), claims: array(ref('ClaimViewV2')), cooperations: array(ref('CooperationViewV2')), objectives: array(object({ objectiveId: ref('Id'), label: text(240), status: en('active', 'completed', 'blocked') })), ending: nullable(ref('EndingViewV2')), chapter: ref('ChapterViewV2') }, ['chapter']),
+  ProjectionV2: object({ protocolCapability: lit('spatial-v2'), chapterVersion: ref('Id'), mapVersion: ref('Id'), variantId: ref('Id'), contentVersion: ref('Id'), reducerVersion: en('spatial-world-v2', 'gaolao-world-v1', 'gaolao-world-v2'), phase: en('Lobby', 'Running', 'Finished', 'Aborted'), sceneTimeMs: integer(), paused: { type: 'boolean' }, self: ref('SelfViewV2'), entities: array(ref('EntityViewV2')), items: array(ref('ItemViewV2')), targets: array(ref('TargetViewV2')), scene: nullable(ref('PublicScene')), movement: nullable(ref('PlanViewV2')), observations: array(ref('ObservationViewV2')), claims: array(ref('ClaimViewV2')), cooperations: array(ref('CooperationViewV2')), objectives: array(object({ objectiveId: ref('Id'), label: text(240), status: en('active', 'completed', 'blocked') })), ending: nullable(ref('EndingViewV2')), chapter: ref('ChapterViewV2') }, ['chapter']),
   SnapshotV2: object({ schemaVersion: lit(2), type: lit('world.snapshot'), sessionId: ref('Id'), viewId: ref('Id'), snapshotSeq: revision, projection: ref('ProjectionV2') }),
   BatchV2: object({ schemaVersion: lit(2), type: lit('world.batch'), sessionId: ref('Id'), viewId: ref('Id'), fromExclusive: revision, throughSeq: revision, events: array(object({ sessionSeq: ref('PositiveDecimalString'), eventId: ref('Id'), kind: lit('projection.replace'), payload: object({ projection: ref('ProjectionV2') }) })) }),
   ControlResponseV2: object({ schemaVersion: lit(2), sessionId: ref('Id'), nonce: ref('Id'), controlEpoch: revision, observedSeq: revision, snapshot: ref('SnapshotV2') }),
-  ErrorV2: object({ schemaVersion: lit(2), code: ref('Id'), message: text(500), requiredCapabilities: array(en('spatial-v2'), 1) }, ['requiredCapabilities']),
+  ErrorV2: object({ schemaVersion: lit(2), code: ref('Id'), message: text(500), requiredCapabilities: array(ref('SpatialClientCapability'), 4) }, ['requiredCapabilities']),
 };
 const freeze = value => { if (value && typeof value === 'object') { Object.values(value).forEach(freeze); Object.freeze(value); } return value; };
 export const spatialSchema = freeze({ $schema: 'https://json-schema.org/draft/2020-12/schema', $id: 'https://github.com/gbcdby/xiyou/protocol/spatial-v2', $defs: defs });

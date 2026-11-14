@@ -55,7 +55,7 @@ export class HttpApi {
       try { const error = spatial ? validateSpatial('ErrorV2', data) : validateContract('ErrorResponse', data); code = error.code; message = error.message || message; }
       catch { try { const error = validateContract('ErrorResponse', data); code = error.code; message = error.message || message; } catch { /* 非契约错误不作成功结果。 */ } }
       if (code === 'UNAUTHENTICATED' && token) this.#onUnauthenticated(token);
-      if (spatial) message = spatialErrorMessage(code);
+      if (spatial) message = code === 'UPGRADE_REQUIRED' ? '这间房间需要更新后的页面，请更新后重试，或返回大厅选择兼容的已有房间。' : spatialErrorMessage(code);
       throw new ApiFailure(message, response.status, code);
     }
     return data;

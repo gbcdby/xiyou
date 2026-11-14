@@ -1,0 +1,720 @@
+{
+  "fence-subject": {
+    "manifest": "fence-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "GrantCurrent",
+      "AtomicEffects",
+      "ControlFrames",
+      "AuthorityUse",
+      "QuotaCorrect",
+      "CustodyStable",
+      "AcquisitionEvidence",
+      "ResumptionReadOnly",
+      "ReceiptReadOnly",
+      "TerminalClosed"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1000,
+    "target": null,
+    "note": "两用途/每用途旧新请求/两物；全配置保留一次Restart-Resume-Terminal。单actor诊断切面，不冒充多个actor顺序组合。"
+  },
+  "fence-requester-p1": {
+    "manifest": "fence-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "GrantCurrent",
+      "AtomicEffects",
+      "ControlFrames",
+      "AuthorityUse",
+      "QuotaCorrect",
+      "CustodyStable",
+      "AcquisitionEvidence",
+      "ResumptionReadOnly",
+      "ReceiptReadOnly",
+      "TerminalClosed"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1000,
+    "target": null,
+    "note": "两用途/每用途旧新请求/两物；全配置保留一次Restart-Resume-Terminal。单actor诊断切面，不冒充多个actor顺序组合。"
+  },
+  "fence-requester-p2": {
+    "manifest": "fence-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "GrantCurrent",
+      "AtomicEffects",
+      "ControlFrames",
+      "AuthorityUse",
+      "QuotaCorrect",
+      "CustodyStable",
+      "AcquisitionEvidence",
+      "ResumptionReadOnly",
+      "ReceiptReadOnly",
+      "TerminalClosed"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1000,
+    "target": null,
+    "note": "两用途/每用途旧新请求/两物；全配置保留一次Restart-Resume-Terminal。单actor诊断切面，不冒充多个actor顺序组合。"
+  },
+  "fence-performer": {
+    "manifest": "fence-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "GrantCurrent",
+      "AtomicEffects",
+      "ControlFrames",
+      "AuthorityUse",
+      "QuotaCorrect",
+      "CustodyStable",
+      "AcquisitionEvidence",
+      "ResumptionReadOnly",
+      "ReceiptReadOnly",
+      "TerminalClosed"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1000,
+    "target": null,
+    "note": "两用途/每用途旧新请求/两物；全配置保留一次Restart-Resume-Terminal。单actor诊断切面，不冒充多个actor顺序组合。"
+  },
+  "fence-shared": {
+    "manifest": "fence-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "GrantCurrent",
+      "AtomicEffects",
+      "ControlFrames",
+      "AuthorityUse",
+      "QuotaCorrect",
+      "CustodyStable",
+      "AcquisitionEvidence",
+      "ResumptionReadOnly",
+      "ReceiptReadOnly",
+      "TerminalClosed"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1000,
+    "target": null,
+    "note": "两用途/每用途旧新请求/两物；全配置保留一次Restart-Resume-Terminal。任意四actor各变化一次；不是单actor结果的合并。"
+  },
+  "fence-negative-type": {
+    "manifest": "fence-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "TypeOK"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "TypeOK",
+    "note": ""
+  },
+  "fence-negative-miss-subject": {
+    "manifest": "fence-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "GrantCurrent"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "GrantCurrent",
+    "note": ""
+  },
+  "fence-negative-miss-performer": {
+    "manifest": "fence-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "GrantCurrent"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "GrantCurrent",
+    "note": ""
+  },
+  "fence-negative-split-appearance": {
+    "manifest": "fence-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "AtomicEffects"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "AtomicEffects",
+    "note": ""
+  },
+  "fence-negative-split-private": {
+    "manifest": "fence-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "AtomicEffects"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "AtomicEffects",
+    "note": ""
+  },
+  "fence-negative-overinvalidate": {
+    "manifest": "fence-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ControlFrames"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "ControlFrames",
+    "note": ""
+  },
+  "fence-negative-refresh-proof": {
+    "manifest": "fence-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ControlFrames"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "ControlFrames",
+    "note": ""
+  },
+  "fence-negative-stale-use": {
+    "manifest": "fence-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "AuthorityUse"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "AuthorityUse",
+    "note": ""
+  },
+  "fence-negative-retake": {
+    "manifest": "fence-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "QuotaCorrect"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "QuotaCorrect",
+    "note": ""
+  },
+  "fence-negative-first-closes-all": {
+    "manifest": "fence-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "QuotaCorrect"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "QuotaCorrect",
+    "note": ""
+  },
+  "fence-negative-reassign": {
+    "manifest": "fence-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "CustodyStable"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "CustodyStable",
+    "note": ""
+  },
+  "fence-negative-control-moves": {
+    "manifest": "fence-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "CustodyStable"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "CustodyStable",
+    "note": ""
+  },
+  "fence-negative-acquisition-evidence": {
+    "manifest": "fence-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "AcquisitionEvidence"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "AcquisitionEvidence",
+    "note": ""
+  },
+  "fence-negative-resume": {
+    "manifest": "fence-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ResumptionReadOnly"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "ResumptionReadOnly",
+    "note": ""
+  },
+  "fence-negative-receipt": {
+    "manifest": "fence-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ReceiptReadOnly"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "ReceiptReadOnly",
+    "note": ""
+  },
+  "fence-negative-terminal": {
+    "manifest": "fence-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "TerminalClosed"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "TerminalClosed",
+    "note": ""
+  },
+  "fence-witness-performer-isolation": {
+    "manifest": "fence-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "fence-witness-requester-isolation": {
+    "manifest": "fence-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "fence-witness-restart-dual": {
+    "manifest": "fence-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "fence-witness-terminal-dual": {
+    "manifest": "fence-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "fence-witness-late-old-take": {
+    "manifest": "fence-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "fence-witness-old-first-rejected": {
+    "manifest": "fence-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "fence-witness-two-actors-after-use": {
+    "manifest": "fence-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "NoWitness",
+    "note": ""
+  },
+  "returns-constructor": {
+    "manifest": "returns-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "SnapshotType",
+      "ReturnCompleteness",
+      "ObserverIsolation",
+      "AcquisitionIdentity",
+      "CurrentReferences",
+      "ReturnTargets",
+      "CompleteObservable"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1000,
+    "target": null,
+    "note": "同一权威动作生成的最小动态切面；包含双持有人，不声称全世界组合。"
+  },
+  "returns-negative-type": {
+    "manifest": "returns-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "SnapshotType"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "SnapshotType",
+    "note": ""
+  },
+  "returns-negative-omit-letter": {
+    "manifest": "returns-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ReturnCompleteness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "ReturnCompleteness",
+    "note": ""
+  },
+  "returns-negative-current-only": {
+    "manifest": "returns-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ReturnCompleteness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "ReturnCompleteness",
+    "note": ""
+  },
+  "returns-negative-leak": {
+    "manifest": "returns-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ObserverIsolation"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "ObserverIsolation",
+    "note": ""
+  },
+  "returns-negative-wrong-acquisition": {
+    "manifest": "returns-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "AcquisitionIdentity"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "AcquisitionIdentity",
+    "note": ""
+  },
+  "returns-negative-old-view": {
+    "manifest": "returns-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "CurrentReferences"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "CurrentReferences",
+    "note": ""
+  },
+  "returns-negative-synthesize-owner": {
+    "manifest": "returns-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "CurrentReferences"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "CurrentReferences",
+    "note": ""
+  },
+  "returns-negative-wrong-origin": {
+    "manifest": "returns-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ReturnTargets"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "ReturnTargets",
+    "note": ""
+  },
+  "returns-negative-drop-quota": {
+    "manifest": "returns-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "CompleteObservable"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "CompleteObservable",
+    "note": ""
+  },
+  "returns-witness-mixed-holders": {
+    "manifest": "returns-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoReturnWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "NoReturnWitness",
+    "note": ""
+  },
+  "returns-witness-mixed-new-view-null": {
+    "manifest": "returns-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoReturnWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "NoReturnWitness",
+    "note": ""
+  },
+  "returns-witness-same-slot-two-items": {
+    "manifest": "returns-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoReturnWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "NoReturnWitness",
+    "note": ""
+  },
+  "returns-witness-restored-not-delivered": {
+    "manifest": "returns-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoReturnWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "NoReturnWitness",
+    "note": ""
+  },
+  "transport-complete": {
+    "manifest": "transport-verification.json",
+    "status": "PASS_WITHIN_SCOPE",
+    "raw_exit": 0,
+    "invariants": [
+      "TypeOK",
+      "ObserverBound",
+      "ViewBound",
+      "NoRollback",
+      "WholeSnapshot",
+      "ReceiptReadOnly"
+    ],
+    "properties": [
+      "EventuallyCurrent"
+    ],
+    "minimum_distinct_states": 100,
+    "target": null,
+    "note": "完整payload参数化equality接口；两observer/两view/三seq，不重放原七个后态。"
+  },
+  "transport-negative-type": {
+    "manifest": "transport-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "TypeOK"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "TypeOK",
+    "note": ""
+  },
+  "transport-negative-wrong-observer": {
+    "manifest": "transport-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ObserverBound"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "ObserverBound",
+    "note": ""
+  },
+  "transport-negative-old-view": {
+    "manifest": "transport-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ViewBound"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "ViewBound",
+    "note": ""
+  },
+  "transport-negative-old-seq": {
+    "manifest": "transport-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoRollback"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "NoRollback",
+    "note": ""
+  },
+  "transport-negative-partial-payload": {
+    "manifest": "transport-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "WholeSnapshot"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "WholeSnapshot",
+    "note": ""
+  },
+  "transport-negative-receipt-overwrite": {
+    "manifest": "transport-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "ReceiptReadOnly"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "ReceiptReadOnly",
+    "note": ""
+  },
+  "transport-negative-live-miss-same-slot": {
+    "manifest": "transport-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 13,
+    "invariants": [],
+    "properties": [
+      "EventuallyCurrent"
+    ],
+    "minimum_distinct_states": 1,
+    "target": null,
+    "note": ""
+  },
+  "transport-negative-live-receipt-overwrite": {
+    "manifest": "transport-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 13,
+    "invariants": [],
+    "properties": [
+      "EventuallyCurrent"
+    ],
+    "minimum_distinct_states": 1,
+    "target": null,
+    "note": ""
+  },
+  "transport-witness-both-observers-current": {
+    "manifest": "transport-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoTransportWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "NoTransportWitness",
+    "note": ""
+  },
+  "transport-witness-late-old-accepted": {
+    "manifest": "transport-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 12,
+    "invariants": [
+      "NoTransportWitness"
+    ],
+    "properties": [],
+    "minimum_distinct_states": 1,
+    "target": "NoTransportWitness",
+    "note": ""
+  },
+  "recovery-negative-both-purposes-progress": {
+    "manifest": "recovery-verification.json",
+    "status": "COUNTEREXAMPLE",
+    "raw_exit": 13,
+    "invariants": [
+      "TypeOK",
+      "SingleUnsettled",
+      "OriginalIdentityStable",
+      "ReceiptStable",
+      "EffectAtMostOnce",
+      "CapacitySufficient"
+    ],
+    "properties": [
+      "BothPurposesProgress"
+    ],
+    "minimum_distinct_states": 1,
+    "target": null,
+    "note": "真实时间反例；不启用会先截断的PendingPurposesPreserved，原LiveSpec公平性不改。"
+  }
+}

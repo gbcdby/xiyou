@@ -1,0 +1,1250 @@
+{
+  "schema_version": 1,
+  "tool": {
+    "version": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "source": {
+    "commit": "76d98e137f5220518b072650ba6af8001966ea23",
+    "tree": "18287fbcde9590c6ce83a82ee747dfafaccdfe46",
+    "revision": "CS-R1",
+    "mode": "design/check",
+    "implementation_status": "NOT_ASSESSED"
+  },
+  "model": {
+    "root": "model",
+    "entry": "PersonalConsent.tla"
+  },
+  "profiles": {
+    "consent-appearance": {
+      "config": "consent-appearance.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "OwnDecisionOnly",
+        "PurposeRequestIsolation",
+        "ScopeBinding",
+        "ActiveRequiresCurrent",
+        "ReceiptDoesNotReactivate",
+        "EffectAtMostOnce",
+        "DecisionBasisRechecked",
+        "NoThirdPartyReplacement",
+        "OwnerCanCloseInvalidated",
+        "SafetyAndHistoryDurable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "FirstChoice": "accepted",
+          "OtherChoice": "accepted",
+          "NewRequester": "p1",
+          "Event": "requester-epoch",
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 30000,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "consent-private": {
+      "config": "consent-private.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "OwnDecisionOnly",
+        "PurposeRequestIsolation",
+        "ScopeBinding",
+        "ActiveRequiresCurrent",
+        "ReceiptDoesNotReactivate",
+        "EffectAtMostOnce",
+        "DecisionBasisRechecked",
+        "NoThirdPartyReplacement",
+        "OwnerCanCloseInvalidated",
+        "SafetyAndHistoryDurable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "private_items",
+          "FirstChoice": "accepted",
+          "OtherChoice": "accepted",
+          "NewRequester": "p1",
+          "Event": "requester-epoch",
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 30000,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "consent-owner-epoch": {
+      "config": "consent-owner-epoch.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "OwnDecisionOnly",
+        "PurposeRequestIsolation",
+        "ScopeBinding",
+        "ActiveRequiresCurrent",
+        "ReceiptDoesNotReactivate",
+        "EffectAtMostOnce",
+        "DecisionBasisRechecked",
+        "NoThirdPartyReplacement",
+        "OwnerCanCloseInvalidated",
+        "SafetyAndHistoryDurable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "FirstChoice": "accepted",
+          "OtherChoice": "accepted",
+          "NewRequester": "p1",
+          "Event": "owner-epoch",
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1000,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "consent-source": {
+      "config": "consent-source.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "OwnDecisionOnly",
+        "PurposeRequestIsolation",
+        "ScopeBinding",
+        "ActiveRequiresCurrent",
+        "ReceiptDoesNotReactivate",
+        "EffectAtMostOnce",
+        "DecisionBasisRechecked",
+        "NoThirdPartyReplacement",
+        "OwnerCanCloseInvalidated",
+        "SafetyAndHistoryDurable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "FirstChoice": "accepted",
+          "OtherChoice": "accepted",
+          "NewRequester": "p1",
+          "Event": "source",
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1000,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "consent-local": {
+      "config": "consent-local.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "OwnDecisionOnly",
+        "PurposeRequestIsolation",
+        "ScopeBinding",
+        "ActiveRequiresCurrent",
+        "ReceiptDoesNotReactivate",
+        "EffectAtMostOnce",
+        "DecisionBasisRechecked",
+        "NoThirdPartyReplacement",
+        "OwnerCanCloseInvalidated",
+        "SafetyAndHistoryDurable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "FirstChoice": "accepted",
+          "OtherChoice": "accepted",
+          "NewRequester": "p1",
+          "Event": "local",
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1000,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "consent-pause": {
+      "config": "consent-pause.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "OwnDecisionOnly",
+        "PurposeRequestIsolation",
+        "ScopeBinding",
+        "ActiveRequiresCurrent",
+        "ReceiptDoesNotReactivate",
+        "EffectAtMostOnce",
+        "DecisionBasisRechecked",
+        "NoThirdPartyReplacement",
+        "OwnerCanCloseInvalidated",
+        "SafetyAndHistoryDurable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "FirstChoice": "accepted",
+          "OtherChoice": "accepted",
+          "NewRequester": "p1",
+          "Event": "pause",
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1000,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "consent-terminal": {
+      "config": "consent-terminal.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "OwnDecisionOnly",
+        "PurposeRequestIsolation",
+        "ScopeBinding",
+        "ActiveRequiresCurrent",
+        "ReceiptDoesNotReactivate",
+        "EffectAtMostOnce",
+        "DecisionBasisRechecked",
+        "NoThirdPartyReplacement",
+        "OwnerCanCloseInvalidated",
+        "SafetyAndHistoryDurable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "FirstChoice": "accepted",
+          "OtherChoice": "accepted",
+          "NewRequester": "p1",
+          "Event": "terminal",
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1000,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "consent-revoke": {
+      "config": "consent-revoke.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "OwnDecisionOnly",
+        "PurposeRequestIsolation",
+        "ScopeBinding",
+        "ActiveRequiresCurrent",
+        "ReceiptDoesNotReactivate",
+        "EffectAtMostOnce",
+        "DecisionBasisRechecked",
+        "NoThirdPartyReplacement",
+        "OwnerCanCloseInvalidated",
+        "SafetyAndHistoryDurable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "FirstChoice": "accepted",
+          "OtherChoice": "accepted",
+          "NewRequester": "p1",
+          "Event": "revoke",
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1000,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "consent-third-party": {
+      "config": "consent-third-party.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "OwnDecisionOnly",
+        "PurposeRequestIsolation",
+        "ScopeBinding",
+        "ActiveRequiresCurrent",
+        "ReceiptDoesNotReactivate",
+        "EffectAtMostOnce",
+        "DecisionBasisRechecked",
+        "NoThirdPartyReplacement",
+        "OwnerCanCloseInvalidated",
+        "SafetyAndHistoryDurable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "FirstChoice": "accepted",
+          "OtherChoice": "accepted",
+          "NewRequester": "p2",
+          "Event": "requester-epoch",
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1000,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "consent-declined": {
+      "config": "consent-declined.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "OwnDecisionOnly",
+        "PurposeRequestIsolation",
+        "ScopeBinding",
+        "ActiveRequiresCurrent",
+        "ReceiptDoesNotReactivate",
+        "EffectAtMostOnce",
+        "DecisionBasisRechecked",
+        "NoThirdPartyReplacement",
+        "OwnerCanCloseInvalidated",
+        "SafetyAndHistoryDurable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "FirstChoice": "declined",
+          "OtherChoice": "declined",
+          "NewRequester": "p1",
+          "Event": "none",
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1000,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "consent-deferred": {
+      "config": "consent-deferred.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "OwnDecisionOnly",
+        "PurposeRequestIsolation",
+        "ScopeBinding",
+        "ActiveRequiresCurrent",
+        "ReceiptDoesNotReactivate",
+        "EffectAtMostOnce",
+        "DecisionBasisRechecked",
+        "NoThirdPartyReplacement",
+        "OwnerCanCloseInvalidated",
+        "SafetyAndHistoryDurable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "FirstChoice": "deferred",
+          "OtherChoice": "deferred",
+          "NewRequester": "p1",
+          "Event": "none",
+          "Fault": "none",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1000,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "consent-negative-type": {
+      "config": "consent-negative-type.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "FirstChoice": "accepted",
+          "OtherChoice": "accepted",
+          "NewRequester": "p1",
+          "Event": "none",
+          "Fault": "type",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "consent-negative-cancel-as-withdraw": {
+      "config": "consent-negative-cancel-as-withdraw.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "OwnDecisionOnly"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "FirstChoice": "accepted",
+          "OtherChoice": "accepted",
+          "NewRequester": "p1",
+          "Event": "none",
+          "Fault": "cancel-as-withdraw",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "consent-negative-wrong-request": {
+      "config": "consent-negative-wrong-request.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "PurposeRequestIsolation"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "FirstChoice": "accepted",
+          "OtherChoice": "accepted",
+          "NewRequester": "p1",
+          "Event": "none",
+          "Fault": "wrong-request",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "consent-negative-wrong-withdraw": {
+      "config": "consent-negative-wrong-withdraw.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "PurposeRequestIsolation"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "FirstChoice": "accepted",
+          "OtherChoice": "accepted",
+          "NewRequester": "p1",
+          "Event": "requester-epoch",
+          "Fault": "wrong-withdraw",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "consent-negative-wrong-scope": {
+      "config": "consent-negative-wrong-scope.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "ScopeBinding"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "FirstChoice": "accepted",
+          "OtherChoice": "accepted",
+          "NewRequester": "p1",
+          "Event": "none",
+          "Fault": "wrong-scope",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "consent-negative-skip-invalidation": {
+      "config": "consent-negative-skip-invalidation.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "ActiveRequiresCurrent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "FirstChoice": "accepted",
+          "OtherChoice": "accepted",
+          "NewRequester": "p1",
+          "Event": "requester-epoch",
+          "Fault": "skip-invalidation",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "consent-negative-receipt-reactivates": {
+      "config": "consent-negative-receipt-reactivates.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "ReceiptDoesNotReactivate"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "FirstChoice": "accepted",
+          "OtherChoice": "accepted",
+          "NewRequester": "p1",
+          "Event": "none",
+          "Fault": "receipt-reactivates",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "consent-negative-repeat-effect": {
+      "config": "consent-negative-repeat-effect.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "EffectAtMostOnce"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "FirstChoice": "accepted",
+          "OtherChoice": "accepted",
+          "NewRequester": "p1",
+          "Event": "none",
+          "Fault": "repeat-effect",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "consent-negative-stale-basis": {
+      "config": "consent-negative-stale-basis.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "DecisionBasisRechecked"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "FirstChoice": "accepted",
+          "OtherChoice": "accepted",
+          "NewRequester": "p1",
+          "Event": "local",
+          "Fault": "stale-basis",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "consent-negative-third-party": {
+      "config": "consent-negative-third-party.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoThirdPartyReplacement"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "FirstChoice": "accepted",
+          "OtherChoice": "accepted",
+          "NewRequester": "p2",
+          "Event": "none",
+          "Fault": "third-party",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "consent-negative-old-participant-epoch": {
+      "config": "consent-negative-old-participant-epoch.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "OwnerCanCloseInvalidated"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "FirstChoice": "accepted",
+          "OtherChoice": "accepted",
+          "NewRequester": "p1",
+          "Event": "requester-epoch",
+          "Fault": "old-participant-epoch",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "consent-negative-rollback": {
+      "config": "consent-negative-rollback.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "SafetyAndHistoryDurable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "FirstChoice": "accepted",
+          "OtherChoice": "accepted",
+          "NewRequester": "p1",
+          "Event": "requester-epoch",
+          "Fault": "rollback",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "consent-witness-both-accepted": {
+      "config": "consent-witness-both-accepted.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "private_items",
+          "FirstChoice": "accepted",
+          "OtherChoice": "accepted",
+          "NewRequester": "p1",
+          "Event": "requester-epoch",
+          "Fault": "none",
+          "Probe": "both-accepted"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "consent-witness-cancel-before": {
+      "config": "consent-witness-cancel-before.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "private_items",
+          "FirstChoice": "accepted",
+          "OtherChoice": "accepted",
+          "NewRequester": "p1",
+          "Event": "requester-epoch",
+          "Fault": "none",
+          "Probe": "cancel-before"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "consent-witness-accept-before": {
+      "config": "consent-witness-accept-before.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "private_items",
+          "FirstChoice": "accepted",
+          "OtherChoice": "accepted",
+          "NewRequester": "p1",
+          "Event": "requester-epoch",
+          "Fault": "none",
+          "Probe": "accept-before"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "consent-witness-stale-response": {
+      "config": "consent-witness-stale-response.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "private_items",
+          "FirstChoice": "accepted",
+          "OtherChoice": "accepted",
+          "NewRequester": "p1",
+          "Event": "requester-epoch",
+          "Fault": "none",
+          "Probe": "stale-response"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "consent-witness-stale-withdraw": {
+      "config": "consent-witness-stale-withdraw.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "private_items",
+          "FirstChoice": "accepted",
+          "OtherChoice": "accepted",
+          "NewRequester": "p1",
+          "Event": "requester-epoch",
+          "Fault": "none",
+          "Probe": "stale-withdraw"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "consent-witness-c2-after-epoch": {
+      "config": "consent-witness-c2-after-epoch.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "private_items",
+          "FirstChoice": "accepted",
+          "OtherChoice": "accepted",
+          "NewRequester": "p1",
+          "Event": "requester-epoch",
+          "Fault": "none",
+          "Probe": "c2-after-epoch"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "consent-witness-replay-closed": {
+      "config": "consent-witness-replay-closed.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "private_items",
+          "FirstChoice": "accepted",
+          "OtherChoice": "accepted",
+          "NewRequester": "p1",
+          "Event": "requester-epoch",
+          "Fault": "none",
+          "Probe": "replay-closed"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "consent-witness-declined": {
+      "config": "consent-witness-declined.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "FirstChoice": "declined",
+          "OtherChoice": "declined",
+          "NewRequester": "p1",
+          "Event": "none",
+          "Fault": "none",
+          "Probe": "declined"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    },
+    "consent-witness-deferred": {
+      "config": "consent-witness-deferred.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "NoWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Focus": "appearance",
+          "FirstChoice": "deferred",
+          "OtherChoice": "deferred",
+          "NewRequester": "p1",
+          "Event": "none",
+          "Fault": "none",
+          "Probe": "deferred"
+        },
+        "minimum_distinct_states": 10,
+        "note": "",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ]
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    }
+  }
+}

@@ -1,3 +1,4 @@
+import { gaolaoPersonalProfile } from '../protocol/spatial.mjs';
 // 只供可信投影使用；公开键描述外表类别，不包含物主、内容或唯一实例身份。
 const keys = Object.freeze({
   'gz-rope': 'hemp-rope',
@@ -16,6 +17,8 @@ const keys = Object.freeze({
 });
 
 export function gaolaoObjectVisual(state, id) {
-  if (state.contentVersion !== 'gaolaozhuang-scene-v2' || state.reducerVersion !== 'gaolao-world-v1' || !Object.hasOwn(keys, id)) return {};
+  const oldDefault=state.contentVersion==='gaolaozhuang-scene-v2'&&state.reducerVersion==='gaolao-world-v1';
+  const newDefault=gaolaoPersonalProfile(state)?.contentVersion==='gaolaozhuang-scene-v3';
+  if ((!oldDefault&&!newDefault)||!Object.hasOwn(keys,id)) return {};
   return { visualKey: keys[id] };
 }

@@ -1,0 +1,43 @@
+{
+  "base_formal_commit": "77ace28f526ce9ad905b1842b7353e48e251423c",
+  "review_sha256": "ab046ee5cf2659421f045f6dfa49628f914e3a9475bbc8738b27796cd107af89",
+  "design_commit": "1a7f45ddfeca0d25fb3714e1ce45980b225d5bde",
+  "plan_commit": "35d8759aac469eba5a8d9d4b94a787a3e62330c5",
+  "ic_read_only_commit": "68d2ccb26237c2deb9640b0f2014600929d3feea",
+  "ic_tree": "8f44905939a2cf083ff08196b957cc19064cee64",
+  "frozen_recovery_dependency_sha256": "a986e81b2dfb6e366181b5892acfe0b0d399e006ad75f99d406e4bc826445b07",
+  "pre_run_contract_sha256": "d7ec09f86c3099f748708161bf329c9408072a9126882790fbb122227afe297d",
+  "implementation_status": "NOT_ASSESSED",
+  "base_formal_tree": "006fc92d3cd261bddf22f698871e44b6434be36e",
+  "design_tree": "6b0130cd6838bf052504994527f05e29aabf521e",
+  "plan_tree": "d838c05f22b54601dc9f291df028975347850c47",
+  "read_source_files": [
+    {
+      "role": "design",
+      "commit": "1a7f45ddfeca0d25fb3714e1ce45980b225d5bde",
+      "path": "docs/specs/gaolao-scene-policy.md",
+      "git_blob": "1f53c57c2fd80ac7fc1f9d3d7b3cbbcb0e8d96d5",
+      "sha256": "3fdfbe7aecc05e086fcf5bb7a7e822221116828e2c263b156ef56b432ec463a7",
+      "bytes": 118052
+    },
+    {
+      "role": "plan",
+      "commit": "35d8759aac469eba5a8d9d4b94a787a3e62330c5",
+      "path": "docs/specs/gaolao-cuilan-self-response-release.md",
+      "git_blob": "85ad949e863a78ce06acaa715ff1793f38be43f2",
+      "sha256": "59593cd73ee60a9a26d5c961b57bbc3a4d63e026b41ee40e99cdc5e95dc25320",
+      "bytes": 21278
+    },
+    {
+      "role": "read_only_ic",
+      "commit": "68d2ccb26237c2deb9640b0f2014600929d3feea",
+      "path": "game/gaolao-personal.mjs",
+      "git_blob": "f63df27f935f2ea51a44a1ed8996ec8d3cc1985c",
+      "sha256": "d802d876817b2a4fcb4ff628d8f7fe7a0158a75b62d6e0cba147e4d6516bcfd4",
+      "bytes": 34370
+    }
+  ],
+  "provider_calls": 0,
+  "business_or_mirror_tests": "NOT_RUN",
+  "public_writes": "NOT_RUN"
+}

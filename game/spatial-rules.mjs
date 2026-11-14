@@ -4,6 +4,7 @@ import { findPath, walkable, clearSegment, pointAlongPath, facingAlongPath, dist
 import { isGaolao, observerName, copyGaolaoEvidence } from './gaolao-world.mjs';
 import { applyGaolaoAction,checkGaolaoMovement,checkGaolaoItem } from './gaolao-rules.mjs';
 import {gaolaoNavigationRejection} from './gaolao-navigation.mjs';
+import { changePersonalItem, personalAppearancePathAllowed } from './gaolao-personal.mjs';
 const refuse = code => { throw new RuleError(code); };
 const active = plan => plan && ['accepted', 'moving'].includes(plan.status);
 const online = (tx, a) => a?.kind === 'human' && a.mode === 'HumanControlled' && tx.liveActorIds?.has(a.characterId);
@@ -35,7 +36,7 @@ export function advanceSpatialPositions(tx, sceneTimeMs) {
         // 检查自上个检查点至新检查点经过的每一段，不能从折线路径跨墙抄近路。
         const previousPoint = pointAlongPath(p.path, p.travelled ?? 0);
         const segments = [a.position, ...p.path.slice(previousPoint.index, nextPoint.index), nextPoint.position];
-        if (segments.some((point, i) => i && !clearSegment(scene, segments[i - 1], point, obstacleEnabled(tx.state)))) {
+        if (!personalAppearancePathAllowed(tx.state,tx.content,a.characterId,a.sceneId,segments) || segments.some((point, i) => i && !clearSegment(scene, segments[i - 1], point, obstacleEnabled(tx.state)))) {
             p.status = 'blocked';
             p.reason = '通路状态已经改变。';
             emitActor(tx, a);
@@ -80,7 +81,7 @@ export function invalidateReady(tx) {
             tx.emit('spatial.cooperation', { cooperation: { ...old, ready, participants } });
     }
 }
-function itemChange(tx, item, location) { emitItem(tx, { ...item, location, resourceRevision: next(item.resourceRevision) }); }
+function itemChange(tx, item, location) { if(!changePersonalItem(tx,item,location))emitItem(tx, { ...item, location, resourceRevision: next(item.resourceRevision) }); }
 function observed(tx, observerId, statement, fields, category = 'WorldFact', shareable = true, sourceSeq = next(tx.state.sessionSeq)) {
     const observation = { observationRef: opaqueRef(), category, statement, sourceSeq, fields: structuredClone(fields), shareable };
     tx.emit('spatial.observation', { observerId, observation }, { humanCharacterIds: [observerId], coreNpcCharacterIds: [], proxyCharacterIds: shareable ? [observerId] : [] });
@@ -191,6 +192,7 @@ export function applySpatialAction(tx, actorId, principalKind, request, navigati
         const path = findPath(destinationScene, origin, action.destination, obstacleEnabled(tx.state));
         if (!path)
             refuse('PATH_UNREACHABLE');
+        if (!personalAppearancePathAllowed(tx.state,tx.content,actorId,action.sceneId,path)) refuse('CONSENT_REQUIRED');
         const planVersion = next(a.planVersion), movement = { movementId: opaqueRef(), planVersion, movementCommandSeq: action.movementCommandSeq, actorId, controlEpoch: a.controlEpoch, sceneId: action.sceneId, mapVersion: tx.state.mapVersion, goal: action.destination, path, acceptedAtSceneTime: tx.state.sceneTimeMs, status: 'accepted', travelled: 0, ...(target ? { relatedTarget: { id: target.characterId ?? target.itemId ?? target.targetId, appearanceEpoch: target.appearanceEpoch, resourceRevision: target.resourceRevision, ...(target.spatialRevision !== undefined ? { spatialRevision: target.spatialRevision } : {}) } } : {}) };
         if(navigationDependencies)movement.chapterDependencies=structuredClone(navigationDependencies);
         emitActor(tx, { ...a, sceneId: action.sceneId, position: origin, spatialRevision: next(a.spatialRevision), planVersion, movement });
@@ -210,7 +212,7 @@ export function applySpatialAction(tx, actorId, principalKind, request, navigati
             refuse('STALE_PRECONDITION');
         if (item.lockedBy)
             refuse('RULE_VIOLATION');
-        checkGaolaoItem(tx,actorId,item,action);
+        checkGaolaoItem(tx,actorId,item,action,request);
         if (action.kind === 'take_item') {
             if (item.location.kind !== 'ground')
                 refuse('RULE_VIOLATION');

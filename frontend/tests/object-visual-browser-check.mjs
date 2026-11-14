@@ -41,7 +41,7 @@ try {
   database = await startTestPostgres('object-visual-ui', { outputSubdirectory: 'object-visuals' });
   server = await createAuthorityServer({ pool: database.pool });
   const origin = `http://127.0.0.1:${(await server.listen(0)).port}`;
-  vite = await createVite({ root: resolve(repository, 'frontend'), configFile: resolve(repository, 'frontend/vite.config.mjs'), configLoader: 'native', cacheDir: resolve(output, 'vite-cache'), server: { host: '127.0.0.1', port: 0, fs: { allow: [repository] }, proxy: { '/api': { target: origin }, '/socket.io': { target: origin, ws: true } } } });
+  vite = await createVite({ root: resolve(repository, 'frontend'), configFile: resolve(repository, 'frontend/vite.config.mjs'), configLoader: 'native', cacheDir: resolve(output, 'vite-cache'), define: { 'import.meta.env.VITE_GAOLAO_CONTENT_VERSION': JSON.stringify('gaolaozhuang-scene-v2') }, server: { host: '127.0.0.1', port: 0, fs: { allow: [repository] }, proxy: { '/api': { target: origin }, '/socket.io': { target: origin, ws: true } } } });
   await vite.listen();
   browser = await chromium.launch({ headless: true, executablePath: process.env.CHROMIUM_PATH, args: process.env.CHROMIUM_ARGS ? JSON.parse(process.env.CHROMIUM_ARGS) : [] });
   room = await browserRoom({ server, browser, baseURL: `http://127.0.0.1:${vite.httpServer.address().port}`, count: 2, contentVersion: 'gaolaozhuang-scene-v2', report });
