@@ -14,7 +14,7 @@ export const directionClock: DirectionClock = {
   now: () => performance.now(), setTimeout: (callback, delay) => setTimeout(callback, delay),
   clearTimeout: timer => clearTimeout(timer as ReturnType<typeof setTimeout>),
 };
-interface Options { send(direction: Position): Promise<void>; stop(): Promise<void>; fail?(message: string): void; clock?: DirectionClock }
+interface Options { send(direction: Position): Promise<void>; stop(): Promise<void>; fail?(message: string): void; reset?(): void; clock?: DirectionClock }
 
 /** 一个move窗口与一个紧急stop槽；普通stop只合并最新持键，确认前不续发，原身份由网络层保留。 */
 export class ContinuousDirection {
@@ -38,11 +38,12 @@ export class ContinuousDirection {
     this.#direction = direction; this.#stopRequested = false; this.#schedule();
   }
   /** 由另一项明确输入接管或连接撤销时只取消续发，接管方负责更高序号动作。 */
-  clear() { this.#generation++; this.#direction = null; this.#stopRequested = true; this.#resumeAfterStop = false; this.#cancelTimer(); this.#cancelStopTimer(); }
+  clear() { this.#generation++; this.#direction = null; this.#stopRequested = true; this.#resumeAfterStop = false; this.#cancelTimer(); this.#cancelStopTimer(); this.#options.reset?.(); }
   #cancelTimer() { if (this.#timer !== null) this.#clock.clearTimeout(this.#timer); this.#timer = null; }
   #cancelStopTimer() { if (this.#stopTimer !== null) this.#clock.clearTimeout(this.#stopTimer); this.#stopTimer = null; }
   #halt(message?: string) {
     this.#generation++; this.#direction = null; this.#resumeAfterStop = false; this.#cancelTimer(); this.#cancelStopTimer();
+    this.#options.reset?.();
     if (message) this.#options.fail?.(message);
     if (!this.#stopRequested) {
       this.#stopRequested = true; this.#stopPending = true;

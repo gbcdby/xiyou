@@ -1,0 +1,121 @@
+{
+  "finding": "R66-CI68-DOWN-001",
+  "source": {
+    "run": "43709967732",
+    "artifact": "14159768530",
+    "commit": "26946f531f3746ada3804fbe5c9685ed5aa964e5",
+    "tree": "fb57941976c0e12af138013dee9d3de10d1ac80b",
+    "resultSha256": "0008b4464357e60fad36a78a1c5448074bf05126dddd09407bf0a9d901263079"
+  },
+  "scope": "保留原始授权位置、接收时刻、阶段边界和原请求目标；进程内测试替换房间身份与收据传输，不宣称浏览器重跑。",
+  "phaseAt": 5915.899999999965,
+  "stopAt": 6386.599999999977,
+  "updates": [
+    {
+      "at": 5895.799999999988,
+      "snapshotSeq": "79",
+      "sceneTimeMs": 1612,
+      "position": {
+        "x": 1079,
+        "y": 673
+      }
+    },
+    {
+      "at": 5989.5,
+      "snapshotSeq": "81",
+      "sceneTimeMs": 1668,
+      "position": {
+        "x": 1083,
+        "y": 682
+      }
+    },
+    {
+      "at": 6016,
+      "snapshotSeq": "84",
+      "sceneTimeMs": 1726,
+      "position": {
+        "x": 1088,
+        "y": 692
+      }
+    },
+    {
+      "at": 6101.299999999988,
+      "snapshotSeq": "87",
+      "sceneTimeMs": 1813,
+      "position": {
+        "x": 1081,
+        "y": 706
+      }
+    },
+    {
+      "at": 6168.199999999953,
+      "snapshotSeq": "89",
+      "sceneTimeMs": 1864,
+      "position": {
+        "x": 1084,
+        "y": 715
+      }
+    },
+    {
+      "at": 6212.899999999965,
+      "snapshotSeq": "92",
+      "sceneTimeMs": 1922,
+      "position": {
+        "x": 1087,
+        "y": 725
+      }
+    },
+    {
+      "at": 6294.899999999965,
+      "snapshotSeq": "95",
+      "sceneTimeMs": 2021,
+      "position": {
+        "x": 1081,
+        "y": 742
+      }
+    },
+    {
+      "at": 6374.599999999977,
+      "snapshotSeq": "97",
+      "sceneTimeMs": 2065,
+      "position": {
+        "x": 1083,
+        "y": 750
+      }
+    }
+  ],
+  "originalRequests": [
+    {
+      "baseSeq": "79",
+      "sequence": "10",
+      "destination": {
+        "x": 1079,
+        "y": 709
+      }
+    },
+    {
+      "baseSeq": "84",
+      "sequence": "11",
+      "destination": {
+        "x": 1088,
+        "y": 728
+      }
+    },
+    {
+      "baseSeq": "87",
+      "sequence": "12",
+      "destination": {
+        "x": 1081,
+        "y": 742
+      }
+    },
+    {
+      "baseSeq": "92",
+      "sequence": "13",
+      "destination": {
+        "x": 1087,
+        "y": 761
+      }
+    }
+  ]
+}

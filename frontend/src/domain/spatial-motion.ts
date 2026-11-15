@@ -1,4 +1,4 @@
-import type { EntityViewV2, Facing, Position, SnapshotV2 } from '../../../game/spatial-types.ts';
+import type { EntityViewV2, Facing, PlanViewV2, Position, SnapshotV2 } from '../../../game/spatial-types.ts';
 import { sceneDisplayProjection } from './spatial-display.ts';
 
 const length = (a: Position, b: Position) => Math.hypot(a.x - b.x, a.y - b.y);
@@ -32,6 +32,17 @@ export function confirmedSegment(path: Position[], from: Position, through: Posi
   for (let i = 1; i < path.length; i++) { distance += length(path[i - 1], path[i]); if (distance > a.distance && distance < b.distance) result.push({ ...path[i] }); }
   result.push({ ...through }); return result;
 }
+/** 一次投影跨过相邻计划时，只沿两条权威折线拼接已经走过的区间。 */
+function confirmedPlanBridge(previous: PlanViewV2 | null | undefined, current: PlanViewV2, from: Position, through: Position, fromTime: number, throughTime: number, mapVersion: string): Position[] | null {
+  if (!previous || !mapVersion || previous.sceneId !== current.sceneId || previous.mapVersion !== mapVersion || current.mapVersion !== mapVersion || previous.movementId === current.movementId) return null;
+  const adjacent = (a: string, b: string) => /^(0|[1-9]\d*)$/.test(a) && /^(0|[1-9]\d*)$/.test(b) && BigInt(b) === BigInt(a) + 1n;
+  if (!adjacent(previous.movementCommandSeq, current.movementCommandSeq) || !adjacent(previous.planVersion, current.planVersion)) return null;
+  if (!['accepted', 'moving', 'arrived'].includes(previous.status) || !['accepted', 'moving', 'arrived'].includes(current.status)) return null;
+  if (!Number.isFinite(previous.acceptedAtSceneTime) || !Number.isFinite(current.acceptedAtSceneTime) || previous.acceptedAtSceneTime > fromTime || current.acceptedAtSceneTime < fromTime || current.acceptedAtSceneTime > throughTime) return null;
+  const joint = current.path[0]; if (!joint) return null;
+  const before = confirmedSegment(previous.path, from, joint), after = confirmedSegment(current.path, joint, through);
+  return before && after ? [...before, ...after.slice(1)] : null;
+}
 const trailLength = (points: Position[]) => points.slice(1).reduce((sum, point, index) => sum + length(points[index], point), 0);
 const directionOf = (from: Position, through: Position): Facing => (['E', 'SE', 'S', 'SW', 'W', 'NW', 'N', 'NE'] as Facing[])[(Math.round(Math.atan2(through.y - from.y, through.x - from.x) / (Math.PI / 4)) + 8) % 8];
 interface Motion { position: Position; trail: Position[] | null; startedAt: number; duration: number; distanceBefore: number; facing: Facing; continuing: boolean }
@@ -42,7 +53,8 @@ export class ConfirmedMotion {
   #previous: SnapshotV2 | null = null; #motions = new Map<string, Motion>();
   update(snapshot: SnapshotV2, now: number) {
     const previous = this.#previous;
-    const continuous = previous?.viewId === snapshot.viewId && previous.projection.self.controlEpoch === snapshot.projection.self.controlEpoch;
+    const continuous = previous?.viewId === snapshot.viewId && previous.projection.self.controlEpoch === snapshot.projection.self.controlEpoch
+      && previous.projection.mapVersion === snapshot.projection.mapVersion && previous.projection.self.entityRef === snapshot.projection.self.entityRef;
     if (!continuous) this.#motions.clear();
     const p = sceneDisplayProjection(snapshot.projection), before = previous ? sceneDisplayProjection(previous.projection) : null;
     const seen = new Set<string>();
@@ -61,7 +73,8 @@ export class ConfirmedMotion {
         } else if (isSelf && p.movement?.sceneId === person.sceneId) {
           // 计划替换时先保留旧计划的已确认区段；从不把两个未知端点直连穿墙。
           trail = confirmedSegment(p.movement.path, prior.position, person.position)
-            ?? (before?.movement?.sceneId === person.sceneId ? confirmedSegment(before.movement.path, prior.position, person.position) : null);
+            ?? (before?.movement?.sceneId === person.sceneId ? confirmedSegment(before.movement.path, prior.position, person.position) : null)
+            ?? (before?.mapVersion === p.mapVersion ? confirmedPlanBridge(before?.movement, p.movement, prior.position, person.position, before!.sceneTimeMs, p.sceneTimeMs, p.mapVersion) : null);
           duration = p.sceneTimeMs - before!.sceneTimeMs;
         }
         if (trail && old) {
