@@ -17,9 +17,11 @@ let observer: ResizeObserver | null = null, unsubscribe: (() => void) | null = n
 let reducedMotion = false, geometryKey = '';
 
 function schedule() { if (!stopped && painter && !frame) frame = requestAnimationFrame(draw); }
-function draw(now: number) {
+function draw() {
   frame = 0; if (!painter || stopped) return;
   if (!scene.value) { painter.clear(); failed.value = false; return; }
+  // 排队的 rAF 时间可能早于已收到的状态更新；本次绘制与完成判断共用实际执行时钟。
+  const now = performance.now();
   const value = painter.paint(props.snapshot, motion, now, { selected: props.selected, personLabels: props.personLabels, reducedMotion });
   failed.value = Boolean(value?.failed.length);
   const p = projection.value;

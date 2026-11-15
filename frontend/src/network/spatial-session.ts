@@ -264,21 +264,26 @@ export class SpatialSessionClient {
     } catch { if (serial === this.#serial) { this.#message = '控制结果待确认，再次点击会重试原请求。'; this.#publish(); } }
     finally { if (serial === this.#serial) { this.#controlBusy = false; this.#publish(); void this.sync(); } }
   }
+  #readyDirection() {
+    const snapshot = this.#ready();
+    if (this.#actions.some(draft => {
+      const kind = parseSpatial('PublicEnvelope', draft.raw).action.kind;
+      return (draft.status === 'unknown' && ['move_to', 'stop_move'].includes(kind)) || (draft.status === 'waiting' && kind === 'stop_move' && !this.#direction.canResumeAfterStop);
+    })) throw new Error('上一项移动或停步结果尚未确认，请先查询或原样重试。');
+    return snapshot;
+  }
   setDirection(vector: Position | null) {
     if (vector && (vector.x || vector.y)) {
       try {
-        this.#ready();
-        if (this.#actions.some(draft => {
-          const kind = parseSpatial('PublicEnvelope', draft.raw).action.kind;
-          return (draft.status === 'unknown' && ['move_to', 'stop_move'].includes(kind)) || (draft.status === 'waiting' && kind === 'stop_move');
-        })) throw new Error('上一项移动或停步结果尚未确认，请先查询或原样重试。');
+        this.#readyDirection();
         this.#queued = null; this.#navigation = null;
       } catch (error) { this.#direction.clear(); this.#message = error instanceof Error ? error.message : '当前不能继续行走。'; this.#publish(); return; }
     }
     this.#direction.set(vector);
   }
   async #moveDirection(vector: Position) {
-    const snapshot = this.#ready(), p = snapshot.projection;
+    // 停步成功后的自动续发也重查原请求；不能绕过稍后变为未知的旧move。
+    const snapshot = this.#readyDirection(), p = snapshot.projection;
     if (!p.scene || !p.self.position || p.paused) throw new Error('当前场景暂停行走。');
     const destination = directionTarget(p.scene, p.self.position, vector);
     if (!destination) throw new Error('这个方向已到达边界或被挡住。');

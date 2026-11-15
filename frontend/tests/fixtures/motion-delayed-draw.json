@@ -1,0 +1,918 @@
+{
+  "provenance": {
+    "workflowRun": 43707119230,
+    "artifactId": 14158803230,
+    "artifactZipSha256": "eb30ca34927996d1d5462fadb25c9063cfbd9cc34bd1feb3191291bdcdf6e1c2",
+    "reportSha256": "cc376f0183eb703ec59c0b034457442b3835bd8cbcf40075be156e73da47c3ef",
+    "source": "f406fec89b822f2f711023e4f6e500e938af2467",
+    "tree": "d125dcb05b684d25f1ad96d98df86d461bb855b2",
+    "selection": "实际失败前缀直到paint47；同一观察者；时间、位置、轨迹、顺序和原输出数值不变，仅省略绘图资源与其他无关字段。"
+  },
+  "identity": {
+    "entityRef": "RIrkMvU2xh_gWhiSdo0zELL76MPyGujqN",
+    "appearanceEpoch": "100468961557712224496980975750980255782600819793960417749830192962637698227508",
+    "controlEpoch": "2",
+    "sceneId": "gaolao-courtyard",
+    "viewId": "R808y3LhhdwtMnEemruRkB2qnRAFuE73T",
+    "rendererId": 1,
+    "instance": "{\"sessionId\":\"S-650da60e-9af9-4572-b4ae-8a660a85ad3e\",\"viewId\":\"R808y3LhhdwtMnEemruRkB2qnRAFuE73T\",\"contentVersion\":\"gaolaozhuang-scene-v3\",\"mapVersion\":\"gaolao-layout-v1.1\",\"sceneId\":\"gaolao-courtyard\",\"chapterVersion\":\"gaolaozhuang-chapter-v3\",\"reducerVersion\":\"gaolao-world-v2\",\"variantId\":\"west-tools\"}:2"
+  },
+  "updates": [
+    {
+      "at": 5641.599999999977,
+      "startedAt": 5641.699999999953,
+      "snapshotSeq": "46",
+      "sceneTimeMs": 980,
+      "paused": false,
+      "position": {
+        "x": 950,
+        "y": 650
+      },
+      "facing": "S",
+      "movement": null,
+      "person": {
+        "moving": false
+      }
+    },
+    {
+      "at": 5671.400000000023,
+      "startedAt": 5671.400000000023,
+      "snapshotSeq": "48",
+      "sceneTimeMs": 1011,
+      "paused": false,
+      "position": {
+        "x": 950,
+        "y": 650
+      },
+      "facing": "S",
+      "movement": {
+        "movementId": "R3Gw98tRGjiIGLtyU9wMfFyMPvD1Ti5by",
+        "planVersion": "1",
+        "movementCommandSeq": "1",
+        "sceneId": "gaolao-courtyard",
+        "mapVersion": "gaolao-layout-v1.1",
+        "goal": {
+          "x": 986,
+          "y": 650
+        },
+        "path": [
+          {
+            "x": 950,
+            "y": 650
+          },
+          {
+            "x": 986,
+            "y": 650
+          }
+        ],
+        "acceptedAtSceneTime": 1011,
+        "status": "accepted"
+      },
+      "person": {
+        "moving": true
+      }
+    },
+    {
+      "at": 5742,
+      "startedAt": 5742,
+      "snapshotSeq": "51",
+      "sceneTimeMs": 1092,
+      "paused": false,
+      "position": {
+        "x": 965,
+        "y": 650
+      },
+      "facing": "E",
+      "movement": {
+        "movementId": "RlEYihN9KTIPtRSTHf51FKODLRkMjVjZE",
+        "planVersion": "2",
+        "movementCommandSeq": "2",
+        "sceneId": "gaolao-courtyard",
+        "mapVersion": "gaolao-layout-v1.1",
+        "goal": {
+          "x": 986,
+          "y": 650
+        },
+        "path": [
+          {
+            "x": 965,
+            "y": 650
+          },
+          {
+            "x": 986,
+            "y": 650
+          }
+        ],
+        "acceptedAtSceneTime": 1092,
+        "status": "accepted"
+      },
+      "person": {
+        "moving": true,
+        "motionTrail": [
+          {
+            "x": 950,
+            "y": 650
+          },
+          {
+            "x": 965,
+            "y": 650
+          }
+        ],
+        "motionFromSceneTimeMs": 1011,
+        "motionThroughSceneTimeMs": 1092
+      }
+    },
+    {
+      "at": 5894.699999999953,
+      "startedAt": 5894.699999999953,
+      "snapshotSeq": "56",
+      "sceneTimeMs": 1197,
+      "paused": false,
+      "position": {
+        "x": 984,
+        "y": 650
+      },
+      "facing": "E",
+      "movement": {
+        "movementId": "RtYq87obX5lxAAgesJjzzLvbW8mbuj7ga",
+        "planVersion": "3",
+        "movementCommandSeq": "3",
+        "sceneId": "gaolao-courtyard",
+        "mapVersion": "gaolao-layout-v1.1",
+        "goal": {
+          "x": 1001,
+          "y": 650
+        },
+        "path": [
+          {
+            "x": 984,
+            "y": 650
+          },
+          {
+            "x": 1001,
+            "y": 650
+          }
+        ],
+        "acceptedAtSceneTime": 1197,
+        "status": "accepted"
+      },
+      "person": {
+        "moving": true,
+        "motionTrail": [
+          {
+            "x": 982,
+            "y": 650
+          },
+          {
+            "x": 984,
+            "y": 650
+          }
+        ],
+        "motionFromSceneTimeMs": 1185,
+        "motionThroughSceneTimeMs": 1197
+      }
+    },
+    {
+      "at": 5983.5,
+      "startedAt": 5983.5,
+      "snapshotSeq": "59",
+      "sceneTimeMs": 1304,
+      "paused": false,
+      "position": {
+        "x": 1001,
+        "y": 650
+      },
+      "facing": "E",
+      "movement": {
+        "movementId": "Rqdonud8qIiidrGZxBcaXUlMpaJ8QVq2s",
+        "planVersion": "4",
+        "movementCommandSeq": "4",
+        "sceneId": "gaolao-courtyard",
+        "mapVersion": "gaolao-layout-v1.1",
+        "goal": {
+          "x": 1020,
+          "y": 650
+        },
+        "path": [
+          {
+            "x": 1001,
+            "y": 650
+          },
+          {
+            "x": 1020,
+            "y": 650
+          }
+        ],
+        "acceptedAtSceneTime": 1304,
+        "status": "accepted"
+      },
+      "person": {
+        "moving": true,
+        "motionTrail": [
+          {
+            "x": 984,
+            "y": 650
+          },
+          {
+            "x": 1001,
+            "y": 650
+          }
+        ],
+        "motionFromSceneTimeMs": 1197,
+        "motionThroughSceneTimeMs": 1304
+      }
+    },
+    {
+      "at": 6083.300000000047,
+      "startedAt": 6083.300000000047,
+      "snapshotSeq": "64",
+      "sceneTimeMs": 1412,
+      "paused": false,
+      "position": {
+        "x": 1020,
+        "y": 650
+      },
+      "facing": "E",
+      "movement": {
+        "movementId": "RzUfmqS3seFT7TBBwP16qodravQ3rqzsS",
+        "planVersion": "5",
+        "movementCommandSeq": "5",
+        "sceneId": "gaolao-courtyard",
+        "mapVersion": "gaolao-layout-v1.1",
+        "goal": {
+          "x": 1037,
+          "y": 650
+        },
+        "path": [
+          {
+            "x": 1020,
+            "y": 650
+          },
+          {
+            "x": 1037,
+            "y": 650
+          }
+        ],
+        "acceptedAtSceneTime": 1412,
+        "status": "accepted"
+      },
+      "person": {
+        "moving": true,
+        "motionTrail": [
+          {
+            "x": 1015,
+            "y": 650
+          },
+          {
+            "x": 1020,
+            "y": 650
+          }
+        ],
+        "motionFromSceneTimeMs": 1381,
+        "motionThroughSceneTimeMs": 1412
+      }
+    },
+    {
+      "at": 6202,
+      "startedAt": 6202,
+      "snapshotSeq": "67",
+      "sceneTimeMs": 1503,
+      "paused": false,
+      "position": {
+        "x": 1036,
+        "y": 650
+      },
+      "facing": "E",
+      "movement": {
+        "movementId": "R02_v_TV68J2guyTSiUjr4pkgW0dbAZHa",
+        "planVersion": "6",
+        "movementCommandSeq": "6",
+        "sceneId": "gaolao-courtyard",
+        "mapVersion": "gaolao-layout-v1.1",
+        "goal": {
+          "x": 1056,
+          "y": 650
+        },
+        "path": [
+          {
+            "x": 1036,
+            "y": 650
+          },
+          {
+            "x": 1056,
+            "y": 650
+          }
+        ],
+        "acceptedAtSceneTime": 1503,
+        "status": "accepted"
+      },
+      "person": {
+        "moving": true,
+        "motionTrail": [
+          {
+            "x": 1020,
+            "y": 650
+          },
+          {
+            "x": 1036,
+            "y": 650
+          }
+        ],
+        "motionFromSceneTimeMs": 1412,
+        "motionThroughSceneTimeMs": 1503
+      }
+    },
+    {
+      "at": 6244.599999999977,
+      "startedAt": 6244.599999999977,
+      "snapshotSeq": "69",
+      "sceneTimeMs": 1582,
+      "paused": false,
+      "position": {
+        "x": 1050,
+        "y": 650
+      },
+      "facing": "E",
+      "movement": {
+        "movementId": "R02_v_TV68J2guyTSiUjr4pkgW0dbAZHa",
+        "planVersion": "6",
+        "movementCommandSeq": "6",
+        "sceneId": "gaolao-courtyard",
+        "mapVersion": "gaolao-layout-v1.1",
+        "goal": {
+          "x": 1056,
+          "y": 650
+        },
+        "path": [
+          {
+            "x": 1036,
+            "y": 650
+          },
+          {
+            "x": 1056,
+            "y": 650
+          }
+        ],
+        "acceptedAtSceneTime": 1503,
+        "status": "moving"
+      },
+      "person": {
+        "moving": true,
+        "motionTrail": [
+          {
+            "x": 1036,
+            "y": 650
+          },
+          {
+            "x": 1050,
+            "y": 650
+          }
+        ],
+        "motionFromSceneTimeMs": 1503,
+        "motionThroughSceneTimeMs": 1582
+      }
+    },
+    {
+      "at": 6340,
+      "startedAt": 6340,
+      "snapshotSeq": "72",
+      "sceneTimeMs": 1624,
+      "paused": false,
+      "position": {
+        "x": 1056,
+        "y": 650
+      },
+      "facing": "E",
+      "movement": {
+        "movementId": "RvjvEtfIoU22XuzNMmv8eD4HP1OsDb6ss",
+        "planVersion": "7",
+        "movementCommandSeq": "7",
+        "sceneId": "gaolao-courtyard",
+        "mapVersion": "gaolao-layout-v1.1",
+        "goal": {
+          "x": 1061,
+          "y": 675
+        },
+        "path": [
+          {
+            "x": 1056,
+            "y": 650
+          },
+          {
+            "x": 1061,
+            "y": 675
+          }
+        ],
+        "acceptedAtSceneTime": 1624,
+        "status": "accepted"
+      },
+      "person": {
+        "moving": true,
+        "motionTrail": [
+          {
+            "x": 1050,
+            "y": 650
+          },
+          {
+            "x": 1056,
+            "y": 650
+          }
+        ],
+        "motionFromSceneTimeMs": 1582,
+        "motionThroughSceneTimeMs": 1624
+      }
+    },
+    {
+      "at": 6415.400000000023,
+      "startedAt": 6415.400000000023,
+      "snapshotSeq": "75",
+      "sceneTimeMs": 1721,
+      "paused": false,
+      "position": {
+        "x": 1059,
+        "y": 667
+      },
+      "facing": "S",
+      "movement": {
+        "movementId": "R1Ad1zR9s4XUfBqax4lMpR_GEGw65I-aM",
+        "planVersion": "8",
+        "movementCommandSeq": "8",
+        "sceneId": "gaolao-courtyard",
+        "mapVersion": "gaolao-layout-v1.1",
+        "goal": {
+          "x": 1075,
+          "y": 675
+        },
+        "path": [
+          {
+            "x": 1059,
+            "y": 667
+          },
+          {
+            "x": 1075,
+            "y": 675
+          }
+        ],
+        "acceptedAtSceneTime": 1721,
+        "status": "accepted"
+      },
+      "person": {
+        "moving": true,
+        "motionTrail": [
+          {
+            "x": 1056,
+            "y": 650
+          },
+          {
+            "x": 1059,
+            "y": 667
+          }
+        ],
+        "motionFromSceneTimeMs": 1624,
+        "motionThroughSceneTimeMs": 1721
+      }
+    }
+  ],
+  "paints": [
+    {
+      "serial": 19,
+      "motionAt": 5637.9,
+      "startedAt": 5648.599999999977,
+      "snapshotSeq": "46",
+      "pose": {
+        "position": {
+          "x": 950,
+          "y": 650
+        },
+        "distance": 0,
+        "facing": "S",
+        "moving": false
+      }
+    },
+    {
+      "serial": 20,
+      "motionAt": 5671.4,
+      "startedAt": 5683.099999999977,
+      "snapshotSeq": "48",
+      "pose": {
+        "position": {
+          "x": 950,
+          "y": 650
+        },
+        "distance": 0,
+        "facing": "S",
+        "moving": false
+      }
+    },
+    {
+      "serial": 21,
+      "motionAt": 5738,
+      "startedAt": 5744.5,
+      "snapshotSeq": "51",
+      "pose": {
+        "position": {
+          "x": 950,
+          "y": 650
+        },
+        "distance": 0,
+        "facing": "E",
+        "moving": true
+      }
+    },
+    {
+      "serial": 22,
+      "motionAt": 5754.6,
+      "startedAt": 5769.400000000023,
+      "snapshotSeq": "51",
+      "pose": {
+        "position": {
+          "x": 952.3333333333334,
+          "y": 650
+        },
+        "distance": 2.333333333333401,
+        "facing": "E",
+        "moving": true
+      }
+    },
+    {
+      "serial": 23,
+      "motionAt": 5771.3,
+      "startedAt": 5777.699999999953,
+      "snapshotSeq": "51",
+      "pose": {
+        "position": {
+          "x": 955.425925925926,
+          "y": 650
+        },
+        "distance": 5.42592592592596,
+        "facing": "E",
+        "moving": true
+      }
+    },
+    {
+      "serial": 24,
+      "motionAt": 5788,
+      "startedAt": 5797.5,
+      "snapshotSeq": "51",
+      "pose": {
+        "position": {
+          "x": 958.5185185185185,
+          "y": 650
+        },
+        "distance": 8.518518518518517,
+        "facing": "E",
+        "moving": true
+      }
+    },
+    {
+      "serial": 25,
+      "motionAt": 5804.6,
+      "startedAt": 5821.099999999977,
+      "snapshotSeq": "51",
+      "pose": {
+        "position": {
+          "x": 961.5925925925926,
+          "y": 650
+        },
+        "distance": 11.592592592592661,
+        "facing": "E",
+        "moving": true
+      }
+    },
+    {
+      "serial": 26,
+      "motionAt": 5838,
+      "startedAt": 5844.800000000047,
+      "snapshotSeq": "51",
+      "pose": {
+        "position": {
+          "x": 965,
+          "y": 650
+        },
+        "distance": 15,
+        "facing": "E",
+        "moving": true
+      }
+    },
+    {
+      "serial": 27,
+      "motionAt": 5887.9,
+      "startedAt": 5898.699999999953,
+      "snapshotSeq": "56",
+      "pose": {
+        "position": {
+          "x": 965,
+          "y": 650
+        },
+        "distance": 15,
+        "facing": "E",
+        "moving": true
+      }
+    },
+    {
+      "serial": 28,
+      "motionAt": 5904.7,
+      "startedAt": 5907.599999999977,
+      "snapshotSeq": "56",
+      "pose": {
+        "position": {
+          "x": 966.8095238095322,
+          "y": 650
+        },
+        "distance": 16.8095238095322,
+        "facing": "E",
+        "moving": true
+      }
+    },
+    {
+      "serial": 29,
+      "motionAt": 5921.3,
+      "startedAt": 5933.400000000023,
+      "snapshotSeq": "56",
+      "pose": {
+        "position": {
+          "x": 969.8133333333418,
+          "y": 650
+        },
+        "distance": 19.81333333334179,
+        "facing": "E",
+        "moving": true
+      }
+    },
+    {
+      "serial": 30,
+      "motionAt": 5937.9,
+      "startedAt": 5954.900000000023,
+      "snapshotSeq": "56",
+      "pose": {
+        "position": {
+          "x": 972.8171428571512,
+          "y": 650
+        },
+        "distance": 22.817142857151218,
+        "facing": "E",
+        "moving": true
+      }
+    },
+    {
+      "serial": 31,
+      "motionAt": 5971.3,
+      "startedAt": 5991.699999999953,
+      "snapshotSeq": "59",
+      "pose": {
+        "position": {
+          "x": 981.0685714285798,
+          "y": 650
+        },
+        "distance": 31.068571428579855,
+        "facing": "E",
+        "moving": true
+      }
+    },
+    {
+      "serial": 32,
+      "motionAt": 5988,
+      "startedAt": 6002.199999999953,
+      "snapshotSeq": "59",
+      "pose": {
+        "position": {
+          "x": 981.7965862708804,
+          "y": 650
+        },
+        "distance": 31.79658627088038,
+        "facing": "E",
+        "moving": true
+      }
+    },
+    {
+      "serial": 33,
+      "motionAt": 6021.3,
+      "startedAt": 6023,
+      "snapshotSeq": "59",
+      "pose": {
+        "position": {
+          "x": 987.1838961039043,
+          "y": 650
+        },
+        "distance": 37.18389610390429,
+        "facing": "E",
+        "moving": true
+      }
+    },
+    {
+      "serial": 34,
+      "motionAt": 6038,
+      "startedAt": 6054.800000000047,
+      "snapshotSeq": "59",
+      "pose": {
+        "position": {
+          "x": 989.8856400742195,
+          "y": 650
+        },
+        "distance": 39.88564007421954,
+        "facing": "E",
+        "moving": true
+      }
+    },
+    {
+      "serial": 35,
+      "motionAt": 6071.3,
+      "startedAt": 6088.199999999953,
+      "snapshotSeq": "64",
+      "pose": {
+        "position": {
+          "x": 997.2143228200523,
+          "y": 650
+        },
+        "distance": 47.21432282005235,
+        "facing": "E",
+        "moving": true
+      }
+    },
+    {
+      "serial": 36,
+      "motionAt": 6088,
+      "startedAt": 6104.199999999953,
+      "snapshotSeq": "64",
+      "pose": {
+        "position": {
+          "x": 998.029335626329,
+          "y": 650
+        },
+        "distance": 48.029335626329136,
+        "facing": "E",
+        "moving": true
+      }
+    },
+    {
+      "serial": 37,
+      "motionAt": 6121.3,
+      "startedAt": 6127.900000000023,
+      "snapshotSeq": "64",
+      "pose": {
+        "position": {
+          "x": 1003.8037880623474,
+          "y": 650
+        },
+        "distance": 53.8037880623474,
+        "facing": "E",
+        "moving": true
+      }
+    },
+    {
+      "serial": 38,
+      "motionAt": 6138,
+      "startedAt": 6153.199999999953,
+      "snapshotSeq": "64",
+      "pose": {
+        "position": {
+          "x": 1006.6996846293595,
+          "y": 650
+        },
+        "distance": 56.69968462935952,
+        "facing": "E",
+        "moving": true
+      }
+    },
+    {
+      "serial": 39,
+      "motionAt": 6171.3,
+      "startedAt": 6174.5,
+      "snapshotSeq": "64",
+      "pose": {
+        "position": {
+          "x": 1012.4741370653777,
+          "y": 650
+        },
+        "distance": 62.47413706537778,
+        "facing": "E",
+        "moving": true
+      }
+    },
+    {
+      "serial": 40,
+      "motionAt": 6187.9,
+      "startedAt": 6205.699999999953,
+      "snapshotSeq": "67",
+      "pose": {
+        "position": {
+          "x": 1017.7977313532383,
+          "y": 650
+        },
+        "distance": 67.7977313532384,
+        "facing": "E",
+        "moving": true
+      }
+    },
+    {
+      "serial": 41,
+      "motionAt": 6221.3,
+      "startedAt": 6225.199999999953,
+      "snapshotSeq": "67",
+      "pose": {
+        "position": {
+          "x": 1021.1854245536497,
+          "y": 650
+        },
+        "distance": 71.1854245536498,
+        "facing": "E",
+        "moving": true
+      }
+    },
+    {
+      "serial": 42,
+      "motionAt": 6238,
+      "startedAt": 6254.5,
+      "snapshotSeq": "69",
+      "pose": {
+        "position": {
+          "x": 1025.275230334453,
+          "y": 650
+        },
+        "distance": 75.27523033445318,
+        "facing": "E",
+        "moving": true
+      }
+    },
+    {
+      "serial": 43,
+      "motionAt": 6271.3,
+      "startedAt": 6278.400000000023,
+      "snapshotSeq": "69",
+      "pose": {
+        "position": {
+          "x": 1029.9872314056222,
+          "y": 650
+        },
+        "distance": 79.98723140562231,
+        "facing": "E",
+        "moving": true
+      }
+    },
+    {
+      "serial": 44,
+      "motionAt": 6304.7,
+      "startedAt": 6309.900000000023,
+      "snapshotSeq": "69",
+      "pose": {
+        "position": {
+          "x": 1035.8816447305999,
+          "y": 650
+        },
+        "distance": 85.88164473060017,
+        "facing": "E",
+        "moving": true
+      }
+    },
+    {
+      "serial": 45,
+      "motionAt": 6337.9,
+      "startedAt": 6349.699999999953,
+      "snapshotSeq": "72",
+      "pose": {
+        "position": {
+          "x": 1042.1113689932263,
+          "y": 650
+        },
+        "distance": 92.11136899322656,
+        "facing": "E",
+        "moving": true
+      }
+    },
+    {
+      "serial": 46,
+      "motionAt": 6371.3,
+      "startedAt": 6373.800000000047,
+      "snapshotSeq": "72",
+      "pose": {
+        "position": {
+          "x": 1047.1253730360436,
+          "y": 650
+        },
+        "distance": 97.12537303604378,
+        "facing": "E",
+        "moving": true
+      }
+    },
+    {
+      "serial": 47,
+      "motionAt": 6388,
+      "startedAt": 6421.800000000047,
+      "snapshotSeq": "75",
+      "pose": {
+        "position": {
+          "x": 1054.1898324062784,
+          "y": 650
+        },
+        "distance": 104.18983240627875,
+        "facing": "E",
+        "moving": true
+      }
+    }
+  ],
+  "failure": {
+    "delta": 7.064459370234772,
+    "dt": 16.699999999999818,
+    "limit": 7.005999999999967
+  }
+}

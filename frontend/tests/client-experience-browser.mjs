@@ -30,10 +30,13 @@ async function startCapture(){await page.evaluate(async()=>{
   const probe=document.createElement('canvas');probe.width=32;probe.height=20;const context=probe.getContext('2d',{willReadFrequently:true});
   const capture=window.uxCapture={running:true,phase:'ready',phaseAt:performance.now(),frames:[],paints:[],updates:[],errors:[]};
   // 测试专用只读包装：原 this/参数/返回值不变，分别保留插值时钟、实际绘制时刻与采样 rAF。
+  const originalRAF=window.requestAnimationFrame;let callbackRAFAt=null;
+  function observedRAF(callback){return originalRAF.call(window,function(rafAt){const prior=callbackRAFAt;callbackRAFAt=rafAt;try{return callback.call(this,rafAt);}finally{callbackRAFAt=prior;}});}
+  window.requestAnimationFrame=observedRAF;
   const originalPaint=SpatialCanvas.prototype.paint,rendererIds=new WeakMap();let nextRendererId=0;
   function observedPaint(...args){
     const startedAt=performance.now(),frame=originalPaint.apply(this,args),finishedAt=performance.now();
-    if(capture.running&&frame){const snapshot=args[0],p=snapshot.projection;if(!rendererIds.has(this))rendererIds.set(this,++nextRendererId);capture.paints.push({phase:capture.phase,rendererId:rendererIds.get(this),serial:frame.serial,instance:frame.instance,sceneId:frame.sceneId,viewId:snapshot.viewId,controlEpoch:p.self.controlEpoch,appearanceEpoch:p.self.appearanceEpoch,motionAt:args[2],startedAt,finishedAt,snapshotSeq:snapshot.snapshotSeq,sceneTimeMs:p.sceneTimeMs,self:frame.actors.find(actor=>actor.ref===p.self.entityRef)});}
+    if(capture.running&&frame){const snapshot=args[0],p=snapshot.projection;if(!rendererIds.has(this))rendererIds.set(this,++nextRendererId);capture.paints.push({phase:capture.phase,rendererId:rendererIds.get(this),serial:frame.serial,instance:frame.instance,sceneId:frame.sceneId,viewId:snapshot.viewId,controlEpoch:p.self.controlEpoch,appearanceEpoch:p.self.appearanceEpoch,rafAt:callbackRAFAt,motionAt:args[2],startedAt,finishedAt,snapshotSeq:snapshot.snapshotSeq,sceneTimeMs:p.sceneTimeMs,self:frame.actors.find(actor=>actor.ref===p.self.entityRef)});}
     return frame;
   }
   SpatialCanvas.prototype.paint=observedPaint;
@@ -44,7 +47,7 @@ async function startCapture(){await page.evaluate(async()=>{
     const result=originalUpdate.apply(this,args);input.finishedAt=performance.now();if(capture.running)capture.updates.push(input);return result;
   }
   ConfirmedMotion.prototype.update=observedUpdate;
-  capture.restore=()=>{if(SpatialCanvas.prototype.paint===observedPaint)SpatialCanvas.prototype.paint=originalPaint;if(ConfirmedMotion.prototype.update===observedUpdate)ConfirmedMotion.prototype.update=originalUpdate;};
+  capture.restore=()=>{if(window.requestAnimationFrame===observedRAF)window.requestAnimationFrame=originalRAF;if(SpatialCanvas.prototype.paint===observedPaint)SpatialCanvas.prototype.paint=originalPaint;if(ConfirmedMotion.prototype.update===observedUpdate)ConfirmedMotion.prototype.update=originalUpdate;};
   const take=now=>{if(!capture.running)return;try{const frame=readCanvasFrame(canvas),s=window.uxSpatial.spatialState.value.snapshot;if(frame&&s){context.clearRect(0,0,32,20);context.drawImage(canvas,0,0,32,20);const rgba=context.getImageData(0,0,32,20).data,colors=new Set();let opaque=0;for(let i=0;i<rgba.length;i+=4){if(rgba[i+3])opaque++;colors.add([rgba[i],rgba[i+1],rgba[i+2],rgba[i+3]].join(','));}const self=frame.actors.find(actor=>actor.ref===s.projection.self.entityRef),paint=capture.paints.at(-1);capture.frames.push({at:now,readAt:performance.now(),phase:capture.phase,phaseElapsed:now-capture.phaseAt,serial:frame.serial,instance:frame.instance,sceneId:frame.sceneId,snapshotSeq:s.snapshotSeq,sceneTimeMs:s.projection.sceneTimeMs,paint:paint?.serial===frame.serial&&paint.instance===frame.instance?{motionAt:paint.motionAt,startedAt:paint.startedAt,finishedAt:paint.finishedAt,snapshotSeq:paint.snapshotSeq,sceneTimeMs:paint.sceneTimeMs}:null,fit:frame.fit,view:frame.view,viewport:frame.viewport,refs:[...frame.actors.map(actor=>actor.ref),...frame.objects.map(object=>object.ref)].sort(),self,opaque,colors:colors.size});}}catch(error){capture.errors.push(error.message);}requestAnimationFrame(take);};requestAnimationFrame(take);
 });}
 async function stopCapture(){return page.evaluate(()=>{const capture=window.uxCapture;capture.running=false;capture.restore();return {frames:capture.frames,paints:capture.paints,updates:capture.updates,errors:capture.errors};});}
