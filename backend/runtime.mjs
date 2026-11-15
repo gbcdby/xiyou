@@ -22,6 +22,7 @@ import * as scenePolicy from './scene-policy.mjs';
 import { encodeJsonbText, decodeJsonbText } from './jsonb-text.mjs';
 import { spatialDirectionConfig, checkDirectionCapability, directionCapability } from './spatial-direction-config.mjs';
 import { createSpatialSupply } from './spatial-supply.mjs';
+import { PrefixStateCache } from './prefix-state-cache.mjs';
 
 const digest = value => createHash('sha256').update(typeof value === 'string' ? value : canonicalize(value)).digest('hex');
 const id = prefix => `${prefix}-${randomUUID()}`;
@@ -46,8 +47,10 @@ export class AuthorityRuntime extends EventEmitter {
   #internals = new WeakMap();
   #views = new Map();
   #publishing = false;
+  #prefixStates;
   constructor({ pool, now = Date.now, hooks = {}, spatialDirection = false }) {
     super(); this.pool = pool; this.now = now; this.hooks = hooks;
+    this.#prefixStates = new PrefixStateCache(pool);
     this.spatialDirection = spatialDirectionConfig(spatialDirection);
     this.spatialSupply = createSpatialSupply(this);
   }
@@ -79,6 +82,7 @@ export class AuthorityRuntime extends EventEmitter {
     if (notify && wasActive) this.emit('view-revoked', { connectionId, sessionId: view.sessionId });
   }
   async close() {
+    this.#prefixStates.close();
     for (const view of this.#views.values()) this.retireView(view);
     this.#handles.clear(); this.removeAllListeners();
   }
@@ -152,6 +156,8 @@ export class AuthorityRuntime extends EventEmitter {
       const row = (await client.query('SELECT * FROM sessions WHERE session_id=$1 FOR UPDATE', [sessionId])).rows[0];
       if (!row) throw new RuntimeError('SESSION_GONE', '本局不可访问。');
       tx = this.buildTransaction(client, row, command.cause);
+      // create 的 INSERT RETURNING 同样会 buildTransaction；只有此锁定持久行授予缓存资格。
+      this.#prefixStates.capture(tx, this.pool);
       result = await operation(tx);
       if (result instanceof RuntimeError) { deferredError = result; result = null; }
       await this.persist(tx);
@@ -453,10 +459,15 @@ export class AuthorityRuntime extends EventEmitter {
   }
   async stateAt(tx, throughSeq) {
     if (throughSeq === tx.state.sessionSeq) return tx.state;
-    const events = (await tx.client.query('SELECT event,event_text_encoding FROM world_events WHERE session_id=$1 AND session_seq<=$2 ORDER BY session_seq', [tx.row.session_id, throughSeq])).rows;
-    let state = tx.row.initial_state;
+    const read = this.#prefixStates.begin(tx, throughSeq, this.pool);
+    if (read?.sequence === throughSeq) return read.state;
+    const events = read?.sequence !== null && read?.sequence !== undefined
+      ? (await tx.client.query('SELECT event,event_text_encoding FROM world_events WHERE session_id=$1 AND session_seq>$2 AND session_seq<=$3 ORDER BY session_seq', [tx.row.session_id, read.sequence, throughSeq])).rows
+      : (await tx.client.query('SELECT event,event_text_encoding FROM world_events WHERE session_id=$1 AND session_seq<=$2 ORDER BY session_seq', [tx.row.session_id, throughSeq])).rows;
+    let state = read?.state ?? tx.row.initial_state;
     for (const { event, event_text_encoding } of events) state = reduceWorld(state, decodeJsonbText(event, event_text_encoding), tx.content);
     if (state.sessionSeq !== throughSeq) throw new RuntimeError('RESYNC_REQUIRED', '所需事件前缀当前不可用。');
+    this.#prefixStates.complete(read, tx, state, this.pool);
     return state;
   }
   async sync(handle, raw, internal = {}) {
@@ -816,6 +827,7 @@ export class AuthorityRuntime extends EventEmitter {
       await this.deadline(tx);
       if (!terminal(tx.row.state)) return new RuntimeError('FORBIDDEN', '只有已经结束的 Session 可以删除。');
       await tx.client.query('DELETE FROM sessions WHERE session_id=$1', [sessionId]);
+      tx.afterCommit.push(() => this.#prefixStates.clearSession(sessionId));
     });
     for (const view of this.#views.values()) if (view.sessionId === sessionId) this.retireView(view, true);
     return result;

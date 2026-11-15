@@ -118,7 +118,14 @@ function retry() { if (props.snapshotSource && renderingError.value) bindSnapsho
 function motionPreference() { presentation?.invalidate(); reducedMotion = Boolean(reduced?.matches); schedule(); }
 /** 旧页面调用仍可恢复键盘焦点；固定视角不再因此改变取景。 */
 function returnToSelf() { canvas.value?.focus({ preventScroll: true }); schedule(); }
-defineExpose({ returnToSelf });
+/** 出口明确操作只恢复页面中的场景可见范围；到达仍由正常paint守卫确认。 */
+function revealScene() {
+  const element = canvas.value;
+  if (!element?.isConnected) return;
+  element.scrollIntoView({ behavior: 'instant', block: 'center', inline: 'nearest' });
+  schedule();
+}
+defineExpose({ returnToSelf, revealScene });
 
 watch(() => props.snapshot, snapshot => {
   if (!props.snapshotSource) receiveSnapshot(snapshot);

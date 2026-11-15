@@ -53,6 +53,13 @@ export async function openObjects(page) {
 /** 读取当前授权对象以找到玩家可见的文字入口；不解析真实角色ID或跨观察者引用。 */
 export async function selectObject(page, reference) {
   await closeReading(page);
+  // 窄屏详情可能遮住场景入口；先通过原可见关闭控件返回场景，不穿透面板点击。
+  const close = page.getByRole('button', { name: '关闭对象区', exact: true });
+  if (await close.isVisible()) {
+    const observed = beginSelectionClick(page, { reference, branch: 'close-objects' });
+    try { await close.click(); endSelectionClick(observed, 'returned'); }
+    catch (error) { endSelectionClick(observed, 'threw', error); throw error; }
+  }
   await openObjects(page);
   const p = await page.evaluate(async()=>{const s=(await import('/src/state/spatial-store.ts')).spatialState.value.snapshot;return (await import('/src/domain/spatial-display.ts')).sceneDisplayProjection(s.projection);});
   const target = [...p.targets, ...p.items, ...p.entities].find(entity => entity.entityRef === reference);
