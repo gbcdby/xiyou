@@ -47,15 +47,106 @@ const trailLength = (points: Position[]) => points.slice(1).reduce((sum, point, 
 const directionOf = (from: Position, through: Position): Facing => (['E', 'SE', 'S', 'SW', 'W', 'NW', 'N', 'NE'] as Facing[])[(Math.round(Math.atan2(through.y - from.y, through.x - from.x) / (Math.PI / 4)) + 8) % 8];
 interface Motion { position: Position; trail: Position[] | null; startedAt: number; duration: number; distanceBefore: number; facing: Facing; continuing: boolean }
 export interface DrawnPose { position: Position; facing: Facing; moving: boolean; distance: number }
+export interface MotionPresentation extends DrawnPose {
+  identity: string; reference: string; renderer: string; serial: number; sampledAt: number; presentedAt: number;
+}
+/** 标识来自已接受的完整本人绑定，不以坐标或最新计划代替身份。 */
+export function motionPresentationIdentity(snapshot: SnapshotV2): string {
+  const p = snapshot.projection, self = p.self;
+  return JSON.stringify([snapshot.sessionId, snapshot.viewId, self.entityRef, self.controlEpoch, p.mapVersion, self.sceneId, self.appearanceEpoch, self.appearanceId]);
+}
+interface TimedPiece { kind: 'motion' | 'hold' | 'legacy'; trail: Position[]; duration: number }
+interface TimedSegment extends TimedPiece { startedAt: number; before: DrawnPose }
+interface TimedMotion { base: DrawnPose; segments: TimedSegment[] }
+
+function piecePose(piece: TimedSegment, now: number): DrawnPose {
+  const fraction = Math.max(0, Math.min(1, (now - piece.startedAt) / piece.duration));
+  const total = trailLength(piece.trail); let remaining = total * fraction, facing = piece.before.facing;
+  for (let i = 1; i < piece.trail.length; i++) {
+    const size = length(piece.trail[i - 1], piece.trail[i]);
+    if (size > 0) facing = directionOf(piece.trail[i - 1], piece.trail[i]);
+    if (remaining <= size && size > 0) break;
+    remaining -= size;
+  }
+  return { position: sampleTrail(piece.trail, fraction), facing, moving: piece.kind !== 'hold' && total > 0 && fraction < 1,
+    distance: piece.before.distance + total * fraction };
+}
+function timedPose(value: TimedMotion, now: number): DrawnPose {
+  let pose = value.base;
+  for (const piece of value.segments) {
+    if (now < piece.startedAt) return { ...pose, moving: false };
+    pose = piecePose(piece, now);
+    if (now < piece.startedAt + piece.duration) return pose;
+  }
+  return { ...pose, moving: false };
+}
+function appendTimed(value: TimedMotion, pieces: TimedPiece[], now: number) {
+  while (value.segments[0] && now >= value.segments[0].startedAt + value.segments[0].duration) {
+    const completed = value.segments.shift()!; value.base = piecePose(completed, completed.startedAt + completed.duration);
+  }
+  let last = value.segments.at(-1), at = Math.max(now, last ? last.startedAt + last.duration : now);
+  let before = last ? piecePose(last, at) : value.base;
+  for (const piece of pieces) {
+    if (piece.duration <= 0) continue;
+    last = { ...piece, trail: piece.trail.map(point => ({ ...point })), startedAt: at, before };
+    value.segments.push(last); at += piece.duration; before = piecePose(last, at);
+  }
+}
+function remainingTrail(points: Position[], travelled: number, position: Position): Position[] {
+  const remaining = [{ ...position }]; let distance = 0;
+  for (let i = 1; i < points.length; i++) { distance += length(points[i - 1], points[i]); if (distance > travelled) remaining.push(points[i]); }
+  return remaining;
+}
 
 /** 绘制缓存只播放已发生且已授权的轨迹，永远不回写权威投影。 */
 export class ConfirmedMotion {
   #previous: SnapshotV2 | null = null; #motions = new Map<string, Motion>();
+  #timed = new Map<string, TimedMotion>();
+  #presented: MotionPresentation | null = null;
+  #lastPresentation: { renderer: string; serial: number } | null = null;
+  #credit: { identity: string; renderer: string; position: Position; through: number; remaining: number } | null = null;
+  get presentationCreditMs(): number { return this.#credit?.remaining ?? 0; }
+  /** 只有画布owner在成功可见提交后调用；姿态查询与状态应用均不能开启账本。 */
+  presentSelf(proof: MotionPresentation): boolean {
+    const snapshot = this.#previous;
+    if (this.#presented) this.invalidatePresentation();
+    if (!snapshot || proof.identity !== motionPresentationIdentity(snapshot) || proof.reference !== snapshot.projection.self.entityRef
+      || !Number.isFinite(proof.sampledAt) || !Number.isFinite(proof.presentedAt) || proof.presentedAt < proof.sampledAt
+      || !Number.isSafeInteger(proof.serial) || proof.serial <= 0) return false;
+    if (this.#lastPresentation?.renderer === proof.renderer && proof.serial <= this.#lastPresentation.serial) return false;
+    if (this.#lastPresentation?.renderer !== proof.renderer) this.#credit = null;
+    this.#lastPresentation = { renderer: proof.renderer, serial: proof.serial };
+    const pose = this.pose(proof.reference, proof.sampledAt);
+    if (!pose || !same(pose.position, proof.position) || pose.distance !== proof.distance || pose.moving || proof.moving
+      || !this.settled(proof.reference, proof.sampledAt) || ['accepted', 'moving'].includes(snapshot.projection.movement?.status ?? '')) return false;
+    if (this.#credit && (this.#credit.identity !== proof.identity || !same(this.#credit.position, proof.position))) this.#credit = null;
+    if (this.#credit && proof.presentedAt < this.#credit.through) return false;
+    this.#presented = { ...proof, position: { ...proof.position } }; return true;
+  }
+  /** 在下一次画布写入或状态应用前封口；只结算此前真正成功绘出的静止区间。 */
+  sealPresentation(at: number) {
+    const proof = this.#presented; this.#presented = null;
+    if (!proof) return;
+    if (!Number.isFinite(at) || at < proof.presentedAt || !this.#previous || proof.identity !== motionPresentationIdentity(this.#previous)) { this.invalidatePresentation(); return; }
+    const old = this.#credit;
+    const compatible = old?.identity === proof.identity && old.renderer === proof.renderer && same(old.position, proof.position);
+    const from = Math.max(proof.presentedAt, compatible ? old.through : proof.presentedAt);
+    this.#credit = { identity: proof.identity, renderer: proof.renderer, position: { ...proof.position }, through: Math.max(from, at),
+      remaining: (compatible ? old.remaining : 0) + Math.max(0, at - from) };
+  }
+  /** 失去可见性或可靠绑定后，旧像素与未用信用都不能跨中断恢复。 */
+  invalidatePresentation() { this.#presented = null; this.#credit = null; }
+  /** 订阅reset或显示owner失败后，只能以新的当前快照重新建立基线。 */
+  reset() { this.#previous = null; this.#motions.clear(); this.#timed.clear(); this.invalidatePresentation(); }
   update(snapshot: SnapshotV2, now: number) {
+    // 缺少owner封口是证据缺口，不能由本次update倒推可见起点。
+    if (this.#presented) this.invalidatePresentation();
     const previous = this.#previous;
     const continuous = previous?.viewId === snapshot.viewId && previous.projection.self.controlEpoch === snapshot.projection.self.controlEpoch
-      && previous.projection.mapVersion === snapshot.projection.mapVersion && previous.projection.self.entityRef === snapshot.projection.self.entityRef;
-    if (!continuous) this.#motions.clear();
+      && previous.projection.mapVersion === snapshot.projection.mapVersion && previous.projection.self.entityRef === snapshot.projection.self.entityRef
+      && previous.projection.self.sceneId === snapshot.projection.self.sceneId && previous.projection.self.appearanceEpoch === snapshot.projection.self.appearanceEpoch
+      && previous.projection.self.appearanceId === snapshot.projection.self.appearanceId;
+    if (!continuous) { this.#motions.clear(); this.#timed.clear(); this.invalidatePresentation(); }
     const p = sceneDisplayProjection(snapshot.projection), before = previous ? sceneDisplayProjection(previous.projection) : null;
     const seen = new Set<string>();
     const people: EntityViewV2[] = [{ ...p.entities.find(e => e.entityRef === p.self.entityRef), ...p.self }, ...p.entities.filter(e => e.entityRef !== p.self.entityRef)];
@@ -67,6 +158,46 @@ export class ConfirmedMotion {
       const old = this.#motions.get(person.entityRef); let trail: Position[] | null = null; let duration = 0; let distanceBefore = 0;
       const continuing = !p.paused && (isSelf ? ['accepted', 'moving'].includes(p.movement?.status ?? '') : p.sceneOverview?.entities.find(e => e.entityRef === person.entityRef)?.moving === true);
       if (prior?.position && prior.sceneId === person.sceneId && prior.appearanceEpoch === person.appearanceEpoch) {
+        const timed = this.#timed.get(person.entityRef);
+        if (isSelf && (person.motionTimeline || timed)) {
+          const hasTrail = person.motionTrail && person.motionFromSceneTimeMs === before!.sceneTimeMs && person.motionThroughSceneTimeMs !== undefined
+            && same(person.motionTrail[0], prior.position) && same(person.motionTrail.at(-1)!, person.position);
+          const repeated = snapshot.snapshotSeq === previous!.snapshotSeq && p.sceneTimeMs === before!.sceneTimeMs;
+          const alreadyCovered = same(prior.position, person.position) && person.motionThroughSceneTimeMs !== undefined && person.motionThroughSceneTimeMs <= before!.sceneTimeMs;
+          if (repeated || alreadyCovered || !person.motionTimeline && !hasTrail && same(prior.position, person.position)) {
+            if (timed) { appendTimed(timed, [], now); continue; }
+            if (old) { this.#motions.set(person.entityRef, { ...old, continuing }); continue; }
+          } else if (hasTrail) {
+            const queueWasEmpty = this.settled(person.entityRef, now);
+            const beforePose = timedPoseOrLegacy(this, person.entityRef, now, prior.position, person.facing);
+            const queue = timed ?? { base: { ...beforePose, moving: false }, segments: [] };
+            if (!timed && old?.trail && now < old.startedAt + old.duration) {
+              const travelled = trailLength(old.trail) * Math.max(0, Math.min(1, (now - old.startedAt) / old.duration));
+              appendTimed(queue, [{ kind: 'legacy', trail: remainingTrail(old.trail, travelled, beforePose.position), duration: old.startedAt + old.duration - now }], now);
+            }
+            const pieces: TimedPiece[] = person.motionTimeline
+              ? person.motionTimeline.map(span => ({ kind: span.kind, trail: person.motionTrail!.slice(span.fromTrailIndex, span.throughTrailIndex + 1), duration: span.throughSceneTimeMs - span.fromSceneTimeMs }))
+              : [{ kind: 'legacy', trail: person.motionTrail!, duration: person.motionThroughSceneTimeMs! - person.motionFromSceneTimeMs! }];
+            const credit = this.#credit;
+            if (person.motionTimeline && queueWasEmpty && credit?.identity === motionPresentationIdentity(snapshot) && same(credit.position, beforePose.position)) {
+              for (const piece of pieces) {
+                if (piece.kind !== 'hold' || piece.duration <= 0) break;
+                const consumed = Math.min(piece.duration, credit.remaining); piece.duration -= consumed; credit.remaining -= consumed;
+                if (piece.duration > 0) break;
+              }
+            }
+            // 正常待播段占用自己的时间；一旦将走过运动，旧点的剩余信用不能抵后方hold。
+            if (pieces.some(piece => piece.kind !== 'hold')) this.#credit = null;
+            appendTimed(queue, pieces, now); this.#timed.set(person.entityRef, queue); this.#motions.delete(person.entityRef); continue;
+          }
+          // 无法证明覆盖连续时建立当前授权基线，不猜补中间路线。
+          const priorDistance = this.pose(person.entityRef, now)?.distance ?? 0;
+          this.#timed.delete(person.entityRef);
+          this.invalidatePresentation();
+          this.#motions.set(person.entityRef, { position: { ...person.position }, trail: null, duration: 0, startedAt: now,
+            distanceBefore: priorDistance, facing: person.facing, continuing: false });
+          continue;
+        }
         if (same(prior.position, person.position) && old && (isSelf || person.motionTrail)) { this.#motions.set(person.entityRef, { ...old, continuing }); continue; }
         if (person.motionTrail && person.motionFromSceneTimeMs !== undefined && person.motionThroughSceneTimeMs !== undefined && person.motionFromSceneTimeMs === before!.sceneTimeMs && person.motionTrail.length >= 2 && same(person.motionTrail[0], prior.position) && same(person.motionTrail.at(-1)!, person.position)) {
           trail = person.motionTrail; duration = person.motionThroughSceneTimeMs - person.motionFromSceneTimeMs;
@@ -94,9 +225,11 @@ export class ConfirmedMotion {
           }
         }
       }
+      if (isSelf && (!prior?.position || !same(prior.position, person.position))) this.invalidatePresentation();
       this.#motions.set(person.entityRef, { position: { ...person.position }, trail: duration > 0 ? trail : null, startedAt: now, duration: Math.max(0, duration), distanceBefore, facing: person.facing, continuing });
     }
     for (const reference of this.#motions.keys()) if (!seen.has(reference)) this.#motions.delete(reference);
+    for (const reference of this.#timed.keys()) if (!seen.has(reference)) this.#timed.delete(reference);
     this.#previous = structuredClone(snapshot);
   }
   position(reference: string, now: number): Position | null {
@@ -104,6 +237,7 @@ export class ConfirmedMotion {
   }
   /** 位置、朝向和步态共用确认路径；墙钟只采样位置，不能使站立者原地走步。 */
   pose(reference: string, now: number): DrawnPose | null {
+    const timed = this.#timed.get(reference); if (timed) return timedPose(timed, now);
     const value = this.#motions.get(reference); if (!value) return null;
     if (!value.trail || value.duration <= 0) return { position: value.position, facing: value.facing, moving: false, distance: value.distanceBefore };
     const fraction = Math.max(0, Math.min(1, (now - value.startedAt) / value.duration));
@@ -116,6 +250,14 @@ export class ConfirmedMotion {
     }
     return { position: sampleTrail(value.trail, fraction), facing, moving: (fraction < 1 || value.continuing) && total > 0, distance: value.distanceBefore + total * fraction };
   }
-  settled(reference: string, now: number): boolean { const value = this.#motions.get(reference); return !value?.trail || now >= value.startedAt + value.duration; }
-  active(now: number): boolean { return [...this.#motions.values()].some(value => value.trail && now < value.startedAt + value.duration); }
+  settled(reference: string, now: number): boolean {
+    const timed = this.#timed.get(reference); if (timed) { const last = timed.segments.at(-1); return !last || now >= last.startedAt + last.duration; }
+    const value = this.#motions.get(reference); return !value?.trail || now >= value.startedAt + value.duration;
+  }
+  active(now: number): boolean { return [...this.#motions.values()].some(value => value.trail && now < value.startedAt + value.duration)
+    || [...this.#timed.values()].some(value => { const last = value.segments.at(-1); return last && now < last.startedAt + last.duration; }); }
+}
+
+function timedPoseOrLegacy(motion: ConfirmedMotion, reference: string, now: number, position: Position, facing: Facing): DrawnPose {
+  return motion.pose(reference, now) ?? { position: { ...position }, facing, moving: false, distance: 0 };
 }

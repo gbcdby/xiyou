@@ -42,6 +42,8 @@ npm run dev
 
 打开开发服务器显示的本机地址，以不同浏览器身份创建或加入房间，2–5 人即可开局。唐僧与悟空使用确定性受控 provider；所有行动仍经正式校验器。默认 `npm start` 只启动权威服务，双角色策略的行为与启动边界见[模拟策略说明](backend/ai/mock.md)。
 
+普通启动入口为方向行走显式选择 50 毫秒空间检查点，前端的开发与构建产物共用方向和分段显示能力协商。按键使用服务端受理时定位的方向短段；地图点选和出口路线仍使用绝对目标。旧服务端在首次握手明确拒绝新能力时只兼容回退一次，动作身份和原收据恢复保持不变。集成 API 的缺省配置见[服务端说明](backend/README.md#技术选择与启动)。
+
 ## 工作记录
 
 后续代码、任务与 PR 统一使用 [GitHub 仓库](https://github.com/gbcdby/xiyou)、[Issues](https://github.com/gbcdby/xiyou/issues) 和 [Pull requests](https://github.com/gbcdby/xiyou/pulls)。Spec 正文进入版本管理，任务状态与验收证据按[记录约定](docs/agents/issue-tracker.md)关联。

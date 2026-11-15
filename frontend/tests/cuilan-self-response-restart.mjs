@@ -111,7 +111,12 @@ export async function runPersonalRestartFault(output = resolve(process.env.CUILA
     report.stages.crash = 'PASS'; report.stages.recovery = 'RUNNING';
     const second = ownedWorker(); workers.push(second);
     await second.send({ phase: 'resume', connection: { ...database.connection, application_name: 'cuilan-restart-' + crypto.randomUUID() }, resume: prepared.resume });
-    report.recovery = (await second.message('recovered')).recovery;
+    const recovered = await second.message('recovered');
+    report.recovery = recovered.recovery;
+    report.spatialDirection = { prepare: prepared.evidence.spatialDirection, resume: recovered.spatialDirection,
+      transportScope: prepared.evidence.transportScope };
+    assert.deepEqual(report.spatialDirection.prepare, { checkpointMs: 50 });
+    assert.deepEqual(report.spatialDirection.resume, report.spatialDirection.prepare);
     assertSharedStopTransaction(report.afterKill.sample, report.recovery);
     report.stages.recovery = 'PASS'; report.stages.postRecovery = 'RUNNING';
     report.postRecovery = (await second.message('complete')).result;

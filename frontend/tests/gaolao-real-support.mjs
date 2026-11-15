@@ -218,7 +218,7 @@ export async function humanAction(page, action, report, player) {
   return waitHumanReceipt(page, previousIds, expectedAction, report, player, label);
 }
 
-export async function browserRoom({ server, browser, baseURL, count, contentVersion, profile = 'legacy-controlled-v1', report, observe = (target, event, listener) => target.on(event, listener) }) {
+export async function browserRoom({ server, browser, baseURL, count, contentVersion, profile = 'legacy-controlled-v1', report, beforeSession = async () => {}, observe = (target, event, listener) => target.on(event, listener) }) {
   assert.ok(['legacy-controlled-v1', 'production-cuilan-v1'].includes(profile), '未知高老庄浏览器 profile，不得静默降级为受控本人');
   const production = profile === 'production-cuilan-v1';
   assert.ok(!production || typeof contentVersion === 'string', '生产 profile 必须显式固定内容版本，不得沿用旧回归默认值');
@@ -238,6 +238,8 @@ export async function browserRoom({ server, browser, baseURL, count, contentVers
       } catch (error) { report.pageErrors.push({ count, player: index, message: '复盘响应无法验证：' + error.message }); }
     });
     await page.goto(baseURL); await page.getByLabel('你的称呼', { exact: true }).fill(`章节${count}人旅伴${index + 1}`); await page.getByRole('button', { name: '以此名同行' }).click();
+    // 测试观察器在真实页面已登录、尚未挂载 SpatialMap 时安装；原调用缺省无副作用。
+    await beforeSession(page, index);
     if (index === 0) {
       // 内容变体须由 VITE_GAOLAO_CONTENT_VERSION 选择，页面只有真实的高老庄入口。
       await page.getByLabel('选择行程', { exact: true }).selectOption('gaolao');

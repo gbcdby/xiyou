@@ -37,7 +37,7 @@ const all = {
   SpatialProposedIntentV2: object({ schemaVersion: lit(2), decisionId: ref('Id'), toolCalls: { ...array(ref('SpatialModelActionV2'), 1), minItems: 1 } }),
   SpatialModelToolV2: object(toolProperties, Object.keys(toolProperties).filter(key => !['kind', 'description'].includes(key))),
   SpatialModelSelfV2: omit(spatialSchema.$defs.SelfViewV2, ['controlEpoch', 'canControl', 'movementCommandHighWater']),
-  SpatialModelEntityV2: omit(spatialSchema.$defs.EntityViewV2, ['motionTrail', 'motionFromSceneTimeMs', 'motionThroughSceneTimeMs']),
+  SpatialModelEntityV2: omit(spatialSchema.$defs.EntityViewV2, ['motionTrail', 'motionFromSceneTimeMs', 'motionThroughSceneTimeMs', 'motionTimeline']),
   SpatialModelItemV2: omit(spatialSchema.$defs.ItemViewV2, ['reclaimHolderEpoch']),
   SpatialModelMovementV2: omit(spatialSchema.$defs.PlanViewV2, ['movementCommandSeq']),
   SpatialModelProjectionV2: projection,

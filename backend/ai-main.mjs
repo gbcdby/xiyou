@@ -5,8 +5,8 @@ import { attachSpatialAI } from './ai/spatial-runtime.mjs';
 import { configuredGateway } from './ai/provider-config.mjs';
 
 /** 默认服务不挑选供应商；此入口要求调用方明确提供并授权 Gateway 配置。 */
-export async function createAIServer({ pool, gateway, now, hooks, maxConcurrent, minIntervalMs, maxCallsPerSession, log = () => {} }) {
-  const server = await createAuthorityServer({ pool, now, hooks, log });
+export async function createAIServer({ pool, gateway, now, hooks, maxConcurrent, minIntervalMs, maxCallsPerSession, spatialDirection = false, log = () => {} }) {
+  const server = await createAuthorityServer({ pool, now, hooks, spatialDirection, log });
   let ai, closing;
   try { ai = await attachSpatialAI({ runtime: server.runtime, gateway, maxConcurrent, minIntervalMs, maxCallsPerSession, log }); }
   catch (error) { await server.close(); throw error; }
@@ -21,7 +21,7 @@ async function main() {
   let server, closing;
   const close = () => closing ??= (async () => { try { await server?.close(); } finally { await gateway.close(); await pool.end(); } })();
   try {
-    server = await createAIServer({ pool, gateway, ...scheduling, log: (message, fields) => console.log(message, fields ?? {}) });
+    server = await createAIServer({ pool, gateway, ...scheduling, spatialDirection: { checkpointMs: 50 }, log: (message, fields) => console.log(message, fields ?? {}) });
     const port = Number(process.env.PORT ?? 3000);
     if (!Number.isInteger(port) || port < 0 || port > 65535) throw new Error('PORT 必须为有效端口。');
     const address = await server.listen(port, process.env.HOST ?? '127.0.0.1');

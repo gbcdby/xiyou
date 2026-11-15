@@ -41,6 +41,8 @@ V2 公开 Receipt 没有摘要。`decisionReceipt` 是可信内部恢复入口�
 
 ## 明确供应商配置后启动
 
+`createAIServer` 的可选 `spatialDirection` 参数缺省 `false`，显式值原样传给权威服务。`ai-main.mjs` 命令入口选择 `{checkpointMs: 50}`，与普通服务的方向能力配置一致；原模型配置、预算和费用授权仍须分别满足。
+
 默认 `backend/main.mjs` 不选择供应商。需要模型时，调用方可注入明确的 Gateway 到 `createAIServer`，或为 `backend/ai-main.mjs` 设置 `XIYOU_AI_CONFIG`，同时提供既有 `DATABASE_URL`。配置文件必须完整声明：
 
 | 字段 | 要求 |

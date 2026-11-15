@@ -34,7 +34,8 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) process.once('message', 
     pool = new pg.Pool({ ...input.connection, max: 8 });
     if (input.phase === 'prepare') {
       stage = 'create-production-room';
-      server = await createAuthorityServer({ pool, now: () => clock.value });
+      server = await createAuthorityServer({ pool, now: () => clock.value, spatialDirection: { checkpointMs: 50 } });
+      assert.equal(server.runtime.spatialDirection?.checkpointMs, 50);
       room = await personalSceneRoom(server, clock);
       assert.deepEqual(room.bindings.map(row => row.key), ['tang', 'wukong', 'bajie']);
       await assert.rejects(room.send('cuilan', { kind: 'wait' }), /禁止控制/);
@@ -67,7 +68,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) process.once('message', 
       const actorId = current.members.find(row => row.userId === room.users[0].userId).characterId;
       const context = { actorId, itemId: item.itemId, acquisitionId: current.items[item.itemId].personalAcquisitionId, appearance: appearance.consentId, private_items: privateConsent.consentId };
       const before = sampleSharedPersonalEffects(current, context); assertBothActiveEffects(before);
-      await send({ type: 'prepared', evidence: { before, applyReceipt, originalTake, oldView, bindings: room.bindings, sceneStatus: room.sceneStatus() },
+      await send({ type: 'prepared', evidence: { before, applyReceipt, originalTake, oldView, bindings: room.bindings, sceneStatus: room.sceneStatus(), spatialDirection: server.runtime.spatialDirection, transportScope: 'legacy spatial-v2 客户端在已启用方向服务上的原 Receipt/进程恢复；不计方向或 Canvas 验收' },
         // 凭据只在此私有IPC定位旧账号；不含权威state，不进入结果文件。
         resume: { clockValue: clock.value, version: room.content.contentVersion, sessionId: room.sessionId, users: room.users, context, originalTake, oldView } });
       // 不执行close/断线；父进程只对自己fork的这个PID发SIGKILL。
@@ -81,12 +82,13 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) process.once('message', 
     const before = sampleSharedPersonalEffects(decodeJsonbText(row.state, row.state_text_encoding), resume.context); assertBothActiveEffects(before);
     const recoveryCommits = [];
     stage = 'real-authority-server-recovery';
-    server = await createAuthorityServer({ pool, now: () => clock.value, hooks: {
+    server = await createAuthorityServer({ pool, now: () => clock.value, spatialDirection: { checkpointMs: 50 }, hooks: {
       afterCommit({ command, sessionId, events }) {
         // 只记录生产恢复已经提交的事件；不阻塞、删改或添加事件。
         if (command === 'spatial-recovery' && sessionId === resume.sessionId) recoveryCommits.push(structuredClone(events));
       },
     } });
+    assert.equal(server.runtime.spatialDirection?.checkpointMs, 50);
     assert.equal(recoveryCommits.length, 1);
     const events = recoveryCommits[0], from = String(BigInt(events[0].sessionSeq) - 1n), through = events.at(-1).sessionSeq;
     const outbox = (await pool.query('SELECT from_exclusive::text,through_seq::text FROM outbox WHERE session_id=$1 AND from_exclusive=$2 AND through_seq=$3', [resume.sessionId, from, through])).rows;
@@ -95,7 +97,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) process.once('message', 
       after: sampleSharedPersonalEffects(await server.runtime.replay(resume.sessionId, through), resume.context) };
     assertSharedStopTransaction(before, recovery); assert.equal(recovery.after.paused, true);
     assert.equal(recovery.before.sessionSeq, from, '恢复输入必须接续宕机后持久水位');
-    await send({ type: 'recovered', recovery });
+    await send({ type: 'recovered', recovery, spatialDirection: server.runtime.spatialDirection });
 
     stage = 'reconnect-existing-accounts-and-c2';
     room = await personalSceneRoom(server, clock, resume.version, resume.users.length, { existing: { sessionId: resume.sessionId, users: resume.users } });

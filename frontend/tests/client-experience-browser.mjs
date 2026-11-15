@@ -10,11 +10,13 @@ import { createAuthorityServer } from '../../backend/server.mjs';
 import { repository, sourceIdentity, saveJSON, sha256, until, sleep } from './network-support.mjs';
 import { browserRoom, snapshot, clientState, openReading, closeReading, openObjects } from './gaolao-real-support.mjs';
 import { assertPaintContinuity, canvasFrame, canvasPixels } from './canvas-browser-support.mjs';
+import { validateSpatial } from '../../protocol/spatial.mjs';
+import { observeDirectionConnections, installPresentationObservation, assertPresentationEvidence, assertShortDirectionPlan } from './direction-browser-support.mjs';
 
 const output=resolve(process.env.FRONTEND_EVIDENCE_DIR||resolve(repository,'.agent-output/ci/browser-client-experience'));
 await mkdir(output,{recursive:true});
 const report={work_id:'GZ-UX-01',contentVersion:'gaolaozhuang-scene-v3',scope:'自然CI真实Chromium、生产Vue与scene-v3、独立两账号；人工操作由浏览器自动化执行，不是真人/真实provider/全角色美术验收',source:await sourceIdentity(),startedAt:new Date().toISOString(),checks:[],pageErrors:[],humanActions:[],npcActions:[],recapResponses:[],wireActions:[],httpAssets:[],screenshots:[],cleanup:[]};
-let database,server,vite,browser,room,page,video,fault=null;
+let database,server,vite,browser,room,page,video,directionConnections,fault=null;
 const check=(id,name,details={})=>{report.checks.push({id,name,status:'PASS',...details});console.log(JSON.stringify({id,name,status:'PASS'}));};
 const position=async()=>structuredClone((await snapshot(page)).projection.self.position);
 const actions=async()=> (await clientState(page)).actions;
@@ -61,14 +63,17 @@ async function currentMapPoint(destination){
 }
 try {
   assert.equal(report.source.status,'','浏览器证据必须对应干净冻结候选');
-  database=await startTestPostgres('client-experience',{outputSubdirectory:'ux-c-browser'});server=await createAuthorityServer({pool:database.pool});
+  database=await startTestPostgres('client-experience',{outputSubdirectory:'ux-c-browser'});server=await createAuthorityServer({pool:database.pool,spatialDirection:{checkpointMs:50}});
+  directionConnections=observeDirectionConnections(server.runtime);
   const submit=server.runtime.submit.bind(server.runtime);
   server.runtime.submit=async(handle,raw)=>{const request=JSON.parse(raw),receipt=await submit(handle,raw);report.wireActions.push({receivedAt:Date.now(),raw,receipt});if(fault&&!fault.request&&request.action.kind==='stop_move'){fault.request=request;fault.raw=raw;fault.receipt=receipt;return {schemaVersion:2,code:'OUTCOME_UNKNOWN',message:'受控传输故障：停步已提交，确认未送达。'};}return receipt;};
   const origin=`http://127.0.0.1:${(await server.listen(0)).port}`;
   vite=await createVite({root:resolve(repository,'frontend'),configFile:resolve(repository,'frontend/vite.config.mjs'),configLoader:'native',cacheDir:resolve(output,'vite-cache'),define:{'import.meta.env.VITE_GAOLAO_CONTENT_VERSION':JSON.stringify(report.contentVersion)},server:{host:'127.0.0.1',port:0,fs:{allow:[repository]},proxy:{'/api':{target:origin},'/socket.io':{target:origin,ws:true}}}});await vite.listen();
   browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH,args:process.env.CHROMIUM_ARGS?JSON.parse(process.env.CHROMIUM_ARGS):[]});report.environment={node:process.version,chromium:browser.version(),dpr:1};
   let index=0;const instrumented={async newContext(options){const owner=index++===0,context=await browser.newContext({...options,...(owner?{recordVideo:{dir:resolve(output,'video-work'),size:{width:1280,height:800}}}:{})});if(owner)context.on('page',p=>{video=p.video();p.on('request',request=>{const path=new URL(request.url()).pathname;if(path.startsWith('/assets/gaolaozhuang/'))report.httpAssets.push(path);});});return context;}};
-  room=await browserRoom({server,browser:instrumented,baseURL:`http://127.0.0.1:${vite.httpServer.address().port}`,count:2,contentVersion:report.contentVersion,profile:'production-cuilan-v1',report});page=room.pages[0];
+  room=await browserRoom({server,browser:instrumented,baseURL:`http://127.0.0.1:${vite.httpServer.address().port}`,count:2,contentVersion:report.contentVersion,profile:'production-cuilan-v1',report,beforeSession:async(page,index)=>{if(index===0)await installPresentationObservation(page);}});page=room.pages[0];
+  report.directionQualification=[];
+  for(let index=0;index<room.pages.length;index++)report.directionQualification.push(await directionConnections.qualify(room.pages[index],room.users[index].userId,'initial-'+index));
   await page.evaluate(async()=>{window.uxSpatial=await import('/src/state/spatial-store.ts');});
   const initial=await snapshot(page);assert.equal(initial.projection.contentVersion,report.contentVersion);assert.equal(initial.projection.reducerVersion,'gaolao-world-v2');assert.ok(initial.projection.sceneOverview);assert.equal(initial.projection.mapCatalog.length,2);
   await until(async()=>{const f=await canvasFrame(page);return f.layerStatus==='ready'&&f.resources.every(resource=>resource.status==='ready');},'正式场景和当前人物资源预解码完成');
@@ -89,15 +94,31 @@ try {
   await phase('diagonal');await page.keyboard.down('ArrowDown');await sleep(350);
   await phase('down-only');await page.keyboard.up('ArrowRight');await sleep(450);
   await phase('stopped');await page.keyboard.up('ArrowDown');await waitSettled();await sleep(250);
-  const capture=await stopCapture();report.motion=capture;await saveJSON(resolve(output,'result-before-cleanup.json'),report);assert.deepEqual(capture.errors,[]);assert.ok(capture.frames.length>=20);
+  const capture=await stopCapture();report.motion=capture;report.presentation=await page.evaluate(()=>window.uxPresentation.stop());await saveJSON(resolve(output,'result-before-cleanup.json'),report);
+  report.presentationSummary=assertPresentationEvidence(report.presentation);
+  const timelineUpdates=capture.updates.filter(update=>update.person?.motionTimeline?.length);
+  assert.ok(timelineUpdates.length>0,'新模式必须实际收到已执行分段时间线');
+  for(const update of timelineUpdates)validateSpatial('SceneEntityViewV1',update.person);
+  report.timelineQualification={updates:timelineUpdates.length,firstSeq:timelineUpdates[0].snapshotSeq,lastSeq:timelineUpdates.at(-1).snapshotSeq};
+  assert.deepEqual(capture.errors,[]);assert.ok(capture.frames.length>=20);
   const stable=capture.frames.filter(frame=>frame.sceneId===first.sceneId);const fixed=stable[0];for(const f of stable){assert.deepEqual(f.fit,fixed.fit);assert.deepEqual(f.view,fixed.view);assert.deepEqual(f.viewport,fixed.viewport);assert.deepEqual(f.refs,fixed.refs);assert.ok(f.opaque>600&&f.colors>8,'每次实际呈现均为完整非空场景');}
   const moving=stable.filter(frame=>['right','diagonal','down-only'].includes(frame.phase)&&frame.self?.moving);assert.ok(moving.length>=10);
   const continuous=stable.filter(frame=>frame.at>=moving[0].at&&['right','diagonal','down-only'].includes(frame.phase));assert.ok(continuous.every(frame=>frame.self.moving),'连续短计划之间不插idle');
   assert.ok(assertPaintContinuity(capture).length>=10,'每次实际paint均保留并按其motionAt检查连续速度');
   const diagonal=stable.filter(frame=>frame.phase==='diagonal'&&frame.phaseElapsed>100),vertical=stable.filter(frame=>frame.phase==='down-only'&&frame.phaseElapsed>150);assert.ok(diagonal.at(-1).self.position.x>diagonal[0].self.position.x&&diagonal.at(-1).self.position.y>diagonal[0].self.position.y);assert.ok(vertical.at(-1).self.position.y>vertical[0].self.position.y+10);assert.ok(Math.abs(vertical.at(-1).self.position.x-vertical[0].self.position.x)<4,'松开右键后仍沿下键行走');
   assert.equal(report.httpAssets.length,assetsBefore,'移动不重新请求图片');const movementActions=(await actions()).filter(action=>!actionsBefore.includes(action.id)).map(action=>JSON.parse(action.raw).action);assert.ok(movementActions.length<=Math.ceil((Date.now()-start)/100)+3,'按键repeat不形成额外请求洪峰');assert.equal(movementActions.at(-1).kind,'stop_move');
+  const directional=movementActions.filter(action=>action.kind!=='stop_move');assert.ok(directional.length>0);assert.ok(directional.every(action=>action.kind==='move_direction'&&action.sceneId===initial.projection.self.sceneId&&action.mapVersion===initial.projection.mapVersion));
+  assert.deepEqual(directional.map(action=>action.direction).filter((value,index,array)=>index===0||value!==array[index-1]),['E','SE','S']);
+  const acceptedDirections=report.wireActions.filter(row=>row.receipt.status==='Accepted'&&!actionsBefore.includes(row.receipt.clientActionId)).map(row=>JSON.parse(row.raw).action).filter(action=>action.kind==='move_direction');
+  for(const direction of ['E','SE','S'])assert.ok(acceptedDirections.some(action=>action.direction===direction),'本阶段必须真实Accepted方向 '+direction);
   const stopped=await position();await sleep(300);assert.deepEqual(await position(),stopped);check('AC02','真实Canvas每帧完整合成、固定fit、实体不因走动消失且图片缓存复用',{frames:capture.frames.length});
-  await sleep(120);const shortStart=await position(),shortIds=(await actions()).map(action=>action.id);await page.keyboard.down('ArrowRight');await sleep(20);await page.keyboard.up('ArrowRight');await waitSettled();const short=(await actions()).filter(action=>!shortIds.includes(action.id)).map(action=>JSON.parse(action.raw).action);assert.deepEqual(short.map(action=>action.kind),['move_to','stop_move']);assert.ok(BigInt(short[1].movementCommandSeq)>BigInt(short[0].movementCommandSeq));const shortEnd=await position();assert.ok(Math.hypot(shortEnd.x-shortStart.x,shortEnd.y-shortStart.y)<=36);
+  await sleep(120);const shortStart=await position(),shortIds=(await actions()).map(action=>action.id);
+  const beforeShort=await server.runtime.replay(room.sessionId),shortActorId=beforeShort.members.find(member=>member.userId===room.users[0].userId).characterId,shortActor=beforeShort.characters[shortActorId];
+  const shortAuthority={actorId:shortActorId,position:{...shortActor.position},controlEpoch:shortActor.controlEpoch,sceneId:shortActor.sceneId,mapVersion:beforeShort.mapVersion,movementStatus:shortActor.movement?.status??null};
+  await page.keyboard.down('ArrowRight');await sleep(20);await page.keyboard.up('ArrowRight');await waitSettled();
+  const shortDrafts=(await actions()).filter(action=>!shortIds.includes(action.id)),short=shortDrafts.map(action=>JSON.parse(action.raw).action);assert.deepEqual(short.map(action=>action.kind),['move_direction','stop_move']);assert.ok(BigInt(short[1].movementCommandSeq)>BigInt(short[0].movementCommandSeq));const shortEnd=await position();assert.ok(Math.hypot(shortEnd.x-shortStart.x,shortEnd.y-shortStart.y)<=36);
+  const afterShort=(await server.runtime.replay(room.sessionId)).characters[shortActorId];
+  report.shortDirection=await assertShortDirectionPlan(database.pool,shortDrafts,{sessionId:room.sessionId,before:shortAuthority,clientStart:shortStart,clientEnd:shortEnd,after:{position:{...afterShort.position},controlEpoch:afterShort.controlEpoch}});
   await sleep(120);await page.keyboard.down('ArrowLeft');await sleep(180);await page.getByLabel('地图目的地',{exact:true}).focus();await page.keyboard.up('ArrowLeft');await waitSettled();const blurPosition=await position();await sleep(250);assert.deepEqual(await position(),blurPosition);const panelCount=(await actions()).length;await page.keyboard.press('ArrowRight');await sleep(130);assert.equal((await actions()).length,panelCount,'地图select独占方向键');
   await openReading(page,'交谈');await page.getByLabel('交谈内容',{exact:true}).fill('键盘范围检查');await page.keyboard.press('ArrowLeft');await page.keyboard.press('ArrowRight');assert.equal((await actions()).length,panelCount,'文本输入不驱动世界移动');await closeReading(page);
   check('AC05','持续持键、组合与松单键、短按停步、失焦与面板/文本输入隔离',{short,movementActions:movementActions.length});
@@ -110,12 +131,16 @@ try {
   const arrived=await snapshot(page);assert.deepEqual(drawRefs(await canvasFrame(page)),sceneRefs(arrived.projection));await picture('scene-v3-map-route.png');
   await page.getByLabel('查看地图场景',{exact:true}).selectOption('gaolao-courtyard');await page.getByLabel('地图目的地',{exact:true}).selectOption('C19');await map.getByRole('button',{name:'沿出口前往',exact:true}).click();await stop();const cancelCount=(await actions()).length;await sleep(500);assert.equal((await clientState(page)).navigation,null);assert.equal((await actions()).length,cancelCount,'手动停步取消后续crossing');
   const current=await currentMapPoint({x:740,y:435});await until(async()=>{const p=(await snapshot(page)).projection;return p.movement?.movementCommandSeq===JSON.parse(current.draft.raw).action.movementCommandSeq&&p.movement.status==='arrived'&&p.self.position.x===current.destination.x&&p.self.position.y===current.destination.y;},'当前地图实际点选并行走到达');check('AC03','当前/全部地图、只选不走、合法出口三段前往、手动取消',{route,currentDestination:current.destination});
-  const oldEpoch=(await snapshot(page)).projection.self.controlEpoch;await page.reload();await page.getByRole('button',{name:'恢复本人控制',exact:true}).click();await until(async()=>(await clientState(page)).inputReady,'刷新后恢复本人控制');assert.ok(BigInt((await snapshot(page)).projection.self.controlEpoch)>BigInt(oldEpoch));await page.getByTestId('spatial-map').focus();await page.keyboard.down('ArrowRight');await sleep(80);await page.keyboard.up('ArrowRight');await waitSettled();check('AC03-recovery','刷新重新建立控制周期且旧导航不复活');
+  const oldEpoch=(await snapshot(page)).projection.self.controlEpoch;await page.reload();await page.getByRole('button',{name:'恢复本人控制',exact:true}).click();await until(async()=>(await clientState(page)).inputReady,'刷新后恢复本人控制');assert.ok(BigInt((await snapshot(page)).projection.self.controlEpoch)>BigInt(oldEpoch));
+  report.directionQualification.push(await directionConnections.qualify(page,room.users[0].userId,'reload'));
+  const recoveryIds=(await actions()).map(action=>action.id);await page.getByTestId('spatial-map').focus();await page.keyboard.down('ArrowRight');await sleep(80);await page.keyboard.up('ArrowRight');await waitSettled();
+  const recoveredActions=(await actions()).filter(action=>!recoveryIds.includes(action.id));assert.ok(recoveredActions.some(draft=>JSON.parse(draft.raw).action.kind==='move_direction'&&draft.receipt?.status==='Accepted'));assert.equal(JSON.parse(recoveredActions.at(-1).raw).action.kind,'stop_move');check('AC03-recovery','刷新重新建立控制周期且旧导航不复活');
   await page.setViewportSize({width:390,height:844});await until(async()=>{const frame=await canvasFrame(page);return frame.viewport.width<390;},'窄屏真实Canvas完成resize');report.narrow={pixels:await canvasPixels(page),...await page.evaluate(()=>({viewport:innerWidth,content:document.documentElement.scrollWidth}))};assert.ok(report.narrow.content<=report.narrow.viewport);await map.getByRole('button',{name:'展开地图',exact:true}).click();assert.equal(await page.getByTestId('gaolao-minimap').isVisible(),true);await openReading(page,'行囊');assert.equal(await page.getByTestId('gaolao-minimap').count(),0,'窄屏阅读区与展开地图互斥');await page.locator('#spatial-reading-pane').waitFor();await picture('scene-v3-narrow.png');await closeReading(page);
   report.aiRunCount=Number((await database.pool.query('SELECT count(*) n FROM ai_runs WHERE session_id=$1',[room.sessionId])).rows[0].n);assert.equal(report.aiRunCount,0);assert.deepEqual(report.pageErrors,[]);assert.deepEqual(new Set(report.checks.map(value=>value.id)),new Set(['AC01','AC02','AC03','AC04','AC05','AC06','AC05-recovery','AC03-recovery']));report.assessment='PASS';
 } catch(error){report.assessment=/Operation not permitted|Failed to launch|Executable doesn't exist/.test(error.message)?'ENVIRONMENT_BLOCKED':'FAIL';report.error=error.stack;console.error(error.stack);if(page)await picture('scene-v3-failure.png').catch(()=>{});process.exitCode=1;}
 finally {
-  if(page){const interrupted=await page.evaluate(()=>{const capture=window.uxCapture;if(!capture)return null;capture.running=false;capture.restore?.();return {frames:capture.frames,paints:capture.paints,updates:capture.updates,errors:capture.errors};}).catch(()=>null);if(interrupted&&!report.motion)report.motion=interrupted;}
+  if(page){const interrupted=await page.evaluate(()=>{const capture=window.uxCapture;if(!capture)return null;capture.running=false;capture.restore?.();return {frames:capture.frames,paints:capture.paints,updates:capture.updates,errors:capture.errors};}).catch(()=>null);if(interrupted&&!report.motion)report.motion=interrupted;const presentation=await page.evaluate(()=>window.uxPresentation?.stop()).catch(()=>null);if(presentation&&!report.presentation)report.presentation=presentation;}
+  directionConnections?.close();
   await saveJSON(resolve(output,'result-before-cleanup.json'),report);
   for(const [name,close] of [['room',()=>room?.close()],['browser',()=>browser?.close()],['vite',()=>vite?.close()],['server',()=>server?.close()],['postgres',()=>database?.stop()]]){try{await close();report.cleanup.push({name,status:'closed'});if(name==='room'&&video){try{await video.saveAs(resolve(output,'scene-v3-demo.webm'));report.video={file:'scene-v3-demo.webm',scope:'本次同一真实页面操作录像；不代替测试断言或真人验收'};}catch(error){report.videoError=error.message;}}}catch(error){report.cleanup.push({name,status:'error',message:error.message});if(report.assessment==='PASS')report.assessment='FAIL_CLEANUP';process.exitCode=1;}}
   report.finishedAt=new Date().toISOString();report.sourceEnd=await sourceIdentity();if(JSON.stringify(report.sourceEnd)!==JSON.stringify(report.source)){report.sourceChanged=true;if(report.assessment==='PASS')report.assessment='FAIL_SOURCE_IDENTITY';process.exitCode=1;}await saveJSON(resolve(output,'result.json'),report);console.log(JSON.stringify({assessment:report.assessment,checks:report.checks.length,output}));

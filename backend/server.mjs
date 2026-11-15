@@ -5,6 +5,8 @@ import { parseStrictJSON } from '../protocol/index.mjs';
 import { createRuntime } from './runtime.mjs';
 import { RuntimeError, errorResponse } from './errors.mjs';
 import {attachScenePolicies} from './scene-policy-runtime.mjs';
+import { attachSpatialDirection } from './spatial-direction-runtime.mjs';
+import { enqueueSocketPacket } from './socket-enqueue.mjs';
 
 const exact = (value, keys, optional = []) => {
   if (!value || typeof value !== 'object' || Array.isArray(value) || Object.keys(value).some(key => ![...keys, ...optional].includes(key)) || !keys.every(key => Object.hasOwn(value, key))) throw new RuntimeError('INVALID_MESSAGE', '消息字段不完整或含未知字段。');
@@ -30,8 +32,8 @@ function respond(response, status, body) {
 const statusOf = code => ({ INVALID_MESSAGE: 400, UNAUTHENTICATED: 401, FORBIDDEN: 403, SESSION_GONE: 410, ACTION_ID_REUSE: 409, CONTROL_HELD: 409, RESYNC_REQUIRED: 409, STALE_REFERENCE: 409, UPGRADE_REQUIRED: 426, OUTCOME_UNKNOWN: 503 })[code] ?? 503;
 
 /** 单体 HTTP + Socket.IO 适配器；所有世界写入复用 AuthorityRuntime。 */
-export async function createAuthorityServer({ pool, now, hooks, log = () => {} } = {}) {
-  const runtime = await createRuntime({ pool, now, hooks });
+export async function createAuthorityServer({ pool, now, hooks, log = () => {}, spatialDirection = false } = {}) {
+  const runtime = await createRuntime({ pool, now, hooks, spatialDirection });
   const scenePolicy = await attachScenePolicies({runtime,log});
   const tasks = new Set(); const sockets = new Map();
   let stopped = false; let pulsing = false; let lastLegacyPulse = Date.now();
@@ -69,7 +71,7 @@ export async function createAuthorityServer({ pool, now, hooks, log = () => {} }
     track((async () => {
       try {
         const auth = exact(socket.handshake.auth, ['token'], ['capabilities']);
-        if (auth.capabilities !== undefined && (!Array.isArray(auth.capabilities) || auth.capabilities.length > 8 || auth.capabilities.some(c => !['region-v1', 'spatial-v2', 'spatial-appearance-v1', 'spatial-object-visual-v1', 'gaolao-personal-consent-v1', 'spatial-scene-overview-v1'].includes(c)))) throw new RuntimeError('INVALID_MESSAGE', '客户端能力格式无效。');
+        if (auth.capabilities !== undefined && (!Array.isArray(auth.capabilities) || auth.capabilities.length > 8 || auth.capabilities.some(c => !['region-v1', 'spatial-v2', 'spatial-appearance-v1', 'spatial-object-visual-v1', 'gaolao-personal-consent-v1', 'spatial-scene-overview-v1', ...(runtime.spatialDirection ? ['spatial-direction-v1', 'spatial-timed-trail-v1'] : [])].includes(c)))) throw new RuntimeError('INVALID_MESSAGE', '客户端能力格式无效。');
         socket.data.handle = await runtime.openConnection(auth.token, auth.capabilities ?? []);
         next();
       } catch (error) {
@@ -89,7 +91,16 @@ export async function createAuthorityServer({ pool, now, hooks, log = () => {} }
     ]) {
       socket.on(event, (value, acknowledge) => {
         track((async () => {
-          try { const result = await operation(value); if (typeof acknowledge === 'function') acknowledge(result); }
+          try {
+            const supply = runtime.spatialSupply.enabled(handle);
+            const send = (result, binding) => enqueueSocketPacket({ sockets, handle, binding, value: result, kind: 'ack',
+              send: typeof acknowledge === 'function' ? () => acknowledge(result) : undefined,
+              current: () => runtime.spatialSupply.current(handle, binding) });
+            if (supply && event === 'sync.request' && runtime.connectionView(handle)?.schemaVersion === 2) { await runtime.spatialSupply.sync(handle, value, send); return; }
+            const result = await operation(value);
+            if (supply && (event === 'session.subscribe' || event.startsWith('control.')) && (result.type === 'world.snapshot' && result.schemaVersion === 2 || result.snapshot?.schemaVersion === 2)) runtime.spatialSupply.snapshot(handle, result, send);
+            else if (typeof acknowledge === 'function') acknowledge(result);
+          }
           catch (error) { if (typeof acknowledge === 'function') acknowledge(errorResponse(error)); }
         })());
       });
@@ -104,6 +115,12 @@ export async function createAuthorityServer({ pool, now, hooks, log = () => {} }
     });
   });
   runtime.on('view-revoked', ({ connectionId }) => sockets.get(connectionId)?.disconnect(true));
+  const deliver = (connectionId, batch, binding) => {
+    if (binding) return enqueueSocketPacket({ sockets, handle: binding.handle, binding, value: batch, kind: 'push',
+      send: () => sockets.get(connectionId)?.emit('world.batch', batch), current: () => runtime.spatialSupply.current(binding.handle, binding) });
+    sockets.get(connectionId)?.emit('world.batch', batch);
+  };
+  const direction = attachSpatialDirection({ runtime, deliver, track, log });
   const pulse = async () => {
     if (stopped || pulsing) return;
     pulsing = true;
@@ -116,7 +133,8 @@ export async function createAuthorityServer({ pool, now, hooks, log = () => {} }
       }
       const rows = (await pool.query("SELECT session_id FROM sessions WHERE state->>'phase' IN ('Lobby','Running') AND ($1 OR state->>'protocolCapability'='spatial-v2')", [legacyDue])).rows;
       for (const row of rows) await runtime.maintenance(row.session_id);
-      await runtime.publishPending(async (connectionId, batch) => { sockets.get(connectionId)?.emit('world.batch', batch); }, { capability: legacyDue ? null : 'spatial-v2' });
+      if (direction) direction.publish(legacyDue ? null : 'spatial-v2');
+      else await runtime.publishPending(deliver, { capability: legacyDue ? null : 'spatial-v2' });
     } catch (error) { log('后台维护暂未完成，将保留原记录重试。', { code: errorResponse(error).code }); }
     finally { pulsing = false; }
   };
@@ -129,6 +147,7 @@ export async function createAuthorityServer({ pool, now, hooks, log = () => {} }
     },
     async close() {
       if (stopped) return; stopped = true; clearInterval(timer);
+      direction?.close();
       await scenePolicy.close();
       await new Promise(resolve => io.close(resolve));
       while (tasks.size) await Promise.allSettled([...tasks]);

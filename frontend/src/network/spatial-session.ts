@@ -1,18 +1,21 @@
 import { canonicalize, compareDecimal, validateContract } from '../../../protocol/index.mjs';
 import { MovementCommandSource, parseSpatial, validateSpatial } from '../../../protocol/spatial.mjs';
-import type { ActionV2, ControlRequestV2, ErrorV2, Position, PublicEnvelope, ReceiptV2, SnapshotV2 } from '../../../game/spatial-types.ts';
+import type { ActionV2, BatchV2, ControlRequestV2, ErrorV2, Facing, Position, PublicEnvelope, ReceiptV2, SnapshotV2 } from '../../../game/spatial-types.ts';
 import { SpatialView } from '../domain/spatial-view.ts';
-import type { ConnectLink, SessionLink } from './link.ts';
+import type { ConnectLink, RequestEvent, SessionLink } from './link.ts';
+import type { BatchResult } from '../domain/client-view.ts';
 import type { ConnectionState } from './session-client.ts';
 import { ApiFailure } from './http-api.ts';
 import { spatialErrorMessage } from '../domain/spatial-errors.ts';
 import { sceneDisplayProjection } from '../domain/spatial-display.ts';
-import { ContinuousDirection } from '../domain/spatial-direction.ts';
+import { ContinuousDirection, directionClock, DIRECTION_RECEIPT_DEADLINE_MS } from '../domain/spatial-direction.ts';
+import { DirectionIntent } from '../domain/direction-intent.ts';
+import { DIRECTION_CAPABILITY, TIMED_TRAIL_CAPABILITY } from './direction-capability.ts';
 import { directionTarget, mapRoute } from '../domain/spatial-navigation.ts';
 
 export interface SpatialDraft { id: string; raw: string; status: 'waiting' | 'unknown' | 'accepted' | 'rejected'; detail: string; receipt: ReceiptV2 | null }
 export interface NavigationState { destinationSceneId: string; destination: Position; phase: 'approaching-exit' | 'crossing' | 'approaching-destination' }
-export interface SpatialState { connection: ConnectionState; snapshot: SnapshotV2 | null; actions: SpatialDraft[]; message: string; controlBusy: boolean; inputReady: boolean; queuedAction: string | null; navigation: NavigationState | null }
+export interface SpatialState { connection: ConnectionState; snapshot: SnapshotV2 | null; actions: SpatialDraft[]; message: string; controlBusy: boolean; inputReady: boolean; queuedAction: string | null; navigation: NavigationState | null; timedTrail?: boolean }
 interface Options { onChange?: (state: SpatialState) => void; onUnauthenticated?: (token: string) => void; id?: () => string; heartbeatMs?: number; reconnectDelayMs?: number; waitForVisualArrival?: boolean }
 interface ReceiptReader { receipt(sessionId: string, actionId: string): Promise<ReceiptV2 | null> }
 interface QueuedAction { action: ActionV2; sequence: string; epoch: string; viewId: string; mapVersion: string; movementId?: string; targetRef?: string; targetSignature?: string }
@@ -45,9 +48,11 @@ export class SpatialSessionClient {
   #source: MovementCommandSource | null = null; #queued: QueuedAction | null = null; #controlBusy = false;
   #pendingControl: { request: ControlRequestV2; raw: string; serial: number } | null = null;
   #heartbeat: ReturnType<typeof setInterval> | null = null; #retryTimer: ReturnType<typeof setTimeout> | null = null;
-  #syncKey = ''; #syncRevision = 0;
+  #syncActive = new Set<SessionLink>(); #syncDemand = ''; #syncRevision = 0;
   #displayedArrival = '';
-  #direction: ContinuousDirection; #navigation: NavigationPlan | null = null;
+  #direction: ContinuousDirection | DirectionIntent; #navigation: NavigationPlan | null = null;
+  #directionBinding = '';
+  #directionDeadlines = new Map<string, unknown>();
   #directionAnchor: { vector: Position; position: Position; identity: string } | null = null;
   constructor(api: ReceiptReader, connect: ConnectLink, options: Options = {}) {
     this.#api = api; this.#connect = connect;
@@ -57,16 +62,84 @@ export class SpatialSessionClient {
   get state(): SpatialState {
     const snapshot = this.#view.snapshot;
     const navigation = this.#navigation ? { destinationSceneId: this.#navigation.destinationSceneId, destination: { ...this.#navigation.destination }, phase: this.#navigation.phase } : null;
-    return { connection: this.#connection, snapshot, actions: [...this.#actions], message: this.#message, controlBusy: this.#controlBusy, inputReady: Boolean(snapshot?.projection.self.canControl && this.#source?.controlEpoch === snapshot.projection.self.controlEpoch), queuedAction: this.#queued ? '到达后重新检查并操作' : null, navigation };
+    return { connection: this.#connection, snapshot, actions: [...this.#actions], message: this.#message, controlBusy: this.#controlBusy, inputReady: Boolean(snapshot?.projection.self.canControl && this.#source?.controlEpoch === snapshot.projection.self.controlEpoch), queuedAction: this.#queued ? '到达后重新检查并操作' : null, navigation,
+      timedTrail: this.#connection === 'online' && this.#timedLink(this.#link) };
+  }
+  #timedLink(link: SessionLink | null): boolean { return Boolean(link?.acceptedCapabilities?.includes(DIRECTION_CAPABILITY) && link.acceptedCapabilities.includes(TIMED_TRAIL_CAPABILITY)); }
+  async #reply(link: SessionLink, event: RequestEvent, request: string | { sessionId: string }, consume: (value: unknown) => void) {
+    let consumed = false;
+    const once = (value: unknown) => { if (consumed) return; consumed = true; consume(value); };
+    const value = await link.request(event, request, this.#timedLink(link) ? once : undefined);
+    // 旧传输可忽略可选hook；只在尚未同步消费时使用原Promise路径。
+    if (!consumed) once(value);
   }
   #publish() {
-    const p = this.#view.snapshot?.projection;
+    const snapshot = this.#view.snapshot, p = snapshot?.projection;
+    const enabled = this.#link?.acceptedCapabilities?.includes(DIRECTION_CAPABILITY) && this.#connection === 'online' && p?.self.canControl && this.#source?.controlEpoch === p.self.controlEpoch && p.phase === 'Running';
+    const binding = enabled ? JSON.stringify([this.#serial, snapshot!.sessionId, snapshot!.viewId, p!.self.controlEpoch, p!.self.entityRef, p!.self.appearanceEpoch, p!.self.sceneId, p!.mapVersion]) : '';
+    if (binding !== this.#directionBinding) {
+      this.#direction.clear(); this.#directionBinding = binding;
+      const fail = (message: string) => { this.#message = message; this.#publish(); };
+      this.#direction = enabled ? new DirectionIntent({ send: vector => this.#sendDirectionIntent(vector), stop: () => this.#stopDirection(), canSend: () => this.#hasDirectionCapacity(), fail, uncertain: () => {
+        this.#actions = this.#actions.map(draft => draft.status === 'waiting' && ['move_direction', 'stop_move'].includes(parseSpatial('PublicEnvelope', draft.raw).action.kind)
+          ? { ...draft, status: 'unknown', detail: '原移动结果尚未确认，请查询或原样重试。' } : draft);
+      } }) : new ContinuousDirection({ send: vector => this.#moveDirection(vector), stop: () => this.#stopDirection(), reset: () => { this.#directionAnchor = null; }, fail });
+    }
     if (this.#connection !== 'online' || !p?.self.canControl || p.phase !== 'Running' || this.#source?.controlEpoch !== p.self.controlEpoch) this.#direction.clear();
     else if (p.paused) this.#direction.set(null);
     this.#options.onChange(this.state);
   }
   #update(id: string, patch: Partial<SpatialDraft>) {
-    this.#actions = retainActions(this.#actions.map(a => a.id === id ? (a.receipt && (patch.status === 'unknown' || patch.status === 'waiting') ? a : { ...a, ...patch }) : a)); this.#publish();
+    const before = this.#actions.find(draft => draft.id === id);
+    this.#actions = retainActions(this.#actions.map(a => a.id === id ? (a.receipt && (patch.status === 'unknown' || patch.status === 'waiting') ? a : { ...a, ...patch }) : a));
+    const draft = this.#actions.find(value => value.id === id);
+    if (draft?.status !== 'waiting') this.#clearDirectionDeadline(id);
+    const kind = draft && parseSpatial('PublicEnvelope', draft.raw).action.kind;
+    const becameUnknown = draft?.status === 'unknown' && before?.status !== 'unknown' && (kind === 'move_direction' || kind === 'stop_move' && this.#direction instanceof DirectionIntent);
+    // Unknown冻结会话待发意图；后续查询只收束原串，不能恢复未知前的持键。
+    if (becameUnknown) this.#direction.clear();
+    // 原Receipt已收束，即使旧网络Promise仍未返回也可重建空意图代次；准入仍检查原账本。
+    if (before?.status === 'unknown' && draft?.receipt && this.#direction instanceof DirectionIntent) this.#directionBinding = '';
+    this.#publish();
+    if (becameUnknown && kind === 'move_direction' && !this.#pendingStop() && this.#needsDirectionStop()) void this.#stopDirection().catch(() => {});
+    if (this.#direction instanceof DirectionIntent) this.#direction.refresh();
+  }
+  #hasDirectionCapacity() {
+    let directions = 0;
+    for (const draft of this.#actions) {
+      if (!['waiting', 'unknown'].includes(draft.status)) continue;
+      const kind = parseSpatial('PublicEnvelope', draft.raw).action.kind;
+      if (kind === 'stop_move' || draft.status === 'unknown' && ['move_to', 'move_direction'].includes(kind)) return false;
+      if (kind === 'move_direction') directions++;
+    }
+    return directions < 2;
+  }
+  #pendingStop() { return this.#actions.some(draft => ['waiting', 'unknown'].includes(draft.status) && parseSpatial('PublicEnvelope', draft.raw).action.kind === 'stop_move'); }
+  #needsDirectionStop() {
+    let move = '0', stop = '0';
+    for (const draft of this.#actions) {
+      const envelope = parseSpatial('PublicEnvelope', draft.raw), action = envelope.action;
+      if (envelope.sessionId !== this.#sessionId || envelope.controlEpoch !== this.#source?.controlEpoch) continue;
+      if (action.kind === 'move_direction' && compareDecimal(action.movementCommandSeq, move) > 0) move = action.movementCommandSeq;
+      if (action.kind === 'stop_move' && draft.status !== 'rejected' && compareDecimal(action.movementCommandSeq, stop) > 0) stop = action.movementCommandSeq;
+    }
+    // 一个更高序号stop已覆盖该批原方向；多个超时不能重复发送新的stop。
+    return compareDecimal(move, stop) > 0;
+  }
+  #clearDirectionDeadline(id: string) {
+    const timer = this.#directionDeadlines.get(id); if (timer !== undefined) directionClock.clearTimeout(timer);
+    this.#directionDeadlines.delete(id);
+  }
+  #clearDirectionDeadlines() { for (const id of this.#directionDeadlines.keys()) this.#clearDirectionDeadline(id); }
+  #armDirectionDeadline(draft: SpatialDraft) {
+    const kind = parseSpatial('PublicEnvelope', draft.raw).action.kind;
+    if (kind !== 'move_direction' && !(kind === 'stop_move' && this.#direction instanceof DirectionIntent)) return;
+    this.#clearDirectionDeadline(draft.id);
+    // 原请求在会话账本计时；地图/视图重新绑定不延长400ms，也不丢失未决原串。
+    this.#directionDeadlines.set(draft.id, directionClock.setTimeout(() => {
+      this.#directionDeadlines.delete(draft.id);
+      if (this.#actions.find(value => value.id === draft.id)?.status === 'waiting') this.#update(draft.id, { status: 'unknown', detail: '原移动确认已超过400ms，请查询原请求。' });
+    }, DIRECTION_RECEIPT_DEADLINE_MS));
   }
   open(sessionId: string, token: string, drafts: SpatialDraft[] = []) {
     this.close(); this.#sessionId = sessionId; this.#token = token;
@@ -77,18 +150,18 @@ export class SpatialSessionClient {
     this.#openConnection();
   }
   close() {
-    this.#direction.clear(); this.#navigation = null;
+    this.#direction.clear(); this.#clearDirectionDeadlines(); this.#navigation = null;
     this.#serial++; if (this.#heartbeat) clearInterval(this.#heartbeat); if (this.#retryTimer) clearTimeout(this.#retryTimer);
     this.#heartbeat = null; this.#retryTimer = null; const link = this.#link; this.#link = null; link?.close();
-    this.#view.begin(''); this.#sessionId = ''; this.#token = ''; this.#connection = 'idle'; this.#source = null; this.#queued = null; this.#controlBusy = false; this.#pendingControl = null; this.#syncKey = ''; this.#message = '';
+    this.#view.begin(''); this.#sessionId = ''; this.#token = ''; this.#connection = 'idle'; this.#source = null; this.#queued = null; this.#controlBusy = false; this.#pendingControl = null; this.#syncDemand = ''; this.#message = '';
     this.#actions = this.#actions.map(a => a.status === 'waiting' ? { ...a, status: 'unknown', detail: '连接已结束，结果待确认。' } : a); this.#publish();
   }
   reconnect() { if (this.#sessionId && this.#token) this.#openConnection(); }
   #openConnection() {
-    this.#direction.clear(); this.#navigation = null;
+    this.#direction.clear(); this.#clearDirectionDeadlines(); this.#navigation = null;
     if (this.#retryTimer) clearTimeout(this.#retryTimer); this.#retryTimer = null;
     const serial = ++this.#serial; const generation = this.#view.begin(this.#sessionId);
-    const old = this.#link; this.#link = null; old?.close(); this.#source = null; this.#queued = null; this.#pendingControl = null; this.#controlBusy = false; this.#syncKey = '';
+    const old = this.#link; this.#link = null; old?.close(); this.#source = null; this.#queued = null; this.#pendingControl = null; this.#controlBusy = false; this.#syncDemand = '';
     this.#connection = 'connecting'; this.#message = ''; this.#actions = this.#actions.map(a => a.status === 'waiting' ? { ...a, status: 'unknown', detail: '连接变化，原动作待确认。' } : a); this.#publish();
     if (serial !== this.#serial || generation !== this.#view.generation || !this.#sessionId || !this.#token) return;
     this.#link = this.#connect(this.#token, {
@@ -106,9 +179,9 @@ export class SpatialSessionClient {
   }
   #disconnect(serial: number, retry = true) {
     if (serial !== this.#serial) return;
-    this.#direction.clear(); this.#navigation = null;
+    this.#direction.clear(); this.#clearDirectionDeadlines(); this.#navigation = null;
     const next = ++this.#serial; const link = this.#link; this.#link = null; link?.close(); this.#view.begin(this.#sessionId);
-    this.#source = null; this.#queued = null; this.#controlBusy = false; this.#pendingControl = null; this.#syncKey = ''; this.#connection = 'offline'; this.#message = '连接已断开，正在重新获取授权视图。';
+    this.#source = null; this.#queued = null; this.#controlBusy = false; this.#pendingControl = null; this.#syncDemand = ''; this.#connection = 'offline'; this.#message = '连接已断开，正在重新获取授权视图。';
     this.#actions = this.#actions.map(a => a.status === 'waiting' ? { ...a, status: 'unknown', detail: '原动作结果未知，可恢复后查询或原样重试。' } : a); this.#publish();
     if (retry && next === this.#serial && this.#sessionId && this.#token && this.#options.reconnectDelayMs > 0) this.#retryTimer = setTimeout(() => { if (next === this.#serial) this.#openConnection(); }, this.#options.reconnectDelayMs);
   }
@@ -127,42 +200,69 @@ export class SpatialSessionClient {
   async #subscribe(serial: number, generation: number) {
     const link = this.#link; if (!link) return; this.#connection = 'synchronizing'; this.#publish();
     try {
-      const value = await link.request('session.subscribe', { sessionId: this.#sessionId });
-      if (serial !== this.#serial || generation !== this.#view.generation) return;
-      if (asError(value)) { this.#initialFailure(value, serial); return; }
-      if (this.#view.acceptSnapshot(value, generation) !== 'applied') { this.#disconnect(serial, false); this.#message = '空间授权视图校验未通过，请重新连接。'; this.#publish(); return; }
-      this.#connection = 'online'; this.#message = ''; this.#publish(); void this.sync();
-      for (const draft of this.#actions.filter(a => a.status === 'unknown')) void this.query(draft.id);
+      await this.#reply(link, 'session.subscribe', { sessionId: this.#sessionId }, value => {
+        if (serial !== this.#serial || link !== this.#link || generation !== this.#view.generation) return;
+        if (asError(value)) { this.#initialFailure(value, serial); return; }
+        if (this.#view.acceptSnapshot(value, generation) !== 'applied') { this.#disconnect(serial, false); this.#message = '空间授权视图校验未通过，请重新连接。'; this.#publish(); return; }
+        this.#connection = 'online'; this.#message = ''; this.#publish(); void this.sync();
+        for (const draft of this.#actions.filter(a => a.status === 'unknown')) void this.query(draft.id);
+      });
     } catch { this.#disconnect(serial); }
   }
-  #batch(value: unknown, generation: number) {
+  #batch(value: unknown, generation: number, requestRefetch = true, record?: (result: BatchResult) => void) {
     if (this.#handleError(value)) return 'stale';
     const result = this.#view.applyBatch(value, generation);
+    record?.(result); // View已接受的结果先固定，后续显示订阅者失败不能重放本批。
     if (result === 'applied') { this.#publish(); this.#drainQueued(); this.#drainNavigation(); }
     else if (result === 'resync') this.#openConnection();
-    else if (result === 'refetch') void this.sync();
+    else if (result === 'refetch' && requestRefetch) void this.sync();
     return result;
   }
   async sync() {
     const snapshot = this.#view.snapshot; const link = this.#link; const serial = this.#serial; const generation = this.#view.generation;
     const revision = this.#syncRevision; const key = `${serial}:${generation}:${revision}`;
     // 控制事务会替换服务端视图；结果未决时，不用旧视图补发打断同一连接上的原 nonce。
-    if (!snapshot || !link?.connected || this.#pendingControl || this.#syncKey === key) return;
-    this.#syncKey = key;
+    if (!snapshot || !link?.connected || this.#pendingControl) return;
+    // 同一物理link的旧请求直到settle仍占槽；控制安装新view只替换最新待读需求。
+    if (this.#syncActive.has(link)) { this.#syncDemand = key; return; }
+    this.#syncActive.add(link); this.#syncDemand = '';
+    let frontier: string | undefined;
     try {
       for (let page = 0; page < 8; page++) {
         if (revision !== this.#syncRevision || this.#pendingControl) break;
         const request = this.#view.syncRequest(); if (!request) break;
-        const value = await link.request('sync.request', canonicalize(request));
-        if (serial !== this.#serial) return;
-        // 访问失效不属于可丢弃的旧视图结果，必须继续立即撤销本连接的授权。
-        const error = asError(value);
-        if (error && ['UNAUTHENTICATED', 'FORBIDDEN', 'SESSION_GONE', 'UPGRADE_REQUIRED'].includes(error.code)) { this.#handleError(value); return; }
-        if (generation !== this.#view.generation || revision !== this.#syncRevision) return;
-        if (this.#batch(value, generation) !== 'applied') break;
+        const outcome: { result: BatchResult; frontier?: string } = { result: 'stale' };
+        await this.#reply(link, 'sync.request', canonicalize(request), value => {
+          if (serial !== this.#serial || link !== this.#link) return;
+          // 同连接真实撤权仍优先于旧view/revision；旧link不能影响新连接。
+          const error = asError(value);
+          if (error && ['UNAUTHENTICATED', 'FORBIDDEN', 'SESSION_GONE', 'UPGRADE_REQUIRED'].includes(error.code)) { this.#handleError(value); return; }
+          if (generation !== this.#view.generation || revision !== this.#syncRevision) return;
+          this.#batch(value, generation, false, result => { outcome.result = result; if (result === 'applied') outcome.frontier = (value as BatchV2).syncFrontierSeq; });
+        });
+        // 本次回复自身无法应用，不算外部fresh需求，避免无限refetch自循环。
+        if (outcome.result !== 'applied') break;
+        if (serial !== this.#serial || generation !== this.#view.generation || revision !== this.#syncRevision) return;
+        if (link.acceptedCapabilities?.includes(DIRECTION_CAPABILITY)) {
+          // 整批已严格校验且连续应用；目标只取首个有效回复，不裁轨迹或追逐后页新提交。
+          frontier ??= outcome.frontier;
+          const cursor = this.#view.snapshot?.snapshotSeq;
+          if (frontier !== undefined && cursor !== undefined && compareDecimal(cursor, frontier) >= 0) break;
+        }
       }
     } catch { if (serial === this.#serial && generation === this.#view.generation && revision === this.#syncRevision) { this.#message = '状态同步暂未完成，当前位置仍以上次服务器确认为准。'; this.#publish(); } }
-    finally { if (this.#syncKey === key) this.#syncKey = ''; }
+    finally {
+      this.#syncActive.delete(link);
+      if (this.#link === link && serial === this.#serial) {
+        const requested = this.#syncDemand; this.#syncDemand = '';
+        // 活动期间的ACK/推送/心跳合并为一次后续轮；每轮仍只有8页。
+        if (requested) queueMicrotask(() => {
+          const current = `${this.#serial}:${this.#view.generation}:${this.#syncRevision}`;
+          if (requested === current && serial === this.#serial && this.#link === link && link.connected
+            && !this.#pendingControl && !this.#syncActive.has(link)) void this.sync();
+        });
+      }
+    }
   }
   #ready(): SnapshotV2 {
     const snapshot = this.#view.snapshot;
@@ -201,14 +301,21 @@ export class SpatialSessionClient {
   }
   async send(action: ActionV2, preserveQueued = false) {
     const snapshot = this.#ready(); if (!preserveQueued) { this.#queued = null; this.#navigation = null; this.#direction.clear(); }
+    if (action.kind === 'move_direction' && !this.#link?.acceptedCapabilities?.includes(DIRECTION_CAPABILITY)) throw new Error('当前连接未确认方向行走能力。');
+    if (action.kind === 'move_direction' && !this.#hasDirectionCapacity()) throw new Error('原方向请求仍未决，请等待确认或查询原请求。');
+    if (action.kind === 'stop_move' && this.#direction instanceof DirectionIntent && this.#pendingStop()) throw new Error('原停步请求仍未决，请查询原请求。');
     const envelope: PublicEnvelope = validateSpatial('PublicEnvelope', { schemaVersion: 2, sessionId: snapshot.sessionId, viewId: snapshot.viewId, actorRef: snapshot.projection.self.entityRef, clientActionId: this.#options.id(), controlEpoch: snapshot.projection.self.controlEpoch, baseSeq: snapshot.snapshotSeq, action });
     const draft: SpatialDraft = { id: envelope.clientActionId, raw: canonicalize(envelope), status: 'waiting', detail: action.kind === 'move_to' ? '正在提交路线，尚未到达。' : '等待服务器确认。', receipt: null };
-    this.#actions = retainActions([...this.#actions, draft]); this.#publish(); await this.#deliver(draft);
+    this.#actions = retainActions([...this.#actions, draft]); this.#armDirectionDeadline(draft); this.#publish(); await this.#deliver(draft);
     return this.#actions.find(value => value.id === draft.id);
   }
   async retry(id: string) {
     const draft = this.#actions.find(a => a.id === id); if (!draft || draft.status !== 'unknown' || !this.#link?.connected || !this.#view.snapshot) return;
-    this.#update(id, { status: 'waiting', detail: '正在原样重试，不重新分配命令序号。' }); await this.#deliver(draft);
+    const kind = parseSpatial('PublicEnvelope', draft.raw).action.kind;
+    if (kind === 'move_direction' && !this.#link.acceptedCapabilities?.includes(DIRECTION_CAPABILITY)) { this.#message = '当前兼容连接不能重发该方向请求，请查询原结果。'; this.#publish(); return; }
+    // 原方向重试仍属于同一个Unknown；只有原Receipt能解除冻结，不重新开始400ms。
+    const frozen = kind === 'move_direction' || kind === 'stop_move' && this.#direction instanceof DirectionIntent;
+    this.#update(id, { status: frozen ? 'unknown' : 'waiting', detail: '正在原样重试，不重新分配命令序号。' }); await this.#deliver(draft);
   }
   async #deliver(draft: SpatialDraft) {
     const serial = this.#serial; const link = this.#link; if (!link) return;
@@ -246,30 +353,37 @@ export class SpatialSessionClient {
     this.#queued = null; this.#navigation = null; this.#direction.clear(); const type = kind === 'take' ? 'control.take' : 'control.resume';
     const old = this.#pendingControl;
     const request = old?.serial === serial && old.request.type === type ? old.request : validateSpatial('ControlRequestV2', { schemaVersion: 2, type, sessionId: snapshot.sessionId, viewId: snapshot.viewId, actorRef: snapshot.projection.self.entityRef, nonce: this.#options.id() });
-    const raw = old?.request === request ? old.raw : canonicalize(request); this.#pendingControl = { request, raw, serial }; this.#syncRevision++; this.#controlBusy = true; this.#publish();
+    const raw = old?.request === request ? old.raw : canonicalize(request); this.#pendingControl = { request, raw, serial }; const revision = ++this.#syncRevision; this.#controlBusy = true; this.#publish();
+    let installed = false;
     try {
-      const value = await link.request(type, raw); if (serial !== this.#serial || generation !== this.#view.generation) return;
-      const error = asError(value); if (error) { if (error.code !== 'OUTCOME_UNKNOWN') this.#pendingControl = null; this.#handleError(value); return; }
-      const response = validateSpatial('ControlResponseV2', value);
-      if (response.sessionId !== snapshot.sessionId || response.nonce !== request.nonce || response.snapshot.sessionId !== snapshot.sessionId || response.snapshot.projection.self.controlEpoch !== response.controlEpoch) throw new Error('控制响应身份不匹配。');
-      const current = this.#view.snapshot;
-      if (!current || current.projection.phase !== 'Running' || compareDecimal(current.projection.self.controlEpoch, response.controlEpoch) > 0) {
-        this.#pendingControl = null; this.#message = '控制状态已经更新，旧确认未恢复输入。'; return;
-      }
-      const knownSource = this.#source?.controlEpoch === response.controlEpoch;
-      const newEpoch = compareDecimal(response.controlEpoch, snapshot.projection.self.controlEpoch) > 0;
-      const next = this.#view.begin(this.#sessionId);
-      if (this.#view.acceptSnapshot(response.snapshot, next) !== 'applied') throw new Error('新控制视图无效。');
-      if (!knownSource) this.#source = newEpoch ? new MovementCommandSource(response.controlEpoch) : null;
-      this.#pendingControl = null; this.#message = this.#source ? '已恢复本人控制。' : '本地输入序号已丢失，请明确接管以建立新的控制周期。'; this.#publish();
-    } catch { if (serial === this.#serial) { this.#message = '控制结果待确认，再次点击会重试原请求。'; this.#publish(); } }
+      await this.#reply(link, type, raw, value => {
+        if (serial !== this.#serial || link !== this.#link) return;
+        const error = asError(value);
+        if (error && ['UNAUTHENTICATED', 'FORBIDDEN', 'SESSION_GONE', 'UPGRADE_REQUIRED'].includes(error.code)) { this.#pendingControl = null; this.#handleError(value); return; }
+        if (generation !== this.#view.generation || revision !== this.#syncRevision || this.#pendingControl?.request.nonce !== request.nonce) return;
+        if (error) { if (error.code !== 'OUTCOME_UNKNOWN') this.#pendingControl = null; this.#handleError(value); return; }
+        const response = validateSpatial('ControlResponseV2', value);
+        if (response.sessionId !== snapshot.sessionId || response.nonce !== request.nonce || response.snapshot.sessionId !== snapshot.sessionId || response.snapshot.projection.self.controlEpoch !== response.controlEpoch) throw new Error('控制响应身份不匹配。');
+        const current = this.#view.snapshot;
+        if (!current || current.projection.phase !== 'Running' || compareDecimal(current.projection.self.controlEpoch, response.controlEpoch) > 0) {
+          this.#pendingControl = null; this.#message = '控制状态已经更新，旧确认未恢复输入。'; return;
+        }
+        const knownSource = this.#source?.controlEpoch === response.controlEpoch;
+        const newEpoch = compareDecimal(response.controlEpoch, snapshot.projection.self.controlEpoch) > 0;
+        const next = this.#view.begin(this.#sessionId);
+        if (this.#view.acceptSnapshot(response.snapshot, next) !== 'applied') throw new Error('新控制视图无效。');
+        installed = true;
+        if (!knownSource) this.#source = newEpoch ? new MovementCommandSource(response.controlEpoch) : null;
+        this.#pendingControl = null; this.#message = this.#source ? '已恢复本人控制。' : '本地输入序号已丢失，请明确接管以建立新的控制周期。'; this.#publish();
+      });
+    } catch { if (serial === this.#serial) { this.#message = installed ? '控制视图已确认，显示更新暂未完成。' : '控制结果待确认，再次点击会重试原请求。'; this.#publish(); } }
     finally { if (serial === this.#serial) { this.#controlBusy = false; this.#publish(); void this.sync(); } }
   }
   #readyDirection() {
     const snapshot = this.#ready();
     if (this.#actions.some(draft => {
       const kind = parseSpatial('PublicEnvelope', draft.raw).action.kind;
-      return (draft.status === 'unknown' && ['move_to', 'stop_move'].includes(kind)) || (draft.status === 'waiting' && kind === 'stop_move' && !this.#direction.canResumeAfterStop);
+      return (draft.status === 'unknown' && ['move_to', 'move_direction', 'stop_move'].includes(kind)) || (draft.status === 'waiting' && kind === 'stop_move' && !this.#direction.canResumeAfterStop);
     })) throw new Error('上一项移动或停步结果尚未确认，请先查询或原样重试。');
     return snapshot;
   }
@@ -280,9 +394,18 @@ export class SpatialSessionClient {
       try {
         this.#readyDirection();
         this.#queued = null; this.#navigation = null;
+        if (this.#direction instanceof DirectionIntent) this.#direction.recover();
+        if (this.#link?.capabilityFallback) this.#message = '当前服务器使用兼容行走模式。';
       } catch (error) { this.#direction.clear(); this.#message = error instanceof Error ? error.message : '当前不能继续行走。'; this.#publish(); return; }
     }
     this.#direction.set(vector);
+  }
+  async #sendDirectionIntent(vector: Position) {
+    const snapshot = this.#readyDirection(), p = snapshot.projection;
+    if (!p.scene || !p.self.position || p.paused || !this.#directionBinding) throw new Error('当前不能继续方向行走。');
+    const facing = (['E', 'SE', 'S', 'SW', 'W', 'NW', 'N', 'NE'] as Facing[])[(Math.round(Math.atan2(vector.y, vector.x) / (Math.PI / 4)) + 8) % 8]!;
+    const draft = await this.send(this.#source!.direction(p.scene.sceneId, p.mapVersion, facing), true);
+    return draft?.status === 'accepted' || draft?.status === 'rejected' ? draft.status : 'unknown' as const;
   }
   async #moveDirection(vector: Position) {
     // 停步成功后的自动续发也重查原请求；不能绕过稍后变为未知的旧move。
@@ -298,6 +421,7 @@ export class SpatialSessionClient {
   }
   async #stopDirection() {
     if (this.#connection !== 'online' || !this.state.inputReady || this.#view.snapshot?.projection.phase !== 'Running') return;
+    if (this.#pendingStop()) throw new Error('原停步请求仍未决，请查询原请求。');
     this.#queued = null; this.#navigation = null;
     const draft = await this.send(this.#source!.stop(), true);
     if (draft?.status !== 'accepted') throw new Error('停步结果尚未确认。');

@@ -20,6 +20,8 @@ import { isSpatial, ensureView } from '../game/spatial-world.mjs';
 import * as spatial from './spatial-runtime.mjs';
 import * as scenePolicy from './scene-policy.mjs';
 import { encodeJsonbText, decodeJsonbText } from './jsonb-text.mjs';
+import { spatialDirectionConfig, checkDirectionCapability, directionCapability } from './spatial-direction-config.mjs';
+import { createSpatialSupply } from './spatial-supply.mjs';
 
 const digest = value => createHash('sha256').update(typeof value === 'string' ? value : canonicalize(value)).digest('hex');
 const id = prefix => `${prefix}-${randomUUID()}`;
@@ -44,8 +46,10 @@ export class AuthorityRuntime extends EventEmitter {
   #internals = new WeakMap();
   #views = new Map();
   #publishing = false;
-  constructor({ pool, now = Date.now, hooks = {} }) {
+  constructor({ pool, now = Date.now, hooks = {}, spatialDirection = false }) {
     super(); this.pool = pool; this.now = now; this.hooks = hooks;
+    this.spatialDirection = spatialDirectionConfig(spatialDirection);
+    this.spatialSupply = createSpatialSupply(this);
   }
   async migrate() {
     const client = await this.pool.connect();
@@ -221,6 +225,7 @@ export class AuthorityRuntime extends EventEmitter {
     return response;
   }
   async create(token, { nonce, contentVersion, capabilities = [] }) {
+    checkDirectionCapability(this.spatialDirection, capabilities);
     requireId(nonce);
     await this.authenticate(token);
     let content;
@@ -260,6 +265,7 @@ export class AuthorityRuntime extends EventEmitter {
     return rows.map(row => ({ sessionId: row.session_id, name: row.name, playerCount: row.player_count, phase: row.phase, ...(row.capability === 'spatial-v2' ? { protocolCapability: 'spatial-v2', contentVersion: row.content_version, requiredCapabilities: spatial.requiredSpatialCapabilities(row.profile) } : {}) }));
   }
   async join(token, sessionId, { nonce, capabilities = [] }) {
+    checkDirectionCapability(this.spatialDirection, capabilities);
     await this.authenticate(token);
     return this.locked(sessionId, { kind: 'join' }, async tx => {
       if (isSpatial(tx.state)) spatial.requireSpatialCapability(capabilities, tx.state);
@@ -322,6 +328,7 @@ export class AuthorityRuntime extends EventEmitter {
     });
   }
   async snapshot(token, sessionId, capabilities = []) {
+    checkDirectionCapability(this.spatialDirection, capabilities);
     await this.authenticate(token);
     return this.locked(sessionId, { kind: 'snapshot' }, async tx => {
       const user = await this.access(tx.client, tx.row, token);
@@ -348,10 +355,12 @@ export class AuthorityRuntime extends EventEmitter {
   }
   canInstallConnectionView(handle, view, scope) {
     const connection = this.connection(handle), current = this.#views.get(handle.connectionId);
+    const sent = this.spatialSupply.cursor(current);
+    const currentWater = sent !== null && BigInt(sent) > BigInt(current.cursor) ? sent : current?.cursor;
     return !connection.closing && this.#handles.get(handle.connectionId) === handle
       && scope.generation >= connection.installedViewScopeGeneration
       && (view.terminalGeneration === undefined || view.terminalGeneration === connection.terminalViewGeneration)
-      && !(current?.sessionId === view.sessionId && current.scope.generation === scope.generation && BigInt(current.cursor) > BigInt(view.cursor));
+      && !(current?.sessionId === view.sessionId && current.scope.generation === scope.generation && BigInt(currentWater) > BigInt(view.cursor));
   }
   setConnectionView(handle, view, scope) {
     if (!this.canInstallConnectionView(handle, view, scope)) return false;
@@ -450,8 +459,8 @@ export class AuthorityRuntime extends EventEmitter {
     if (state.sessionSeq !== throughSeq) throw new RuntimeError('RESYNC_REQUIRED', '所需事件前缀当前不可用。');
     return state;
   }
-  async sync(handle, raw) {
-    if (parseStrictJSON(raw)?.schemaVersion === 2) return spatial.syncSpatial(this, handle, parseSpatial('SyncRequestV2', raw));
+  async sync(handle, raw, internal = {}) {
+    if (parseStrictJSON(raw)?.schemaVersion === 2) return spatial.syncSpatial(this, handle, parseSpatial('SyncRequestV2', raw), internal);
     const request = parseContract('SyncRequest', raw);
     const connection = this.connection(handle);
     await this.authenticate(connection.token);
@@ -475,12 +484,14 @@ export class AuthorityRuntime extends EventEmitter {
       return validateContract('WorldBatch', { schemaVersion: 1, type: 'world.batch', sessionId: request.sessionId, viewId: view.viewId, fromExclusive: request.cursor, throughSeq, events });
     });
   }
-  /** 发布器只读取已提交前缀；发送失败保留 Pending，客户端游标始终由客户端确认。 */
+  /** 发布器只读取已提交前缀；新计时模式须有可信入队证据，失败保留Pending。 */
   async publishPending(deliver = async () => {}, { capability = null } = {}) {
-    if (this.#publishing) return;
+    if (this.#publishing) return { busy: true, examined: 0, published: 0 };
     this.#publishing = true;
+    let examined = 0, published = 0;
     try {
       const pending = (await this.pool.query("SELECT o.session_id,o.through_seq FROM outbox o JOIN sessions s ON s.session_id=o.session_id WHERE o.status='Pending' AND ($1::text IS NULL OR s.state->>'protocolCapability'=$1) ORDER BY o.session_id,o.through_seq", [capability])).rows;
+      examined = pending.length;
       for (const record of pending) {
         let installationPending = [...this.#handles.values()].some(handle => this.pendingViewInstallation(handle, record.session_id));
         for (const view of this.#views.values()) {
@@ -489,6 +500,16 @@ export class AuthorityRuntime extends EventEmitter {
             for (;;) {
               if (!view.active) break;
               if (this.pendingViewInstallation(view.handle)) { installationPending = true; break; }
+              if (view.schemaVersion === 2 && this.spatialSupply.enabled(view.handle)) {
+                const result = await this.spatialSupply.publish(view, record.through_seq, (batch, binding) => deliver(binding.handle.connectionId, batch, binding));
+                if (result.blocked) installationPending = true;
+                if (result.blocked || result.ignored || result.covered) break;
+                continue;
+              }
+              // 仅复用当前已安装视图自身的覆盖水位；旧通知不再次锁读动态新前缀。
+              if (this.spatialDirection && view.schemaVersion === 2 && this.connectionView(view.handle) === view
+                && this.connection(view.handle).capabilities.includes(directionCapability)
+                && BigInt(view.cursor) >= BigInt(record.through_seq)) break;
               const batch = await this.sync(view.handle, JSON.stringify({ schemaVersion: view.schemaVersion ?? 1, type: 'sync.request', sessionId: view.sessionId, viewId: view.viewId, cursor: view.cursor }));
               if (batch.throughSeq === view.cursor) break;
               if (!view.active) break;
@@ -497,6 +518,7 @@ export class AuthorityRuntime extends EventEmitter {
               if (BigInt(batch.throughSeq) >= BigInt(record.through_seq)) break;
             }
           } catch (error) {
+            if (error.keepSpatialPending) throw error;
             if (error.code === 'RESYNC_REQUIRED' && this.pendingViewInstallation(view.handle)) installationPending = true;
             else if (['FORBIDDEN', 'UNAUTHENTICATED', 'RESYNC_REQUIRED', 'SESSION_GONE'].includes(error.code)) this.retireView(view, true);
             else throw error;
@@ -508,15 +530,18 @@ export class AuthorityRuntime extends EventEmitter {
         await this.locked(record.session_id, { kind: 'outbox-progress' }, async tx => {
           await tx.client.query("UPDATE outbox SET status='Published',attempts=attempts+1 WHERE session_id=$1 AND through_seq=$2", [record.session_id, record.through_seq]);
         }).catch(error => { if (error.code !== 'SESSION_GONE') throw error; });
+        published++;
       }
+      return { busy: false, examined, published };
     } finally { this.#publishing = false; }
   }
   /** 仅由可信传输适配器在真实连接建立后调用；请求正文不能创建此句柄。 */
   async openConnection(token, capabilities = []) {
     const user = await this.authenticate(token);
+    checkDirectionCapability(this.spatialDirection, capabilities);
     const handle = Object.freeze({ connectionId: id('connection') });
     await this.pool.query('INSERT INTO connections(connection_id,user_id,lease_until) VALUES($1,$2,$3)', [handle.connectionId, user.userId, new Date(this.now() + 60_000).toISOString()]);
-    this.#connections.set(handle, { ...user, token, capabilities, grants: new Map(), viewScopeGeneration: 0, viewScopeFence: 0, installedViewScopeGeneration: 0, terminalViewGeneration: 0, requestedViewScope: null, pendingViews: new Set(), recoverableView: null, closing: false });
+    this.#connections.set(handle, { ...user, token, capabilities: Object.freeze([...capabilities]), grants: new Map(), viewScopeGeneration: 0, viewScopeFence: 0, installedViewScopeGeneration: 0, terminalViewGeneration: 0, requestedViewScope: null, pendingViews: new Set(), recoverableView: null, closing: false });
     this.#handles.set(handle.connectionId, handle);
     return handle;
   }
@@ -598,6 +623,16 @@ export class AuthorityRuntime extends EventEmitter {
         }
       }
       await tx.client.query("UPDATE decisions SET record=jsonb_set(record,'{status}','\"Expired\"') WHERE session_id=$1 AND record->>'status'='Pending' AND (record->>'deadlineAt')::timestamptz<=$2", [sessionId, tx.time]);
+    });
+  }
+  /** 高频切片只推进原共享空间时钟，不提前执行代理接管或决定过期维护。 */
+  async spatialCheckpoint(sessionId) {
+    if (!this.spatialDirection) return false;
+    return this.locked(sessionId, { kind: 'spatial-checkpoint', cause: { principalId: 'system', actionId: 'spatial-checkpoint' } }, async tx => {
+      const activeHuman = () => isSpatial(tx.state) && tx.state.phase === 'Running' && !tx.state.paused && Object.values(tx.state.characters).some(actor => actor.kind === 'human' && actor.mode === 'HumanControlled' && ['accepted', 'moving'].includes(actor.movement?.status));
+      if (!activeHuman()) return false;
+      await spatial.advanceSpatialTime(tx);
+      return activeHuman();
     });
   }
   prepareDecision(handle, options) { return decisions.prepareDecision(this, handle, options); }

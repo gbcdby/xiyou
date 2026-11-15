@@ -10,6 +10,7 @@ export function sceneDisplayProjection(projection: ProjectionV2): ProjectionV2 {
     entities.set(value.entityRef, { ...physical, ...value, ...(physical?.motionTrail ? {
       motionTrail: physical.motionTrail, motionFromSceneTimeMs: physical.motionFromSceneTimeMs,
       motionThroughSceneTimeMs: physical.motionThroughSceneTimeMs,
+      motionTimeline: physical.motionTimeline,
     } : {}) });
   }
   const items = new Map<string, ItemViewV2>(overview.items.map(value => [value.entityRef, {

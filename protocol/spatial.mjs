@@ -95,6 +95,40 @@ export function checkSpatialSchema(schema, value, defs = spatialSchema.$defs, pa
         }
     }
 }
+const sameMotionPoint = (a, b) => !!a && !!b && a.x === b.x && a.y === b.y;
+/** 时间与点索引同时覆盖；重复端点不能掩盖折返或把已执行运动改成静止。 */
+function validateMotionTimeline(entity, sceneTimeMs = Number.MAX_SAFE_INTEGER) {
+    if (!Object.hasOwn(entity, 'motionTimeline')) return;
+    const trail = entity.motionTrail, spans = entity.motionTimeline, from = entity.motionFromSceneTimeMs, through = entity.motionThroughSceneTimeMs;
+    if (!Array.isArray(trail) || trail.length < 2 || !Number.isSafeInteger(from) || !Number.isSafeInteger(through)
+        || from > through || through > sceneTimeMs || !sameMotionPoint(trail.at(-1), entity.position) || !spans.length) fail('$.motionTimeline');
+    const zero = from === through;
+    if (zero && (spans.length !== 1 || spans[0].kind !== 'hold')) fail('$.motionTimeline');
+    let time = from, index = 0;
+    for (const span of spans) {
+        if (span.fromSceneTimeMs !== time || span.fromTrailIndex !== index || span.throughTrailIndex < index || span.throughTrailIndex >= trail.length
+            || (zero ? span.throughSceneTimeMs !== time : span.throughSceneTimeMs <= time)) fail('$.motionTimeline');
+        if (span.kind === 'hold') {
+            for (let at = index + 1; at <= span.throughTrailIndex; at++) if (!sameMotionPoint(trail[index], trail[at])) fail('$.motionTimeline.hold');
+        }
+        time = span.throughSceneTimeMs; index = span.throughTrailIndex;
+    }
+    if (time !== through || index !== trail.length - 1) fail('$.motionTimeline');
+}
+function validateTimedProjection(projection) {
+    const entries = [...projection.entities, ...(projection.sceneOverview?.entities ?? [])];
+    for (const entity of entries) {
+        if (Object.hasOwn(entity, 'motionTimeline') && entity.entityRef !== projection.self.entityRef) fail('$.motionTimeline.self');
+        validateMotionTimeline(entity, projection.sceneTimeMs);
+    }
+    if (!projection.sceneOverview) return;
+    const entity = projection.entities.find(value => value.entityRef === projection.self.entityRef);
+    const overview = projection.sceneOverview.entities.find(value => value.entityRef === projection.self.entityRef);
+    if (!entity?.motionTimeline && !overview?.motionTimeline) return;
+    for (const key of ['motionTrail', 'motionFromSceneTimeMs', 'motionThroughSceneTimeMs', 'motionTimeline']) {
+        if (!entity || !overview || !Object.hasOwn(entity, key) || !Object.hasOwn(overview, key) || canonicalize(entity[key]) !== canonicalize(overview[key])) fail('$.motionTimeline.mirror');
+    }
+}
 function validateSceneOverview(projection) {
     const overview = projection.sceneOverview, catalog = projection.mapCatalog;
     if (Boolean(overview) !== Boolean(catalog)) fail('$.sceneOverview');
@@ -120,6 +154,10 @@ export function validateSpatial(name, value) {
     const personalProjections = name === 'ProjectionV2' ? [value] : name === 'SnapshotV2' ? [value.projection] : name === 'BatchV2' ? value.events.map(event => event.payload.projection) : name === 'ControlResponseV2' ? [value.snapshot.projection] : [];
     personalProjections.forEach(validatePersonalProjection);
     personalProjections.forEach(validateSceneOverview);
+    personalProjections.forEach(validateTimedProjection);
+    if (['EntityViewV2', 'SceneEntityViewV1'].includes(name)) validateMotionTimeline(value);
+    if (name === 'MotionTimelineSpanV1' && (value.fromTrailIndex > value.throughTrailIndex || value.fromSceneTimeMs > value.throughSceneTimeMs
+        || value.kind === 'motion' && value.fromSceneTimeMs === value.throughSceneTimeMs)) fail('$.motionTimeline');
     const action = name === 'PublicEnvelope' ? value.action : name === 'ActionV2' ? value : null;
     if (action && ['speak', 'make_claim'].includes(action.kind) && ((action.channel === 'public' || action.channel === 'team') ? action.recipientRefs.length !== 0 : action.recipientRefs.length === 0))
         fail('$.action.recipientRefs');
@@ -134,6 +172,8 @@ export function validateSpatial(name, value) {
         let cursor = BigInt(value.fromExclusive);
         if (cursor > BigInt(value.throughSeq))
             fail('$.throughSeq');
+        if (Object.hasOwn(value, 'syncFrontierSeq') && BigInt(value.throughSeq) > BigInt(value.syncFrontierSeq))
+            fail('$.syncFrontierSeq');
         for (const event of value.events) {
             if (BigInt(event.sessionSeq) <= cursor || BigInt(event.sessionSeq) > BigInt(value.throughSeq))
                 fail('$.events');
@@ -172,5 +212,6 @@ export class MovementCommandSource {
     #next = 0n;
     constructor(controlEpoch) { validateSpatial('DecimalString', controlEpoch); Object.defineProperty(this, 'controlEpoch', { value: controlEpoch, enumerable: true }); }
     move(sceneId, destination, options = {}) { const command = validateSpatial('ActionV2', { kind: 'move_to', sceneId, destination: { ...destination }, ...options, movementCommandSeq: String(++this.#next) }); Object.freeze(command.destination); return Object.freeze(command); }
+    direction(sceneId, mapVersion, direction) { return Object.freeze(validateSpatial('ActionV2', { kind: 'move_direction', sceneId, mapVersion, direction, movementCommandSeq: String(++this.#next) })); }
     stop() { return Object.freeze({ kind: 'stop_move', movementCommandSeq: String(++this.#next) }); }
 }

@@ -19,6 +19,8 @@ DATABASE_URL='postgresql://USER:PASSWORD@127.0.0.1:5432/xiyou' npm start
 
 默认监听 `127.0.0.1:3000`，可通过 `HOST`、`PORT` 调整。`GET /health` 检查数据库连接。服务启动按序执行 `migrations/` 下的 001–005 迁移，使用事务和数据库 advisory lock，不删除现有数据；空间文本的增量编码与历史读取边界见 [spatial.md](spatial.md#版本运行与存储)。默认启动不调用 AI；可信集成方式见 AI 模块说明。
 
+`main.mjs`、`mock-main.mjs` 和 `ai-main.mjs` 的命令入口显式传入 `spatialDirection: {checkpointMs: 50}`，接受已协商的方向短段和分段显示能力。通用 `createAuthorityServer`、`createMockServer`、`createAIServer` 的该参数仍缺省为 `false`，已有集成调用保留旧路径；需要同样能力的集成方须显式传入上述配置。未协商新能力的连接沿原协议运行。模型入口仍要求原有的明确供应商配置和授权，方向配置不改变模型调用边界。
+
 退出时处理 SIGINT／SIGTERM，停止维护、关闭 Socket.IO、等待已接纳任务结束，再关闭连接池。业务库不可用时不会切换到内存世界。原型登录是随机 Bearer token，数据库只保存 token 的 SHA-256；生产账号运营不在 #6 范围。
 
 ```sh

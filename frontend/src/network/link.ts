@@ -1,4 +1,5 @@
 export type RequestEvent = 'session.subscribe' | 'player.action.request' | 'sync.request' | 'control.resume' | 'control.take';
+export type ReplyConsumer = (value: unknown) => void;
 export interface LinkHandlers {
   connected(): void;
   disconnected(): void;
@@ -7,7 +8,9 @@ export interface LinkHandlers {
 }
 export interface SessionLink {
   readonly connected: boolean;
-  request(event: RequestEvent, value: string | { sessionId: string }): Promise<unknown>;
+  readonly acceptedCapabilities?: readonly string[];
+  readonly capabilityFallback?: boolean;
+  request(event: RequestEvent, value: string | { sessionId: string }, consumeReply?: ReplyConsumer): Promise<unknown>;
   close(): void;
 }
 export type ConnectLink = (token: string, handlers: LinkHandlers) => SessionLink;

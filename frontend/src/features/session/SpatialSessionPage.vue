@@ -3,7 +3,7 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref, shallowRef, watch 
 import { useRoute } from 'vue-router';
 import type { ActionV2, ItemViewV2, Position } from '../../../../game/spatial-types.ts';
 import { api, authNotice, identity } from '../../state/app-store.ts';
-import { enterSpatialSession, leaveSpatialSession, performSpatial, spatialClient, spatialNotice, spatialState, spatialStorageNotice } from '../../state/spatial-store.ts';
+import { enterSpatialSession, leaveSpatialSession, performSpatial, spatialClient, spatialNotice, spatialState, spatialSnapshots, spatialStorageNotice } from '../../state/spatial-store.ts';
 import AppIcon from '../../components/AppIcon.vue';
 import SpatialFieldList from '../../components/SpatialFieldList.vue';
 import SpatialStatus from '../../components/SpatialStatus.vue';
@@ -223,7 +223,7 @@ function ownerName(reference: string) { const p = projection.value; return p?.se
         <div class="spatial-layout" :class="{ 'reading-open': reading }">
           <div class="spatial-main">
             <section v-if="!hud && (currentSummary || recentPreparations.length)" class="spatial-current-objective" :aria-label="currentSummary?.caption || '眼下事项'"><div><p class="eyebrow">{{ currentSummary?.caption || '眼下事项' }}</p><h2>{{ currentSummary?.title || '已知准备已留下' }}</h2></div><div class="spatial-known-preparations"><SpatialStatus v-for="objective in recentPreparations" :key="objective.objectiveId" :label="objective.label" tone="confirmed" /></div></section>
-            <SpatialMap :snapshot="spatialState.snapshot!" :disabled="!canAct" :selected="selectedRef" :person-labels="personLabels" :immersive="hud" @move="move" @direction="direction" @select="select" @stop="stop" @objects="showObjects" @settled="spatialClient.confirmDisplayedArrival($event)" />
+            <SpatialMap :snapshot="spatialState.snapshot!" :snapshot-source="spatialState.timedTrail ? spatialSnapshots : undefined" :disabled="!canAct" :selected="selectedRef" :person-labels="personLabels" :immersive="hud" @move="move" @direction="direction" @select="select" @stop="stop" @objects="showObjects" @settled="spatialClient.confirmDisplayedArrival($event)" />
             <p class="spatial-input-hint">点地行走 · 场景内方向键移动 · Esc 关闭详情 / 停步</p>
             <div class="spatial-hud-footer">
               <div class="spatial-action-bar"><div><strong>{{ projection.self.name }}</strong><span v-if="hud" class="gaolao-own-duties">{{ ownDuties }}</span><span v-if="!hud" data-testid="movement-status">{{ projection.movement ? movementLabels[projection.movement.status] : '点地选择路线' }}</span><span v-if="!hud && spatialState.queuedAction">{{ spatialState.queuedAction }}</span></div><button class="secondary-button" aria-label="停步 / 取消后续操作" :disabled="!canStop" @click="stop"><AppIcon name="x" :size="16" />停步</button></div>

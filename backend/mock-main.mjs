@@ -4,8 +4,8 @@ import { createAuthorityServer } from './server.mjs';
 import { attachMockAI } from './ai/mock-runtime.mjs';
 
 /** 与普通服务使用同一权威 Runtime，仅显式加上受控角色启动层。 */
-export async function createMockServer({ pool, now, hooks, minIntervalMs, maxCallsPerSession, log = () => {} }) {
-  const server = await createAuthorityServer({ pool, now, hooks, log });
+export async function createMockServer({ pool, now, hooks, minIntervalMs, maxCallsPerSession, spatialDirection = false, log = () => {} }) {
+  const server = await createAuthorityServer({ pool, now, hooks, spatialDirection, log });
   let ai;
   try { ai = await attachMockAI({ runtime: server.runtime, minIntervalMs, maxCallsPerSession, log }); }
   catch (error) { await server.close(); throw error; }
@@ -42,7 +42,7 @@ async function main() {
   })();
   function onSignal() { close().catch(() => { console.error('模拟服务关闭失败。'); process.exitCode = 1; }); }
   try {
-    server = await createMockServer({ pool, log: (message, fields) => console.log(message, fields ?? {}) });
+    server = await createMockServer({ pool, spatialDirection: { checkpointMs: 50 }, log: (message, fields) => console.log(message, fields ?? {}) });
     const address = await server.listen(port, process.env.HOST ?? '127.0.0.1');
     console.log(`模拟角色策略：权威服务已启动，监听端口 ${address.port}。不调用外部模型。`);
     process.once('SIGINT', onSignal); process.once('SIGTERM', onSignal);

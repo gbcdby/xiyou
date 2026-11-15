@@ -10,6 +10,7 @@ import { accepted, take, share, cleanupPublic } from '../../backend/test-support
 import { sampleSharedPersonalEffects, assertBothActiveEffects, assertSharedStoppedEffects, assertSharedStopTransaction, assertOriginalReceiptRead, tracePersonalTransactions } from '../../backend/test-support/personal-shared-effects.mjs';
 import { repository, sourceIdentity, saveJSON, sha256, until, sleep } from './network-support.mjs';
 import { browserRoom, snapshot, clientState, openReading } from './gaolao-real-support.mjs';
+import { observeDirectionConnections } from './direction-browser-support.mjs';
 import { productionProfile, caseIds, assertCompleteReport, clickAction, askAppearance, describeItems, askItems, personalState, cancelPersonal, returnItem, holdSubmissions, captureAppearanceCompetition, holdCommittedReceipt, deferLeaseMaintenance, authoritativeState, sceneDecision, assertRoomIdentity, createCuilanReportCollector, finalizeCuilanReport } from './cuilan-self-response-support.mjs';
 
 const output = resolve(process.env.FRONTEND_EVIDENCE_DIR || resolve(repository, '.agent-output/cuilan-production-browser'));
@@ -24,7 +25,7 @@ const report = {
   leaseFault: { status: 'NOT_RUN' }, realProviderCalls: 0, faults: [], resources: [],
   notCovered: ['真实provider的自然语言因果质量', '真人四局', '真实设备与艺术品质', '五客户端连续900秒', '3/4/5人数完整分支矩阵', '新环境部署'],
 };
-let database, server, browser, activeRoom, serverPort, activeCase;
+let database, server, browser, activeRoom, serverPort, activeCase, directionConnections;
 const vites = [], rooms = [], restorers = new Set();
 const collector = createCuilanReportCollector(error => report.pageErrors.push({ message: '证据采集失败：' + error.message }));
 const workflow = resolve(repository, '.github/workflows/cuilan-self-response.yml');
@@ -85,6 +86,8 @@ async function newRoom(baseURL, contentVersion, { count = 2, defaultEntry = fals
   const facade = { get runtime() { return server.runtime; } };
   const room = await browserRoom({ server: facade, browser: instrumentedBrowser, baseURL, contentVersion, count, profile: productionProfile, report, observe: collector.observe });
   room.report = report; room.baseURL = baseURL; rooms.push(room); activeRoom = room;
+  report.directionQualification ??= [];
+  for (let player = 0; player < room.count; player++) report.directionQualification.push(await directionConnections.qualify(room.pages[player], room.users[player].userId, 'initial-' + player));
   report.rooms.push(await assertRoomIdentity(room, database.pool, { defaultEntry }));
   assert.ok(report.creationRequests.some(row => row.request.contentVersion === contentVersion && row.request.capabilities.includes('gaolao-personal-consent-v1')));
   return room;
@@ -284,10 +287,13 @@ async function recoverPlayer(room, player, { reload = true } = {}) {
   const resume = page.getByRole('button', { name: '恢复本人控制', exact: true });
   if (await resume.isVisible()) await resume.click();
   await until(async () => (await clientState(page)).inputReady, '真实页面恢复本人控制', 20000);
+  report.directionQualification.push(await directionConnections.qualify(page, room.users[player].userId, 'recovery-' + player));
 }
 async function restartServer(room) {
   const before = (await snapshot(room.pages[0])).viewId;
-  await server.close(); server = await createAuthorityServer({ pool: database.pool }); await server.listen(serverPort);
+  directionConnections.close(); restorers.delete(directionConnections);
+  await server.close(); server = await createAuthorityServer({ pool: database.pool, spatialDirection: { checkpointMs: 50 } });
+  directionConnections = observeDirectionConnections(server.runtime); restorers.add(directionConnections); await server.listen(serverPort);
   for (let player = 0; player < room.count; player++) await recoverPlayer(room, player);
   await assertRoomIdentity(room, database.pool, { defaultEntry: report.rooms.find(row => row.sessionId === room.sessionId).defaultEntry });
   await room.rebindControlledNpcs();
@@ -490,7 +496,8 @@ try {
   assert.equal(report.resources.length, 65); assert.equal(report.resources.reduce((sum, row) => sum + row.bytes, 0), 29038902);
   database = await startTestPostgres('cuilan-e2', { outputSubdirectory: 'cuilan-production-postgres' });
   report.postgresVersion = (await database.pool.query('SHOW server_version')).rows[0].server_version;
-  server = await createAuthorityServer({ pool: database.pool }); serverPort = (await server.listen(0)).port;
+  server = await createAuthorityServer({ pool: database.pool, spatialDirection: { checkpointMs: 50 } });
+  directionConnections = observeDirectionConnections(server.runtime); restorers.add(directionConnections); serverPort = (await server.listen(0)).port;
   browser = await chromium.launch({ headless: true, ...(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {}), args: process.env.CHROMIUM_ARGS ? JSON.parse(process.env.CHROMIUM_ARGS) : [] }); report.chromiumVersion = browser.version();
   const defaultURL = await startFrontend();
   const primary = await newRoom(defaultURL, 'gaolaozhuang-scene-v3', { defaultEntry: true });

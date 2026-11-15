@@ -55,6 +55,7 @@ export interface SpatialContracts {
   ControlRequestV2: T.ControlRequestV2;
   ReceiptResultV2: T.ReceiptResultV2;
   ReceiptV2: T.ReceiptV2;
+  MotionTimelineSpanV1: T.MotionTimelineSpanV1;
   EntityViewV2: T.EntityViewV2;
   SelfViewV2: T.SelfViewV2;
   ItemViewV2: T.ItemViewV2;
@@ -76,4 +77,4 @@ export interface SpatialContracts {
   ControlResponseV2: T.ControlResponseV2;
   ErrorV2: T.ErrorV2;
 }
-export class MovementCommandSource { readonly controlEpoch: string; constructor(controlEpoch: string); move(sceneId: string, destination: T.Position, options?: { targetRef?: string; anchorId?: string }): T.ActionV2; stop(): T.ActionV2; }
+export class MovementCommandSource { readonly controlEpoch: string; constructor(controlEpoch: string); move(sceneId: string, destination: T.Position, options?: { targetRef?: string; anchorId?: string }): T.ActionV2; direction(sceneId: string, mapVersion: string, direction: T.Facing): Extract<T.ActionV2, { kind: 'move_direction' }>; stop(): T.ActionV2; }
