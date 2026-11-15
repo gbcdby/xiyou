@@ -2,6 +2,10 @@
 
 模式：`check/design`。基础包固定 `77ace28f526ce9ad905b1842b7353e48e251423c`，候选 Spec 固定 `1a7f45ddfeca0d25fb3714e1ce45980b225d5bde`，计划固定 `35d8759aac469eba5a8d9d4b94a787a3e62330c5`。只添加本目录；不修改旧模型/原131项结果、业务实现、Spec 或 current。实际代码 `68d2ccb` 仅有定向只读字段对应，`implementation_status=NOT_ASSESSED`。
 
+## #62 新候选证据入口（2026-11-15）
+
+[PROOF_CLOSURE.md](PROOF_CLOSURE.md) 明确签名商、历史标签商、共享 frame、公平性、完整缓存到权威组件的安全模拟及合法 Source 到 constructor 的逐字段合成。[CLOSURE_RESULTS.md](CLOSURE_RESULTS.md) 与 `CLOSURE_RUN_INDEX.json` 记录原候选 36 次运行和 STD-001 的 7 次差量，共 43 次实际运行；`CLOSURE_EVIDENCE.json` 固定原件及差量封存摘要。`STD001_SENSITIVITY.json`、`STD001_REUSE_AUDIT.json` 给新增属性逐项负控和旧证据不变核验。新增结果为作者候选，独立审查结论由 reviewer 更新；下列 S1 原模型、54 项最终选择和历史超时均保留，不能把新证据写回旧 PASS。
+
 ## 入口
 
 - `CONTRACT.md`：运行前冻结的54项范围与判据，7正向、47负控/见证，含3项真正时间负控。

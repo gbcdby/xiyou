@@ -1,0 +1,81 @@
+{
+  "finding": "R-ISSUE62-STD-001",
+  "original_candidate": "4c9957349800767efc4a9668d29fc8c896cd5e2d",
+  "author_status": "EVIDENCE_READY_FOR_INDEPENDENT_REVIEW",
+  "independent_finding_status": "NOT_DECIDED_BY_AUTHOR",
+  "properties": {
+    "SourceInputClosed": [
+      {
+        "run": "closure-shared-negative-source-domain-std001-r1",
+        "run_id": "e1fb349c-4b0e-4f63-80e3-9f295cf6e728",
+        "profile": "closure-shared-negative-source-domain",
+        "raw_exit": 12,
+        "log_sha256": "c6b7953d4dd1e782a3b7f9653a388f2032b05015fbe1bdcb267df82ad06f4521"
+      }
+    ],
+    "CaptureMatches": [
+      {
+        "run": "closure-signature-negative-capture-match-std001-r1",
+        "run_id": "52cdb213-4f42-42df-8437-cdb2871852d2",
+        "profile": "closure-signature-negative-capture-match",
+        "raw_exit": 12,
+        "log_sha256": "fdf7a455ea6a518f664ccddbd7a55eeaf6f0d926bf53e4d96e13234e59de92ab"
+      }
+    ],
+    "EmptyStale": [
+      {
+        "run": "closure-signature-negative-empty-std001-r1",
+        "run_id": "8f57f867-9506-48d5-be30-515062955d2e",
+        "profile": "closure-signature-negative-empty",
+        "raw_exit": 12,
+        "log_sha256": "47a8e98665e86e9d23b5f6107e0b775528a34c3fd3f03ce88d90db0d89f75228"
+      }
+    ],
+    "ActorProjection": [
+      {
+        "run": "closure-signature-negative-actor-r1",
+        "run_id": "4c10569f-46cb-41b3-9c80-fb939c070c9f",
+        "profile": "closure-signature-negative-actor",
+        "raw_exit": 12,
+        "log_sha256": "1cab4b155fe3b1047fef16c87bd3963bd046d53282dee482291c32a90ad5630a"
+      }
+    ],
+    "RestartProjection": [
+      {
+        "run": "closure-signature-negative-restart-r1",
+        "run_id": "314133bd-b681-44a4-bce7-d2152b319cf7",
+        "profile": "closure-signature-negative-restart",
+        "raw_exit": 12,
+        "log_sha256": "6a838fb5e2bac6e35756c83006519a5e05749684bcd08e6222be54b7dd2e2bcf"
+      }
+    ],
+    "CaptureInDomain": [
+      {
+        "run": "closure-signature-negative-capture-domain-std001-r1",
+        "run_id": "94c98913-7773-4707-91fb-bd4f90ed801d",
+        "profile": "closure-signature-negative-capture-domain",
+        "raw_exit": 12,
+        "log_sha256": "ed511e91863a49bdfd89e75654767d6ad2e41d0e84e99b55f843bfd4ec5f7bf2"
+      }
+    ],
+    "ActorDomainClosed": [
+      {
+        "run": "closure-signature-negative-actor-domain-std001-r1",
+        "run_id": "c9b5c371-24df-4924-8451-b9fc3bc60567",
+        "profile": "closure-signature-negative-actor-domain",
+        "raw_exit": 12,
+        "log_sha256": "7059806880710081464e641379adc5b1879efdb7b044eb0f3a8b6f50a58a1fe8"
+      }
+    ],
+    "RestartDomainClosed": [
+      {
+        "run": "closure-signature-negative-restart-domain-std001-r1",
+        "run_id": "4f6eb9a8-37f9-46f0-b7b3-9cef2a75e4c4",
+        "profile": "closure-signature-negative-restart-domain",
+        "raw_exit": 12,
+        "log_sha256": "ae7f28a17db981360eb788af3de71f94534dfe903cd7230e7aeb41e1e0eb3006"
+      }
+    ]
+  },
+  "note": "8个新增属性各有真实rc12；其中ActorProjection/RestartProjection复用原运行，另外6项为本次差量。"
+}
