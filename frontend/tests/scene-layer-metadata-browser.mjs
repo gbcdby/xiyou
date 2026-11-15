@@ -61,7 +61,7 @@ try {
       const set = async value => { validateSpatial('SnapshotV2', value); await page.evaluate(value => window.objectVisualFixture.setSnapshot(value), value); };
       const status = value => until(async () => await page.locator('.spatial-map').getAttribute('data-scene-layer-status') === value, scenario + ' 状态 ' + value);
       const count = (selector, expected) => until(async () => await page.locator(selector).count() === expected, scenario + ' ' + selector + '数量=' + expected);
-      const retry = () => page.locator('.spatial-map-note').getByRole('button', { name: '重新载入图像', exact: true }).click();
+      const retry = () => page.locator('.spatial-map-note').getByRole('button', { name: '重新载入场景', exact: true }).click();
       await set(input);
       if (scenario !== 'registered-road') {
         await status(legacy ? 'legacy' : 'failed'); await count('.spatial-geometric-fallback', 1);
@@ -102,7 +102,7 @@ try {
       }
       if (scenario === 'valid-courtyard') {
         await set(samples.fixed); baseFails = false; await retry(); await status('ready');
-        await until(async () => await page.locator('.spatial-map-note').getByRole('button', { name: '重新载入图像', exact: true }).count() === 1, '独立门失败可重试');
+        await until(async () => await page.locator('.spatial-map-note').getByRole('button', { name: '重新载入场景', exact: true }).count() === 1, '独立门失败可重试');
         assert.equal(await page.locator('.spatial-scene-base').count(), 1); assert.equal(await page.locator('.spatial-scene-door image').count(), 0);
         doorFails = false; await retry(); await status('ready'); await count('.spatial-scene-door [data-object-variant="closed"] image', 1);
         await page.route('**/tests/layer-door-open.svg*', route => { pendingOpen.push(route); });

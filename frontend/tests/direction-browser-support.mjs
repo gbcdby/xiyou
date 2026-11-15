@@ -1,6 +1,9 @@
 import assert from 'node:assert/strict';
 import { validateSpatial } from '../../protocol/spatial.mjs';
 import { decodeJsonbText } from '../../backend/jsonb-text.mjs';
+import { canonicalize } from '../../protocol/index.mjs';
+import { createHash } from 'node:crypto';
+import { entityRef } from '../../game/spatial-world.mjs';
 
 const requiredCapabilities = ['spatial-direction-v1', 'spatial-timed-trail-v1'];
 
@@ -122,4 +125,137 @@ export async function assertShortDirectionPlan(pool, drafts, { sessionId, before
   assert.ok(distance(clientStart, clientEnd) <= 36, '原客户端权威位移门槛保持');
   assert.ok(distance(origin, after.position) <= 36 && distance(before.position, after.position) <= 36, '实际起点与最终权威位移仍至多36');
   return { requests, receipts, before, clientStart, clientEnd, origin, path: plan.path, pathDistance, after, acceptedEventSeq: accepted[0].sessionSeq };
+}
+
+/** 只选冻结窗口的第一条SE，不按Accepted挑下一条；仅扣住原submit已经返回的ACK。 */
+export function observeDirectionSubmissions(runtime, { late = false, now = Date.now, delay = ms => new Promise(resolve => setTimeout(resolve, ms)) } = {}) {
+  const original = runtime.submit, submissions = [], sends = [], errors = [], restorers = [];
+  let diagonalAt = null, downAt = null, startedAt = null, selected = null;
+  async function observed(...args) {
+    const request = JSON.parse(args[1]), row = { enteredAt: now(), raw: args[1], request };
+    submissions.push(row);
+    if (late && !selected && diagonalAt !== null && downAt === null && row.enteredAt >= diagonalAt + 180
+      && request.action.kind === 'move_direction' && request.action.direction === 'SE') selected = row;
+    const receipt = await Reflect.apply(original, this, args); row.submitReturnedAt = now(); row.receipt = structuredClone(receipt);
+    if (row === selected) {
+      // 定时器可能提前唤醒；仅补足同一个固定180ms截止，不等下一动作或扩展观察窗。
+      const deadline = row.submitReturnedAt + 180;
+      do { await delay(Math.max(0, deadline - now())); } while (now() < deadline);
+    }
+    row.ackReleasedAt = now(); return receipt;
+  }
+  runtime.submit = observed;
+  restorers.push(() => { if (runtime.submit === observed) runtime.submit = original; });
+  for (const [name, origin] of [['sync', 'sync'], ['publish', 'push']]) {
+    const original = runtime.spatialSupply[name];
+    function wrapped(...args) {
+      const send = args[2], forwarded = [...args], delivered = [];
+      forwarded[2] = function (...values) {
+        const batch = values[0], binding = values[1], row = { at: now(), origin, viewId: batch?.viewId, fromExclusive: batch?.fromExclusive, throughSeq: batch?.throughSeq, eventCount: batch?.events?.length ?? 0, sent: false };
+        const result = Reflect.apply(send, this, values); row.returnedProof = !!result && typeof result === 'object';
+        delivered.push({ row, binding }); sends.push(row); return result;
+      };
+      const result = Reflect.apply(original, this, forwarded);
+      // 仅在原供给方法成功消费真实入队证明并推进可信水位后记录发送成功；不消费/伪造证明。
+      void result.then(() => { try { for (const { row, binding } of delivered) {
+        const cursor = runtime.spatialSupply.cursor(binding);
+        row.sent = row.returnedProof && cursor !== null && BigInt(cursor) >= BigInt(row.throughSeq);
+      } } catch (error) { errors.push(String(error?.message ?? error)); } }, () => {});
+      return result;
+    }
+    runtime.spatialSupply[name] = wrapped;
+    restorers.push(() => { if (runtime.spatialSupply[name] === wrapped) runtime.spatialSupply[name] = original; });
+  }
+  return { mark(phase) { if (phase === 'right') startedAt = now(); if (phase === 'diagonal') diagonalAt = now(); if (phase === 'down-only') downAt = now(); },
+    read() { return { startedAt, diagonalAt, downAt, selected, submissions, sends, errors, delayMs: late ? 180 : 0 }; },
+    close() { for (const restore of restorers.reverse()) restore(); } };
+}
+
+export async function installDirectionObservation(page) {
+  assert.equal(await page.getByTestId('spatial-map').count(), 0);
+  await page.evaluate(async () => {
+    const { SpatialView } = await import('/src/domain/spatial-view.ts');
+    const { spatialState } = await import('/src/state/spatial-store.ts');
+    const { observeDirectionClient } = await import('/tests/direction-observer.mjs');
+    window.uxDirection = observeDirectionClient({ SpatialView, spatialState }, { phase: () => window.uxCapture?.phase ?? null });
+  });
+}
+
+/** 在运动前解析各读者当前授权别名；不把真实角色ID用于页面输入。 */
+export async function beginDirectionObservations(runtime, room) {
+  const state = await runtime.replay(room.sessionId), mover = state.members.find(member => member.userId === room.users[0].userId).characterId;
+  for (const [index, page] of room.pages.entries()) {
+    const actorId = state.members.find(member => member.userId === room.users[index].userId).characterId;
+    const reference = entityRef(state.views[actorId], mover); assert.ok(reference);
+    await page.evaluate(reference => window.uxDirection.begin(reference), reference);
+  }
+}
+
+export function assertAcceptedLateEvidence(evidence) {
+  const { selected, diagonalAt, downAt, stored, plan, client, submissions, movementRequests } = evidence;
+  assert.ok(selected, '冻结窗口未取得SE样本，不能挑下一条或算PASS'); assert.equal(evidence.delayMs, 180);
+  assert.ok(selected.enteredAt >= diagonalAt + 180 && selected.enteredAt < downAt);
+  assert.equal(selected.request.action.kind, 'move_direction'); assert.equal(selected.request.action.direction, 'SE');
+  assert.equal(selected.receipt.status, 'Accepted'); assert.ok(selected.submitReturnedAt < downAt);
+  assert.ok(selected.ackReleasedAt - selected.submitReturnedAt >= 180);
+  assert.equal(stored.length, 1); assert.deepEqual(stored[0].receipt.publicReceipt, selected.receipt);
+  assert.equal(stored[0].semantic_digest, createHash('sha256').update(canonicalize(selected.request)).digest('hex'));
+  assert.equal(selected.raw, canonicalize(selected.request)); assert.ok(plan); assert.equal(plan.movementId, selected.receipt.result.movementId);
+  assert.equal(plan.movementCommandSeq, selected.request.action.movementCommandSeq); assert.equal(plan.controlEpoch, selected.request.controlEpoch);
+  assert.ok(plan.path[0].x !== plan.path.at(-1).x && plan.path[0].y !== plan.path.at(-1).y, '必须为真实权威双轴Accepted路径');
+  assert.deepEqual(client.errors, []); assert.equal(client.dropped, 0); assert.ok(client.maxPendingDirections <= 2 && client.maxPendingStops <= 1);
+  assert.equal(client.initial.viewId, selected.request.viewId); assert.equal(client.initial.controlEpoch, selected.request.controlEpoch);
+  const down = client.inputs.find(row => row.type === 'keyup' && row.key === 'ArrowRight' && row.phase === 'down-only'); assert.ok(down);
+  assert.equal(down.viewId, selected.request.viewId); assert.equal(down.epoch, selected.request.controlEpoch);
+  const pending = down.actions.find(row => row.id === selected.request.clientActionId); assert.ok(pending && ['waiting', 'unknown'].includes(pending.status) && !pending.receipt, 'DOWN时原请求不能已被历史查询收束');
+  const ack = client.acknowledgements.find(row => row.id === selected.request.clientActionId), applied = client.states.find(row => row.id === selected.request.clientActionId && row.receipt);
+  assert.ok(ack && applied); assert.deepEqual(ack.receipt, selected.receipt); assert.deepEqual(applied.receipt, selected.receipt);
+  assert.equal(applied.viewId, selected.request.viewId); assert.equal(applied.controlEpoch, selected.request.controlEpoch);
+  assert.ok(ack.wallAt > down.wallAt && applied.wallAt >= ack.wallAt);
+  assert.ok(!client.states.some(row => row.id === selected.request.clientActionId && row.receipt && row.wallAt <= down.wallAt));
+  const south = client.requests.find(row => row.action?.kind === 'move_direction' && row.action.direction === 'S' && row.wallAt >= down.wallAt);
+  assert.ok(south && south.wallAt < ack.wallAt);
+  const acceptedSouth = submissions.find(row => row.request.clientActionId === south.id);
+  assert.equal(acceptedSouth?.receipt.status, 'Accepted'); assert.ok(acceptedSouth.submitReturnedAt < ack.wallAt, '新S须在旧ACK客户端收到前实际Accepted');
+  assert.ok(!client.requests.some(row => row.action?.kind === 'move_direction' && row.action.direction === 'SE' && row.wallAt >= down.wallAt), '迟到ACK不得复活SE');
+  const stop = movementRequests.at(-1); assert.equal(stop.action.kind, 'stop_move');
+  const actualRequests = client.requests.filter(row => ['move_direction', 'stop_move'].includes(row.action?.kind));
+  assert.deepEqual(actualRequests.map(row => row.id), movementRequests.map(request => request.clientActionId), '原账本须覆盖所有实际发送，不能遗漏更高seq');
+  assert.ok(movementRequests.slice(0, -1).every(request => BigInt(request.action.movementCommandSeq) < BigInt(stop.action.movementCommandSeq)));
+  assert.equal(submissions.find(row => row.request.clientActionId === stop.clientActionId)?.receipt.status, 'Accepted');
+  return { qualified: true, selectedId: selected.request.clientActionId, down, ack, applied, south, acceptedSouth, stop, heldMs: selected.ackReleasedAt - selected.submitReturnedAt };
+}
+
+export async function collectAcceptedLateEvidence(pool, observer, client, movementRequests) {
+  const timing = observer.read(), selected = timing.selected;
+  if (!selected) return { ...timing, stored: [], plan: null, client, movementRequests };
+  const request = selected.request;
+  const stored = (await pool.query('SELECT actor_id,semantic_digest,receipt FROM action_receipts WHERE session_id=$1 AND client_action_id=$2', [request.sessionId, request.clientActionId])).rows;
+  const range = selected.receipt.actionEventRange;
+  const events = range ? (await pool.query('SELECT event,event_text_encoding FROM world_events WHERE session_id=$1 AND session_seq>=$2 AND session_seq<=$3 ORDER BY session_seq', [request.sessionId, range.first, range.last])).rows.map(row => decodeJsonbText(row.event, row.event_text_encoding)) : [];
+  const plans = events.filter(event => event.kind === 'spatial.actor' && event.payload.actor.characterId === stored[0]?.actor_id
+    && event.payload.actor.movement?.movementId === selected.receipt.result?.movementId && event.payload.actor.movement.status === 'accepted');
+  return { ...timing, stored, acceptedEventSeq: plans[0]?.sessionSeq, plan: plans.length === 1 ? plans[0].payload.actor.movement : null, client, movementRequests };
+}
+
+export function assertFivePersonSupply({ readers, sends, stop, finalPosition }) {
+  assert.equal(readers.length, 5); assert.equal(new Set(readers.map(reader => reader.initial.viewId)).size, 5); assert.equal(stop.status, 'Accepted');
+  const summaries = readers.map(reader => {
+    assert.deepEqual(reader.errors, []); assert.equal(reader.dropped, 0);
+    const rows = reader.applications.filter(row => row.result === 'applied'); assert.ok(rows.length >= 2, '每个真实读者必须连续应用，不得只有连接或终点快照');
+    let cursor = reader.initial.snapshotSeq;
+    for (const row of rows) {
+      assert.equal(row.viewId, reader.initial.viewId); assert.equal(row.epoch, reader.initial.controlEpoch);
+      assert.equal(row.before, cursor); assert.equal(row.fromExclusive, cursor); assert.equal(row.after, row.throughSeq); assert.ok(BigInt(row.after) > BigInt(cursor)); cursor = row.after;
+      assert.ok(['sync', 'push'].includes(row.origin));
+      assert.ok(sends.some(send => send.sent && send.origin === row.origin && send.viewId === row.viewId && send.fromExclusive === row.fromExclusive && send.throughSeq === row.throughSeq), '客户端实际应用须关联成功服务端发送');
+    }
+    const moving = rows.filter(row => row.eventCount > 0 && row.person?.moving && row.person.motionTrail?.some(point => point.x !== row.person.motionTrail[0].x || point.y !== row.person.motionTrail[0].y));
+    assert.ok(moving.length > 0, '每个读者必须实际应用主运动者的已执行移动轨迹');
+    const stopped = rows.find(row => BigInt(row.after) >= BigInt(stop.observedSeq) && row.person?.moving === false
+      && row.person.position.x === finalPosition.x && row.person.position.y === finalPosition.y); assert.ok(stopped, '每个读者必须实际应用终止前缀');
+    return { viewId: reader.initial.viewId, initialCursor: reader.initial.snapshotSeq, finalCursor: cursor, applications: rows.length,
+      push: rows.filter(row => row.origin === 'push').length, sync: rows.filter(row => row.origin === 'sync').length, motionApplications: moving.length, stoppedAt: stopped.after };
+  });
+  return { readers: summaries, scope: '一名运动者向五个真实当前读者供给；不代表五人同时全速输入' };
 }

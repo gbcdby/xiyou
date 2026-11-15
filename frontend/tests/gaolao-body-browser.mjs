@@ -104,9 +104,9 @@ try {
   await capture(page, 'narrow-body.png'); check('390窄屏身体选择与14px标签/44px入口保持');
   await page.setViewportSize({ width: 1600, height: 1000 });
   await page.route('**/assets/gaolaozhuang/gaocai/**', route => route.abort()); await page.reload(); await page.getByRole('button', { name: '恢复本人控制', exact: true }).click();
-  await until(async () => (await clientState(page)).inputReady, '刷新取得新控制'); await page.getByRole('button', { name: '重新载入图像', exact: true }).waitFor();
+  await until(async () => (await clientState(page)).inputReady, '刷新取得新控制'); await page.getByRole('button', { name: '重新载入场景', exact: true }).waitFor();
   const fallback = (await snapshot(page)).projection.self; await selectBody(page, fallback.name, await mapPoint(page, { x: fallback.position.x, y: fallback.position.y - 40 }), fallback.entityRef); await capture(page, 'resource-fallback-body.png');
-  await page.unroute('**/assets/gaolaozhuang/gaocai/**'); await page.getByRole('button', { name: '重新载入图像', exact: true }).click(); await until(() => page.locator('[data-spatial-self="true"] .spatial-actor-art').count(), '显式重试恢复图像'); check('图像失败仍可身体选择，显式重试恢复当前造型');
+  await page.unroute('**/assets/gaolaozhuang/gaocai/**'); await page.getByRole('button', { name: '重新载入场景', exact: true }).click(); await until(() => page.locator('[data-spatial-self="true"] .spatial-actor-art').count(), '显式重试恢复图像'); check('图像失败仍可身体选择，显式重试恢复当前造型');
   report.sourceEnd = await sourceIdentity(); assert.deepEqual(report.sourceEnd, report.source); assert.deepEqual(report.pageErrors, []); report.assessment = 'PASS';
 } catch (error) { report.assessment = 'FAIL'; report.error = error.stack; console.error(error); if (room) await capture(room.pages[0], 'failure.png').catch(() => {}); }
 finally { await room?.close(); await browser?.close(); await vite?.close(); await server?.close(); await database?.stop(); report.finishedAt = new Date().toISOString(); await saveJSON(resolve(output, 'result.json'), report); console.log(JSON.stringify({ assessment: report.assessment, output })); if (report.assessment !== 'PASS') process.exitCode = 1; }

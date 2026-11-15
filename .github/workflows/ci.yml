@@ -87,6 +87,20 @@ jobs:
           VITE_GAOLAO_CONTENT_VERSION: 'gaolaozhuang-scene-v3'
         # 当前正式内容；两个独立账号真实UI/PG/Socket。录像不替代断言、独审或真人试玩。
         run: node frontend/tests/client-experience-browser.mjs
+      - name: 同配置已接受斜向180ms迟到确认与真实Canvas
+        timeout-minutes: 4
+        env:
+          FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-direction-late
+          VITE_GAOLAO_CONTENT_VERSION: 'gaolaozhuang-scene-v3'
+        # 默认success依赖：normal通过才运行，首个冻结SE样本失格也失败，不挑样本重试。
+        run: node frontend/tests/client-experience-browser.mjs late-accepted-se-180
+      - name: 同配置五个真实新模式客户端供给与Canvas
+        timeout-minutes: 4
+        env:
+          FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-direction-five
+          VITE_GAOLAO_CONTENT_VERSION: 'gaolaozhuang-scene-v3'
+        # late通过才继续；一名运动者、五个实际应用前缀的读者，不人为加快心跳。
+        run: node frontend/tests/client-experience-browser.mjs five-person
       - name: 旧版 A2 高老庄真实 2 人与 5 人章节及授权复盘
         env:
           FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-gaolao
@@ -125,6 +139,14 @@ jobs:
             .agent-output/ci/browser-client-experience/scene-v3-narrow.png
             .agent-output/ci/browser-client-experience/scene-v3-failure.png
             .agent-output/ci/browser-client-experience/scene-v3-demo.webm
+            .agent-output/ci/browser-direction-late/result.json
+            .agent-output/ci/browser-direction-late/result-before-cleanup.json
+            .agent-output/ci/browser-direction-late/scene-v3-failure.png
+            .agent-output/ci/browser-direction-late/scene-v3-demo.webm
+            .agent-output/ci/browser-direction-five/result.json
+            .agent-output/ci/browser-direction-five/result-before-cleanup.json
+            .agent-output/ci/browser-direction-five/scene-v3-failure.png
+            .agent-output/ci/browser-direction-five/scene-v3-demo.webm
           include-hidden-files: true
           if-no-files-found: warn
           retention-days: 7

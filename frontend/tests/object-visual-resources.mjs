@@ -35,14 +35,14 @@ export async function checkObjectResources({ browser, output, report, samples })
     const count = (locator, expected, label) => until(async () => await locator.count() === expected, label, 5000);
     const pictured = async name => { const path = resolve(output, name); await page.screenshot({ path, fullPage: true }); report.screenshots.push({ file: name, sha256: sha256(await readFile(path)), scope: 'controlled-consumer' }); };
     await set(base);
-    await page.locator('.spatial-map-note').getByRole('button', { name: '重新载入图像', exact: true }).waitFor();
+    await page.locator('.spatial-map-note').getByRole('button', { name: '重新载入场景', exact: true }).waitFor();
     assert.equal(await map.locator('.spatial-object-art image').count(), 0);
     const brace = base.projection.items.find(item => item.visualKey === 'timber-brace');
     const braceNode = map.locator('.spatial-item[aria-label="选择公共门撑"]');
     const hitRadius = await braceNode.locator('.spatial-hit').getAttribute('r');
     await braceNode.focus(); await braceNode.press('Enter');
     assert.equal((await page.evaluate(() => window.objectVisualFixture.selections())).at(-1), brace.entityRef);
-    mode = 'good'; await page.locator('.spatial-map-note').getByRole('button', { name: '重新载入图像', exact: true }).click();
+    mode = 'good'; await page.locator('.spatial-map-note').getByRole('button', { name: '重新载入场景', exact: true }).click();
     await count(map.locator('.spatial-object-art image'), 1, '失败重试仅加载已登记资源');
     assert.equal(await braceNode.locator('.spatial-hit').getAttribute('r'), hitRadius);
     assert.equal(await map.locator('.spatial-object-art image').evaluate(node => getComputedStyle(node).pointerEvents), 'none');
@@ -73,7 +73,7 @@ export async function checkObjectResources({ browser, output, report, samples })
     assert.equal(await map.locator('.spatial-object-art image').count(), 0);
     const requestCount = evidence.requests.length;
     await set(next); await page.waitForLoadState('networkidle'); assert.equal(evidence.requests.length, requestCount);
-    assert.equal(await page.getByRole('button', { name: '重新载入图像', exact: true }).count(), 0);
+    assert.equal(await page.getByRole('button', { name: /^(?:重新载入场景|重新载入图像)$/, exact: true }).count(), 0);
     check('隐藏/换view撤销旧实例；constructor未知键不请求资源且不遗留错误');
 
     const twins = structuredClone(base); twins.viewId = 'object-fixture-twins'; twins.projection.items.forEach(item => { item.visualKey = 'timber-brace'; });
@@ -88,9 +88,9 @@ export async function checkObjectResources({ browser, output, report, samples })
     mode = 'fail-ground'; await set(split);
     await count(map.locator('.spatial-object-art image'), 0, '地面变体失败');
     await count(page.locator('.spatial-inventory-art image'), 1, '同key另一个ref的行囊变体继续可见');
-    await page.locator('.spatial-map-note').getByRole('button', { name: '重新载入图像', exact: true }).waitFor();
+    await page.locator('.spatial-map-note').getByRole('button', { name: '重新载入场景', exact: true }).waitFor();
     split.projection.items = split.projection.items.slice(1);
-    await set(split); await until(async () => await page.getByRole('button', { name: '重新载入图像', exact: true }).count() === 0, '删除失败实例同时删除错误统计');
+    await set(split); await until(async () => await page.getByRole('button', { name: /^(?:重新载入场景|重新载入图像)$/, exact: true }).count() === 0, '删除失败实例同时删除错误统计');
     assert.equal(await page.locator('.spatial-inventory-art image').count(), 1);
     check('同key不同ref独立选择、失败与删除，剩余实例不受影响');
 

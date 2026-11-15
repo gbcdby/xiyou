@@ -3,6 +3,7 @@ import { loadContent } from '../../content/index.mjs';
 import { validateSpatial } from '../../protocol/spatial.mjs';
 import { until, sleep } from './network-support.mjs';
 import { canvasFrame, worldPixel } from './canvas-browser-support.mjs';
+import { beginSelectionClick, endSelectionClick } from './cuilan-click-observation.mjs';
 
 export const snapshot = page => page.evaluate(async () => (await import('/src/state/spatial-store.ts')).spatialState.value.snapshot);
 export const clientState = page => page.evaluate(async () => {
@@ -56,14 +57,24 @@ export async function selectObject(page, reference) {
   const texts = await buttons.allTextContents();
   const candidates = texts.map((text, index) => ({ text: text.trim(), index })).filter(entry => entry.text === target.name || new RegExp('^\\d+号 · ' + escapeRegex(target.name) + '$').test(entry.text));
   if (candidates.length === 1) {
-    await buttons.nth(candidates[0].index).click();
+    const observed = beginSelectionClick(page, { reference, branch: 'object-button' });
+    try { await buttons.nth(candidates[0].index).click(); endSelectionClick(observed, 'returned'); }
+    catch (error) { endSelectionClick(observed, 'threw', error); throw error; }
   } else {
     // 同名/同脚点时点实际绘出的编号标签；不凭真身、插入顺序或隐藏DOM挑选。
     assert.ok(target.position && target.sceneId === p.self.sceneId, '同名目标须在当前地图可见');
     const map = page.getByTestId('spatial-map'); await map.scrollIntoViewIfNeeded();
     const label=(await canvasFrame(page)).labels.find(value=>value.key===reference&&value.selectable);
-    if(label)await map.click({position:{x:label.x+label.width/2,y:label.y+label.height/2}});
-    else{const {pixel}=await worldPixel(page,target.position);await page.mouse.click(pixel.x,pixel.y);}
+    if(label) {
+      const observed = beginSelectionClick(page, { reference, branch: 'map-label' });
+      try { await map.click({position:{x:label.x+label.width/2,y:label.y+label.height/2}}); endSelectionClick(observed, 'returned'); }
+      catch (error) { endSelectionClick(observed, 'threw', error); throw error; }
+    } else {
+      const {pixel}=await worldPixel(page,target.position);
+      const observed = beginSelectionClick(page, { reference, branch: 'map-position' });
+      try { await page.mouse.click(pixel.x,pixel.y); endSelectionClick(observed, 'returned'); }
+      catch (error) { endSelectionClick(observed, 'threw', error); throw error; }
+    }
   }
   const label = (await page.locator('#spatial-selection-heading').innerText()).trim();
   assert.ok(label === target.name || label.endsWith(' · ' + target.name), '选中卡必须显示目标的当前授权称呼');

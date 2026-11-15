@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { DirectionIntent } from '../src/domain/direction-intent.ts';
+import { DIRECTION_INTERVAL_MS } from '../src/domain/spatial-direction.ts';
 
 const flush = () => new Promise(resolve => setImmediate(resolve));
 function clock() {
@@ -20,6 +21,32 @@ test('DIR-CLIENT：旧Accepted回执未到时抢先改向，旧拒绝不能停�
   assert.equal(calls.length, 2); assert.deepEqual(calls[1], { vector: { x: 0, y: 1 }, at: 50 });
   complete[1]('accepted'); complete[0]('rejected'); await flush(); await time.advance(150);
   assert.equal(calls.filter(x => x === 'stop').length, 0); assert.deepEqual(calls[2].vector, { x: 0, y: 1 });
+});
+
+test('GZ-UX-AC-05：新DirectionIntent的30/60/120Hz重复输入保持相同时刻、预算和两方向一stop上限', async () => {
+  const traces = [];
+  for (const hz of [30, 60, 120]) {
+    const time = clock(), calls = [], pending = new Map(); let serial = 0, held = { x: 1, y: 0 }, moves = 0, stops = 0, maxMoves = 0, maxStops = 0;
+    const finish = (id, kind, resolve, result) => { pending.delete(id); if (kind === 'move') moves--; else stops--; resolve(result); };
+    const controller = new DirectionIntent({ clock: time,
+      send(vector) { const id = ++serial; moves++; maxMoves = Math.max(maxMoves, moves); calls.push({ kind: 'move', at: time.now(), vector });
+        return new Promise(resolve => { pending.set(id, 'move'); time.setTimeout(() => finish(id, 'move', resolve, 'accepted'), 180); }); },
+      stop() { const id = ++serial; stops++; maxStops = Math.max(maxStops, stops); calls.push({ kind: 'stop', at: time.now() });
+        return new Promise(resolve => { pending.set(id, 'stop'); time.setTimeout(() => finish(id, 'stop', resolve), 80); }); },
+    });
+    const changes = [{ at: 0, vector: { x: 1, y: 0 } }, { at: 500, vector: { x: 1, y: 1 } }, { at: 850, vector: { x: 0, y: 1 } }, { at: 1300, vector: null }];
+    const events = [...changes.map(change => ({ ...change, change: true })), ...Array.from({ length: Math.floor(1300 * hz / 1000) }, (_, i) => ({ at: (i + 1) * 1000 / hz, change: false }))]
+      .sort((a, b) => a.at - b.at || Number(b.change) - Number(a.change));
+    for (const event of events) { await time.advance(event.at); if (event.change) held = event.vector; controller.set(held); await flush(); }
+    await time.advance(2000); controller.clear();
+    assert.equal(pending.size, 0); assert.ok(maxMoves <= 2 && maxStops <= 1); assert.deepEqual(calls.filter(call => call.kind === 'stop'), [{ kind: 'stop', at: 1300 }]);
+    const sent = calls.filter(call => call.kind === 'move');
+    for (let end = 0; end < sent.length; end++) for (let start = 0; start <= end; start++) assert.ok(end - start + 1 <= 2 + (sent[end].at - sent[start].at) / DIRECTION_INTERVAL_MS + 1e-8, '相同100ms补充预算，不因帧率增加请求');
+    const directions = sent.map(call => Math.abs(call.vector.x) < 1e-8 ? 'S' : Math.abs(call.vector.y) < 1e-8 ? 'E' : 'SE');
+    assert.deepEqual(directions.filter((value, index) => !index || value !== directions[index - 1]), ['E', 'SE', 'S']);
+    traces.push(calls);
+  }
+  assert.deepEqual(traces[0], traces[1]); assert.deepEqual(traces[1], traces[2]);
 });
 
 test('DIR-CLIENT：两槽满只保留最新意图，全松stop不等待两条旧回执', async t => {
