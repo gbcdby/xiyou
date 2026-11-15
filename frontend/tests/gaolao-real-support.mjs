@@ -41,7 +41,11 @@ export async function openReading(page, label) {
 /** 固定HUD按需打开对象列表；不通过隐藏实体DOM选择。 */
 export async function openObjects(page) {
   const entry = page.getByRole('button', { name: '场景对象', exact: true });
-  if (await entry.count()) await entry.click();
+  if (await entry.count()) {
+    const observed = beginSelectionClick(page, { branch: 'objects-entry' });
+    try { await entry.click(); endSelectionClick(observed, 'returned'); }
+    catch (error) { endSelectionClick(observed, 'threw', error); throw error; }
+  }
   const restore = page.locator('.spatial-sidebar.hud-card-collapsed').getByRole('button', { name: '取消选择并展开', exact: true });
   if (await restore.isVisible()) await restore.click();
 }

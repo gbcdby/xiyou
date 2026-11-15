@@ -8,14 +8,27 @@ import { createAuthorityServer } from '../../backend/server.mjs';
 import { repository, saveJSON, sourceIdentity, sha256, until } from './network-support.mjs';
 import { checkObjectGeometry } from './object-geometry-resources.mjs';
 import { canvasFrame, canvasPixels, worldPixel } from './canvas-browser-support.mjs';
+import { beginExitObservation, markExitObservation, finishExitObservation, combineExitObservation } from './spatial-exit-observation.mjs';
 
 const output = resolve(process.env.FRONTEND_EVIDENCE_DIR || resolve(repository, '.agent-output/ui-implementer/spatial-browser'));
 await mkdir(output, { recursive: true });
-const report = { scope: 'A1灰盒作者自查：真实Vue/独立浏览器/HTTP/Socket.IO/PostgreSQL；自动化，不是真人、正式视觉或完整章节验收', source: await sourceIdentity(), startedAt: new Date().toISOString(), checks: [], pointerChecks: [], pageErrors: [], cleanup: [] };
-let database, server, vite, browser, activePages = []; const contexts = [];
+const report = { scope: 'A1灰盒作者自查：真实Vue/独立浏览器/HTTP/Socket.IO/PostgreSQL；自动化，不是真人、正式视觉或完整章节验收', source: await sourceIdentity(), startedAt: new Date().toISOString(), checks: [], pointerChecks: [], pageErrors: [], cleanup: [], exitObservations: [] };
+let database, server, vite, browser, activePages = [], activeExit = null; const contexts = [];
 const check = (name, details = {}) => { report.checks.push({ name, status: 'PASS', ...details }); console.log(JSON.stringify({ check: name })); };
-const snapshot = page => page.evaluate(async () => (await import('/src/state/spatial-store.ts')).spatialState.value.snapshot);
-const state = page => page.evaluate(async () => { const s = (await import('/src/state/spatial-store.ts')).spatialState.value; return { connection: s.connection, inputReady: s.inputReady, paused: s.snapshot?.projection.paused, movement: s.snapshot?.projection.movement, position: s.snapshot?.projection.self.position, message: s.message, actions: s.actions.map(a => ({ status: a.status, detail: a.detail })) }; });
+const snapshot = page => page.evaluate(async () => {
+  const s = (await import('/src/state/spatial-store.ts')).spatialState.value;
+  try { window.__xiyouExitObservation?.phase('waiting'); window.__xiyouExitObservation?.sample('poll', s); } catch { /* 观察失败不能改变原snapshot返回。 */ }
+  return s.snapshot;
+});
+const state = (page, collectExit = false) => page.evaluate(async collectExit => {
+  const s = (await import('/src/state/spatial-store.ts')).spatialState.value;
+  const value = { connection: s.connection, inputReady: s.inputReady, paused: s.snapshot?.projection.paused, movement: s.snapshot?.projection.movement, position: s.snapshot?.projection.self.position, message: s.message, actions: s.actions.map(a => ({ status: a.status, detail: a.detail })) };
+  if (collectExit) try {
+    const observer = window.__xiyouExitObservation;
+    if (observer) { observer.phase('failed'); observer.sample('failure-tail', s); value.exitObservation = observer.stop(); delete window.__xiyouExitObservation; }
+  } catch (error) { value.exitObservationError = String(error?.message ?? error); }
+  return value;
+}, collectExit);
 async function arrived(page, previousSequence, position, description) {
   await until(async () => { const p = (await snapshot(page))?.projection; return p?.movement?.movementCommandSeq !== previousSequence && p?.movement?.status === 'arrived' && p.self.position.x === position.x && p.self.position.y === position.y; }, description);
 }
@@ -104,10 +117,17 @@ try {
       await until(async () => (await snapshot(host)).projection.cooperations.some(c => c.phase === 'locked'), '两人协作锁定');
       check(`${count}人：到达后拿取、近距唯一交接、两人协作锁定`);
       const outwardProjection=(await snapshot(host)).projection,outward=outwardProjection.mapCatalog.find(scene=>scene.sceneId==='gray-yard').anchors.find(anchor=>anchor.anchorId===outwardProjection.scene.exits[0].anchorId);
+      activeExit = { page: host, handle: await beginExitObservation(host, { group: count, exitId: outwardProjection.scene.exits[0].exitId, targetSceneId: 'gray-road', label: '沿实际出口进入短路', timeoutMs: 20000 }) };
       await host.getByRole('button', { name: '走向出口 · '+outward.label, exact: true }).click();
+      markExitObservation(activeExit.handle, 'click-returned');
       await until(async () => (await snapshot(host)).projection.self.sceneId === 'gray-road', '沿实际出口进入短路', 20000);
+      markExitObservation(activeExit.handle, 'wait-completed'); report.exitObservations.push(await finishExitObservation(host, activeExit.handle)); activeExit = null;
       const homeProjection=(await snapshot(host)).projection,homeward=homeProjection.mapCatalog.find(scene=>scene.sceneId==='gray-road').anchors.find(anchor=>anchor.anchorId===homeProjection.scene.exits[0].anchorId);
-      await host.getByRole('button', { name: '走向出口 · '+homeward.label, exact: true }).click(); await until(async () => (await snapshot(host)).projection.self.sceneId === 'gray-yard', '返回院落');
+      activeExit = { page: host, handle: await beginExitObservation(host, { group: count, exitId: homeProjection.scene.exits[0].exitId, targetSceneId: 'gray-yard', label: '返回院落', timeoutMs: 15000 }) };
+      await host.getByRole('button', { name: '走向出口 · '+homeward.label, exact: true }).click();
+      markExitObservation(activeExit.handle, 'click-returned');
+      await until(async () => (await snapshot(host)).projection.self.sceneId === 'gray-yard', '返回院落');
+      markExitObservation(activeExit.handle, 'wait-completed'); report.exitObservations.push(await finishExitObservation(host, activeExit.handle)); activeExit = null;
       check(`${count}人：场景出口按授权条件来回行走`);
       await screenshot(host, `spatial-${count}players-desktop.png`);
     }
@@ -132,7 +152,19 @@ try {
   assert.deepEqual(report.pageErrors, []); report.assessment = 'PASS';
 } catch (error) {
   report.assessment = 'FAIL'; report.error = error.stack; console.error(error);
-  for (let i = 0; i < activePages.length; i++) { await activePages[i].screenshot({ path: resolve(output, `failure-${i}.png`), fullPage: true }).catch(() => {}); report[`page-${i}`] = await activePages[i].locator('body').innerText().catch(() => ''); report[`state-${i}`] = await state(activePages[i]).catch(() => null); }
+  markExitObservation(activeExit?.handle, 'operation-failed', error);
+  for (let i = 0; i < activePages.length; i++) {
+    // 复用原失败state读取，先于fullPage截图，避免把截图采集后的viewport当失败瞬间。
+    let readFailure;
+    const value = await state(activePages[i], true).catch(failure => { readFailure = failure; return null; });
+    if (activeExit?.page === activePages[i]) {
+      report.exitObservations.push(combineExitObservation(activeExit.handle, value?.exitObservation, readFailure ?? value?.exitObservationError)); activeExit = null;
+    }
+    if (value) { delete value.exitObservation; delete value.exitObservationError; }
+    report[`state-${i}`] = value;
+    await activePages[i].screenshot({ path: resolve(output, `failure-${i}.png`), fullPage: true }).catch(() => {});
+    report[`page-${i}`] = await activePages[i].locator('body').innerText().catch(() => '');
+  }
 } finally {
   await saveJSON(resolve(output, 'result-before-cleanup.json'), report);
   for (const [name, close] of [['browser', () => browser?.close()], ['vite', () => vite?.close()], ['server', () => server?.close()], ['postgres', () => database?.stop()]]) { await close(); report.cleanup.push(name); }

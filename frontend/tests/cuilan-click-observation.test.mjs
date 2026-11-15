@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { EventEmitter } from 'node:events';
 import { runInNewContext } from 'node:vm';
-import { selectObject } from './gaolao-real-support.mjs';
+import { openObjects, selectObject } from './gaolao-real-support.mjs';
 import { observeSelectionClicks } from './cuilan-click-observation.mjs';
 import * as observation from './cuilan-click-observation.mjs';
 
@@ -84,6 +84,53 @@ const pulse = page => ({ type: () => 'debug', text: () => page.init.args.prefix 
   longTasks: { count: 1, totalDuration: 60, maxDuration: 60, recent: [{ startTime: 20, duration: 60 }] },
   privateIgnoredField: '不得保存',
 }) });
+
+function objectsEntry({ present = true, restored = true, failure, clickWait } = {}) {
+  const calls = [];
+  const entry = { count: async () => { calls.push('count'); return Number(present); }, click: async (...args) => {
+    calls.push(['entry-click', args]); if (clickWait) await clickWait; if (failure) throw failure;
+  } };
+  const restore = { isVisible: async () => { calls.push('restore-visible'); return restored; }, click: async (...args) => calls.push(['restore-click', args]) };
+  const page = { getByRole: (...args) => { calls.push(['entry-locator', args]); return entry; }, locator: selector => {
+    calls.push(['restore-locator', selector]); return { getByRole: (...args) => { calls.push(['restore-role', args]); return restore; } };
+  } };
+  return { page, calls };
+}
+
+test('对象入口原单次无参 click 的边界先于恢复按钮，观察失败不改变动作', async () => {
+  for (const throws of [false, true]) {
+    const { page, calls } = objectsEntry(), phases = [];
+    const remove = observeSelectionClicks(page, event => { phases.push({ phase: event.phase, branch: event.branch, calls: structuredClone(calls) }); if (throws) throw new Error('仅观察失败'); return 7; });
+    await openObjects(page); remove();
+    assert.deepEqual(calls, [
+      ['entry-locator', ['button', { name: '场景对象', exact: true }]], 'count', ['entry-click', []],
+      ['restore-locator', '.spatial-sidebar.hud-card-collapsed'], ['restore-role', ['button', { name: '取消选择并展开', exact: true }]], 'restore-visible', ['restore-click', []],
+    ]);
+    assert.equal(phases[0]?.branch, 'objects-entry');
+    assert.deepEqual(phases.map(row => row.phase), throws ? ['called'] : ['called', 'returned']);
+    assert.equal(phases[0].calls.some(row => row[0] === 'entry-click'), false);
+    if (!throws) assert.equal(phases[1].calls.some(row => row[0] === 'restore-locator'), false);
+  }
+});
+
+test('入口 click 未 settle 不进入恢复按钮，抛原错误且失败 hook 不截断传播', async () => {
+  let release; const wait = new Promise(resolve => { release = resolve; }), error = new Error('原 5000ms 错误');
+  const { page, calls } = objectsEntry({ failure: error, clickWait: wait }), phases = [];
+  const remove = observeSelectionClicks(page, event => { phases.push(event); if (event.phase === 'threw') throw new Error('诊断错误'); return 8; });
+  const pending = openObjects(page); await Promise.resolve(); await Promise.resolve();
+  assert.deepEqual(phases.map(row => row.phase), ['called']); assert.equal(calls.some(row => row[0] === 'restore-locator'), false);
+  release(); await assert.rejects(pending, actual => actual === error); remove();
+  assert.deepEqual(phases.map(row => row.phase), ['called', 'threw']); assert.equal(phases[1].error, error);
+  assert.equal(calls.filter(row => row[0] === 'entry-click').length, 1); assert.equal(calls.some(row => row[0] === 'restore-locator'), false);
+});
+
+test('入口不存在不制造点击或观察，未注册入口仍按原顺序执行', async () => {
+  const absent = objectsEntry({ present: false }), phases = [];
+  const remove = observeSelectionClicks(absent.page, event => phases.push(event)); await openObjects(absent.page); remove();
+  assert.deepEqual(phases, []); assert.equal(absent.calls.some(row => row[0] === 'entry-click'), false);
+  const plain = objectsEntry({ restored: false }); await openObjects(plain.page);
+  assert.equal(plain.calls.filter(row => row[0] === 'entry-click').length, 1); assert.equal(plain.calls.some(row => row[0] === 'restore-click'), false);
+});
 
 test('公共事件只存有限元数据，记录响应脉冲与 Node 时钟而不发额外页面请求', async t => {
   assert.equal(typeof observation.createCuilanClickObservation, 'function', '须有独立可关闭的观察器');

@@ -12,6 +12,7 @@ import { repository, sourceIdentity, saveJSON, sha256, until, sleep } from './ne
 import { browserRoom, snapshot, clientState, openReading } from './gaolao-real-support.mjs';
 import { observeDirectionConnections } from './direction-browser-support.mjs';
 import { createCuilanClickObservation } from './cuilan-click-observation.mjs';
+import { createCuilanNodeProfile } from './cuilan-node-profile.mjs';
 import { productionProfile, caseIds, assertCompleteReport, clickAction, askAppearance, describeItems, askItems, personalState, cancelPersonal, returnItem, holdSubmissions, captureAppearanceCompetition, holdCommittedReceipt, deferLeaseMaintenance, authoritativeState, sceneDecision, assertRoomIdentity, createCuilanReportCollector, finalizeCuilanReport } from './cuilan-self-response-support.mjs';
 
 const output = resolve(process.env.FRONTEND_EVIDENCE_DIR || resolve(repository, '.agent-output/cuilan-production-browser'));
@@ -31,6 +32,8 @@ const vites = [], rooms = [], restorers = new Set();
 const collector = createCuilanReportCollector(error => report.pageErrors.push({ message: '证据采集失败：' + error.message }));
 const clickObservation = createCuilanClickObservation({ currentCase: () => activeCase });
 report.clickObservation = clickObservation.report; restorers.add(clickObservation);
+const nodeProfile = createCuilanNodeProfile({ repository, output, sourcePaths: Object.keys(report.source.sourceHashes) });
+report.clickObservation.nodeProfile = nodeProfile.report; restorers.add(nodeProfile);
 const workflow = resolve(repository, '.github/workflows/cuilan-self-response.yml');
 report.workflowSha256 = sha256(await readFile(workflow));
 await saveJSON(resolve(output, 'startup.json'), { source: report.source, startedAt: report.startedAt, command: 'node frontend/tests/cuilan-self-response-browser.mjs', workflowSha256: report.workflowSha256 });
@@ -344,11 +347,16 @@ async function oldPossessions(room) {
   } finally { gate.close(); restorers.delete(gate); }
   // 必须真实挤出旧许可历史；聊天不会增长 consent 历史，因此不拿聊天替代。
   await nearOwner(room, a); let generated = 0;
-  while ((await snapshot(room.pages[a])).projection.chapter.consents.some(row => row.consentId === granted.consent.consentId) && generated < 262) {
-    accepted((await askAppearance(room, a, 'front-meeting', 'reusable')).receipt);
-    await awaitDecision(room, a, 'appearance', 'declined'); generated++;
-    if (generated % 32 === 0) console.log(JSON.stringify({ stage: '真实许可历史落窗', generated }));
-  }
+  let historyCompleted = false;
+  nodeProfile.start();
+  try {
+    while ((await snapshot(room.pages[a])).projection.chapter.consents.some(row => row.consentId === granted.consent.consentId) && generated < 262) {
+      accepted((await askAppearance(room, a, 'front-meeting', 'reusable')).receipt);
+      await awaitDecision(room, a, 'appearance', 'declined'); generated++;
+      if (generated % 32 === 0) console.log(JSON.stringify({ stage: '真实许可历史落窗', generated }));
+    }
+    historyCompleted = true;
+  } finally { nodeProfile.end(historyCompleted ? 'history-returned' : 'history-threw'); }
   assert.ok(generated > 0 && generated <= 262);
   assert.ok(!(await snapshot(room.pages[a])).projection.chapter.consents.some(row => row.consentId === granted.consent.consentId), '旧consent须已实际退出近期许可历史');
   assert.equal((await snapshot(room.pages[a])).projection.chapter.privateReturns.length, 2);

@@ -75,6 +75,7 @@ jobs:
             .agent-output/ci/browser-cuilan-self-response/startup.json
             .agent-output/ci/browser-cuilan-self-response/result-before-cleanup.json
             .agent-output/ci/browser-cuilan-self-response/result.json
+            .agent-output/ci/browser-cuilan-self-response/p05-node-profile.json
             .agent-output/ci/browser-cuilan-self-response/stdout.log
             .agent-output/ci/browser-cuilan-self-response/*.png
             .agent-output/ci/cuilan-process-restart/startup.json
