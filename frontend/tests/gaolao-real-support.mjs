@@ -100,7 +100,8 @@ export async function waitHumanReceipt(page, previousIds, expected, report, play
     if (expected[field] !== undefined) assert.deepEqual(request.action[field], expected[field], label + '使用原授权字段 ' + field);
   }
   if (expected.parameters !== undefined) assert.deepEqual(request.action.parameters, expected.parameters, label + '有限操作参数保持');
-  if (expected.destination !== undefined) assert.deepEqual(request.action.destination, expected.destination, label + '实际屏幕点选目标保持');
+  // 内容解码器的 Position 可为 null-prototype；仍逐值严格比较同一 {x,y}，不把原型当坐标语义。
+  if (expected.destination !== undefined) assert.deepEqual(request.action.destination, { x: expected.destination.x, y: expected.destination.y }, label + '实际屏幕点选目标保持');
   if (expected.recipientRefs !== undefined) assert.deepEqual(request.action.recipientRefs, expected.recipientRefs, label + '收件引用保持');
   return settled;
 }
