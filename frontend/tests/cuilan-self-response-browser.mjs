@@ -197,7 +197,21 @@ async function appearancePlaces(room, initial) {
       accepted(await room.interact('wukong', 'self', 'gz-release-appearance'));
       const current = await state(room); assert.equal(current.chapter.disguise, null); assert.equal(current.chapter.consents[granted.consent.consentId].status, 'accepted', '自愿解除不伪称本人撤回');
     } else {
-      await cancelPersonal(room, player, 'appearance');
+      const applied = await until(async () => {
+        const current = await snapshot(room.pages[player]);
+        if (!current || current.sessionId !== room.sessionId || BigInt(current.snapshotSeq) < BigInt(applyReceipt.observedSeq)) return false;
+        const request = current.projection.chapter.personalRequests.find(row => row.consentId === granted.consent.consentId && row.purpose === 'appearance');
+        const consent = current.projection.chapter.consents.find(row => row.consentId === granted.consent.consentId);
+        return request?.executionState === 'active' && request.lifecycle === 'open'
+          && BigInt(request.lifecycleVersion) > BigInt(granted.request.lifecycleVersion)
+          && consent?.status === 'accepted' && consent.version === granted.consent.version
+          ? { snapshotSeq: current.snapshotSeq, lifecycleVersion: request.lifecycleVersion, consentVersion: consent.version } : false;
+      }, '本次请求者收到原借貌提交及同一许可的实际 active 生命周期', 15000);
+      const cancelled = await cancelPersonal(room, player, 'appearance');
+      assert.ok(BigInt(cancelled.request.baseSeq) >= BigInt(applyReceipt.observedSeq));
+      assert.equal(cancelled.request.action.expectedLifecycleVersion, applied.lifecycleVersion);
+      assert.equal(cancelled.request.action.expectedConsentVersion, applied.consentVersion);
+      evidence('P-06', '取消前本人客户端实际追上原借貌提交', { sessionId: room.sessionId, destinationId: place.destinationId, consentId: granted.consent.consentId, applyActionId: applyReceipt.clientActionId, applyObservedSeq: applyReceipt.observedSeq, requesterSnapshotSeq: applied.snapshotSeq, lifecycleVersion: applied.lifecycleVersion, cancelActionId: cancelled.request.clientActionId, cancelBaseSeq: cancelled.request.baseSeq });
       const current = await state(room); assert.equal(current.chapter.disguise, null); assert.equal(current.chapter.consents[granted.consent.consentId].status, 'accepted', '请求者取消不伪称本人撤回');
     }
     evidence('P-06', '真实受控悟空在登记会面点使用并合法结束', { sessionId: room.sessionId, destinationId: place.destinationId, consentId: granted.consent.consentId, ending: ['public_disclosure_then_owner_withdrawal', 'performer_release', 'requester_cancel'][index] });

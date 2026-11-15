@@ -62,11 +62,37 @@ V2 公开 Receipt 没有摘要。`decisionReceipt` 是可信内部恢复入口�
 
 `node backend/scripts/evaluate-spatial-ai.mjs <sessionId>` 通过已指定的数据库读取本局持久样本，输出 JSON；脚本本身不调用模型。每个样本保留供应商来源、配置、generation、合法来源观察、已听陈述、人格/目标、原意图、等待时间、决定结果、Receipt 和 fallback。
 
+[#63](https://github.com/gbcdby/xiyou/issues/63) 在同一 `REPEATABLE READ READ ONLY` 事务内汇集这些记录，报告 `snapshotSeq` 固定读取时的本局水位。每个样本增加 `evidenceChain`，其 `COMPLETE` 仅表示下表的持久关联齐全；必要对象缺失、身份或摘要错配、调用未收束均为 `INCOMPLETE`，具体原因保留在样本或动作的 `issues` 中。
+
+| 关联 | 实际核对与导出 |
+| --- | --- |
+| 权威上下文 → 模型输入 | `ai_runs.context` 与原 Decision 的上下文快照、会话/角色/决定身份、view、baseSeq 和摘要一致；导出原 digest/baseSeq/generation。来源观察、Claim、人格与目标仍来自这一合法上下文，不从全局事件补充未感知资料 |
+| 模型输出 → 原意图 | 原文按原编码读取并核对已存码元摘要；有效意图重新按本次 context 解析，核对 semantic digest。导出原文的码元摘要和意图摘要，模型输出始终不是 WorldEvent |
+| 原意图 → 实际执行 | `intent` 与 `fallback` 各用原 actionId，校验本局、本 actor、principal、generation、原动作、完整请求摘要及 `action_receipts` 的真实 Receipt；不拿调度 outcome 缓存代替权威收据 |
+| Receipt → 世界结果 | 按 Receipt 的 `actionEventRange` 核对该会话的完整连续范围，以及各事件的原 actor/action/principal；只导出 eventId、sessionSeq、kind 和完整事件摘要。事件可能同时通知其他观察者，报告不带出其 payload、audience 或投影 |
+
+合法 `Rejected` 的空事件范围标 `REJECTED_NO_EFFECT`；合法 `Accepted / NO_CHANGE` 标 `NO_CHANGE`。两者都可以是完整证据链，不能为了表示成功而补造世界效果。有事件的完整范围才标 `EVENTS_COMMITTED`；缺失或错配时为 `UNCONFIRMED`。导航动作的受理事件仍不代表后来实际到达，评价要继续检查到达后新上下文与新动作。`outcome` 中的 Receipt/fallback 只复述已校验的真实收据；缓存与真实收据不符时仍保留 `*_OUTCOME_MISMATCH`，不会复制错绑到其他房间的缓存收据。
+
+这项核对不重新执行历史感知规则，也不根据事件 hash 推断隐藏内容。权限依据仍是当时由权威运行器构造并持久的本角色 context，审查者可以用 digest/baseSeq 定位原始输入。该脚本是既有数据库访问权限下的可信运维入口，报告不是新的模型输入、玩家 DTO 或公开会话接口。
+
 有外部样本仅标记 `SAMPLES_COLLECTED`；无外部样本保持 `NOT_RUN`，即使受控样本全部通过也一样。不同信息顺序、合理拒绝后补证、NPC 沟通改变后续行动、完整分支、三角色公平、身份权限和真人趣味均保留独立检查项，不由脚本把未评价项写成 PASS。
+
+### 真实模型采样操作
+
+沿用 [#29](https://github.com/gbcdby/xiyou/issues/29) 的独立评价终点。先取得上一节要求的明确 provider/model/endpoint/adapter、获准凭据引用和调用/费用上限，再通过既有 `backend/ai-main.mjs` 启动；没有这些输入时不调用供应商，也不把 controlled 校准登记为外部样本。每组记录实际 contentVersion、sessionId、供应商/模型配置、授权引用和预算，秘密值不进入采样记录。
+
+| 采样范围 | 在真实世界中执行的步骤 | 需要成对记录的证据 |
+| --- | --- | --- |
+| 不同信息顺序 | 建立同一有效内容版本的两局，通过正式观察、拿取、交谈、分享入口，分别按“旧饭账→见证证言”和“见证证言→旧饭账”送达同一目标 NPC；两局均保留送达前、只收到第一份及收到第二份之后的模型决定。等待真实周期收束，有限预算内未出现的阶段如实记未观察到 | 两局 sessionId、每阶段 decisionId/generation、context baseSeq/digest、来源 observationRef/sourceSeq/receivedSeq、原意图与动作链；用来源内容与实际送达顺序对比，不要求不同局的不透明引用相同 |
+| 拒绝后补证 | 从确实欠缺相关来源的世界状态出发，让 NPC 作本人决定。记录其真实拒绝、暂缓或补证请求，再由有资格的参与者通过正常操作取得并分享新增材料，等待该 NPC 的新 generation。预算内没有出现拒绝时登记未观察到，不编造拒绝或修改原样本 | 原决定及其合法上下文、真实表达或规则 Receipt、新来源到达记录、新决定/context/intent/Receipt。区分 NPC 自己表达拒绝与规则引擎拒绝非法动作；只有后者天然对应 `Rejected` 收据。是否合理、补证是否改变判断由独立评价判定 |
+| NPC 交流影响后续行动 | 通过真实空间中的可见、可听范围让 NPC 发言或分享证据；从接收者后续已授权 context 确认其实际收到陈述或来源，然后记录下一轮动作。没有送达或没有新周期时保留缺口 | 发起方 decisionId/原 action/事件链，接收方 heardClaims 或 sourceObservations 的来源引用与 baseSeq，接收方下一轮 decisionId/原意图/执行链。Claim 不升级为事实；本人队聊及未获授权的其他房间资料不得用于判断 |
+
+每个观察节点使用原导出命令保存报告，并在评价记录中明确样本对应的场景、阶段和成对 decisionId。先核 `evidenceChain` 与实际来源，再分别评价人格/目标、推理与行动的一致性、合理拒绝、补证后的调整、三角色机会和身份权限。完整链只让这些判断可复核，`coverage.*` 继续保持 `NOT_ASSESSED`，真人趣味继续保持 `NOT_RUN`，直到对应评价另有真实证据。
 
 针对性工程入口：
 
 ```sh
+node --test backend/tests/ai-spatial-evaluation.test.mjs
 node --test backend/tests/ai-spatial-decisions.test.mjs
 node --test backend/tests/ai-spatial-orchestrator.test.mjs
 node --test backend/tests/ai-spatial-unknown.test.mjs
@@ -74,4 +100,4 @@ node --test backend/tests/ai-spatial-config.test.mjs
 npm run test:ai
 ```
 
-这些检查覆盖真实 PostgreSQL 的持久决定、原文、旧序号、Unknown、竞争物权及受控故障。正式真实模型质量、真人 2/5 人及复玩、正式运行视觉、手机真机和全章阶段释放由集成票分别判定。
+这些检查覆盖真实 PostgreSQL 的持久决定、原文、旧序号、Unknown、竞争物权及受控故障。评价导出的针对性检查在 `gaolaozhuang-scene-v3` 使用 controlled Gateway 校准真实受理、无效果拒绝、新来源后的新决定、必要链缺失、跨房间/队聊隔离及一致快照，外部调用为零；它验证取证能力，不判断真实模型质量。正式真实模型质量、真人 2/5 人及复玩、正式运行视觉、手机真机和全章阶段释放由集成票分别判定。
