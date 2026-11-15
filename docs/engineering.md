@@ -63,7 +63,7 @@
 
 ## GitHub Actions 自动检查
 
-[#29](https://github.com/gbcdby/xiyou/issues/29) 的自动检查配置见 [ci.yml](../.github/workflows/ci.yml)。覆盖普通 push、pull_request 与 workflow_dispatch；只请求 `contents: read`，不保留 checkout 凭据，不部署、不调用真实模型、不需要用户 secret 或私人素材。配置入库、本地检查通过、远端 workflow 实际运行成功是不同状态；结果以对应提交的 Actions run 为准。手动入口需该工作流先进入默认分支。
+[#29](https://github.com/gbcdby/xiyou/issues/29) 的自动检查配置见 [ci.yml](../.github/workflows/ci.yml)，翠兰本人生产流程见 [cuilan-self-response.yml](../.github/workflows/cuilan-self-response.yml)。两份工作流均由 `pull_request`、`main` 分支的 `push` 或 `workflow_dispatch` 触发；工作分支 push 不另起检查，保留 PR 候选与合并后主线验收。已有工作分支需同步该配置后才会采用新的 push 过滤。只请求 `contents: read`，不保留 checkout 凭据，不部署、不调用真实模型、不需要用户 secret 或私人素材。配置入库、本地检查通过、远端 workflow 实际运行成功是不同状态；结果以对应提交的 Actions run 为准。手动入口需该工作流先进入默认分支。
 
 运行环境为 Ubuntu 24.04、Node.js 24、Python 3.12。前后端使用各自 lockfile 执行 `npm ci`；真实 PostgreSQL 由已锁定的 `embedded-postgres` 和现有测试辅助程序在随机本机端口启动，无需另建共享数据库。Playwright 固定为已用于本轮浏览器检查的 1.57.0，CI 安装其对应 Chromium，不依赖开发机的 `PLAYWRIGHT_MODULE` / `CHROMIUM_PATH`。
 
