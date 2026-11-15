@@ -135,6 +135,8 @@ NPC“走到物件再拿取”拆为导航、权威到达、重新检查、实�
 
 ## 5. 感知引用与全链路投影
 
+**2026-11-15 首章human物理显示修订：**[GZ-UX-01 §2.1](gaolao-client-experience.md#21-人类全场物理显示与原感知分离)提出经能力协商、仅人类可用的sceneOverview/mapCatalog，物理显示不再依赖距离裁剪；原感知数组、NPC知识/听闻、真正秘密及交互守卫保持。严格schema与缓存控制响应兼容裁剪必须同步，不能仅增加optional字段。状态和唯一实施记录见[#66](https://github.com/gbcdby/xiyou/issues/66)，当前仍待独立设计短审。
+
 ### 5.1 引用生命周期
 
 服务端内部真实实体 ID 永远稳定，外观是独立版本，真实翠兰和借貌悟空始终不同实体。`EntityRef` 绑定 `(sessionId, observerCharacterId, viewEpoch, entityId, appearanceEpoch)`；绑定是服务端私有记录，输出仅不透明 ref。引用有 `active/historical/retired` 状态，不接受客户端自行指定绑定。
