@@ -7,10 +7,13 @@ import { mkdtemp, readFile, readdir, rm, stat } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { constants as bufferConstants } from 'node:buffer';
-import { assertCompleteReport, caseIds, holdSubmissions, holdCommittedReceipt, deferLeaseMaintenance, saveCuilanReportJSON, createCuilanReportCollector, finalizeCuilanReport } from './cuilan-self-response-support.mjs';
+import { assertCompleteReport, caseIds, holdSubmissions, captureAppearanceCompetition, holdCommittedReceipt, deferLeaseMaintenance, saveCuilanReportJSON, createCuilanReportCollector, finalizeCuilanReport } from './cuilan-self-response-support.mjs';
 import { assertRestartFaultReport } from './cuilan-self-response-restart.mjs';
 import { assertBothActiveEffects, assertSharedStopTransaction, assertOriginalReceiptRead, tracePersonalTransactions } from '../../backend/test-support/personal-shared-effects.mjs';
 import { waitForPersonalWithdrawals } from '../../backend/test-support/cuilan-personal-restart-worker.mjs';
+import { loadContent } from '../../content/index.mjs';
+import { personalFixture } from '../../backend/test-support/scene-personal-fixture.mjs';
+import { ensureView, entityRef, publicResourceRevision } from '../../game/spatial-world.mjs';
 
 test('完整报告分段字节与原JSON一致，含Date/toJSON、共享引用和跨块中文emoji/转义', async t => {
   const directory = await mkdtemp(join(tmpdir(), 'cuilan-json-')); t.after(() => rm(directory, { recursive: true, force: true }));
@@ -154,6 +157,42 @@ test('提交窗口只延迟匹配原请求，this/raw/异常不变，清场释�
   await assert.rejects(runtime.submit('fail', '{}'), error => error === failure);
   const incomplete = holdSubmissions(runtime, () => true, 2), pending = runtime.submit('a', first);
   incomplete.close(); assert.equal(await pending, first);
+});
+
+test('竞争证据核验同一内部人物版本及各自别名，拒绝跨观察者/陈旧/错误目标伪证', async () => {
+  // 纯检查器正负对照；实际浏览器竞争仍由 P-04 的 PG/页面/收据链证明。
+  const content = await loadContent('gaolaozhuang-scene-v3'), state = personalFixture(content);
+  Object.assign(state, { sessionId: 'competition-checker', seed: 'competition-checker-private-seed', items: {}, views: {},
+    members: [{ userId: 'user-a', characterId: 'human-a' }, { userId: 'user-b', characterId: 'human-b' }] });
+  for (const character of Object.values(state.characters)) character.appearanceEpoch = '0';
+  const tx = { state, content, emit(_kind, { actorId, view }) { state.views[actorId] = view; } };
+  for (const member of state.members) ensureView(tx, member.characterId);
+  const target = state.characters[content.chapterRules.people.cuilan], users = state.members.map(row => row.userId);
+  const requests = state.members.map(({ characterId }, index) => {
+    const view = state.views[characterId];
+    return { sessionId: state.sessionId, viewId: view.viewId, actorRef: entityRef(view, characterId), controlEpoch: '1', baseSeq: state.sessionSeq, clientActionId: 'request-' + index,
+      action: { kind: 'interact', operationId: 'gz-request-appearance', targetRef: entityRef(view, target.characterId), expectedTargetRevision: publicResourceRevision(state, characterId, view, target) } };
+  });
+  const basis = captureAppearanceCompetition(state, content, requests, users);
+  assert.deepEqual(basis.contenders.map(row => row.internalRevision), ['0', '0']);
+  assert.notEqual(basis.contenders[0].publicRevision, basis.contenders[1].publicRevision);
+  assert.equal(JSON.stringify(basis).includes(state.seed), false, '私有种子不能混入验收摘要');
+  const failures = [
+    (_state, raw) => { raw[1].action.expectedTargetRevision = raw[0].action.expectedTargetRevision; },
+    (_state, raw) => { raw[1].action.expectedTargetRevision = target.resourceRevision; },
+    (current) => { current.characters[target.characterId].resourceRevision = '1'; },
+    (_state, raw) => { raw[1].action.targetRef = raw[0].action.targetRef; },
+    (current, raw) => {
+      const other = current.characters[content.chapterRules.people.wukong], observerId = 'human-b', view = current.views[observerId];
+      Object.assign(other, { sceneId: target.sceneId, position: target.position });
+      raw[1].action.targetRef = entityRef(view, other.characterId); raw[1].action.expectedTargetRevision = publicResourceRevision(current, observerId, view, other);
+    },
+    (_state, raw) => { raw[1] = { ...structuredClone(raw[0]), clientActionId: raw[1].clientActionId }; },
+  ];
+  for (const mutate of failures) {
+    const current = structuredClone(state), raw = structuredClone(requests); mutate(current, raw);
+    assert.throws(() => captureAppearanceCompetition(current, content, raw, users));
+  }
 });
 
 test('迟收据窗口仅扣住实际原结果和原历史读取，不重新提交或伪造收据', async () => {

@@ -10,7 +10,7 @@ import { accepted, take, share, cleanupPublic } from '../../backend/test-support
 import { sampleSharedPersonalEffects, assertBothActiveEffects, assertSharedStoppedEffects, assertSharedStopTransaction, assertOriginalReceiptRead, tracePersonalTransactions } from '../../backend/test-support/personal-shared-effects.mjs';
 import { repository, sourceIdentity, saveJSON, sha256, until, sleep } from './network-support.mjs';
 import { browserRoom, snapshot, clientState, openReading } from './gaolao-real-support.mjs';
-import { productionProfile, caseIds, assertCompleteReport, clickAction, askAppearance, describeItems, askItems, personalState, cancelPersonal, returnItem, holdSubmissions, holdCommittedReceipt, deferLeaseMaintenance, authoritativeState, sceneDecision, assertRoomIdentity, createCuilanReportCollector, finalizeCuilanReport } from './cuilan-self-response-support.mjs';
+import { productionProfile, caseIds, assertCompleteReport, clickAction, askAppearance, describeItems, askItems, personalState, cancelPersonal, returnItem, holdSubmissions, captureAppearanceCompetition, holdCommittedReceipt, deferLeaseMaintenance, authoritativeState, sceneDecision, assertRoomIdentity, createCuilanReportCollector, finalizeCuilanReport } from './cuilan-self-response-support.mjs';
 
 const output = resolve(process.env.FRONTEND_EVIDENCE_DIR || resolve(repository, '.agent-output/cuilan-production-browser'));
 await mkdir(output, { recursive: true });
@@ -20,7 +20,7 @@ const report = {
   source: await sourceIdentity(), startedAt: new Date().toISOString(), nodeVersion: process.version,
   cases: caseIds.map(id => ({ id, status: 'NOT_RUN', evidence: [] })),
   rooms: [], humanActions: [], npcActions: [], recapResponses: [], pageErrors: [], externalRequests: [],
-  creationRequests: [], wireActions: [], httpReceipts: [], authority: [], screenshots: [], cleanup: [],
+  creationRequests: [], wireActions: [], httpReceipts: [], authority: [], competitions: [], screenshots: [], cleanup: [],
   leaseFault: { status: 'NOT_RUN' }, realProviderCalls: 0, faults: [], resources: [],
   notCovered: ['真实provider的自然语言因果质量', '真人四局', '真实设备与艺术品质', '五客户端连续900秒', '3/4/5人数完整分支矩阵', '新环境部署'],
 };
@@ -224,9 +224,21 @@ async function competition(room) {
   try {
     const pending = Promise.all([askAppearance(room, a, 'front-meeting', 'single_use'), askAppearance(room, b, 'front-meeting', 'single_use')]);
     await until(() => gate.held.length === 2, '两个正常页面请求都到达提交屏障', 15000);
-    assert.equal(gate.held[0].request.action.expectedTargetRevision, gate.held[1].request.action.expectedTargetRevision, '实际捕获同公开revision竞争');
+    const captured = await authoritativeState(database.pool, room.sessionId);
+    const basis = captureAppearanceCompetition(captured.state, captured.content_snapshot, gate.held.map(row => row.request), [room.users[a].userId, room.users[b].userId]);
+    report.competitions.push(basis);
     gate.release(); const results = await pending;
     assert.deepEqual(results.map(row => row.receipt.status).sort(), ['Accepted', 'Rejected']);
+    const rejected = results.find(row => row.receipt.status === 'Rejected');
+    assert.equal(rejected.receipt.code, 'STALE_PRECONDITION'); assert.equal(rejected.receipt.actionEventRange, null);
+    basis.receipts = (await database.pool.query('SELECT actor_id,client_action_id,receipt FROM action_receipts WHERE session_id=$1 AND client_action_id=ANY($2::text[])', [room.sessionId, basis.contenders.map(row => row.clientActionId)])).rows;
+    assert.equal(basis.receipts.length, 2);
+    for (const result of results) {
+      assert.deepEqual(result.request, gate.held.find(row => row.request.clientActionId === result.request.clientActionId).request, '页面完成的仍是屏障内原请求');
+      const contender = basis.contenders.find(row => row.clientActionId === result.request.clientActionId);
+      const stored = basis.receipts.find(row => row.client_action_id === contender.clientActionId);
+      assert.equal(stored.actor_id, contender.observerId); assert.deepEqual(stored.receipt.publicReceipt, result.receipt, '竞争结果必须是各自原动作的真实 PG 收据');
+    }
     const winner = results[0].receipt.status === 'Accepted' ? a : b;
     const old = await awaitDecision(room, winner, 'appearance', 'accepted');
     accepted((await askAppearance(room, winner, 'road-meeting', 'single_use', { replace: true })).receipt);
@@ -234,7 +246,7 @@ async function competition(room) {
     let current = await state(room); assert.equal(current.chapter.personalRequests[old.consent.consentId].lifecycle, 'superseded'); assert.equal(current.chapter.consents[old.consent.consentId].status, 'accepted');
     await cancelPersonal(room, winner, 'appearance'); current = await state(room);
     assert.equal(current.chapter.personalRequests[newer.consent.consentId].lifecycle, 'cancelled'); assert.equal(current.chapter.consents[newer.consent.consentId].status, 'accepted');
-    evidence('P-04', '同revision竞争、明确替换与请求者取消分轴', { sessionId: room.sessionId, actionIds: results.map(row => row.request.clientActionId), statuses: results.map(row => row.receipt.status), oldId: old.consent.consentId, newerId: newer.consent.consentId, faultProfile: 'two-real-ui-submissions-barrier' });
+    evidence('P-04', '同底层revision与各自公开别名竞争、明确替换与请求者取消分轴', { sessionId: room.sessionId, actionIds: results.map(row => row.request.clientActionId), statuses: results.map(row => row.receipt.status), capturedSeq: basis.snapshotSeq, staleCode: rejected.receipt.code, oldId: old.consent.consentId, newerId: newer.consent.consentId, faultProfile: 'two-real-ui-submissions-barrier' });
   } finally { gate.close(); restorers.delete(gate); }
 }
 async function bindingInterruption(room, player, purpose, consentId) {

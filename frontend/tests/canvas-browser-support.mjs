@@ -1,5 +1,30 @@
 import assert from 'node:assert/strict';
 
+/** 比较每次真实 paint 的位置和它实际使用的插值时钟，不把稍后的画面读取时刻配给旧帧。 */
+export function assertPaintContinuity(capture) {
+  const paints = capture.paints;
+  assert.ok(Array.isArray(paints) && paints.length >= 2, '必须捕获实际绘制，不能仅用重复读取重建动画');
+  capture.continuity = []; capture.motionBoundaries = [];
+  const scope = ['rendererId', 'instance', 'sceneId', 'viewId', 'controlEpoch', 'appearanceEpoch'];
+  for (const paint of paints) {
+    assert.ok(scope.every(key => paint[key] !== undefined) && paint.self?.ref, '每个实际绘制都须记录身份与实例边界');
+    assert.ok([paint.motionAt, paint.self.position.x, paint.self.position.y, paint.self.distance].every(Number.isFinite));
+  }
+  for (let i = 1; i < paints.length; i++) {
+    const from = paints[i - 1], to = paints[i];
+    const changed = scope.filter(key => from[key] !== to[key]); if (from.self.ref !== to.self.ref) changed.push('entityRef');
+    if (changed.length) { capture.motionBoundaries.push({ from, to, changed }); continue; }
+    assert.equal(to.serial, from.serial + 1, '连续实例不能遗漏实际绘制或把同一serial的重复读取当新帧');
+    const interval = { from, to, delta: Math.hypot(to.self.position.x - from.self.position.x, to.self.position.y - from.self.position.y), dt: to.motionAt - from.motionAt };
+    interval.limit = 180 * interval.dt / 1000 + 4; capture.continuity.push(interval);
+    if (interval.dt < 0 || interval.delta > interval.limit || to.self.distance < from.self.distance) capture.failedInterval = interval;
+    assert.ok(interval.dt >= 0, '真实绘制插值时钟不能倒退');
+    assert.ok(to.self.distance >= from.self.distance, '连续短计划步态相位不重置');
+    assert.ok(interval.delta <= interval.limit, '确认段不发生超速跳点');
+  }
+  return capture.continuity;
+}
+
 /** 读取生产渲染器刚完成的真实Canvas帧；不创建隐藏SVG或按测试需要重画场景。 */
 export async function canvasFrame(page) {
   const frame = await page.getByTestId('spatial-map').evaluate(async canvas => {

@@ -9,7 +9,7 @@ import { startTestPostgres } from '../../backend/test-support/postgres.mjs';
 import { createAuthorityServer } from '../../backend/server.mjs';
 import { repository, sourceIdentity, saveJSON, sha256, until, sleep } from './network-support.mjs';
 import { browserRoom, snapshot, clientState, openReading, closeReading, openObjects } from './gaolao-real-support.mjs';
-import { canvasFrame, canvasPixels } from './canvas-browser-support.mjs';
+import { assertPaintContinuity, canvasFrame, canvasPixels } from './canvas-browser-support.mjs';
 
 const output=resolve(process.env.FRONTEND_EVIDENCE_DIR||resolve(repository,'.agent-output/ci/browser-client-experience'));
 await mkdir(output,{recursive:true});
@@ -25,12 +25,29 @@ const drawRefs=f=>[...f.actors.map(value=>value.ref),...f.objects.map(value=>val
 async function picture(name){const file=resolve(output,name);await page.screenshot({path:file});report.screenshots.push({file:name,sha256:sha256(await readFile(file))});}
 async function phase(name){await page.evaluate(name=>{window.uxCapture.phase=name;window.uxCapture.phaseAt=performance.now();},name);}
 async function startCapture(){await page.evaluate(async()=>{
-  const {readCanvasFrame}=await import('/src/rendering/spatial-canvas.ts'),canvas=document.querySelector('[data-testid="spatial-map"]');
+  const {readCanvasFrame,SpatialCanvas}=await import('/src/rendering/spatial-canvas.ts'),canvas=document.querySelector('[data-testid="spatial-map"]');
+  const {ConfirmedMotion}=await import('/src/domain/spatial-motion.ts');
   const probe=document.createElement('canvas');probe.width=32;probe.height=20;const context=probe.getContext('2d',{willReadFrequently:true});
-  const capture=window.uxCapture={running:true,phase:'ready',phaseAt:performance.now(),frames:[],errors:[]};
-  const take=now=>{if(!capture.running)return;try{const frame=readCanvasFrame(canvas),s=window.uxSpatial.spatialState.value.snapshot;if(frame&&s){context.clearRect(0,0,32,20);context.drawImage(canvas,0,0,32,20);const rgba=context.getImageData(0,0,32,20).data,colors=new Set();let opaque=0;for(let i=0;i<rgba.length;i+=4){if(rgba[i+3])opaque++;colors.add([rgba[i],rgba[i+1],rgba[i+2],rgba[i+3]].join(','));}const self=frame.actors.find(actor=>actor.ref===s.projection.self.entityRef);capture.frames.push({at:now,phase:capture.phase,phaseElapsed:now-capture.phaseAt,serial:frame.serial,sceneId:frame.sceneId,fit:frame.fit,view:frame.view,viewport:frame.viewport,refs:[...frame.actors.map(actor=>actor.ref),...frame.objects.map(object=>object.ref)].sort(),self,opaque,colors:colors.size});}}catch(error){capture.errors.push(error.message);}requestAnimationFrame(take);};requestAnimationFrame(take);
+  const capture=window.uxCapture={running:true,phase:'ready',phaseAt:performance.now(),frames:[],paints:[],updates:[],errors:[]};
+  // 测试专用只读包装：原 this/参数/返回值不变，分别保留插值时钟、实际绘制时刻与采样 rAF。
+  const originalPaint=SpatialCanvas.prototype.paint,rendererIds=new WeakMap();let nextRendererId=0;
+  function observedPaint(...args){
+    const startedAt=performance.now(),frame=originalPaint.apply(this,args),finishedAt=performance.now();
+    if(capture.running&&frame){const snapshot=args[0],p=snapshot.projection;if(!rendererIds.has(this))rendererIds.set(this,++nextRendererId);capture.paints.push({phase:capture.phase,rendererId:rendererIds.get(this),serial:frame.serial,instance:frame.instance,sceneId:frame.sceneId,viewId:snapshot.viewId,controlEpoch:p.self.controlEpoch,appearanceEpoch:p.self.appearanceEpoch,motionAt:args[2],startedAt,finishedAt,snapshotSeq:snapshot.snapshotSeq,sceneTimeMs:p.sceneTimeMs,self:frame.actors.find(actor=>actor.ref===p.self.entityRef)});}
+    return frame;
+  }
+  SpatialCanvas.prototype.paint=observedPaint;
+  const originalUpdate=ConfirmedMotion.prototype.update;
+  function observedUpdate(...args){
+    const snapshot=args[0],p=snapshot.projection,startedAt=performance.now();
+    const input=structuredClone({phase:capture.phase,at:args[1],startedAt,snapshotSeq:snapshot.snapshotSeq,viewId:snapshot.viewId,sceneTimeMs:p.sceneTimeMs,paused:p.paused,self:p.self,movement:p.movement,person:p.sceneOverview?.entities.find(value=>value.entityRef===p.self.entityRef)??p.entities.find(value=>value.entityRef===p.self.entityRef)});
+    const result=originalUpdate.apply(this,args);input.finishedAt=performance.now();if(capture.running)capture.updates.push(input);return result;
+  }
+  ConfirmedMotion.prototype.update=observedUpdate;
+  capture.restore=()=>{if(SpatialCanvas.prototype.paint===observedPaint)SpatialCanvas.prototype.paint=originalPaint;if(ConfirmedMotion.prototype.update===observedUpdate)ConfirmedMotion.prototype.update=originalUpdate;};
+  const take=now=>{if(!capture.running)return;try{const frame=readCanvasFrame(canvas),s=window.uxSpatial.spatialState.value.snapshot;if(frame&&s){context.clearRect(0,0,32,20);context.drawImage(canvas,0,0,32,20);const rgba=context.getImageData(0,0,32,20).data,colors=new Set();let opaque=0;for(let i=0;i<rgba.length;i+=4){if(rgba[i+3])opaque++;colors.add([rgba[i],rgba[i+1],rgba[i+2],rgba[i+3]].join(','));}const self=frame.actors.find(actor=>actor.ref===s.projection.self.entityRef),paint=capture.paints.at(-1);capture.frames.push({at:now,readAt:performance.now(),phase:capture.phase,phaseElapsed:now-capture.phaseAt,serial:frame.serial,instance:frame.instance,sceneId:frame.sceneId,snapshotSeq:s.snapshotSeq,sceneTimeMs:s.projection.sceneTimeMs,paint:paint?.serial===frame.serial&&paint.instance===frame.instance?{motionAt:paint.motionAt,startedAt:paint.startedAt,finishedAt:paint.finishedAt,snapshotSeq:paint.snapshotSeq,sceneTimeMs:paint.sceneTimeMs}:null,fit:frame.fit,view:frame.view,viewport:frame.viewport,refs:[...frame.actors.map(actor=>actor.ref),...frame.objects.map(object=>object.ref)].sort(),self,opaque,colors:colors.size});}}catch(error){capture.errors.push(error.message);}requestAnimationFrame(take);};requestAnimationFrame(take);
 });}
-async function stopCapture(){return page.evaluate(()=>{window.uxCapture.running=false;return {frames:window.uxCapture.frames,errors:window.uxCapture.errors};});}
+async function stopCapture(){return page.evaluate(()=>{const capture=window.uxCapture;capture.running=false;capture.restore();return {frames:capture.frames,paints:capture.paints,updates:capture.updates,errors:capture.errors};});}
 async function currentMapPoint(destination){
   const map=page.locator('.gaolao-map-navigator'),expand=map.getByRole('button',{name:'展开地图',exact:true});if(await expand.isVisible())await expand.click();
   await map.getByRole('button',{name:'当前',exact:true}).click();
@@ -69,14 +86,14 @@ try {
   await phase('diagonal');await page.keyboard.down('ArrowDown');await sleep(350);
   await phase('down-only');await page.keyboard.up('ArrowRight');await sleep(450);
   await phase('stopped');await page.keyboard.up('ArrowDown');await waitSettled();await sleep(250);
-  const capture=await stopCapture();assert.deepEqual(capture.errors,[]);assert.ok(capture.frames.length>=20);
+  const capture=await stopCapture();report.motion=capture;await saveJSON(resolve(output,'result-before-cleanup.json'),report);assert.deepEqual(capture.errors,[]);assert.ok(capture.frames.length>=20);
   const stable=capture.frames.filter(frame=>frame.sceneId===first.sceneId);const fixed=stable[0];for(const f of stable){assert.deepEqual(f.fit,fixed.fit);assert.deepEqual(f.view,fixed.view);assert.deepEqual(f.viewport,fixed.viewport);assert.deepEqual(f.refs,fixed.refs);assert.ok(f.opaque>600&&f.colors>8,'每次实际呈现均为完整非空场景');}
   const moving=stable.filter(frame=>['right','diagonal','down-only'].includes(frame.phase)&&frame.self?.moving);assert.ok(moving.length>=10);
   const continuous=stable.filter(frame=>frame.at>=moving[0].at&&['right','diagonal','down-only'].includes(frame.phase));assert.ok(continuous.every(frame=>frame.self.moving),'连续短计划之间不插idle');
-  for(let i=1;i<continuous.length;i++){const a=continuous[i-1],b=continuous[i];assert.ok(b.self.distance>=a.self.distance,'连续短计划步态相位不重置');assert.ok(Math.hypot(b.self.position.x-a.self.position.x,b.self.position.y-a.self.position.y)<=180*(b.at-a.at)/1000+4,'确认段不发生超速跳点');}
+  assert.ok(assertPaintContinuity(capture).length>=10,'每次实际paint均保留并按其motionAt检查连续速度');
   const diagonal=stable.filter(frame=>frame.phase==='diagonal'&&frame.phaseElapsed>100),vertical=stable.filter(frame=>frame.phase==='down-only'&&frame.phaseElapsed>150);assert.ok(diagonal.at(-1).self.position.x>diagonal[0].self.position.x&&diagonal.at(-1).self.position.y>diagonal[0].self.position.y);assert.ok(vertical.at(-1).self.position.y>vertical[0].self.position.y+10);assert.ok(Math.abs(vertical.at(-1).self.position.x-vertical[0].self.position.x)<4,'松开右键后仍沿下键行走');
   assert.equal(report.httpAssets.length,assetsBefore,'移动不重新请求图片');const movementActions=(await actions()).filter(action=>!actionsBefore.includes(action.id)).map(action=>JSON.parse(action.raw).action);assert.ok(movementActions.length<=Math.ceil((Date.now()-start)/100)+3,'按键repeat不形成额外请求洪峰');assert.equal(movementActions.at(-1).kind,'stop_move');
-  const stopped=await position();await sleep(300);assert.deepEqual(await position(),stopped);report.motion=capture;check('AC02','真实Canvas每帧完整合成、固定fit、实体不因走动消失且图片缓存复用',{frames:capture.frames.length});
+  const stopped=await position();await sleep(300);assert.deepEqual(await position(),stopped);check('AC02','真实Canvas每帧完整合成、固定fit、实体不因走动消失且图片缓存复用',{frames:capture.frames.length});
   await sleep(120);const shortStart=await position(),shortIds=(await actions()).map(action=>action.id);await page.keyboard.down('ArrowRight');await sleep(20);await page.keyboard.up('ArrowRight');await waitSettled();const short=(await actions()).filter(action=>!shortIds.includes(action.id)).map(action=>JSON.parse(action.raw).action);assert.deepEqual(short.map(action=>action.kind),['move_to','stop_move']);assert.ok(BigInt(short[1].movementCommandSeq)>BigInt(short[0].movementCommandSeq));const shortEnd=await position();assert.ok(Math.hypot(shortEnd.x-shortStart.x,shortEnd.y-shortStart.y)<=36);
   await sleep(120);await page.keyboard.down('ArrowLeft');await sleep(180);await page.getByLabel('地图目的地',{exact:true}).focus();await page.keyboard.up('ArrowLeft');await waitSettled();const blurPosition=await position();await sleep(250);assert.deepEqual(await position(),blurPosition);const panelCount=(await actions()).length;await page.keyboard.press('ArrowRight');await sleep(130);assert.equal((await actions()).length,panelCount,'地图select独占方向键');
   await openReading(page,'交谈');await page.getByLabel('交谈内容',{exact:true}).fill('键盘范围检查');await page.keyboard.press('ArrowLeft');await page.keyboard.press('ArrowRight');assert.equal((await actions()).length,panelCount,'文本输入不驱动世界移动');await closeReading(page);
@@ -95,7 +112,7 @@ try {
   report.aiRunCount=Number((await database.pool.query('SELECT count(*) n FROM ai_runs WHERE session_id=$1',[room.sessionId])).rows[0].n);assert.equal(report.aiRunCount,0);assert.deepEqual(report.pageErrors,[]);assert.deepEqual(new Set(report.checks.map(value=>value.id)),new Set(['AC01','AC02','AC03','AC04','AC05','AC06','AC05-recovery','AC03-recovery']));report.assessment='PASS';
 } catch(error){report.assessment=/Operation not permitted|Failed to launch|Executable doesn't exist/.test(error.message)?'ENVIRONMENT_BLOCKED':'FAIL';report.error=error.stack;console.error(error.stack);if(page)await picture('scene-v3-failure.png').catch(()=>{});process.exitCode=1;}
 finally {
-  if(page)await page.evaluate(()=>{if(window.uxCapture)window.uxCapture.running=false;}).catch(()=>{});
+  if(page){const interrupted=await page.evaluate(()=>{const capture=window.uxCapture;if(!capture)return null;capture.running=false;capture.restore?.();return {frames:capture.frames,paints:capture.paints,updates:capture.updates,errors:capture.errors};}).catch(()=>null);if(interrupted&&!report.motion)report.motion=interrupted;}
   await saveJSON(resolve(output,'result-before-cleanup.json'),report);
   for(const [name,close] of [['room',()=>room?.close()],['browser',()=>browser?.close()],['vite',()=>vite?.close()],['server',()=>server?.close()],['postgres',()=>database?.stop()]]){try{await close();report.cleanup.push({name,status:'closed'});if(name==='room'&&video){try{await video.saveAs(resolve(output,'scene-v3-demo.webm'));report.video={file:'scene-v3-demo.webm',scope:'本次同一真实页面操作录像；不代替测试断言或真人验收'};}catch(error){report.videoError=error.message;}}}catch(error){report.cleanup.push({name,status:'error',message:error.message});if(report.assessment==='PASS')report.assessment='FAIL_CLEANUP';process.exitCode=1;}}
   report.finishedAt=new Date().toISOString();report.sourceEnd=await sourceIdentity();if(JSON.stringify(report.sourceEnd)!==JSON.stringify(report.source)){report.sourceChanged=true;if(report.assessment==='PASS')report.assessment='FAIL_SOURCE_IDENTITY';process.exitCode=1;}await saveJSON(resolve(output,'result.json'),report);console.log(JSON.stringify({assessment:report.assessment,checks:report.checks.length,output}));

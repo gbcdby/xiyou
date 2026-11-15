@@ -68,12 +68,20 @@ export class ConfirmedMotion {
           const pose = this.pose(person.entityRef, now)!;
           distanceBefore = pose.distance;
           if (old.trail && now < old.startedAt + old.duration) {
-            const remaining = confirmedSegment(old.trail, pose.position, prior.position);
-            if (remaining) trail = [...remaining, ...trail.slice(1)];
+            // 按已经播过的路程截取，折返路径中的同一坐标不能被误认成更早的端点。
+            const travelled = trailLength(old.trail) * Math.max(0, Math.min(1, (now - old.startedAt) / old.duration));
+            const remaining = [pose.position]; let distance = 0;
+            for (let i = 1; i < old.trail.length; i++) {
+              distance += length(old.trail[i - 1], old.trail[i]);
+              if (distance > travelled) remaining.push(old.trail[i]);
+            }
+            trail = [...remaining, ...trail.slice(1)];
+            // 已确认的旧余段和其剩余播放时间必须一起保留，不能压入新段而加速。
+            duration += old.startedAt + old.duration - now;
           }
         }
       }
-      this.#motions.set(person.entityRef, { position: { ...person.position }, trail: duration > 0 ? trail : null, startedAt: now, duration: Math.min(200, Math.max(0, duration)), distanceBefore, facing: person.facing, continuing });
+      this.#motions.set(person.entityRef, { position: { ...person.position }, trail: duration > 0 ? trail : null, startedAt: now, duration: Math.max(0, duration), distanceBefore, facing: person.facing, continuing });
     }
     for (const reference of this.#motions.keys()) if (!seen.has(reference)) this.#motions.delete(reference);
     this.#previous = structuredClone(snapshot);
