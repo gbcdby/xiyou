@@ -1,5 +1,5 @@
 import { RuleError } from './rules.mjs';
-import { opaqueRef,next,sceneOf,obstacleEnabled,resolveRef,ensureView,inRange,unoccluded,canSee } from './spatial-world.mjs';
+import { opaqueRef,next,sceneOf,obstacleEnabled,resolveRef,ensureView,inRange,unoccluded,canSee,publicMotionViews,publicResourceRevision } from './spatial-world.mjs';
 import { findPath,pointAlongPath,facingAlongPath,distance,inPolygon,clearSegment,walkable } from './spatial-geometry.mjs';
 import {scenePolicy,routeSources,createPolicyRoute,policyRouteValid,checkPolicyLeader,policyLocalPath,actualFrontExit,policySummary} from './gaolao-policy-route.mjs';
 import { isGaolao,chapterPeople,changeChapter,consentFor,consentVersion,observeGaolao,observeConsentChange,knowsSource,nearbyObservers,recordProgress,currentDecision,publicItemsReturned } from './gaolao-world.mjs';
@@ -62,7 +62,7 @@ function followProposal(tx,actorId,principalKind,request){
   const destination=tx.content.chapterRules.safeDestinations.find(d=>d.destinationId===action.destinationId);if(!destination)refuse('TARGET_UNAVAILABLE');
   // 新领路者只持有合法可见的人物版本；不要求读取上一份私有许可。
   const publicRevision=Object.hasOwn(action,'expectedTargetRevision');
-  if(publicRevision&&subject.resourceRevision!==action.expectedTargetRevision)refuse('STALE_PRECONDITION');
+  if(publicRevision&&publicResourceRevision(tx.state,actorId,tx.state.views[actorId],subject)!==action.expectedTargetRevision)refuse('STALE_PRECONDITION');
   const expectedVersion=publicRevision?consentVersion(tx.state,p.cuilan,'follow'):action.expectedConsentVersion;
   const old=tx.state.chapter.follows[p.cuilan],consent=consentRequest(tx,actorId,p.cuilan,'follow',{destinationId:destination.destinationId,leaderId:leader.characterId},expectedVersion);
   const follow={followId:opaqueRef(),subjectId:p.cuilan,requesterId:actorId,leaderId:leader.characterId,destinationId:destination.destinationId,planVersion:next(old?.planVersion??'0'),routeVersion:tx.state.mapVersion,consentId:consent.consentId,consentVersion:consent.version,status:'proposed',reason:'等待本人确认这次安排。',subjectEpoch:subject.controlEpoch,leaderEpoch:leader.controlEpoch,lastSceneTime:tx.state.sceneTimeMs};
@@ -108,7 +108,7 @@ export function advanceGaolaoFollow(tx,sceneTimeMs,paused){
       const moved=pointAlongPath(local.path,elapsed*tx.content.movement.speedPerSecond/1000),segments=[subject.position,...local.path.slice(1,moved.index),moved.position];
       if(segments.some((point,i)=>i&&!clearSegment(local.scene,segments[i-1],point,obstacleEnabled(tx.state)))){pause('本人的当前通路受阻，等待重新安排。','obstructed');continue;}
       const changed=distance(subject.position,moved.position)>0;
-      const a={...subject,position:moved.position,facing:changed?facingAlongPath(segments,subject.facing):subject.facing,spatialRevision:changed?next(subject.spatialRevision):subject.spatialRevision,motionViews:{}};
+      const a={...subject,position:moved.position,facing:changed?facingAlongPath(segments,subject.facing):subject.facing,spatialRevision:changed?next(subject.spatialRevision):subject.spatialRevision,motionViews:{},publicMotionViews:publicMotionViews(tx.state,subject,segments,f.lastSceneTime,sceneTimeMs)};
       if(route.frontExitRequired&&!route.frontExitDone&&moved.arrived&&actualFrontExit(tx.content,a))route.frontExitDone=true;
       if(local.cross&&moved.arrived){
         const requirement=local.cross.requirement;if(requirement&&fact(tx.state,requirement.targetId,requirement.field)!==requirement.value){pause('约定入口目前不能通过。','obstructed');continue;}
@@ -125,7 +125,7 @@ export function advanceGaolaoFollow(tx,sceneTimeMs,paused){
     if(leader.sceneId!==subject.sceneId){cross=scene.exits.find(e=>e.destinationSceneId===leader.sceneId);if(!cross){pause('带路者已离开可达路线。');continue;}goal=scene.anchors.find(x=>x.anchorId===cross.anchorId).position;}
     const path=findPath(scene,subject.position,goal,obstacleEnabled(tx.state));if(!path){pause('通路受阻，等待重新安排。');continue;}
     const moved=pointAlongPath(path,elapsed*tx.content.movement.speedPerSecond/1000),segments=[subject.position,...path.slice(1,moved.index),moved.position],changed=distance(subject.position,moved.position)>0;
-    const a={...subject,position:moved.position,facing:changed?facingAlongPath(segments,subject.facing):subject.facing,spatialRevision:changed?next(subject.spatialRevision):subject.spatialRevision,motionViews:{}};
+    const a={...subject,position:moved.position,facing:changed?facingAlongPath(segments,subject.facing):subject.facing,spatialRevision:changed?next(subject.spatialRevision):subject.spatialRevision,motionViews:{},publicMotionViews:publicMotionViews(tx.state,subject,segments,f.lastSceneTime,sceneTimeMs)};
     if(cross&&moved.arrived){a.sceneId=cross.destinationSceneId;a.position=cross.destination;a.spatialRevision=next(a.spatialRevision);}
     actorEvent(tx,a);f.lastSceneTime=sceneTimeMs;f.status='following';
     const d=tx.content.chapterRules.safeDestinations.find(d=>d.destinationId===f.destinationId),area=sceneOf(tx.content,d.sceneId).walkableAreas.find(x=>x.areaId===d.areaId);
@@ -173,7 +173,7 @@ export function applyGaolaoAction(tx,actorId,principalKind,request){
   if(['request_end','confirm_end'].includes(action.kind))return requestEnd(tx,actorId,principalKind,action);
   if(action.kind!=='interact'||!action.operationId.startsWith('gz-'))return null;
   const target=resolveRef(tx,actorId,action.targetRef,request.viewId),op=action.operationId,params=action.parameters;
-  near(tx,a,target);if(target.resourceRevision!==action.expectedTargetRevision)refuse('STALE_PRECONDITION');
+  near(tx,a,target);if(publicResourceRevision(tx.state,actorId,tx.state.views[actorId],target)!==action.expectedTargetRevision)refuse('STALE_PRECONDITION');
   if(principalKind==='proxy')refuse('RULE_VIOLATION');
   const personal=personalInteraction(tx,actorId,principalKind,request,target);if(personal!==null)return personal;
   if(op==='gz-contact'){

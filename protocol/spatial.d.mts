@@ -59,6 +59,11 @@ export interface SpatialContracts {
   SelfViewV2: T.SelfViewV2;
   ItemViewV2: T.ItemViewV2;
   TargetViewV2: T.TargetViewV2;
+  SceneEntityViewV1: T.SceneEntityViewV1;
+  SceneItemViewV1: T.SceneItemViewV1;
+  SceneTargetViewV1: T.SceneTargetViewV1;
+  SceneOverviewV1: T.SceneOverviewV1;
+  PublicMapScene: T.PublicMapScene;
   PlanViewV2: T.PlanViewV2;
   EvidenceSourceViewV2: T.EvidenceSourceViewV2;
   ObservationViewV2: T.ObservationViewV2;

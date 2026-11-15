@@ -12,7 +12,7 @@ export function buildSpatialContext(snapshot, { decisionId, allowedKinds = spati
   const p = snapshot.projection;
   const allowed = new Set(p.self.capabilities.filter(kind => spatialModelKinds.includes(kind) && allowedKinds.includes(kind)));
   const projection = {
-    ...structuredClone(p), self: modelView('SpatialModelSelfV2', p.self),
+    ...modelView('SpatialModelProjectionV2', p), self: modelView('SpatialModelSelfV2', p.self),
     entities: p.entities.map(e => modelView('SpatialModelEntityV2', e)),
     items: p.items.map(i => modelView('SpatialModelItemV2', i)),
     movement: p.movement ? modelView('SpatialModelMovementV2', p.movement) : null,

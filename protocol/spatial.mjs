@@ -95,6 +95,22 @@ export function checkSpatialSchema(schema, value, defs = spatialSchema.$defs, pa
         }
     }
 }
+function validateSceneOverview(projection) {
+    const overview = projection.sceneOverview, catalog = projection.mapCatalog;
+    if (Boolean(overview) !== Boolean(catalog)) fail('$.sceneOverview');
+    if (!overview) return;
+    const sceneId = projection.scene?.sceneId;
+    const values = [...overview.entities, ...overview.items, ...overview.targets];
+    if (new Set(values.map(value => value.entityRef)).size !== values.length) fail('$.sceneOverview.entities');
+    if (sceneId && !overview.entities.some(entity => entity.entityRef === projection.self.entityRef)) fail('$.sceneOverview.self');
+    if (values.some(value => (value.location?.sceneId ?? value.sceneId) !== sceneId)) fail('$.sceneOverview.sceneId');
+    for (const entity of overview.entities) {
+        const count = ['motionTrail', 'motionFromSceneTimeMs', 'motionThroughSceneTimeMs'].filter(key => Object.hasOwn(entity, key)).length;
+        if (count !== 0 && count !== 3) fail('$.sceneOverview.motionTrail');
+        if (count && (entity.motionTrail.length < 2 || entity.motionFromSceneTimeMs > entity.motionThroughSceneTimeMs || entity.motionThroughSceneTimeMs > projection.sceneTimeMs || canonicalize(entity.motionTrail.at(-1)) !== canonicalize(entity.position))) fail('$.sceneOverview.motionTrail');
+    }
+    if (new Set(catalog.map(scene => scene.sceneId)).size !== catalog.length || sceneId && !catalog.some(scene => scene.sceneId === sceneId)) fail('$.mapCatalog');
+}
 export function validateSpatial(name, value) {
     canonicalize(value);
     if (!Object.hasOwn(spatialSchema.$defs, name))
@@ -103,6 +119,7 @@ export function validateSpatial(name, value) {
     if (name === 'PrivateItemOfferV1') validatePersonalOffer(value);
     const personalProjections = name === 'ProjectionV2' ? [value] : name === 'SnapshotV2' ? [value.projection] : name === 'BatchV2' ? value.events.map(event => event.payload.projection) : name === 'ControlResponseV2' ? [value.snapshot.projection] : [];
     personalProjections.forEach(validatePersonalProjection);
+    personalProjections.forEach(validateSceneOverview);
     const action = name === 'PublicEnvelope' ? value.action : name === 'ActionV2' ? value : null;
     if (action && ['speak', 'make_claim'].includes(action.kind) && ((action.channel === 'public' || action.channel === 'team') ? action.recipientRefs.length !== 0 : action.recipientRefs.length === 0))
         fail('$.action.recipientRefs');

@@ -6,12 +6,18 @@ import type { ConnectLink, SessionLink } from './link.ts';
 import type { ConnectionState } from './session-client.ts';
 import { ApiFailure } from './http-api.ts';
 import { spatialErrorMessage } from '../domain/spatial-errors.ts';
+import { sceneDisplayProjection } from '../domain/spatial-display.ts';
+import { ContinuousDirection } from '../domain/spatial-direction.ts';
+import { directionTarget, mapRoute } from '../domain/spatial-navigation.ts';
 
 export interface SpatialDraft { id: string; raw: string; status: 'waiting' | 'unknown' | 'accepted' | 'rejected'; detail: string; receipt: ReceiptV2 | null }
-export interface SpatialState { connection: ConnectionState; snapshot: SnapshotV2 | null; actions: SpatialDraft[]; message: string; controlBusy: boolean; inputReady: boolean; queuedAction: string | null }
+export interface NavigationState { destinationSceneId: string; destination: Position; phase: 'approaching-exit' | 'crossing' | 'approaching-destination' }
+export interface SpatialState { connection: ConnectionState; snapshot: SnapshotV2 | null; actions: SpatialDraft[]; message: string; controlBusy: boolean; inputReady: boolean; queuedAction: string | null; navigation: NavigationState | null }
 interface Options { onChange?: (state: SpatialState) => void; onUnauthenticated?: (token: string) => void; id?: () => string; heartbeatMs?: number; reconnectDelayMs?: number; waitForVisualArrival?: boolean }
 interface ReceiptReader { receipt(sessionId: string, actionId: string): Promise<ReceiptV2 | null> }
 interface QueuedAction { action: ActionV2; sequence: string; epoch: string; viewId: string; mapVersion: string; movementId?: string; targetRef?: string; targetSignature?: string }
+interface NavigationStep { sequence: string; sceneId: string; originSceneId: string; movementId?: string; crossing?: ActionV2; exitId?: string }
+interface NavigationPlan extends NavigationState { viewId: string; epoch: string; mapVersion: string; step: NavigationStep | null }
 function retainActions(actions: SpatialDraft[]): SpatialDraft[] {
   // 只有已有确定结果的历史计入上限；未决请求必须一直保留原串，直到收据确认。
   let confirmed = 80;
@@ -24,11 +30,11 @@ function asError(value: unknown): ErrorV2 | null {
 }
 function targetSignature(snapshot: SnapshotV2, reference?: string): string | undefined {
   if (!reference) return undefined;
-  const p = snapshot.projection;
+  const p = sceneDisplayProjection(snapshot.projection);
   const value = [...p.targets, ...p.items, ...p.entities].find(value => value.entityRef === reference);
   // 计划依赖只使用当前已授权字段，引用、资源或目标位置变化均取消自动后续操作。
   if (!value) return '';
-  return canonicalize(value);
+  return canonicalize(value ? { entityRef: value.entityRef, ...('appearanceEpoch' in value ? { appearanceEpoch: value.appearanceEpoch } : {}), ...('resourceRevision' in value ? { resourceRevision: value.resourceRevision } : {}), ...('location' in value ? { location: value.location } : { sceneId: value.sceneId, position: value.position }) } : null);
 }
 
 /** v2 独立恢复驱动，保留 v1 实现；输入源只在已确认的新控制 epoch 建立。 */
@@ -41,15 +47,23 @@ export class SpatialSessionClient {
   #heartbeat: ReturnType<typeof setInterval> | null = null; #retryTimer: ReturnType<typeof setTimeout> | null = null;
   #syncKey = ''; #syncRevision = 0;
   #displayedArrival = '';
+  #direction: ContinuousDirection; #navigation: NavigationPlan | null = null;
   constructor(api: ReceiptReader, connect: ConnectLink, options: Options = {}) {
     this.#api = api; this.#connect = connect;
     this.#options = { onChange: options.onChange ?? (() => {}), onUnauthenticated: options.onUnauthenticated ?? (() => {}), id: options.id ?? (() => crypto.randomUUID()), heartbeatMs: options.heartbeatMs ?? 1000, reconnectDelayMs: options.reconnectDelayMs ?? 1000, waitForVisualArrival: options.waitForVisualArrival ?? false };
+    this.#direction = new ContinuousDirection({ send: vector => this.#moveDirection(vector), stop: () => this.#stopDirection(), fail: message => { this.#message = message; this.#publish(); } });
   }
   get state(): SpatialState {
     const snapshot = this.#view.snapshot;
-    return { connection: this.#connection, snapshot, actions: [...this.#actions], message: this.#message, controlBusy: this.#controlBusy, inputReady: Boolean(snapshot?.projection.self.canControl && this.#source?.controlEpoch === snapshot.projection.self.controlEpoch), queuedAction: this.#queued ? '到达后重新检查并操作' : null };
+    const navigation = this.#navigation ? { destinationSceneId: this.#navigation.destinationSceneId, destination: { ...this.#navigation.destination }, phase: this.#navigation.phase } : null;
+    return { connection: this.#connection, snapshot, actions: [...this.#actions], message: this.#message, controlBusy: this.#controlBusy, inputReady: Boolean(snapshot?.projection.self.canControl && this.#source?.controlEpoch === snapshot.projection.self.controlEpoch), queuedAction: this.#queued ? '到达后重新检查并操作' : null, navigation };
   }
-  #publish() { this.#options.onChange(this.state); }
+  #publish() {
+    const p = this.#view.snapshot?.projection;
+    if (this.#connection !== 'online' || !p?.self.canControl || p.phase !== 'Running' || this.#source?.controlEpoch !== p.self.controlEpoch) this.#direction.clear();
+    else if (p.paused) this.#direction.set(null);
+    this.#options.onChange(this.state);
+  }
   #update(id: string, patch: Partial<SpatialDraft>) {
     this.#actions = retainActions(this.#actions.map(a => a.id === id ? (a.receipt && (patch.status === 'unknown' || patch.status === 'waiting') ? a : { ...a, ...patch }) : a)); this.#publish();
   }
@@ -62,6 +76,7 @@ export class SpatialSessionClient {
     this.#openConnection();
   }
   close() {
+    this.#direction.clear(); this.#navigation = null;
     this.#serial++; if (this.#heartbeat) clearInterval(this.#heartbeat); if (this.#retryTimer) clearTimeout(this.#retryTimer);
     this.#heartbeat = null; this.#retryTimer = null; const link = this.#link; this.#link = null; link?.close();
     this.#view.begin(''); this.#sessionId = ''; this.#token = ''; this.#connection = 'idle'; this.#source = null; this.#queued = null; this.#controlBusy = false; this.#pendingControl = null; this.#syncKey = ''; this.#message = '';
@@ -69,6 +84,7 @@ export class SpatialSessionClient {
   }
   reconnect() { if (this.#sessionId && this.#token) this.#openConnection(); }
   #openConnection() {
+    this.#direction.clear(); this.#navigation = null;
     if (this.#retryTimer) clearTimeout(this.#retryTimer); this.#retryTimer = null;
     const serial = ++this.#serial; const generation = this.#view.begin(this.#sessionId);
     const old = this.#link; this.#link = null; old?.close(); this.#source = null; this.#queued = null; this.#pendingControl = null; this.#controlBusy = false; this.#syncKey = '';
@@ -89,6 +105,7 @@ export class SpatialSessionClient {
   }
   #disconnect(serial: number, retry = true) {
     if (serial !== this.#serial) return;
+    this.#direction.clear(); this.#navigation = null;
     const next = ++this.#serial; const link = this.#link; this.#link = null; link?.close(); this.#view.begin(this.#sessionId);
     this.#source = null; this.#queued = null; this.#controlBusy = false; this.#pendingControl = null; this.#syncKey = ''; this.#connection = 'offline'; this.#message = '连接已断开，正在重新获取授权视图。';
     this.#actions = this.#actions.map(a => a.status === 'waiting' ? { ...a, status: 'unknown', detail: '原动作结果未知，可恢复后查询或原样重试。' } : a); this.#publish();
@@ -99,6 +116,7 @@ export class SpatialSessionClient {
     this.#message = spatialErrorMessage(error.code);
     if (['UNAUTHENTICATED', 'FORBIDDEN', 'SESSION_GONE', 'UPGRADE_REQUIRED'].includes(error.code)) {
       const token = this.#token; this.#serial++; this.#view.begin(this.#sessionId); this.#source = null; this.#queued = null; this.#connection = 'forbidden';
+      this.#navigation = null; this.#direction.clear();
       const link = this.#link; this.#link = null; link?.close(); this.#controlBusy = false; this.#publish();
       if (error.code === 'UNAUTHENTICATED') this.#options.onUnauthenticated(token);
     } else if (['RESYNC_REQUIRED', 'STALE_REFERENCE'].includes(error.code)) this.#openConnection();
@@ -119,7 +137,7 @@ export class SpatialSessionClient {
   #batch(value: unknown, generation: number) {
     if (this.#handleError(value)) return 'stale';
     const result = this.#view.applyBatch(value, generation);
-    if (result === 'applied') { this.#publish(); this.#drainQueued(); }
+    if (result === 'applied') { this.#publish(); this.#drainQueued(); this.#drainNavigation(); }
     else if (result === 'resync') this.#openConnection();
     else if (result === 'refetch') void this.sync();
     return result;
@@ -154,12 +172,14 @@ export class SpatialSessionClient {
   }
   async move(position: Position, options: { targetRef?: string; anchorId?: string } = {}, after?: ActionV2) {
     const snapshot = this.#ready(); const scene = snapshot.projection.scene; if (!scene) throw new Error('当前没有可行走场景。');
+    this.#direction.clear(); this.#navigation = null;
     this.#queued = null; const action = this.#source!.move(scene.sceneId, position, options);
     if (after && action.kind === 'move_to') this.#queued = { action: validateSpatial('ActionV2', after), sequence: action.movementCommandSeq, epoch: snapshot.projection.self.controlEpoch, viewId: snapshot.viewId, mapVersion: snapshot.projection.mapVersion, targetRef: options.targetRef, targetSignature: targetSignature(snapshot, options.targetRef) };
     await this.send(action, true);
   }
-  async stop() { this.#ready(); this.#queued = null; await this.send(this.#source!.stop(), true); }
+  async stop() { this.#ready(); this.#direction.clear(); this.#queued = null; this.#navigation = null; await this.send(this.#source!.stop(), true); }
   async traverseExit(exitId: string) {
+    this.#direction.clear(); this.#navigation = null;
     const snapshot = this.#ready(); const scene = snapshot.projection.scene;
     const exit = scene?.exits.find(value => value.exitId === exitId && value.open);
     const anchor = scene?.anchors.find(value => value.anchorId === exit?.anchorId);
@@ -171,18 +191,19 @@ export class SpatialSessionClient {
     this.#queued = { action: crossing, sequence: approach.movementCommandSeq, epoch: snapshot.projection.self.controlEpoch, viewId: snapshot.viewId, mapVersion: snapshot.projection.mapVersion };
     await this.send(approach, true);
   }
-  cancelQueued() { this.#queued = null; this.#publish(); }
+  cancelQueued() { this.#queued = null; this.#navigation = null; this.#direction.clear(); this.#publish(); }
   confirmDisplayedArrival(value: { viewId: string; epoch: string; movementId: string; sequence: string; position: Position }) {
     const snapshot = this.#view.snapshot; const p = snapshot?.projection;
     if (!snapshot || !p || snapshot.viewId !== value.viewId || p.self.controlEpoch !== value.epoch || p.movement?.movementId !== value.movementId || p.movement.movementCommandSeq !== value.sequence || p.movement.status !== 'arrived' || p.self.position?.x !== value.position.x || p.self.position?.y !== value.position.y) return;
     // 显示确认可以先于原收据到达；保留事件携带的真实计划身份，不借用同号旧计划。
-    this.#displayedArrival = `${value.viewId}:${value.epoch}:${value.movementId}:${value.sequence}`; this.#drainQueued();
+    this.#displayedArrival = `${value.viewId}:${value.epoch}:${value.movementId}:${value.sequence}`; this.#drainQueued(); this.#drainNavigation();
   }
   async send(action: ActionV2, preserveQueued = false) {
-    const snapshot = this.#ready(); if (!preserveQueued) this.#queued = null;
+    const snapshot = this.#ready(); if (!preserveQueued) { this.#queued = null; this.#navigation = null; this.#direction.clear(); }
     const envelope: PublicEnvelope = validateSpatial('PublicEnvelope', { schemaVersion: 2, sessionId: snapshot.sessionId, viewId: snapshot.viewId, actorRef: snapshot.projection.self.entityRef, clientActionId: this.#options.id(), controlEpoch: snapshot.projection.self.controlEpoch, baseSeq: snapshot.snapshotSeq, action });
     const draft: SpatialDraft = { id: envelope.clientActionId, raw: canonicalize(envelope), status: 'waiting', detail: action.kind === 'move_to' ? '正在提交路线，尚未到达。' : '等待服务器确认。', receipt: null };
     this.#actions = retainActions([...this.#actions, draft]); this.#publish(); await this.#deliver(draft);
+    return this.#actions.find(value => value.id === draft.id);
   }
   async retry(id: string) {
     const draft = this.#actions.find(a => a.id === id); if (!draft || draft.status !== 'unknown' || !this.#link?.connected || !this.#view.snapshot) return;
@@ -205,7 +226,12 @@ export class SpatialSessionClient {
         if (receipt.status === 'Rejected') this.#queued = null;
         else queued.movementId = receipt.result.movementId;
       }
-      this.#update(draft.id, { receipt, status: receipt.status === 'Accepted' ? 'accepted' : 'rejected', detail: receipt.status === 'Rejected' ? spatialErrorMessage(receipt.code) : envelope.action.kind === 'move_to' ? '路线已受理；实际到达以后才会操作。' : '服务器已确认。' }); this.#drainQueued(); void this.sync();
+      const navigation = this.#navigation;
+      if (envelope.action.kind === 'move_to' && navigation?.step?.sequence === envelope.action.movementCommandSeq && navigation.epoch === envelope.controlEpoch && navigation.viewId === envelope.viewId) {
+        if (receipt.status === 'Rejected') this.#cancelNavigation(spatialErrorMessage(receipt.code));
+        else navigation.step.movementId = receipt.result.movementId;
+      }
+      this.#update(draft.id, { receipt, status: receipt.status === 'Accepted' ? 'accepted' : 'rejected', detail: receipt.status === 'Rejected' ? spatialErrorMessage(receipt.code) : envelope.action.kind === 'move_to' ? '路线已受理；实际到达以后才会操作。' : '服务器已确认。' }); this.#drainQueued(); this.#drainNavigation(); void this.sync();
     } catch { this.#update(draft.id, { status: 'unknown', detail: '收据校验未通过，结果仍待确认。' }); }
   }
   async query(id: string) {
@@ -216,7 +242,7 @@ export class SpatialSessionClient {
   async control(kind: 'resume' | 'take') {
     const snapshot = this.#view.snapshot; const link = this.#link; const serial = this.#serial; const generation = this.#view.generation;
     if (!snapshot || !link?.connected || this.#controlBusy || snapshot.projection.phase !== 'Running') return;
-    this.#queued = null; const type = kind === 'take' ? 'control.take' : 'control.resume';
+    this.#queued = null; this.#navigation = null; this.#direction.clear(); const type = kind === 'take' ? 'control.take' : 'control.resume';
     const old = this.#pendingControl;
     const request = old?.serial === serial && old.request.type === type ? old.request : validateSpatial('ControlRequestV2', { schemaVersion: 2, type, sessionId: snapshot.sessionId, viewId: snapshot.viewId, actorRef: snapshot.projection.self.entityRef, nonce: this.#options.id() });
     const raw = old?.request === request ? old.raw : canonicalize(request); this.#pendingControl = { request, raw, serial }; this.#syncRevision++; this.#controlBusy = true; this.#publish();
@@ -237,6 +263,92 @@ export class SpatialSessionClient {
       this.#pendingControl = null; this.#message = this.#source ? '已恢复本人控制。' : '本地输入序号已丢失，请明确接管以建立新的控制周期。'; this.#publish();
     } catch { if (serial === this.#serial) { this.#message = '控制结果待确认，再次点击会重试原请求。'; this.#publish(); } }
     finally { if (serial === this.#serial) { this.#controlBusy = false; this.#publish(); void this.sync(); } }
+  }
+  setDirection(vector: Position | null) {
+    if (vector && (vector.x || vector.y)) {
+      try {
+        this.#ready();
+        if (this.#actions.some(draft => {
+          const kind = parseSpatial('PublicEnvelope', draft.raw).action.kind;
+          return (draft.status === 'unknown' && ['move_to', 'stop_move'].includes(kind)) || (draft.status === 'waiting' && kind === 'stop_move');
+        })) throw new Error('上一项移动或停步结果尚未确认，请先查询或原样重试。');
+        this.#queued = null; this.#navigation = null;
+      } catch (error) { this.#direction.clear(); this.#message = error instanceof Error ? error.message : '当前不能继续行走。'; this.#publish(); return; }
+    }
+    this.#direction.set(vector);
+  }
+  async #moveDirection(vector: Position) {
+    const snapshot = this.#ready(), p = snapshot.projection;
+    if (!p.scene || !p.self.position || p.paused) throw new Error('当前场景暂停行走。');
+    const destination = directionTarget(p.scene, p.self.position, vector);
+    if (!destination) throw new Error('这个方向已到达边界或被挡住。');
+    const draft = await this.send(this.#source!.move(p.scene.sceneId, destination), true);
+    if (draft?.status !== 'accepted') throw new Error(draft?.status === 'rejected' ? draft.detail : '移动结果尚未确认，已请求停步；请查询原请求。');
+  }
+  async #stopDirection() {
+    if (this.#connection !== 'online' || !this.state.inputReady || this.#view.snapshot?.projection.phase !== 'Running') return;
+    this.#queued = null; this.#navigation = null;
+    const draft = await this.send(this.#source!.stop(), true);
+    if (draft?.status !== 'accepted') throw new Error('停步结果尚未确认。');
+  }
+  async navigateTo(sceneId: string, position: Position): Promise<void> {
+    const snapshot = this.#ready(), p = snapshot.projection, destination = p.mapCatalog?.find(scene => scene.sceneId === sceneId);
+    if (!destination || !p.scene || !Number.isSafeInteger(position.x) || !Number.isSafeInteger(position.y) || position.x < 0 || position.y < 0 || position.x > destination.width || position.y > destination.height || !mapRoute(p.mapCatalog!, p.scene.sceneId, sceneId)) throw new Error('目的地没有可用的公开路线。');
+    this.#direction.clear(); this.#queued = null;
+    this.#navigation = { destinationSceneId: sceneId, destination: { ...position }, phase: 'approaching-destination', viewId: snapshot.viewId, epoch: p.self.controlEpoch, mapVersion: p.mapVersion, step: null };
+    try { await this.#advanceNavigation(); }
+    catch (error) { this.#navigation = null; this.#publish(); throw error; }
+  }
+  #cancelNavigation(message?: string) {
+    if (!this.#navigation) return;
+    this.#navigation = null; if (message) this.#message = message; this.#publish();
+  }
+  async #advanceNavigation() {
+    const navigation = this.#navigation; if (!navigation) return;
+    const snapshot = this.#ready(), p = snapshot.projection, scene = p.scene;
+    if (!scene || snapshot.viewId !== navigation.viewId || p.self.controlEpoch !== navigation.epoch || p.mapVersion !== navigation.mapVersion) { this.#cancelNavigation('场景或控制状态已改变，请重新选择路线。'); return; }
+    let action: ActionV2;
+    if (scene.sceneId === navigation.destinationSceneId) {
+      action = this.#source!.move(scene.sceneId, navigation.destination);
+      if (action.kind !== 'move_to') return;
+      navigation.phase = 'approaching-destination'; navigation.step = { sequence: action.movementCommandSeq, sceneId: scene.sceneId, originSceneId: scene.sceneId };
+    } else {
+      const route = mapRoute(p.mapCatalog ?? [], scene.sceneId, navigation.destinationSceneId);
+      const exit = route?.[0] && scene.exits.find(value => value.exitId === route[0].exitId && value.destinationSceneId === route[0].destinationSceneId && value.open);
+      const anchor = exit && scene.anchors.find(value => value.anchorId === exit.anchorId);
+      if (!exit || !anchor) throw new Error('当前路线的出口尚未开放或不可达。');
+      action = this.#source!.move(scene.sceneId, anchor.position, { anchorId: anchor.anchorId });
+      const crossing = this.#source!.move(exit.destinationSceneId, exit.destination);
+      if (action.kind !== 'move_to') return;
+      navigation.phase = 'approaching-exit'; navigation.step = { sequence: action.movementCommandSeq, sceneId: scene.sceneId, originSceneId: scene.sceneId, crossing, exitId: exit.exitId };
+    }
+    this.#publish(); await this.send(action, true);
+  }
+  #drainNavigation() {
+    const navigation = this.#navigation, snapshot = this.#view.snapshot, step = navigation?.step;
+    if (!navigation || !snapshot || !step) return;
+    const p = snapshot.projection, movement = p.movement;
+    if (snapshot.viewId !== navigation.viewId || p.self.controlEpoch !== navigation.epoch || p.mapVersion !== navigation.mapVersion || !p.self.canControl || p.phase !== 'Running') { this.#cancelNavigation('控制或场景版本已改变，原路线已取消。'); return; }
+    const order = compareDecimal(p.self.movementCommandHighWater, step.sequence);
+    if (order > 0) { this.#cancelNavigation(); return; }
+    if (p.self.sceneId !== step.sceneId) {
+      // crossing发出到确认之间仍可暂时留在来源场景；其他跨景绝不沿用旧链。
+      if (navigation.phase === 'crossing' && p.self.sceneId === step.originSceneId && order < 0) return;
+      this.#cancelNavigation('已离开原路线，自动前往已取消。'); return;
+    }
+    if (order < 0 || !step.movementId || movement?.movementId !== step.movementId) return;
+    if (movement.movementCommandSeq !== step.sequence || ['cancelled', 'blocked'].includes(movement.status)) { this.#cancelNavigation(movement.reason || '路线已中止。'); return; }
+    const visual = !this.#options.waitForVisualArrival || this.#displayedArrival === `${snapshot.viewId}:${p.self.controlEpoch}:${movement.movementId}:${movement.movementCommandSeq}`;
+    if (movement.status !== 'arrived' || !visual || p.paused || !this.state.inputReady) return;
+    if (navigation.phase === 'approaching-exit') {
+      const crossing = step.crossing, exit = p.scene?.exits.find(value => value.exitId === step.exitId && value.open);
+      if (crossing?.kind !== 'move_to' || !exit || exit.destinationSceneId !== crossing.sceneId) { this.#cancelNavigation('出口状态已改变，原路线已取消。'); return; }
+      navigation.phase = 'crossing'; navigation.step = { sequence: crossing.movementCommandSeq, originSceneId: step.sceneId, sceneId: crossing.sceneId };
+      this.#publish(); void this.send(crossing, true).catch(error => this.#cancelNavigation(error instanceof Error ? error.message : '出口前往尚未确认。'));
+    } else if (navigation.phase === 'crossing') {
+      navigation.step = null;
+      void this.#advanceNavigation().catch(error => this.#cancelNavigation(error instanceof Error ? error.message : '下一段路线不可用。'));
+    } else { this.#navigation = null; this.#publish(); }
   }
   #drainQueued() {
     const queued = this.#queued; const snapshot = this.#view.snapshot; if (!queued || !snapshot) return;

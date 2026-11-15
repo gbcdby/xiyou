@@ -7,8 +7,9 @@ import { startTestPostgres } from '../../backend/test-support/postgres.mjs';
 import { createAuthorityServer } from '../../backend/server.mjs';
 import { accepted, openDoor, cleanupPublic, disguise, gatherSources, investigate, endTogether, take } from '../../backend/test-support/gaolao-room.mjs';
 import { repository, sourceIdentity, saveJSON, sha256, until, sleep } from './network-support.mjs';
-import { browserRoom, snapshot, clientState, openReading, closeReading, selectObject, waitHumanReceipt } from './gaolao-real-support.mjs';
+import { browserRoom, snapshot, clientState, openReading, closeReading, openObjects, selectObject, waitHumanReceipt } from './gaolao-real-support.mjs';
 import { recordOfflineRecovery } from './gaolao-offline-diagnostics.mjs';
+import { canvasFrame, canvasPixels } from './canvas-browser-support.mjs';
 
 const output = resolve(process.env.FRONTEND_EVIDENCE_DIR || resolve(repository, '.agent-output/adv001-33-a2-integration/real-browser'));
 await mkdir(output, { recursive: true });
@@ -22,15 +23,17 @@ const latestConsent = async (r, actor, purpose) => (await r.snapshot(actor)).pro
 
 async function stageSummary(page, label) {
   const p = (await snapshot(page)).projection;
-  const expected = p.ending?.title || p.chapter.progress.at(-1)?.label || p.objectives.find(objective => objective.status === 'active')?.label;
-  await until(async () => (await page.locator('.spatial-current-objective h2').innerText()) === expected, label + '显示当前授权进展');
-  if (p.ending || p.chapter.progress.length) assert.doesNotMatch(await page.locator('.spatial-current-objective').innerText(), /先联系受困者，再准备安全开门/);
+  const progress = p.chapter.progress.filter(value=>value.value===true).at(-1)?.label;
+  if(p.ending)await until(async()=>(await page.getByTestId('gaolao-goal').innerText())===p.ending.title,label+'显示当前真实终态');
+  else if(progress)await until(async()=>(await page.locator('.gaolao-known-progress').innerText())===progress,label+'显示当前已授权的真实进展');
+  assert.ok((await page.getByTestId('gaolao-goal').innerText()).trim());assert.ok((await page.getByTestId('gaolao-next-step').innerText()).trim());
+  if (p.ending || progress) assert.doesNotMatch(await page.locator('.gaolao-guidance').innerText(), /先联系受困者，再准备安全开门/);
 }
 
 async function narrowReady(page) {
   await page.setViewportSize({ width: 390, height: 844 });
-  await until(() => page.evaluate(() => { const map = document.querySelector('.spatial-map-viewport').getBoundingClientRect(), box = document.querySelector('.spatial-label-guides').viewBox.baseVal; return Math.abs(box.width - map.width) < 1 && Math.abs(box.height - map.height) < 1; }), '窄屏 ResizeObserver 与实际地图尺寸一致');
-  const geometry = await page.evaluate(() => ({ content: document.documentElement.scrollWidth, viewport: document.documentElement.clientWidth, labels: [...document.querySelectorAll('button.spatial-map-label')].map(label => ({ font: Number.parseFloat(getComputedStyle(label).fontSize), width: label.getBoundingClientRect().width, height: label.getBoundingClientRect().height })) }));
+  await until(() => page.evaluate(async () => { const map = document.querySelector('.spatial-map-viewport').getBoundingClientRect(), frame = (await import('/src/rendering/spatial-canvas.ts')).readCanvasFrame(document.querySelector('[data-testid="spatial-map"]')); return frame&&Math.abs(frame.viewport.width-map.width)<1&&Math.abs(frame.viewport.height-map.height)<1; }), '窄屏 ResizeObserver 与实际Canvas尺寸一致');
+  const f=await canvasFrame(page),geometry={...await page.evaluate(()=>({content:document.documentElement.scrollWidth,viewport:document.documentElement.clientWidth})),pixels:await canvasPixels(page),labels:f.labels.filter(label=>label.selectable).map(label=>({font:Number.parseFloat(f.labelFont),width:label.width,height:label.height}))};
   assert.ok(geometry.content <= geometry.viewport);
   for (const label of geometry.labels) assert.ok(label.font >= 14 && label.width >= 44 && label.height >= 44);
   return geometry;
@@ -243,7 +246,7 @@ async function disguiseAndDoubles(r) {
   await until(async () => (await snapshot(page)).projection.entities.filter(entity => entity.name === '翠兰').length === 2, '未获知玩家实际看见两个同貌人物');
   const doubles = (await snapshot(page)).projection.entities.filter(entity => entity.name === '翠兰'); assert.notEqual(doubles[0].entityRef, doubles[1].entityRef);
   // 玩家依可见编号选择任意一位；不以服务端真身选择正确答案。
-  await closeReading(page); const labels = page.locator('.spatial-object-list').getByRole('button', { name: /^\d+号 · 翠兰$/ });
+  await closeReading(page); await openObjects(page); const labels = page.locator('.spatial-object-list').getByRole('button', { name: /^\d+号 · 翠兰$/ });
   assert.equal(await labels.count(), 2); const chosenLabel = (await labels.nth(1).innerText()).trim(); await labels.nth(1).click();
   const selectedLabel = (await page.locator('#spatial-selection-heading').innerText()).trim(); assert.equal(selectedLabel, chosenLabel);
   const inspectBefore = (await clientState(page)).actions.map(action => action.id); await page.getByRole('button', { name: '在当前位置查看', exact: true }).click();

@@ -9,7 +9,9 @@ import { gaolaoRoom, openDoor, accepted, take } from '../test-support/gaolao-roo
 import { personalDecisionBinding, ownPersonalSource } from '../../game/gaolao-personal-contract.mjs';
 import { personalAppearancePathAllowed } from '../../game/gaolao-personal.mjs';
 import { observeGaolao } from '../../game/gaolao-world.mjs';
-import { opaqueRef, spatialProjection } from '../../game/spatial-world.mjs';
+import { opaqueRef, spatialProjection, resolveRef } from '../../game/spatial-world.mjs';
+import { encodeJsonbText } from '../jsonb-text.mjs';
+import { sceneDisplayProjection } from '../../frontend/src/domain/spatial-display.ts';
 
 let db, runtime;
 const clock = { value: Date.parse('2026-11-14T12:00:00Z') };
@@ -46,6 +48,78 @@ async function settledRoom(version = 'gaolaozhuang-scene-v3', destinationId = 'f
   assert.equal((await runtime.replay(r.sessionId)).chapter.cuilanSafe, true);
   return r;
 }
+
+test('R66-STD-004：真实借貌后的双同貌只公开观察者/ref版本，旧nonce和原动作守卫保持', async () => {
+  // 复用本文件明确标记的本人 authority-contract basis；变貌、移动、视图及 Receipt 均走真实规则。
+  const r = await settledRoom('gaolaozhuang-scene-v3', 'front-guest-room', 3), allCaps = [...caps, 'spatial-appearance-v1', 'spatial-scene-overview-v1'];
+  await r.go(2, r.R('R03'));
+  accepted(await r.interact(0, '翠兰', 'gz-request-appearance', { destinationId: 'rear-meeting', permissionTerm: 'single_use' }));
+  const consent = (await r.snapshot(0)).projection.chapter.consents.findLast(value => value.purpose === 'appearance');
+  accepted(await controlledDecision(r, consent.consentId));
+  await r.go('wukong', r.C('C10')); await r.go(0, r.C('C10'));
+  const permission = (await r.snapshot('wukong')).projection.chapter.consents.find(value => value.consentId === consent.consentId);
+  accepted(await r.interact('wukong', 'self', 'gz-apply-appearance', { consentId: permission.consentId, expectedConsentVersion: permission.version }));
+  await r.go(2, r.C('C10'));
+  const state = await runtime.replay(r.sessionId), observerId = state.members[2].characterId, { wukong, cuilan } = r.content.chapterRules.people;
+  assert.equal(state.characters[wukong].appearanceEpoch, '1'); assert.equal(state.characters[cuilan].appearanceEpoch, '0');
+  assert.ok(!state.chapter.identityKnowledge[observerId]?.[wukong], '观察者未目击变貌，也没有获知真身');
+  const first = await runtime.snapshot(r.users[2].token, r.sessionId, allCaps), view = state.views[observerId];
+  const lookalikes = first.projection.sceneOverview.entities.filter(value => value.name === '翠兰');
+  assert.equal(lookalikes.length, 2); assert.ok(lookalikes.every(value => value.appearanceId === 'cuilan'));
+  assert.ok(first.projection.entities.some(value => value.entityRef === view.bindings[wukong].ref), '原感知路径确实包含近处借貌者');
+  for (const id of [wukong, cuilan]) {
+    const overview = lookalikes.find(value => value.entityRef === view.bindings[id].ref), authorized = first.projection.entities.find(value => value.entityRef === overview.entityRef);
+    for (const key of ['appearanceEpoch', 'resourceRevision']) {
+      assert.notEqual(overview[key], state.characters[id][key], `${key} 不得直接暴露内部计数`);
+      assert.match(overview[key], /^[1-9][0-9]{60,}$/);
+      if (authorized) assert.equal(authorized[key], overview[key]);
+      assert.equal(sceneDisplayProjection(first.projection).entities.find(value => value.entityRef === overview.entityRef)[key], overview[key]);
+    }
+  }
+  await r.go(2, r.content.chapterRules.safeDestinations[0]);
+  const besideOwner = await runtime.snapshot(r.users[2].token, r.sessionId, allCaps), owner = besideOwner.projection.entities.find(value => value.entityRef === view.bindings[cuilan].ref);
+  assert.ok(owner, '真实走到本人所在位置后也核原publicActor路径，不解除房间原遮挡');
+  for (const key of ['appearanceEpoch', 'resourceRevision']) assert.equal(owner[key], lookalikes.find(value => value.entityRef === owner.entityRef)[key]);
+  assert.ok(!JSON.stringify(first).includes(state.seed), '别名密钥从不进入公共投影');
+  const known = await runtime.snapshot(r.users[0].token, r.sessionId, allCaps), knownActor = known.projection.sceneOverview.entities.find(value => value.name === '孙悟空（借貌）');
+  const unknownActor = lookalikes.find(value => value.entityRef === view.bindings[wukong].ref);
+  assert.notEqual(knownActor.appearanceEpoch, unknownActor.appearanceEpoch); assert.notEqual(knownActor.resourceRevision, unknownActor.resourceRevision);
+  const handle = await runtime.openConnection(r.users[2].token, allCaps), start = await runtime.subscribe(handle, r.sessionId);
+  const nonce = crypto.randomUUID(), raw = JSON.stringify({ schemaVersion: 2, type: 'control.take', sessionId: r.sessionId, viewId: start.viewId, actorRef: start.projection.self.entityRef, nonce });
+  const original = await runtime.control(handle, raw), captured = await runtime.replay(r.sessionId), binding = captured.views[observerId];
+  for (const id of [wukong, cuilan]) {
+    const before = lookalikes.find(value => value.entityRef === view.bindings[id].ref), after = original.snapshot.projection.sceneOverview.entities.find(value => value.entityRef === binding.bindings[id].ref);
+    assert.notEqual(after.entityRef, before.entityRef); assert.notEqual(after.appearanceEpoch, before.appearanceEpoch); assert.notEqual(after.resourceRevision, before.resourceRevision);
+  }
+  const currentSelf = original.snapshot.projection.self;
+  const oldRefRequest = JSON.stringify({ schemaVersion: 2, sessionId: r.sessionId, viewId: original.snapshot.viewId, actorRef: currentSelf.entityRef, clientActionId: crypto.randomUUID(), controlEpoch: currentSelf.controlEpoch, baseSeq: original.snapshot.snapshotSeq, action: { kind: 'inspect', targetRef: unknownActor.entityRef } });
+  assert.equal((await runtime.submit(handle, oldRefRequest)).code, 'STALE_REFERENCE');
+  const selfBefore = (await r.snapshot('wukong')).projection.self;
+  assert.equal((await r.send('wukong', { kind: 'interact', targetRef: selfBefore.entityRef, operationId: 'gz-release-appearance', expectedTargetRevision: unknownActor.resourceRevision })).code, 'STALE_PRECONDITION', '别人的别名不能给本人动作使用');
+  assert.equal((await r.send('wukong', { kind: 'interact', targetRef: selfBefore.entityRef, operationId: 'gz-release-appearance', expectedTargetRevision: captured.characters[wukong].resourceRevision })).code, 'STALE_PRECONDITION', '猜中真实计数也不能绕过公开版本检查');
+  accepted(await r.interact('wukong', 'self', 'gz-release-appearance'));
+  const restored = (await r.snapshot('wukong')).projection.self;
+  assert.equal(restored.appearanceId, 'wukong'); assert.notEqual(restored.appearanceEpoch, selfBefore.appearanceEpoch);
+  assert.equal((await r.send('wukong', { kind: 'interact', targetRef: selfBefore.entityRef, operationId: 'gz-release-appearance', expectedTargetRevision: selfBefore.resourceRevision })).code, 'STALE_REFERENCE', '旧ref与旧版本自洽也不能越过内部appearance绑定校验');
+  const staleBinding = structuredClone(await runtime.replay(r.sessionId)); staleBinding.views[observerId] = structuredClone(binding);
+  assert.throws(() => resolveRef({ state: staleBinding, content: r.content }, observerId, binding.bindings[wukong].ref, binding.viewId, { visible: false }), { code: 'STALE_REFERENCE' }, '即使保留原binding，旧内部epoch仍必须拒绝');
+  // 模拟升级前已经保存的 nonce：仅受控测试改缓存为当时真实计数，不修改世界状态/事件。
+  const legacy = structuredClone(original), byRef = new Map(Object.entries(binding.bindings).map(([id, value]) => [value.ref, captured.characters[id]]));
+  for (const person of [legacy.snapshot.projection.self, ...legacy.snapshot.projection.entities, ...legacy.snapshot.projection.sceneOverview.entities]) {
+    const actor = byRef.get(person.entityRef); person.appearanceEpoch = actor.appearanceEpoch;
+    if (person.resourceRevision !== undefined) person.resourceRevision = actor.resourceRevision;
+  }
+  const stored = encodeJsonbText(legacy);
+  await db.pool.query('UPDATE command_nonces SET response=$1,response_text_encoding=$2 WHERE session_id=$3 AND nonce=$4', [stored.value, stored.encoding, r.sessionId, nonce]);
+  const rows = () => db.pool.query('SELECT response,response_text_encoding,semantic_digest FROM command_nonces WHERE session_id=$1 AND nonce=$2', [r.sessionId, nonce]);
+  const cacheBefore = (await rows()).rows, worldBefore = await runtime.replay(r.sessionId);
+  assert.deepEqual(await runtime.control(handle, raw), original, '按历史snapshot重表达，不用解除后的新计数，也不重新接管');
+  const old = await runtime.openConnection(r.users[2].token, caps), trimmed = structuredClone(original);
+  delete trimmed.snapshot.projection.sceneOverview; delete trimmed.snapshot.projection.mapCatalog;
+  for (const person of [trimmed.snapshot.projection.self, ...trimmed.snapshot.projection.entities]) delete person.appearanceId;
+  assert.deepEqual(await runtime.control(old, raw), trimmed, '旧reader的缓存出口也不能泄露原计数');
+  assert.deepEqual((await rows()).rows, cacheBefore); assert.deepEqual(await runtime.replay(r.sessionId), worldBefore);
+});
 async function requestItems(r, who = 0, { both = true, permissionTerm = 'single_use', replacement } = {}) {
   const owner = (await r.snapshot('cuilan')).projection.self; await r.go(who, owner);
   accepted(await r.interact(who, '翠兰', 'gz-describe-private-items'));

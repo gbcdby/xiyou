@@ -4,7 +4,7 @@ import { SpatialSessionClient } from '../network/spatial-session.ts';
 import type { SpatialDraft, SpatialState } from '../network/spatial-session.ts';
 import { connectSpatialSocket } from '../network/socket-link.ts';
 
-export const spatialState = shallowRef<SpatialState>({ connection: 'idle', snapshot: null, actions: [], message: '', controlBusy: false, inputReady: false, queuedAction: null });
+export const spatialState = shallowRef<SpatialState>({ connection: 'idle', snapshot: null, actions: [], message: '', controlBusy: false, inputReady: false, queuedAction: null, navigation: null });
 export const spatialNotice = ref('');
 export const spatialStorageNotice = ref('');
 let currentKey = ''; let opening = false;

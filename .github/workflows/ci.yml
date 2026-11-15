@@ -79,6 +79,13 @@ jobs:
         env:
           FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-spatial
         run: node frontend/tests/spatial-browser-check.mjs
+      - name: scene-v3 Canvas、连续输入、地图与目标动态验收
+        timeout-minutes: 4
+        env:
+          FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-client-experience
+          VITE_GAOLAO_CONTENT_VERSION: 'gaolaozhuang-scene-v3'
+        # 当前正式内容；两个独立账号真实UI/PG/Socket。录像不替代断言、独审或真人试玩。
+        run: node frontend/tests/client-experience-browser.mjs
       - name: 旧版 A2 高老庄真实 2 人与 5 人章节及授权复盘
         env:
           FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-gaolao
@@ -99,6 +106,7 @@ jobs:
           path: |
             .agent-output/ci/browser-spatial/result.json
             .agent-output/ci/browser-spatial/result-before-cleanup.json
+            .agent-output/ci/browser-spatial/object-geometry-result.json
             .agent-output/ci/browser-spatial/*.png
             .agent-output/ci/browser-retention/report.json
             .agent-output/ci/browser-retention/pending-actions.png
@@ -109,6 +117,13 @@ jobs:
             .agent-output/ci/browser-static-release/stdout.log
             .agent-output/ci/browser-static-release/postgres.log
             .agent-output/ci/browser-static-release/run/result.json
+            .agent-output/ci/browser-client-experience/result.json
+            .agent-output/ci/browser-client-experience/result-before-cleanup.json
+            .agent-output/ci/browser-client-experience/scene-v3-desktop.png
+            .agent-output/ci/browser-client-experience/scene-v3-map-route.png
+            .agent-output/ci/browser-client-experience/scene-v3-narrow.png
+            .agent-output/ci/browser-client-experience/scene-v3-failure.png
+            .agent-output/ci/browser-client-experience/scene-v3-demo.webm
           include-hidden-files: true
           if-no-files-found: warn
           retention-days: 7

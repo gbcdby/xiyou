@@ -8,7 +8,7 @@
 
 允许值为 `neutral`、`gaocai`、`courtyard-helper`、`carpenter`、`kitchen-helper`、`woodcutter`、`tang`、`wukong`、`bajie`、`cuilan`、`gao`、`witness`。未知内容或没有明确映射时服务端使用 `neutral`。这组键对应公开造型，不能把内部 `characterId` 原样填入。
 
-真实翠兰与借貌中的悟空都必须为 `cuilan`，两者仍有独立 `entityRef`、位置与操作目标。知情者的称呼可以是“悟空·借貌”，其 `appearanceId` 仍是 `cuilan`；未识破者与知情者看到同一当前外形。解除借貌后才随权威 `appearanceEpoch` 的变化回到 `wukong`。客户端在外观版本变化时清除旧造型帧，缺字段或没有本地资源时用中性造型，禁止退回姓名、顺序或真实身份猜图。
+真实翠兰与借貌中的悟空都必须为 `cuilan`，两者仍有独立 `entityRef`、位置与操作目标。知情者的称呼可以是“悟空·借貌”，其 `appearanceId` 仍是 `cuilan`；未识破者与知情者看到同一当前外形。解除借貌后才随权威外观变化回到 `wukong`。公开 `appearanceEpoch` 和人物 `resourceRevision` 是绑定观察者、视图与当前不透明引用的十进制版本别名，只可比较相等或原样提交，不能排序或解释为次数；内部真实计数及陈旧引用重验不变。客户端在外观版本变化时清除旧造型帧，缺字段或没有本地资源时用中性造型，禁止退回姓名、顺序、版本数值或真实身份猜图。
 
 ## 显式兼容协商
 

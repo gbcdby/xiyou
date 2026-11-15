@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { spriteForAppearance } from '../src/domain/gaolao-art.ts';
+import { spriteForAppearance, spriteResourcePaths } from '../src/domain/gaolao-art.ts';
 import { ConfirmedMotion } from '../src/domain/spatial-motion.ts';
 import { spatialSnapshot } from './spatial-fixture.mjs';
 
@@ -8,6 +8,23 @@ test('只以公开外观键选图，未知身份与缺字段保持中性回退',
   assert.equal(spriteForAppearance(undefined, 'S', false, 0), null);
   assert.equal(spriteForAppearance('private-wukong-id', 'S', false, 0), null);
   assert.ok(spriteForAppearance('gaocai', 'SE', false, 0));
+});
+
+test('角色注册使用各自manifest和根路径，渲染消费不限定高才或推断真实身份', () => {
+  const asset = file => ({ file, width: 40, height: 80, footPivot: { x: 20, y: 78 }, scale: 1 });
+  const catalog = { helper: { basePath: '/assets/helper', manifest: {
+    cycleDistance: 20,
+    directions: { e: { nativeDirection: 'e', mirrorX: false }, w: { nativeDirection: 'e', mirrorX: true } },
+    native: { e: { idle: asset('idle.png'), walk: [asset('walk-0.png'), asset('walk-1.png')] } },
+  } } };
+  assert.deepEqual(spriteResourcePaths('helper', catalog), ['/assets/helper/idle.png', '/assets/helper/walk-0.png', '/assets/helper/walk-1.png']);
+  const frame = spriteForAppearance('helper', 'W', true, 12, false, catalog);
+  assert.equal(frame.href, '/assets/helper/walk-1.png');
+  assert.equal(frame.mirrorX, true);
+  assert.deepEqual(frame.bounds, { x: -20, y: -78, width: 40, height: 80 });
+  assert.equal(spriteForAppearance('helper', 'S', true, 0, false, catalog), null);
+  assert.equal(spriteForAppearance('unknown', 'E', true, 0, false, catalog), null);
+  assert.deepEqual(spriteResourcePaths('unknown', catalog), []);
 });
 
 test('高才停步使用独立站姿，镜像围绕脚底而不改变最终缩放', () => {

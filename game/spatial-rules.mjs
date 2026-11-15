@@ -1,5 +1,5 @@
 import { RuleError } from './rules.mjs';
-import { opaqueRef, next, sceneOf, obstacleEnabled, conditionMet, locationOf, inRange, unoccluded, canSee, ensureView, entityRef, resolveRef } from './spatial-world.mjs';
+import { opaqueRef, next, sceneOf, obstacleEnabled, conditionMet, locationOf, inRange, unoccluded, canSee, ensureView, entityRef, resolveRef, publicPhysical, publicMotionViews } from './spatial-world.mjs';
 import { findPath, walkable, clearSegment, pointAlongPath, facingAlongPath, distance, visibleSegment } from './spatial-geometry.mjs';
 import { isGaolao, observerName, copyGaolaoEvidence } from './gaolao-world.mjs';
 import { applyGaolaoAction,checkGaolaoMovement,checkGaolaoItem } from './gaolao-rules.mjs';
@@ -50,6 +50,7 @@ export function advanceSpatialPositions(tx, sceneTimeMs) {
         p.travelled = travel;
         p.status = nextPoint.arrived ? 'arrived' : 'moving';
         a.motionViews = {};
+        a.publicMotionViews = publicMotionViews(before, a, segments, before.sceneTimeMs, sceneTimeMs);
         for (const observer of Object.values(before.characters)) {
             const view = before.views[observer.characterId];
             // 观察者同期运动或重建视图时宁可不给轨迹，也不能追补当时未看见的区段。
@@ -184,7 +185,8 @@ export function applySpatialAction(tx, actorId, principalKind, request, navigati
             near(tx, a, { sceneId: a.sceneId, position: current.anchors.find(x => x.anchorId === exit.anchorId).position });
             origin = exit.destination;
         }
-        const target = action.targetRef ? resolve(action.targetRef) : null;
+        const target = action.targetRef ? resolveRef(tx, actorId, action.targetRef, request.viewId, { visible: principalKind !== 'human' }) : null;
+        if (target && principalKind === 'human' && !publicPhysical(tx.state, actorId, target) && !canSee(tx.state, tx.content, actorId, target)) refuse('STALE_REFERENCE');
         if (target && locationOf(tx.state, target)?.sceneId !== action.sceneId)
             refuse('STALE_REFERENCE');
         if (action.anchorId && !destinationScene.anchors.some(x => x.anchorId === action.anchorId && distance(x.position, action.destination) === 0))

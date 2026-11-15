@@ -18,8 +18,9 @@ const toolProperties = {
   expectedTargetRevision: ref('DecimalString'), evidenceRef: ref('EntityRef'), consentId: ref('EntityRef'),
   expectedConsentVersion: ref('DecimalString'), purpose: ref('ConsentPurpose'), scope: ref('ConsentScopeViewV2'),
 };
-const projection = { ...spatialSchema.$defs.ProjectionV2, properties: {
-  ...spatialSchema.$defs.ProjectionV2.properties,
+const modelProjection = omit(spatialSchema.$defs.ProjectionV2, ['sceneOverview', 'mapCatalog']);
+const projection = { ...modelProjection, properties: {
+  ...modelProjection.properties,
   self: ref('SpatialModelSelfV2'), entities: array(ref('SpatialModelEntityV2')),
   items: array(ref('SpatialModelItemV2')), movement: nullable(ref('SpatialModelMovementV2')),
 } };

@@ -63,10 +63,12 @@ function unchangedRejection(receipt, code) {
   assert.deepEqual(receipt.result, {});
 }
 
-test('SP06：相同公开人物版本的并发提议只提交一次，成功与拒绝的原串都稳定', async () => {
+test('SP06：同一内部人物版本的观察者别名不同，并发提议仍只提交一次', async () => {
   const r = await twoNearbyRequesters();
   const prepared = await Promise.all([visibleProposal(r, 0), visibleProposal(r, 1, 'tea-back-room')]);
-  assert.equal(prepared[0].action.expectedTargetRevision, prepared[1].action.expectedTargetRevision);
+  assert.notEqual(prepared[0].action.expectedTargetRevision, prepared[1].action.expectedTargetRevision, '不同观察者不能用版本作人物关联指纹');
+  const wrongObserver = { ...prepared[0].action, expectedTargetRevision: prepared[1].action.expectedTargetRevision };
+  unchangedRejection(await r.send(0, wrongObserver), 'STALE_PRECONDITION');
   const receipts = await Promise.all(prepared.map((p, who) => runtime.submit(r.handles[who], p.raw)));
   assert.equal(receipts.filter(receipt => receipt.status === 'Accepted').length, 1);
   unchangedRejection(receipts.find(receipt => receipt.status === 'Rejected'), 'STALE_PRECONDITION');
@@ -86,13 +88,15 @@ for (const legacyFirst of [true, false]) {
     const old = await visibleProposal(r, 0), modern = await visibleProposal(r, 1, 'tea-back-room');
     assert.deepEqual(old.snapshot.projection.chapter.consents, []);
     const { expectedTargetRevision, ...scope } = old.action;
+    const internalRevision = (await runtime.replay(r.sessionId)).characters[r.content.chapterRules.people.cuilan].resourceRevision;
     const legacy = await r.raw(0, { ...scope, expectedConsentVersion: '0' });
     const first = legacyFirst ? [0, legacy] : [1, modern.raw], second = legacyFirst ? [1, modern.raw] : [0, legacy];
     const receipt = accepted(await runtime.submit(r.handles[first[0]], first[1]));
     unchangedRejection(await runtime.submit(r.handles[second[0]], second[1]), legacyFirst ? 'STALE_PRECONDITION' : 'CONSENT_STALE');
     const state = await runtime.replay(r.sessionId);
     assert.equal(consentCount(state), 1);
-    assert.equal(state.characters[r.content.chapterRules.people.cuilan].resourceRevision, String(BigInt(expectedTargetRevision) + 1n));
+    assert.notEqual(expectedTargetRevision, internalRevision, '公开版本不是内部次数');
+    assert.equal(state.characters[r.content.chapterRules.people.cuilan].resourceRevision, String(BigInt(internalRevision) + 1n));
     assert.deepEqual(await runtime.submit(r.handles[first[0]], first[1]), receipt, '兼容格式原串仍能恢复原 Receipt');
   });
 }

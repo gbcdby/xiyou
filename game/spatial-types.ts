@@ -1,5 +1,5 @@
 // 由 protocol/scripts/generate-spatial.mjs 从 spatial-schema.mjs 生成；请修改唯一字段源。
-export type SpatialClientCapability = "spatial-v2" | "spatial-appearance-v1" | "spatial-object-visual-v1" | "gaolao-personal-consent-v1";
+export type SpatialClientCapability = "spatial-v2" | "spatial-appearance-v1" | "spatial-object-visual-v1" | "gaolao-personal-consent-v1" | "spatial-scene-overview-v1";
 
 export type PersonalPermissionTermV1 = "single_use" | "reusable";
 
@@ -99,6 +99,16 @@ export type ItemViewV2 = { "entityRef": EntityRef; "name": string; "location": (
 
 export type TargetViewV2 = { "entityRef": EntityRef; "name": string; "sceneId": Id; "position": Position; "resourceRevision": DecimalString; "availableOperations": Array<Id>; "fields": Array<FactField>; "visualKey"?: ObjectVisualKeyV1; };
 
+export type SceneEntityViewV1 = { "entityRef": EntityRef; "name": string; "appearanceEpoch": DecimalString; "resourceRevision": DecimalString; "moving": boolean; "appearanceId"?: AppearanceIdV2; "sceneId": Id; "position": Position; "facing": Facing; "motionTrail"?: Array<Position>; "motionFromSceneTimeMs"?: number; "motionThroughSceneTimeMs"?: number; };
+
+export type SceneItemViewV1 = { "entityRef": EntityRef; "name": string; "resourceRevision": DecimalString; "location": { "kind": "ground"; "sceneId": Id; "position": Position; }; "visualKey"?: ObjectVisualKeyV1; "visualState": "loose" | "fixed" | "default"; };
+
+export type SceneTargetViewV1 = { "entityRef": EntityRef; "name": string; "resourceRevision": DecimalString; "sceneId": Id; "position": Position; "visualKey"?: ObjectVisualKeyV1; "visualState": "open" | "closed" | "default"; };
+
+export type SceneOverviewV1 = { "entities": Array<SceneEntityViewV1>; "items": Array<SceneItemViewV1>; "targets": Array<SceneTargetViewV1>; };
+
+export type PublicMapScene = { "sceneId": Id; "name": string; "width": number; "height": number; "unitsPerPixel": number; "walkableAreas": Array<{ "areaId": Id; "polygon": Polygon; }>; "anchors": Array<{ "anchorId": Id; "position": Position; "label": string; }>; "exits": Array<{ "exitId": Id; "anchorId": Id; "destinationSceneId": Id; "destination": Position; }>; };
+
 export type PlanViewV2 = { "movementId": EntityRef; "planVersion": DecimalString; "movementCommandSeq": DecimalString; "sceneId": Id; "mapVersion": Id; "goal": Position; "path": Array<Position>; "acceptedAtSceneTime": number; "status": "accepted" | "moving" | "arrived" | "blocked" | "cancelled"; "reason"?: string; };
 
 export type EvidenceSourceViewV2 = { "sourceRef": EntityRef; "kind": "archive" | "testimony" | "material" | "comparison" | "decision" | "arrangement" | "contact"; "label": string; "beforeArrivalDays": number; "receivedSeq": DecimalString; };
@@ -111,7 +121,7 @@ export type CooperationViewV2 = { "operationId": Id; "operationVersion": Decimal
 
 export type PublicScene = { "sceneId": Id; "name": string; "width": number; "height": number; "unitsPerPixel": number; "walkableAreas": Array<{ "areaId": Id; "polygon": Polygon; }>; "obstacles": Array<{ "obstacleId": Id; "polygon": Polygon; "exceptAreas": Array<Id>; }>; "anchors": Array<{ "anchorId": Id; "position": Position; "label": string; }>; "exits": Array<{ "exitId": Id; "anchorId": Id; "destinationSceneId": Id; "destination": Position; "open": boolean; }>; };
 
-export type ProjectionV2 = { "protocolCapability": "spatial-v2"; "chapterVersion": Id; "mapVersion": Id; "variantId": Id; "contentVersion": Id; "reducerVersion": "spatial-world-v2" | "gaolao-world-v1" | "gaolao-world-v2"; "phase": "Lobby" | "Running" | "Finished" | "Aborted"; "sceneTimeMs": number; "paused": boolean; "self": SelfViewV2; "entities": Array<EntityViewV2>; "items": Array<ItemViewV2>; "targets": Array<TargetViewV2>; "scene": (PublicScene) | (null); "movement": (PlanViewV2) | (null); "observations": Array<ObservationViewV2>; "claims": Array<ClaimViewV2>; "cooperations": Array<CooperationViewV2>; "objectives": Array<{ "objectiveId": Id; "label": string; "status": "active" | "completed" | "blocked"; }>; "ending": (EndingViewV2) | (null); "chapter"?: ChapterViewV2; };
+export type ProjectionV2 = { "protocolCapability": "spatial-v2"; "chapterVersion": Id; "mapVersion": Id; "variantId": Id; "contentVersion": Id; "reducerVersion": "spatial-world-v2" | "gaolao-world-v1" | "gaolao-world-v2"; "phase": "Lobby" | "Running" | "Finished" | "Aborted"; "sceneTimeMs": number; "paused": boolean; "self": SelfViewV2; "entities": Array<EntityViewV2>; "items": Array<ItemViewV2>; "targets": Array<TargetViewV2>; "scene": (PublicScene) | (null); "movement": (PlanViewV2) | (null); "observations": Array<ObservationViewV2>; "claims": Array<ClaimViewV2>; "cooperations": Array<CooperationViewV2>; "objectives": Array<{ "objectiveId": Id; "label": string; "status": "active" | "completed" | "blocked"; }>; "ending": (EndingViewV2) | (null); "chapter"?: ChapterViewV2; "sceneOverview"?: SceneOverviewV1; "mapCatalog"?: Array<PublicMapScene>; };
 
 export type SnapshotV2 = { "schemaVersion": 2; "type": "world.snapshot"; "sessionId": Id; "viewId": Id; "snapshotSeq": DecimalString; "projection": ProjectionV2; };
 
