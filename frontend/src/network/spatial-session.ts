@@ -48,10 +48,11 @@ export class SpatialSessionClient {
   #syncKey = ''; #syncRevision = 0;
   #displayedArrival = '';
   #direction: ContinuousDirection; #navigation: NavigationPlan | null = null;
+  #directionAnchor: { vector: Position; position: Position; identity: string } | null = null;
   constructor(api: ReceiptReader, connect: ConnectLink, options: Options = {}) {
     this.#api = api; this.#connect = connect;
     this.#options = { onChange: options.onChange ?? (() => {}), onUnauthenticated: options.onUnauthenticated ?? (() => {}), id: options.id ?? (() => crypto.randomUUID()), heartbeatMs: options.heartbeatMs ?? 1000, reconnectDelayMs: options.reconnectDelayMs ?? 1000, waitForVisualArrival: options.waitForVisualArrival ?? false };
-    this.#direction = new ContinuousDirection({ send: vector => this.#moveDirection(vector), stop: () => this.#stopDirection(), fail: message => { this.#message = message; this.#publish(); } });
+    this.#direction = new ContinuousDirection({ send: vector => this.#moveDirection(vector), stop: () => this.#stopDirection(), reset: () => { this.#directionAnchor = null; }, fail: message => { this.#message = message; this.#publish(); } });
   }
   get state(): SpatialState {
     const snapshot = this.#view.snapshot;
@@ -273,6 +274,8 @@ export class SpatialSessionClient {
     return snapshot;
   }
   setDirection(vector: Position | null) {
+    const size = vector ? Math.hypot(vector.x, vector.y) : 0;
+    if (!size || !Number.isFinite(size) || (this.#directionAnchor && (this.#directionAnchor.vector.x !== vector!.x / size || this.#directionAnchor.vector.y !== vector!.y / size))) this.#directionAnchor = null;
     if (vector && (vector.x || vector.y)) {
       try {
         this.#readyDirection();
@@ -285,7 +288,10 @@ export class SpatialSessionClient {
     // 停步成功后的自动续发也重查原请求；不能绕过稍后变为未知的旧move。
     const snapshot = this.#readyDirection(), p = snapshot.projection;
     if (!p.scene || !p.self.position || p.paused) throw new Error('当前场景暂停行走。');
-    const destination = directionTarget(p.scene, p.self.position, vector);
+    const identity = JSON.stringify([snapshot.viewId, p.self.controlEpoch, p.self.entityRef, p.self.appearanceEpoch, p.self.sceneId, p.mapVersion]);
+    if (!this.#directionAnchor || this.#directionAnchor.identity !== identity) this.#directionAnchor = { vector: { ...vector }, position: { ...p.self.position }, identity };
+    // 只保存输入意图的零轴，不让滞后授权坐标在每次续发时反复改变纯横/竖方向。
+    const destination = directionTarget(p.scene, p.self.position, vector, this.#directionAnchor.position);
     if (!destination) throw new Error('这个方向已到达边界或被挡住。');
     const draft = await this.send(this.#source!.move(p.scene.sceneId, destination), true);
     if (draft?.status !== 'accepted') throw new Error(draft?.status === 'rejected' ? draft.detail : '移动结果尚未确认，已请求停步；请查询原请求。');

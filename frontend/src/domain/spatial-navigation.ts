@@ -2,11 +2,12 @@ import type { Position, PublicMapScene, PublicScene } from '../../../game/spatia
 import { clearSegment } from '../../../game/spatial-geometry.mjs';
 import { DIRECTION_LOOKAHEAD } from './spatial-direction.ts';
 
-/** 只用当前公开几何选短目标；服务器仍重新寻路与校验，键盘不绕墙寻找远端折线。 */
-export function directionTarget(scene: PublicScene, origin: Position, direction: Position): Position | null {
+/** 零方向轴沿用本次输入锚点；从当前授权位置验距与碰撞，服务器仍重新寻路与校验。 */
+export function directionTarget(scene: PublicScene, origin: Position, direction: Position, anchor?: Position): Position | null {
   for (let length = DIRECTION_LOOKAHEAD; length >= 1; length--) {
-    const target = { x: origin.x + Math.trunc(direction.x * length), y: origin.y + Math.trunc(direction.y * length) };
+    const target = { x: direction.x === 0 && anchor ? anchor.x : origin.x + Math.trunc(direction.x * length), y: direction.y === 0 && anchor ? anchor.y : origin.y + Math.trunc(direction.y * length) };
     if (target.x === origin.x && target.y === origin.y) continue;
+    if (Math.hypot(target.x - origin.x, target.y - origin.y) > DIRECTION_LOOKAHEAD) continue;
     if (clearSegment(scene, origin, target)) return target;
   }
   return null;
