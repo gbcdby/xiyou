@@ -1,0 +1,32 @@
+{
+  "schema_version": 2,
+  "runs": 43,
+  "original_candidate": "4c9957349800767efc4a9668d29fc8c896cd5e2d",
+  "archives": [
+    {
+      "schema_version": 1,
+      "archive_name": "xiyou-issue62-formal-raw-20261115.tar.gz",
+      "bytes": 1079123,
+      "sha256": "57240b853b3a429e1babe2786143e433300d2fc80e0419647f8e7f675f209e0a",
+      "raw_manifest_sha256": "5c42a4e6b35fad6f1b97fc4aad6665dcaf95738188d2de1a13454c58ce855511",
+      "raw_file_count": 3945,
+      "runs": 36,
+      "scope": "原始result/manifest/messages/tlc.log、每次完整输入快照、生成审计；原始路径留在私有证据中。",
+      "excluded": "固定公开TLC jar与可重建的states/tmp缓存；正式Git交付文件不另作仓库备份。",
+      "access": "由既有总控持有原始封存位置；本文件仅公开内容摘要，不包含凭据或访问地址。"
+    },
+    {
+      "schema_version": 1,
+      "archive_name": "xiyou-issue62-std001-raw-20261115.tar.gz",
+      "bytes": 211297,
+      "sha256": "fbc8981390a486993f893f88706e66c093340f7e71df585a7ad404ffab404077",
+      "raw_manifest_sha256": "65a1892372fa28032d4d48d1fb7fe64270b7439364ec48c67ef12cb765ed1735",
+      "raw_file_count": 689,
+      "runs": 7,
+      "finding": "R-ISSUE62-STD-001",
+      "scope": "6新增负控+1副本none小域正向的原始result/manifest/messages/log、完整输入快照及生成/复用核验。",
+      "excluded": "固定公开jar、states/tmp缓存；旧36运行在原包原身份下保留。"
+    }
+  ],
+  "note": "原包不替换、不重写；STD-001差量单独追加。访问位置由总控持有，此处仅存内容摘要。"
+}

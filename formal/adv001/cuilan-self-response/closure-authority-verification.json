@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "tool": {
+    "version": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "source": {
+    "commit": "3a3001325553b5116db65234190fd681bac7eaf4",
+    "ticket": "https://github.com/gbcdby/xiyou/issues/62",
+    "mode": "check/design",
+    "implementation_status": "NOT_ASSESSED"
+  },
+  "model": {
+    "root": "model",
+    "entry": "AuthorityEffectsHistoryQuotient.tla"
+  },
+  "profiles": {
+    "closure-authority-both": {
+      "config": "closure-authority-both.cfg",
+      "timeout_seconds": 300,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "TypeOK",
+        "AtomicAppearanceStop",
+        "AtomicPrivateStop",
+        "PurposeAndTakerAuthorized",
+        "CustodyProvenance",
+        "PrivateOwnerOnly",
+        "RestitutionEnabled",
+        "ReturnEntryRetained",
+        "ReceiptNeverReactivates",
+        "SafetyAndKnowledgeDurable",
+        "CompletedItemNotRetaken",
+        "RemainingItemEntitlement",
+        "ReturnPreservesClosureCause",
+        "ReturnContextPrivate",
+        "CurrentReturnReference"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "UsePurpose": "both",
+          "ProjectionMode": "item-ledger",
+          "Fault": "none",
+          "Probe": "none",
+          "EnableEnvironment": false
+        },
+        "minimum_distinct_states": 1000,
+        "note": "新历史标签商；原配置规格/常量/性质逐字不变，完整缓存及归还守卫仍在。原旧运行保持原身份。",
+        "excluded": [
+          "生产源码对应/SQL事务隔离",
+          "精确几何及人物可玩性",
+          "全产品组合证明",
+          "无限历史和任意多次重启"
+        ],
+        "time_budget_note": "同一重启/双用途具体风险的权威分层；原60秒独立结果保留，仅补一次300秒。",
+        "erased": [
+          "r.reason",
+          "e.returnedClosed",
+          "e.restored",
+          "e.lateOld",
+          "e.stoppedActive",
+          "ui.receiptSeen"
+        ],
+        "transfer_requires": "Probe=none；PROOF_CLOSURE中的逐动作商关系/启用性/公平性保持。"
+      },
+      "assumptions": [
+        "动作世界效果和原Receipt为同一权威事务；这是实现义务。",
+        "所有请求身份/用途/来源摘要抽象为有限值，不证明鉴权或摘要算法。",
+        "本配置没有CONSTRAINT、VIEW、对称归约或随机模拟。"
+      ]
+    }
+  }
+}

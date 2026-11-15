@@ -1,0 +1,371 @@
+{
+  "schema_version": 1,
+  "tool": {
+    "version": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "source": {
+    "commit": "3a3001325553b5116db65234190fd681bac7eaf4",
+    "mode": "check/design",
+    "ticket": "https://github.com/gbcdby/xiyou/issues/62",
+    "implementation_status": "NOT_ASSESSED"
+  },
+  "model": {
+    "root": "model",
+    "entry": "SharedControlQuotient.tla"
+  },
+  "profiles": {
+    "closure-shared-quotient": {
+      "config": "closure-shared-quotient.cfg",
+      "timeout_seconds": 300,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "TypeOK",
+        "GrantCurrent",
+        "AtomicEffects",
+        "ControlFrames",
+        "AuthorityUse",
+        "QuotaCorrect",
+        "CustodyStable",
+        "AcquisitionEvidence",
+        "ResumptionReadOnly",
+        "ReceiptReadOnly",
+        "TerminalClosed",
+        "SourceInputClosed"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "ChangedActor": "any",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1000,
+        "note": "签名相等商；所有四actor可依任意顺序各变化一次，共享Restart/Resume/Terminal，旧新身份和两物保持。",
+        "excluded": [
+          "无界版本/ABA",
+          "生产源码精化",
+          "完整网络/客户端组合",
+          "真人与真实模型评价"
+        ]
+      },
+      "assumptions": [
+        "固定有限2用途/每用途2请求/2物/4个独立actor；新profile不重写旧结果。",
+        "TLC普通BFS；无CONSTRAINT、VIEW、对称归约、模拟或Java覆盖。",
+        "独立的原子世界动作合同保持；模型不证明真实SQL事务。"
+      ]
+    },
+    "closure-shared-negative-subject": {
+      "config": "closure-shared-negative-subject.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "GrantCurrent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "miss-subject",
+          "ChangedActor": "any",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "签名相等商；所有四actor可依任意顺序各变化一次，共享Restart/Resume/Terminal，旧新身份和两物保持。",
+        "excluded": [
+          "无界版本/ABA",
+          "生产源码精化",
+          "完整网络/客户端组合",
+          "真人与真实模型评价"
+        ]
+      },
+      "assumptions": [
+        "固定有限2用途/每用途2请求/2物/4个独立actor；新profile不重写旧结果。",
+        "TLC普通BFS；无CONSTRAINT、VIEW、对称归约、模拟或Java覆盖。",
+        "独立的原子世界动作合同保持；模型不证明真实SQL事务。"
+      ]
+    },
+    "closure-shared-negative-performer": {
+      "config": "closure-shared-negative-performer.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "GrantCurrent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "miss-performer",
+          "ChangedActor": "any",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "签名相等商；所有四actor可依任意顺序各变化一次，共享Restart/Resume/Terminal，旧新身份和两物保持。",
+        "excluded": [
+          "无界版本/ABA",
+          "生产源码精化",
+          "完整网络/客户端组合",
+          "真人与真实模型评价"
+        ]
+      },
+      "assumptions": [
+        "固定有限2用途/每用途2请求/2物/4个独立actor；新profile不重写旧结果。",
+        "TLC普通BFS；无CONSTRAINT、VIEW、对称归约、模拟或Java覆盖。",
+        "独立的原子世界动作合同保持；模型不证明真实SQL事务。"
+      ]
+    },
+    "closure-shared-negative-refresh-proof": {
+      "config": "closure-shared-negative-refresh-proof.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "ControlFrames"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "refresh-proof",
+          "ChangedActor": "any",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "签名相等商；所有四actor可依任意顺序各变化一次，共享Restart/Resume/Terminal，旧新身份和两物保持。",
+        "excluded": [
+          "无界版本/ABA",
+          "生产源码精化",
+          "完整网络/客户端组合",
+          "真人与真实模型评价"
+        ]
+      },
+      "assumptions": [
+        "固定有限2用途/每用途2请求/2物/4个独立actor；新profile不重写旧结果。",
+        "TLC普通BFS；无CONSTRAINT、VIEW、对称归约、模拟或Java覆盖。",
+        "独立的原子世界动作合同保持；模型不证明真实SQL事务。"
+      ]
+    },
+    "closure-shared-negative-overinvalidate": {
+      "config": "closure-shared-negative-overinvalidate.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "ControlFrames"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "overinvalidate",
+          "ChangedActor": "any",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "签名相等商；所有四actor可依任意顺序各变化一次，共享Restart/Resume/Terminal，旧新身份和两物保持。",
+        "excluded": [
+          "无界版本/ABA",
+          "生产源码精化",
+          "完整网络/客户端组合",
+          "真人与真实模型评价"
+        ]
+      },
+      "assumptions": [
+        "固定有限2用途/每用途2请求/2物/4个独立actor；新profile不重写旧结果。",
+        "TLC普通BFS；无CONSTRAINT、VIEW、对称归约、模拟或Java覆盖。",
+        "独立的原子世界动作合同保持；模型不证明真实SQL事务。"
+      ]
+    },
+    "closure-shared-negative-split-appearance": {
+      "config": "closure-shared-negative-split-appearance.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "AtomicEffects"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "split-appearance",
+          "ChangedActor": "any",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "签名相等商；所有四actor可依任意顺序各变化一次，共享Restart/Resume/Terminal，旧新身份和两物保持。",
+        "excluded": [
+          "无界版本/ABA",
+          "生产源码精化",
+          "完整网络/客户端组合",
+          "真人与真实模型评价"
+        ]
+      },
+      "assumptions": [
+        "固定有限2用途/每用途2请求/2物/4个独立actor；新profile不重写旧结果。",
+        "TLC普通BFS；无CONSTRAINT、VIEW、对称归约、模拟或Java覆盖。",
+        "独立的原子世界动作合同保持；模型不证明真实SQL事务。"
+      ]
+    },
+    "closure-shared-negative-split-private": {
+      "config": "closure-shared-negative-split-private.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "AtomicEffects"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "split-private",
+          "ChangedActor": "any",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "签名相等商；所有四actor可依任意顺序各变化一次，共享Restart/Resume/Terminal，旧新身份和两物保持。",
+        "excluded": [
+          "无界版本/ABA",
+          "生产源码精化",
+          "完整网络/客户端组合",
+          "真人与真实模型评价"
+        ]
+      },
+      "assumptions": [
+        "固定有限2用途/每用途2请求/2物/4个独立actor；新profile不重写旧结果。",
+        "TLC普通BFS；无CONSTRAINT、VIEW、对称归约、模拟或Java覆盖。",
+        "独立的原子世界动作合同保持；模型不证明真实SQL事务。"
+      ]
+    },
+    "closure-shared-negative-custody": {
+      "config": "closure-shared-negative-custody.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "CustodyStable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "reassign-acquisition",
+          "ChangedActor": "any",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "签名相等商；所有四actor可依任意顺序各变化一次，共享Restart/Resume/Terminal，旧新身份和两物保持。",
+        "excluded": [
+          "无界版本/ABA",
+          "生产源码精化",
+          "完整网络/客户端组合",
+          "真人与真实模型评价"
+        ]
+      },
+      "assumptions": [
+        "固定有限2用途/每用途2请求/2物/4个独立actor；新profile不重写旧结果。",
+        "TLC普通BFS；无CONSTRAINT、VIEW、对称归约、模拟或Java覆盖。",
+        "独立的原子世界动作合同保持；模型不证明真实SQL事务。"
+      ]
+    },
+    "closure-shared-negative-source-domain": {
+      "config": "closure-shared-negative-source-domain.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "SourceInputClosed"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "reassign-acquisition",
+          "ChangedActor": "any",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "签名相等商；所有四actor可依任意顺序各变化一次，共享Restart/Resume/Terminal，旧新身份和两物保持。",
+        "excluded": [
+          "无界版本/ABA",
+          "生产源码精化",
+          "完整网络/客户端组合",
+          "真人与真实模型评价"
+        ]
+      },
+      "assumptions": [
+        "固定有限2用途/每用途2请求/2物/4个独立actor；新profile不重写旧结果。",
+        "TLC普通BFS；无CONSTRAINT、VIEW、对称归约、模拟或Java覆盖。",
+        "独立的原子世界动作合同保持；模型不证明真实SQL事务。"
+      ]
+    },
+    "closure-shared-negative-quota": {
+      "config": "closure-shared-negative-quota.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "QuotaCorrect"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "first-closes-all",
+          "ChangedActor": "any",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "签名相等商；所有四actor可依任意顺序各变化一次，共享Restart/Resume/Terminal，旧新身份和两物保持。",
+        "excluded": [
+          "无界版本/ABA",
+          "生产源码精化",
+          "完整网络/客户端组合",
+          "真人与真实模型评价"
+        ]
+      },
+      "assumptions": [
+        "固定有限2用途/每用途2请求/2物/4个独立actor；新profile不重写旧结果。",
+        "TLC普通BFS；无CONSTRAINT、VIEW、对称归约、模拟或Java覆盖。",
+        "独立的原子世界动作合同保持；模型不证明真实SQL事务。"
+      ]
+    },
+    "closure-shared-negative-receipt": {
+      "config": "closure-shared-negative-receipt.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "ReceiptReadOnly"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "receipt-reactivates",
+          "ChangedActor": "any",
+          "Probe": "none"
+        },
+        "minimum_distinct_states": 1,
+        "note": "签名相等商；所有四actor可依任意顺序各变化一次，共享Restart/Resume/Terminal，旧新身份和两物保持。",
+        "excluded": [
+          "无界版本/ABA",
+          "生产源码精化",
+          "完整网络/客户端组合",
+          "真人与真实模型评价"
+        ]
+      },
+      "assumptions": [
+        "固定有限2用途/每用途2请求/2物/4个独立actor；新profile不重写旧结果。",
+        "TLC普通BFS；无CONSTRAINT、VIEW、对称归约、模拟或Java覆盖。",
+        "独立的原子世界动作合同保持；模型不证明真实SQL事务。"
+      ]
+    }
+  }
+}

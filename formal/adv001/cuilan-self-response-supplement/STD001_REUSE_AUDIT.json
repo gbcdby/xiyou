@@ -1,0 +1,1487 @@
+{
+  "finding": "R-ISSUE62-STD-001",
+  "original_candidate": "4c9957349800767efc4a9668d29fc8c896cd5e2d",
+  "original_tree": "47d2a5f2e9c03cefb0af4344e013769ed9e0f372",
+  "all_original_models_and_cfgs_unchanged": true,
+  "original_model_and_cfg_files": {
+    "formal/adv001/cuilan-self-response-supplement/model/ObserverSnapshotTransport.tla": {
+      "sha256": "089fac0ea59e99ae87fed49a9131c54aa3f61cc348446bd20d6fb04ba16218eb",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/PersonalRecovery.tla": {
+      "sha256": "a986e81b2dfb6e366181b5892acfe0b0d399e006ad75f99d406e4bc826445b07",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/ReturnInputDomain.tla": {
+      "sha256": "0117853d588ff2e75ff66641e9afd38f46764cc738d49f1a1661b2abc8ee8d20",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/ReturnSnapshotCut.tla": {
+      "sha256": "1544811072b017d7be22f360b30142ccf29f051e572e2bd8c7c48919fe407f34",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/ReturnSnapshotOperators.tla": {
+      "sha256": "52c903cd0b7006ca66a7796bde9031811a163e7d78a8720eba71bab2abcd6cb2",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/SharedControlEffects.tla": {
+      "sha256": "151baf3544b2401bc0fdb2f0ce3fdf8e0feb449024227f2b35dee6e7bd3c7108",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/SharedControlQuotient.tla": {
+      "sha256": "1c73c8adad649cbe7eac6934243c1770baabdcad378042c8e03cd96aa62e8297",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/SignatureProjectionLemmas.tla": {
+      "sha256": "28197b9588bcea3a4b514c764749ca520ecfb69d35f1748f6c3cbd05e71dcd44",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/closure-return-negative-acquisition.cfg": {
+      "sha256": "a61112ca07ad45fd789392c353266f5eebd305a964bfd0d49e19e107cbd5f544",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/closure-return-negative-current-only.cfg": {
+      "sha256": "4e760cd3326c71cb2c895df5717ea70bdfbec25ae224b2770173a0dd49ec00c6",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/closure-return-negative-null.cfg": {
+      "sha256": "aa6cfae3f43865cf10eed456eaa9617531a1222b10916b98257995eab4f8227f",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/closure-return-negative-observer.cfg": {
+      "sha256": "7467edd4987f73c248e87fe0e33b2eeb3f79a64991cc4d785b53392a28e911d1",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/closure-return-negative-omit-item.cfg": {
+      "sha256": "db8aaa7fdceaa1ca46a817b740ac5acf0f943a7ee9dbdb93cffe40f297453da3",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/closure-return-negative-origin.cfg": {
+      "sha256": "4dc37f42164569b552c491af19566ded6fabfe5d65b4caa40d44d994b804cf68",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/closure-return-negative-quota.cfg": {
+      "sha256": "210d28e0cde39b59da8440240707f59d531c5884d9f54226e2e87d7f495d82b2",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/closure-return-negative-type.cfg": {
+      "sha256": "dcd62ff037e553190bf14fb0a8e0b2d561173a7a7e21f6d66d77808846c61fce",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/closure-return-negative-view.cfg": {
+      "sha256": "f65ee559430f35d47329b1b34bb42564d5c22901d480fde0150763708d07903a",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/closure-return-requests.cfg": {
+      "sha256": "26ecd27f3ba3fe24fcfa1f76d08e9b229713a02d5b68dd106da685955df74239",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/closure-return-rows.cfg": {
+      "sha256": "6ea8b9593f8e2a06008e45f21bbf24882023748d958f6f8e1ae5a5df1cd3f5dc",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/closure-shared-negative-custody.cfg": {
+      "sha256": "b1b0607eb0998806f3c69e026fb13799b5ad73f86b4f202874904197b580582f",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/closure-shared-negative-overinvalidate.cfg": {
+      "sha256": "8234e76bfdba1fc7ebc3084c6f8210d27b0823d82b5105d6e482e8bb3591f011",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/closure-shared-negative-performer.cfg": {
+      "sha256": "d24462f3374781c3394a702c4ebcfb8263e82c19b7c6efeecb1d92ff52d0b80e",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/closure-shared-negative-quota.cfg": {
+      "sha256": "163217dd4f93d46c15c648f74210e88efa0f67a27a343fe861585c960a69aa08",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/closure-shared-negative-receipt.cfg": {
+      "sha256": "88ca71faa8b379c3d843532a99d4a67e09d2bb4454032357f844260caf1ce0d5",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/closure-shared-negative-refresh-proof.cfg": {
+      "sha256": "8d97190a87bcf25f305e24ba97b3b41b26489ed0bbfb1180025df0f97b4c5c2d",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/closure-shared-negative-split-appearance.cfg": {
+      "sha256": "4319a0d08d67ea416c7edee5aa134e54a6146b13edede3b6d242b0d68ba18566",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/closure-shared-negative-split-private.cfg": {
+      "sha256": "f4665e55c2de4cf2b9ecc5459e3e3d5c44973980f752a9d3343da692cf12e1d0",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/closure-shared-negative-subject.cfg": {
+      "sha256": "2b95288a1f25c7d4ccf99be146195f23324af64b412f29483410b96750a44d4e",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/closure-shared-quotient.cfg": {
+      "sha256": "e619e236b7877d4831396441f0b7db9f03c97ede630fa8be29a8899aae445046",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/closure-signature-domain.cfg": {
+      "sha256": "0012818be0960db9514a073408881e5973637cfa4969866907557867c4c1110d",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/closure-signature-negative-actor.cfg": {
+      "sha256": "0f7993701754bdc402dd0bcfbe8cd79b3d2b3902f0734fc2693587e6a74382fb",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/closure-signature-negative-restart.cfg": {
+      "sha256": "8ecd60985facee2fc838258ba24a3f4f96cc5d59574d1de23cdb8a6a26a6e543",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/fence-negative-acquisition-evidence.cfg": {
+      "sha256": "db0518dd6ae9fcdb8147e0414ff5871fdb0fee80c111a319558c757b6f8f29a8",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/fence-negative-control-moves.cfg": {
+      "sha256": "fc128792f11c372a40943073067bbf867e134bb710fc4165244b59134a0f8dfe",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/fence-negative-first-closes-all.cfg": {
+      "sha256": "e94f4d77fac6d75712ad08ea6ead332d874906eecbe0c947a169c1da127a7d35",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/fence-negative-miss-performer.cfg": {
+      "sha256": "cfa5b3b4276506ecfef251dabc4e0d86e9bebdc630a686e5d39c933876da708e",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/fence-negative-miss-subject.cfg": {
+      "sha256": "1ccde77f2317eea24db80a44dbf2b2d42fcb5d147edbd7e2f99a8e774077ad3b",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/fence-negative-overinvalidate.cfg": {
+      "sha256": "2adf2243b0d1fc3253a798e89c183565ee7fd3cb9e87213eb6fe015dc8e6302c",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/fence-negative-reassign.cfg": {
+      "sha256": "166459890bc041e4611cfcd2c9f46906a3eae0e120a5ce25f137dff2aa746b9a",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/fence-negative-receipt.cfg": {
+      "sha256": "1991a7ada7e5511e56e72b6b384699f5ca9ff0b1f99a943ac1583a2c670610fa",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/fence-negative-refresh-proof.cfg": {
+      "sha256": "bc041508143fdc2113119c9061df8880682e5ff510b40c5afe9be31c75d33812",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/fence-negative-resume.cfg": {
+      "sha256": "7390e03256370180ff2a8103d1c8ea0b06441305e9c205b22d3423cfab7a6b5a",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/fence-negative-retake.cfg": {
+      "sha256": "86922676b2a42a4fdc4bcaac359e76349561a70b48e6575c11aa6e7a278c96da",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/fence-negative-split-appearance.cfg": {
+      "sha256": "1a133ff048365dcca2bf2c393fae1406990499cb523ad8cca05906e42f50d40d",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/fence-negative-split-private.cfg": {
+      "sha256": "1f3f376f06d924ec1e6f953d5c4b381184e4cf4df1c3e6acb136ef45f1d77879",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/fence-negative-stale-use.cfg": {
+      "sha256": "477b0244801ea46f04c580171662949b32c0fd323c54e8eeee2887351d735c0a",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/fence-negative-terminal.cfg": {
+      "sha256": "24e9f57be6b626cb7252a7ea71bb0d8a2424cbe6cff27552cada66d61070926b",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/fence-negative-type.cfg": {
+      "sha256": "39bdfd238d3a7a2a80ea14f24f9b6e96dc0b69ee5aa00c4b06ccf8d1714fb871",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/fence-performer.cfg": {
+      "sha256": "ad8924a9f4a178a1bdb7a07617f927c2970fc9ffcc56001acc63c16d4f5ba9ca",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/fence-requester-p1.cfg": {
+      "sha256": "31802568948d1b5f1bb34ae771893d11c426629668b6822a9754ee568571388a",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/fence-requester-p2.cfg": {
+      "sha256": "d4083600d9083cf8c543d43ef85bf225affcff94105c6f26d4114839e09b1837",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/fence-shared.cfg": {
+      "sha256": "090548cd8f19744ec80c554af84a2a3484d06a0fac1274c9e1045e20a974cd61",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/fence-subject.cfg": {
+      "sha256": "cf6e654b0b9945a2b1c31c5dd79c6b48ea718228b118996a5c959a76c9f16e0a",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/fence-witness-late-old-take.cfg": {
+      "sha256": "400681a3e5a92619374c71e116b7382bd0542f91caf0b784d6122c6affea50e4",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/fence-witness-old-first-rejected.cfg": {
+      "sha256": "89d495a1e2e020412945980d9b9d0f559bf2c6c3ae4164f53cb10705507a0cb8",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/fence-witness-performer-isolation.cfg": {
+      "sha256": "257b7e5c2e23ae2e1c510473ad3619719bfe420d4d15d6368977dc4be8d7ae66",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/fence-witness-requester-isolation.cfg": {
+      "sha256": "23c4d7beb6d88a38353210bc37c1f06cceca1c7d924b9730cc7f4e756c0810d6",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/fence-witness-restart-dual.cfg": {
+      "sha256": "8e87beea5d3c22a075c5031eb70bb2c4caf6aa0df2dc107a615897a1b08d940e",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/fence-witness-terminal-dual.cfg": {
+      "sha256": "c7bcc5ff0b13ef012f775b2386ce160ca0e5c3af3be3eaaf6ede21661c0c006f",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/fence-witness-two-actors-after-use.cfg": {
+      "sha256": "bb2a6218e91477db717f37be5cd5bb3af7c6157764c7721dcf58a2413091cb12",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/recovery-negative-both-purposes-progress.cfg": {
+      "sha256": "521c04523713e8cb846c02e85917e30d9154726bc64eb0458227b108ff6a55b6",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/returns-constructor.cfg": {
+      "sha256": "5a929396eb0bef3c9122aec6abfd9f17a6a89bbea01d9eb2f71ecceb0b4eb779",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/returns-negative-current-only.cfg": {
+      "sha256": "94d04954a340253308f39455d5f65e23c4350edc0377362b05f817dabff66e15",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/returns-negative-drop-quota.cfg": {
+      "sha256": "16c9b002fa06addad1378767a436c0694b9fbd77f46ede7eda7568ce2f73ce65",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/returns-negative-leak.cfg": {
+      "sha256": "9476dfd9135b684747c28bf33a381d6a88b911148847e51fdbdb359f360c9ba4",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/returns-negative-old-view.cfg": {
+      "sha256": "aa5846819142a2ef4ac952e5c9b4c25ee80fb688b3eb2c2e5ae3f09359883a4d",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/returns-negative-omit-letter.cfg": {
+      "sha256": "a14b161efb8cd521862c65d1c0ce0143334729f68e9ff483c96e287b09c6b164",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/returns-negative-synthesize-owner.cfg": {
+      "sha256": "54ea64d80214f77e03e436c49542b6fd4a099d48954ced1a298842d26c31fc36",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/returns-negative-type.cfg": {
+      "sha256": "d476c4fa660e5af48598cf07edf77ba3b13481b2f7d55342993462d279bec378",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/returns-negative-wrong-acquisition.cfg": {
+      "sha256": "1afcc059a762b79e0ec4f47451388742ed86550b4b6faaddef930d0e6e6a42cb",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/returns-negative-wrong-origin.cfg": {
+      "sha256": "a08226e4485b5a85ee4547fa22ce174413d3e8cd61cb7d7bef1d46b6a2b79e7d",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/returns-witness-mixed-holders.cfg": {
+      "sha256": "6a0784eae4669e825be06b79849a76db2cd14950a6ac6bf1dd17307709ef511c",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/returns-witness-mixed-new-view-null.cfg": {
+      "sha256": "838529e6da6edc228508216ebd0644c20179977ed55a8d5c42201f458484acda",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/returns-witness-restored-not-delivered.cfg": {
+      "sha256": "07b3882ec265749d6177a66778068df64855f0bc1e6ed22285c3e037ff3b1710",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/returns-witness-same-slot-two-items.cfg": {
+      "sha256": "794c6147c2a9a9ba4d1a70909d1705727402c139e8148d41310a0c8f578d1b3f",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/transport-complete.cfg": {
+      "sha256": "870072099c81ebc79cf071a8768c2f64a3e887c7b88f2e9c6e48f5efe6feaa37",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/transport-negative-live-miss-same-slot.cfg": {
+      "sha256": "c22a979f135af1f1704f904d0b67756397cb4c529292e4baa597c975b32883e4",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/transport-negative-live-receipt-overwrite.cfg": {
+      "sha256": "cf96f0bd7834fc230c866bcef96c27ec8e54a86ad21b6438f72af447023e57bc",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/transport-negative-old-seq.cfg": {
+      "sha256": "0e13f0b85ad61a1e5b51863cb95addfd9033972d2fd9afcef64228f4e6653d6f",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/transport-negative-old-view.cfg": {
+      "sha256": "dec60deb3d43a04453f36942453300609642a69fd224a4297d5194394bd1be6a",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/transport-negative-partial-payload.cfg": {
+      "sha256": "a631c9576836c0bcdc45deff76368a973b563310bb3aaa0b189334de4ed6d33d",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/transport-negative-receipt-overwrite.cfg": {
+      "sha256": "bfbbf7bb95e3fe2e658023165f0f9b12e4aef5613fea8eae98257c6db82ea818",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/transport-negative-type.cfg": {
+      "sha256": "f886d434abf412e527ff6954c3dfaf7168276e0cb635101f35cce0d28ac04b8a",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/transport-negative-wrong-observer.cfg": {
+      "sha256": "b422fd06b1f16d02d5f02f35758eb0660ca78ddcb13676f281f349ad404702b8",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/transport-witness-both-observers-current.cfg": {
+      "sha256": "29bafb2e3f11e0e10c7880f96ac37f0d0a26fcb4e381e884b3323d4586547719",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response-supplement/model/transport-witness-late-old-accepted.cfg": {
+      "sha256": "e985caeb5841d1278b8039b1272814e5b10fd32e91927e8877adfb8e4ff1baad",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/history/cs-r1/model/PersonalEffects.tla": {
+      "sha256": "a3bc1fbf5de9414d3d437696ad8dce3b1a8225545ece8b751b77c92355c7e464",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/history/cs-r1/model/effects-appearance.cfg": {
+      "sha256": "35994b4690fd7628633b74e58862cbb0a2c0dd5d4b5e2728e63601c53469713f",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/history/cs-r1/model/effects-both.cfg": {
+      "sha256": "0015e9ca681119a197f0ac5da1942c290090030d9da6c7c2be992e4252f397cf",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/history/cs-r1/model/effects-cooperative-return.cfg": {
+      "sha256": "494bb62cb13e0f9581794d8f9f1884f006c0c2ea7fcb57cd2f9f042778cd19ec",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/history/cs-r1/model/effects-negative-cross-purpose.cfg": {
+      "sha256": "c5df0a364776dcab74914a28964d3205a3e892ef7319e6062a6018f6d2c6e943",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/history/cs-r1/model/effects-negative-old-capability.cfg": {
+      "sha256": "611743c81003d84c4b97db909a529de74d29e0e4f71152523d126c92465bf210",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/history/cs-r1/model/effects-negative-public-return.cfg": {
+      "sha256": "775b09a1d1d53d7cd3013b4828e7616ec461e1c9f892684dbb9c21b4e0927192",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/history/cs-r1/model/effects-negative-reassign-custody.cfg": {
+      "sha256": "f71b86bc4bc7c0667f1afe9a4c4842a233b74dfd14a5bcb5364f439bd095c21a",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/history/cs-r1/model/effects-negative-receipt-reactivates.cfg": {
+      "sha256": "3369dc08f280633eb1240e10e420fe638559fd5dd023ee3b767d52ed7c147c98",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/history/cs-r1/model/effects-negative-return-needs-active.cfg": {
+      "sha256": "ffc52c86f24e502686e4eb232eafac7966a382989e9f294e6cb1cca4a5004a41",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/history/cs-r1/model/effects-negative-rollback.cfg": {
+      "sha256": "5c8b9e629172a9d9a4d3d662fc9dc6108f730c540c88472ff40bb17e2e7f5e66",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/history/cs-r1/model/effects-negative-split-private.cfg": {
+      "sha256": "7ea813fef3c0e144d35d7e2aaf8816091c485109b5119370db751cfb85ab526b",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/history/cs-r1/model/effects-negative-split-stop.cfg": {
+      "sha256": "0430fcd1d6da4df8a3f5e223570255d1cced837af1ad311936d40ace191f6df7",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/history/cs-r1/model/effects-negative-type.cfg": {
+      "sha256": "531cbbe956c2fb8d51baddff12456fcfebb61f445d66a47e7eefe58412d61acd",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/history/cs-r1/model/effects-negative-ui-receipt-overwrite.cfg": {
+      "sha256": "3a97da1343ddf0ab21d549fe502f90d91de7ea20700b70a3384d41b38a05e98f",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/history/cs-r1/model/effects-negative-wrong-taker.cfg": {
+      "sha256": "f9e22aa96cd91f360de1363ce9d2fb54f1d88f3f7bf18b8591c2f3f7cc6a3fda",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/history/cs-r1/model/effects-private.cfg": {
+      "sha256": "1a1e210a203012b0fc1a388a762b58b8ef0d6f684381e4b8ce0506ef27dd4a7e",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/history/cs-r1/model/effects-r1-current-only.cfg": {
+      "sha256": "56d6130e3b20e5ffd4123d9755ef21335bf67d546bd667fb099635fd01a034f1",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/history/cs-r1/model/effects-restart-private.cfg": {
+      "sha256": "ebd3fb70884ff204cca8153c4f73b1fe368d677d3f8e1136665e52cf6faa0c8d",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/history/cs-r1/model/effects-witness-appearance-stopped.cfg": {
+      "sha256": "b5a32c0c53df63209a33c922b7d3b15b60d1d82b2e38ae5a343e4e5ec7f1c1d0",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/history/cs-r1/model/effects-witness-late-old-receipt.cfg": {
+      "sha256": "0c255f73c035f799ea45cdd3456c0d527c4543f52b68b584f43a671782b885ac",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/history/cs-r1/model/effects-witness-new-slot-old-custody.cfg": {
+      "sha256": "6760aaa54ff6486c057fb3016ffd6125639025a1988c425c56c8c1e8fd13f50c",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/history/cs-r1/model/effects-witness-old-return-new-slot.cfg": {
+      "sha256": "bc20f636e2151fb8caa1acce473d0c4f0c8456aa8c94614dc7be99e29afd8015",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/history/cs-r1/model/effects-witness-old-return.cfg": {
+      "sha256": "fe44295cf49ca0267e6dc9901821f2a3d2a5b386d1de5a484989d891f1339e6d",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/history/cs-r1/model/effects-witness-restart-new.cfg": {
+      "sha256": "3ac779abe3984e2ac054773cadbedba1eb3dfcdd4e23c703a92925d9bfae9d79",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/history/cs-r1/model/effects-witness-restored-origin.cfg": {
+      "sha256": "63cc96ecb6b950d358b897ace645ef70b376a7de11945b9ebe1102fecadb3a48",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/AuthorityEffects.tla": {
+      "sha256": "96fb85b6509524cab9b28cacf4aca41ca0ae1996f53aa0da0ab246017cb54dfc",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/AuthorityEffectsHistoryQuotient.tla": {
+      "sha256": "c87f5edd99d0adf047d270c8dffef047f9daac5d354f4ee35d58e3c8d4f913e1",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/PersonalCAS.tla": {
+      "sha256": "849f5a02b85efdf1ecf7b2ece92ed43c026578b05eb2ef776d2fe674b9245a34",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/PersonalConsent.tla": {
+      "sha256": "0a946381bbbb9552c2c322894cf4c022bfe9fe00e0bafdff58723a5494f70517",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/PersonalEffects.tla": {
+      "sha256": "4c20bde2577d87e539caddd60eaa58ac4fc9b6b27cd04f7c142a6afe31b94602",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/PersonalEffectsHistoryQuotient.tla": {
+      "sha256": "2782cd352d4166b916d235e027dcb53ec18f6b0229177f5a42dcdbaff9b058bd",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/PersonalEffectsLifeQuotient.tla": {
+      "sha256": "5c2e349d3ebdeabb089fc873e16771aac7204e79c289ebf22e878379d58464f0",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/PersonalProjection.tla": {
+      "sha256": "41e34a90dc32de772d957d63527940d979f0a4f3ae29bd35a2904e4fa50b8913",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/PersonalRecovery.tla": {
+      "sha256": "a986e81b2dfb6e366181b5892acfe0b0d399e006ad75f99d406e4bc826445b07",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/PersonalTerms.tla": {
+      "sha256": "fa90e4cd6fec13b3bdf70c637041e62088ff620da033aa78fabde4cad793f446",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/authority-both.cfg": {
+      "sha256": "b106d5997b1eac30dc33ccc0dd5175c5f2c0373b8104d1e5d6ee350a194c0d61",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/authority-cooperative-return.cfg": {
+      "sha256": "1d0612fadcffd4e5c8126c7c7e39427e65af02f6f788173faec9850115638a23",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/authority-negative-current-only.cfg": {
+      "sha256": "aa56fc08b77ccb3eb147058fcdd70439a51cf3c7de18406ed53f07d0d344a17f",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/authority-negative-first-item-closes-all.cfg": {
+      "sha256": "471c381cda46b3f5061a1467cdde685ffb94de0e9cdcf31dca788a7652641b92",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/authority-negative-retake-completed.cfg": {
+      "sha256": "5ea1837bb0262996a6f0a111b04f249bc9569db06958843e17cfff72dcfb848a",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/authority-private.cfg": {
+      "sha256": "2296e885eb145eb02c77a8cf4f0aaf38540e9467a5a4890087e7b18eb9266555",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/authority-restart-private.cfg": {
+      "sha256": "b81e8a9528322b13eb3b04bac88f37d53571e9dd2348c91e51238c2d6b008e9c",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/authority-witness-new-grant-retake.cfg": {
+      "sha256": "d38f83dd800bdb547ed4a99a3993a04e1de074534b24adc9f6c84fbb8cfd8121",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/authority-witness-old-return-new-slot.cfg": {
+      "sha256": "4a727436df87652072a906f512dfee8d48c296f1b95e50e35cff39b63dbecb28",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/cas-different-purpose.cfg": {
+      "sha256": "982342ffa6e54aba139f403d51ffe21ac89cdc64012003feea7b83a57b939656",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/cas-negative-overwrite.cfg": {
+      "sha256": "c0bcdb90ba2291b03fa2408cc7803da6d90469145e5dd08c078b7147552d1cb5",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/cas-negative-skip-cas.cfg": {
+      "sha256": "ab09abcc86a476c349d644928d4a5e32371a9651657302f3fe299c808e4b9617",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/cas-negative-type.cfg": {
+      "sha256": "979cb8a433dea3546a7c6944dce1684f05a5a88bd22d1d9e4766cf11e0185380",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/cas-same-purpose.cfg": {
+      "sha256": "678b3c15e597f678998953e0da4678a5602a101427405e1a8faf7269b69d462d",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/cas-witness-both-purposes.cfg": {
+      "sha256": "01e44489ac14707ca98c84c0c7b78bbee8570dd67a44334775d91910f310e2d0",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/cas-witness-concurrent.cfg": {
+      "sha256": "969b06e22919982cde6d363ceb9d2c5f314ffe51a3d04640aa8b2630e5827185",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/closure-authority-both.cfg": {
+      "sha256": "b106d5997b1eac30dc33ccc0dd5175c5f2c0373b8104d1e5d6ee350a194c0d61",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/closure-effects-both.cfg": {
+      "sha256": "0cfb8fcba467907b877151c9573b5f48e8e77574c73502af484733c8b67c03dc",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/closure-effects-cooperative-return.cfg": {
+      "sha256": "56cd260c67334838049fb76b29c8087e03c2fdecc3b93c6c4702d6a80b186b1b",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/closure-effects-negative-first-item-closes-all.cfg": {
+      "sha256": "6c418939dca090747b4a10204ffa8bc831c5ba453cb335428e66c00c936c5556",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/closure-effects-negative-history-trims-return.cfg": {
+      "sha256": "79b9e0bbc3c8b4eeb2e6f2be7f146556a848777ef18b8e02e8f960e5b11570d7",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/closure-effects-negative-stale-return-view.cfg": {
+      "sha256": "984a748d03e94fc61f31db8fa019c2129e310427d670b09ba2b83372a5cb257d",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/closure-effects-negative-ui-receipt-overwrite.cfg": {
+      "sha256": "3a97da1343ddf0ab21d549fe502f90d91de7ea20700b70a3384d41b38a05e98f",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/closure-effects-private.cfg": {
+      "sha256": "58ff252c86a58381b8419b6dd0624cec2c8787655c17d38ddd56887db31a0ba8",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/closure-effects-restart-private.cfg": {
+      "sha256": "017d0308cffee31cc44b3959e4e8ef33057b88bd0b25d15d4100ce4ebf944870",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/closure-life-effects-both.cfg": {
+      "sha256": "0cfb8fcba467907b877151c9573b5f48e8e77574c73502af484733c8b67c03dc",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/closure-life-effects-negative-old-capability.cfg": {
+      "sha256": "611743c81003d84c4b97db909a529de74d29e0e4f71152523d126c92465bf210",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/closure-life-effects-negative-return-rewrites-history.cfg": {
+      "sha256": "9e39176d89091a56cb2e516434fd17c8167a02f8e66e48054c45bb30fc284adb",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/closure-life-effects-restart-private.cfg": {
+      "sha256": "017d0308cffee31cc44b3959e4e8ef33057b88bd0b25d15d4100ce4ebf944870",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/consent-appearance.cfg": {
+      "sha256": "12138179f2c3cb352f4cfc7120442c087b56292f898001cd9b1b29f56267fbb3",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/consent-declined.cfg": {
+      "sha256": "b85517404d161d9b9dfe7505f512150af80d4d0f395ba6ef580b159e26546f7d",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/consent-deferred.cfg": {
+      "sha256": "3e53ff0c557826cae9e9dd11cc521d342954b2edef22d1c7400c04c1ebb68d6f",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/consent-local.cfg": {
+      "sha256": "4f772e204a18a4656186e21fc75e29749054e624e685195b18ac19cbcf0d5abf",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/consent-negative-cancel-as-withdraw.cfg": {
+      "sha256": "215e4be53aee862a293a43f9052bff7795392a52a5e81b324443803610f43349",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/consent-negative-old-participant-epoch.cfg": {
+      "sha256": "9e40ecb07d39d06da4fcab474f2cd63ef507952101443fb20189e1013b40e74b",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/consent-negative-receipt-reactivates.cfg": {
+      "sha256": "147d36d754a088eef2b1b860a2e682f4c4a34bf2335c83f4e7fc5693fd22add7",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/consent-negative-repeat-effect.cfg": {
+      "sha256": "39698995cede847634b53b2c1844321d5815a78dc89e9c74092ad4625d2322b9",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/consent-negative-rollback.cfg": {
+      "sha256": "01cd4eb30d56ed58c4d8f7cf764974ca41287c8eaf6190c06b5f9a78bf68f30e",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/consent-negative-skip-invalidation.cfg": {
+      "sha256": "883b4cdd4921f48019cb9807f01ade341778087d2dad84e4954e353540fe5865",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/consent-negative-stale-basis.cfg": {
+      "sha256": "c474b2acf3f73b2888958004caf130b42d3a5633cc0c0bb0e7a9981a94214b6c",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/consent-negative-third-party.cfg": {
+      "sha256": "69b35ef83265575908cd4b7caca516a27a7ff21e9b03df51f7423eec207febf2",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/consent-negative-type.cfg": {
+      "sha256": "b04f559e017fac078a3b97730508f789f67e932126758e4964ea35985023bd5f",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/consent-negative-wrong-request.cfg": {
+      "sha256": "6f7f46166868d83fc78ecc9b1002f714878c7607398e62fe525465f6024ed1e2",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/consent-negative-wrong-scope.cfg": {
+      "sha256": "af346952269949af83857d591c90b01af52c72040f67cc71e76cbd6c77011df1",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/consent-negative-wrong-withdraw.cfg": {
+      "sha256": "d4333c3f1b01a52ba5abe394b9da9876bcb1fe0f81c86754b6a4f196d3f54058",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/consent-owner-epoch.cfg": {
+      "sha256": "4c66113e868140884f5206e379f89140610f9252f3dec34903b3f07aa1c1c7c5",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/consent-pause.cfg": {
+      "sha256": "f6c38ac3f337b1a44b008594a89471748ea3982c42b24452db788dfd9086e38e",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/consent-private.cfg": {
+      "sha256": "a4420e26a9314e9c860e0ff130d2574131402aa8f17b407ab384acc481851e4c",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/consent-revoke.cfg": {
+      "sha256": "c1c511017cb56af23a17c1c8a5cd69bebcaa3c22c2f5e121faa120fbb344d728",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/consent-source.cfg": {
+      "sha256": "5454b21b5702840676cf06a458b9e48b6ad8107b41d81613ffbe1ecde4a2d1a3",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/consent-terminal.cfg": {
+      "sha256": "1f9b1a0b68870b121499f4a7a02a8b6746e63896114728c6984cbcc3ce3bdbd6",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/consent-third-party.cfg": {
+      "sha256": "447c00f68316a6e4c67bc64bca19346acd2cde4fc5a7d7494a58016bb4f43fcd",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/consent-witness-accept-before.cfg": {
+      "sha256": "f3a0af320cd2359fbe8600e991f9105756c52337f33040f1a04ed85a3e3922b9",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/consent-witness-both-accepted.cfg": {
+      "sha256": "fd23283eaee1a1603c57cd80b80371dec0a255a0fa08d1bb2b1e56c6e9390953",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/consent-witness-c2-after-epoch.cfg": {
+      "sha256": "e7c597cf35f08b78efc82477d0cf1d2e276c06272c6b3137fa820454bd23e38a",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/consent-witness-cancel-before.cfg": {
+      "sha256": "849add924c7d34a5cb86350c6233e90defa4a53adb8ce34e500250fa514750c0",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/consent-witness-declined.cfg": {
+      "sha256": "d1e57844155fc2ae122885676918a344ddbb877d6f7d9cd0579c1285f49ce121",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/consent-witness-deferred.cfg": {
+      "sha256": "ecb2196a1e18e65f0ac94d9595794a39179462b26a436b0d8420fb9213a06191",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/consent-witness-replay-closed.cfg": {
+      "sha256": "f8e0aa060cd89befd843d43b1e24489a85da2c017b78d12f7964a223aff21f94",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/consent-witness-stale-response.cfg": {
+      "sha256": "3ef3cdf3ba3916f0b093e3390e2a7a38e0f9a5f69c48ff9b868860a04d2fc814",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/consent-witness-stale-withdraw.cfg": {
+      "sha256": "bfafc5730b5b27a4b058e3a4afd1873139257c131c7264fde839e8cd6227af13",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-appearance.cfg": {
+      "sha256": "1654bc06f682929195c5d886733f6f7387003814f4ff0abc66735c07bf42ef23",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-both.cfg": {
+      "sha256": "0cfb8fcba467907b877151c9573b5f48e8e77574c73502af484733c8b67c03dc",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-cooperative-return.cfg": {
+      "sha256": "56cd260c67334838049fb76b29c8087e03c2fdecc3b93c6c4702d6a80b186b1b",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-negative-cross-purpose.cfg": {
+      "sha256": "c5df0a364776dcab74914a28964d3205a3e892ef7319e6062a6018f6d2c6e943",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-negative-first-item-closes-all.cfg": {
+      "sha256": "6c418939dca090747b4a10204ffa8bc831c5ba453cb335428e66c00c936c5556",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-negative-history-trims-return.cfg": {
+      "sha256": "79b9e0bbc3c8b4eeb2e6f2be7f146556a848777ef18b8e02e8f960e5b11570d7",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-negative-leak-return.cfg": {
+      "sha256": "167b4a0f320c1a28b346ea0815962e822950a71cdbeccbdaea38982e48a7107c",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-negative-live-return.cfg": {
+      "sha256": "1c5a5012a20fffd628971439cb6e3c040027a3287ad233218b9b563db9347fef",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-negative-missed-projection.cfg": {
+      "sha256": "d6854d73d9dcb943f0a3ab67ba1c797ff0465e6b797c1973cde4b253b9d69a60",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-negative-old-capability.cfg": {
+      "sha256": "611743c81003d84c4b97db909a529de74d29e0e4f71152523d126c92465bf210",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-negative-public-return.cfg": {
+      "sha256": "775b09a1d1d53d7cd3013b4828e7616ec461e1c9f892684dbb9c21b4e0927192",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-negative-reassign-custody.cfg": {
+      "sha256": "f71b86bc4bc7c0667f1afe9a4c4842a233b74dfd14a5bcb5364f439bd095c21a",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-negative-receipt-reactivates.cfg": {
+      "sha256": "3369dc08f280633eb1240e10e420fe638559fd5dd023ee3b767d52ed7c147c98",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-negative-retake-completed.cfg": {
+      "sha256": "576bbe1b89a025f4dea957af71bcfc2e06b54922403af3af8ca6a00cdee63c0b",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-negative-return-needs-active.cfg": {
+      "sha256": "ffc52c86f24e502686e4eb232eafac7966a382989e9f294e6cb1cca4a5004a41",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-negative-return-rewrites-history.cfg": {
+      "sha256": "9e39176d89091a56cb2e516434fd17c8167a02f8e66e48054c45bb30fc284adb",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-negative-rollback.cfg": {
+      "sha256": "5c8b9e629172a9d9a4d3d662fc9dc6108f730c540c88472ff40bb17e2e7f5e66",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-negative-split-private.cfg": {
+      "sha256": "7ea813fef3c0e144d35d7e2aaf8816091c485109b5119370db751cfb85ab526b",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-negative-split-stop.cfg": {
+      "sha256": "0430fcd1d6da4df8a3f5e223570255d1cced837af1ad311936d40ace191f6df7",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-negative-stale-return-view.cfg": {
+      "sha256": "984a748d03e94fc61f31db8fa019c2129e310427d670b09ba2b83372a5cb257d",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-negative-type.cfg": {
+      "sha256": "531cbbe956c2fb8d51baddff12456fcfebb61f445d66a47e7eefe58412d61acd",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-negative-ui-receipt-overwrite.cfg": {
+      "sha256": "3a97da1343ddf0ab21d549fe502f90d91de7ea20700b70a3384d41b38a05e98f",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-negative-wrong-taker.cfg": {
+      "sha256": "f9e22aa96cd91f360de1363ce9d2fb54f1d88f3f7bf18b8591c2f3f7cc6a3fda",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-private.cfg": {
+      "sha256": "58ff252c86a58381b8419b6dd0624cec2c8787655c17d38ddd56887db31a0ba8",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-r1-current-only.cfg": {
+      "sha256": "56d6130e3b20e5ffd4123d9755ef21335bf67d546bd667fb099635fd01a034f1",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-restart-private.cfg": {
+      "sha256": "017d0308cffee31cc44b3959e4e8ef33057b88bd0b25d15d4100ce4ebf944870",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-witness-appearance-stopped.cfg": {
+      "sha256": "b5a32c0c53df63209a33c922b7d3b15b60d1d82b2e38ae5a343e4e5ec7f1c1d0",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-witness-first-return-second-held.cfg": {
+      "sha256": "56fcc44f8771150d2a9ebb7c8c04684f44690014b64cb42b70d5fa87943e6231",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-witness-late-old-receipt.cfg": {
+      "sha256": "0c255f73c035f799ea45cdd3456c0d527c4543f52b68b584f43a671782b885ac",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-witness-new-grant-retake.cfg": {
+      "sha256": "ece6a9429acd34a54acc74d7989dd626b91efabb9db3044b8d0baa20dbab5b31",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-witness-new-slot-old-custody.cfg": {
+      "sha256": "6760aaa54ff6486c057fb3016ffd6125639025a1988c425c56c8c1e8fd13f50c",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-witness-old-return-new-slot.cfg": {
+      "sha256": "bc20f636e2151fb8caa1acce473d0c4f0c8456aa8c94614dc7be99e29afd8015",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-witness-old-return-refresh-prune.cfg": {
+      "sha256": "d650dd98b52a7f7936d251795dab2111915d72ea59d67c8d056fd97aaa30d0d9",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-witness-old-return.cfg": {
+      "sha256": "fe44295cf49ca0267e6dc9901821f2a3d2a5b386d1de5a484989d891f1339e6d",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-witness-restart-new.cfg": {
+      "sha256": "3ac779abe3984e2ac054773cadbedba1eb3dfcdd4e23c703a92925d9bfae9d79",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/effects-witness-restored-origin.cfg": {
+      "sha256": "63cc96ecb6b950d358b897ace645ef70b376a7de11945b9ebe1102fecadb3a48",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/projection-negative-accept-old-seq.cfg": {
+      "sha256": "f0f95b56cdbbd356b988595bfcf46ce6fceef66b66ab65d77fe11646f7785e26",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/projection-negative-accept-old-view.cfg": {
+      "sha256": "bd515859f224cf936b284cbb943eef4e6ad2cbefffc4aedb6874714e327c9118",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/projection-negative-current-only.cfg": {
+      "sha256": "12505c1ce19fc8082ef051ce936248ec21bbfd6d1002296c9348141980238e6f",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/projection-negative-receipt-liveness.cfg": {
+      "sha256": "4ab8663b3322922485af0fee9f9e955bf397116ad62bdc790fb3b072fa75442d",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/projection-negative-receipt-overwrite.cfg": {
+      "sha256": "6748f94d24509f517feadf834dc4aa1ec17b8f3ed795bd90a50f9df56c5e19e3",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/projection-negative-stale-view.cfg": {
+      "sha256": "3d9b7dc153f177177cf1622bdd9478dd0a9140e85b0e2bc7729aaa2dc8396c70",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/projection-negative-type.cfg": {
+      "sha256": "639fd8af22d76040aa9ab4ff50403dd810bdf07729a587401e5da100cb9b7e54",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/projection-origin.cfg": {
+      "sha256": "b80b3c1180b10c7a4ce5e5c6261b5bfb572105f43432913fed52e9f91a0a2e76",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/projection-owner.cfg": {
+      "sha256": "c18f615d1c62d5f97681618018ed28d27c9f0ce982839fb19ca55be4a021ba9d",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/projection-witness-late-accepted.cfg": {
+      "sha256": "a55ac009af71ed9510328ee5b55c27192cf269ddcfe76b6fee6daf9f55df4cdd",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/projection-witness-new-view-old-holding.cfg": {
+      "sha256": "15f4210d179e5147031848f3dac086c4979f25dffb2ed5afb22f6de5b7071d1a",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/projection-witness-origin-not-delivered.cfg": {
+      "sha256": "a6286a596b763f4218ea236f7bf9bb9376676b57fe29064336552549e95afd6f",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/projection-witness-same-slot-change.cfg": {
+      "sha256": "2067e1c2429410ab1bbf5fe199d2e9dea48078d17c0c168ce679cfdb91f60308",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/recovery-appearance.cfg": {
+      "sha256": "1a1d640a10a69a1d3aafd50ef950ce3d5b7d3fb45ed79abb20f1231051144a16",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/recovery-expanded-capacity.cfg": {
+      "sha256": "6aed15a8150f61324cc2728e6391993ae0fff111435c6d00c6f1f95f8fb4c425",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/recovery-negative-capacity.cfg": {
+      "sha256": "281658abf8429b83dec3c899e74138cc59703fe1d24f47092488d629ab3e8c91",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/recovery-negative-consume-all.cfg": {
+      "sha256": "23f831380bdd26deb3ce28754bde1bba02e05249a092c8f823599821a2a1ed21",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/recovery-negative-progress-consume-all.cfg": {
+      "sha256": "db3120608f356094eac3f293c64bf82300bb6f288bc93dbb804475562458e62e",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/recovery-negative-receipt-after-validation.cfg": {
+      "sha256": "cc4e750aac2bb35f055927cf107072014b27e12eb21243f30625fdc805d114dd",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/recovery-negative-recovery-drops-other.cfg": {
+      "sha256": "59be2a224e03c36337835d5a6bd55579060a53e20248b9cfca20397ccc85f70b",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/recovery-negative-repeat-effect.cfg": {
+      "sha256": "706d8524a86e60bf36e9462ddbed21ff1f5de371ce84a002e81332d599645d6b",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/recovery-negative-rewrite-original.cfg": {
+      "sha256": "a397fb0e95d6c3801a43ab239dc9acecc4c8ce23d1e8ed2015189c54bd667685",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/recovery-negative-type.cfg": {
+      "sha256": "0c068f436f6eab58c0a7c48563e0675d7a6965985ff269fd915e96c09aa4edb4",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/recovery-negative-unknown-new-id.cfg": {
+      "sha256": "9f03cfd716a0c18cf130c3459ac0cd8ab48731305f995c8a9413074531521b04",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/recovery-private.cfg": {
+      "sha256": "362d55c284b1deb434f605496caa946b58f61e80c9b587314b9c4ad779463737",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/recovery-retry-bound.cfg": {
+      "sha256": "fc7bf6c9b75da47cfa2d8c815df2193b05451ecf7e544c1476b1002e2f7eec2e",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/recovery-witness-both-complete.cfg": {
+      "sha256": "9c445cc6edc118e471ce81b421ff66f4498e3459ec000575405ec5e096389478",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/recovery-witness-new-while-unknown.cfg": {
+      "sha256": "fd066ce073ece31dcb0d46e352f64c65be4c99e77df6b99d269d2a35c0b57840",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/recovery-witness-restart-recovered.cfg": {
+      "sha256": "83554afa3a026e2643452cb3ba9593a249f14e733754099fb3daa2d85d977196",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/recovery-witness-retry-exhausted.cfg": {
+      "sha256": "eb8f58b83cb045c6f9bd4248ba188c611c052b8dd7f7bc2e140f188549fdbc3a",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/recovery-witness-unknown-after.cfg": {
+      "sha256": "613d28b4a5cdca04be0aa1da4a6035d2e4f3488698b42c5952168db7691b19a1",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/recovery-witness-unknown-before.cfg": {
+      "sha256": "9385141543bdbac8f0c89a8eaf8205a99c45e2ff4ca8a1ce3f36568ba3e4e551",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/terms-before-settlement.cfg": {
+      "sha256": "5dbb40189187843f76f195232b9bbe3b2f72917ca825f7d3733247334a4f3b15",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/terms-negative-drop-term-basis.cfg": {
+      "sha256": "5779d1d8d6bbee7ebf4d900a507e49d5f1ed21b3baf70097891ccbf20bf554a4",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/terms-negative-edit-old-scope.cfg": {
+      "sha256": "60e4e6dc5df7cce257aff9b13a8ac86f459acf4aab9713720bb8e7852a48d62b",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/terms-negative-generic-grant.cfg": {
+      "sha256": "60580ba23119cfc7d2e563d2fcb5c9ba33262668ee8f0c73990ecf7b2b407248",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/terms-negative-schema-declines.cfg": {
+      "sha256": "2945b05e151611b816af1c2bf63f5c893559188441e3479c702c30554ce3abc6",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/terms-negative-type.cfg": {
+      "sha256": "0aed97ceabda45bfea8d25a835fdc6bc6b487b57e76473d6610648da1bfa27f7",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/terms-negative-use-defense-appearance.cfg": {
+      "sha256": "0362d2db9d09f687c5bd056aa7e5ea149509a16f7eb50055ec0188d19bd228aa",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/terms-negative-use-defense-private_items.cfg": {
+      "sha256": "6a08c318844fffb32e069269fc0ff347670704fdb81060801f0a389631d43df6",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/terms-reusable-remedy.cfg": {
+      "sha256": "b7f35af17c88634dc5fcb70fecffe689fb1ed4dfdc26f9bcd4a1f033630b8803",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/terms-single-use.cfg": {
+      "sha256": "8d06c862da4b0799c7b75d1724636797bb32f5ea3e427ef8a3641432a8ead14d",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/terms-use-defense-appearance.cfg": {
+      "sha256": "7c15ed02693b92a6b5e88db351e62dae80ad7f72cd732ec7f335a8585def860f",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/terms-use-defense-private_items.cfg": {
+      "sha256": "6182021e15345161336044a88688fff9f43ecb0ef1dd36d0719f1b58a7d41af8",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/terms-witness-authority-rejected.cfg": {
+      "sha256": "dd33b1212e98344419595d3a60ddc51f76ed5e0cf2d7ed46fe707984b474e5d2",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/terms-witness-both-remedies.cfg": {
+      "sha256": "1ae619da9389dee5096d785a577c997e92ddfb2c33811b142899b495b80749a8",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/terms-witness-private-deferred.cfg": {
+      "sha256": "59d5be0b092cf23e64114d7e965c312e4f50ca5a69b4d76ccd2816badcb44a3e",
+      "byte_identical": true
+    },
+    "formal/adv001/cuilan-self-response/model/terms-witness-single-use-permitted.cfg": {
+      "sha256": "133a006482fc4243b2427b5ef0683c804c051d16244c278dcad97b4a988cdbc3",
+      "byte_identical": true
+    }
+  },
+  "all_original_profile_definitions_unchanged": true,
+  "original_profiles": {
+    "closure-return-rows": {
+      "manifest": "formal/adv001/cuilan-self-response-supplement/closure-returns-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "ca18be01839ed2c5f667db5aaa2dd7810ab30a6d2c9ea025c7b15ce6e154e727"
+    },
+    "closure-return-requests": {
+      "manifest": "formal/adv001/cuilan-self-response-supplement/closure-returns-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "c78fc0fd538758b949fb0a41c5d3b863d4ed66764bdd1559f9bff86b3ae4c2cd"
+    },
+    "closure-return-negative-current-only": {
+      "manifest": "formal/adv001/cuilan-self-response-supplement/closure-returns-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "834270c52eea409d2d0a28dd9fd7b4f8400222cb0898f3819be91709527eec8e"
+    },
+    "closure-return-negative-omit-item": {
+      "manifest": "formal/adv001/cuilan-self-response-supplement/closure-returns-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "f7d0812a007592b795229a8f76f2e3cbf9847091ac6aa86bd8d609a13e47c169"
+    },
+    "closure-return-negative-observer": {
+      "manifest": "formal/adv001/cuilan-self-response-supplement/closure-returns-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "525f826182b393724ff2798e1725f13aaeb635a13f75fc4d6df35275a4ed1849"
+    },
+    "closure-return-negative-acquisition": {
+      "manifest": "formal/adv001/cuilan-self-response-supplement/closure-returns-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "6feefe54fe35f252db23f04622f09e091c142e27b1efab53d414762e5f396e79"
+    },
+    "closure-return-negative-view": {
+      "manifest": "formal/adv001/cuilan-self-response-supplement/closure-returns-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "8d509a9e503b02d0fd891b126011e9e3244cdfbf835ad6aa5faec97aee27f3be"
+    },
+    "closure-return-negative-null": {
+      "manifest": "formal/adv001/cuilan-self-response-supplement/closure-returns-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "cae795a81eaef99d3805e0168c5257b849e87ebeef0fda62e99dd8c6800e60a6"
+    },
+    "closure-return-negative-origin": {
+      "manifest": "formal/adv001/cuilan-self-response-supplement/closure-returns-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "d130e37985817cf554b11f61bdd8b017e3df7759f553a96a1a75b6750daee0d9"
+    },
+    "closure-return-negative-quota": {
+      "manifest": "formal/adv001/cuilan-self-response-supplement/closure-returns-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "62ae7684c0d287ac9fc063241a0249834bd13d17ecbea08ccf137695334eb2e0"
+    },
+    "closure-return-negative-type": {
+      "manifest": "formal/adv001/cuilan-self-response-supplement/closure-returns-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "281595f1775d9cad707ca15c8f2cfaa3dc584ad02786e81330950d59e0136ac4"
+    },
+    "closure-shared-quotient": {
+      "manifest": "formal/adv001/cuilan-self-response-supplement/closure-shared-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "13d8c2f1807c0dd5c80cb8c32262ce27e2642e087ccec52c5c80117caf38f723"
+    },
+    "closure-shared-negative-subject": {
+      "manifest": "formal/adv001/cuilan-self-response-supplement/closure-shared-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "203f998a53ee1ee764d9a3189e76210fbf5ff891a323ce2878fadd09a869c918"
+    },
+    "closure-shared-negative-performer": {
+      "manifest": "formal/adv001/cuilan-self-response-supplement/closure-shared-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "0788fa9f0d374a29c6062f4ef8ba6a262037fb667e8e7a6e6bdc62bc85daf48f"
+    },
+    "closure-shared-negative-refresh-proof": {
+      "manifest": "formal/adv001/cuilan-self-response-supplement/closure-shared-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "f4bab8767f386cc401449dc121a299c8b8c7b1ca11de06f74fd48daa4d65685f"
+    },
+    "closure-shared-negative-overinvalidate": {
+      "manifest": "formal/adv001/cuilan-self-response-supplement/closure-shared-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "f12e3d1c27617f15fdf8405c13328e4f001276045acf1c21fdecfa5343d6c1be"
+    },
+    "closure-shared-negative-split-appearance": {
+      "manifest": "formal/adv001/cuilan-self-response-supplement/closure-shared-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "e2a196f0d0aa6c75b6a7f7c1ac9c3c3eaf0d91970fa5109c9dd1aea4bb21a1fb"
+    },
+    "closure-shared-negative-split-private": {
+      "manifest": "formal/adv001/cuilan-self-response-supplement/closure-shared-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "b4473fe11073f860d3e1a5104276f30d729968fa6f34b3dd962f0f8d04b9eb21"
+    },
+    "closure-shared-negative-custody": {
+      "manifest": "formal/adv001/cuilan-self-response-supplement/closure-shared-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "138fc6982e0364001bef3508f69267e2149e154d77fc6245ef1b0fc26b645ef5"
+    },
+    "closure-shared-negative-quota": {
+      "manifest": "formal/adv001/cuilan-self-response-supplement/closure-shared-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "b80e556357a4a76f56827edfad57f820f906782d2c54909d2e04f2dfcdd51292"
+    },
+    "closure-shared-negative-receipt": {
+      "manifest": "formal/adv001/cuilan-self-response-supplement/closure-shared-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "40d82b500c52938597c5750cb56d01135d6499e807319d2f889c0223bdbf82a9"
+    },
+    "closure-signature-domain": {
+      "manifest": "formal/adv001/cuilan-self-response-supplement/closure-signature-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "cf69006f499c8fe88f9c00466d97c82ef53e4b7f647d2dd2cde132e7fe633304"
+    },
+    "closure-signature-negative-actor": {
+      "manifest": "formal/adv001/cuilan-self-response-supplement/closure-signature-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "45921a44f0180de5706ef7e489c1b8a0f10d42989626a95cb440dca84241d636"
+    },
+    "closure-signature-negative-restart": {
+      "manifest": "formal/adv001/cuilan-self-response-supplement/closure-signature-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "83d78e18657fa4a73e5377f84d5ebb16bb528b991bd05647c40e2cebd2d0a7e3"
+    },
+    "closure-authority-both": {
+      "manifest": "formal/adv001/cuilan-self-response/closure-authority-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "182a46cfdf9252fce0e06542690f279d253be5bb40ad306188a7021614a2d9a2"
+    },
+    "closure-effects-private": {
+      "manifest": "formal/adv001/cuilan-self-response/closure-effects-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "db27a1a8397e10c09d8c14e87da41ceb74219b7fd26ae6d8e337553083f23635"
+    },
+    "closure-effects-restart-private": {
+      "manifest": "formal/adv001/cuilan-self-response/closure-effects-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "fb7c0231650127593270d68d9f25198c2916a215d4a01fcfeb6a5a855c26ba0e"
+    },
+    "closure-effects-both": {
+      "manifest": "formal/adv001/cuilan-self-response/closure-effects-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "5227e6140a49fec659ce0263764eb15b187aa9db6433ece15eb4750f663fa10f"
+    },
+    "closure-effects-cooperative-return": {
+      "manifest": "formal/adv001/cuilan-self-response/closure-effects-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "fd40af78c142ba8602608316984571beac4ea49eb78c89b0ba70ddab74d1fa42"
+    },
+    "closure-effects-negative-ui-receipt-overwrite": {
+      "manifest": "formal/adv001/cuilan-self-response/closure-effects-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "438310db39b0e74dc91ff435e2b063246d7d5843afe6d759bf20a9529ee357ec"
+    },
+    "closure-effects-negative-stale-return-view": {
+      "manifest": "formal/adv001/cuilan-self-response/closure-effects-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "2d7b697f8baab663084e62b9edf0d6bc9bb6d0ebfb521b342a2d5fbd382ba34c"
+    },
+    "closure-effects-negative-history-trims-return": {
+      "manifest": "formal/adv001/cuilan-self-response/closure-effects-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "b977aa03febbe84ac9476f4be43def21941eebe66fd15dfcad01d4a015e7f830"
+    },
+    "closure-effects-negative-first-item-closes-all": {
+      "manifest": "formal/adv001/cuilan-self-response/closure-effects-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "4f0d1866793da97fd2291e110d2f925ca979b9bd92bd09de444a15cafefe7ace"
+    },
+    "closure-life-effects-restart-private": {
+      "manifest": "formal/adv001/cuilan-self-response/closure-life-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "d7fcaa5aa7fd4bdc183e7dae487d222dabd7a137a360c6f5668b2d6db71942d4"
+    },
+    "closure-life-effects-both": {
+      "manifest": "formal/adv001/cuilan-self-response/closure-life-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "7ef3a9c424e148794d5acfc5fd35caafa3bfedc67671818696220a18e56d5880"
+    },
+    "closure-life-effects-negative-old-capability": {
+      "manifest": "formal/adv001/cuilan-self-response/closure-life-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "2b098c3f5a6453c9bd5651066fb4b19f0583f42c8ac3b9595b1b006db6dc0461"
+    },
+    "closure-life-effects-negative-return-rewrites-history": {
+      "manifest": "formal/adv001/cuilan-self-response/closure-life-verification.json",
+      "byte_equivalent_definition": true,
+      "canonical_sha256": "a5989a5ae4b83e44087a562a17b1c1d0913804163c34db5482fbeee8384f9663"
+    }
+  },
+  "original_raw_archive_sha256": "57240b853b3a429e1babe2786143e433300d2fc80e0419647f8e7f675f209e0a",
+  "original_raw_manifest_sha256": "5c42a4e6b35fad6f1b97fc4aad6665dcaf95738188d2de1a13454c58ce855511",
+  "original_raw_files_rechecked": 3945,
+  "all_original_raw_files_unchanged": true,
+  "original_runs": [
+    {
+      "run": "authority-both-quotient-r1",
+      "run_id": "03e639d6-cb9c-4300-a347-562fa84c51aa",
+      "four_evidence_hashes_unchanged": true,
+      "status": "PASS_WITHIN_SCOPE"
+    },
+    {
+      "run": "closure-effects-negative-first-item-closes-all-r1",
+      "run_id": "65c54653-52ff-4c7e-b011-c254a8ff826e",
+      "four_evidence_hashes_unchanged": true,
+      "status": "COUNTEREXAMPLE"
+    },
+    {
+      "run": "closure-effects-negative-history-trims-return-r1",
+      "run_id": "51ce9d89-48af-4df7-9a2a-c6184f19c764",
+      "four_evidence_hashes_unchanged": true,
+      "status": "COUNTEREXAMPLE"
+    },
+    {
+      "run": "closure-effects-negative-stale-return-view-r1",
+      "run_id": "208c09b9-b0cb-4c41-a886-8bcb5f36670b",
+      "four_evidence_hashes_unchanged": true,
+      "status": "COUNTEREXAMPLE"
+    },
+    {
+      "run": "closure-effects-negative-ui-receipt-overwrite-r1",
+      "run_id": "fb6e58c4-0f85-4d10-a1dc-8e8dd020d4a0",
+      "four_evidence_hashes_unchanged": true,
+      "status": "COUNTEREXAMPLE"
+    },
+    {
+      "run": "closure-life-effects-negative-old-capability-r1",
+      "run_id": "bf5ce1f7-a819-411d-a85a-30bb1449c6c4",
+      "four_evidence_hashes_unchanged": true,
+      "status": "COUNTEREXAMPLE"
+    },
+    {
+      "run": "closure-life-effects-negative-return-rewrites-history-r1",
+      "run_id": "4f13640a-af74-4f78-b4f4-777eab27afbb",
+      "four_evidence_hashes_unchanged": true,
+      "status": "COUNTEREXAMPLE"
+    },
+    {
+      "run": "closure-return-negative-acquisition-r1",
+      "run_id": "da1d564e-f713-49ff-a921-08432f0c5ed6",
+      "four_evidence_hashes_unchanged": true,
+      "status": "COUNTEREXAMPLE"
+    },
+    {
+      "run": "closure-return-negative-current-only-r1",
+      "run_id": "21ff54ce-9887-4a70-8577-77568a839e35",
+      "four_evidence_hashes_unchanged": true,
+      "status": "COUNTEREXAMPLE"
+    },
+    {
+      "run": "closure-return-negative-null-r1",
+      "run_id": "f8a7e54a-c268-4b69-8e51-f186844d7292",
+      "four_evidence_hashes_unchanged": true,
+      "status": "COUNTEREXAMPLE"
+    },
+    {
+      "run": "closure-return-negative-observer-r1",
+      "run_id": "70839e49-5f7b-445a-a245-4377ff894654",
+      "four_evidence_hashes_unchanged": true,
+      "status": "COUNTEREXAMPLE"
+    },
+    {
+      "run": "closure-return-negative-omit-item-r1",
+      "run_id": "3698793f-6291-4fd4-b7df-7b943da47d40",
+      "four_evidence_hashes_unchanged": true,
+      "status": "COUNTEREXAMPLE"
+    },
+    {
+      "run": "closure-return-negative-origin-r1",
+      "run_id": "5ab24be1-9d87-4c81-842d-e75cd0dbba81",
+      "four_evidence_hashes_unchanged": true,
+      "status": "COUNTEREXAMPLE"
+    },
+    {
+      "run": "closure-return-negative-quota-r1",
+      "run_id": "73a9a456-1ede-4d30-a73c-5ce636d5f932",
+      "four_evidence_hashes_unchanged": true,
+      "status": "COUNTEREXAMPLE"
+    },
+    {
+      "run": "closure-return-negative-type-r1",
+      "run_id": "c6d4ef59-8a05-41c1-8e44-89c537dd3f6d",
+      "four_evidence_hashes_unchanged": true,
+      "status": "COUNTEREXAMPLE"
+    },
+    {
+      "run": "closure-return-negative-view-r1",
+      "run_id": "52de7f97-d3e4-492c-b0c8-5a291feac0f4",
+      "four_evidence_hashes_unchanged": true,
+      "status": "COUNTEREXAMPLE"
+    },
+    {
+      "run": "closure-shared-negative-custody-r1",
+      "run_id": "70b13825-b347-42c3-a948-9e9181abee7d",
+      "four_evidence_hashes_unchanged": true,
+      "status": "COUNTEREXAMPLE"
+    },
+    {
+      "run": "closure-shared-negative-overinvalidate-r1",
+      "run_id": "2d38af3f-d99e-40f8-9434-a219b6e792ca",
+      "four_evidence_hashes_unchanged": true,
+      "status": "COUNTEREXAMPLE"
+    },
+    {
+      "run": "closure-shared-negative-performer-r1",
+      "run_id": "331261c0-497a-4add-8ac7-90374e528a21",
+      "four_evidence_hashes_unchanged": true,
+      "status": "COUNTEREXAMPLE"
+    },
+    {
+      "run": "closure-shared-negative-quota-r1",
+      "run_id": "e665e2d0-b0bb-4145-8666-ed0a285b0376",
+      "four_evidence_hashes_unchanged": true,
+      "status": "COUNTEREXAMPLE"
+    },
+    {
+      "run": "closure-shared-negative-receipt-r1",
+      "run_id": "efc0ca9e-50e5-4184-a569-99fb7afd5ebd",
+      "four_evidence_hashes_unchanged": true,
+      "status": "COUNTEREXAMPLE"
+    },
+    {
+      "run": "closure-shared-negative-refresh-proof-r1",
+      "run_id": "eef511dc-6349-4250-99aa-9c4013f2a2e5",
+      "four_evidence_hashes_unchanged": true,
+      "status": "COUNTEREXAMPLE"
+    },
+    {
+      "run": "closure-shared-negative-split-appearance-r1",
+      "run_id": "4fdfdfdb-3ba0-482a-9fc7-03d1d861e6ca",
+      "four_evidence_hashes_unchanged": true,
+      "status": "COUNTEREXAMPLE"
+    },
+    {
+      "run": "closure-shared-negative-split-private-r1",
+      "run_id": "9eb0a85c-0944-4d39-b39f-d3fd2882f345",
+      "four_evidence_hashes_unchanged": true,
+      "status": "COUNTEREXAMPLE"
+    },
+    {
+      "run": "closure-shared-negative-subject-r1",
+      "run_id": "8fca9701-69c5-4750-96a8-db5a44ec7ae9",
+      "four_evidence_hashes_unchanged": true,
+      "status": "COUNTEREXAMPLE"
+    },
+    {
+      "run": "closure-signature-negative-actor-r1",
+      "run_id": "4c10569f-46cb-41b3-9c80-fb939c070c9f",
+      "four_evidence_hashes_unchanged": true,
+      "status": "COUNTEREXAMPLE"
+    },
+    {
+      "run": "closure-signature-negative-restart-r1",
+      "run_id": "314133bd-b681-44a4-bce7-d2152b319cf7",
+      "four_evidence_hashes_unchanged": true,
+      "status": "COUNTEREXAMPLE"
+    },
+    {
+      "run": "effects-both-life-quotient-r1",
+      "run_id": "c75182c9-10a8-42ae-b0bd-5bff47e7a769",
+      "four_evidence_hashes_unchanged": true,
+      "status": "INCONCLUSIVE"
+    },
+    {
+      "run": "effects-cooperative-quotient-r1",
+      "run_id": "0a45a7b2-1488-4d09-b1b6-cee271abb818",
+      "four_evidence_hashes_unchanged": true,
+      "status": "PASS_WITHIN_SCOPE"
+    },
+    {
+      "run": "effects-private-quotient-r1",
+      "run_id": "11c1dc4f-abde-41f8-9ead-e938f3116eee",
+      "four_evidence_hashes_unchanged": true,
+      "status": "PASS_WITHIN_SCOPE"
+    },
+    {
+      "run": "effects-restart-private-life-quotient-r1",
+      "run_id": "b2a4522e-0ce9-4682-9cf4-bd4a011a7820",
+      "four_evidence_hashes_unchanged": true,
+      "status": "PASS_WITHIN_SCOPE"
+    },
+    {
+      "run": "return-requests-r1",
+      "run_id": "0cbc7b77-8384-44b8-98ed-881d7252d3e8",
+      "four_evidence_hashes_unchanged": true,
+      "status": "PASS_WITHIN_SCOPE"
+    },
+    {
+      "run": "return-rows-r1",
+      "run_id": "2627aeec-698d-4ca5-94cc-46b2599b1b2b",
+      "four_evidence_hashes_unchanged": true,
+      "status": "PASS_WITHIN_SCOPE"
+    },
+    {
+      "run": "shared-quotient-domain-r2",
+      "run_id": "d3b86619-408f-40f9-b84e-39b68a048d92",
+      "four_evidence_hashes_unchanged": true,
+      "status": "PASS_WITHIN_SCOPE"
+    },
+    {
+      "run": "shared-quotient-r1",
+      "run_id": "dcf2ab55-db3a-4c69-a8be-9d03425d05aa",
+      "four_evidence_hashes_unchanged": true,
+      "status": "PASS_WITHIN_SCOPE"
+    },
+    {
+      "run": "signature-domain-r1",
+      "run_id": "af94f986-ec55-43dc-aa31-c3695ac456b9",
+      "four_evidence_hashes_unchanged": true,
+      "status": "PASS_WITHIN_SCOPE"
+    }
+  ],
+  "note": "新增副本/配置和6负+1正为独立差量。原模型、旧配置、旧profile的定义、36原运行及原封存包保持；当前聚合索引增加差量，不重写原件。"
+}

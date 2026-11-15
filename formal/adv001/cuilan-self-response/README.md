@@ -2,6 +2,10 @@
 
 本目录由独立 `worker-tla` 创建，只做设计建模与 TLC 检查。业务实现、实现对应/精化、生产验收均为 **NOT_ASSESSED / NOT_RUN**；没有修改业务、测试、内容或候选 Spec。外层决定采用与实施释放。
 
+## #62 新候选证据入口（2026-11-15）
+
+后续七项未决补证见 [候选证明关系](../cuilan-self-response-supplement/PROOF_CLOSURE.md)、[新实际结果](../cuilan-self-response-supplement/CLOSURE_RESULTS.md) 和 `../cuilan-self-response-supplement/CLOSURE_RUN_INDEX.json`。本目录的历史标签商保留完整缓存及原性质；双用途完整缓存的直接探索仍未完成，另交明确的权威模拟与缓存归纳候选。新结果等待独立审查，以下原始模型与历史结果身份不变。
+
 ## 固定来源与结论入口
 
 - CS-R1：`76d98e137f5220518b072650ba6af8001966ea23`，tree `18287fbcde9590c6ce83a82ee747dfafaccdfe46`。
