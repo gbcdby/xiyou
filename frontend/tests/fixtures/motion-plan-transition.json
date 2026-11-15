@@ -1,0 +1,322 @@
+{
+  "origin": {
+    "run": "https://github.com/gbcdby/xiyou/actions/runs/43710059644",
+    "artifact": 14160487070,
+    "artifactSha256": "aadcfb3a1cc13643991470c5688a1fcc1d5fa35a71bb581651bd40438c05d1f4",
+    "resultSha256": "d05119479b7f40e786e7bfae716d20fcc180607fd6d0d0402dc1ad6d86b88a3e",
+    "sourceCommit": "17cb3383d7c0bc1d94c139108b6ca8da88b4e872",
+    "sourceTree": "fb57941976c0e12af138013dee9d3de10d1ac80b",
+    "scope": "原CI三个连续update记录的完整运动输入；不是整场或初始显示缓存。"
+  },
+  "updates": [
+    {
+      "at": 6616.400000000023,
+      "snapshotSeq": "63",
+      "viewId": "Rmp_3ploJMcOv_1TC1nSKpVlLHFXdfdzM",
+      "sceneTimeMs": 1489,
+      "paused": false,
+      "self": {
+        "entityRef": "R6tREdKX5Xoyqy5_Uh68lIdWp4Y2RmZ1c",
+        "name": "高才",
+        "appearanceId": "gaocai",
+        "resourceRevision": "74219314828807222345144654095683873940599978314309602766074419596325587189785",
+        "availableOperations": [],
+        "appearanceEpoch": "103198537755699251636998318694348162287440536375105223418265757779898498802055",
+        "sceneId": "gaolao-courtyard",
+        "position": {
+          "x": 1014,
+          "y": 650
+        },
+        "facing": "E",
+        "controlEpoch": "2",
+        "canControl": true,
+        "capabilities": [
+          "move_to",
+          "stop_move",
+          "inspect",
+          "take_item",
+          "put_item",
+          "transfer_item",
+          "reclaim_public_item",
+          "cooperate",
+          "interact",
+          "speak",
+          "make_claim",
+          "share_evidence",
+          "wait",
+          "propose_follow",
+          "respond_consent",
+          "withdraw_consent",
+          "request_end",
+          "confirm_end",
+          "cancel_personal_request"
+        ],
+        "movementCommandHighWater": "4"
+      },
+      "movement": {
+        "movementId": "RfGjW4Fbx7GfEnwadCGOZALVQrSP3nr0z",
+        "planVersion": "4",
+        "movementCommandSeq": "4",
+        "sceneId": "gaolao-courtyard",
+        "mapVersion": "gaolao-layout-v1.1",
+        "goal": {
+          "x": 1026,
+          "y": 650
+        },
+        "path": [
+          {
+            "x": 1005,
+            "y": 650
+          },
+          {
+            "x": 1026,
+            "y": 650
+          }
+        ],
+        "acceptedAtSceneTime": 1441,
+        "status": "moving"
+      },
+      "person": {
+        "entityRef": "R6tREdKX5Xoyqy5_Uh68lIdWp4Y2RmZ1c",
+        "name": "高才",
+        "appearanceEpoch": "103198537755699251636998318694348162287440536375105223418265757779898498802055",
+        "resourceRevision": "74219314828807222345144654095683873940599978314309602766074419596325587189785",
+        "moving": true,
+        "appearanceId": "gaocai",
+        "sceneId": "gaolao-courtyard",
+        "position": {
+          "x": 1014,
+          "y": 650
+        },
+        "facing": "E",
+        "motionTrail": [
+          {
+            "x": 1005,
+            "y": 650
+          },
+          {
+            "x": 1014,
+            "y": 650
+          }
+        ],
+        "motionFromSceneTimeMs": 1441,
+        "motionThroughSceneTimeMs": 1489
+      }
+    },
+    {
+      "at": 6692.5,
+      "snapshotSeq": "66",
+      "viewId": "Rmp_3ploJMcOv_1TC1nSKpVlLHFXdfdzM",
+      "sceneTimeMs": 1580,
+      "paused": false,
+      "self": {
+        "entityRef": "R6tREdKX5Xoyqy5_Uh68lIdWp4Y2RmZ1c",
+        "name": "高才",
+        "appearanceId": "gaocai",
+        "resourceRevision": "74219314828807222345144654095683873940599978314309602766074419596325587189785",
+        "availableOperations": [],
+        "appearanceEpoch": "103198537755699251636998318694348162287440536375105223418265757779898498802055",
+        "sceneId": "gaolao-courtyard",
+        "position": {
+          "x": 1026,
+          "y": 650
+        },
+        "facing": "E",
+        "controlEpoch": "2",
+        "canControl": true,
+        "capabilities": [
+          "move_to",
+          "stop_move",
+          "inspect",
+          "take_item",
+          "put_item",
+          "transfer_item",
+          "reclaim_public_item",
+          "cooperate",
+          "interact",
+          "speak",
+          "make_claim",
+          "share_evidence",
+          "wait",
+          "propose_follow",
+          "respond_consent",
+          "withdraw_consent",
+          "request_end",
+          "confirm_end",
+          "cancel_personal_request"
+        ],
+        "movementCommandHighWater": "5"
+      },
+      "movement": {
+        "movementId": "RWAd24HoLOCVRXtTk4bnv7R6mMJ_2rnGN",
+        "planVersion": "5",
+        "movementCommandSeq": "5",
+        "sceneId": "gaolao-courtyard",
+        "mapVersion": "gaolao-layout-v1.1",
+        "goal": {
+          "x": 1041,
+          "y": 650
+        },
+        "path": [
+          {
+            "x": 1026,
+            "y": 650
+          },
+          {
+            "x": 1041,
+            "y": 650
+          }
+        ],
+        "acceptedAtSceneTime": 1580,
+        "status": "accepted"
+      },
+      "person": {
+        "entityRef": "R6tREdKX5Xoyqy5_Uh68lIdWp4Y2RmZ1c",
+        "name": "高才",
+        "appearanceEpoch": "103198537755699251636998318694348162287440536375105223418265757779898498802055",
+        "resourceRevision": "74219314828807222345144654095683873940599978314309602766074419596325587189785",
+        "moving": true,
+        "appearanceId": "gaocai",
+        "sceneId": "gaolao-courtyard",
+        "position": {
+          "x": 1026,
+          "y": 650
+        },
+        "facing": "E",
+        "motionTrail": [
+          {
+            "x": 1014,
+            "y": 650
+          },
+          {
+            "x": 1026,
+            "y": 650
+          }
+        ],
+        "motionFromSceneTimeMs": 1489,
+        "motionThroughSceneTimeMs": 1580
+      }
+    },
+    {
+      "at": 6795.900000000023,
+      "snapshotSeq": "71",
+      "viewId": "Rmp_3ploJMcOv_1TC1nSKpVlLHFXdfdzM",
+      "sceneTimeMs": 1706,
+      "paused": false,
+      "self": {
+        "entityRef": "R6tREdKX5Xoyqy5_Uh68lIdWp4Y2RmZ1c",
+        "name": "高才",
+        "appearanceId": "gaocai",
+        "resourceRevision": "74219314828807222345144654095683873940599978314309602766074419596325587189785",
+        "availableOperations": [],
+        "appearanceEpoch": "103198537755699251636998318694348162287440536375105223418265757779898498802055",
+        "sceneId": "gaolao-courtyard",
+        "position": {
+          "x": 1043,
+          "y": 654
+        },
+        "facing": "SE",
+        "controlEpoch": "2",
+        "canControl": true,
+        "capabilities": [
+          "move_to",
+          "stop_move",
+          "inspect",
+          "take_item",
+          "put_item",
+          "transfer_item",
+          "reclaim_public_item",
+          "cooperate",
+          "interact",
+          "speak",
+          "make_claim",
+          "share_evidence",
+          "wait",
+          "propose_follow",
+          "respond_consent",
+          "withdraw_consent",
+          "request_end",
+          "confirm_end",
+          "cancel_personal_request"
+        ],
+        "movementCommandHighWater": "6"
+      },
+      "movement": {
+        "movementId": "RacXZF03dOH_AHcLf7F4jVmrY-3yYMwkh",
+        "planVersion": "6",
+        "movementCommandSeq": "6",
+        "sceneId": "gaolao-courtyard",
+        "mapVersion": "gaolao-layout-v1.1",
+        "goal": {
+          "x": 1051,
+          "y": 675
+        },
+        "path": [
+          {
+            "x": 1041,
+            "y": 650
+          },
+          {
+            "x": 1051,
+            "y": 675
+          }
+        ],
+        "acceptedAtSceneTime": 1680,
+        "status": "moving"
+      },
+      "person": {
+        "entityRef": "R6tREdKX5Xoyqy5_Uh68lIdWp4Y2RmZ1c",
+        "name": "高才",
+        "appearanceEpoch": "103198537755699251636998318694348162287440536375105223418265757779898498802055",
+        "resourceRevision": "74219314828807222345144654095683873940599978314309602766074419596325587189785",
+        "moving": true,
+        "appearanceId": "gaocai",
+        "sceneId": "gaolao-courtyard",
+        "position": {
+          "x": 1043,
+          "y": 654
+        },
+        "facing": "SE",
+        "motionTrail": [
+          {
+            "x": 1041,
+            "y": 650
+          },
+          {
+            "x": 1043,
+            "y": 654
+          }
+        ],
+        "motionFromSceneTimeMs": 1680,
+        "motionThroughSceneTimeMs": 1706
+      }
+    }
+  ],
+  "failedPaint": {
+    "serial": 38,
+    "motionAt": 6801.300000000047,
+    "snapshotSeq": "71",
+    "sceneTimeMs": 1706,
+    "self": {
+      "ref": "R6tREdKX5Xoyqy5_Uh68lIdWp4Y2RmZ1c",
+      "appearanceId": "gaocai",
+      "position": {
+        "x": 1043,
+        "y": 654
+      },
+      "facing": "SE",
+      "moving": false,
+      "distance": 0,
+      "art": {
+        "href": "/assets/gaolaozhuang/gaocai/idle/se.png",
+        "mirrorX": false,
+        "bounds": {
+          "x": -26.789272030651343,
+          "y": -76.727969348659,
+          "width": 52.70498084291188,
+          "height": 79.05747126436782
+        }
+      }
+    }
+  }
+}
