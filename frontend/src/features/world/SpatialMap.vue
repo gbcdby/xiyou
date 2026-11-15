@@ -5,7 +5,7 @@ import type { HudMapGeometry, HudCameraArea } from '../../domain/gaolao-hud-layo
 import { ConfirmedMotion } from '../../domain/spatial-motion.ts';
 import { directionFromKeys, directionKeys } from '../../domain/spatial-direction.ts';
 import { SpatialCanvas } from '../../rendering/spatial-canvas.ts';
-import { CanvasPresentationOwner } from '../../rendering/spatial-presentation.ts';
+import { CanvasPresentationOwner, visibleSelf } from '../../rendering/spatial-presentation.ts';
 import type { SnapshotSubscription, SpatialSnapshotSource } from '../../domain/spatial-snapshot-source.ts';
 import { sharedCanvasAssets } from '../../rendering/canvas-assets.ts';
 
@@ -62,7 +62,12 @@ function draw() {
   presentation?.painted(value, snapshot, now, performance.now(), painter === renderer && !stopped && presentationAllowed(snapshot));
   failed.value = Boolean(value?.failed.length);
   const p = snapshot.projection;
-  if (p.movement?.status === 'arrived' && p.self.position && (reducedMotion || motion.settled(p.self.entityRef, now))) {
+  const drawn = value?.actors.find(actor => actor.ref === p.self.entityRef);
+  const currentFrame = value && canvas.value && painter === renderer && !stopped && displayInput() === snapshot
+    && value.sceneId === p.self.sceneId && visibleSelf(canvas.value, value, p.self.entityRef);
+  if (p.movement?.status === 'arrived' && p.self.position && currentFrame && drawn && !drawn.moving
+    && drawn.position.x === p.self.position.x && drawn.position.y === p.self.position.y
+    && (reducedMotion || !motion.hasPendingMotion(p.self.entityRef, now))) {
     const key = `${snapshot.viewId}:${p.self.controlEpoch}:${p.movement.movementId}:${p.movement.movementCommandSeq}`;
     if (settledKey !== key) { settledKey = key; emit('settled', { viewId: snapshot.viewId, epoch: p.self.controlEpoch, movementId: p.movement.movementId, sequence: p.movement.movementCommandSeq, position: p.self.position }); }
   }

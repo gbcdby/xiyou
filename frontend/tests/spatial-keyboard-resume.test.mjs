@@ -11,8 +11,8 @@ const flush = () => new Promise(resolve => setImmediate(resolve));
 const source = await readFile(new URL('../src/features/world/SpatialMap.vue', import.meta.url), 'utf8');
 const script = source.match(/<script setup lang="ts">([\s\S]*?)<\/script>/)?.[1]; assert.ok(script);
 const parsed = ts.createSourceFile('SpatialMap.ts', script, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
-const functions = parsed.statements.filter(node => ts.isFunctionDeclaration(node) && ['releaseKeys', 'blockedTarget', 'keydown', 'keyup', 'hidden', 'blur'].includes(node.name?.text));
-assert.equal(functions.length, 6);
+const functions = parsed.statements.filter(node => ts.isFunctionDeclaration(node) && ['displayInput', 'releaseKeys', 'blockedTarget', 'keydown', 'keyup', 'hidden', 'blur'].includes(node.name?.text));
+assert.equal(functions.length, 7);
 const keyboardCode = ts.transpileModule(functions.map(node => node.getText(parsed)).join('\n'), { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext } }).outputText;
 
 async function keyboardRoom(t, { holdFirstMove = false } = {}) {
@@ -49,8 +49,9 @@ async function keyboardRoom(t, { holdFirstMove = false } = {}) {
   client.open('spatial-room', 'token'); handlers.connected(); await flush(); await client.control('resume');
   class Element { closest() { return null; } }
   const world = new Element(), document = { hidden: false }, props = { disabled: false };
-  const keyboard = new Function('bindings', `const {props, canvas, projection, emit, directionFromKeys, directionKeys, Element, document}=bindings; const held=new Set(); ${keyboardCode}; return {keydown,keyup,blur,hidden,held};`)({
-    props, canvas: { value: world }, projection: { get value() { return client.state.snapshot.projection; } }, Element, document, directionFromKeys, directionKeys,
+  // 本组网络仍是无新能力的legacy连接；显示输入来自成功安装的当前快照。
+  const keyboard = new Function('bindings', `const {props, canvas, displaySnapshot, emit, directionFromKeys, directionKeys, Element, document}=bindings; const snapshotSubscription=null, presentation=null, held=new Set(); const schedule=()=>{}; ${keyboardCode}; return {keydown,keyup,blur,hidden,held};`)({
+    props, canvas: { value: world }, displaySnapshot: { get value() { return client.state.snapshot; } }, Element, document, directionFromKeys, directionKeys,
     emit(kind, value) { if (kind === 'direction') client.setDirection(value); else if (kind === 'stop') void client.stop(); },
   });
   return {

@@ -250,6 +250,17 @@ export class ConfirmedMotion {
     }
     return { position: sampleTrail(value.trail, fraction), facing, moving: (fraction < 1 || value.continuing) && total > 0, distance: value.distanceBefore + total * fraction };
   }
+  /** 视觉到达只排除待播运动；尾部hold仍按原时间播放，不能据此开启呈现信用。 */
+  hasPendingMotion(reference: string, now: number): boolean {
+    if (!Number.isFinite(now)) return true;
+    const timed = this.#timed.get(reference);
+    // wire不携带原travelled，motion即使几何为零也必须等到原时间结束。
+    if (timed) return timed.segments.some(piece => now < piece.startedAt + piece.duration
+      && (piece.kind === 'motion' || piece.kind === 'legacy' && trailLength(piece.trail) > 0));
+    const value = this.#motions.get(reference);
+    if (!value) return true;
+    return Boolean(value.trail && value.duration > 0 && now < value.startedAt + value.duration && trailLength(value.trail) > 0);
+  }
   settled(reference: string, now: number): boolean {
     const timed = this.#timed.get(reference); if (timed) { const last = timed.segments.at(-1); return !last || now >= last.startedAt + last.duration; }
     const value = this.#motions.get(reference); return !value?.trail || now >= value.startedAt + value.duration;

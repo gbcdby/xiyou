@@ -1,0 +1,185 @@
+{
+  "positive-supply": {
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_tlc_exit": 0,
+    "target": null,
+    "minimum_distinct_states": 100,
+    "gate": false
+  },
+  "positive-lane": {
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_tlc_exit": 0,
+    "target": null,
+    "minimum_distinct_states": 100,
+    "gate": true
+  },
+  "negative-type": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "TypeOK",
+    "minimum_distinct_states": 2
+  },
+  "negative-parallel": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "ReadCapacity",
+    "minimum_distinct_states": 2
+  },
+  "negative-waiting": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "ReadCapacity",
+    "minimum_distinct_states": 2
+  },
+  "negative-publisher": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "ReadCapacity",
+    "minimum_distinct_states": 2
+  },
+  "negative-installed": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "InstalledSeparate",
+    "minimum_distinct_states": 2
+  },
+  "negative-fake-enqueue": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "SentPrefix",
+    "minimum_distinct_states": 2
+  },
+  "negative-cursor": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "SentPrefix",
+    "minimum_distinct_states": 2
+  },
+  "negative-old-install": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "SentPrefix",
+    "minimum_distinct_states": 2
+  },
+  "negative-stale": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "NoStaleAdvance",
+    "minimum_distinct_states": 2
+  },
+  "negative-callback": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "OrderedApplication",
+    "minimum_distinct_states": 2
+  },
+  "negative-duplicate": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "ExactlyOnce",
+    "minimum_distinct_states": 2
+  },
+  "witness-baseline": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "NoBaselineWitness",
+    "minimum_distinct_states": 2
+  },
+  "witness-capacity": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "NoCapacityWitness",
+    "minimum_distinct_states": 2
+  },
+  "witness-old-view-waiting": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "NoOldViewWaitingWitness",
+    "minimum_distinct_states": 2
+  },
+  "witness-separation": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "NoSeparationWitness",
+    "minimum_distinct_states": 2
+  },
+  "witness-prefix": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "NoPrefixWitness",
+    "minimum_distinct_states": 2
+  },
+  "witness-stale-reject": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "NoStaleRejectWitness",
+    "minimum_distinct_states": 2
+  },
+  "witness-old-install": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "NoOldInstallWitness",
+    "minimum_distinct_states": 2
+  },
+  "witness-send-failure": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "NoFailureWitness",
+    "minimum_distinct_states": 2
+  },
+  "witness-ack-push": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "NoAckPushWitness",
+    "minimum_distinct_states": 2
+  },
+  "positive-order": {
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_tlc_exit": 0,
+    "target": null,
+    "minimum_distinct_states": 100,
+    "gate": true
+  },
+  "positive-view": {
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_tlc_exit": 0,
+    "target": null,
+    "minimum_distinct_states": 100,
+    "gate": true
+  },
+  "positive-reconnect": {
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_tlc_exit": 0,
+    "target": null,
+    "minimum_distinct_states": 100,
+    "gate": true
+  },
+  "negative-omission": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "ExactlyOnce",
+    "minimum_distinct_states": 2,
+    "gate": true
+  },
+  "witness-late-old-link": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "NoLateOldLinkWitness",
+    "minimum_distinct_states": 2,
+    "gate": true
+  },
+  "witness-two-links-active": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "NoTwoLinkActiveWitness",
+    "minimum_distinct_states": 2,
+    "gate": true
+  },
+  "negative-old-snapshot": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "NoStaleAdvance",
+    "minimum_distinct_states": 2,
+    "gate": true
+  }
+}

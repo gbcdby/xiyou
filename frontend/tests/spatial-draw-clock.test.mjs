@@ -3,16 +3,32 @@ import test from 'node:test';
 import { readFile } from 'node:fs/promises';
 import ts from 'typescript';
 import { ConfirmedMotion } from '../src/domain/spatial-motion.ts';
+import { createSpatialSnapshotSource } from '../src/domain/spatial-snapshot-source.ts';
+import { visibleSelf } from '../src/rendering/spatial-presentation.ts';
 import { assertPaintContinuity } from './canvas-browser-support.mjs';
 
 // 隔离执行真实 SFC 的 draw 回调；不复制绘制决策，不冒称运行过 DOM/浏览器。
 const source = await readFile(new URL('../src/features/world/SpatialMap.vue', import.meta.url), 'utf8');
 const script = source.match(/<script setup lang="ts">([\s\S]*?)<\/script>/)?.[1]; assert.ok(script);
 const parsed = ts.createSourceFile('SpatialMap.ts', script, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
-const drawNode = parsed.statements.find(node => ts.isFunctionDeclaration(node) && node.name?.text === 'draw'); assert.ok(drawNode);
-const drawCode = ts.transpileModule(drawNode.getText(parsed), { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext } }).outputText;
+const drawNodes = parsed.statements.filter(node => ts.isFunctionDeclaration(node) && ['displayInput', 'draw'].includes(node.name?.text)); assert.equal(drawNodes.length, 2);
+const drawCode = ts.transpileModule(drawNodes.map(node => node.getText(parsed)).join('\n'), { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext } }).outputText;
 function drawCallback(bindings) {
-  return new Function('bindings', `const { painter, props, motion, projection, scene, failed, performance, reducedMotion, emit, schedule } = bindings; let frame=1, settledKey='', stopped=false; ${drawCode}; return draw;`)(bindings);
+  // 该隔离回调没有DOM呈现owner；不以paint替身建立呈现信用。
+  return new Function('bindings', `const { painter, props, motion, canvas, visibleSelf, displaySnapshot, snapshotSubscription=null, failed, performance, reducedMotion, emit, schedule } = bindings; const presentation=null, renderingError={value:''}; const displayFailed=error=>{throw error;}; let frame=1, settledKey='', stopped=false; ${drawCode}; return draw;`)({ ...bindings, visibleSelf });
+}
+
+// 只给生产可见性函数提供受控几何；不把这些替身当作真实DOM或Canvas呈现证据。
+function controlledCanvas() {
+  const bounds = { left: 0, top: 0, right: 2000, bottom: 1200, width: 2000, height: 1200 };
+  const style = { display: 'block', visibility: 'visible', opacity: '1', overflowX: 'visible', overflowY: 'visible' };
+  return { value: { ownerDocument: { hidden: false, visibilityState: 'visible', defaultView: { innerWidth: 2000, innerHeight: 1200, getComputedStyle: () => style } },
+    isConnected: true, parentElement: null, getBoundingClientRect: () => bounds, getClientRects: () => [bounds] } };
+}
+function drawnFrame(snapshot, pose) {
+  return { sceneId: snapshot.projection.self.sceneId, instance: 'isolated-draw', serial: 1, failed: [],
+    view: { x: 0, y: 0, width: 2000, height: 1200 }, viewport: { width: 2000, height: 1200, dpr: 1 }, fit: { x: 0, y: 0, scale: 1 },
+    actors: [{ ref: snapshot.projection.self.entityRef, ...pose }] };
 }
 
 const trace = JSON.parse(await readFile(new URL('./fixtures/motion-delayed-draw.json', import.meta.url), 'utf8'));
@@ -20,19 +36,19 @@ function snapshot(update) {
   const identity = trace.identity;
   const self = { entityRef: identity.entityRef, sceneId: identity.sceneId, controlEpoch: identity.controlEpoch, appearanceEpoch: identity.appearanceEpoch, position: structuredClone(update.position), facing: update.facing };
   return { schemaVersion: 2, sessionId: 'captured-motion', viewId: identity.viewId, snapshotSeq: update.snapshotSeq, projection: {
-    self, movement: structuredClone(update.movement), sceneTimeMs: update.sceneTimeMs, paused: update.paused, entities: [], items: [], targets: [],
+    self, movement: structuredClone(update.movement), scene: { sceneId: identity.sceneId }, sceneTimeMs: update.sceneTimeMs, paused: update.paused, entities: [], items: [], targets: [],
     sceneOverview: { entities: [{ ...self, ...structuredClone(update.person) }], items: [], targets: [] },
   } };
 }
 function replay(useDraw) {
   const events = [...trace.updates.map(value => ({ kind: 'update', time: value.startedAt, value })), ...trace.paints.map(value => ({ kind: 'paint', time: value.startedAt, value }))].sort((a, b) => a.time - b.time);
-  const motion = new ConfirmedMotion(), props = { snapshot: snapshot(trace.updates[0]) }, captures = []; let actualTime = 0, painted, latest;
+  const motion = new ConfirmedMotion(), props = { snapshot: snapshot(trace.updates[0]) }, displaySnapshot = { value: props.snapshot }, captures = []; let actualTime = 0, painted, latest;
   motion.update(props.snapshot, Math.min(events[0].time, trace.paints[0].motionAt) - 1);
-  const draw = drawCallback({ props, motion, projection: { get value() { return props.snapshot.projection; } }, scene: { value: {} }, failed: { value: false }, reducedMotion: false,
-    performance: { now: () => actualTime }, emit() {}, schedule() {}, painter: { paint(_snapshot, actualMotion, now) { painted = { motionAt: now, pose: actualMotion.pose(trace.identity.entityRef, now) }; return { failed: [] }; } } });
+  const draw = drawCallback({ props, motion, canvas: controlledCanvas(), displaySnapshot, failed: { value: false }, reducedMotion: false,
+    performance: { now: () => actualTime }, emit() {}, schedule() {}, painter: { paint(actualSnapshot, actualMotion, now) { painted = { motionAt: now, pose: actualMotion.pose(trace.identity.entityRef, now) }; return drawnFrame(actualSnapshot, painted.pose); } } });
   for (const event of events) {
     const value = event.value;
-    if (event.kind === 'update') { props.snapshot = snapshot(value); motion.update(props.snapshot, value.at); latest = value; continue; }
+    if (event.kind === 'update') { props.snapshot = snapshot(value); motion.update(props.snapshot, value.at); displaySnapshot.value = props.snapshot; latest = value; continue; }
     if (latest) assert.equal(latest.snapshotSeq, value.snapshotSeq, '重放保持实际更新与绘制先后');
     if (useDraw) { actualTime = value.startedAt; draw(value.motionAt); }
     else painted = { motionAt: value.motionAt, pose: motion.pose(trace.identity.entityRef, value.motionAt) };
@@ -65,11 +81,30 @@ test('同一真实更新/绘制顺序经生产draw重新采样位置，原速度
 test('draw只采一次当前时钟，paint、视觉到达与下一帧判断消费同一个值', () => {
   const calls = []; let clockReads = 0, scheduled = 0;
   const current = snapshot(trace.updates.at(-1)); current.projection.movement.status = 'arrived';
-  const draw = drawCallback({ props: { snapshot: current }, projection: { value: current.projection }, scene: { value: {} }, failed: { value: false }, reducedMotion: false,
+  current.snapshotSeq = '2'; current.projection.sceneTimeMs = 100;
+  const point = current.projection.self.position;
+  for (const person of [current.projection.self, current.projection.sceneOverview.entities[0]]) Object.assign(person, {
+    motionTrail: [structuredClone(point), structuredClone(point)], motionFromSceneTimeMs: 0, motionThroughSceneTimeMs: 100,
+    motionTimeline: [{ kind: 'motion', fromTrailIndex: 0, throughTrailIndex: 1, fromSceneTimeMs: 0, throughSceneTimeMs: 100 }],
+  });
+  const baseline = structuredClone(current); baseline.snapshotSeq = '1'; baseline.projection.sceneTimeMs = 0; baseline.projection.movement = null;
+  for (const person of [baseline.projection.self, baseline.projection.sceneOverview.entities[0]]) {
+    delete person.motionTrail; delete person.motionFromSceneTimeMs; delete person.motionThroughSceneTimeMs; delete person.motionTimeline;
+  }
+  // 已确认的零几何motion仍有真实待播时间；用生产Motion触发门控，不能靠固定布尔跳过依赖。
+  const motion = new ConfirmedMotion(); motion.update(baseline, 200); motion.update(current, 300);
+  assert.equal(motion.hasPendingMotion(trace.identity.entityRef, 310), true); assert.equal(motion.active(310), true);
+  const pendingMotion = motion.hasPendingMotion.bind(motion), active = motion.active.bind(motion);
+  motion.hasPendingMotion = (reference, now) => { calls.push(['hasPendingMotion', now]); return pendingMotion(reference, now); };
+  motion.active = now => { calls.push(['active', now]); return active(now); };
+  const input = createSpatialSnapshotSource(), stale = snapshot(trace.updates[0]);
+  const subscription = input.source.subscribe(() => {}, assert.fail); input.publish(current);
+  const draw = drawCallback({ props: { snapshot: stale, snapshotSource: input.source }, canvas: controlledCanvas(), displaySnapshot: { value: stale }, snapshotSubscription: subscription, failed: { value: false }, reducedMotion: false,
     performance: { now: () => { clockReads++; return 310 + clockReads - 1; } },
-    painter: { paint(_snapshot, _motion, now) { calls.push(['paint', now]); return { failed: [] }; } },
-    motion: { settled(_ref, now) { calls.push(['settled', now]); return false; }, active(now) { calls.push(['active', now]); return true; } },
+    painter: { paint(actualSnapshot, actualMotion, now) { assert.equal(actualSnapshot, current, '生产displayInput读取成功source订阅，不能退回迟到props'); calls.push(['paint', now]); return drawnFrame(actualSnapshot, actualMotion.pose(trace.identity.entityRef, now)); } },
+    motion,
     emit() {}, schedule() { scheduled++; } });
   draw(266.6666666667);
-  assert.equal(clockReads, 1); assert.deepEqual(calls, [['paint', 310], ['settled', 310], ['active', 310]]); assert.equal(scheduled, 1);
+  subscription.close();
+  assert.equal(clockReads, 1); assert.deepEqual(calls, [['paint', 310], ['hasPendingMotion', 310], ['active', 310]]); assert.equal(scheduled, 1);
 });

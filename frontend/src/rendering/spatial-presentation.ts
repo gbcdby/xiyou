@@ -3,7 +3,7 @@ import { ConfirmedMotion, motionPresentationIdentity } from '../domain/spatial-m
 import type { CanvasSceneFrame } from './spatial-canvas.ts';
 
 /** 可见性只服务于已成功绘制的帧，不能由此产生任何世界位置或运动。 */
-function visibleSelf(canvas: HTMLCanvasElement, frame: CanvasSceneFrame, reference: string): boolean {
+export function visibleSelf(canvas: HTMLCanvasElement, frame: CanvasSceneFrame, reference: string): boolean {
   const doc = canvas.ownerDocument, win = doc.defaultView, actor = frame.actors.find(value => value.ref === reference);
   if (!win || doc.hidden || doc.visibilityState !== 'visible' || !canvas.isConnected || !actor || !canvas.getClientRects().length) return false;
   const rect = canvas.getBoundingClientRect();
