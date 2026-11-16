@@ -52,11 +52,28 @@ async function picture(room, label, player = 0) {
 }
 async function instrumentPage(page) {
   const pageId = crypto.randomUUID();
+  // 只观测真实收据查询突发与完成量，不读令牌/收据/SQL，不影响页面发包。
+  const receiptRequests = new Set();
+  const receiptQueryStats = { pageId, sent: 0, finished: 0, failed: 0, pending: 0, peakPending: 0, lastSentAt: null, lastSettledAt: null };
+  (report.receiptQueryStats ??= []).push(receiptQueryStats);
+  const receiptRead = request => request.method() === 'GET' && /^\\/api\\/sessions\\/[^/]+\\/actions\\/[^/]+$/.test(new URL(request.url()).pathname);
   collector.observe(page, 'request', request => {
+    if (receiptRead(request)) {
+      receiptRequests.add(request); receiptQueryStats.sent++; receiptQueryStats.pending = receiptRequests.size;
+      receiptQueryStats.peakPending = Math.max(receiptQueryStats.peakPending, receiptRequests.size);
+      receiptQueryStats.lastSentAt = new Date().toISOString();
+    }
     const url = new URL(request.url());
     if (['http:', 'https:'].includes(url.protocol) && !['127.0.0.1', 'localhost'].includes(url.hostname)) report.externalRequests.push({ pageId, origin: url.origin, path: url.pathname });
     if (url.pathname === '/api/sessions' && request.method() === 'POST') report.creationRequests.push({ pageId, request: request.postDataJSON() });
   });
+  for (const [event, field] of [['requestfinished', 'finished'], ['requestfailed', 'failed']]) {
+    collector.observe(page, event, request => {
+      if (!receiptRequests.delete(request)) return;
+      receiptQueryStats[field]++; receiptQueryStats.pending = receiptRequests.size;
+      receiptQueryStats.lastSettledAt = new Date().toISOString();
+    });
+  }
   collector.observe(page, 'websocket', socket => {
     // 只读捕获普通Socket.IO ACK身份：不注入、替换或重发控制请求；
     // 重启后区分真正的CONTROL_HELD、其他错误、未决超时与客户端提示丢码。
@@ -367,6 +384,19 @@ async function restartServer(room) {
     } catch (probeError) {
       trace.backendHealthOnFailure = { error: probeError.code ?? probeError.name };
     }
+    // 只读、失败后诊断：核对后台仍在线时收据查询是否占满数据库连接；
+    // 不延长原20秒验收、不修改session、不让诊断失败覆盖原错误。
+    trace.databasePoolOnFailure = { total: database.pool.totalCount, idle: database.pool.idleCount, waiting: database.pool.waitingCount };
+    trace.receiptQueriesOnFailure = (report.receiptQueryStats ?? []).map(({ pageId, sent, finished, failed, pending, peakPending, lastSentAt, lastSettledAt }) =>
+      ({ pageId, sent, finished, failed, pending, peakPending, lastSentAt, lastSettledAt }));
+    if (database.pool.idleCount > 0) {
+      try {
+        const activity = await database.pool.query(`SELECT state, wait_event_type AS "waitType", wait_event AS "waitEvent", count(*)::int AS count
+          FROM pg_stat_activity WHERE datname=current_database() AND pid<>pg_backend_pid()
+          GROUP BY state, wait_event_type, wait_event ORDER BY count DESC LIMIT 12`);
+        trace.postgresWaitsOnFailure = activity.rows;
+      } catch (probeError) { trace.postgresWaitsOnFailure = { error: probeError.code ?? probeError.name }; }
+    } else trace.postgresWaitsOnFailure = { skipped: 'no-idle-pool-connection' };
     throw error;
   }
   await assertRoomIdentity(room, database.pool, { defaultEntry: report.rooms.find(row => row.sessionId === room.sessionId).defaultEntry });
