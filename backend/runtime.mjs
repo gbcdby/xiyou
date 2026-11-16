@@ -48,6 +48,7 @@ export class AuthorityRuntime extends EventEmitter {
   #views = new Map();
   #publishing = false;
   #prefixStates;
+  #controlPriority = new Map();
   constructor({ pool, now = Date.now, hooks = {}, spatialDirection = false }) {
     super(); this.pool = pool; this.now = now; this.hooks = hooks;
     this.#prefixStates = new PrefixStateCache(pool);
@@ -143,7 +144,8 @@ export class AuthorityRuntime extends EventEmitter {
       await tx.client.query('UPDATE sessions SET state=$2, session_seq=$3, logical_time=$4, state_text_encoding=$5 WHERE session_id=$1', [tx.row.session_id, stored.value, tx.state.sessionSeq, tx.time, stored.encoding]);
     }
   }
-  async locked(sessionId, command, operation) {
+  async #lockedBody(sessionId, command, operation) {
+    const readOnly = command?.readOnly === true;
     requireId(sessionId);
     const client = await this.pool.connect();
     let committed = false;
@@ -152,24 +154,26 @@ export class AuthorityRuntime extends EventEmitter {
     let deferredError;
     let result;
     try {
-      await client.query('BEGIN');
-      const row = (await client.query('SELECT * FROM sessions WHERE session_id=$1 FOR UPDATE', [sessionId])).rows[0];
+      await client.query(readOnly ? 'BEGIN READ ONLY' : 'BEGIN');
+      // 收据只读不取会话行锁，避免重连回放把 control.resume 堵在同一行的锁队列后。
+      const row = (await client.query(readOnly ? 'SELECT * FROM sessions WHERE session_id=$1' : 'SELECT * FROM sessions WHERE session_id=$1 FOR UPDATE', [sessionId])).rows[0];
       if (!row) throw new RuntimeError('SESSION_GONE', '本局不可访问。');
       tx = this.buildTransaction(client, row, command.cause);
-      // create 的 INSERT RETURNING 同样会 buildTransaction；只有此锁定持久行授予缓存资格。
-      this.#prefixStates.capture(tx, this.pool);
+      if (!readOnly) this.#prefixStates.capture(tx, this.pool);
       result = await operation(tx);
       if (result instanceof RuntimeError) { deferredError = result; result = null; }
-      await this.persist(tx);
-      await this.hooks.beforeCommit?.({ command: command.kind, sessionId, events: tx.events });
+      if (!readOnly) await this.persist(tx);
+      if (!readOnly) await this.hooks.beforeCommit?.({ command: command.kind, sessionId, events: tx.events });
       committing = true; await client.query('COMMIT'); committed = true;
-      for (const effect of tx.afterCommit) await effect();
-      await this.hooks.afterCommit?.({ command: command.kind, sessionId, events: tx.events });
-      await this.applyControlEffects(tx);
-      // 仅进程内提交订阅者使用事务起点；不写入 WorldEvent、客户端投影或模型上下文。
-      if (tx.events.length) {
-        const policyWake=isSpatial(tx.row.state)?scenePolicy.scenePolicyWake(tx):null;
-        this.emit('commit', { sessionId, events: tx.events, ...(isSpatial(tx.row.state) ? { spatialPauseBefore: tx.row.state.paused } : {}), ...(policyWake?{scenePolicyWake:policyWake}:{}) });
+      if (!readOnly) {
+        for (const effect of tx.afterCommit) await effect();
+        await this.hooks.afterCommit?.({ command: command.kind, sessionId, events: tx.events });
+        await this.applyControlEffects(tx);
+        // 仅进程内提交订阅者使用事务起点；不写入 WorldEvent、客户端投影或模型上下文。
+        if (tx.events.length) {
+          const policyWake=isSpatial(tx.row.state)?scenePolicy.scenePolicyWake(tx):null;
+          this.emit('commit', { sessionId, events: tx.events, ...(isSpatial(tx.row.state) ? { spatialPauseBefore: tx.row.state.paused } : {}), ...(policyWake?{scenePolicyWake:policyWake}:{}) });
+        }
       }
     } catch (error) {
       if (!committed) await client.query('ROLLBACK').catch(() => {});
@@ -178,6 +182,27 @@ export class AuthorityRuntime extends EventEmitter {
     } finally { for (const cleanup of tx?.afterFinish ?? []) cleanup({ committed, committing }); client.release(); }
     if (deferredError) throw deferredError;
     return result;
+  }
+  async locked(sessionId, command, operation) {
+    requireId(sessionId);
+    const priority = command?.kind === 'control.resume' || command?.kind === 'control.take';
+    let gate = this.#controlPriority.get(sessionId);
+    if (!gate) { gate = { pending: 0, idle: Promise.resolve(), release: null }; this.#controlPriority.set(sessionId, gate); }
+    if (priority) {
+      // 控制请求进入后，后续普通事务先让位；已在事务中的操作不回滚，避免破坏提交语义。
+      gate.pending += 1;
+      if (gate.pending === 1) gate.idle = new Promise(resolve => { gate.release = resolve; });
+    } else if (gate.pending) await gate.idle;
+    try { return await this.#lockedBody(sessionId, command, operation); }
+    finally {
+      if (priority) {
+        gate.pending -= 1;
+        if (gate.pending === 0) {
+          gate.release?.(); gate.release = null; gate.idle = Promise.resolve();
+          if (this.#controlPriority.get(sessionId) === gate) this.#controlPriority.delete(sessionId);
+        }
+      }
+    }
   }
   async applyControlEffects(tx) {
     const actorIds = new Set(tx.events.filter(event => event.kind === 'control.changed').map(event => event.payload.actorId));
@@ -657,7 +682,8 @@ export class AuthorityRuntime extends EventEmitter {
   async receipt(token, sessionId, actionId) {
     requireId(actionId);
     await this.authenticate(token);
-    return this.locked(sessionId, { kind: 'receipt' }, async tx => {
+    // 收据读取不写世界状态，也不取会话行锁；仍复用原事务采样与返回校验。
+    return this.locked(sessionId, { kind: 'receipt', readOnly: true }, async tx => {
       const user = await this.access(tx.client, tx.row, token);
       const row = (await tx.client.query('SELECT receipt,actor_id FROM action_receipts WHERE session_id=$1 AND principal_id=$2 AND client_action_id=$3', [sessionId, user.principalId, actionId])).rows[0];
       if (!row) return null;

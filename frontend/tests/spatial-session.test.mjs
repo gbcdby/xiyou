@@ -1,18 +1,18 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { SpatialSessionClient } from '../src/network/spatial-session.ts';
-import { spatialSnapshot, spatialBatch } from './spatial-fixture.mjs';
+import { spatialSnapshot, spatialBatch, selfRef } from './spatial-fixture.mjs';
 import { ApiFailure } from '../src/network/http-api.ts';
 
 const flush = () => new Promise(resolve => setImmediate(resolve));
-function harness(options = {}, readReceipt = async () => null) {
+function harness(options = {}, readReceipt = async () => null, controlReply = null) {
   let handlers; const requests = []; let actionReplies = [];
   const initial = spatialSnapshot(); initial.projection.self.canControl = false;
   const link = { connected: true, close() {}, async request(event, value) {
     requests.push({ event, value });
     if (event === 'session.subscribe') return structuredClone(initial);
     if (event === 'sync.request') { const r = JSON.parse(value); return { schemaVersion: 2, type: 'world.batch', sessionId: r.sessionId, viewId: r.viewId, fromExclusive: r.cursor, throughSeq: r.cursor, events: [] }; }
-    if (event.startsWith('control.')) { const r = JSON.parse(value); const snapshot = spatialSnapshot(); snapshot.viewId = 'control-view'; snapshot.projection.self.controlEpoch = '3'; return { schemaVersion: 2, sessionId: r.sessionId, nonce: r.nonce, controlEpoch: '3', observedSeq: snapshot.snapshotSeq, snapshot }; }
+    if (event.startsWith('control.')) { const r = JSON.parse(value); const snapshot = spatialSnapshot(); snapshot.viewId = 'control-view'; snapshot.projection.self.controlEpoch = '3'; const reply = { schemaVersion: 2, sessionId: r.sessionId, nonce: r.nonce, controlEpoch: '3', observedSeq: snapshot.snapshotSeq, snapshot }; return controlReply ? await controlReply(reply, r) : reply; }
     if (actionReplies.length) return await actionReplies.shift()(JSON.parse(value));
     const r = JSON.parse(value); return { schemaVersion: 2, sessionId: r.sessionId, clientActionId: r.clientActionId, status: 'Accepted', code: 'OK', observedSeq: '10', actionEventRange: null, result: r.action.kind === 'move_to' ? { movementId: 'move_' + String(BigInt(r.action.movementCommandSeq) - 1n).padStart(31, '0'), planVersion: r.action.movementCommandSeq, movementCommandSeq: r.action.movementCommandSeq, status: 'accepted' } : { status: 'cancelled' } };
   } };
@@ -268,6 +268,38 @@ test('重连回放未知收据时在途查询有界，逐个查询完成后仍�
   assert.equal(queried.length, 81, '所有未知动作最终都被逐个查询');
   assert.equal(new Set(queried).size, 81, '不重复查询');
   restored.client.close();
+});
+
+test('P-05：并发收据查询期间控制恢复先返回，页面获得本人输入且原收据仍逐项确认', async t => {
+  const ids = Array.from({ length: 6 }, (_, index) => `unknown-${index}`);
+  const drafts = ids.map(id => ({ id, raw: JSON.stringify({ schemaVersion: 2, sessionId: 'spatial-room', viewId: 'spatial-view-1', actorRef: selfRef, clientActionId: id, controlEpoch: '2', baseSeq: '1', action: { kind: 'wait' } }) }));
+  const receipts = new Map(ids.map(id => [id, { schemaVersion: 2, sessionId: 'spatial-room', clientActionId: id, status: 'Accepted', code: 'OK', observedSeq: '10', actionEventRange: null, result: { status: 'cancelled' } }]));
+  const queried = [], pending = new Map();
+  let finishControl;
+  const h = harness({}, async (_sessionId, id) => {
+    queried.push(id);
+    if (queried.length <= 3) return new Promise(resolve => pending.set(id, resolve));
+    return receipts.get(id) ?? null;
+  }, async reply => new Promise(resolve => { finishControl = () => resolve(reply); }));
+  t.after(() => h.client.close());
+  h.client.open('spatial-room', 'token', drafts); h.handlers.connected(); await flush();
+  assert.equal(queried.length, 3, '重连首批收据查询应以有界并发启动');
+  const resumed = h.client.control('resume'); await flush();
+  assert.equal(h.client.state.inputReady, false);
+  assert.equal(queried.length, 3, '控制恢复尚未返回时不得继续启动后续收据查询');
+  finishControl(); await resumed;
+  assert.equal(h.client.state.inputReady, true, '控制 ACK 必须使真实页面进入本人输入就绪');
+  pending.forEach((resolve, id) => resolve(receipts.get(id)));
+  let guard = 0;
+  while (queried.length < ids.length && guard++ < 50) await flush();
+  assert.deepEqual(queried, ids, '让位后仍按原顺序逐个查询全部未知动作');
+  assert.equal(new Set(queried).size, ids.length);
+  for (const id of ids) {
+    const action = h.client.state.actions.find(value => value.id === id);
+    assert.equal(action?.status, 'accepted');
+    assert.deepEqual(action?.receipt, receipts.get(id));
+    assert.equal(JSON.parse(action.raw).clientActionId, id);
+  }
 });
 
 test('A2 用途参数与结束轮在未知确认、恢复换视图后逐字重试，不改成新许可或新轮', async () => {

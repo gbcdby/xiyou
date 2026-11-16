@@ -54,6 +54,7 @@ export class SpatialSessionClient {
   #syncActive = new Set<SessionLink>(); #syncDemand = ''; #syncRevision = 0;
   #displayedArrival = '';
   #replayQueue: string[] = []; #replaying = false; #replaySerial = 0;
+  #controlIdleWaiters: (() => void)[] = [];
   #direction: ContinuousDirection | DirectionIntent; #navigation: NavigationPlan | null = null;
   #directionBinding = '';
   #directionDeadlines = new Map<string, unknown>();
@@ -135,6 +136,7 @@ export class SpatialSessionClient {
     this.#directionDeadlines.delete(id);
   }
   #clearDirectionDeadlines() { for (const id of this.#directionDeadlines.keys()) this.#clearDirectionDeadline(id); }
+  #releaseControlIdle() { for (const resolve of this.#controlIdleWaiters.splice(0)) resolve(); }
   #armDirectionDeadline(draft: SpatialDraft) {
     const kind = parseSpatial('PublicEnvelope', draft.raw).action.kind;
     if (kind !== 'move_direction' && !(kind === 'stop_move' && this.#direction instanceof DirectionIntent)) return;
@@ -154,7 +156,7 @@ export class SpatialSessionClient {
     this.#openConnection();
   }
   close() {
-    this.#direction.clear(); this.#clearDirectionDeadlines(); this.#navigation = null;
+    this.#direction.clear(); this.#clearDirectionDeadlines(); this.#navigation = null; this.#releaseControlIdle();
     this.#serial++; if (this.#heartbeat) clearInterval(this.#heartbeat); if (this.#retryTimer) clearTimeout(this.#retryTimer);
     this.#heartbeat = null; this.#retryTimer = null; const link = this.#link; this.#link = null; link?.close();
     this.#view.begin(''); this.#sessionId = ''; this.#token = ''; this.#connection = 'idle'; this.#source = null; this.#queued = null; this.#controlBusy = false; this.#pendingControl = null; this.#syncDemand = ''; this.#message = '';
@@ -162,7 +164,7 @@ export class SpatialSessionClient {
   }
   reconnect() { if (this.#sessionId && this.#token) this.#openConnection(); }
   #openConnection() {
-    this.#direction.clear(); this.#clearDirectionDeadlines(); this.#navigation = null;
+    this.#direction.clear(); this.#clearDirectionDeadlines(); this.#navigation = null; this.#releaseControlIdle();
     if (this.#retryTimer) clearTimeout(this.#retryTimer); this.#retryTimer = null;
     const serial = ++this.#serial; const generation = this.#view.begin(this.#sessionId);
     const old = this.#link; this.#link = null; old?.close(); this.#source = null; this.#queued = null; this.#pendingControl = null; this.#controlBusy = false; this.#syncDemand = '';
@@ -183,7 +185,7 @@ export class SpatialSessionClient {
   }
   #disconnect(serial: number, retry = true) {
     if (serial !== this.#serial) return;
-    this.#direction.clear(); this.#clearDirectionDeadlines(); this.#navigation = null;
+    this.#direction.clear(); this.#clearDirectionDeadlines(); this.#navigation = null; this.#releaseControlIdle();
     const next = ++this.#serial; const link = this.#link; this.#link = null; link?.close(); this.#view.begin(this.#sessionId);
     this.#source = null; this.#queued = null; this.#controlBusy = false; this.#pendingControl = null; this.#syncDemand = ''; this.#connection = 'offline'; this.#message = '连接已断开，正在重新获取授权视图。';
     this.#actions = this.#actions.map(a => a.status === 'waiting' ? { ...a, status: 'unknown', detail: '原动作结果未知，可恢复后查询或原样重试。' } : a); this.#publish();
@@ -358,6 +360,11 @@ export class SpatialSessionClient {
   }
   async #drainReplay() {
     while (this.#replayQueue.length && this.#serial === this.#replaySerial) {
+      // 控制恢复期间不再启动新一批收据查询；已在途的原查询继续按原语义收束。
+      if (this.#controlBusy || this.#pendingControl) {
+        await new Promise<void>(resolve => this.#controlIdleWaiters.push(resolve));
+        continue;
+      }
       const active: Promise<unknown>[] = [];
       while (active.length < RECEIPT_REPLAY_LIMIT && this.#replayQueue.length && this.#serial === this.#replaySerial) {
         const id = this.#replayQueue.shift()!;
@@ -403,7 +410,7 @@ export class SpatialSessionClient {
         this.#pendingControl = null; this.#message = this.#source ? '已恢复本人控制。' : '本地输入序号已丢失，请明确接管以建立新的控制周期。'; this.#publish();
       });
     } catch { if (serial === this.#serial) { this.#message = installed ? '控制视图已确认，显示更新暂未完成。' : '控制结果待确认，再次点击会重试原请求。'; this.#publish(); } }
-    finally { if (serial === this.#serial) { this.#controlBusy = false; this.#publish(); void this.sync(); } }
+    finally { if (serial === this.#serial) { this.#controlBusy = false; this.#publish(); this.#releaseControlIdle(); void this.sync(); } }
   }
   #readyDirection() {
     const snapshot = this.#ready();
