@@ -85,13 +85,19 @@ const pulse = page => ({ type: () => 'debug', text: () => page.init.args.prefix 
   privateIgnoredField: '不得保存',
 }) });
 
-function objectsEntry({ present = true, restored = true, failure, clickWait } = {}) {
+function objectsEntry({ present = true, restored = true, failure, clickWait, detailsOpen = false } = {}) {
   const calls = [];
   const entry = { count: async () => { calls.push('count'); return Number(present); }, click: async (...args) => {
     calls.push(['entry-click', args]); if (clickWait) await clickWait; if (failure) throw failure;
   } };
+  const close = { isVisible: async () => { calls.push('close-visible'); return detailsOpen; }, click: async (...args) => {
+    calls.push(['close-click', args]); detailsOpen = false;
+  } };
   const restore = { isVisible: async () => { calls.push('restore-visible'); return restored; }, click: async (...args) => calls.push(['restore-click', args]) };
-  const page = { getByRole: (...args) => { calls.push(['entry-locator', args]); return entry; }, locator: selector => {
+  const page = { getByRole: (...args) => {
+    if (args[1]?.name === '关闭对象区') { calls.push(['close-locator', args]); return close; }
+    calls.push(['entry-locator', args]); return entry;
+  }, locator: selector => {
     calls.push(['restore-locator', selector]); return { getByRole: (...args) => { calls.push(['restore-role', args]); return restore; } };
   } };
   return { page, calls };
@@ -103,6 +109,7 @@ test('对象入口原单次无参 click 的边界先于恢复按钮，观察失�
     const remove = observeSelectionClicks(page, event => { phases.push({ phase: event.phase, branch: event.branch, calls: structuredClone(calls) }); if (throws) throw new Error('仅观察失败'); return 7; });
     await openObjects(page); remove();
     assert.deepEqual(calls, [
+      ['close-locator', ['button', { name: '关闭对象区', exact: true }]], 'close-visible',
       ['entry-locator', ['button', { name: '场景对象', exact: true }]], 'count', ['entry-click', []],
       ['restore-locator', '.spatial-sidebar.hud-card-collapsed'], ['restore-role', ['button', { name: '取消选择并展开', exact: true }]], 'restore-visible', ['restore-click', []],
     ]);
@@ -116,8 +123,14 @@ test('对象入口原单次无参 click 的边界先于恢复按钮，观察失�
 test('入口 click 未 settle 不进入恢复按钮，抛原错误且失败 hook 不截断传播', async () => {
   let release; const wait = new Promise(resolve => { release = resolve; }), error = new Error('原 5000ms 错误');
   const { page, calls } = objectsEntry({ failure: error, clickWait: wait }), phases = [];
-  const remove = observeSelectionClicks(page, event => { phases.push(event); if (event.phase === 'threw') throw new Error('诊断错误'); return 8; });
-  const pending = openObjects(page); await Promise.resolve(); await Promise.resolve();
+  let started; const entered = new Promise(resolve => { started = resolve; });
+  const remove = observeSelectionClicks(page, event => {
+    phases.push(event);
+    if (event.branch === 'objects-entry' && event.phase === 'called') started();
+    if (event.phase === 'threw') throw new Error('诊断错误');
+    return 8;
+  });
+  const pending = openObjects(page); await entered;
   assert.deepEqual(phases.map(row => row.phase), ['called']); assert.equal(calls.some(row => row[0] === 'restore-locator'), false);
   release(); await assert.rejects(pending, actual => actual === error); remove();
   assert.deepEqual(phases.map(row => row.phase), ['called', 'threw']); assert.equal(phases[1].error, error);
