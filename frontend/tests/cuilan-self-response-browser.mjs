@@ -57,13 +57,35 @@ async function instrumentPage(page) {
     if (['http:', 'https:'].includes(url.protocol) && !['127.0.0.1', 'localhost'].includes(url.hostname)) report.externalRequests.push({ pageId, origin: url.origin, path: url.pathname });
     if (url.pathname === '/api/sessions' && request.method() === 'POST') report.creationRequests.push({ pageId, request: request.postDataJSON() });
   });
-  collector.observe(page, 'websocket', socket => collector.observe(socket, 'framesent', frame => {
-    const text = String(frame.payload); if (!/^42\d*\[/.test(text)) return;
-    try {
-      const [event, value] = JSON.parse(text.replace(/^42\d*/, ''));
-      if (event === 'player.action.request') report.wireActions.push({ pageId, request: JSON.parse(value) });
-    } catch (error) { report.pageErrors.push({ message: '实际动作帧无法读取：' + error.message }); }
-  }));
+  collector.observe(page, 'websocket', socket => {
+    // 只读捕获普通Socket.IO ACK身份：不注入、替换或重发控制请求；
+    // 重启后区分真正的CONTROL_HELD、其他错误、未决超时与客户端提示丢码。
+    const controlAwaitingAck = new Map();
+    collector.observe(socket, 'framesent', frame => {
+      const text = String(frame.payload); if (!/^42\d*\[/.test(text)) return;
+      try {
+        const [event, value] = JSON.parse(text.replace(/^42\d*/, ''));
+        if (event === 'player.action.request') report.wireActions.push({ pageId, request: JSON.parse(value) });
+        if (event === 'control.resume' || event === 'control.take') {
+          const packetId = /^42(\d+)\[/.exec(text)?.[1];
+          if (packetId !== undefined) controlAwaitingAck.set(packetId, event);
+          (report.controlFrames ??= []).push({ pageId, event, packetId: packetId ?? null, stage: 'sent', at: new Date().toISOString() });
+        }
+      } catch (error) { report.pageErrors.push({ message: '实际动作帧无法读取：' + error.message }); }
+    });
+    collector.observe(socket, 'framereceived', frame => {
+      const text = String(frame.payload), match = /^43(\d+)\[/.exec(text);
+      if (!match || !controlAwaitingAck.has(match[1])) return;
+      const event = controlAwaitingAck.get(match[1]); controlAwaitingAck.delete(match[1]);
+      let code = 'ACK_UNREADABLE', responseType = null;
+      try {
+        const reply = JSON.parse(text.slice(text.indexOf('[')))[0];
+        code = typeof reply?.code === 'string' ? reply.code : 'ACK_SUCCESS_SHAPE';
+        responseType = typeof reply?.type === 'string' ? reply.type : null;
+      } catch { /* ACK仍保留不可读证据，不改变原消费者。 */ }
+      (report.controlFrames ??= []).push({ pageId, event, packetId: match[1], stage: 'ack', code, responseType, at: new Date().toISOString() });
+    });
+  });
   collector.observe(page, 'response', async response => {
     if (!/\/actions\//.test(new URL(response.url()).pathname) || !response.ok()) return;
     try { report.httpReceipts.push({ pageId, receivedAt: new Date().toISOString(), receipt: await response.json(), viewId: (await snapshot(page))?.viewId }); } catch (error) { report.pageErrors.push({ message: '实际收据响应无法读取：' + error.message }); }
