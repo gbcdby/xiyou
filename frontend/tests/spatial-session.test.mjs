@@ -270,15 +270,15 @@ test('重连回放未知收据时在途查询有界，逐个查询完成后仍�
   restored.client.close();
 });
 
-test('P-05：并发收据查询期间控制恢复先返回，页面获得本人输入且原收据仍逐项确认', async t => {
+test('P-05：首批收据完成后控制仍在途时不启动新批次，收束后唤醒回放', async t => {
   const ids = Array.from({ length: 6 }, (_, index) => `unknown-${index}`);
   const drafts = ids.map(id => ({ id, raw: JSON.stringify({ schemaVersion: 2, sessionId: 'spatial-room', viewId: 'spatial-view-1', actorRef: selfRef, clientActionId: id, controlEpoch: '2', baseSeq: '1', action: { kind: 'wait' } }) }));
   const receipts = new Map(ids.map(id => [id, { schemaVersion: 2, sessionId: 'spatial-room', clientActionId: id, status: 'Accepted', code: 'OK', observedSeq: '10', actionEventRange: null, result: { status: 'cancelled' } }]));
-  const queried = [], pending = new Map();
+  const queried = [], firstBatch = new Map();
   let finishControl;
   const h = harness({}, async (_sessionId, id) => {
     queried.push(id);
-    if (queried.length <= 3) return new Promise(resolve => pending.set(id, resolve));
+    if (queried.length <= 3) return new Promise(resolve => firstBatch.set(id, resolve));
     return receipts.get(id) ?? null;
   }, async reply => new Promise(resolve => { finishControl = () => resolve(reply); }));
   t.after(() => h.client.close());
@@ -286,10 +286,16 @@ test('P-05：并发收据查询期间控制恢复先返回，页面获得本人�
   assert.equal(queried.length, 3, '重连首批收据查询应以有界并发启动');
   const resumed = h.client.control('resume'); await flush();
   assert.equal(h.client.state.inputReady, false);
-  assert.equal(queried.length, 3, '控制恢复尚未返回时不得继续启动后续收据查询');
+  assert.equal(queried.length, 3, '控制请求在途且首批收据 pending 时不得启动后续批次');
+  for (const [id, resolve] of firstBatch) resolve(receipts.get(id));
+  firstBatch.clear();
+  for (let round = 0; round < 3; round++) await flush();
+  assert.equal(queried.length, 3, '首批收据完成后仍须让位给在途控制请求，不得启动第二批');
+  assert.equal(h.client.state.inputReady, false);
   finishControl(); await resumed;
   assert.equal(h.client.state.inputReady, true, '控制 ACK 必须使真实页面进入本人输入就绪');
-  pending.forEach((resolve, id) => resolve(receipts.get(id)));
+  await flush();
+  assert.equal(queried.length, 6, '控制收束后应唤醒回放并启动第二批');
   let guard = 0;
   while (queried.length < ids.length && guard++ < 50) await flush();
   assert.deepEqual(queried, ids, '让位后仍按原顺序逐个查询全部未知动作');

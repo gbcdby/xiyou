@@ -48,7 +48,6 @@ export class AuthorityRuntime extends EventEmitter {
   #views = new Map();
   #publishing = false;
   #prefixStates;
-  #controlPriority = new Map();
   constructor({ pool, now = Date.now, hooks = {}, spatialDirection = false }) {
     super(); this.pool = pool; this.now = now; this.hooks = hooks;
     this.#prefixStates = new PrefixStateCache(pool);
@@ -183,27 +182,7 @@ export class AuthorityRuntime extends EventEmitter {
     if (deferredError) throw deferredError;
     return result;
   }
-  async locked(sessionId, command, operation) {
-    requireId(sessionId);
-    const priority = command?.kind === 'control.resume' || command?.kind === 'control.take';
-    let gate = this.#controlPriority.get(sessionId);
-    if (!gate) { gate = { pending: 0, idle: Promise.resolve(), release: null }; this.#controlPriority.set(sessionId, gate); }
-    if (priority) {
-      // 控制请求进入后，后续普通事务先让位；已在事务中的操作不回滚，避免破坏提交语义。
-      gate.pending += 1;
-      if (gate.pending === 1) gate.idle = new Promise(resolve => { gate.release = resolve; });
-    } else if (gate.pending) await gate.idle;
-    try { return await this.#lockedBody(sessionId, command, operation); }
-    finally {
-      if (priority) {
-        gate.pending -= 1;
-        if (gate.pending === 0) {
-          gate.release?.(); gate.release = null; gate.idle = Promise.resolve();
-          if (this.#controlPriority.get(sessionId) === gate) this.#controlPriority.delete(sessionId);
-        }
-      }
-    }
-  }
+  async locked(sessionId, command, operation) { return this.#lockedBody(sessionId, command, operation); }
   async applyControlEffects(tx) {
     const actorIds = new Set(tx.events.filter(event => event.kind === 'control.changed').map(event => event.payload.actorId));
     if (!actorIds.size) return;
