@@ -28,6 +28,8 @@ const digest = value => createHash('sha256').update(typeof value === 'string' ? 
 const id = prefix => `${prefix}-${randomUUID()}`;
 const validId = value => typeof value === 'string' && /^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}(?![\s\S])/.test(value);
 const requireId = value => { if (!validId(value)) throw new RuntimeError('INVALID_MESSAGE', '标识格式无效。'); };
+// 普通事务最多让位这么久；到点后不再被后来到达的控制请求续期。
+export const CONTROL_PRIORITY_WAIT_MS = 250;
 export function clientReceipt(receipt) {
   if (receipt.schemaVersion === 2) return validateSpatial('ReceiptV2', receipt.publicReceipt);
   const { key, ...fields } = receipt;
@@ -48,6 +50,7 @@ export class AuthorityRuntime extends EventEmitter {
   #views = new Map();
   #publishing = false;
   #prefixStates;
+  #controlPriority = new Map();
   constructor({ pool, now = Date.now, hooks = {}, spatialDirection = false }) {
     super(); this.pool = pool; this.now = now; this.hooks = hooks;
     this.#prefixStates = new PrefixStateCache(pool);
@@ -182,7 +185,35 @@ export class AuthorityRuntime extends EventEmitter {
     if (deferredError) throw deferredError;
     return result;
   }
-  async locked(sessionId, command, operation) { return this.#lockedBody(sessionId, command, operation); }
+  async locked(sessionId, command, operation) {
+    requireId(sessionId);
+    const priority = command?.kind === 'control.resume' || command?.kind === 'control.take';
+    let gate = this.#controlPriority.get(sessionId);
+    if (!gate) { gate = { sequence: 0, pending: new Map() }; this.#controlPriority.set(sessionId, gate); }
+    let ticket;
+    if (priority) {
+      ticket = ++gate.sequence;
+      let resolve;
+      const settled = new Promise(done => { resolve = done; });
+      gate.pending.set(ticket, { settled, resolve });
+    } else if (gate.pending.size) {
+      // 只让位于到达时已在门内的控制请求；后来的控制不能无限续期普通事务的等待。
+      const waitingFor = [...gate.pending.values()];
+      let timer;
+      const expired = new Promise(resolve => { timer = setTimeout(resolve, CONTROL_PRIORITY_WAIT_MS); timer.unref?.(); });
+      try { await Promise.race([Promise.all(waitingFor.map(entry => entry.settled)), expired]); }
+      finally { clearTimeout(timer); }
+    }
+    try { return await this.#lockedBody(sessionId, command, operation); }
+    finally {
+      if (priority) {
+        const entry = gate.pending.get(ticket);
+        entry?.resolve?.();
+        gate.pending.delete(ticket);
+        if (!gate.pending.size && this.#controlPriority.get(sessionId) === gate) this.#controlPriority.delete(sessionId);
+      }
+    }
+  }
   async applyControlEffects(tx) {
     const actorIds = new Set(tx.events.filter(event => event.kind === 'control.changed').map(event => event.payload.actorId));
     if (!actorIds.size) return;

@@ -4,7 +4,8 @@ import { AsyncLocalStorage } from 'node:async_hooks';
 import { io } from 'socket.io-client';
 import { startTestPostgres } from '../test-support/postgres.mjs';
 import { createAuthorityServer } from '../server.mjs';
-import { MovementCommandSource, validateSpatial } from '../../protocol/spatial.mjs';
+import { CONTROL_PRIORITY_WAIT_MS } from '../runtime.mjs';
+import { validateSpatial } from '../../protocol/spatial.mjs';
 
 const until = async (check, message, timeout = 3000) => {
   const deadline = Date.now() + timeout;
@@ -87,7 +88,6 @@ test('真实PG与Socket.IO：收据查询不取会话行锁，并发收据查询
   validateSpatial('SnapshotV2', subscribed);
   const baseline = await rpc(socket, 'control.resume', JSON.stringify({ schemaVersion: 2, type: 'control.resume', sessionId, viewId: subscribed.viewId, actorRef: subscribed.projection.self.entityRef, nonce: 'baseline-resume' }));
   validateSpatial('ControlResponseV2', baseline);
-  const source = new MovementCommandSource(baseline.controlEpoch);
   const actionId = 'p05-original-wait';
   const originalReceipt = await rpc(socket, 'player.action.request', JSON.stringify({ schemaVersion: 2, sessionId, viewId: baseline.snapshot.viewId, actorRef: baseline.snapshot.projection.self.entityRef, clientActionId: actionId, controlEpoch: baseline.controlEpoch, baseSeq: baseline.observedSeq, action: { kind: 'wait' } }));
   validateSpatial('ReceiptV2', originalReceipt);
@@ -116,7 +116,7 @@ test('真实PG与Socket.IO：收据查询不取会话行锁，并发收据查询
   // 后台脉冲不参与本定向竞争，否则会引入不受控的正常事务。
   server.runtime.maintenance = async () => {};
   server.runtime.publishPending = async () => ({ busy: false, examined: 0, published: 0 });
-  // 方法级受控替身：真实 DB 读取完成后才计数，随后暂缓响应，证明控制帧不必等收据批完成。
+  // 真实 DB 读取完成后才计数；随后暂缓响应，证明控制帧不必等收据批完成。
   server.runtime.receipt = async (...args) => {
     const value = await receiptContext.run({ receipt: true }, () => originalReceiptRead(...args));
     receiptCompletions++;
@@ -136,7 +136,7 @@ test('真实PG与Socket.IO：收据查询不取会话行锁，并发收据查询
   const blockerStartedPromise = new Promise(resolve => { blockerStarted = resolve; });
   const blocker = server.runtime.locked(sessionId, { kind: 'p05-blocker' }, async () => { blockerStarted(); await blockerGate; });
   await blockerStartedPromise;
-  assert.ok(sessionSelects.some(entry => entry.command === 'other' && entry.forUpdate), ' blocker 必须真实持有 sessions 行锁');
+  assert.ok(sessionSelects.some(entry => entry.command === 'other' && entry.forUpdate), 'blocker 必须真实持有 sessions 行锁');
 
   const receiptResponses = Array.from({ length: 6 }, () => server.runtime.receipt(users[0].token, sessionId, actionId));
   const receiptSelects = () => sessionSelects.filter(entry => entry.command === 'receipt');
@@ -146,18 +146,88 @@ test('真实PG与Socket.IO：收据查询不取会话行锁，并发收据查询
 
   const resumed = rpc(socket, 'control.resume', JSON.stringify({ schemaVersion: 2, type: 'control.resume', sessionId, viewId: baseline.snapshot.viewId, actorRef: baseline.snapshot.projection.self.entityRef, nonce: 'priority-resume' }));
   await controlEnteredPromise;
+  const trailing = server.runtime.locked(sessionId, { kind: 'p05-trailing' }, async () => {});
   releaseBlocker();
   const response = await resumed;
   validateSpatial('ControlResponseV2', response);
   assert.equal(response.sessionId, sessionId);
   assert.equal(response.nonce, 'priority-resume');
   assert.equal(receiptsReleased, false, '控制 ACK 不得等待收据批响应释放');
+  await trailing;
   assert.ok(commitOrder.includes('p05-blocker'), '受控阻塞事务仍按真实提交顺序记录');
+  assert.ok(commitOrder.indexOf('control.resume') >= 0);
   assert.ok(!commitOrder.includes('receipt'), '只读收据不得进入写提交顺序');
+  assert.ok(commitOrder.indexOf('p05-trailing') > commitOrder.indexOf('control.resume'), '控制恢复之后的普通事务不得越过控制帧');
 
   releaseReceipts();
   const bodies = await Promise.all(receiptResponses);
   for (const body of bodies) assert.deepEqual(body, originalReceipt);
   await blocker;
   assert.deepEqual(await originalReceiptRead(users[0].token, sessionId, actionId), originalReceipt);
+});
+
+test('控制优先门按到达老化让步，普通事务不被后到控制请求饿死', async t => {
+  const database = await startTestPostgres('p05-control-priority-fairness', { outputSubdirectory: 'p05-control-priority-fairness' });
+  let server;
+  let releaseFirst;
+  let releaseSecond;
+  let releaseThird;
+  t.after(async () => {
+    releaseFirst?.(); releaseSecond?.(); releaseThird?.();
+    await server?.close();
+    await database.stop();
+  });
+  server = await createAuthorityServer({ pool: database.pool });
+  const user = await server.runtime.guest({ name: '控制优先门测试' });
+  const sessionId = 'control-gate-fairness';
+  await database.pool.query(`INSERT INTO sessions(session_id, host_user_id, name, session_seq, state, initial_state, content_snapshot, content_digest, reducer_version, logical_time)
+    VALUES($1,$2,'控制优先门测试',0,'{}'::jsonb,'{}'::jsonb,'{}'::jsonb,'test-digest','test-reducer',now())`, [sessionId, user.userId]);
+  const originalBeforeCommit = server.runtime.hooks.beforeCommit;
+  const commitOrder = [];
+  server.runtime.hooks.beforeCommit = async context => {
+    if (context.sessionId === sessionId) commitOrder.push(context.command);
+    await originalBeforeCommit?.(context);
+  };
+  server.runtime.maintenance = async () => {};
+  server.runtime.publishPending = async () => ({ busy: false, examined: 0, published: 0 });
+
+  const firstGate = new Promise(resolve => { releaseFirst = resolve; });
+  const secondGate = new Promise(resolve => { releaseSecond = resolve; });
+  const thirdGate = new Promise(resolve => { releaseThird = resolve; });
+  let firstStarted;
+  let secondStarted;
+  let thirdStarted;
+  const firstStartedPromise = new Promise(resolve => { firstStarted = resolve; });
+  const secondStartedPromise = new Promise(resolve => { secondStarted = resolve; });
+  const thirdStartedPromise = new Promise(resolve => { thirdStarted = resolve; });
+  let secondDone = false;
+  let thirdDone = false;
+
+  const first = server.runtime.locked(sessionId, { kind: 'control.resume', readOnly: true }, async () => { firstStarted(); await firstGate; });
+  await firstStartedPromise;
+  const maintenance = server.runtime.locked(sessionId, { kind: 'maintenance' }, async () => {});
+  const second = server.runtime.locked(sessionId, { kind: 'control.take', readOnly: true }, async () => { secondStarted(); await secondGate; }).then(value => { secondDone = true; return value; });
+  await secondStartedPromise;
+  await new Promise(resolve => setTimeout(resolve, 20));
+  assert.equal(secondDone, false);
+  releaseFirst();
+  await first;
+  await until(() => commitOrder.includes('maintenance'), '首个控制收束后普通事务应恢复推进', CONTROL_PRIORITY_WAIT_MS + 3000);
+  assert.equal(secondDone, false, '后到控制请求不得无限期推迟已等待的普通事务');
+  releaseSecond();
+  await Promise.all([maintenance, second]);
+  assert.equal(secondDone, true);
+  assert.ok(commitOrder.includes('maintenance'));
+
+  const third = server.runtime.locked(sessionId, { kind: 'control.take', readOnly: true }, async () => { thirdStarted(); await thirdGate; }).then(value => { thirdDone = true; return value; });
+  await thirdStartedPromise;
+  const sync = server.runtime.locked(sessionId, { kind: 'sync' }, async () => {});
+  let waitTimer;
+  const timeout = new Promise((_, reject) => { waitTimer = setTimeout(() => reject(new Error('普通事务等待超过控制优先门上限')), CONTROL_PRIORITY_WAIT_MS + 3000); waitTimer.unref?.(); });
+  try { await Promise.race([sync, timeout]); }
+  finally { clearTimeout(waitTimer); }
+  assert.equal(thirdDone, false, '控制请求未收束时普通事务仍应到达有界等待上限');
+  releaseThird();
+  await Promise.all([third, sync]);
+  assert.ok(commitOrder.indexOf('sync') > commitOrder.indexOf('maintenance'));
 });
