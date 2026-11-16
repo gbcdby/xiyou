@@ -301,7 +301,9 @@ async function restartServer(room) {
   directionConnections.close(); restorers.delete(directionConnections);
   await server.close(); server = await createAuthorityServer({ pool: database.pool, spatialDirection: { checkpointMs: 50 } });
   directionConnections = observeDirectionConnections(server.runtime); restorers.add(directionConnections); await server.listen(serverPort);
-  for (let player = 0; player < room.count; player++) await recoverPlayer(room, player);
+  // 两人房间暂停时，首人 inputReady 依赖另一人同样恢复；串行等待会互锁。
+  // 并行启动每个真实页面的 reload / 恢复入口，保留各自 online、inputReady 的原门槛。
+  await Promise.all(Array.from({ length: room.count }, (_, player) => recoverPlayer(room, player)));
   await assertRoomIdentity(room, database.pool, { defaultEntry: report.rooms.find(row => row.sessionId === room.sessionId).defaultEntry });
   await room.rebindControlledNpcs();
   await until(async () => !(await snapshot(room.pages[0])).projection.paused, '实际服务器重启后正常两人恢复');
