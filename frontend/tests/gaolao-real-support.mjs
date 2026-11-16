@@ -39,13 +39,13 @@ export async function openReading(page, label) {
 }
 
 /** 固定HUD按需打开对象列表；不通过隐藏实体DOM选择。 */
-export async function openObjects(page) {
+export async function openObjects(page, reference) {
   await closeReading(page);
   // 已展开的对象详情会覆盖 Canvas 底部的“场景对象”入口。
   // 必须先由用户可见的正常关闭按钮收起面板，不能 force click 穿透。
   const close = page.getByRole('button', { name: '关闭对象区', exact: true });
   if (await close.isVisible()) {
-    const observed = beginSelectionClick(page, { branch: 'close-objects' });
+    const observed = beginSelectionClick(page, { ...(reference === undefined ? {} : { reference }), branch: 'close-objects' });
     try { await close.click(); endSelectionClick(observed, 'returned'); }
     catch (error) { endSelectionClick(observed, 'threw', error); throw error; }
   }
@@ -62,7 +62,7 @@ export async function openObjects(page) {
 /** 读取当前授权对象以找到玩家可见的文字入口；不解析真实角色ID或跨观察者引用。 */
 export async function selectObject(page, reference) {
   // 直接进入公共入口；所有选对象/移动调用方遵守同一可见关闭顺序。
-  await openObjects(page);
+  await openObjects(page, reference);
   const p = await page.evaluate(async()=>{const s=(await import('/src/state/spatial-store.ts')).spatialState.value.snapshot;return (await import('/src/domain/spatial-display.ts')).sceneDisplayProjection(s.projection);});
   const target = [...p.targets, ...p.items, ...p.entities].find(entity => entity.entityRef === reference);
   assert.ok(target, '目标必须出现在当前玩家授权投影中');
