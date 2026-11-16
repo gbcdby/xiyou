@@ -14,6 +14,7 @@ import { observeDirectionConnections } from './direction-browser-support.mjs';
 import { createCuilanClickObservation } from './cuilan-click-observation.mjs';
 import { createCuilanNodeProfile } from './cuilan-node-profile.mjs';
 import { productionProfile, caseIds, assertCompleteReport, clickAction, askAppearance, describeItems, askItems, personalState, cancelPersonal, returnItem, holdSubmissions, captureAppearanceCompetition, holdCommittedReceipt, deferLeaseMaintenance, authoritativeState, sceneDecision, assertRoomIdentity, createCuilanReportCollector, finalizeCuilanReport } from './cuilan-self-response-support.mjs';
+import { nextRecoveryAction } from './cuilan-self-response-recovery.mjs';
 
 const output = resolve(process.env.FRONTEND_EVIDENCE_DIR || resolve(repository, '.agent-output/cuilan-production-browser'));
 await mkdir(output, { recursive: true });
@@ -339,21 +340,24 @@ async function recoverPlayer(room, player, { reload = true, trace = null, allowE
   let clicked = false, explicitTakeClicked = false;
   // 正常恢复优先。服务器重启后PG中可能仍保留旧连接的控制租约，协议明确要求
   // CONTROL_HELD 时本人点击「明确接管」；同epoch且本地命令序号丢失也必须新建控制代次。
-  // 仅重启专用路径允许这个普通UI回退，其他重连仍需原恢复条件。总20秒上限不变。
+  // 连接代次再次变为 connecting/online 时允许本人重新点击，不能让一次失效的点击吃掉20秒；
+  // 只有重启专用路径允许显式接管回退，其他重连仍需原恢复条件。总20秒上限不变。
   await until(async () => {
     const state = await clientState(page);
-    if (state.inputReady) return true;
-    if (!clicked && state.connection === 'online' && await resume.isVisible()) {
+    const action = nextRecoveryAction(state, { clicked, explicitTakeClicked }, allowExplicitTake);
+    if (action.kind === 'ready') return true;
+    if (action.kind === 'reset') { clicked = false; explicitTakeClicked = false; return false; }
+    if (action.kind === 'resume') {
+      assert.ok(await resume.isVisible(), '本人恢复入口必须是真实可见控件');
       await resume.click();
       clicked = true;
       record('resume-clicked');
-    } else if (allowExplicitTake && clicked && !explicitTakeClicked && state.connection === 'online' && !state.controlBusy
-      && ['另一处连接正在控制此角色，需要时请明确接管。', '本地输入序号已丢失，请明确接管以建立新的控制周期。'].includes(state.message)) {
+    } else if (action.kind === 'take') {
       assert.ok(await take.isVisible(), '本人明确接管入口必须是真实可见控件');
       const epoch = (await snapshot(page))?.projection.self.controlEpoch;
       await take.click();
       explicitTakeClicked = true;
-      record('explicit-take-clicked', { reason: state.message, beforeTakeEpoch: epoch });
+      record('explicit-take-clicked', { reason: action.reason, beforeTakeEpoch: epoch });
     }
     return false;
   }, '真实页面恢复本人控制', 20000);
