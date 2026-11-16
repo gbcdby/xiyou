@@ -71,14 +71,18 @@ function piecePose(piece: TimedSegment, now: number): DrawnPose {
   return { position: sampleTrail(piece.trail, fraction), facing, moving: piece.kind !== 'hold' && total > 0 && fraction < 1,
     distance: piece.before.distance + total * fraction };
 }
-function timedPose(value: TimedMotion, now: number): DrawnPose {
+function timedPose(value: TimedMotion, now: number, sampledForPaint = false, continuing = false): DrawnPose {
   let pose = value.base;
+  let source: TimedSegment | null = null;
   for (const piece of value.segments) {
     if (now < piece.startedAt) return { ...pose, moving: false };
-    pose = piecePose(piece, now);
-    if (now < piece.startedAt + piece.duration) return pose;
+    pose = piecePose(piece, now); source = piece;
+    if (now < piece.startedAt + piece.duration) break;
   }
-  return { ...pose, moving: false };
+  // paint 使用已确认的非零 motion 段且计划仍为 accepted/moving 时，保持走步标志；
+  // 墙钟终点钉在快照到达时刻，不能据此把真实绘制判成静止。hold 与零轨迹段永不走步。
+  if (sampledForPaint && continuing && source && source.kind !== 'hold' && trailLength(source.trail) > 0) return { ...pose, moving: true };
+  return pose;
 }
 function appendTimed(value: TimedMotion, pieces: TimedPiece[], now: number) {
   while (value.segments[0] && now >= value.segments[0].startedAt + value.segments[0].duration) {
@@ -252,9 +256,17 @@ export class ConfirmedMotion {
   position(reference: string, now: number): Position | null {
     return this.pose(reference, now)?.position || null;
   }
-  /** 位置、朝向和步态共用确认路径；墙钟只采样位置，不能使站立者原地走步。 */
-  pose(reference: string, now: number): DrawnPose | null {
-    const timed = this.#timed.get(reference); if (timed) return timedPose(timed, now);
+  /** 位置、朝向和步态共用确认路径；墙钟只采样位置，不能使站立者原地走步。
+   * sampledForPaint 仅供真实画布成功绘制使用，普通查询/校验仍只看段内插值。 */
+  pose(reference: string, now: number, sampledForPaint = false): DrawnPose | null {
+    const timed = this.#timed.get(reference);
+    if (timed) {
+      const p = this.#previous?.projection;
+      const continuing = Boolean(p && !p.paused && (reference === p.self.entityRef
+        ? ['accepted', 'moving'].includes(p.movement?.status ?? '')
+        : p.sceneOverview?.entities.find(entity => entity.entityRef === reference)?.moving === true));
+      return timedPose(timed, now, sampledForPaint, continuing);
+    }
     const value = this.#motions.get(reference); if (!value) return null;
     if (!value.trail || value.duration <= 0) return { position: value.position, facing: value.facing, moving: false, distance: value.distanceBefore };
     const fraction = Math.max(0, Math.min(1, (now - value.startedAt) / value.duration));

@@ -122,7 +122,7 @@ export class SpatialCanvas {
     }
     const people: DrawPerson[] = [...p.entities.filter(value => value.entityRef !== p.self.entityRef), { ...p.entities.find(value => value.entityRef === p.self.entityRef), ...p.self }].flatMap(person => {
       if (!person.position || person.sceneId !== scene.sceneId) return [];
-      const pose = motion.pose(person.entityRef, now), position = options.reducedMotion ? person.position : pose?.position ?? person.position, drawnFacing = pose?.facing ?? person.facing;
+      const pose = motion.pose(person.entityRef, now, true), position = options.reducedMotion ? person.position : pose?.position ?? person.position, drawnFacing = pose?.facing ?? person.facing;
       const moving = !p.paused && !options.reducedMotion && Boolean(pose?.moving), distance = pose?.distance ?? 0;
       return [{ ...person, position, drawnFacing, moving, distance, art: this.#assets.actorFrame(person.appearanceId, drawnFacing, moving, distance, options.reducedMotion) }];
     });
