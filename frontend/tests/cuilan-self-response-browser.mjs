@@ -56,7 +56,7 @@ async function instrumentPage(page) {
   const receiptRequests = new Set();
   const receiptQueryStats = { pageId, sent: 0, finished: 0, failed: 0, pending: 0, peakPending: 0, lastSentAt: null, lastSettledAt: null };
   (report.receiptQueryStats ??= []).push(receiptQueryStats);
-  const receiptRead = request => request.method() === 'GET' && /^\\/api\\/sessions\\/[^/]+\\/actions\\/[^/]+$/.test(new URL(request.url()).pathname);
+  const receiptRead = request => request.method() === 'GET' && new URL(request.url()).pathname.includes('/actions/');
   collector.observe(page, 'request', request => {
     if (receiptRead(request)) {
       receiptRequests.add(request); receiptQueryStats.sent++; receiptQueryStats.pending = receiptRequests.size;
