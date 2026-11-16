@@ -288,16 +288,19 @@ async function interruptAppearance(room) {
   assert.ok((await state(room)).chapter.disguise);
   await bindingInterruption(room, player, 'appearance', granted.consent.consentId);
 }
-async function recoverPlayer(room, player, { reload = true, trace = null } = {}) {
-  const record = (step) => { if (trace) trace.push({ player, step, at: new Date().toISOString() }); };
+async function recoverPlayer(room, player, { reload = true, trace = null, allowExplicitTake = false } = {}) {
+  const record = (step, detail = {}) => { if (trace) trace.push({ player, step, at: new Date().toISOString(), ...detail }); };
   const page = room.pages[player]; record('start');
   if (reload) { await page.reload(); record('reloaded'); }
   await until(async () => (await clientState(page)).connection === 'online', '真实页面网络恢复', 20000);
   record('online');
+  const beforeEpoch = (await snapshot(page))?.projection.self.controlEpoch;
   const resume = page.getByRole('button', { name: '恢复本人控制', exact: true });
-  let clicked = false;
-  // 网络已online不代表Vue的恢复控件已完成渲染；不能仅在首个瞬间查一次可见性。
-  // 在原20秒 inputReady 门槛内等待真实入口出现并普通点击，不伪造控制资格或延长上限。
+  const take = page.getByRole('button', { name: '明确接管此角色', exact: true });
+  let clicked = false, explicitTakeClicked = false;
+  // 正常恢复优先。服务器重启后PG中可能仍保留旧连接的控制租约，协议明确要求
+  // CONTROL_HELD 时本人点击「明确接管」；同epoch且本地命令序号丢失也必须新建控制代次。
+  // 仅重启专用路径允许这个普通UI回退，其他重连仍需原恢复条件。总20秒上限不变。
   await until(async () => {
     const state = await clientState(page);
     if (state.inputReady) return true;
@@ -305,9 +308,21 @@ async function recoverPlayer(room, player, { reload = true, trace = null } = {})
       await resume.click();
       clicked = true;
       record('resume-clicked');
+    } else if (allowExplicitTake && clicked && !explicitTakeClicked && state.connection === 'online' && !state.controlBusy
+      && ['另一处连接正在控制此角色，需要时请明确接管。', '本地输入序号已丢失，请明确接管以建立新的控制周期。'].includes(state.message)) {
+      assert.ok(await take.isVisible(), '本人明确接管入口必须是真实可见控件');
+      const epoch = (await snapshot(page))?.projection.self.controlEpoch;
+      await take.click();
+      explicitTakeClicked = true;
+      record('explicit-take-clicked', { reason: state.message, beforeTakeEpoch: epoch });
     }
     return false;
   }, '真实页面恢复本人控制', 20000);
+  if (explicitTakeClicked) {
+    const afterEpoch = (await snapshot(page))?.projection.self.controlEpoch;
+    assert.ok(beforeEpoch !== undefined && afterEpoch !== undefined && BigInt(afterEpoch) > BigInt(beforeEpoch), '真实本人接管必须提升权威控制代次，不可仅显示inputReady');
+    record('explicit-take-confirmed', { beforeEpoch, afterEpoch });
+  }
   record('input-ready');
   report.directionQualification.push(await directionConnections.qualify(page, room.users[player].userId, 'recovery-' + player));
 }
@@ -321,7 +336,7 @@ async function restartServer(room) {
   const trace = { sessionId: room.sessionId, beforeView: before, events: [] };
   (report.restartRecoveryTraces ??= []).push(trace);
   try {
-    await Promise.all(Array.from({ length: room.count }, (_, player) => recoverPlayer(room, player, { trace: trace.events })));
+    await Promise.all(Array.from({ length: room.count }, (_, player) => recoverPlayer(room, player, { trace: trace.events, allowExplicitTake: true })));
   } catch (error) {
     trace.failure = { message: error.message, at: new Date().toISOString() };
     try {
