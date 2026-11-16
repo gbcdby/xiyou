@@ -288,12 +288,27 @@ async function interruptAppearance(room) {
   assert.ok((await state(room)).chapter.disguise);
   await bindingInterruption(room, player, 'appearance', granted.consent.consentId);
 }
-async function recoverPlayer(room, player, { reload = true } = {}) {
-  const page = room.pages[player]; if (reload) await page.reload();
+async function recoverPlayer(room, player, { reload = true, trace = null } = {}) {
+  const record = (step) => { if (trace) trace.push({ player, step, at: new Date().toISOString() }); };
+  const page = room.pages[player]; record('start');
+  if (reload) { await page.reload(); record('reloaded'); }
   await until(async () => (await clientState(page)).connection === 'online', '真实页面网络恢复', 20000);
+  record('online');
   const resume = page.getByRole('button', { name: '恢复本人控制', exact: true });
-  if (await resume.isVisible()) await resume.click();
-  await until(async () => (await clientState(page)).inputReady, '真实页面恢复本人控制', 20000);
+  let clicked = false;
+  // 网络已online不代表Vue的恢复控件已完成渲染；不能仅在首个瞬间查一次可见性。
+  // 在原20秒 inputReady 门槛内等待真实入口出现并普通点击，不伪造控制资格或延长上限。
+  await until(async () => {
+    const state = await clientState(page);
+    if (state.inputReady) return true;
+    if (!clicked && state.connection === 'online' && await resume.isVisible()) {
+      await resume.click();
+      clicked = true;
+      record('resume-clicked');
+    }
+    return false;
+  }, '真实页面恢复本人控制', 20000);
+  record('input-ready');
   report.directionQualification.push(await directionConnections.qualify(page, room.users[player].userId, 'recovery-' + player));
 }
 async function restartServer(room) {
@@ -301,9 +316,22 @@ async function restartServer(room) {
   directionConnections.close(); restorers.delete(directionConnections);
   await server.close(); server = await createAuthorityServer({ pool: database.pool, spatialDirection: { checkpointMs: 50 } });
   directionConnections = observeDirectionConnections(server.runtime); restorers.add(directionConnections); await server.listen(serverPort);
-  // 两人房间暂停时，首人 inputReady 依赖另一人同样恢复；串行等待会互锁。
-  // 并行启动每个真实页面的 reload / 恢复入口，保留各自 online、inputReady 的原门槛。
-  await Promise.all(Array.from({ length: room.count }, (_, player) => recoverPlayer(room, player)));
+  // 两人房间暂停时，先并行建立真实连接；复原入口可能比online晚一拍出现。
+  // 记录各人到达可见控件和inputReady的实际次序，失败原样传播并保留完整门槛。
+  const trace = { sessionId: room.sessionId, beforeView: before, events: [] };
+  (report.restartRecoveryTraces ??= []).push(trace);
+  try {
+    await Promise.all(Array.from({ length: room.count }, (_, player) => recoverPlayer(room, player, { trace: trace.events })));
+  } catch (error) {
+    trace.failure = { message: error.message, at: new Date().toISOString() };
+    try {
+      const response = await fetch(`http://127.0.0.1:${serverPort}/health`, { signal: AbortSignal.timeout(2000) });
+      trace.backendHealthOnFailure = { status: response.status, ok: response.ok };
+    } catch (probeError) {
+      trace.backendHealthOnFailure = { error: probeError.code ?? probeError.name };
+    }
+    throw error;
+  }
   await assertRoomIdentity(room, database.pool, { defaultEntry: report.rooms.find(row => row.sessionId === room.sessionId).defaultEntry });
   await room.rebindControlledNpcs();
   await until(async () => !(await snapshot(room.pages[0])).projection.paused, '实际服务器重启后正常两人恢复');
