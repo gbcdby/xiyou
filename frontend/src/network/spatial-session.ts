@@ -26,6 +26,9 @@ function retainActions(actions: SpatialDraft[]): SpatialDraft[] {
   let confirmed = 80;
   return [...actions].reverse().filter(action => action.status === 'waiting' || action.status === 'unknown' || confirmed-- > 0).reverse();
 }
+// 重连后回放未知收据时限制在途数量：每个查询都占用一条数据库连接并锁定同一会话行，
+// 无界并发会耗尽连接池，使同一时刻的 control.resume 拿不到连接/行锁而超时。
+const RECEIPT_REPLAY_LIMIT = 3;
 function asError(value: unknown): ErrorV2 | null {
   try { return validateSpatial('ErrorV2', value); } catch {
     try { const error = validateContract('ErrorResponse', value); return { schemaVersion: 2, code: error.code, message: error.message || '请求未完成。' }; } catch { return null; }
@@ -50,6 +53,7 @@ export class SpatialSessionClient {
   #heartbeat: ReturnType<typeof setInterval> | null = null; #retryTimer: ReturnType<typeof setTimeout> | null = null;
   #syncActive = new Set<SessionLink>(); #syncDemand = ''; #syncRevision = 0;
   #displayedArrival = '';
+  #replayQueue: string[] = []; #replaying = false; #replaySerial = 0;
   #direction: ContinuousDirection | DirectionIntent; #navigation: NavigationPlan | null = null;
   #directionBinding = '';
   #directionDeadlines = new Map<string, unknown>();
@@ -205,7 +209,9 @@ export class SpatialSessionClient {
         if (asError(value)) { this.#initialFailure(value, serial); return; }
         if (this.#view.acceptSnapshot(value, generation) !== 'applied') { this.#disconnect(serial, false); this.#message = '空间授权视图校验未通过，请重新连接。'; this.#publish(); return; }
         this.#connection = 'online'; this.#message = ''; this.#publish(); void this.sync();
-        for (const draft of this.#actions.filter(a => a.status === 'unknown')) void this.query(draft.id);
+        // 逐个查询旧未知动作，但在途数量有界，避免重连瞬间用收据请求占满数据库连接/行锁，
+        // 饿死紧随其后的 control.resume。连接更换后旧队列即作废。
+        this.#replayUnknown(this.#actions.filter(a => a.status === 'unknown').map(a => a.id), serial);
       });
     } catch { this.#disconnect(serial); }
   }
@@ -341,6 +347,26 @@ export class SpatialSessionClient {
       }
       this.#update(draft.id, { receipt, status: receipt.status === 'Accepted' ? 'accepted' : 'rejected', detail: receipt.status === 'Rejected' ? spatialErrorMessage(receipt.code) : envelope.action.kind === 'move_to' ? '路线已受理；实际到达以后才会操作。' : '服务器已确认。' }); this.#drainQueued(); this.#drainNavigation(); void this.sync();
     } catch { this.#update(draft.id, { status: 'unknown', detail: '收据校验未通过，结果仍待确认。' }); }
+  }
+  // 重连回放：保留逐个查询语义，但在途查询数有界。每次只启动 RECEIPT_REPLAY_LIMIT 条，
+  // 完成一条再启下一条；连接代次变化时整队作废，避免旧连接的查询打到新会话。
+  #replayUnknown(ids: string[], serial: number) {
+    this.#replaySerial = serial; this.#replayQueue = [...ids];
+    if (this.#replaying) return;
+    this.#replaying = true;
+    queueMicrotask(() => void this.#drainReplay());
+  }
+  async #drainReplay() {
+    while (this.#replayQueue.length && this.#serial === this.#replaySerial) {
+      const active: Promise<unknown>[] = [];
+      while (active.length < RECEIPT_REPLAY_LIMIT && this.#replayQueue.length && this.#serial === this.#replaySerial) {
+        const id = this.#replayQueue.shift()!;
+        active.push(this.query(id).catch(() => {}));
+      }
+      if (!active.length) break;
+      await Promise.all(active);
+    }
+    this.#replaying = false;
   }
   async query(id: string) {
     const draft = this.#actions.find(a => a.id === id); const serial = this.#serial; if (!draft || !this.#view.snapshot) return;

@@ -237,6 +237,39 @@ test('超过八十个未知动作从持久数据恢复时仍逐个查询，首�
   restored.client.close();
 });
 
+test('重连回放未知收据时在途查询有界，逐个查询完成后仍能继续控制恢复', async () => {
+  const h = harness(); h.client.open('spatial-room', 'token'); h.handlers.connected(); await flush(); await h.client.control('resume');
+  for (let count = 0; count < 81; count++) {
+    h.actionReplies.push(async () => { throw new Error('确认丢失'); });
+    await h.client.send({ kind: 'wait' });
+  }
+  const saved = JSON.stringify(h.client.state.actions); h.client.close();
+  let inFlight = 0, peak = 0; const queried = []; const completions = [];
+  const restored = harness({}, (_sessionId, actionId) => {
+    queried.push(actionId); inFlight++; peak = Math.max(peak, inFlight);
+    return new Promise(resolve => completions.push(() => { inFlight--; resolve(null); }));
+  });
+  restored.client.open('spatial-room', 'token', JSON.parse(saved)); restored.handlers.connected();
+  await flush(); await flush();
+  assert.ok(queried.length > 0 && queried.length <= 3, `首批在途查询必须不超过3，实际 ${queried.length}`);
+  assert.equal(peak, queried.length, '峰值等于首批，尚未放行完成');
+  // 先放行第一批，控制恢复（独立 Socket 事件）无需等待剩余队列即可完成。
+  const controlReply = restored.client.control('take');
+  while (completions.length) completions.shift()();
+  await controlReply;
+  assert.equal(restored.client.state.snapshot.viewId, 'control-view');
+  // 后续批次的完成回调在微任务中逐个登记；每轮放行后让出事件循环直到全部查完。
+  let guard = 0;
+  while (queried.length < 81 && guard++ < 200) {
+    while (completions.length) completions.shift()();
+    await flush();
+  }
+  assert.ok(peak <= 3, `全过程的在途查询峰值不得超过3，实际 ${peak}`);
+  assert.equal(queried.length, 81, '所有未知动作最终都被逐个查询');
+  assert.equal(new Set(queried).size, 81, '不重复查询');
+  restored.client.close();
+});
+
 test('A2 用途参数与结束轮在未知确认、恢复换视图后逐字重试，不改成新许可或新轮', async () => {
   const reference = letter => 'R' + letter.repeat(32);
   const h = harness(); h.client.open('spatial-room', 'token'); h.handlers.connected(); await flush(); await h.client.control('resume');
