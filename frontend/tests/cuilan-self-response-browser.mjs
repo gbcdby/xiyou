@@ -399,6 +399,13 @@ async function restartServer(room) {
           FROM pg_stat_activity WHERE datname=current_database() AND pid<>pg_backend_pid()
           GROUP BY state, wait_event_type, wait_event ORDER BY count DESC LIMIT 12`);
         trace.postgresWaitsOnFailure = activity.rows;
+        // 只读追加阻塞链：定位是哪个持锁事务让 control.resume 的 ACK 一直未回。
+        const blockers = await database.pool.query(`SELECT pid, application_name AS "applicationName", state,
+          wait_event_type AS "waitType", wait_event AS "waitEvent", pg_blocking_pids(pid) AS "blockingPids",
+          now() - xact_start AS "xactAge", now() - state_change AS "stateAge", left(query, 600) AS query
+          FROM pg_stat_activity WHERE datname=current_database() AND pid<>pg_backend_pid()
+          ORDER BY (pg_blocking_pids(pid))[1] NULLS LAST, pid LIMIT 20`);
+        trace.postgresBlockersOnFailure = blockers.rows.map(row => ({ ...row, xactAge: String(row.xactAge), stateAge: String(row.stateAge) }));
       } catch (probeError) { trace.postgresWaitsOnFailure = { error: probeError.code ?? probeError.name }; }
     } else trace.postgresWaitsOnFailure = { skipped: 'no-idle-pool-connection' };
     throw error;
