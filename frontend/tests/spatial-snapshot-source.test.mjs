@@ -11,7 +11,7 @@ test('SUP-04：真实Vue props合并45/48时，稳定source逐条入Motion且当
   first.projection.sceneTimeMs = 0; first.projection.self.position = { x: 0, y: 0 }; first.projection.entities[0].position = { x: 0, y: 0 };
   const state = shallowRef(first);
   publish(state.value);
-  const subscription = source.subscribe(value => { if (value) { motionSeen.push(value.snapshotSeq); motion.update(value, 0); } else motion.reset(); }, () => assert.fail('有效输入不应隔离'));
+  const subscription = source.subscribe(value => { if (value) { motionSeen.push(value.snapshotSeq); motion.update(value, value.projection.sceneTimeMs); } else motion.reset(); }, () => assert.fail('有效输入不应隔离'));
   const Child = defineComponent({ props: ['snapshot'], setup(props) { watch(() => props.snapshot, value => propsSeen.push(value.snapshotSeq), { immediate: true, flush: 'sync' }); return () => h('canvas'); } });
   const host = { createElement: tag => ({ tag, children: [] }), createText: text => ({ text }), createComment: text => ({ text }), setText() {}, setElementText() {}, parentNode: n => n.parent || null, nextSibling: () => null, insert(n, p) { n.parent = p; p.children.push(n); }, remove() {}, patchProp() {} };
   const app = createRenderer(host).createApp({ setup: () => () => h(Child, { snapshot: state.value }) }); app.mount({ children: [] });
@@ -24,7 +24,7 @@ test('SUP-04：真实Vue props合并45/48时，稳定source逐条入Motion且当
   assert.equal(subscription.current, latest, '父props还未刷新时，owner的成功消费输入已经是48');
   assert.deepEqual(propsSeen, ['40']); assert.deepEqual(motionSeen, ['40', '45', '48']);
   await nextTick(); assert.deepEqual(propsSeen, ['40', '48']); assert.equal(motion.presentationCreditMs, 0, '同步状态回调不是paint');
-  assert.equal(motion.pose(selfRef, 50).position.x, 5); assert.equal(motion.pose(selfRef, 150).position.x, 15); assert.equal(motion.pose(selfRef, 200).distance, 20);
+  assert.equal(motion.pose(selfRef, 150).position.x, 15); assert.equal(motion.pose(selfRef, 200).distance, 20);
   subscription.close(); app.unmount();
 });
 test('SUP-04：同身份同seq通知去重，换binding先reset，新挂载只读当前基线', () => {

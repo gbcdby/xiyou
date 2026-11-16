@@ -55,9 +55,9 @@ export function motionPresentationIdentity(snapshot: SnapshotV2): string {
   const p = snapshot.projection, self = p.self;
   return JSON.stringify([snapshot.sessionId, snapshot.viewId, self.entityRef, self.controlEpoch, p.mapVersion, self.sceneId, self.appearanceEpoch, self.appearanceId]);
 }
-interface TimedPiece { kind: 'motion' | 'hold' | 'legacy'; trail: Position[]; duration: number }
+interface TimedPiece { kind: 'motion' | 'hold' | 'legacy'; trail: Position[]; duration: number; sceneFrom?: number; sceneThrough?: number }
 interface TimedSegment extends TimedPiece { startedAt: number; before: DrawnPose }
-interface TimedMotion { base: DrawnPose; segments: TimedSegment[] }
+interface TimedMotion { base: DrawnPose; segments: TimedSegment[]; anchor?: number }
 
 function piecePose(piece: TimedSegment, now: number): DrawnPose {
   const fraction = Math.max(0, Math.min(1, (now - piece.startedAt) / piece.duration));
@@ -84,12 +84,18 @@ function appendTimed(value: TimedMotion, pieces: TimedPiece[], now: number) {
   while (value.segments[0] && now >= value.segments[0].startedAt + value.segments[0].duration) {
     const completed = value.segments.shift()!; value.base = piecePose(completed, completed.startedAt + completed.duration);
   }
-  let last = value.segments.at(-1), at = Math.max(now, last ? last.startedAt + last.duration : now);
+  const timed = pieces.filter(piece => piece.sceneFrom !== undefined && piece.sceneThrough !== undefined);
+  if (timed.length && value.anchor === undefined) value.anchor = now - Math.max(...timed.map(piece => piece.sceneThrough!));
+  let last = value.segments.at(-1), at = last ? last.startedAt + last.duration : timed.length ? -Infinity : now;
   let before = last ? piecePose(last, at) : value.base;
   for (const piece of pieces) {
     if (piece.duration <= 0) continue;
-    last = { ...piece, trail: piece.trail.map(point => ({ ...point })), startedAt: at, before };
-    value.segments.push(last); at += piece.duration; before = piecePose(last, at);
+    // 有权威时间端点时按同一锚点换算墙钟；已过去的区间只推进基线，不从收包时刻重播。
+    const authoritativeAt = value.anchor !== undefined && piece.sceneFrom !== undefined ? piece.sceneFrom + value.anchor : null;
+    const startedAt = authoritativeAt !== null ? Math.max(authoritativeAt, last ? last.startedAt + last.duration : -Infinity) : Math.max(now, at);
+    const segment: TimedSegment = { ...piece, trail: piece.trail.map(point => ({ ...point })), startedAt, before };
+    const end = startedAt + segment.duration;
+    value.segments.push(segment); at = end; before = piecePose(segment, end);
   }
 }
 function remainingTrail(points: Position[], travelled: number, position: Position): Position[] {
@@ -176,13 +182,24 @@ export class ConfirmedMotion {
               appendTimed(queue, [{ kind: 'legacy', trail: remainingTrail(old.trail, travelled, beforePose.position), duration: old.startedAt + old.duration - now }], now);
             }
             const pieces: TimedPiece[] = person.motionTimeline
-              ? person.motionTimeline.map(span => ({ kind: span.kind, trail: person.motionTrail!.slice(span.fromTrailIndex, span.throughTrailIndex + 1), duration: span.throughSceneTimeMs - span.fromSceneTimeMs }))
+              ? person.motionTimeline.map(span => ({ kind: span.kind, trail: person.motionTrail!.slice(span.fromTrailIndex, span.throughTrailIndex + 1), duration: span.throughSceneTimeMs - span.fromSceneTimeMs,
+                sceneFrom: span.fromSceneTimeMs, sceneThrough: span.throughSceneTimeMs }))
               : [{ kind: 'legacy', trail: person.motionTrail!, duration: person.motionThroughSceneTimeMs! - person.motionFromSceneTimeMs! }];
             const credit = this.#credit;
+            if (queue.anchor === undefined && pieces.some(piece => piece.sceneFrom !== undefined)) queue.anchor = now - Math.max(...pieces.map(piece => piece.sceneThrough ?? now));
             if (person.motionTimeline && queueWasEmpty && credit?.identity === motionPresentationIdentity(snapshot) && same(credit.position, beforePose.position)) {
-              for (const piece of pieces) {
+              const anchor = queue.anchor ?? now;
+              for (let index = 0; index < pieces.length; index++) {
+                const piece = pieces[index];
                 if (piece.kind !== 'hold' || piece.duration <= 0) break;
+                const start = piece.sceneFrom !== undefined ? piece.sceneFrom + anchor : now;
+                if (start < now) break;
                 const consumed = Math.min(piece.duration, credit.remaining); piece.duration -= consumed; credit.remaining -= consumed;
+                for (let next = index + 1; next < pieces.length; next++) {
+                  const later = pieces[next];
+                  if (later.sceneFrom !== undefined) later.sceneFrom -= consumed;
+                  if (later.sceneThrough !== undefined) later.sceneThrough -= consumed;
+                }
                 if (piece.duration > 0) break;
               }
             }
