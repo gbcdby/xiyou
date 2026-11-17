@@ -2,6 +2,8 @@
 
 本包为 [#66 窄供给设计 r1](https://github.com/gbcdby/xiyou/issues/66#issuecomment-6943056327) 提供独立增量模型。模式为 `design`：核对拟议共享读、有界 peer 工作与逐行进度的安全义务；不实现业务，不运行应用测试，不批准设计采纳。原 [direction-supply](../direction-supply/README.md) 的 59 条证据不修改，也不重跑。
 
+后续已对 `ed6a4d2fdeea9fa47159c2fee3590f94431624b1` 做明确请求的限定 `align`，见 [IMPLEMENTATION_MAP.md](IMPLEMENTATION_MAP.md)：列明源码对应、实现方 12 项 PG/Socket + 80 项回归、独立模型审查及剩余边界。新映射状态是 `ASSESSED_WITHIN_SCOPE`；本页与原始 runner 的有限检查状态不改变，浏览器 normal 仍 FAIL。
+
 **本轮 9 个正配置均为 `PASS_WITHIN_SCOPE`；21 个负控、14 个可达见证均以原始 TLC `rc=12` 命中预声明性质。** 正配置清空搜索队列，负控和见证保留 `COUNTEREXAMPLE`，不改写为通过。逐项统计、摘要、启用性质和证据位置见 [results.json](results.json)。所有 runner 结果的 `implementation_status` 保持 `NOT_ASSESSED`；实际 PG、浏览器、CI、合并与部署不由本包结论代替。
 
 ## 范围与输入身份
@@ -63,7 +65,7 @@ heartbeat、无 grant disconnect 的 connections 表变化及内存 closing 不�
 
 ## 实现交接与复现
 
-语义映射、原子边界、回归场景及未覆盖项见 [HANDOFF.md](HANDOFF.md)。这是一份待实现义务表，不是已经完成的源码对应证明。
+最初语义义务、原子边界、回归规格及未覆盖项见 [HANDOFF.md](HANDOFF.md)。随后实际候选的限定对应记录见 [IMPLEMENTATION_MAP.md](IMPLEMENTATION_MAP.md)，它不是源码 refinement 证明。
 
 固定工具如下：
 

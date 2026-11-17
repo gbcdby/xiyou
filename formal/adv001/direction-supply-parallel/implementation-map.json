@@ -1,0 +1,374 @@
+{
+  "schema_version": 1,
+  "mode": "align",
+  "implementation_status": "ASSESSED_WITHIN_SCOPE",
+  "correspondence_status": "IN_SYNC",
+  "source_commit": "ed6a4d2fdeea9fa47159c2fee3590f94431624b1",
+  "source_tree": "d5a24d66f0770cdbc15859d4be9a02bd7163499e",
+  "source_worktree_clean": true,
+  "production_source_commit": "cb822f80ef2a755371bdd6e464dcc6aa6a169cde",
+  "production_files_identical": true,
+  "model_commit": "0a3f95686a90b1d1aabf3630b2f845a9c7fbd621",
+  "model_tree": "a8b401563c8b2ec7b1cba6ecc2c6947656157e01",
+  "model_inputs_and_raw_results_changed": false,
+  "tlc_run_this_alignment": false,
+  "project_tests_run_this_alignment": false,
+  "independent_model_review": {
+    "status": "REVIEWED",
+    "provider": "/root/inspect_local_state",
+    "requirements_axis": "PASS_WITHIN_SCOPE",
+    "standards_axis": "PASS_WITHIN_SCOPE",
+    "report_archive_path": "model-review/review-model.md",
+    "report_sha256": "34631d7287ba4b42e377a704d6e292cdf499581c730b028be83a6190c9b9f9dd"
+  },
+  "source_files": [
+    {
+      "path": "backend/runtime.mjs",
+      "git_blob": "11bd85ed81ed23213934a6a55d6e4c32608aa635",
+      "sha256": "4f015809ec2bd555fe32ed84d0b700098f21f2f02bb2b2232761df997f77f136",
+      "bytes": 68949,
+      "inspection": "READ_STATIC_MAPPING"
+    },
+    {
+      "path": "backend/spatial-runtime.mjs",
+      "git_blob": "7ab36f3d871d3391e6c1838308bb5605dc9bd49b",
+      "sha256": "3a27d233e28d099f8a5a1329287d603c1f6e4bfb39adfb4f25245f39ef160165",
+      "bytes": 28333,
+      "inspection": "READ_STATIC_MAPPING"
+    },
+    {
+      "path": "backend/spatial-direction-runtime.mjs",
+      "git_blob": "c96c03c48514ff7b052b869ea6017e52f311b8d5",
+      "sha256": "32ac3c5a95eeaeda9926cb08c1d3927e32e5a038997c2168d55aa730b18a6277",
+      "bytes": 4107,
+      "inspection": "READ_STATIC_MAPPING"
+    },
+    {
+      "path": "backend/spatial-supply.mjs",
+      "git_blob": "751e93a4abded7e904ed468675e26a2cea7bc9d3",
+      "sha256": "6e35490f8cfb1a6cbb783f687bf184c7f3bc975bd95aa03601301ff6c80b7d24",
+      "bytes": 6119,
+      "inspection": "READ_STATIC_MAPPING"
+    },
+    {
+      "path": "backend/socket-enqueue.mjs",
+      "git_blob": "521092a9746a42e651acbb3ad3bf7ebc9414739e",
+      "sha256": "9735ad439af8a68bba421208fa5065a194912748a8cb42e61deb69beb63d368b",
+      "bytes": 2507,
+      "inspection": "READ_STATIC_MAPPING"
+    },
+    {
+      "path": "backend/server.mjs",
+      "git_blob": "b5148430e9f14e2aa9b910b25cf348441a68a4bb",
+      "sha256": "ad8914b92c76f170d07d4b6528bf2ccbbc18dc357cc62d7b9b15360c71a5c5db",
+      "bytes": 10398,
+      "inspection": "READ_STATIC_MAPPING"
+    },
+    {
+      "path": "backend/tests/spatial-parallel-supply.test.mjs",
+      "git_blob": "1536e8d0d5dc1392c93abcc7d2145b6874ae8606",
+      "sha256": "922df9a4cca510869638fe748a76a9ad73b97e83e694fd3c085f4c8da679e887",
+      "bytes": 27806,
+      "inspection": "READ_STATIC_MAPPING"
+    },
+    {
+      "path": "backend/tests/p05-cold-recovery.test.mjs",
+      "git_blob": "2c8da9f7b2a6abe19b3f5e95551418c1943b957c",
+      "sha256": "e66f66c69f7d0e7c74cf8547f4d2ae46127e3139182b98598da215b95d541808",
+      "bytes": 5447,
+      "inspection": "IDENTITY_AND_REPORTED_LOG_BINDING"
+    },
+    {
+      "path": "backend/tests/p05-control-priority.test.mjs",
+      "git_blob": "cb5b2b6adead901ca5a85530864b22cca779b46f",
+      "sha256": "317c2b3bbeff8fd6c35555375824d8834250226732863388bd77f2a697c63c94",
+      "bytes": 16583,
+      "inspection": "IDENTITY_AND_REPORTED_LOG_BINDING"
+    },
+    {
+      "path": "backend/tests/prefix-state-cache.test.mjs",
+      "git_blob": "a99360a33f0a3def67963f73d6494004298739c0",
+      "sha256": "22d788c57d077759aa1d37038ddbbff02efa24b29145c990c790aac79e1201c4",
+      "bytes": 20983,
+      "inspection": "IDENTITY_AND_REPORTED_LOG_BINDING"
+    },
+    {
+      "path": "backend/tests/spatial-supply-pg.test.mjs",
+      "git_blob": "ad610c7d34119f6f9c92b93d62d9411964350a5c",
+      "sha256": "6c9e51f323ff26078fa917641c2d8430b5c7956595f0e32bdb5ae6c6cd5d6bc1",
+      "bytes": 7402,
+      "inspection": "READ_STATIC_MAPPING"
+    },
+    {
+      "path": "backend/tests/spatial-supply.test.mjs",
+      "git_blob": "b5bd4017c324705caa56e803ac36e0853f2716db",
+      "sha256": "b29a54865e8a1d7d0e430f220abb9b1e9ecd1c88f1198da45c298928f48328d4",
+      "bytes": 9014,
+      "inspection": "READ_STATIC_MAPPING"
+    },
+    {
+      "path": "backend/tests/spatial-sync-frontier.test.mjs",
+      "git_blob": "5eb94a8afc483c63dfa9bd692447c359b0a400e2",
+      "sha256": "b8d47ef089b44c3df9375f05e37d335b8e97d00f37d9952871f0b9d6f4606c41",
+      "bytes": 9640,
+      "inspection": "READ_STATIC_MAPPING"
+    },
+    {
+      "path": "backend/tests/spatial-commit-order.test.mjs",
+      "git_blob": "771f7b9f508ce61eab741e664b70ed97133986af",
+      "sha256": "69cb58cbfba37ab35c14a7b7f6f488699eadf7bee3e6d7cc804036c3e9f8b8b9",
+      "bytes": 27481,
+      "inspection": "IDENTITY_AND_REPORTED_LOG_BINDING"
+    },
+    {
+      "path": "backend/tests/spatial-terminal-fences.test.mjs",
+      "git_blob": "3e3344d713fd3fe7258289acad4377efd3a4dc54",
+      "sha256": "20188c462fc68d3fa97530a1ba8738113fa3c4e48bf8044217904eae406b04eb",
+      "bytes": 12555,
+      "inspection": "IDENTITY_AND_REPORTED_LOG_BINDING"
+    },
+    {
+      "path": "backend/tests/spatial-terminal-views.test.mjs",
+      "git_blob": "34ff52de7fbbd56979db0ce480e822f02ee074c4",
+      "sha256": "f5dcd156e3f725bad7a6316a703c8ad6437d591437b95715127073f13d98f8dd",
+      "bytes": 7793,
+      "inspection": "IDENTITY_AND_REPORTED_LOG_BINDING"
+    },
+    {
+      "path": "backend/tests/spatial-direction-publisher.test.mjs",
+      "git_blob": "002a403a55e4ceccb4d4a33fbded48340b365898",
+      "sha256": "9fdb9d6ca332e4448e03dd0899bfa053e288cf7dc623af66ab01bd6e67bd3762",
+      "bytes": 2985,
+      "inspection": "IDENTITY_AND_REPORTED_LOG_BINDING"
+    },
+    {
+      "path": "backend/tests/spatial-direction.test.mjs",
+      "git_blob": "1e2f6c043c1c65c7d78f65da6002ca8d92800232",
+      "sha256": "1c5d8d0996db7d6c9d661128969a88bb8580dc6cbb24b1e52cb67d8fb84e3348",
+      "bytes": 9906,
+      "inspection": "IDENTITY_AND_REPORTED_LOG_BINDING"
+    },
+    {
+      "path": "package-lock.json",
+      "git_blob": "bf7ce4634b6065b0d34b3e333df5320596730671",
+      "sha256": "05b7939b74fe1ef072450f3f7c6d0dc4556c52469a761723700c3c7ce67ed6e3",
+      "bytes": 21641,
+      "inspection": "IDENTITY_AND_REPORTED_LOG_BINDING"
+    }
+  ],
+  "actual_locked_dependency_versions": {
+    "socket.io": "4.8.4",
+    "socket.io-client": "4.8.4",
+    "engine.io": "6.6.11",
+    "pg": "8.23.1"
+  },
+  "implementation_evidence": {
+    "provider": "/root/recovery_fix",
+    "verification_by_this_alignment": "READ_ONLY_SOURCE_LOG_HASH_AND_SCOPE_CHECK",
+    "commands": {
+      "target": "node --test backend/tests/spatial-parallel-supply.test.mjs",
+      "regression": "node --expose-gc --test --test-concurrency=2 backend/tests/p05-cold-recovery.test.mjs backend/tests/p05-control-priority.test.mjs backend/tests/prefix-state-cache.test.mjs backend/tests/spatial-supply-pg.test.mjs backend/tests/spatial-supply.test.mjs backend/tests/spatial-sync-frontier.test.mjs backend/tests/spatial-commit-order.test.mjs backend/tests/spatial-terminal-fences.test.mjs backend/tests/spatial-terminal-views.test.mjs backend/tests/spatial-direction-publisher.test.mjs backend/tests/spatial-direction.test.mjs"
+    },
+    "target": {
+      "pass": 12,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "duration_ms": 28273.048633,
+      "archive_path": "author/pg-behavior-final.log"
+    },
+    "regression": {
+      "pass": 80,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "duration_ms": 45534.90797,
+      "archive_path": "author/regression.log"
+    },
+    "tests": [
+      {
+        "id": "T01",
+        "name": "真实PG：不同handle共享授权读可重叠，控制写在两读COMMIT前不能穿越",
+        "requirements": [
+          "PS-01",
+          "PS-03"
+        ],
+        "reported_result": "PASS"
+      },
+      {
+        "id": "T02",
+        "name": "真实PG与六条Socket：同record最多五个不同handle并行，第六个等待整组收束",
+        "requirements": [
+          "PS-05"
+        ],
+        "reported_result": "PASS"
+      },
+      {
+        "id": "T03",
+        "name": "真实PG：普通写先持锁时后读不能穿越，读到提交后的头且旧控制binding仍拒绝",
+        "requirements": [
+          "PS-01",
+          "PS-03",
+          "PS-10"
+        ],
+        "reported_result": "PASS"
+      },
+      {
+        "id": "T04",
+        "name": "真实PG与Socket：一个peer失败时等待其他在途peer，成功者水位保留且重试只补失败者",
+        "requirements": [
+          "PS-06",
+          "PS-08",
+          "PS-10"
+        ],
+        "reported_result": "PASS"
+      },
+      {
+        "id": "T05",
+        "name": "真实PG：duringPublish期间新安装pending必须在进度排他锁内重核",
+        "requirements": [
+          "PS-07"
+        ],
+        "reported_result": "PASS"
+      },
+      {
+        "id": "T06",
+        "name": "真实PG：逐record进度独立提交，第二行回滚不撤销第一行且重试不重记第一行",
+        "requirements": [
+          "PS-09"
+        ],
+        "reported_result": "PASS"
+      },
+      {
+        "id": "T07",
+        "name": "真实PG：进度COMMIT回应丢失报告未知，重查持久结果且连接正常释放",
+        "requirements": [
+          "PS-09"
+        ],
+        "reported_result": "PASS"
+      },
+      {
+        "id": "T08",
+        "name": "真实PG：进度持锁前会话被合法删除，沿SESSION_GONE收束并释放连接",
+        "requirements": [
+          "PS-09"
+        ],
+        "reported_result": "PASS"
+      },
+      {
+        "id": "T09",
+        "name": "真实PG：共享sync冷暖缓存投影与轨迹相同，命中后仍重核撤权且不写世界",
+        "requirements": [
+          "PS-03"
+        ],
+        "reported_result": "PASS"
+      },
+      {
+        "id": "T10",
+        "name": "真实PG与六handle：关闭只停止启动新工作，已开始组必须settle且本行保持Pending",
+        "requirements": [
+          "PS-06"
+        ],
+        "reported_result": "PASS"
+      },
+      {
+        "id": "T11",
+        "name": "真实PG混合能力：发布仍逐读者串行，不误用新并发分支",
+        "requirements": [
+          "PS-02",
+          "PS-05"
+        ],
+        "reported_result": "PASS"
+      },
+      {
+        "id": "T12",
+        "name": "真实生产adapter与PG：进度check后无ACK撤销立即closing，旧pending不因current退休重新可安装",
+        "requirements": [
+          "PS-07",
+          "PS-10"
+        ],
+        "reported_result": "PASS"
+      }
+    ]
+  },
+  "browser": {
+    "provider": "/root",
+    "assessment": "FAIL",
+    "scenario": "normal",
+    "production_commit": "cb822f80ef2a755371bdd6e464dcc6aa6a169cde",
+    "raw_sha256": "60029109090423acfec5a23f8da203d50966868d04d91023b20071aa868ebec2",
+    "error_summary": "必须观察到真实可见静止paint建立的呈现资格",
+    "late": "NOT_RUN",
+    "five": "NOT_RUN",
+    "excerpt_archive_path": "browser/normal-result-excerpt.json",
+    "new_browser_run": false
+  },
+  "scope_limits": [
+    "工程语义对应不是源码或两模型/全系统trace refinement。",
+    "pending保守接口不自动为真实资格谓词构成安全over-approximation；实际adapter补证仅关闭具名无ACK退休路径。",
+    "预算5为publisher当前record工作，不是全服务SQL/RPC并发上限。",
+    "原可撤权错误退休、SQL失败、提交未知和关闭并非一一映射到模型每个ReadFailure/Discard动作。",
+    "COMMIT回应未知与SESSION_GONE的真实语义由PG具名场景补证，不由两record模型证明。",
+    "不证明任意规模、多实例、Crash、全部重试/取消、lease、资格组合、liveness、公平性或normal/late/five/P05性能。"
+  ],
+  "evidence_archive": {
+    "path": "evidence/implementation-ed6a4d2.tar.gz",
+    "sha256": "665aa76d7c11e0fb3524b95c30008b8f14558fcf6a8add53ce4617a0ad209f48",
+    "bytes": 20415,
+    "entries": {
+      "author/HANDOFF.md": {
+        "sha256": "2f1b966c1c803d3346f3e993dae2bab8c4f6c824743d3fe35961e7a3ec4c4647",
+        "bytes": 6590,
+        "kind": "UNCHANGED_SOURCE_BYTES"
+      },
+      "author/author-evidence.json": {
+        "sha256": "93d6b2dbb856fdc6c37856724f8fa3e57b5da30850e2ab8402833b6397fbbd5f",
+        "bytes": 2254,
+        "kind": "UNCHANGED_SOURCE_BYTES"
+      },
+      "author/red-shared-fanout.log": {
+        "sha256": "9371751fcc228a6e127cfd55d8d46bda87352416377dbfea40c64c90e0a6c2d3",
+        "bytes": 2063,
+        "kind": "UNCHANGED_SOURCE_BYTES"
+      },
+      "author/green-shared-fanout.log": {
+        "sha256": "73cb9cfd9d1d034b3df2a3beb9ae498a58cae9a484dc78d2e3819e9b007395d7",
+        "bytes": 341,
+        "kind": "UNCHANGED_SOURCE_BYTES"
+      },
+      "author/pg-behavior-final.log": {
+        "sha256": "8d5d75f5789005faa4c71770aba3f41f332a1bf5eaae59c9c6ebc9394914e20c",
+        "bytes": 1506,
+        "kind": "UNCHANGED_SOURCE_BYTES"
+      },
+      "author/pg-adapter.log": {
+        "sha256": "330a95812ae1b34eae6c6d615baa291b90b4ce7ba1e26e5fef25eef12ead6fd8",
+        "bytes": 250,
+        "kind": "UNCHANGED_SOURCE_BYTES"
+      },
+      "author/regression.log": {
+        "sha256": "7fce9a19a970636d4f3e6913e60104b6c2920f61a84bed6ac3d7c2b1d5672885",
+        "bytes": 8929,
+        "kind": "UNCHANGED_SOURCE_BYTES"
+      },
+      "model-review/review-model.md": {
+        "sha256": "34631d7287ba4b42e377a704d6e292cdf499581c730b028be83a6190c9b9f9dd",
+        "bytes": 13714,
+        "kind": "UNCHANGED_SOURCE_BYTES"
+      },
+      "model-review/model-evidence-audit.json": {
+        "sha256": "eec6757123116d0743e4bdbc46f9b0e279a1017860e7bc05855da0cc3a52421b",
+        "bytes": 38460,
+        "kind": "UNCHANGED_SOURCE_BYTES"
+      },
+      "browser/normal-result-excerpt.json": {
+        "sha256": "e7d0bdbcb1d4fee29da89340fe464cccfec0c576e3a7da4ca82a7f53fe66ebfc",
+        "bytes": 1660,
+        "kind": "DERIVED_EXCERPT"
+      }
+    }
+  },
+  "correspondence_scope": "只限六个列明生产文件中的PS-01至PS-10责任、已核静态路径及具名测试；不构成全程序trace refinement。",
+  "independent_implementation_mapping_review": "NOT_RUN",
+  "model_updated": false
+}

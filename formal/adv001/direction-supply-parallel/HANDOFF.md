@@ -1,6 +1,6 @@
 # 供给增量的设计与实现义务
 
-模式 `design`。本次业务源码对应状态为 `NOT_ASSESSED`，真实应用测试 `NOT_RUN`。模型检查与其边界见 [README.md](README.md)；只把这份表作为原总控继续实现、独审与验收的输入。
+本文件保留最初 `design` 交接的义务与边界；当时业务源码对应为 `NOT_ASSESSED`，应用测试 `NOT_RUN`。随后已按明确请求对 `ed6a4d2fdeea9fa47159c2fee3590f94431624b1` 做限定只读 `align`，状态 `ASSESSED_WITHIN_SCOPE`，实际源码身份、实现方 12 项 PG/Socket + 80 项回归及尚未覆盖内容见 [IMPLEMENTATION_MAP.md](IMPLEMENTATION_MAP.md)。原 TLC 结果不倒写新状态；浏览器 normal 仍 FAIL，late/five NOT_RUN。
 
 ## 已读取的基准
 
@@ -36,11 +36,13 @@
 
 基准生产 adapter 的静态调用链提供了收束依据：`spatial-supply::sendChecked` 失败及 runtime 的撤权/发布错误路径使用 `retireView(view,true)`；`server.mjs` 的 `view-revoked` 监听调用当前 socket 的 `disconnect(true)`，disconnect 回调调用 `runtime.disconnect`，其第一个 await 之前先设置 `connection.closing=true`。不通知的 `setConnectionView` 在原 session 锁内同步 retire/set；disconnect 末尾已有 closing，runtime close 则在服务 tracked 工作收束之后执行。当前未发现一个既不 closing、又不持相应锁的真实生产 retire 路径。任意直接调用内部方法不能被当作已可达的产品反例；Socket.IO 的真实回调顺序及该固定 adapter 映射仍由实际验证确认。
 
+后续 `align` 已读取实际生产 adapter 的具名 PG/Socket 交错与断言，确认上述无 ACK 发送失败路径同步 closing、旧候选不能复活，详见 [IMPLEMENTATION_MAP.md](IMPLEMENTATION_MAP.md)。这补充该路径的运行依据，不把完整非单调资格空间改写为形式化已覆盖。
+
 `negative-pending-after-check` 的业务含义是：两 peer 已覆盖 record → 进度持锁并复核成功 → 另一条允许的无锁路径使 pending 重新成立 → UPDATE/COMMIT → Published 证据不再满足无 pending。`negative-join-after-check` 同理让一个未覆盖 view 在复核之后出现。两者是对原子边界义务的错误变体，只有实现确实允许对应路径时才构成真实偏离。它们不是已经运行过的 PG 复现。
 
 ## 反例回归规格
 
-以下均交给实现方转写和运行；本包未添加或运行项目测试。
+以下是最初交给实现方的回归规格。本包未添加或运行项目测试；随后核到的真实测试及其对应关系见 [映射索引](IMPLEMENTATION_MAP.md#4-12-项新增测试的映射索引)，不能把规格清单本身当作运行证据。
 
 1. **共享读与授权头。** 门住两个不同 handle 的共享读，同时发 world/control 写；写只能在读事务结束后取得 session 行锁。读完成后再推进 head，早先那一页仍返回自己的固定授权头。反向先提交 control，再让旧绑定读取得锁，必须拒绝旧授权。
 2. **旧 cursor。** 已真实发送到 1、会话 head 为 2/3，发 cursor 0。仍读授权事务，完整返回上界不超过 1。不得用实时新 head 改写历史请求的上界。
