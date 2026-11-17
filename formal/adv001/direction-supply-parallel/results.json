@@ -1,0 +1,2509 @@
+{
+  "schema_version": 1,
+  "mode": "design",
+  "task": "#66 窄供给 r1 增量",
+  "design_source": "https://github.com/gbcdby/xiyou/issues/66#issuecomment-6943056327",
+  "design_sha256": "cd899058342ac9e5d571db675255946ac27eb00b46f5f2418a7e706d15285fbe",
+  "source_commit": "7b0d3846fad50b2c73598cdda2ddd350b7d83cb6",
+  "source_tree": "0648491f24960557cdf303b94a77b392e84ce1bc",
+  "implementation_status": "NOT_ASSESSED",
+  "independent_model_review": "NOT_RUN",
+  "liveness": "NOT_CHECKED",
+  "deadlock_checked": false,
+  "search": "BFS",
+  "counts": {
+    "positive": 9,
+    "negative-control": 21,
+    "witness": 14
+  },
+  "all_expectations_matched": true,
+  "tool": {
+    "version": "TLC 2.19 / v1.7.4",
+    "jar_sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+    "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+    "java_version": "OpenJDK 21.0.13"
+  },
+  "inputs_sha256": {
+    "ParallelPublish.tla": "a398ba802e01a73e8176bb54cd4bcf490c151c80b3a106481ab9102296312a8f",
+    "SharedRead.tla": "d7ef44896498a9c228862ea04e8bf199adfeda18d14fbf72ad2db4c1bcfff893",
+    "negative-batch-progress.cfg": "972763c73b7257ed9db2f0cd85f861a8f2e974598ee05d9091ea894163059f18",
+    "negative-close-release.cfg": "f9957eba2fbebc64ed1d0d6b5d90fe994242525ead1caadf8a7d9b2e76fbea06",
+    "negative-closed-send.cfg": "44e111983d7aeac8c2d10618fa61e4abb74378af44f1cad8f1c360e8a5802e21",
+    "negative-early-progress.cfg": "be43bb5cfd541d88ed3d24d7a20cd0ea172175c0d1fe318e2f72e940735a32f1",
+    "negative-early-release.cfg": "722c96ad6dd692d6d6e92d701d5eef9e4625de3f17060aa1746d8c9cc4288529",
+    "negative-fake-proof.cfg": "06e8eff11124fee8e874cd804c0e4b39c459cf0965cdaad76819fc93286f6b79",
+    "negative-ignore-failure.cfg": "3e0584ff597781a0be3f956af1c47099c644f56332336af598a8c3d031864d78",
+    "negative-ignore-pending.cfg": "644b6428b0d21f85d69454f35c2b4ff89d14e80867a225067b10da6d8d2d675a",
+    "negative-join-after-check.cfg": "8bc8d8f40d6360af82f10e0fd25e47146e3f2a009685188a7d7f27752997cd60",
+    "negative-live-head.cfg": "0979a552452cc19ee540df12c7417fb25e8a4ae0fdf9b2a671296af60cb767bd",
+    "negative-old-cursor.cfg": "844e88381a89d86c3e31a70f3d89c5274d041b0ac7552c5ab0e9e93b735a5a1c",
+    "negative-ordinary-share.cfg": "faad1893e26dd7eec953e585445bcee598a3665097168198cac2dc93637877d7",
+    "negative-pending-after-check.cfg": "671bfbfc08c0d03aba340a24ebfffaa2ac71fefb923c38790d711720551fd1e3",
+    "negative-progress-lock.cfg": "ba726abb349253a69ec529bec9d1b94e6aabb5e02121d1c9a1d8e6b845e05158",
+    "negative-publish-type.cfg": "2cc758c9c8e4f9282f715c8b9183697da019755d4a1b881de5266746b5203a09",
+    "negative-read-type.cfg": "85074081d09d31395655b471e51fe51f1d942d679548abc83b2ff1ceda7b6692",
+    "negative-stale-authorization.cfg": "6657c32a90cd77ea3e1818b7424bd4ba72fdf487b1e8ed40aac74d12dc91204c",
+    "negative-stale-binding.cfg": "2fd209728addb2d9f64bf6ef19605bc22d4f168ceea0c01687bbdf59af12343c",
+    "negative-stale-views.cfg": "cc13c4e5abff9b5321ac7155068e01bb8ee1533549347bf1f006362b081f4e86",
+    "negative-unbounded.cfg": "b457bebddebf2724f73322ed2c59afea5a906edd65797834a501d1598739b8e7",
+    "negative-write-overlap.cfg": "b4b7458122a2e12565a8e38dcc5ce4d2ae7a2d0a323d47eda91e8ded3751f98b",
+    "positive-budget.cfg": "877c4ebc66a55e48531e00ca951307323170107367c9546dc092072f2bf61ee0",
+    "positive-combined.cfg": "64317fe5645e81da93a73c4d716567701ef1d4535dba2c2dbe81d3f0fcd7b479",
+    "positive-failure.cfg": "980fb5c472ab0c446cdeb6f0d7e51c64c4fb51a12c4d1c179e1053ae74197b85",
+    "positive-install.cfg": "608c5a78f9e4241e2f60abcda0948895f4ef0c865621e451988e76012a43593b",
+    "positive-join.cfg": "1589091381408d66e35ee2675bb0f827f00dbf67b3287d838431736e82fd5685",
+    "positive-mixed.cfg": "744e078bb9fad00f451721bc1030a3d2a4eac024d171cd344cfc09ba366236d5",
+    "positive-old-cursor.cfg": "f3c5594fbf871f1c7c1e48e84f086f11fc0f3a68273b738dc3f3b84eb356c3e7",
+    "positive-publish.cfg": "17bf7c229df70f6c6dfd4fe370480ac14c8c3851c5fdc8e0828827e505e207d2",
+    "positive-shared.cfg": "4b20b28809a2c50b5eb7521d79d050e5799645946d67aa3f64402ee2c2682572",
+    "witness-close-settled.cfg": "8a189c197a2cf109e28a475548c77dc4649533f059cae3685a0485480985a3eb",
+    "witness-failure-retained.cfg": "9aaca8852b2f5200b597f46b1437f7f2f44b98a1de79f5f7ada6680ced14fd2b",
+    "witness-independent-rows.cfg": "0370f8cedba5355803494478ef8341fb75109fa2bede059d7aa25bcbec80ade8",
+    "witness-join-blocked.cfg": "4a7c09dc3a78b6ad23f1da763895b581804e6fcfc4839c0a639ff90ed36a7f2d",
+    "witness-new-view-blocked.cfg": "f84812273503f58d1659d03e1c591f1b33fc74876fb3191e5a0c67c2d0f7ffe3",
+    "witness-parallel-peers.cfg": "d8cfc234d81029dbbf5accb1d7bac375e039bf21985e2f3957a5d5b6477ca20e",
+    "witness-pending-blocked.cfg": "9967da077c9b18755b9698d88caa6b89a2c74d3d69f70b22282c36574895b3eb",
+    "witness-published-both.cfg": "02566d58e93fea4be3c2bcade0f225c8f708d44d409f377c013d9a2d3f076bee",
+    "witness-read-failure-retained.cfg": "1bc761c17f566bc58458460bad543ebccb6a40ae13e3505cd15774591bc0a4fc",
+    "witness-read-failure.cfg": "23ec0d9eb9a97bae2161b316f89ef778dc1e9036c61fd403db4d998c22af9974",
+    "witness-read-write.cfg": "ea68539558b2ebdafcc65a7e9752453e63cebb03c6cbbaa66c764081eec6d648",
+    "witness-send-failure-retained.cfg": "cbb8d1f759c3b257a1392dbc4db2fcea5639edfd81db459274a5ad0078fbba8b",
+    "witness-shared-readers.cfg": "2556ef00706244ad9ca37be081ac8a1bc6fbf1eda3fdc9c8c17927a7fa1b74cf",
+    "witness-stale-rejected.cfg": "e293f508e3cfb2d2979226bd91b322e10fb04c8081fb6581ec4480c3341ac255"
+  },
+  "check_sha256": "3c2f6b691062c7c1ae9268a90fba4ea26adcd8d40b021d54aeb73d69ebc2ce44",
+  "archive": {
+    "path": "evidence/r1-records.tar.gz",
+    "sha256": "dd032b85dd41c1e3d189e259846d3ad334c0b01e84837db50a1c7ea664dbb1ab",
+    "bytes": 342275,
+    "content": "原始runner结果、清单、日志和messages；共用输入快照、runner/工具锁；不含重复jar和状态队列。"
+  },
+  "runs": [
+    {
+      "group": "read",
+      "profile": "positive-shared",
+      "kind": "positive",
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "completed": true,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": null,
+      "actual_violated_invariants": [],
+      "expectation_matched": true,
+      "runner_exit": 0,
+      "tlc_exit": 0,
+      "started_at": "2026-11-17T08:43:38.158642+00:00",
+      "finished_at": "2026-11-17T08:43:39.755810+00:00",
+      "duration_seconds": 1.597211,
+      "statistics": {
+        "generated_states": 629,
+        "distinct_states": 412,
+        "remaining_states": 0
+      },
+      "configured_invariants": [
+        "TypeOK",
+        "LockExclusion",
+        "EligibleSharedOnly",
+        "AuthorizedBinding",
+        "FixedAuthorizedHead",
+        "OldCursorCeiling"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "none",
+        "Eligible": [
+          1,
+          2
+        ],
+        "OldCursor": false
+      },
+      "minimum_distinct_states": 50,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "read/positive-shared/result.json",
+          "sha256": "b207fba9cd97a70507a7d88481be99211235aa41f6cacfd42ad49e3a31109ec4"
+        },
+        "manifest.json": {
+          "archive_path": "read/positive-shared/manifest.json",
+          "sha256": "f65ac0967a3fee868387a824407125200b7180a0b3a84044456ae17f7a862fde"
+        },
+        "messages.json": {
+          "archive_path": "read/positive-shared/messages.json",
+          "sha256": "7cdb885604d9c463f85ff2467b1d320442eb270b075cb327a038577a83984b1f"
+        },
+        "tlc.log": {
+          "archive_path": "read/positive-shared/tlc.log",
+          "sha256": "6509113a0c6e413efd77e55f458af0787cbfc02937f13eea7e859296fee65bc7"
+        }
+      }
+    },
+    {
+      "group": "read",
+      "profile": "positive-mixed",
+      "kind": "positive",
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "completed": true,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": null,
+      "actual_violated_invariants": [],
+      "expectation_matched": true,
+      "runner_exit": 0,
+      "tlc_exit": 0,
+      "started_at": "2026-11-17T08:43:39.831939+00:00",
+      "finished_at": "2026-11-17T08:43:41.262522+00:00",
+      "duration_seconds": 1.430624,
+      "statistics": {
+        "generated_states": 539,
+        "distinct_states": 393,
+        "remaining_states": 0
+      },
+      "configured_invariants": [
+        "TypeOK",
+        "LockExclusion",
+        "EligibleSharedOnly",
+        "AuthorizedBinding",
+        "FixedAuthorizedHead",
+        "OldCursorCeiling"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "none",
+        "Eligible": [
+          1
+        ],
+        "OldCursor": false
+      },
+      "minimum_distinct_states": 50,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "read/positive-mixed/result.json",
+          "sha256": "62afd306c8c82ed5078f41428c012e60b536de64aa7721af7ed1788a7358c339"
+        },
+        "manifest.json": {
+          "archive_path": "read/positive-mixed/manifest.json",
+          "sha256": "f65ac0967a3fee868387a824407125200b7180a0b3a84044456ae17f7a862fde"
+        },
+        "messages.json": {
+          "archive_path": "read/positive-mixed/messages.json",
+          "sha256": "fadf0c53d60d9dcf46c50b69fc65860bc7f1cbda96e5e62a3c4a45d5cd546411"
+        },
+        "tlc.log": {
+          "archive_path": "read/positive-mixed/tlc.log",
+          "sha256": "48d59b98c8da08d023faa67747c3d36e795ec289e7a0cc6588c4110ff6ccbe5e"
+        }
+      }
+    },
+    {
+      "group": "read",
+      "profile": "positive-old-cursor",
+      "kind": "positive",
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "completed": true,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": null,
+      "actual_violated_invariants": [],
+      "expectation_matched": true,
+      "runner_exit": 0,
+      "tlc_exit": 0,
+      "started_at": "2026-11-17T08:43:41.343573+00:00",
+      "finished_at": "2026-11-17T08:43:42.815649+00:00",
+      "duration_seconds": 1.472119,
+      "statistics": {
+        "generated_states": 629,
+        "distinct_states": 412,
+        "remaining_states": 0
+      },
+      "configured_invariants": [
+        "TypeOK",
+        "LockExclusion",
+        "EligibleSharedOnly",
+        "AuthorizedBinding",
+        "FixedAuthorizedHead",
+        "OldCursorCeiling"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "none",
+        "Eligible": [
+          1,
+          2
+        ],
+        "OldCursor": true
+      },
+      "minimum_distinct_states": 50,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "read/positive-old-cursor/result.json",
+          "sha256": "3cd5421945179c04b99c69b64dc95bced867fb4bf513f5ef38c7f6e90c1f5ab6"
+        },
+        "manifest.json": {
+          "archive_path": "read/positive-old-cursor/manifest.json",
+          "sha256": "f65ac0967a3fee868387a824407125200b7180a0b3a84044456ae17f7a862fde"
+        },
+        "messages.json": {
+          "archive_path": "read/positive-old-cursor/messages.json",
+          "sha256": "4191af8d55a6501f6224d655957e4f3eb11ff4fc14fa96c5c17221680d83bc93"
+        },
+        "tlc.log": {
+          "archive_path": "read/positive-old-cursor/tlc.log",
+          "sha256": "4fb68e661b1d071073100836d4e17c1760f4c168e14ad9b2b694f0a260ec9899"
+        }
+      }
+    },
+    {
+      "group": "read",
+      "profile": "negative-read-type",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "TypeOK",
+      "actual_violated_invariants": [
+        "Invariant TypeOK is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:43:42.879217+00:00",
+      "finished_at": "2026-11-17T08:43:44.160577+00:00",
+      "duration_seconds": 1.281404,
+      "statistics": {
+        "generated_states": 6,
+        "distinct_states": 6,
+        "remaining_states": 4
+      },
+      "configured_invariants": [
+        "TypeOK"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "type",
+        "Eligible": [
+          1,
+          2
+        ],
+        "OldCursor": false
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "read/negative-read-type/result.json",
+          "sha256": "a3f6bff356886ad93f4a58e540b92c2502a948d79a62d468308092a043c4c526"
+        },
+        "manifest.json": {
+          "archive_path": "read/negative-read-type/manifest.json",
+          "sha256": "f65ac0967a3fee868387a824407125200b7180a0b3a84044456ae17f7a862fde"
+        },
+        "messages.json": {
+          "archive_path": "read/negative-read-type/messages.json",
+          "sha256": "4dc3d3e4a2db3a82f76d8098c4c513ab365d600fab7e782d563feaee4cd264ac"
+        },
+        "tlc.log": {
+          "archive_path": "read/negative-read-type/tlc.log",
+          "sha256": "af52f8c601abdc7f82d849975c77dc57fa749b37f4a46e742c516adde37b285f"
+        }
+      }
+    },
+    {
+      "group": "read",
+      "profile": "negative-write-overlap",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "LockExclusion",
+      "actual_violated_invariants": [
+        "Invariant LockExclusion is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:43:44.231986+00:00",
+      "finished_at": "2026-11-17T08:43:45.740067+00:00",
+      "duration_seconds": 1.508153,
+      "statistics": {
+        "generated_states": 11,
+        "distinct_states": 9,
+        "remaining_states": 6
+      },
+      "configured_invariants": [
+        "LockExclusion"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "writer-overlap",
+        "Eligible": [
+          1,
+          2
+        ],
+        "OldCursor": false
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "read/negative-write-overlap/result.json",
+          "sha256": "579f575d8f5963c9238b571aef7912853c5f09c923a90a5172b565af0ff3d7a2"
+        },
+        "manifest.json": {
+          "archive_path": "read/negative-write-overlap/manifest.json",
+          "sha256": "f65ac0967a3fee868387a824407125200b7180a0b3a84044456ae17f7a862fde"
+        },
+        "messages.json": {
+          "archive_path": "read/negative-write-overlap/messages.json",
+          "sha256": "c63296cd1a08fd39e8e085ee99d113bcd94b916507bb764ca1394d32d2240db0"
+        },
+        "tlc.log": {
+          "archive_path": "read/negative-write-overlap/tlc.log",
+          "sha256": "ccf2cfda6b509ea5ff7f23f203407ba3ed75fcbaa203cfc02a10792331e360f0"
+        }
+      }
+    },
+    {
+      "group": "read",
+      "profile": "negative-ordinary-share",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "EligibleSharedOnly",
+      "actual_violated_invariants": [
+        "Invariant EligibleSharedOnly is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:43:45.884847+00:00",
+      "finished_at": "2026-11-17T08:43:47.379219+00:00",
+      "duration_seconds": 1.494531,
+      "statistics": {
+        "generated_states": 3,
+        "distinct_states": 3,
+        "remaining_states": 1
+      },
+      "configured_invariants": [
+        "EligibleSharedOnly"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "ordinary-share",
+        "Eligible": [
+          1
+        ],
+        "OldCursor": false
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "read/negative-ordinary-share/result.json",
+          "sha256": "0e745ced2700069144bfee5a87833be500c675efec41fa7584dbe8809cf65c32"
+        },
+        "manifest.json": {
+          "archive_path": "read/negative-ordinary-share/manifest.json",
+          "sha256": "f65ac0967a3fee868387a824407125200b7180a0b3a84044456ae17f7a862fde"
+        },
+        "messages.json": {
+          "archive_path": "read/negative-ordinary-share/messages.json",
+          "sha256": "c56da8237418e502891c1d5efb24f9c87a502210d971ac1371f2aef7b7a910c9"
+        },
+        "tlc.log": {
+          "archive_path": "read/negative-ordinary-share/tlc.log",
+          "sha256": "8bd61eaf47435372e5f0ff5c18d995ba3b25e33c2dc6502774fcc28d09be6e7f"
+        }
+      }
+    },
+    {
+      "group": "read",
+      "profile": "negative-stale-authorization",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "AuthorizedBinding",
+      "actual_violated_invariants": [
+        "Invariant AuthorizedBinding is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:43:47.490991+00:00",
+      "finished_at": "2026-11-17T08:43:49.134138+00:00",
+      "duration_seconds": 1.643194,
+      "statistics": {
+        "generated_states": 78,
+        "distinct_states": 54,
+        "remaining_states": 26
+      },
+      "configured_invariants": [
+        "AuthorizedBinding"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "stale-authorization",
+        "Eligible": [
+          1,
+          2
+        ],
+        "OldCursor": false
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "read/negative-stale-authorization/result.json",
+          "sha256": "154d12b76d69bf21f9abd35c22c60070f96e598d3e8a8e06c4621d2712ec1632"
+        },
+        "manifest.json": {
+          "archive_path": "read/negative-stale-authorization/manifest.json",
+          "sha256": "f65ac0967a3fee868387a824407125200b7180a0b3a84044456ae17f7a862fde"
+        },
+        "messages.json": {
+          "archive_path": "read/negative-stale-authorization/messages.json",
+          "sha256": "0f2cc589384d6b81999b94e3ab5019b9ae23aaa1b3dedd3da51bb0db13f2ecdc"
+        },
+        "tlc.log": {
+          "archive_path": "read/negative-stale-authorization/tlc.log",
+          "sha256": "fbd290286d040acdbef8235cbfe48b58e423190165bc1682aa6302f0640e84cb"
+        }
+      }
+    },
+    {
+      "group": "read",
+      "profile": "negative-live-head",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "FixedAuthorizedHead",
+      "actual_violated_invariants": [
+        "Invariant FixedAuthorizedHead is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:43:49.214488+00:00",
+      "finished_at": "2026-11-17T08:43:50.740647+00:00",
+      "duration_seconds": 1.526209,
+      "statistics": {
+        "generated_states": 248,
+        "distinct_states": 176,
+        "remaining_states": 61
+      },
+      "configured_invariants": [
+        "FixedAuthorizedHead"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "live-head",
+        "Eligible": [
+          1,
+          2
+        ],
+        "OldCursor": false
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "read/negative-live-head/result.json",
+          "sha256": "cb054e58cd094c7884e890ed5df89e2efac69c68889abae2f819c975dfe0d046"
+        },
+        "manifest.json": {
+          "archive_path": "read/negative-live-head/manifest.json",
+          "sha256": "f65ac0967a3fee868387a824407125200b7180a0b3a84044456ae17f7a862fde"
+        },
+        "messages.json": {
+          "archive_path": "read/negative-live-head/messages.json",
+          "sha256": "66e68f3e28e7cb2743458043a01aa9e40ee671af4146bf7813291af54baca0bf"
+        },
+        "tlc.log": {
+          "archive_path": "read/negative-live-head/tlc.log",
+          "sha256": "0359f71c05be3f60d40bbe3fbee6355b64598eaf0f55bde34d57935032d9b30e"
+        }
+      }
+    },
+    {
+      "group": "read",
+      "profile": "negative-old-cursor",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "OldCursorCeiling",
+      "actual_violated_invariants": [
+        "Invariant OldCursorCeiling is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:43:50.825872+00:00",
+      "finished_at": "2026-11-17T08:43:52.378587+00:00",
+      "duration_seconds": 1.552752,
+      "statistics": {
+        "generated_states": 81,
+        "distinct_states": 64,
+        "remaining_states": 30
+      },
+      "configured_invariants": [
+        "OldCursorCeiling"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "old-cursor",
+        "Eligible": [
+          1,
+          2
+        ],
+        "OldCursor": true
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "read/negative-old-cursor/result.json",
+          "sha256": "c84e3b3e439e931647e0cf72de08b45355fd343a3c23dea9f6ac099b0edcd4ae"
+        },
+        "manifest.json": {
+          "archive_path": "read/negative-old-cursor/manifest.json",
+          "sha256": "f65ac0967a3fee868387a824407125200b7180a0b3a84044456ae17f7a862fde"
+        },
+        "messages.json": {
+          "archive_path": "read/negative-old-cursor/messages.json",
+          "sha256": "7928ce5ed1be092ef133497bb5413dab8335165c861773c2544468abe45d1bd4"
+        },
+        "tlc.log": {
+          "archive_path": "read/negative-old-cursor/tlc.log",
+          "sha256": "96dbb2642405ae817133113eeddb16fb60ec880d81f04f8b3af62ac993125958"
+        }
+      }
+    },
+    {
+      "group": "read",
+      "profile": "witness-shared-readers",
+      "kind": "witness",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "NotConcurrentShared",
+      "actual_violated_invariants": [
+        "Invariant NotConcurrentShared is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:43:52.444592+00:00",
+      "finished_at": "2026-11-17T08:43:53.871632+00:00",
+      "duration_seconds": 1.427077,
+      "statistics": {
+        "generated_states": 8,
+        "distinct_states": 8,
+        "remaining_states": 5
+      },
+      "configured_invariants": [
+        "NotConcurrentShared"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "none",
+        "Eligible": [
+          1,
+          2
+        ],
+        "OldCursor": false
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "read/witness-shared-readers/result.json",
+          "sha256": "7db0cc50aab77b9375572c0ec2c82a4cbda2204839f2c81d235b2fd895e3aa9d"
+        },
+        "manifest.json": {
+          "archive_path": "read/witness-shared-readers/manifest.json",
+          "sha256": "f65ac0967a3fee868387a824407125200b7180a0b3a84044456ae17f7a862fde"
+        },
+        "messages.json": {
+          "archive_path": "read/witness-shared-readers/messages.json",
+          "sha256": "f80ff9f0e91853f39587649bc58dc3112d82c322a4c836e8c41768aed9dee743"
+        },
+        "tlc.log": {
+          "archive_path": "read/witness-shared-readers/tlc.log",
+          "sha256": "de2be7b48a0eef30a655df186d8448a6a3cd400ad4475e1b2848e849ce3274b6"
+        }
+      }
+    },
+    {
+      "group": "read",
+      "profile": "witness-read-write",
+      "kind": "witness",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "NotReadThenWrite",
+      "actual_violated_invariants": [
+        "Invariant NotReadThenWrite is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:43:53.955109+00:00",
+      "finished_at": "2026-11-17T08:43:55.533145+00:00",
+      "duration_seconds": 1.578081,
+      "statistics": {
+        "generated_states": 240,
+        "distinct_states": 170,
+        "remaining_states": 59
+      },
+      "configured_invariants": [
+        "NotReadThenWrite"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "none",
+        "Eligible": [
+          1,
+          2
+        ],
+        "OldCursor": false
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "read/witness-read-write/result.json",
+          "sha256": "b60c8dee2812159c3209e74e77cc2b03b69f9fb2e94ef9b7e49d8412e80ee6e2"
+        },
+        "manifest.json": {
+          "archive_path": "read/witness-read-write/manifest.json",
+          "sha256": "f65ac0967a3fee868387a824407125200b7180a0b3a84044456ae17f7a862fde"
+        },
+        "messages.json": {
+          "archive_path": "read/witness-read-write/messages.json",
+          "sha256": "19f4176a05f61f4aed967b4fb838e09927d1bc2299339638fdd21a11591b24d0"
+        },
+        "tlc.log": {
+          "archive_path": "read/witness-read-write/tlc.log",
+          "sha256": "e4343bafb6cb27879da8c70b008d05cbee36bd4952147082a3c81bea8bcf76a7"
+        }
+      }
+    },
+    {
+      "group": "read",
+      "profile": "witness-stale-rejected",
+      "kind": "witness",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "NotStaleRejected",
+      "actual_violated_invariants": [
+        "Invariant NotStaleRejected is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:43:55.602512+00:00",
+      "finished_at": "2026-11-17T08:43:57.168847+00:00",
+      "duration_seconds": 1.56638,
+      "statistics": {
+        "generated_states": 68,
+        "distinct_states": 54,
+        "remaining_states": 26
+      },
+      "configured_invariants": [
+        "NotStaleRejected"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "none",
+        "Eligible": [
+          1,
+          2
+        ],
+        "OldCursor": false
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "read/witness-stale-rejected/result.json",
+          "sha256": "a259f5906d50d1bbabf04263b5bd1857fb31012a820ef96441a299098b7cd871"
+        },
+        "manifest.json": {
+          "archive_path": "read/witness-stale-rejected/manifest.json",
+          "sha256": "f65ac0967a3fee868387a824407125200b7180a0b3a84044456ae17f7a862fde"
+        },
+        "messages.json": {
+          "archive_path": "read/witness-stale-rejected/messages.json",
+          "sha256": "f2d037463665abb2a7f12a819c9502dca03c40fa0576a056b190dbde31b35a1f"
+        },
+        "tlc.log": {
+          "archive_path": "read/witness-stale-rejected/tlc.log",
+          "sha256": "11190e002c5a8fa63d3c460d08fee372be77f33043ddd36707b46486afa77ec7"
+        }
+      }
+    },
+    {
+      "group": "read",
+      "profile": "witness-read-failure",
+      "kind": "witness",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "NotReadFailure",
+      "actual_violated_invariants": [
+        "Invariant NotReadFailure is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:43:57.258954+00:00",
+      "finished_at": "2026-11-17T08:43:58.709415+00:00",
+      "duration_seconds": 1.450509,
+      "statistics": {
+        "generated_states": 7,
+        "distinct_states": 7,
+        "remaining_states": 4
+      },
+      "configured_invariants": [
+        "NotReadFailure"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "none",
+        "Eligible": [
+          1,
+          2
+        ],
+        "OldCursor": false
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "read/witness-read-failure/result.json",
+          "sha256": "ae011c955f738dfb22552a4243e82419850a2eab0b3cd7cc480093c1b10dfeb1"
+        },
+        "manifest.json": {
+          "archive_path": "read/witness-read-failure/manifest.json",
+          "sha256": "f65ac0967a3fee868387a824407125200b7180a0b3a84044456ae17f7a862fde"
+        },
+        "messages.json": {
+          "archive_path": "read/witness-read-failure/messages.json",
+          "sha256": "eaa96460bb8254299e04a2a6f836db69bce110137e12712d6276c3afc8835ea4"
+        },
+        "tlc.log": {
+          "archive_path": "read/witness-read-failure/tlc.log",
+          "sha256": "7dd95f6c7624a6677f4d35dce77cea62893d0a2fff49e4f0d340e903c1b0bb2c"
+        }
+      }
+    },
+    {
+      "group": "publish",
+      "profile": "positive-publish",
+      "kind": "positive",
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "completed": true,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": null,
+      "actual_violated_invariants": [],
+      "expectation_matched": true,
+      "runner_exit": 0,
+      "tlc_exit": 0,
+      "started_at": "2026-11-17T08:43:44.907290+00:00",
+      "finished_at": "2026-11-17T08:43:46.606115+00:00",
+      "duration_seconds": 1.698877,
+      "statistics": {
+        "generated_states": 132,
+        "distinct_states": 82,
+        "remaining_states": 0
+      },
+      "configured_invariants": [
+        "TypeOK",
+        "PeerBudget",
+        "LockExclusion",
+        "SettledBeforeProgress",
+        "NoLeakedTasks",
+        "PendingPreventsPublish",
+        "CurrentViewsCovered",
+        "FailureKeepsPending",
+        "ExactRowCommit",
+        "SentProof",
+        "NoStaleSend"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "none",
+        "Budget": 2,
+        "Scenario": "stable"
+      },
+      "minimum_distinct_states": 50,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "publish/positive-publish/result.json",
+          "sha256": "e4a36041deb6dbcb3f443f34dfea1d239132c1cc21461cc1416e6c7cd4a06d48"
+        },
+        "manifest.json": {
+          "archive_path": "publish/positive-publish/manifest.json",
+          "sha256": "19b5346594e819db412c4a514268ceebdfee4f89bfc210216b1c0936a007afe5"
+        },
+        "messages.json": {
+          "archive_path": "publish/positive-publish/messages.json",
+          "sha256": "04782b62ffeb3adf9112acf566ddd46ade9b7d47c8cb570fd39c697efecb3eab"
+        },
+        "tlc.log": {
+          "archive_path": "publish/positive-publish/tlc.log",
+          "sha256": "61f08143124a121bfd2dd437058f861bb238f014857800716dce8a899a34a5c0"
+        }
+      }
+    },
+    {
+      "group": "publish",
+      "profile": "positive-install",
+      "kind": "positive",
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "completed": true,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": null,
+      "actual_violated_invariants": [],
+      "expectation_matched": true,
+      "runner_exit": 0,
+      "tlc_exit": 0,
+      "started_at": "2026-11-17T08:43:46.725096+00:00",
+      "finished_at": "2026-11-17T08:43:48.625457+00:00",
+      "duration_seconds": 1.900411,
+      "statistics": {
+        "generated_states": 3791,
+        "distinct_states": 1858,
+        "remaining_states": 0
+      },
+      "configured_invariants": [
+        "TypeOK",
+        "PeerBudget",
+        "LockExclusion",
+        "SettledBeforeProgress",
+        "NoLeakedTasks",
+        "PendingPreventsPublish",
+        "CurrentViewsCovered",
+        "FailureKeepsPending",
+        "ExactRowCommit",
+        "SentProof",
+        "NoStaleSend"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "none",
+        "Budget": 2,
+        "Scenario": "install"
+      },
+      "minimum_distinct_states": 50,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "publish/positive-install/result.json",
+          "sha256": "3626929511b0e72d9174ad61f1d8fec734b6c759cb3f73b0939989565f4c9d87"
+        },
+        "manifest.json": {
+          "archive_path": "publish/positive-install/manifest.json",
+          "sha256": "19b5346594e819db412c4a514268ceebdfee4f89bfc210216b1c0936a007afe5"
+        },
+        "messages.json": {
+          "archive_path": "publish/positive-install/messages.json",
+          "sha256": "f6f66184c5098ecfa8a82dc7790aea73f581dbf8e1cc35cf9a5bb702c90d3519"
+        },
+        "tlc.log": {
+          "archive_path": "publish/positive-install/tlc.log",
+          "sha256": "e2c723e73b85539d75b2fb36c0a99702d779f738815dcabf52392d26ea3735bc"
+        }
+      }
+    },
+    {
+      "group": "publish",
+      "profile": "positive-join",
+      "kind": "positive",
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "completed": true,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": null,
+      "actual_violated_invariants": [],
+      "expectation_matched": true,
+      "runner_exit": 0,
+      "tlc_exit": 0,
+      "started_at": "2026-11-17T08:43:48.746508+00:00",
+      "finished_at": "2026-11-17T08:43:50.246504+00:00",
+      "duration_seconds": 1.50005,
+      "statistics": {
+        "generated_states": 618,
+        "distinct_states": 349,
+        "remaining_states": 0
+      },
+      "configured_invariants": [
+        "TypeOK",
+        "PeerBudget",
+        "LockExclusion",
+        "SettledBeforeProgress",
+        "NoLeakedTasks",
+        "PendingPreventsPublish",
+        "CurrentViewsCovered",
+        "FailureKeepsPending",
+        "ExactRowCommit",
+        "SentProof",
+        "NoStaleSend"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "none",
+        "Budget": 2,
+        "Scenario": "join"
+      },
+      "minimum_distinct_states": 50,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "publish/positive-join/result.json",
+          "sha256": "058fb4c8a6cdef32e7f7a813272c8242093d83375ef86bc16c7be5dcc9867c2a"
+        },
+        "manifest.json": {
+          "archive_path": "publish/positive-join/manifest.json",
+          "sha256": "19b5346594e819db412c4a514268ceebdfee4f89bfc210216b1c0936a007afe5"
+        },
+        "messages.json": {
+          "archive_path": "publish/positive-join/messages.json",
+          "sha256": "0a9b774694c7f2051e28f77bece37019481a2f0b2d1db14f6ca157186cb1f6e4"
+        },
+        "tlc.log": {
+          "archive_path": "publish/positive-join/tlc.log",
+          "sha256": "70faa9d6d5d599b3ab444f109fc122af8ed2e470d04848a524cb59f5c70973db"
+        }
+      }
+    },
+    {
+      "group": "publish",
+      "profile": "positive-failure",
+      "kind": "positive",
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "completed": true,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": null,
+      "actual_violated_invariants": [],
+      "expectation_matched": true,
+      "runner_exit": 0,
+      "tlc_exit": 0,
+      "started_at": "2026-11-17T08:43:50.339284+00:00",
+      "finished_at": "2026-11-17T08:43:52.335232+00:00",
+      "duration_seconds": 1.995997,
+      "statistics": {
+        "generated_states": 11090,
+        "distinct_states": 5453,
+        "remaining_states": 0
+      },
+      "configured_invariants": [
+        "TypeOK",
+        "PeerBudget",
+        "LockExclusion",
+        "SettledBeforeProgress",
+        "NoLeakedTasks",
+        "PendingPreventsPublish",
+        "CurrentViewsCovered",
+        "FailureKeepsPending",
+        "ExactRowCommit",
+        "SentProof",
+        "NoStaleSend"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "none",
+        "Budget": 2,
+        "Scenario": "failure"
+      },
+      "minimum_distinct_states": 50,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "publish/positive-failure/result.json",
+          "sha256": "b91bf8082ed007e10b21d15ce8c72eeb44130c9e738f9b2a0477e0884ab1e7e1"
+        },
+        "manifest.json": {
+          "archive_path": "publish/positive-failure/manifest.json",
+          "sha256": "19b5346594e819db412c4a514268ceebdfee4f89bfc210216b1c0936a007afe5"
+        },
+        "messages.json": {
+          "archive_path": "publish/positive-failure/messages.json",
+          "sha256": "c605c013b914d4bd51d257e1b129e53d92b346e4dfeb4da8c3d42596cfe82aa1"
+        },
+        "tlc.log": {
+          "archive_path": "publish/positive-failure/tlc.log",
+          "sha256": "5e4e78c6a15f97271b2235ad2cc78d620a9ef912aa3f34e218b9c80965e75474"
+        }
+      }
+    },
+    {
+      "group": "publish",
+      "profile": "positive-budget",
+      "kind": "positive",
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "completed": true,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": null,
+      "actual_violated_invariants": [],
+      "expectation_matched": true,
+      "runner_exit": 0,
+      "tlc_exit": 0,
+      "started_at": "2026-11-17T08:43:52.424402+00:00",
+      "finished_at": "2026-11-17T08:43:53.979209+00:00",
+      "duration_seconds": 1.554844,
+      "statistics": {
+        "generated_states": 52,
+        "distinct_states": 50,
+        "remaining_states": 0
+      },
+      "configured_invariants": [
+        "TypeOK",
+        "PeerBudget",
+        "LockExclusion",
+        "SettledBeforeProgress",
+        "NoLeakedTasks",
+        "PendingPreventsPublish",
+        "CurrentViewsCovered",
+        "FailureKeepsPending",
+        "ExactRowCommit",
+        "SentProof",
+        "NoStaleSend"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "none",
+        "Budget": 1,
+        "Scenario": "stable"
+      },
+      "minimum_distinct_states": 50,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "publish/positive-budget/result.json",
+          "sha256": "8e84c885b578530b87c1acec5aa31e269b05af17bc7be0488b996236051d9b91"
+        },
+        "manifest.json": {
+          "archive_path": "publish/positive-budget/manifest.json",
+          "sha256": "19b5346594e819db412c4a514268ceebdfee4f89bfc210216b1c0936a007afe5"
+        },
+        "messages.json": {
+          "archive_path": "publish/positive-budget/messages.json",
+          "sha256": "2a7af16969b54f1f6fe4bb70bf6b2a4cbe3511ffc95f918f4e3e76b3970c38a4"
+        },
+        "tlc.log": {
+          "archive_path": "publish/positive-budget/tlc.log",
+          "sha256": "4a2fac72f4ff3689654fc468c6bda5e387674f4cd6f5d386b8dc98f1d7714793"
+        }
+      }
+    },
+    {
+      "group": "publish",
+      "profile": "positive-combined",
+      "kind": "positive",
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "completed": true,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": null,
+      "actual_violated_invariants": [],
+      "expectation_matched": true,
+      "runner_exit": 0,
+      "tlc_exit": 0,
+      "started_at": "2026-11-17T08:43:54.107396+00:00",
+      "finished_at": "2026-11-17T08:43:59.682999+00:00",
+      "duration_seconds": 5.57565,
+      "statistics": {
+        "generated_states": 173601,
+        "distinct_states": 70181,
+        "remaining_states": 0
+      },
+      "configured_invariants": [
+        "TypeOK",
+        "PeerBudget",
+        "LockExclusion",
+        "SettledBeforeProgress",
+        "NoLeakedTasks",
+        "PendingPreventsPublish",
+        "CurrentViewsCovered",
+        "FailureKeepsPending",
+        "ExactRowCommit",
+        "SentProof",
+        "NoStaleSend"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "none",
+        "Budget": 2,
+        "Scenario": "all"
+      },
+      "minimum_distinct_states": 50,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "publish/positive-combined/result.json",
+          "sha256": "c5f50e75ea30e76f4ce6b028838e855c10be0a1e591a80a8c84782410f66586d"
+        },
+        "manifest.json": {
+          "archive_path": "publish/positive-combined/manifest.json",
+          "sha256": "19b5346594e819db412c4a514268ceebdfee4f89bfc210216b1c0936a007afe5"
+        },
+        "messages.json": {
+          "archive_path": "publish/positive-combined/messages.json",
+          "sha256": "a11b82cff699d8919c1238d6857388ea4e1e2d033cde75833aa260629fe3e39f"
+        },
+        "tlc.log": {
+          "archive_path": "publish/positive-combined/tlc.log",
+          "sha256": "464db163e9d0cce5388479dedbc3858874f567f878dc50437b04b54e2acc08c1"
+        }
+      }
+    },
+    {
+      "group": "publish",
+      "profile": "negative-publish-type",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "TypeOK",
+      "actual_violated_invariants": [
+        "Invariant TypeOK is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:43:59.787365+00:00",
+      "finished_at": "2026-11-17T08:44:01.182831+00:00",
+      "duration_seconds": 1.395553,
+      "statistics": {
+        "generated_states": 3,
+        "distinct_states": 3,
+        "remaining_states": 1
+      },
+      "configured_invariants": [
+        "TypeOK"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "type",
+        "Budget": 2,
+        "Scenario": "stable"
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "publish/negative-publish-type/result.json",
+          "sha256": "41a1a69a677f00d7ba25164d0ddee072b6fd07acc685d1ab5b8f800484d197dc"
+        },
+        "manifest.json": {
+          "archive_path": "publish/negative-publish-type/manifest.json",
+          "sha256": "19b5346594e819db412c4a514268ceebdfee4f89bfc210216b1c0936a007afe5"
+        },
+        "messages.json": {
+          "archive_path": "publish/negative-publish-type/messages.json",
+          "sha256": "2217d8e722827cdf1ce8e41f75d6e20414d8e2883949a5e974d01e5a3f2fad2e"
+        },
+        "tlc.log": {
+          "archive_path": "publish/negative-publish-type/tlc.log",
+          "sha256": "e0c529bffe63d89bcdb312ac34d0de225b5c99a5c067581a14e71d9117ab3ce0"
+        }
+      }
+    },
+    {
+      "group": "publish",
+      "profile": "negative-unbounded",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "PeerBudget",
+      "actual_violated_invariants": [
+        "Invariant PeerBudget is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:44:01.243988+00:00",
+      "finished_at": "2026-11-17T08:44:03.014906+00:00",
+      "duration_seconds": 1.770964,
+      "statistics": {
+        "generated_states": 8,
+        "distinct_states": 6,
+        "remaining_states": 2
+      },
+      "configured_invariants": [
+        "PeerBudget"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "unbounded",
+        "Budget": 1,
+        "Scenario": "stable"
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "publish/negative-unbounded/result.json",
+          "sha256": "0b62eb1db0af301cd197cbc9293a3d64b389136e8dc13d09844f2d826acdb966"
+        },
+        "manifest.json": {
+          "archive_path": "publish/negative-unbounded/manifest.json",
+          "sha256": "19b5346594e819db412c4a514268ceebdfee4f89bfc210216b1c0936a007afe5"
+        },
+        "messages.json": {
+          "archive_path": "publish/negative-unbounded/messages.json",
+          "sha256": "82fa0ed65abfdc5a36ff1c55d393e0778a08ef3004e41af52bd99f763c334998"
+        },
+        "tlc.log": {
+          "archive_path": "publish/negative-unbounded/tlc.log",
+          "sha256": "3999c7fcb2c57796290fb683f6bf55b9904a3fbac7e275aac99ef4ca07c02779"
+        }
+      }
+    },
+    {
+      "group": "publish",
+      "profile": "negative-progress-lock",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "LockExclusion",
+      "actual_violated_invariants": [
+        "Invariant LockExclusion is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:44:03.086587+00:00",
+      "finished_at": "2026-11-17T08:44:04.691722+00:00",
+      "duration_seconds": 1.605176,
+      "statistics": {
+        "generated_states": 29,
+        "distinct_states": 21,
+        "remaining_states": 11
+      },
+      "configured_invariants": [
+        "LockExclusion"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "writer-overlap",
+        "Budget": 2,
+        "Scenario": "install"
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "publish/negative-progress-lock/result.json",
+          "sha256": "2949506680ce33fb10849bb3f298cc2f73aca56b2dda70a9ccd4beab0cb381fb"
+        },
+        "manifest.json": {
+          "archive_path": "publish/negative-progress-lock/manifest.json",
+          "sha256": "19b5346594e819db412c4a514268ceebdfee4f89bfc210216b1c0936a007afe5"
+        },
+        "messages.json": {
+          "archive_path": "publish/negative-progress-lock/messages.json",
+          "sha256": "5d70acdaf6ba50854b3c2681c84b40cb0d944403c86ebb85e0fa8a88c3f55995"
+        },
+        "tlc.log": {
+          "archive_path": "publish/negative-progress-lock/tlc.log",
+          "sha256": "b9510f92e9dc542d5fddd7457747f49545f0a10fa92dde4f25007b4cbd22d98c"
+        }
+      }
+    },
+    {
+      "group": "publish",
+      "profile": "negative-early-progress",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "SettledBeforeProgress",
+      "actual_violated_invariants": [
+        "Invariant SettledBeforeProgress is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:44:04.773552+00:00",
+      "finished_at": "2026-11-17T08:44:06.085718+00:00",
+      "duration_seconds": 1.312206,
+      "statistics": {
+        "generated_states": 5,
+        "distinct_states": 5,
+        "remaining_states": 2
+      },
+      "configured_invariants": [
+        "SettledBeforeProgress"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "early-progress",
+        "Budget": 2,
+        "Scenario": "stable"
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "publish/negative-early-progress/result.json",
+          "sha256": "f1dd41779b867e6181fcfb010d868597a02dbe81cbe8f078232af1ad1e8fefce"
+        },
+        "manifest.json": {
+          "archive_path": "publish/negative-early-progress/manifest.json",
+          "sha256": "19b5346594e819db412c4a514268ceebdfee4f89bfc210216b1c0936a007afe5"
+        },
+        "messages.json": {
+          "archive_path": "publish/negative-early-progress/messages.json",
+          "sha256": "3914fdcf11ec9722cf0dfef9a6e19588bca2c9e04ae55286b1c7f0c93ab2e36b"
+        },
+        "tlc.log": {
+          "archive_path": "publish/negative-early-progress/tlc.log",
+          "sha256": "392ae22d319e9693ee62d7a5afe37ffe81fff89459e40f27b3b1ba09deb5b148"
+        }
+      }
+    },
+    {
+      "group": "publish",
+      "profile": "negative-early-release",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "NoLeakedTasks",
+      "actual_violated_invariants": [
+        "Invariant NoLeakedTasks is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:44:06.167509+00:00",
+      "finished_at": "2026-11-17T08:44:07.753265+00:00",
+      "duration_seconds": 1.585804,
+      "statistics": {
+        "generated_states": 192,
+        "distinct_states": 131,
+        "remaining_states": 67
+      },
+      "configured_invariants": [
+        "NoLeakedTasks"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "early-release",
+        "Budget": 2,
+        "Scenario": "failure"
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "publish/negative-early-release/result.json",
+          "sha256": "d39a54638f3137ad51770938212017fd06e2584ec57a5b5a40fb998b90f54fc1"
+        },
+        "manifest.json": {
+          "archive_path": "publish/negative-early-release/manifest.json",
+          "sha256": "19b5346594e819db412c4a514268ceebdfee4f89bfc210216b1c0936a007afe5"
+        },
+        "messages.json": {
+          "archive_path": "publish/negative-early-release/messages.json",
+          "sha256": "9653e6b21162cb3de05d501d07453a67f7ad1ca8f07635466d323ea55ff58a6e"
+        },
+        "tlc.log": {
+          "archive_path": "publish/negative-early-release/tlc.log",
+          "sha256": "bf18f170b309de1459cbe1440c7f5218b6c5f9ae771ca05b367c080a1f5da0e6"
+        }
+      }
+    },
+    {
+      "group": "publish",
+      "profile": "negative-ignore-pending",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "PendingPreventsPublish",
+      "actual_violated_invariants": [
+        "Invariant PendingPreventsPublish is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:44:07.813969+00:00",
+      "finished_at": "2026-11-17T08:44:09.356915+00:00",
+      "duration_seconds": 1.542987,
+      "statistics": {
+        "generated_states": 1145,
+        "distinct_states": 565,
+        "remaining_states": 36
+      },
+      "configured_invariants": [
+        "PendingPreventsPublish"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "ignore-pending",
+        "Budget": 2,
+        "Scenario": "install"
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "publish/negative-ignore-pending/result.json",
+          "sha256": "cc94de3c46e747cc86cfaa46939dedfe10a0fce7abe99b873ce4343f3c63f3e5"
+        },
+        "manifest.json": {
+          "archive_path": "publish/negative-ignore-pending/manifest.json",
+          "sha256": "19b5346594e819db412c4a514268ceebdfee4f89bfc210216b1c0936a007afe5"
+        },
+        "messages.json": {
+          "archive_path": "publish/negative-ignore-pending/messages.json",
+          "sha256": "f4d2e8e6f77c479e7ddcf3ca7d824d36cfa3248783d8dad9179aac28968676df"
+        },
+        "tlc.log": {
+          "archive_path": "publish/negative-ignore-pending/tlc.log",
+          "sha256": "8571fe3242008da17d1d84d56860bd600a6587ae69a72a01ad921910b67c6390"
+        }
+      }
+    },
+    {
+      "group": "publish",
+      "profile": "negative-stale-views",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "CurrentViewsCovered",
+      "actual_violated_invariants": [
+        "Invariant CurrentViewsCovered is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:44:09.416437+00:00",
+      "finished_at": "2026-11-17T08:44:10.802714+00:00",
+      "duration_seconds": 1.386323,
+      "statistics": {
+        "generated_states": 157,
+        "distinct_states": 90,
+        "remaining_states": 7
+      },
+      "configured_invariants": [
+        "CurrentViewsCovered"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "stale-views",
+        "Budget": 2,
+        "Scenario": "join"
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "publish/negative-stale-views/result.json",
+          "sha256": "9e409f1b1e857e63d2495f71e41f1891d67b8dc57365e41b97bc228301edf8c6"
+        },
+        "manifest.json": {
+          "archive_path": "publish/negative-stale-views/manifest.json",
+          "sha256": "19b5346594e819db412c4a514268ceebdfee4f89bfc210216b1c0936a007afe5"
+        },
+        "messages.json": {
+          "archive_path": "publish/negative-stale-views/messages.json",
+          "sha256": "213de72379227d181c80b7f569ff72b6dbd2df00105f9bdcd32d247d6b699bbd"
+        },
+        "tlc.log": {
+          "archive_path": "publish/negative-stale-views/tlc.log",
+          "sha256": "be31df43604ce232b6ed9c8666010e83d47d67eac15e680c1ae2a58c66270166"
+        }
+      }
+    },
+    {
+      "group": "publish",
+      "profile": "negative-ignore-failure",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "FailureKeepsPending",
+      "actual_violated_invariants": [
+        "Invariant FailureKeepsPending is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:44:10.875932+00:00",
+      "finished_at": "2026-11-17T08:44:12.354428+00:00",
+      "duration_seconds": 1.478537,
+      "statistics": {
+        "generated_states": 1543,
+        "distinct_states": 754,
+        "remaining_states": 170
+      },
+      "configured_invariants": [
+        "FailureKeepsPending"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "ignore-failure",
+        "Budget": 2,
+        "Scenario": "failure"
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "publish/negative-ignore-failure/result.json",
+          "sha256": "5e65ffbaca9a1f9b6101243c69f0d09d2684a93f46b2c1cd3b3d75702a480ada"
+        },
+        "manifest.json": {
+          "archive_path": "publish/negative-ignore-failure/manifest.json",
+          "sha256": "19b5346594e819db412c4a514268ceebdfee4f89bfc210216b1c0936a007afe5"
+        },
+        "messages.json": {
+          "archive_path": "publish/negative-ignore-failure/messages.json",
+          "sha256": "7c6f4eeb452edd1e9dd94447a496531505a12b82aae2a92de966303088a7ca3a"
+        },
+        "tlc.log": {
+          "archive_path": "publish/negative-ignore-failure/tlc.log",
+          "sha256": "e8e02ee470f4d7e6e94356ef71aab46fce0759d9c15429a33f9d484583c11e93"
+        }
+      }
+    },
+    {
+      "group": "publish",
+      "profile": "negative-batch-progress",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "ExactRowCommit",
+      "actual_violated_invariants": [
+        "Invariant ExactRowCommit is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:44:12.419903+00:00",
+      "finished_at": "2026-11-17T08:44:13.889092+00:00",
+      "duration_seconds": 1.46923,
+      "statistics": {
+        "generated_states": 66,
+        "distinct_states": 41,
+        "remaining_states": 0
+      },
+      "configured_invariants": [
+        "ExactRowCommit"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "batch-progress",
+        "Budget": 2,
+        "Scenario": "stable"
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "publish/negative-batch-progress/result.json",
+          "sha256": "7a77c30f453ca9e0f90e66715f2b22c41bbf8fa6c5ee55d195608e78ef95ddef"
+        },
+        "manifest.json": {
+          "archive_path": "publish/negative-batch-progress/manifest.json",
+          "sha256": "19b5346594e819db412c4a514268ceebdfee4f89bfc210216b1c0936a007afe5"
+        },
+        "messages.json": {
+          "archive_path": "publish/negative-batch-progress/messages.json",
+          "sha256": "0e91728e27cd3b40d502a5a969ffbaede5be5a9355eaf43f363eb5878795b477"
+        },
+        "tlc.log": {
+          "archive_path": "publish/negative-batch-progress/tlc.log",
+          "sha256": "e586f271e22b62cd5c23115d0f536faeb25236cd16e7b2de128e8875d84bc8b5"
+        }
+      }
+    },
+    {
+      "group": "publish",
+      "profile": "negative-fake-proof",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "SentProof",
+      "actual_violated_invariants": [
+        "Invariant SentProof is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:44:13.960438+00:00",
+      "finished_at": "2026-11-17T08:44:15.388635+00:00",
+      "duration_seconds": 1.428248,
+      "statistics": {
+        "generated_states": 15,
+        "distinct_states": 12,
+        "remaining_states": 3
+      },
+      "configured_invariants": [
+        "SentProof"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "fake-proof",
+        "Budget": 2,
+        "Scenario": "stable"
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "publish/negative-fake-proof/result.json",
+          "sha256": "6d8dde00fa6da9a3a6b26d1ee409403f9aec91912372177e12aa799579110ff5"
+        },
+        "manifest.json": {
+          "archive_path": "publish/negative-fake-proof/manifest.json",
+          "sha256": "19b5346594e819db412c4a514268ceebdfee4f89bfc210216b1c0936a007afe5"
+        },
+        "messages.json": {
+          "archive_path": "publish/negative-fake-proof/messages.json",
+          "sha256": "d320b26795bc7986c868bece31f90dd41b82d6a196c3c779e160aa1fb9e1aab8"
+        },
+        "tlc.log": {
+          "archive_path": "publish/negative-fake-proof/tlc.log",
+          "sha256": "6225f4e81f38bfea3e7ee7f8682139dca3971eebe114ce0d0f9c6f9db823614f"
+        }
+      }
+    },
+    {
+      "group": "publish",
+      "profile": "negative-stale-binding",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "NoStaleSend",
+      "actual_violated_invariants": [
+        "Invariant NoStaleSend is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:44:15.449364+00:00",
+      "finished_at": "2026-11-17T08:44:17.147980+00:00",
+      "duration_seconds": 1.698696,
+      "statistics": {
+        "generated_states": 314,
+        "distinct_states": 177,
+        "remaining_states": 57
+      },
+      "configured_invariants": [
+        "NoStaleSend"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "stale-binding",
+        "Budget": 2,
+        "Scenario": "install"
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "publish/negative-stale-binding/result.json",
+          "sha256": "18106178eb9ae1c9df6dce6a8503e6ee018dcdf7f5fe8322dc11c89a785feeb0"
+        },
+        "manifest.json": {
+          "archive_path": "publish/negative-stale-binding/manifest.json",
+          "sha256": "19b5346594e819db412c4a514268ceebdfee4f89bfc210216b1c0936a007afe5"
+        },
+        "messages.json": {
+          "archive_path": "publish/negative-stale-binding/messages.json",
+          "sha256": "d4439e59b52494bfd5777e6a3952ea5c7521c2157c91ea9559b3d8a1fe81136e"
+        },
+        "tlc.log": {
+          "archive_path": "publish/negative-stale-binding/tlc.log",
+          "sha256": "ec7cedfe0b7d4dcb879c0f9447da727ba306e70fd6464d865263017ab8fae5a9"
+        }
+      }
+    },
+    {
+      "group": "publish",
+      "profile": "negative-pending-after-check",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "PendingPreventsPublish",
+      "actual_violated_invariants": [
+        "Invariant PendingPreventsPublish is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:44:17.230830+00:00",
+      "finished_at": "2026-11-17T08:44:19.022156+00:00",
+      "duration_seconds": 1.79138,
+      "statistics": {
+        "generated_states": 72,
+        "distinct_states": 45,
+        "remaining_states": 1
+      },
+      "configured_invariants": [
+        "PendingPreventsPublish"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "pending-after-check",
+        "Budget": 2,
+        "Scenario": "stable"
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "publish/negative-pending-after-check/result.json",
+          "sha256": "2e29c142e3e70822e88a2a470985fdd0739c9005b03036b3ee98ee10a664202c"
+        },
+        "manifest.json": {
+          "archive_path": "publish/negative-pending-after-check/manifest.json",
+          "sha256": "19b5346594e819db412c4a514268ceebdfee4f89bfc210216b1c0936a007afe5"
+        },
+        "messages.json": {
+          "archive_path": "publish/negative-pending-after-check/messages.json",
+          "sha256": "37147973616b1c7ad1809f7274182cd9bc61b9bbc57b1a2cef2ac4b970ebee49"
+        },
+        "tlc.log": {
+          "archive_path": "publish/negative-pending-after-check/tlc.log",
+          "sha256": "1fd22ca08e7266d9cfb5e6a3036bd38af62d634947942c0f74b1801689f3c848"
+        }
+      }
+    },
+    {
+      "group": "publish",
+      "profile": "negative-join-after-check",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "CurrentViewsCovered",
+      "actual_violated_invariants": [
+        "Invariant CurrentViewsCovered is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:44:19.103425+00:00",
+      "finished_at": "2026-11-17T08:44:20.941435+00:00",
+      "duration_seconds": 1.838055,
+      "statistics": {
+        "generated_states": 173,
+        "distinct_states": 96,
+        "remaining_states": 10
+      },
+      "configured_invariants": [
+        "CurrentViewsCovered"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "join-without-lock",
+        "Budget": 2,
+        "Scenario": "join"
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "publish/negative-join-after-check/result.json",
+          "sha256": "bc7e2ad023384eb110effd442c536447edd64ae7f2d7cc6f37333f10927f8e7d"
+        },
+        "manifest.json": {
+          "archive_path": "publish/negative-join-after-check/manifest.json",
+          "sha256": "19b5346594e819db412c4a514268ceebdfee4f89bfc210216b1c0936a007afe5"
+        },
+        "messages.json": {
+          "archive_path": "publish/negative-join-after-check/messages.json",
+          "sha256": "916ecd82d761ddd2e73c72075fe400e0151636a6c3927b69d55a7a6306b17d3c"
+        },
+        "tlc.log": {
+          "archive_path": "publish/negative-join-after-check/tlc.log",
+          "sha256": "c620cb75889dc9891eb7e7d7790910688ed908d6566a80a050747779a3be7fec"
+        }
+      }
+    },
+    {
+      "group": "publish",
+      "profile": "witness-parallel-peers",
+      "kind": "witness",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "NotTwoReaders",
+      "actual_violated_invariants": [
+        "Invariant NotTwoReaders is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:44:21.062797+00:00",
+      "finished_at": "2026-11-17T08:44:22.562730+00:00",
+      "duration_seconds": 1.49998,
+      "statistics": {
+        "generated_states": 18,
+        "distinct_states": 14,
+        "remaining_states": 4
+      },
+      "configured_invariants": [
+        "NotTwoReaders"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "none",
+        "Budget": 2,
+        "Scenario": "stable"
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "publish/witness-parallel-peers/result.json",
+          "sha256": "a071cf8b226568e2f08e59b069c4c22fd098a0bf9e8418ec57353a58f4dc65cf"
+        },
+        "manifest.json": {
+          "archive_path": "publish/witness-parallel-peers/manifest.json",
+          "sha256": "19b5346594e819db412c4a514268ceebdfee4f89bfc210216b1c0936a007afe5"
+        },
+        "messages.json": {
+          "archive_path": "publish/witness-parallel-peers/messages.json",
+          "sha256": "66daba4b71f5441856180dd28f29bba025a00c563e9e956a339be7aafc8e7541"
+        },
+        "tlc.log": {
+          "archive_path": "publish/witness-parallel-peers/tlc.log",
+          "sha256": "b42fe5d70bd5143b043cdd4b05a945893e1165c465ab16c63edef2ce55d09ee9"
+        }
+      }
+    },
+    {
+      "group": "publish",
+      "profile": "witness-published-both",
+      "kind": "witness",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "NotPublishedBoth",
+      "actual_violated_invariants": [
+        "Invariant NotPublishedBoth is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:44:22.631642+00:00",
+      "finished_at": "2026-11-17T08:44:24.219897+00:00",
+      "duration_seconds": 1.588297,
+      "statistics": {
+        "generated_states": 131,
+        "distinct_states": 81,
+        "remaining_states": 0
+      },
+      "configured_invariants": [
+        "NotPublishedBoth"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "none",
+        "Budget": 2,
+        "Scenario": "stable"
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "publish/witness-published-both/result.json",
+          "sha256": "bab843bac25a32baa742b701a6f59f538d5847c13252bb39afb4f708f69f6e22"
+        },
+        "manifest.json": {
+          "archive_path": "publish/witness-published-both/manifest.json",
+          "sha256": "19b5346594e819db412c4a514268ceebdfee4f89bfc210216b1c0936a007afe5"
+        },
+        "messages.json": {
+          "archive_path": "publish/witness-published-both/messages.json",
+          "sha256": "dc433047cd7ccbf79c51161cde71312ae1a250e0cd08b13e7e6b69868dc7371c"
+        },
+        "tlc.log": {
+          "archive_path": "publish/witness-published-both/tlc.log",
+          "sha256": "96efe41c11587a14763027bac92ee318590408a5070f9715d7549cb6a6d77aa2"
+        }
+      }
+    },
+    {
+      "group": "publish",
+      "profile": "witness-independent-rows",
+      "kind": "witness",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "NotIndependentRows",
+      "actual_violated_invariants": [
+        "Invariant NotIndependentRows is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:44:24.295261+00:00",
+      "finished_at": "2026-11-17T08:44:25.776795+00:00",
+      "duration_seconds": 1.481581,
+      "statistics": {
+        "generated_states": 66,
+        "distinct_states": 41,
+        "remaining_states": 0
+      },
+      "configured_invariants": [
+        "NotIndependentRows"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "none",
+        "Budget": 2,
+        "Scenario": "stable"
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "publish/witness-independent-rows/result.json",
+          "sha256": "40d8a38b759dd6ea89e3480392cb271a17445007dc58d7b6ffd3c17bc84ae113"
+        },
+        "manifest.json": {
+          "archive_path": "publish/witness-independent-rows/manifest.json",
+          "sha256": "19b5346594e819db412c4a514268ceebdfee4f89bfc210216b1c0936a007afe5"
+        },
+        "messages.json": {
+          "archive_path": "publish/witness-independent-rows/messages.json",
+          "sha256": "aed5a93f111690d203a5ec4e7b0413656f8f11f12ecca728dff15d97ea40d770"
+        },
+        "tlc.log": {
+          "archive_path": "publish/witness-independent-rows/tlc.log",
+          "sha256": "12df1aa633e716da758ef8fafdbcd81a0fe69066900ef701458f42618fe1bd7b"
+        }
+      }
+    },
+    {
+      "group": "publish",
+      "profile": "witness-failure-retained",
+      "kind": "witness",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "NotFailureRetained",
+      "actual_violated_invariants": [
+        "Invariant NotFailureRetained is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:44:25.872483+00:00",
+      "finished_at": "2026-11-17T08:44:27.949888+00:00",
+      "duration_seconds": 2.077456,
+      "statistics": {
+        "generated_states": 1904,
+        "distinct_states": 917,
+        "remaining_states": 154
+      },
+      "configured_invariants": [
+        "NotFailureRetained"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "none",
+        "Budget": 2,
+        "Scenario": "failure"
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "publish/witness-failure-retained/result.json",
+          "sha256": "a43e47608e720ad94c695bd9350d310dbc77832a93f6e35275941919c3013445"
+        },
+        "manifest.json": {
+          "archive_path": "publish/witness-failure-retained/manifest.json",
+          "sha256": "19b5346594e819db412c4a514268ceebdfee4f89bfc210216b1c0936a007afe5"
+        },
+        "messages.json": {
+          "archive_path": "publish/witness-failure-retained/messages.json",
+          "sha256": "dadd320a9d3e50da0b392421d53a20b64c1d7b65a48e52c73cfe44828530697d"
+        },
+        "tlc.log": {
+          "archive_path": "publish/witness-failure-retained/tlc.log",
+          "sha256": "43a8eac3077eaf6d81cf2a038230be84ac6eef5ca6cad8be064074702a5ed644"
+        }
+      }
+    },
+    {
+      "group": "publish",
+      "profile": "witness-pending-blocked",
+      "kind": "witness",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "NotPendingBlocked",
+      "actual_violated_invariants": [
+        "Invariant NotPendingBlocked is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:44:28.067459+00:00",
+      "finished_at": "2026-11-17T08:44:29.982198+00:00",
+      "duration_seconds": 1.914782,
+      "statistics": {
+        "generated_states": 909,
+        "distinct_states": 437,
+        "remaining_states": 51
+      },
+      "configured_invariants": [
+        "NotPendingBlocked"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "none",
+        "Budget": 2,
+        "Scenario": "install"
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "publish/witness-pending-blocked/result.json",
+          "sha256": "c4dd223e0ddbe80ba6fd145bd4d9a1912ca28132adf3ca46603d4042afbd6dc8"
+        },
+        "manifest.json": {
+          "archive_path": "publish/witness-pending-blocked/manifest.json",
+          "sha256": "19b5346594e819db412c4a514268ceebdfee4f89bfc210216b1c0936a007afe5"
+        },
+        "messages.json": {
+          "archive_path": "publish/witness-pending-blocked/messages.json",
+          "sha256": "a7a6e75c1920ea9709b3f29df448e099f4a3ab82534117b7441c153562144b2a"
+        },
+        "tlc.log": {
+          "archive_path": "publish/witness-pending-blocked/tlc.log",
+          "sha256": "088b27e2fd1d910abd7bf39fddf4b879d2e0730e0d8516d2bf9bab537a0164ef"
+        }
+      }
+    },
+    {
+      "group": "publish",
+      "profile": "witness-new-view-blocked",
+      "kind": "witness",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "NotNewViewBlocked",
+      "actual_violated_invariants": [
+        "Invariant NotNewViewBlocked is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:44:30.124660+00:00",
+      "finished_at": "2026-11-17T08:44:32.203484+00:00",
+      "duration_seconds": 2.078879,
+      "statistics": {
+        "generated_states": 994,
+        "distinct_states": 474,
+        "remaining_states": 37
+      },
+      "configured_invariants": [
+        "NotNewViewBlocked"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "none",
+        "Budget": 2,
+        "Scenario": "install"
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "publish/witness-new-view-blocked/result.json",
+          "sha256": "3c6754028864df3b4251a19b52e64502101fce45debbc7cb3ae965d7976d0fab"
+        },
+        "manifest.json": {
+          "archive_path": "publish/witness-new-view-blocked/manifest.json",
+          "sha256": "19b5346594e819db412c4a514268ceebdfee4f89bfc210216b1c0936a007afe5"
+        },
+        "messages.json": {
+          "archive_path": "publish/witness-new-view-blocked/messages.json",
+          "sha256": "498429f540f0e3e394dbdaf31dfd45fa37dfadbeac553a83cb24aac582d33587"
+        },
+        "tlc.log": {
+          "archive_path": "publish/witness-new-view-blocked/tlc.log",
+          "sha256": "6c429212e2f31c9d7abd85166e523bd23a8ff325717b62160ab0d44706747c99"
+        }
+      }
+    },
+    {
+      "group": "publish",
+      "profile": "witness-join-blocked",
+      "kind": "witness",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "NotJoinBlocked",
+      "actual_violated_invariants": [
+        "Invariant NotJoinBlocked is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:44:32.268733+00:00",
+      "finished_at": "2026-11-17T08:44:34.157491+00:00",
+      "duration_seconds": 1.888799,
+      "statistics": {
+        "generated_states": 122,
+        "distinct_states": 72,
+        "remaining_states": 11
+      },
+      "configured_invariants": [
+        "NotJoinBlocked"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "none",
+        "Budget": 2,
+        "Scenario": "join"
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "publish/witness-join-blocked/result.json",
+          "sha256": "3305ab061a6c05602f0d1f295db1b88a06794a377e37c49ee71cb08a15d67f6d"
+        },
+        "manifest.json": {
+          "archive_path": "publish/witness-join-blocked/manifest.json",
+          "sha256": "19b5346594e819db412c4a514268ceebdfee4f89bfc210216b1c0936a007afe5"
+        },
+        "messages.json": {
+          "archive_path": "publish/witness-join-blocked/messages.json",
+          "sha256": "f06c3d18ebe7412574f7e2ab79aa787b9e44aa76cb6cd3dc8ed7bc7ce097d977"
+        },
+        "tlc.log": {
+          "archive_path": "publish/witness-join-blocked/tlc.log",
+          "sha256": "c120687a40d0c108c5bee678a17adb14d39f7383a02b1b27a567374b04be0d62"
+        }
+      }
+    },
+    {
+      "group": "publish",
+      "profile": "witness-close-settled",
+      "kind": "witness",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "NotClosedSettled",
+      "actual_violated_invariants": [
+        "Invariant NotClosedSettled is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:44:34.253160+00:00",
+      "finished_at": "2026-11-17T08:44:36.146182+00:00",
+      "duration_seconds": 1.893075,
+      "statistics": {
+        "generated_states": 2141,
+        "distinct_states": 1023,
+        "remaining_states": 139
+      },
+      "configured_invariants": [
+        "NotClosedSettled"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "none",
+        "Budget": 2,
+        "Scenario": "failure"
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "publish/witness-close-settled/result.json",
+          "sha256": "eddfca6cdfceb88afcb7443e8e61419318ee948aed11648d97bd791d40e7e507"
+        },
+        "manifest.json": {
+          "archive_path": "publish/witness-close-settled/manifest.json",
+          "sha256": "19b5346594e819db412c4a514268ceebdfee4f89bfc210216b1c0936a007afe5"
+        },
+        "messages.json": {
+          "archive_path": "publish/witness-close-settled/messages.json",
+          "sha256": "162fb0e149a30376a2bdbbfd67d688dfdff3b08abe601267db983e5d10b30b23"
+        },
+        "tlc.log": {
+          "archive_path": "publish/witness-close-settled/tlc.log",
+          "sha256": "c482107e95c8657c353d60168c0d4a12ac63d028434521a3bc58bc61b3862989"
+        }
+      }
+    },
+    {
+      "group": "publish",
+      "profile": "negative-close-release",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "NoLeakedTasks",
+      "actual_violated_invariants": [
+        "Invariant NoLeakedTasks is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:44:36.244547+00:00",
+      "finished_at": "2026-11-17T08:44:38.058626+00:00",
+      "duration_seconds": 1.814127,
+      "statistics": {
+        "generated_states": 40,
+        "distinct_states": 35,
+        "remaining_states": 21
+      },
+      "configured_invariants": [
+        "NoLeakedTasks"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "close-release",
+        "Budget": 2,
+        "Scenario": "failure"
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "publish/negative-close-release/result.json",
+          "sha256": "444805fb30304bc3a81478c8e1c9285b4b04ce7632a340cf43006b823c69a99f"
+        },
+        "manifest.json": {
+          "archive_path": "publish/negative-close-release/manifest.json",
+          "sha256": "19b5346594e819db412c4a514268ceebdfee4f89bfc210216b1c0936a007afe5"
+        },
+        "messages.json": {
+          "archive_path": "publish/negative-close-release/messages.json",
+          "sha256": "59a186f583d76e81c7fd8cb5f8e07c4681a20d6421bbd77a7007179ae7a49216"
+        },
+        "tlc.log": {
+          "archive_path": "publish/negative-close-release/tlc.log",
+          "sha256": "eeab841ddac1fdc161c8b670677ee59457c9272c5dcf927f9a522e93e4c474cc"
+        }
+      }
+    },
+    {
+      "group": "publish",
+      "profile": "negative-closed-send",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "NoStaleSend",
+      "actual_violated_invariants": [
+        "Invariant NoStaleSend is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:44:38.137213+00:00",
+      "finished_at": "2026-11-17T08:44:39.724215+00:00",
+      "duration_seconds": 1.587048,
+      "statistics": {
+        "generated_states": 169,
+        "distinct_states": 117,
+        "remaining_states": 58
+      },
+      "configured_invariants": [
+        "NoStaleSend"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "closed-send",
+        "Budget": 2,
+        "Scenario": "failure"
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "publish/negative-closed-send/result.json",
+          "sha256": "a94e5c651ae65a350b059678dde00cbea795bb9c8e69dbd8669764a610d4a284"
+        },
+        "manifest.json": {
+          "archive_path": "publish/negative-closed-send/manifest.json",
+          "sha256": "19b5346594e819db412c4a514268ceebdfee4f89bfc210216b1c0936a007afe5"
+        },
+        "messages.json": {
+          "archive_path": "publish/negative-closed-send/messages.json",
+          "sha256": "d1cac511b03dec326b847450926ebbc334cf231ee3a5292ea18c7e10f3f0b96d"
+        },
+        "tlc.log": {
+          "archive_path": "publish/negative-closed-send/tlc.log",
+          "sha256": "e90d302e6381093050b7f89d2eb0eb112b67c9e2ed644f7303c29f851fbe1ac6"
+        }
+      }
+    },
+    {
+      "group": "publish",
+      "profile": "witness-read-failure-retained",
+      "kind": "witness",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "NotReadFailureRetained",
+      "actual_violated_invariants": [
+        "Invariant NotReadFailureRetained is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:44:39.850696+00:00",
+      "finished_at": "2026-11-17T08:44:41.391422+00:00",
+      "duration_seconds": 1.540769,
+      "statistics": {
+        "generated_states": 1904,
+        "distinct_states": 917,
+        "remaining_states": 154
+      },
+      "configured_invariants": [
+        "NotReadFailureRetained"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "none",
+        "Budget": 2,
+        "Scenario": "failure"
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "publish/witness-read-failure-retained/result.json",
+          "sha256": "66884a0b07c86152809fe77b6bf06838861ce828bd8850547503c662e9d4c8a5"
+        },
+        "manifest.json": {
+          "archive_path": "publish/witness-read-failure-retained/manifest.json",
+          "sha256": "19b5346594e819db412c4a514268ceebdfee4f89bfc210216b1c0936a007afe5"
+        },
+        "messages.json": {
+          "archive_path": "publish/witness-read-failure-retained/messages.json",
+          "sha256": "dcce1057561fce382b76a05e3d5d43f4a3e8d9aa291b277dbea7418750817cd8"
+        },
+        "tlc.log": {
+          "archive_path": "publish/witness-read-failure-retained/tlc.log",
+          "sha256": "daa4e1f3fc79877157b77e67fdc02b53e1257ac547af1d77ee4347045cc30b3e"
+        }
+      }
+    },
+    {
+      "group": "publish",
+      "profile": "witness-send-failure-retained",
+      "kind": "witness",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "completed": false,
+      "implementation_status": "NOT_ASSESSED",
+      "expected_target": "NotSendFailureRetained",
+      "actual_violated_invariants": [
+        "Invariant NotSendFailureRetained is violated."
+      ],
+      "expectation_matched": true,
+      "runner_exit": 2,
+      "tlc_exit": 12,
+      "started_at": "2026-11-17T08:44:41.475289+00:00",
+      "finished_at": "2026-11-17T08:44:43.022823+00:00",
+      "duration_seconds": 1.547586,
+      "statistics": {
+        "generated_states": 2194,
+        "distinct_states": 1056,
+        "remaining_states": 142
+      },
+      "configured_invariants": [
+        "NotSendFailureRetained"
+      ],
+      "configured_properties": [],
+      "checks_deadlock": false,
+      "parameters": {
+        "Fault": "none",
+        "Budget": 2,
+        "Scenario": "failure"
+      },
+      "minimum_distinct_states": 2,
+      "raw_artifacts": {
+        "result.json": {
+          "archive_path": "publish/witness-send-failure-retained/result.json",
+          "sha256": "e3dc70f939f6783e614965422f81ba47cd43bc34356ab6ef373bc50603d2c4f1"
+        },
+        "manifest.json": {
+          "archive_path": "publish/witness-send-failure-retained/manifest.json",
+          "sha256": "19b5346594e819db412c4a514268ceebdfee4f89bfc210216b1c0936a007afe5"
+        },
+        "messages.json": {
+          "archive_path": "publish/witness-send-failure-retained/messages.json",
+          "sha256": "c89f94ba8a1df994aea9afa50efa776019e93e51532301a92dc4153e7abbb378"
+        },
+        "tlc.log": {
+          "archive_path": "publish/witness-send-failure-retained/tlc.log",
+          "sha256": "cec6aaa2dc921974762e506de1ce8ad8ad8fd38e5fc031977e91bd21307d3c02"
+        }
+      }
+    }
+  ]
+}
