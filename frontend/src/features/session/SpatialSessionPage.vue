@@ -208,7 +208,7 @@ function ownerName(reference: string) { const p = projection.value; return p?.se
 </script>
 
 <template>
-  <div ref="hudRoot" class="spatial-page page-shell" :class="{ 'gaolao-scene-page': hud, 'hud-panel-open': hud && Boolean(hudPanelKind) }">
+  <div ref="hudRoot" class="spatial-page page-shell" :class="{ 'gaolao-scene-page': hud, 'hud-panel-open': hud && narrow && Boolean(hudPanelKind) }">
     <header v-if="hud" class="gaolao-heading">
       <div class="gaolao-chapter-name"><span class="gaolao-chapter-seal" aria-hidden="true">一</span><h1>高老庄</h1><span>{{ projection?.scene?.name || '同行记' }}</span></div>
       <section v-if="guidance" class="gaolao-guidance" aria-label="目标与下一步">
@@ -227,7 +227,7 @@ function ownerName(reference: string) { const p = projection.value; return p?.se
       <section v-if="projection.phase === 'Lobby'" class="panel waiting-room"><p class="eyebrow">等待同行</p><h2>{{ roomCount === null ? '等待人数同步' : roomCount + ' 位旅伴已相聚' }}</h2><p>2–5 位真人可以开始。启程后，各自在自己的浏览器中控制角色。</p><button class="primary-button" :disabled="!online || starting || (roomCount !== null && roomCount < 2)" @click="start">{{ starting ? '正在开始…' : '开始同行（房主）' }}</button><p v-if="startNotice" role="status">{{ startNotice }}</p></section>
       <template v-else>
         <section v-if="projection.ending && !hud" class="panel spatial-ending"><h2>{{ projection.ending.title }}</h2><p>{{ projection.ending.summary }}</p></section>
-        <div class="spatial-layout" :class="{ 'reading-open': reading }">
+        <div class="spatial-layout" :class="{ 'reading-open': Boolean(reading) && (!hud || narrow) }">
           <div class="spatial-main">
             <section v-if="!hud && (currentSummary || recentPreparations.length)" class="spatial-current-objective" :aria-label="currentSummary?.caption || '眼下事项'"><div><p class="eyebrow">{{ currentSummary?.caption || '眼下事项' }}</p><h2>{{ currentSummary?.title || '已知准备已留下' }}</h2></div><div class="spatial-known-preparations"><SpatialStatus v-for="objective in recentPreparations" :key="objective.objectiveId" :label="objective.label" tone="confirmed" /></div></section>
             <SpatialMap ref="sceneMap" :snapshot="spatialState.snapshot!" :snapshot-source="spatialState.timedTrail ? spatialSnapshots : undefined" :disabled="!canAct" :selected="selectedRef" :person-labels="personLabels" :immersive="hud" @move="move" @direction="direction" @select="select" @stop="stop" @objects="showObjects" @settled="spatialClient.confirmDisplayedArrival($event)" />

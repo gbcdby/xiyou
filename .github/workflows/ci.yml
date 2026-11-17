@@ -192,6 +192,12 @@ jobs:
       - name: 安装已锁定 Playwright 对应的 Chromium
         working-directory: frontend
         run: npx --no-install playwright install --with-deps chromium
+      - name: 桌面与窄屏呈现生命周期组件回归
+        timeout-minutes: 2
+        env:
+          FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-presentation-lifecycle
+        # 真实Vue/Canvas与公开DTO组件检查；不代替下方原配置整场动态验收。
+        run: npm run test:browser:presentation-lifecycle --prefix frontend
       - name: scene-v3 Canvas、连续输入、地图与目标动态验收
         timeout-minutes: 4
         env:
@@ -220,6 +226,7 @@ jobs:
           name: browser-direction-evidence-${{ github.run_id }}-${{ github.run_attempt }}
           # 仅上传具名结果和截图，不上传数据库目录、连接配置或浏览器缓存。
           path: |
+            .agent-output/ci/browser-presentation-lifecycle/result.json
             .agent-output/ci/browser-client-experience/result.json
             .agent-output/ci/browser-client-experience/result-before-cleanup.json
             .agent-output/ci/browser-client-experience/scene-v3-desktop.png
