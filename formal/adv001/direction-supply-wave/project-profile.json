@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "project_name": "xiyou",
+  "feature": "#66 单publisher内进度与有限新波次",
+  "mode": "design/check",
+  "source_revision": "aacbf377e3cb94cb2c9ec77c3609eac9e773b1e5",
+  "source_tree": "e760d4cfa13e99146177651db3029ba6794f6191",
+  "implementation_status": "NOT_ASSESSED",
+  "source_snapshot": {
+    "purpose": "为设计提供上下文，不是align；新协调器未实现。",
+    "covered_files_and_symbols": [
+      "runtime.publishPending/#publishOutboxProgress/#outboxRecordCovered",
+      "spatialSupply.enqueue/drain/publish/sync/sentBatch/sendChecked",
+      "spatial-runtime.syncSpatial",
+      "spatial-direction-runtime.committedPublisher/attachSpatialDirection",
+      "socket-enqueue.consumeQueuedPacket"
+    ],
+    "content_digests": {
+      "backend/runtime.mjs": "4f015809ec2bd555fe32ed84d0b700098f21f2f02bb2b2232761df997f77f136",
+      "backend/spatial-supply.mjs": "6e35490f8cfb1a6cbb783f687bf184c7f3bc975bd95aa03601301ff6c80b7d24",
+      "backend/spatial-runtime.mjs": "3a27d233e28d099f8a5a1329287d603c1f6e4bfb39adfb4f25245f39ef160165",
+      "backend/spatial-direction-runtime.mjs": "32ac3c5a95eeaeda9926cb08c1d3927e32e5a038997c2168d55aa730b18a6277",
+      "backend/socket-enqueue.mjs": "9735ad439af8a68bba421208fa5065a194912748a8cb42e61deb69beb63d368b"
+    },
+    "working_changes_included": "基线业务文件无工作区改动；本工作树只增加新formal目录。",
+    "last_aligned_baseline": "NONE_FOR_NEW_WAVE_DESIGN"
+  },
+  "implementation_languages": [
+    "JavaScript / Node.js"
+  ],
+  "execution_model": {
+    "actors": [
+      "一个publisher owner",
+      "一会话",
+      "两peer的旧lane",
+      "一个旧RPC与至多一个后续RPC",
+      "有限world/control/安装环境"
+    ],
+    "scheduling_and_cancellation": [
+      "原同handle串行，RPC优先",
+      "本模型新增至多一个W和一个G",
+      "停止禁止新工作，已提交SQL/G不假取消"
+    ],
+    "atomic_operations_with_evidence": [
+      "设计义务：G独立session FOR UPDATE最终重核/精确UPDATE/COMMIT，基线helper为既有语义",
+      "模型假设：world/control/current持久变化在CanMutate处折叠为原子动作；不是PG实现证明"
+    ]
+  },
+  "persistence": {
+    "stores": [
+      "PostgreSQL的sessions/outbox（基线阅读事实）"
+    ],
+    "transaction_and_isolation_guarantees": [
+      "新模型仅抽象session读写互斥和单行真实提交；不证明DB隔离实现、索引或运行时行为"
+    ]
+  },
+  "communication": {
+    "delivery_order_and_duplication": [
+      "绑定内单lane，旧cursor有限ceiling；完整proof实现未建模"
+    ],
+    "retry_identity": [
+      "只建模一次有限P，不覆盖外层下一轮与多实例"
+    ],
+    "timeouts_and_uncertain_outcomes": [
+      "真实COMMIT后回应丢失作为单独动作；没有时钟或超时性能"
+    ],
+    "failure_and_recovery_scope": [
+      "单一具名环境扰动配置；读/发/G失败、关闭、mixed、pending、换view/新view"
+    ]
+  },
+  "semantic_differences": {
+    "integers_and_overflow": "小整数代表权威序号；未证明实际BigInt/JSON表示",
+    "memory_visibility": "未证明JavaScript微任务与Promise实际调度",
+    "time_and_clocks": "NOT_MODELED",
+    "serialization_and_equality": "一次性proof与完整DTO相等为外部要求，NOT_ASSESSED",
+    "exceptions_and_partial_effects": "显式区分真实COMMIT、回应未知、发送错误和自然settle；SESSION_GONE/完整hooks未建模"
+  },
+  "source_evidence": [
+    "inputs.json",
+    "CONTRACT.md",
+    "results.json"
+  ],
+  "unknowns": [
+    "非单调eligible pending完整adapter交错",
+    "新监听接线/拆除与generation竞态",
+    "真实5+1、A/B/C三peer同时错误边界",
+    "性能、客户端延迟和原normal门槛"
+  ],
+  "notes": "本轮没有业务实现、PG/浏览器或项目测试；所有场景规格交回总控。"
+}

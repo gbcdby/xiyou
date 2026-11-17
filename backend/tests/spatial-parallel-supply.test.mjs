@@ -316,8 +316,9 @@ test('真实生产adapter与PG：进度check后无ACK撤销立即closing，旧pe
   try {
     server = await createAuthorityServer({ pool: database.pool, now: () => Date.parse('2026-11-17T09:00:00Z'), spatialDirection: { checkpointMs: 50 } });
     const runtime = server.runtime, publish = runtime.publishPending.bind(runtime), open = runtime.openConnection.bind(runtime), sync = runtime.sync.bind(runtime);
-    // 只冻结后台调度；下方显式调用原publisher，Socket认证、发送证明和disconnect均为实际生产适配器。
-    runtime.publishPending = async () => ({ busy: false, examined: 0, published: 0 });
+    // 只冻结后台调度并保存实际deliver；断连产生的新提交仍可由同一publisher的有限新波次发送。
+    let productionDeliver;
+    runtime.publishPending = async deliver => { productionDeliver ??= deliver; return { busy: false, examined: 0, published: 0 }; };
     runtime.openConnection = async (...args) => { const handle = await open(...args); handles.push(handle); return handle; };
     const users = await Promise.all(['甲', '乙'].map(name => runtime.guest({ name })));
     const { sessionId } = await runtime.create(users[0].token, { nonce: crypto.randomUUID(), contentVersion: 'spatial-graybox-v2', capabilities });
@@ -347,6 +348,9 @@ test('真实生产adapter与PG：进度check后无ACK撤销立即closing，旧pe
     for (let index = 0; index < peers.length; index++) validateSpatial('BatchV2', await rpc(peers[index], 'sync.request', query(handles[index])));
     const records = (await database.pool.query("SELECT through_seq FROM outbox WHERE session_id=$1 AND status='Pending' ORDER BY through_seq", [sessionId])).rows;
     assert(records.length > 0);
+    const acknowledged = new Map(handles.map(handle => [handle.connectionId, runtime.spatialSupply.cursor(runtime.connectionView(handle))]));
+    const deliveredHeads = new Set();
+    await until(() => typeof productionDeliver === 'function', '须取得原后台调度使用的真实Socket deliver');
     const read = Promise.withResolvers(), retired = once(runtime, 'view-revoked', { signal: AbortSignal.timeout(5000) });
     retired.catch(() => {}); let intercept = true, checked = false, requestStarted = false;
     runtime.sync = async (...args) => {
@@ -367,11 +371,27 @@ test('真实生产adapter与PG：进度check后无ACK撤销立即closing，旧pe
       assert.equal(runtime.pendingViewInstallation(handles[0]), false, 'current退休后旧pending仍不可重新eligible');
       assert.equal(runtime.canInstallConnectionView(handles[0], candidate.view, candidate.scope), false);
     };
-    await publish(() => assert.fail('所有当前读者已有真实ACK覆盖，不应新增推送'));
+    const outcome = await publish((connectionId, batch, binding) => {
+      assert.equal(binding, runtime.connectionView(binding.handle));
+      assert.equal(connectionId, binding.handle.connectionId);
+      assert.equal(runtime.spatialSupply.current(binding.handle, binding), true);
+      assert.equal(batch.fromExclusive, runtime.spatialSupply.cursor(binding), '新推送仍须从当前真实sent连续前进');
+      const previous = acknowledged.get(connectionId); assert.notEqual(previous, undefined);
+      assert(BigInt(batch.fromExclusive) >= BigInt(previous), '不得重推进入本轮前已ACK的旧前缀');
+      assert(BigInt(batch.throughSeq) > BigInt(previous), '只有断连后真实新增的前缀可推送');
+      deliveredHeads.add(batch.throughSeq);
+      return productionDeliver(connectionId, batch, binding);
+    });
+    assert.equal(outcome.examined, records.length, '新提交不追加进原有限P');
     assert.equal(checked, true);
     for (const { through_seq } of records) {
       const result = await database.pool.query('SELECT status FROM outbox WHERE session_id=$1 AND through_seq=$2', [sessionId, through_seq]);
       assert.deepEqual(result.rows, [{ status: 'Published' }]);
+    }
+    for (const throughSeq of deliveredHeads) {
+      assert(!records.some(record => record.through_seq === throughSeq));
+      assert.deepEqual((await database.pool.query('SELECT status,attempts FROM outbox WHERE session_id=$1 AND through_seq=$2', [sessionId, throughSeq])).rows,
+        [{ status: 'Pending', attempts: 0 }], '新H已发送不等于可越过原P提交其进度');
     }
     hold.release(); await subscribing.catch(() => {});
     assert.equal(runtime.connectionView(handles[0]), undefined);

@@ -571,6 +571,105 @@ export class AuthorityRuntime extends EventEmitter {
       return validateContract('WorldBatch', { schemaVersion: 1, type: 'world.batch', sessionId: request.sessionId, viewId: view.viewId, fromExclusive: request.cursor, throughSeq, events });
     });
   }
+  /** 原owner内只协调一个session；有限P逐行进度G与有限发送波次W各至多一个。 */
+  async #publishSessionWaves(records, deliver, isStopped) {
+    const sessionId = records[0].session_id;
+    let head = records.at(-1).through_seq, generation = 0, attempted = -1, retryPage = false;
+    let index = 0, published = 0, wave = null, progress = null, owedProgress = false;
+    let draining = false, closed = false, mixed = false, firstError = null;
+    let wake = Promise.withResolvers();
+    const signal = () => { const previous = wake; wake = Promise.withResolvers(); previous.resolve(); };
+    const views = () => [...this.#views.values()].filter(view => view.active && view.sessionId === sessionId);
+    const halted = () => {
+      mixed ||= views().some(view => view.schemaVersion !== 2 || !this.spatialSupply.enabled(view.handle));
+      return isStopped() || mixed || firstError !== null;
+    };
+    const demand = through => {
+      if (closed || draining) return;
+      if (through !== null && through !== undefined && BigInt(through) > BigInt(head)) head = through;
+      generation++; signal();
+    };
+    const onCommit = ({ sessionId: committedSession, events }) => {
+      if (committedSession === sessionId && events.length) demand(events.at(-1).sessionSeq);
+    };
+    const onReady = ({ connectionId }) => { if (this.#views.get(connectionId)?.sessionId === sessionId) demand(null); };
+    const fail = error => { firstError ??= error; signal(); };
+    const covered = through => this.#outboxRecordCovered({ session_id: sessionId, through_seq: through });
+
+    const startWave = () => {
+      // H与候选集合在波次开始冻结；H不进入DTO，也不是读权或可信sent。
+      const target = head, selected = views();
+      attempted = generation; retryPage = false;
+      wave = (async () => {
+        let advanced = false;
+        for (let offset = 0; offset < selected.length; offset += 5) {
+          // 普通draining仍完成已冻结的后续组；stop/error/mixed则不再开始任何peer。
+          if (halted()) break;
+          const settled = await Promise.allSettled(selected.slice(offset, offset + 5).map(async view => {
+            if (halted() || !view.active || this.pendingViewInstallation(view.handle)) return;
+            try {
+              const result = await this.spatialSupply.publish(view, target,
+                (batch, binding) => deliver(binding.handle.connectionId, batch, binding));
+              advanced ||= result.progressed === true;
+            } catch (error) {
+              if (error.keepSpatialPending) { fail(error); throw error; }
+              if (error.code === 'RESYNC_REQUIRED' && this.pendingViewInstallation(view.handle)) return;
+              if (['FORBIDDEN', 'UNAUTHENTICATED', 'RESYNC_REQUIRED', 'SESSION_GONE'].includes(error.code)) this.retireView(view, true);
+              else { fail(error); throw error; }
+            }
+          }));
+          const failed = settled.find(result => result.status === 'rejected');
+          if (failed) fail(failed.reason);
+        }
+        // 每handle只有一次原lane调用；真实分页前进才允许同需求再获一个波次。
+        retryPage = advanced && !covered(target);
+      })().then(() => { wave = null; owedProgress = true; signal(); }, error => { wave = null; fail(error); });
+    };
+    const startProgress = record => {
+      index++; owedProgress = false;
+      progress = (async () => {
+        await this.hooks.duringPublish?.({ sessionId, throughSeq: record.through_seq });
+        // G已接纳后沿原helper自然收束；后来的W失败不能假取消它或撤销真实COMMIT。
+        if (await this.#publishOutboxProgress(record)) published++;
+      })().then(() => {
+        progress = null;
+        // 游标到尾不是终止：最后G实际settle后才禁新W，既有W仍须完成有限分组。
+        if (index === records.length) draining = true;
+        signal();
+      }, error => { progress = null; if (index === records.length) draining = true; fail(error); });
+    };
+
+    // 先接线，再查询权威已提交提示；查询窗口内的通知与查询结果取最大值，不丢唤醒。
+    this.on('commit', onCommit); this.on('spatial-supply-ready', onReady);
+    try {
+      const initial = (await this.pool.query('SELECT max(through_seq) AS through_seq FROM outbox WHERE session_id=$1', [sessionId])).rows[0]?.through_seq;
+      if (initial !== null && initial !== undefined && BigInt(initial) > BigInt(head)) head = initial;
+      for (;;) {
+        const notified = wake.promise;
+        if (halted()) break;
+        if (!progress && index === records.length) draining = true;
+        if (draining && !wave && !progress) break;
+        if (!wave) {
+          const record = records[index], ready = record && covered(record.through_seq);
+          // 一个有限W结束后，可完成旧行保有下一次G机会，新hint不能擦掉它。
+          if (!progress && ready && owedProgress) startProgress(record);
+          else if (!draining && (generation !== attempted || retryPage) && !covered(head)) startWave();
+          else if (!progress && record) {
+            if (ready) startProgress(record);
+            else { index++; owedProgress = false; continue; }
+          }
+        }
+        if (!wave && !progress) continue;
+        // 只等轻量通知，不以首个失败/停止冒充已排入lane、SQL或G的实际结束。
+        await notified;
+      }
+    } finally {
+      await Promise.allSettled([wave, progress].filter(Boolean));
+      closed = true; this.off('commit', onCommit); this.off('spatial-supply-ready', onReady);
+    }
+    if (firstError) throw firstError;
+    return published;
+  }
   /** 发布器只读取已提交前缀；新计时模式须有可信入队证据，失败保留Pending。 */
   async publishPending(deliver = async () => {}, { capability = null, isStopped = () => false } = {}) {
     if (this.#publishing) return { busy: true, examined: 0, published: 0 };
@@ -579,11 +678,19 @@ export class AuthorityRuntime extends EventEmitter {
     try {
       const pending = (await this.pool.query("SELECT o.session_id,o.through_seq FROM outbox o JOIN sessions s ON s.session_id=o.session_id WHERE o.status='Pending' AND ($1::text IS NULL OR s.state->>'protocolCapability'=$1) ORDER BY o.session_id,o.through_seq", [capability])).rows;
       examined = pending.length;
-      for (const record of pending) {
+      for (let recordIndex = 0; recordIndex < pending.length; recordIndex++) {
+        const record = pending[recordIndex];
         if (isStopped()) break;
         let installationPending = [...this.#handles.values()].some(handle => this.pendingViewInstallation(handle, record.session_id));
         const views = [...this.#views.values()].filter(view => view.active && view.sessionId === record.session_id);
         const parallel = views.length > 0 && views.every(view => view.schemaVersion === 2 && this.spatialSupply.enabled(view.handle));
+        if (parallel) {
+          let end = recordIndex + 1;
+          while (end < pending.length && pending[end].session_id === record.session_id) end++;
+          published += await this.#publishSessionWaves(pending.slice(recordIndex, end), deliver, isStopped);
+          recordIndex = end - 1;
+          continue;
+        }
         const publishView = async view => {
           try {
             for (;;) {
@@ -613,16 +720,7 @@ export class AuthorityRuntime extends EventEmitter {
             else throw error;
           }
         };
-        if (parallel) {
-          // 预算限制的是工作数而非成员数；同一成员可以有多条只读handle，第六条仍须得到处理。
-          for (let index = 0; index < views.length; index += 5) {
-            if (isStopped()) return { busy: false, examined, published };
-            const settled = await Promise.allSettled(views.slice(index, index + 5).map(publishView));
-            const failed = settled.find(result => result.status === 'rejected');
-            // 已开始工作必须全部settle，错误不能提前释放single-publisher或泄漏后台读到下一轮。
-            if (failed) throw failed.reason;
-          }
-        } else for (const view of this.#views.values()) {
+        for (const view of this.#views.values()) {
           if (view.active && view.sessionId === record.session_id) await publishView(view);
         }
         // 安装等待不阻塞其他读者，也不能把等待中的新视图尚未收到的事件标为已发布。
@@ -630,10 +728,6 @@ export class AuthorityRuntime extends EventEmitter {
         if (isStopped()) break;
         await this.hooks.duringPublish?.({ sessionId: record.session_id, throughSeq: record.through_seq });
         if (isStopped()) break;
-        if (parallel) {
-          if (await this.#publishOutboxProgress(record)) published++;
-          continue;
-        }
         await this.locked(record.session_id, { kind: 'outbox-progress' }, async tx => {
           await tx.client.query("UPDATE outbox SET status='Published',attempts=attempts+1 WHERE session_id=$1 AND through_seq=$2", [record.session_id, record.through_seq]);
         }).catch(error => { if (error.code !== 'SESSION_GONE') throw error; });

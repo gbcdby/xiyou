@@ -1,0 +1,2645 @@
+{
+  "schema_version": 1,
+  "feature": "D66 单publisher旧进度与有限新波次的窄增量",
+  "tool": {
+    "version": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "model": {
+    "root": "model",
+    "entry": "WaveProgress.tla"
+  },
+  "profiles": {
+    "positive-two-rows": {
+      "config": "positive-two-rows.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "SingleSlots",
+        "PeerBudget",
+        "LockExclusion",
+        "AdmissionSettled",
+        "DrainedOwner",
+        "NoSQLCancellation",
+        "NoNewAfterStop",
+        "OrderedAttempts",
+        "ExactRowCommit",
+        "ActualCommitOnly",
+        "PendingBlocks",
+        "CurrentCoverage",
+        "SentProof",
+        "SuccessfulSentRetained",
+        "FailureDoesNotAdvance",
+        "NoStaleSend",
+        "FixedAuthorizedHead",
+        "RPCBoundary",
+        "FiniteWave",
+        "NoBusyRetry",
+        "ProgressOpportunity"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "stable",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "positive-one-row-budget": {
+      "config": "positive-one-row-budget.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "SingleSlots",
+        "PeerBudget",
+        "LockExclusion",
+        "AdmissionSettled",
+        "DrainedOwner",
+        "NoSQLCancellation",
+        "NoNewAfterStop",
+        "OrderedAttempts",
+        "ExactRowCommit",
+        "ActualCommitOnly",
+        "PendingBlocks",
+        "CurrentCoverage",
+        "SentProof",
+        "SuccessfulSentRetained",
+        "FailureDoesNotAdvance",
+        "NoStaleSend",
+        "FixedAuthorizedHead",
+        "RPCBoundary",
+        "FiniteWave",
+        "NoBusyRetry",
+        "ProgressOpportunity"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "stable",
+          "Budget": 1,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 1
+        },
+        "peers": 2,
+        "original_pending_rows": 1,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "positive-rpc": {
+      "config": "positive-rpc.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "SingleSlots",
+        "PeerBudget",
+        "LockExclusion",
+        "AdmissionSettled",
+        "DrainedOwner",
+        "NoSQLCancellation",
+        "NoNewAfterStop",
+        "OrderedAttempts",
+        "ExactRowCommit",
+        "ActualCommitOnly",
+        "PendingBlocks",
+        "CurrentCoverage",
+        "SentProof",
+        "SuccessfulSentRetained",
+        "FailureDoesNotAdvance",
+        "NoStaleSend",
+        "FixedAuthorizedHead",
+        "RPCBoundary",
+        "FiniteWave",
+        "NoBusyRetry",
+        "ProgressOpportunity"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "rpc",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "positive-failure": {
+      "config": "positive-failure.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "SingleSlots",
+        "PeerBudget",
+        "LockExclusion",
+        "AdmissionSettled",
+        "DrainedOwner",
+        "NoSQLCancellation",
+        "NoNewAfterStop",
+        "OrderedAttempts",
+        "ExactRowCommit",
+        "ActualCommitOnly",
+        "PendingBlocks",
+        "CurrentCoverage",
+        "SentProof",
+        "SuccessfulSentRetained",
+        "FailureDoesNotAdvance",
+        "NoStaleSend",
+        "FixedAuthorizedHead",
+        "RPCBoundary",
+        "FiniteWave",
+        "NoBusyRetry",
+        "ProgressOpportunity"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "failure",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "positive-pending": {
+      "config": "positive-pending.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "SingleSlots",
+        "PeerBudget",
+        "LockExclusion",
+        "AdmissionSettled",
+        "DrainedOwner",
+        "NoSQLCancellation",
+        "NoNewAfterStop",
+        "OrderedAttempts",
+        "ExactRowCommit",
+        "ActualCommitOnly",
+        "PendingBlocks",
+        "CurrentCoverage",
+        "SentProof",
+        "SuccessfulSentRetained",
+        "FailureDoesNotAdvance",
+        "NoStaleSend",
+        "FixedAuthorizedHead",
+        "RPCBoundary",
+        "FiniteWave",
+        "NoBusyRetry",
+        "ProgressOpportunity"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "pending",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "positive-view": {
+      "config": "positive-view.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "SingleSlots",
+        "PeerBudget",
+        "LockExclusion",
+        "AdmissionSettled",
+        "DrainedOwner",
+        "NoSQLCancellation",
+        "NoNewAfterStop",
+        "OrderedAttempts",
+        "ExactRowCommit",
+        "ActualCommitOnly",
+        "PendingBlocks",
+        "CurrentCoverage",
+        "SentProof",
+        "SuccessfulSentRetained",
+        "FailureDoesNotAdvance",
+        "NoStaleSend",
+        "FixedAuthorizedHead",
+        "RPCBoundary",
+        "FiniteWave",
+        "NoBusyRetry",
+        "ProgressOpportunity"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "view",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "positive-join": {
+      "config": "positive-join.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "SingleSlots",
+        "PeerBudget",
+        "LockExclusion",
+        "AdmissionSettled",
+        "DrainedOwner",
+        "NoSQLCancellation",
+        "NoNewAfterStop",
+        "OrderedAttempts",
+        "ExactRowCommit",
+        "ActualCommitOnly",
+        "PendingBlocks",
+        "CurrentCoverage",
+        "SentProof",
+        "SuccessfulSentRetained",
+        "FailureDoesNotAdvance",
+        "NoStaleSend",
+        "FixedAuthorizedHead",
+        "RPCBoundary",
+        "FiniteWave",
+        "NoBusyRetry",
+        "ProgressOpportunity"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "join",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "positive-close": {
+      "config": "positive-close.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "SingleSlots",
+        "PeerBudget",
+        "LockExclusion",
+        "AdmissionSettled",
+        "DrainedOwner",
+        "NoSQLCancellation",
+        "NoNewAfterStop",
+        "OrderedAttempts",
+        "ExactRowCommit",
+        "ActualCommitOnly",
+        "PendingBlocks",
+        "CurrentCoverage",
+        "SentProof",
+        "SuccessfulSentRetained",
+        "FailureDoesNotAdvance",
+        "NoStaleSend",
+        "FixedAuthorizedHead",
+        "RPCBoundary",
+        "FiniteWave",
+        "NoBusyRetry",
+        "ProgressOpportunity"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "close",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "positive-mixed": {
+      "config": "positive-mixed.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "SingleSlots",
+        "PeerBudget",
+        "LockExclusion",
+        "AdmissionSettled",
+        "DrainedOwner",
+        "NoSQLCancellation",
+        "NoNewAfterStop",
+        "OrderedAttempts",
+        "ExactRowCommit",
+        "ActualCommitOnly",
+        "PendingBlocks",
+        "CurrentCoverage",
+        "SentProof",
+        "SuccessfulSentRetained",
+        "FailureDoesNotAdvance",
+        "NoStaleSend",
+        "FixedAuthorizedHead",
+        "RPCBoundary",
+        "FiniteWave",
+        "NoBusyRetry",
+        "ProgressOpportunity"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "mixed",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "positive-merge": {
+      "config": "positive-merge.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "SingleSlots",
+        "PeerBudget",
+        "LockExclusion",
+        "AdmissionSettled",
+        "DrainedOwner",
+        "NoSQLCancellation",
+        "NoNewAfterStop",
+        "OrderedAttempts",
+        "ExactRowCommit",
+        "ActualCommitOnly",
+        "PendingBlocks",
+        "CurrentCoverage",
+        "SentProof",
+        "SuccessfulSentRetained",
+        "FailureDoesNotAdvance",
+        "NoStaleSend",
+        "FixedAuthorizedHead",
+        "RPCBoundary",
+        "FiniteWave",
+        "NoBusyRetry",
+        "ProgressOpportunity"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "stable",
+          "Budget": 2,
+          "MaxHead": 4,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "positive-pagination": {
+      "config": "positive-pagination.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "SingleSlots",
+        "PeerBudget",
+        "LockExclusion",
+        "AdmissionSettled",
+        "DrainedOwner",
+        "NoSQLCancellation",
+        "NoNewAfterStop",
+        "OrderedAttempts",
+        "ExactRowCommit",
+        "ActualCommitOnly",
+        "PendingBlocks",
+        "CurrentCoverage",
+        "SentProof",
+        "SuccessfulSentRetained",
+        "FailureDoesNotAdvance",
+        "NoStaleSend",
+        "FixedAuthorizedHead",
+        "RPCBoundary",
+        "FiniteWave",
+        "NoBusyRetry",
+        "ProgressOpportunity"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "stable",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 1,
+          "PageSize": 1,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "negative-type": {
+      "config": "negative-type.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "type",
+          "Scenario": "stable",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "negative-second-owner": {
+      "config": "negative-second-owner.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "SingleSlots"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "second-owner",
+          "Scenario": "stable",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "negative-second-progress": {
+      "config": "negative-second-progress.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "SingleSlots"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "second-progress",
+          "Scenario": "stable",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "negative-second-wave": {
+      "config": "negative-second-wave.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "SingleSlots"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "second-wave",
+          "Scenario": "stable",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "negative-exceed-budget": {
+      "config": "negative-exceed-budget.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "PeerBudget"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "exceed-budget",
+          "Scenario": "stable",
+          "Budget": 1,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "negative-read-through-lock": {
+      "config": "negative-read-through-lock.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "LockExclusion"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "read-through-lock",
+          "Scenario": "stable",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "negative-progress-through-read": {
+      "config": "negative-progress-through-read.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "LockExclusion"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "progress-through-read",
+          "Scenario": "stable",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "negative-early-progress": {
+      "config": "negative-early-progress.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "AdmissionSettled"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "early-progress",
+          "Scenario": "stable",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "negative-early-release": {
+      "config": "negative-early-release.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "DrainedOwner"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "early-release",
+          "Scenario": "close",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "negative-cancel-sql": {
+      "config": "negative-cancel-sql.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoSQLCancellation"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "cancel-sql",
+          "Scenario": "close",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "negative-start-after-stop": {
+      "config": "negative-start-after-stop.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoNewAfterStop"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "start-after-stop",
+          "Scenario": "close",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "negative-wave-after-drain": {
+      "config": "negative-wave-after-drain.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoNewAfterStop"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "wave-after-drain",
+          "Scenario": "stable",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 1
+        },
+        "peers": 2,
+        "original_pending_rows": 1,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "negative-reorder-rows": {
+      "config": "negative-reorder-rows.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "OrderedAttempts"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "reorder-rows",
+          "Scenario": "stable",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "negative-batch-update": {
+      "config": "negative-batch-update.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "ExactRowCommit"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "batch-update",
+          "Scenario": "stable",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "negative-precommit-published": {
+      "config": "negative-precommit-published.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "ActualCommitOnly"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "precommit-published",
+          "Scenario": "stable",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "negative-rollback-commit": {
+      "config": "negative-rollback-commit.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "ActualCommitOnly"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "rollback-commit",
+          "Scenario": "failure",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "negative-ignore-pending": {
+      "config": "negative-ignore-pending.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "PendingBlocks"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "ignore-pending",
+          "Scenario": "pending",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "negative-pending-after-check": {
+      "config": "negative-pending-after-check.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "PendingBlocks"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "pending-after-check",
+          "Scenario": "pending",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "negative-stale-coverage": {
+      "config": "negative-stale-coverage.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "CurrentCoverage"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "stale-coverage",
+          "Scenario": "view",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "negative-join-after-check": {
+      "config": "negative-join-after-check.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "CurrentCoverage"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "join-after-check",
+          "Scenario": "join",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "negative-fake-proof": {
+      "config": "negative-fake-proof.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "SentProof"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "fake-proof",
+          "Scenario": "stable",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "negative-rollback-peer": {
+      "config": "negative-rollback-peer.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "SuccessfulSentRetained"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "rollback-peer",
+          "Scenario": "failure",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "negative-failure-as-success": {
+      "config": "negative-failure-as-success.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "FailureDoesNotAdvance"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "failure-as-success",
+          "Scenario": "failure",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "negative-stale-send": {
+      "config": "negative-stale-send.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoStaleSend"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "stale-send",
+          "Scenario": "view",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "negative-hint-as-authority": {
+      "config": "negative-hint-as-authority.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "FixedAuthorizedHead"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "hint-as-authority",
+          "Scenario": "stable",
+          "Budget": 2,
+          "MaxHead": 4,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "negative-bypass-rpc": {
+      "config": "negative-bypass-rpc.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "RPCBoundary"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "bypass-rpc",
+          "Scenario": "rpc",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "negative-rpc-above-ceiling": {
+      "config": "negative-rpc-above-ceiling.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "RPCBoundary"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "rpc-above-ceiling",
+          "Scenario": "rpc",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "negative-chase-wave": {
+      "config": "negative-chase-wave.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "FiniteWave"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "chase-wave",
+          "Scenario": "stable",
+          "Budget": 2,
+          "MaxHead": 4,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "negative-repeat-peer": {
+      "config": "negative-repeat-peer.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "FiniteWave"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "repeat-peer",
+          "Scenario": "stable",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "negative-busy-retry": {
+      "config": "negative-busy-retry.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoBusyRetry"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "busy-retry",
+          "Scenario": "pending",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "negative-erase-owed": {
+      "config": "negative-erase-owed.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "ProgressOpportunity"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "erase-owed",
+          "Scenario": "stable",
+          "Budget": 2,
+          "MaxHead": 4,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "negative-bypass-opportunity": {
+      "config": "negative-bypass-opportunity.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "ProgressOpportunity"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "bypass-opportunity",
+          "Scenario": "stable",
+          "Budget": 2,
+          "MaxHead": 4,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "witness-stopped-sql": {
+      "config": "witness-stopped-sql.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotStoppedSQLWait"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "close",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "witness-one-row-overlap": {
+      "config": "witness-one-row-overlap.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotQueuedOverlap"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "stable",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 1
+        },
+        "peers": 2,
+        "original_pending_rows": 1,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "witness-two-row-overlap": {
+      "config": "witness-two-row-overlap.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotQueuedOverlap"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "stable",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "witness-rpc-lane": {
+      "config": "witness-rpc-lane.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotReadBehindRPC"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "rpc",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "witness-lock-wait": {
+      "config": "witness-lock-wait.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotReadWaitingOnProgress"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "stable",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "witness-committed-wave": {
+      "config": "witness-committed-wave.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotCommittedWhileWave"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "stable",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "witness-completed-overlap": {
+      "config": "witness-completed-overlap.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotCompletedOverlap"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "stable",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "witness-send-error-drain": {
+      "config": "witness-send-error-drain.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotFailureDrained"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "failure",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "witness-read-error-drain": {
+      "config": "witness-read-error-drain.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotReadFailureDrained"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "failure",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "witness-unknown-retained": {
+      "config": "witness-unknown-retained.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotUnknownRetained"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "failure",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "witness-close-drain": {
+      "config": "witness-close-drain.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotClosedDrained"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "close",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "witness-mixed-drain": {
+      "config": "witness-mixed-drain.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotMixedDrained"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "mixed",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "witness-pending-blocked": {
+      "config": "witness-pending-blocked.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotPendingBlocked"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "pending",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "witness-view-discard": {
+      "config": "witness-view-discard.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotViewDiscarded"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "view",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "witness-merge-opportunity": {
+      "config": "witness-merge-opportunity.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotOpportunityGiven"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "stable",
+          "Budget": 2,
+          "MaxHead": 4,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "witness-pagination": {
+      "config": "witness-pagination.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotPagination"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "stable",
+          "Budget": 2,
+          "MaxHead": 3,
+          "InitialSent": 1,
+          "PageSize": 1,
+          "RecordCount": 2
+        },
+        "peers": 2,
+        "original_pending_rows": 2,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    },
+    "witness-drain-second-group": {
+      "config": "witness-drain-second-group.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotFinalGroupAfterDrain"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可用尽；SQL、RPC、网络允许永久等待。本次只检查安全性与有限可达见证，没有活性或死锁结论。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "stable",
+          "Budget": 1,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 1
+        },
+        "peers": 2,
+        "original_pending_rows": 1,
+        "scope": "一个会话、一个 publisher 生命周期；旧行进度与有限新前缀波次重叠。",
+        "liveness": "NOT_CHECKED",
+        "excluded_behaviors": [
+          "任意规模或真实预算5的第6handle",
+          "真实PG授锁/JS Promise/adapter证明实现",
+          "非单调pending资格完整状态机",
+          "跨实例、进程崩溃、恢复轮次、SESSION_GONE",
+          "传输延迟、毫秒性能、浏览器/自然CI"
+        ]
+      },
+      "assumptions": [
+        "世界/control/current安装变更仅在同一session无读/进度写锁时原子提交；读锁持有至页COMMIT。",
+        "可信proof作为外部原子输入；没有对Socket.IO代码、序列化或proof一次性实现做形式证明。",
+        "安装pending为存在候选的显式抽象，未证明其与生产eligible判定的精化关系。",
+        "stop/error/mixed禁止新工作但不取消已started lane/SQL/G；已开始有限波次在普通draining中完成后续组。"
+      ]
+    }
+  }
+}
