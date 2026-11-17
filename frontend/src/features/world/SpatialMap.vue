@@ -54,12 +54,15 @@ function draw() {
   if (!snapshot?.projection.scene) { presentation?.invalidate(); painter.clear(); failed.value = false; return; }
   // 排队的 rAF 时间可能早于已收到的状态更新；本次绘制与完成判断共用实际执行时钟。
   const now = performance.now();
-  presentation?.seal(now, presentationAllowed(snapshot));
   const renderer = painter;
   let value;
-  try { value = renderer.paint(snapshot, motion, now, { selected: props.selected, personLabels: props.personLabels, reducedMotion }); }
+  try {
+    value = renderer.paint(snapshot, motion, now, { selected: props.selected, personLabels: props.personLabels, reducedMotion,
+      beforeFrontWrite: () => presentation?.seal(performance.now(), presentationAllowed(snapshot)) });
+    if (value) presentation?.painted(value, snapshot, now, performance.now(), painter === renderer && !stopped && presentationAllowed(snapshot));
+    else presentation?.invalidate();
+  }
   catch (error) { if (props.snapshotSource) displayFailed(error); else { presentation?.invalidate(); renderingError.value = error instanceof Error ? error.message : '场景画布暂不可用。'; } return; }
-  presentation?.painted(value, snapshot, now, performance.now(), painter === renderer && !stopped && presentationAllowed(snapshot));
   failed.value = Boolean(value?.failed.length);
   const p = snapshot.projection;
   const drawn = value?.actors.find(actor => actor.ref === p.self.entityRef);
@@ -128,7 +131,9 @@ function revealScene() {
 defineExpose({ returnToSelf, revealScene });
 
 watch(() => props.snapshot, snapshot => {
-  if (!props.snapshotSource) receiveSnapshot(snapshot);
+  if (!props.snapshotSource) {
+    try { receiveSnapshot(snapshot); } catch (error) { displayFailed(error); }
+  }
 }, { immediate: true, flush: 'sync' });
 watch(() => props.snapshotSource, () => { if (mounted) bindSnapshotSource(); }, { flush: 'sync' });
 watch(() => props.disabled, disabled => { if (disabled) { presentation?.invalidate(); releaseKeys(); } else schedule(); }, { flush: 'sync' });
@@ -138,7 +143,10 @@ onMounted(() => {
   try { painter = new SpatialCanvas(canvas.value); } catch (error) { renderingError.value = error instanceof Error ? error.message : '场景画布暂不可用。'; return; }
   presentation = new CanvasPresentationOwner(motion, canvas.value);
   mounted = true;
-  if (props.snapshotSource) bindSnapshotSource(); else if (displaySnapshot.value) painter.prepare(displaySnapshot.value);
+  if (props.snapshotSource) bindSnapshotSource();
+  else if (displaySnapshot.value) {
+    try { painter.prepare(displaySnapshot.value); } catch (error) { displayFailed(error); }
+  }
   unsubscribe = sharedCanvasAssets.subscribe(schedule);
   reduced = matchMedia('(prefers-reduced-motion: reduce)'); motionPreference(); reduced.addEventListener('change', motionPreference);
   observer = new ResizeObserver(resize); observer.observe(viewport.value); resize();

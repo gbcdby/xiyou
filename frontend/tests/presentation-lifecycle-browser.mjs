@@ -24,7 +24,7 @@ const opening = node => `<${node.tag} ${node.props.map(prop => prop.loc.source).
 const template = `${opening(rootNode)}
   <header class="gaolao-heading"><h1>呈现生命周期组件检查</h1></header>
   ${opening(layoutNode)}<div class="spatial-main">
-    <SpatialMap :snapshot="snapshot" :snapshot-source="source" :disabled="disabled" :immersive="hud" />
+    <SpatialMap :snapshot="snapshot" :snapshot-source="source" :disabled="disabled" :immersive="hud" :selected="selected" />
   </div><div class="spatial-rail"><section class="gaolao-map-navigator">公开地图</section>
     <aside v-if="hudPanelKind" class="spatial-sidebar"><section class="panel" :class="{ 'spatial-reading-pane': reading }">
       <header class="spatial-reading-heading"><h2>{{ reading ? '手记' : '场景对象' }}</h2></header>
@@ -44,12 +44,14 @@ import { SpatialCanvas } from '/src/rendering/spatial-canvas.ts';
 import { CanvasPresentationOwner } from '/src/rendering/spatial-presentation.ts';
 import { spatialSnapshot } from '/tests/spatial-fixture.mjs';
 import { observePresentation } from '/tests/presentation-observer.mjs';
+import { installCanvasBoundaryProbe, realHoldSuffix } from '/tests/presentation-boundary-probe.mjs';
 import '/src/styles.css';
 import '/src/styles-spatial.css';
 import '/src/styles-art.css';
 ${compiled.code}
 let phase = '初始化', app, currentMotion, state, binding = 0, seq = 10;
 const observer = observePresentation({ ConfirmedMotion, SpatialCanvas, CanvasPresentationOwner }, { phase: () => phase });
+const boundaries = installCanvasBoundaryProbe();
 const update = ConfirmedMotion.prototype.update;
 ConfirmedMotion.prototype.update = function(...args) { currentMotion = this; return Reflect.apply(update, this, args); };
 const channel = createSpatialSnapshotSource();
@@ -77,18 +79,26 @@ function rebind() {
 }
 function panel(kind) { state.reading.value=kind==='reading'?'notebook':null; state.hudPanelKind.value=kind; }
 window.__lifecycle = {
-  async boot(hud=true) {
+  async boot(hud=true, useSource=true) {
     app=createApp({ components:{SpatialMap}, render, setup() {
       const hudRoot=ref(null), {narrow}=useGaolaoHud(hudRoot);
-      state={hudRoot,narrow,hud:ref(hud),reading:ref(null),hudPanelKind:ref(null),snapshot:shallowRef(spatialSnapshot()),disabled:ref(false)};
-      channel.publish(state.snapshot.value); return {...state,source:channel.source};
+      state={hudRoot,narrow,hud:ref(hud),reading:ref(null),hudPanelKind:ref(null),snapshot:shallowRef(spatialSnapshot()),disabled:ref(false),selected:ref(undefined)};
+      channel.publish(state.snapshot.value); return {...state,source:useSource?channel.source:undefined};
     }}); app.mount('#fixture');
     // 同一JS任务内、首次rAF之前切换：没有成功paint就不能有信用。
     panel('reading'); await nextTick(); panel(null); await nextTick(); advance(); return read();
   },
   read, mark(value) { phase=value; }, evidence:()=>observer.read(),
+  boundaryRows:boundaries.read, realHoldSuffix,
+  async boundary(mode) {
+    const index=boundaries.arm(mode);
+    if(mode==='prepare-error') advance(); else state.selected.value=state.selected.value?undefined:state.snapshot.value.projection.self.entityRef;
+    await nextTick(); return index;
+  },
+  sealOnly() { boundaries.seal(); return read(); },
   async panel(kind) { panel(kind); await nextTick(); await Promise.resolve(); const changed=read(); const sealed=advance(); return {changed,sealed}; },
   advance,
+  async advanceFlushed() { advance(); await nextTick(); return read(); },
   async hold() {
     rebind(); const next=structuredClone(state.snapshot.value), from=next.projection.sceneTimeMs, through=from+1000, position=next.projection.self.position;
     next.snapshotSeq=String(++seq); next.projection.sceneTimeMs=through;
@@ -127,12 +137,12 @@ const report = { workId:'GZ-UX-01-PRESENTATION', scope:'真实Vue/DOM/SpatialMap
   testSourceSha256:sha256(await readFile(new URL(import.meta.url))), templateAncestors:[opening(rootNode),opening(layoutNode)], cases:[], pages:[], pageErrors:[] };
 let vite, browser;
 const activePages = [];
-async function open(width, hud=true) {
+async function open(width, hud=true, useSource=true) {
   const page=await browser.newPage({viewport:{width,height:900}}); activePages.push(page);
   page.on('pageerror', error=>report.pageErrors.push(error.message));
   await page.goto(`http://127.0.0.1:${vite.httpServer.address().port}/presentation-lifecycle-fixture`);
   await until(()=>page.evaluate(()=>Boolean(window.__lifecycle)),'真实组件模块载入',10000);
-  const beforePaint=await page.evaluate(hud=>window.__lifecycle.boot(hud),hud);
+  const beforePaint=await page.evaluate(([hud,useSource])=>window.__lifecycle.boot(hud,useSource),[hud,useSource]);
   assert.equal(beforePaint.paints,0,'首次rAF前未成功paint'); assert.equal(beforePaint.credit,0,'未paint的面板切换不得产生信用');
   report.cases.push({name:`${width}/${hud?'HUD':'非HUD'}未paint零资格`,status:'PASS',observed:beforePaint});
   await ready(page); return page;
@@ -167,7 +177,7 @@ try {
   await desktop.evaluate(()=>window.__lifecycle.mark('待播hold零信用'));
   await desktop.evaluate(()=>window.__lifecycle.hold());
   const hold=await until(()=>desktop.evaluate(()=>{const value=window.__lifecycle.read();return value.lastPainted?.snapshotSeq===value.snapshotSeq&&!value.settled?value:null;}),'待播hold已由原Canvas实际绘制',10000);
-  assert.equal(hold.lastPainted.returned,false); assert.equal(hold.credit,0);
+  assert.equal(hold.lastPainted.returned,true,'成功纯hold帧保存凭据不等于产生余额'); assert.equal(hold.credit,0);
   const holdPanel=await desktop.evaluate(()=>window.__lifecycle.panel('reading'));
   assert.equal(holdPanel.changed.settled,false); assert.equal(holdPanel.sealed.credit,0,'已实际paint的旧hold仍占用原时长，面板开合不补信用');
   report.cases.push({name:'待播hold零信用',status:'PASS',before:hold,after:holdPanel}); await desktop.evaluate(()=>window.__lifecycle.fresh());
@@ -209,6 +219,40 @@ try {
   assert.ok(opened.changed.classes.layout.includes('reading-open')); assert.equal(opened.changed.classes.root.includes('hud-panel-open'),false);
   assert.notEqual(opened.changed.columns,before.columns,'非HUD实际grid列继续随阅读面板变化');
   await recordPanel(legacy,null,'非HUD关闭阅读保留原通知',true); await collect(legacy); await legacy.close();
+  for(const useSource of [true,false]) for(const mode of ['observe','buffer-error','callback-error','front-error','painted-error','null-result','prepare-error']) {
+    const page=await open(1200,true,useSource); await ready(page);
+    const credited=await page.evaluate(()=>window.__lifecycle.advanceFlushed()); assert.ok(credited.credit>0); await ready(page);
+    const name=`真实Canvas边界/${useSource?'source':'props'}/${mode}`; await page.evaluate(name=>window.__lifecycle.mark(name),name);
+    const index=await page.evaluate(mode=>window.__lifecycle.boundary(mode),mode);
+    const boundary=await until(()=>page.evaluate(index=>{const value=window.__lifecycle.boundaryRows()[index];return value?.completed?value:null;},index),name,10000);
+    const after=await page.evaluate(()=>window.__lifecycle.read());
+    const row={name,status:'PENDING',boundary,after}; report.cases.push(row);
+    if(mode==='observe') {
+      assert.equal(boundary.hasProductionCallback,true,'使用实际Map提供的前台写前回调');
+      assert.deepEqual(boundary.events.map(event=>event.kind),['buffer-start','before-front','front-transform','front-write','paint-return','owner-painted']);
+      assert.ok(boundary.events.slice(0,4).every(event=>event.oldFrontIntact),'buffer及封口前旧front像素必须完整保留');
+      assert.equal(boundary.accepted,true); assert.equal(boundary.creditAfterPaint,boundary.creditAtSeal,'新成功帧只开凭据，不即时增加余额');
+      assert.ok(boundary.serial>boundary.previousSerial); assert.deepEqual(boundary.queries.map(query=>query.name),['settled','active']);
+      assert.ok(boundary.queries.every(query=>query.at===boundary.sampledAt),'paint/settled/active使用同一采样时刻');
+    } else {
+      assert.equal(after.credit,0,'异常或null必须撤销所有余额'); assert.equal(after.qualified,false,'异常不能留下旧资格或产生新资格');
+      assert.notEqual(boundary.accepted,true); const sealed=await page.evaluate(()=>window.__lifecycle.sealOnly());
+      assert.equal(sealed.credit,0,'没有新成功帧的再次封口不能恢复旧余额');
+    }
+    row.status='PASS'; await collect(page); await page.close();
+  }
+  const suffix=await browser.newPage({viewport:{width:1200,height:900}}); activePages.push(suffix);
+  await suffix.goto(`http://127.0.0.1:${vite.httpServer.address().port}/presentation-lifecycle-fixture`);
+  await until(()=>suffix.evaluate(()=>Boolean(window.__lifecycle)),'真实hold后缀模块',10000);
+  const suffixes=await suffix.evaluate(()=>window.__lifecycle.realHoldSuffix());
+  for(const value of suffixes) {
+    assert.equal(value.sampledPending,true); assert.equal(value.accepted,true); assert.equal(value.afterPrepare,0); assert.equal(value.beforeSeal,0);
+    assert.equal(value.credit,value.earlySeal?0:value.sealedAt-Math.max(value.presentedAt,value.tail));
+    if(value.earlySeal) assert.ok(value.firstSeal<value.tail); else assert.ok(value.credit>0);
+    assert.equal(value.repeatedCredit,value.credit); assert.equal(value.nullFrame,null); assert.equal(value.nullAccepted,false); assert.equal(value.afterNull,0);
+    report.cases.push({name:`真实Canvas纯hold后缀/${value.earlySeal?'早封口不复活':'持续凭据仅空后缀'}`,status:'PASS',observed:value});
+  }
+  await collect(suffix); await suffix.close();
   assert.deepEqual(report.pageErrors,[]); report.status='PASS_COMPONENT_LIFECYCLE_ONLY';
 } catch(error) {
   report.status='FAIL'; report.error=String(error.stack??error); process.exitCode=1;

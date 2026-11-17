@@ -86,7 +86,7 @@ export class SpatialCanvas {
     }
     return null;
   }
-  paint(snapshot: SnapshotV2, motion: ConfirmedMotion, now: number, options: { selected?: string; personLabels?: Record<string, string>; reducedMotion: boolean }): CanvasSceneFrame | null {
+  paint(snapshot: SnapshotV2, motion: ConfirmedMotion, now: number, options: { selected?: string; personLabels?: Record<string, string>; reducedMotion: boolean; beforeFrontWrite?: () => void }): CanvasSceneFrame | null {
     const p = sceneDisplayProjection(snapshot.projection), scene = p.scene; if (!scene) { this.clear(); return null; }
     const context = this.#context, artContext = objectArtContext(snapshot), presentation = sceneLayerPresentation(artContext), group = presentation.resources;
     const groupAssets = group ? sceneGroupAssets(group) : [], dimensionsValid = groupAssets.every(asset => { const image = this.#assets.image(asset.file); return !image || image.naturalWidth === asset.pixelSize.width && image.naturalHeight === asset.pixelSize.height; });
@@ -208,6 +208,7 @@ export class SpatialCanvas {
       if (characters.length > limit) { context.fillText(characters.slice(0, limit).join(''), label.x + label.width / 2, label.y + label.height / 2 - 8); context.fillText(characters.slice(limit, limit * 2).join(''), label.x + label.width / 2, label.y + label.height / 2 + 8); }
       else context.fillText(label.label, label.x + label.width / 2, label.y + label.height / 2);
     }
+    options.beforeFrontWrite?.();
     this.#front.setTransform(1, 0, 0, 1, 0, 0); this.#front.drawImage(this.#buffer, 0, 0);
     frames.set(this.#canvas, frame);
     this.#canvas.dataset.sceneId = scene.sceneId; this.#canvas.dataset.sceneLayerStatus = frame.layerStatus; this.#canvas.dataset.sceneView = `0 0 ${scene.width} ${scene.height}`; this.#canvas.dataset.renderedEntities = String(frame.objects.length + frame.actors.length);

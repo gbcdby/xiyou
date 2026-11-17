@@ -35,66 +35,71 @@ function validatePersonalProjection(projection) {
         if (entry.ownerRef !== null && !projection.entities.some(entity => entity.entityRef === entry.ownerRef)) fail('$.projection.chapter.privateReturns.ownerRef');
     }
 }
-export function checkSpatialSchema(schema, value, defs = spatialSchema.$defs, path = '$') {
+// oneOf内部吸收的失败不反复构造Error；非string路径仍保留原转换副作用。
+const mismatch = Symbol('schema-probe-mismatch');
+function rejectSchema(path, probing) { if (probing && typeof path === 'string') throw mismatch; fail(path); }
+function trialSchema(schema, value, defs, path, probing) {
     if (schema.$ref)
-        return checkSpatialSchema(defs[schema.$ref.split('/').at(-1)], value, defs, path);
+        return trialSchema(defs[schema.$ref.split('/').at(-1)], value, defs, path, probing);
     if (schema.oneOf) {
         let matches = 0;
         for (const choice of schema.oneOf) {
             try {
-                checkSpatialSchema(choice, value, defs, path);
+                trialSchema(choice, value, defs, path, true);
                 matches++;
             }
             catch (error) {
-                if (!(error instanceof ContractError))
+                if (error !== mismatch && !(error instanceof ContractError))
                     throw error;
             }
         }
         if (matches !== 1)
-            fail(path);
+            rejectSchema(path, probing);
         return;
     }
     if ('const' in schema && value !== schema.const)
-        fail(path);
+        rejectSchema(path, probing);
     if (schema.enum && !schema.enum.includes(value))
-        fail(path);
+        rejectSchema(path, probing);
     if (schema.type === 'null' && value !== null)
-        fail(path);
+        rejectSchema(path, probing);
     if (schema.type === 'boolean' && typeof value !== 'boolean')
-        fail(path);
+        rejectSchema(path, probing);
     if (schema.type === 'integer' && (!Number.isSafeInteger(value) || value < schema.minimum || value > schema.maximum))
-        fail(path);
+        rejectSchema(path, probing);
     if (schema.type === 'string') {
         if (typeof value !== 'string' || [...value].length > (schema.maxLength ?? Infinity) || [...value].length < (schema.minLength ?? 0) || (schema.pattern && !new RegExp(schema.pattern, 'u').test(value)))
-            fail(path);
+            rejectSchema(path, probing);
     }
     if (schema.type === 'array') {
         if (!Array.isArray(value) || value.length > (schema.maxItems ?? Infinity) || value.length < (schema.minItems ?? 0))
-            fail(path);
+            rejectSchema(path, probing);
         if (schema.uniqueItems && new Set(value.map(canonicalize)).size !== value.length)
-            fail(path);
+            rejectSchema(path, probing);
+        // 调用方可以自定义forEach并观察callback异常，这里必须保留公共ContractError。
         value.forEach((item, index) => checkSpatialSchema(schema.items, item, defs, path + '[' + index + ']'));
     }
     if (schema.type === 'object') {
         if (!value || typeof value !== 'object' || Array.isArray(value))
-            fail(path);
+            rejectSchema(path, probing);
         for (const key of schema.required ?? [])
             if (!Object.hasOwn(value, key))
-                fail(path + '.' + key);
+                rejectSchema(path + '.' + key, probing);
         for (const key of Object.keys(value)) {
             if (['__proto__', 'prototype', 'constructor'].includes(key))
-                fail(path + '.' + key);
+                rejectSchema(path + '.' + key, probing);
             if (schema.propertyNames)
-                checkSpatialSchema(schema.propertyNames, key, defs, path);
+                trialSchema(schema.propertyNames, key, defs, path, probing);
             if (Object.hasOwn(schema.properties ?? {}, key))
-                checkSpatialSchema(schema.properties[key], value[key], defs, path + '.' + key);
+                trialSchema(schema.properties[key], value[key], defs, path + '.' + key, probing);
             else if (schema.additionalProperties === false)
-                fail(path + '.' + key);
+                rejectSchema(path + '.' + key, probing);
             else if (typeof schema.additionalProperties === 'object')
-                checkSpatialSchema(schema.additionalProperties, value[key], defs, path + '.' + key);
+                trialSchema(schema.additionalProperties, value[key], defs, path + '.' + key, probing);
         }
     }
 }
+export function checkSpatialSchema(schema, value, defs = spatialSchema.$defs, path = '$') { return trialSchema(schema, value, defs, path, false); }
 const sameMotionPoint = (a, b) => !!a && !!b && a.x === b.x && a.y === b.y;
 /** 时间与点索引同时覆盖；重复端点不能掩盖折返或把已执行运动改成静止。 */
 function validateMotionTimeline(entity, sceneTimeMs = Number.MAX_SAFE_INTEGER) {

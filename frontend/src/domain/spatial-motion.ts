@@ -110,7 +110,7 @@ function remainingTrail(points: Position[], travelled: number, position: Positio
 export class ConfirmedMotion {
   #previous: SnapshotV2 | null = null; #motions = new Map<string, Motion>();
   #timed = new Map<string, TimedMotion>();
-  #presented: MotionPresentation | null = null;
+  #presented: (MotionPresentation & { eligibleFrom: number }) | null = null;
   #lastPresentation: { renderer: string; serial: number } | null = null;
   #credit: { identity: string; renderer: string; position: Position; through: number; remaining: number } | null = null;
   get presentationCreditMs(): number { return this.#credit?.remaining ?? 0; }
@@ -125,11 +125,26 @@ export class ConfirmedMotion {
     if (this.#lastPresentation?.renderer !== proof.renderer) this.#credit = null;
     this.#lastPresentation = { renderer: proof.renderer, serial: proof.serial };
     const pose = this.pose(proof.reference, proof.sampledAt);
-    if (!pose || !same(pose.position, proof.position) || pose.distance !== proof.distance || pose.moving || proof.moving
-      || !this.settled(proof.reference, proof.sampledAt) || ['accepted', 'moving'].includes(snapshot.projection.movement?.status ?? '')) return false;
+    if (!pose || !same(pose.position, proof.position) || pose.distance !== proof.distance || pose.facing !== proof.facing || pose.moving || proof.moving
+      || this.#motions.get(proof.reference)?.continuing || ['accepted', 'moving'].includes(snapshot.projection.movement?.status ?? '')) return false;
+    let eligibleFrom = proof.presentedAt;
+    if (!this.settled(proof.reference, proof.sampledAt)) {
+      const queue = this.#timed.get(proof.reference);
+      const person = sceneDisplayProjection(snapshot.projection).entities.find(value => value.entityRef === proof.reference);
+      if (!queue || !person?.motionTimeline) return false;
+      // 本次真实帧只保存当场完整纯hold尾；尾时刻本身不产生呈现或余额。
+      for (const piece of queue.segments) {
+        const endAt = piece.startedAt + piece.duration;
+        if (endAt <= proof.sampledAt) continue;
+        if (!Number.isFinite(endAt) || piece.kind !== 'hold' || !piece.trail.every(point => same(point, proof.position))) return false;
+        const end = piecePose(piece, endAt);
+        if (!same(end.position, proof.position) || end.distance !== proof.distance || end.facing !== proof.facing || end.moving) return false;
+        eligibleFrom = Math.max(eligibleFrom, endAt);
+      }
+    }
     if (this.#credit && (this.#credit.identity !== proof.identity || !same(this.#credit.position, proof.position))) this.#credit = null;
     if (this.#credit && proof.presentedAt < this.#credit.through) return false;
-    this.#presented = { ...proof, position: { ...proof.position } }; return true;
+    this.#presented = { ...proof, position: { ...proof.position }, eligibleFrom }; return true;
   }
   /** 在下一次画布写入或状态应用前封口；只结算此前真正成功绘出的静止区间。 */
   sealPresentation(at: number) {
@@ -138,9 +153,10 @@ export class ConfirmedMotion {
     if (!Number.isFinite(at) || at < proof.presentedAt || !this.#previous || proof.identity !== motionPresentationIdentity(this.#previous)) { this.invalidatePresentation(); return; }
     const old = this.#credit;
     const compatible = old?.identity === proof.identity && old.renderer === proof.renderer && same(old.position, proof.position);
-    const from = Math.max(proof.presentedAt, compatible ? old.through : proof.presentedAt);
-    this.#credit = { identity: proof.identity, renderer: proof.renderer, position: { ...proof.position }, through: Math.max(from, at),
-      remaining: (compatible ? old.remaining : 0) + Math.max(0, at - from) };
+    const from = Math.max(proof.eligibleFrom, compatible ? old.through : proof.presentedAt);
+    if (at <= from) return; // 未越过完整尾时仍销毁凭据，不能把已计边界推到未来。
+    this.#credit = { identity: proof.identity, renderer: proof.renderer, position: { ...proof.position }, through: at,
+      remaining: (compatible ? old.remaining : 0) + (at - from) };
   }
   /** 失去可见性或可靠绑定后，旧像素与未用信用都不能跨中断恢复。 */
   invalidatePresentation() { this.#presented = null; this.#credit = null; }

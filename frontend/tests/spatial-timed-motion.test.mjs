@@ -29,10 +29,10 @@ test('TIME-01：无实际呈现时141ms静止与原28ms运动分开，查询不�
   assert.equal(motion.pose(selfRef, 369).moving, false, '确认队列耗尽时不以Accepted或continuing假装走步');
 });
 
-function present(motion, snapshot, at, serial = 1, renderer = 'controlled-visible-canvas') {
+function present(motion, snapshot, at, serial = 1, renderer = 'controlled-visible-canvas', presentedAt = at) {
   const pose = motion.pose(selfRef, at);
   return motion.presentSelf({ identity: motionPresentationIdentity(snapshot), reference: selfRef, renderer, serial,
-    ...pose, sampledAt: at, presentedAt: at });
+    ...pose, sampledAt: at, presentedAt });
 }
 
 for (const credit of [0, 80, 141]) test(`TIME-03：受控呈现单元仅抵扣实际封存的${credit}ms，不是Canvas运行证据`, () => {
@@ -73,10 +73,120 @@ test('TIME-03：正常播完旧hold的50ms不能抵扣下一hold30ms', () => {
   const motion = new ConfirmedMotion(), first = baseline(0); motion.update(first, 0);
   const point = first.projection.self.position;
   const old = timed(first, 50, [point, point], [['hold', 0, 50, 0, 1]], null); motion.update(old, 0);
-  assert.equal(present(motion, old, 25), false); motion.sealPresentation(50); assert.equal(motion.presentationCreditMs, 0);
+  assert.equal(present(motion, old, 25), true, '纯hold真实帧可保留凭据，但播放期间没有余额'); motion.sealPresentation(50); assert.equal(motion.presentationCreditMs, 0);
   assert.equal(present(motion, old, 50, 2), true); motion.sealPresentation(50);
   const next = timed(old, 80, [point, point], [['hold', 50, 80, 0, 1]], null); motion.update(next, 50);
   assert.equal(motion.settled(selfRef, 79), false); assert.equal(motion.settled(selfRef, 80), true);
+});
+
+function holding(through = 50, spans = [['hold', 0, through, 0, 1]]) {
+  const motion = new ConfirmedMotion(), first = baseline(0); motion.update(first, 0);
+  const point = first.projection.self.position, snapshot = timed(first, through, [point, point], spans, null);
+  motion.update(snapshot, 0); return { motion, snapshot, point };
+}
+
+test('TIME-03：纯hold帧凭据只在封口时计入完整队列尾后的历史后缀', () => {
+  const { motion, snapshot } = holding();
+  assert.equal(present(motion, snapshot, 25), true); assert.equal(motion.presentationCreditMs, 0);
+  assert.equal(motion.settled(selfRef, 25), false); assert.equal(motion.active(25), true);
+  motion.pose(selfRef, 70); motion.settled(selfRef, 70); motion.active(70);
+  assert.equal(motion.presentationCreditMs, 0, '到尾/查询均不自动增加余额');
+  motion.sealPresentation(70); assert.equal(motion.presentationCreditMs, 20);
+  motion.sealPresentation(90); assert.equal(motion.presentationCreditMs, 20, '同一凭据只封口一次');
+});
+
+test('TIME-03：跨hold尾的成功提交不能回填采样时刻，早封口不污染未来水位', () => {
+  const first = holding();
+  assert.equal(present(first.motion, first.snapshot, 49, 1, 'canvas', 55), true);
+  first.motion.sealPresentation(70); assert.equal(first.motion.presentationCreditMs, 15);
+  const future = holding(100);
+  assert.equal(present(future.motion, future.snapshot, 30, 1, 'canvas', 33), true);
+  future.motion.sealPresentation(90); assert.equal(future.motion.presentationCreditMs, 0);
+  assert.equal(present(future.motion, future.snapshot, 95, 2, 'canvas', 96), true, 'seal90不能把已消费边界写到未来100');
+  future.motion.sealPresentation(110); assert.equal(future.motion.presentationCreditMs, 10);
+});
+
+test('TIME-03：尚未开始的多个确认纯hold也纳入完整尾T，不能只看当前段', () => {
+  for (const [sealAt, expected] of [[75, 0], [120, 20]]) {
+    const { motion, snapshot } = holding(100, [['hold', 0, 50, 0, 0], ['hold', 50, 100, 0, 1]]);
+    assert.equal(present(motion, snapshot, 25), true); motion.sealPresentation(sealAt);
+    assert.equal(motion.presentationCreditMs, expected);
+  }
+});
+
+test('TIME-03：纯hold凭据早封口、失效、漏封口update及时间回退均不能复活', () => {
+  for (const interrupt of [
+    motion => motion.sealPresentation(40), motion => motion.sealPresentation(50), motion => motion.invalidatePresentation(),
+    (motion, snapshot) => motion.update(snapshot, 40), motion => motion.sealPresentation(20),
+  ]) {
+    const { motion, snapshot } = holding();
+    assert.equal(present(motion, snapshot, 25), true); interrupt(motion, snapshot);
+    motion.sealPresentation(70); assert.equal(motion.presentationCreditMs, 0);
+    assert.equal(present(motion, snapshot, 25), false, '旧serial不能重新开启');
+    assert.equal(present(motion, snapshot, 75, 2), true); motion.sealPresentation(85);
+    assert.equal(motion.presentationCreditMs, 10, '失效后只有新成功帧可以重新累计');
+  }
+});
+
+test('TIME-03：新包早于旧hold尾到达，不能把旧播放区间抵扣或漏掉延长的尾', () => {
+  const { motion, snapshot, point } = holding(); present(motion, snapshot, 25); motion.sealPresentation(40);
+  const next = timed(snapshot, 80, [point, point], [['hold', 50, 80, 0, 1]], null); motion.update(next, 40);
+  assert.equal(present(motion, next, 45, 2), true); motion.sealPresentation(70);
+  assert.equal(motion.presentationCreditMs, 0); assert.equal(motion.settled(selfRef, 79), false); assert.equal(motion.settled(selfRef, 80), true);
+});
+
+test('TIME-03：纯hold尾后余额仅消费下一领先hold，不越过motion抵内部hold', () => {
+  const { motion, snapshot, point } = holding(); present(motion, snapshot, 25); motion.sealPresentation(70);
+  const end = { x: point.x + 10, y: point.y }, next = timed(snapshot, 140, [point, end], [
+    ['hold', 50, 80, 0, 0], ['motion', 80, 110, 0, 1], ['hold', 110, 140, 1, 1],
+  ], null); motion.update(next, 70);
+  assert.equal(motion.presentationCreditMs, 0); assert.equal(motion.pose(selfRef, 79).position.x, point.x);
+  assert.equal(motion.pose(selfRef, 95).position.x, point.x + 5);
+  assert.equal(motion.settled(selfRef, 139), false); assert.equal(motion.settled(selfRef, 140), true);
+});
+
+test('TIME-03：延后资格只接受全队列同点纯hold，运动/闭环/零几何/legacy/异点均拒绝', () => {
+  const point = { x: 950, y: 650 }, other = { x: 960, y: 650 };
+  const cases = [
+    { points: [point, other], spans: [['hold', 0, 50, 0, 0], ['motion', 50, 100, 0, 1]] },
+    { points: [point, other, point], spans: [['hold', 0, 50, 0, 0], ['motion', 50, 100, 0, 2]] },
+    { points: [point, point], spans: [['hold', 0, 50, 0, 0], ['motion', 50, 100, 0, 1]] },
+    // 领域防御：协议应已拒绝异点hold；不能仅因其moving=false而接受呈现凭据。
+    { points: [point, other], spans: [['hold', 0, 100, 0, 1]] },
+  ];
+  for (const item of cases) {
+    const motion = new ConfirmedMotion(), first = baseline(0); motion.update(first, 0);
+    const next = timed(first, 100, item.points, item.spans, null);
+    motion.update(next, 0); assert.equal(present(motion, next, 25), false);
+    motion.sealPresentation(120); assert.equal(motion.presentationCreditMs, 0);
+  }
+  const legacy = holding(), noTimeline = timed(legacy.snapshot, 100, [point, point], [['hold', 50, 100, 0, 1]], null);
+  delete noTimeline.projection.entities[0].motionTimeline; legacy.motion.update(noTimeline, 25);
+  assert.equal(present(legacy.motion, noTimeline, 30), false, '已排timed后的零几何legacy仍有原待播时长');
+  legacy.motion.sealPresentation(120); assert.equal(legacy.motion.presentationCreditMs, 0);
+  for (const status of ['accepted', 'moving']) {
+    const { motion, snapshot } = holding(); snapshot.projection.movement = { status }; motion.update(snapshot, 0);
+    assert.equal(present(motion, snapshot, 25), false); motion.sealPresentation(70); assert.equal(motion.presentationCreditMs, 0);
+  }
+});
+
+test('TIME-03：已结束运动不复活旧帧；新成功同点帧可证明后续纯hold，朝向仍需一致', () => {
+  const motion = new ConfirmedMotion(), first = baseline(0), point = first.projection.self.position; motion.update(first, 0);
+  const next = timed(first, 100, [point, { x: point.x + 10, y: point.y }, point], [
+    ['motion', 0, 50, 0, 2], ['hold', 50, 100, 2, 2],
+  ], null); motion.update(next, 0);
+  assert.equal(present(motion, next, 0), false); motion.sealPresentation(60); assert.equal(motion.presentationCreditMs, 0);
+  const pose = motion.pose(selfRef, 75); assert.equal(pose.distance, 20);
+  assert.equal(motion.presentSelf({ identity: motionPresentationIdentity(next), reference: selfRef, renderer: 'controlled-visible-canvas', serial: 2,
+    ...pose, facing: 'E', sampledAt: 75, presentedAt: 75 }), false);
+  assert.equal(present(motion, next, 75, 3), true); motion.sealPresentation(120); assert.equal(motion.presentationCreditMs, 20);
+});
+
+test('TIME-03：中途缺少timeline不能为尚未结束的旧hold开启新延后资格', () => {
+  const { motion, snapshot } = holding(), missing = structuredClone(snapshot); missing.snapshotSeq = '42';
+  for (const key of ['motionTrail', 'motionTimeline', 'motionFromSceneTimeMs', 'motionThroughSceneTimeMs']) delete missing.projection.entities[0][key];
+  motion.update(missing, 20); assert.equal(motion.settled(selfRef, 49), false, '缺字段保留旧hold原时长');
+  assert.equal(present(motion, missing, 25), false); motion.sealPresentation(70); assert.equal(motion.presentationCreditMs, 0);
 });
 
 test('TIME-03：同点Accepted只封存旧信用，查询/再次绘制不增加；只能消费一次', () => {

@@ -51,3 +51,27 @@ test('TIME-03：画布clear/resize/异常显式失效后必须新成功帧，替
   const replacement = new CanvasPresentationOwner(f.motion, f.canvas); replacement.painted(f.frame, f.snapshot, 150, 150, true);
   assert.equal(f.motion.presentationCreditMs, 0); replacement.seal(175, true); assert.equal(f.motion.presentationCreditMs, 25);
 });
+
+test('TIME-03：纯hold延后凭据在尾前/尾后失效均清零，renderer替换只能从新帧起算', () => {
+  const holding = () => {
+    const f = fixture(), first = structuredClone(f.snapshot), point = first.projection.self.position;
+    f.snapshot.snapshotSeq = '11'; f.snapshot.projection.sceneTimeMs += 50;
+    Object.assign(f.snapshot.projection.entities[0], { motionTrail: [point, point], motionFromSceneTimeMs: first.projection.sceneTimeMs,
+      motionThroughSceneTimeMs: f.snapshot.projection.sceneTimeMs, motionTimeline: [{ kind: 'hold', fromSceneTimeMs: first.projection.sceneTimeMs,
+        throughSceneTimeMs: f.snapshot.projection.sceneTimeMs, fromTrailIndex: 0, throughTrailIndex: 1 }] });
+    f.motion.update(f.snapshot, 0); assert.equal(f.owner.painted(f.frame, f.snapshot, 25, 25, true), true); return f;
+  };
+  for (const at of [40, 70]) for (const invalidate of [
+    f => { f.doc.hidden = true; f.owner.seal(at, true); },
+    f => { f.canvas.isConnected = false; f.owner.seal(at, true); },
+    f => { f.style.visibility = 'hidden'; f.owner.seal(at, true); },
+    f => f.owner.seal(at, false), f => f.owner.invalidate(),
+  ]) {
+    const f = holding(); invalidate(f); f.doc.hidden = false; f.canvas.isConnected = true; f.style.visibility = 'visible';
+    f.owner.seal(100, true); assert.equal(f.motion.presentationCreditMs, 0, '重新可见不能复活之前的延后凭据');
+  }
+  const f = holding(); f.owner.invalidate();
+  const replacement = new CanvasPresentationOwner(f.motion, f.canvas);
+  assert.equal(replacement.painted(f.frame, f.snapshot, 60, 60, true), true); replacement.seal(70, true);
+  assert.equal(f.motion.presentationCreditMs, 10, '新owner不能赚取旧hold尾到新提交前的时间');
+});
