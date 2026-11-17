@@ -86,6 +86,8 @@ export class AuthorityRuntime extends EventEmitter {
   }
   async close() {
     this.#prefixStates.close();
+    for (const gate of this.#controlPriority.values()) for (const entry of gate.pending.values()) entry.resolve();
+    this.#controlPriority.clear();
     for (const view of this.#views.values()) this.retireView(view);
     this.#handles.clear(); this.removeAllListeners();
   }
@@ -189,14 +191,14 @@ export class AuthorityRuntime extends EventEmitter {
     requireId(sessionId);
     const priority = command?.kind === 'control.resume' || command?.kind === 'control.take';
     let gate = this.#controlPriority.get(sessionId);
-    if (!gate) { gate = { sequence: 0, pending: new Map() }; this.#controlPriority.set(sessionId, gate); }
     let ticket;
     if (priority) {
+      if (!gate) { gate = { sequence: 0, pending: new Map() }; this.#controlPriority.set(sessionId, gate); }
       ticket = ++gate.sequence;
       let resolve;
       const settled = new Promise(done => { resolve = done; });
       gate.pending.set(ticket, { settled, resolve });
-    } else if (gate.pending.size) {
+    } else if (gate?.pending.size) {
       // 只让位于到达时已在门内的控制请求；后来的控制不能无限续期普通事务的等待。
       const waitingFor = [...gate.pending.values()];
       let timer;

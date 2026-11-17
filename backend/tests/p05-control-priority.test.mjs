@@ -4,7 +4,7 @@ import { AsyncLocalStorage } from 'node:async_hooks';
 import { io } from 'socket.io-client';
 import { startTestPostgres } from '../test-support/postgres.mjs';
 import { createAuthorityServer } from '../server.mjs';
-import { CONTROL_PRIORITY_WAIT_MS } from '../runtime.mjs';
+import { AuthorityRuntime, CONTROL_PRIORITY_WAIT_MS } from '../runtime.mjs';
 import { validateSpatial } from '../../protocol/spatial.mjs';
 
 const until = async (check, message, timeout = 3000) => {
@@ -15,6 +15,58 @@ const until = async (check, message, timeout = 3000) => {
   }
   throw new Error(message);
 };
+
+// 只在 locked 同步入口观察按会话登记的 Map，不给生产 runtime 增加测试专用公开接口。
+function observeGateRegistration(sessionId, start) {
+  const original = Map.prototype.set;
+  const maps = new Set();
+  Map.prototype.set = function (key, value) {
+    if (key === sessionId) maps.add(this);
+    return original.call(this, key, value);
+  };
+  try { return { operation: start(), maps }; }
+  finally { Map.prototype.set = original; }
+}
+
+test('不存在会话的普通读写请求不登记控制优先门，失败控制请求释放登记', async () => {
+  const client = { async query() { return { rows: [] }; }, release() {} };
+  const runtime = new AuthorityRuntime({ pool: { async connect() { return client; } } });
+  try {
+    for (const [kind, readOnly] of [['snapshot', false], ['receipt', true], ['join', false]]) {
+      const sessionId = `missing-session-${kind}`;
+      const { operation, maps } = observeGateRegistration(sessionId,
+        () => runtime.locked(sessionId, { kind, readOnly }, () => assert.fail('不存在的会话不得进入操作')));
+      await assert.rejects(operation, { code: 'SESSION_GONE' });
+      assert.equal(maps.size, 0, `${kind} 不得为任意合法会话 ID 留下优先门`);
+    }
+    const sessionId = 'missing-session-control';
+    const { operation, maps } = observeGateRegistration(sessionId,
+      () => runtime.locked(sessionId, { kind: 'control.resume' }, () => assert.fail('不存在的会话不得进入操作')));
+    await assert.rejects(operation, { code: 'SESSION_GONE' });
+    assert.equal(maps.size, 1);
+    assert.equal([...maps][0].has(sessionId), false, '失败控制请求也应清理优先门');
+  } finally { await runtime.close(); }
+});
+
+test('关闭 runtime 释放控制优先门及其普通事务等待者', async () => {
+  const held = Promise.withResolvers();
+  const client = { async query() { return { rows: [] }; }, release() {} };
+  let connections = 0;
+  const runtime = new AuthorityRuntime({ pool: { connect() { return ++connections === 1 ? held.promise : Promise.resolve(client); } } });
+  const sessionId = 'closing-session-control';
+  const { operation, maps } = observeGateRegistration(sessionId,
+    () => runtime.locked(sessionId, { kind: 'control.resume' }, () => {}));
+  const control = assert.rejects(operation, { code: 'SESSION_GONE' });
+  const normal = assert.rejects(runtime.locked(sessionId, { kind: 'snapshot' }, () => {}), { code: 'SESSION_GONE' });
+  try {
+    assert.equal(connections, 1);
+    await runtime.close();
+    assert.equal([...maps][0].has(sessionId), false, '关闭后 runtime 不得继续持有控制优先门');
+    await new Promise(resolve => setImmediate(resolve));
+    assert.equal(connections, 2, '关闭应释放既有普通请求的门等待，无须等控制请求结束或计时器到期');
+    await normal;
+  } finally { held.resolve(client); await control; await normal; await runtime.close(); }
+});
 
 test('真实PG与Socket.IO：收据查询不取会话行锁，并发收据查询中控制恢复仍获ACK', async t => {
   const database = await startTestPostgres('p05-control-priority', { outputSubdirectory: 'p05-control-priority' });
