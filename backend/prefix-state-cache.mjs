@@ -53,9 +53,13 @@ export class PrefixStateCache {
       || typeof row.content_digest !== 'string' || typeof row.reducer_version !== 'string') {
       this.clearSession(row.session_id); return;
     }
-    this.#contexts.set(tx, { generation: this.#generation, head, sessionId: row.session_id,
+    const context = { generation: this.#generation, head, sessionId: row.session_id,
       namespace: JSON.stringify([row.session_id, row.content_digest, row.reducer_version]),
-      contentDigest: row.content_digest, reducerVersion: row.reducer_version, content: tx.content, initial: row.initial_state });
+      contentDigest: row.content_digest, reducerVersion: row.reducer_version, content: tx.content, initial: row.initial_state };
+    this.#contexts.set(tx, context);
+    // 锁定行已经提交；先保留其不可变副本，下一次 timed-trail 同步才无需从零重放快照之前的历史。
+    // 不使用本事务可变 tx.state，也不等待本事务提交；其回滚不能撤销先前已提交的行头。
+    this.complete({ context, throughSeq: head }, tx, row.state, pool);
   }
   #valid(context, tx, pool) {
     return this.#usable(pool) && context && context.generation === this.#generation

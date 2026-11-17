@@ -14,6 +14,7 @@ import { observeDirectionConnections } from './direction-browser-support.mjs';
 import { createCuilanClickObservation } from './cuilan-click-observation.mjs';
 import { createCuilanNodeProfile } from './cuilan-node-profile.mjs';
 import { productionProfile, caseIds, assertCompleteReport, clickAction, askAppearance, describeItems, askItems, personalState, cancelPersonal, returnItem, holdSubmissions, captureAppearanceCompetition, holdCommittedReceipt, deferLeaseMaintenance, authoritativeState, sceneDecision, assertRoomIdentity, createCuilanReportCollector, finalizeCuilanReport } from './cuilan-self-response-support.mjs';
+import { nextRecoveryAction } from './cuilan-self-response-recovery.mjs';
 
 const output = resolve(process.env.FRONTEND_EVIDENCE_DIR || resolve(repository, '.agent-output/cuilan-production-browser'));
 await mkdir(output, { recursive: true });
@@ -52,18 +53,57 @@ async function picture(room, label, player = 0) {
 }
 async function instrumentPage(page) {
   const pageId = crypto.randomUUID();
+  // 只观测真实收据查询突发与完成量，不读令牌/收据/SQL，不影响页面发包。
+  const receiptRequests = new Set();
+  const receiptQueryStats = { pageId, sent: 0, finished: 0, failed: 0, pending: 0, peakPending: 0, lastSentAt: null, lastSettledAt: null };
+  (report.receiptQueryStats ??= []).push(receiptQueryStats);
+  const receiptRead = request => request.method() === 'GET' && new URL(request.url()).pathname.includes('/actions/');
   collector.observe(page, 'request', request => {
+    if (receiptRead(request)) {
+      receiptRequests.add(request); receiptQueryStats.sent++; receiptQueryStats.pending = receiptRequests.size;
+      receiptQueryStats.peakPending = Math.max(receiptQueryStats.peakPending, receiptRequests.size);
+      receiptQueryStats.lastSentAt = new Date().toISOString();
+    }
     const url = new URL(request.url());
     if (['http:', 'https:'].includes(url.protocol) && !['127.0.0.1', 'localhost'].includes(url.hostname)) report.externalRequests.push({ pageId, origin: url.origin, path: url.pathname });
     if (url.pathname === '/api/sessions' && request.method() === 'POST') report.creationRequests.push({ pageId, request: request.postDataJSON() });
   });
-  collector.observe(page, 'websocket', socket => collector.observe(socket, 'framesent', frame => {
-    const text = String(frame.payload); if (!/^42\d*\[/.test(text)) return;
-    try {
-      const [event, value] = JSON.parse(text.replace(/^42\d*/, ''));
-      if (event === 'player.action.request') report.wireActions.push({ pageId, request: JSON.parse(value) });
-    } catch (error) { report.pageErrors.push({ message: '实际动作帧无法读取：' + error.message }); }
-  }));
+  for (const [event, field] of [['requestfinished', 'finished'], ['requestfailed', 'failed']]) {
+    collector.observe(page, event, request => {
+      if (!receiptRequests.delete(request)) return;
+      receiptQueryStats[field]++; receiptQueryStats.pending = receiptRequests.size;
+      receiptQueryStats.lastSettledAt = new Date().toISOString();
+    });
+  }
+  collector.observe(page, 'websocket', socket => {
+    // 只读捕获普通Socket.IO ACK身份：不注入、替换或重发控制请求；
+    // 重启后区分真正的CONTROL_HELD、其他错误、未决超时与客户端提示丢码。
+    const controlAwaitingAck = new Map();
+    collector.observe(socket, 'framesent', frame => {
+      const text = String(frame.payload); if (!/^42\d*\[/.test(text)) return;
+      try {
+        const [event, value] = JSON.parse(text.replace(/^42\d*/, ''));
+        if (event === 'player.action.request') report.wireActions.push({ pageId, request: JSON.parse(value) });
+        if (event === 'control.resume' || event === 'control.take') {
+          const packetId = /^42(\d+)\[/.exec(text)?.[1];
+          if (packetId !== undefined) controlAwaitingAck.set(packetId, event);
+          (report.controlFrames ??= []).push({ pageId, event, packetId: packetId ?? null, stage: 'sent', at: new Date().toISOString() });
+        }
+      } catch (error) { report.pageErrors.push({ message: '实际动作帧无法读取：' + error.message }); }
+    });
+    collector.observe(socket, 'framereceived', frame => {
+      const text = String(frame.payload), match = /^43(\d+)\[/.exec(text);
+      if (!match || !controlAwaitingAck.has(match[1])) return;
+      const event = controlAwaitingAck.get(match[1]); controlAwaitingAck.delete(match[1]);
+      let code = 'ACK_UNREADABLE', responseType = null;
+      try {
+        const reply = JSON.parse(text.slice(text.indexOf('[')))[0];
+        code = typeof reply?.code === 'string' ? reply.code : 'ACK_SUCCESS_SHAPE';
+        responseType = typeof reply?.type === 'string' ? reply.type : null;
+      } catch { /* ACK仍保留不可读证据，不改变原消费者。 */ }
+      (report.controlFrames ??= []).push({ pageId, event, packetId: match[1], stage: 'ack', code, responseType, at: new Date().toISOString() });
+    });
+  });
   collector.observe(page, 'response', async response => {
     if (!/\/actions\//.test(new URL(response.url()).pathname) || !response.ok()) return;
     try { report.httpReceipts.push({ pageId, receivedAt: new Date().toISOString(), receipt: await response.json(), viewId: (await snapshot(page))?.viewId }); } catch (error) { report.pageErrors.push({ message: '实际收据响应无法读取：' + error.message }); }
@@ -288,12 +328,45 @@ async function interruptAppearance(room) {
   assert.ok((await state(room)).chapter.disguise);
   await bindingInterruption(room, player, 'appearance', granted.consent.consentId);
 }
-async function recoverPlayer(room, player, { reload = true } = {}) {
-  const page = room.pages[player]; if (reload) await page.reload();
+async function recoverPlayer(room, player, { reload = true, trace = null, allowExplicitTake = false } = {}) {
+  const record = (step, detail = {}) => { if (trace) trace.push({ player, step, at: new Date().toISOString(), ...detail }); };
+  const page = room.pages[player]; record('start');
+  if (reload) { await page.reload(); record('reloaded'); }
   await until(async () => (await clientState(page)).connection === 'online', '真实页面网络恢复', 20000);
+  record('online');
+  const beforeEpoch = (await snapshot(page))?.projection.self.controlEpoch;
   const resume = page.getByRole('button', { name: '恢复本人控制', exact: true });
-  if (await resume.isVisible()) await resume.click();
-  await until(async () => (await clientState(page)).inputReady, '真实页面恢复本人控制', 20000);
+  const take = page.getByRole('button', { name: '明确接管此角色', exact: true });
+  let clicked = false, explicitTakeClicked = false;
+  // 正常恢复优先。服务器重启后PG中可能仍保留旧连接的控制租约，协议明确要求
+  // CONTROL_HELD 时本人点击「明确接管」；同epoch且本地命令序号丢失也必须新建控制代次。
+  // 连接代次再次变为 connecting/online 时允许本人重新点击，不能让一次失效的点击吃掉20秒；
+  // 只有重启专用路径允许显式接管回退，其他重连仍需原恢复条件。总20秒上限不变。
+  await until(async () => {
+    const state = await clientState(page);
+    const action = nextRecoveryAction(state, { clicked, explicitTakeClicked }, allowExplicitTake);
+    if (action.kind === 'ready') return true;
+    if (action.kind === 'reset') { clicked = false; explicitTakeClicked = false; return false; }
+    if (action.kind === 'resume') {
+      assert.ok(await resume.isVisible(), '本人恢复入口必须是真实可见控件');
+      await resume.click();
+      clicked = true;
+      record('resume-clicked');
+    } else if (action.kind === 'take') {
+      assert.ok(await take.isVisible(), '本人明确接管入口必须是真实可见控件');
+      const epoch = (await snapshot(page))?.projection.self.controlEpoch;
+      await take.click();
+      explicitTakeClicked = true;
+      record('explicit-take-clicked', { reason: action.reason, beforeTakeEpoch: epoch });
+    }
+    return false;
+  }, '真实页面恢复本人控制', 20000);
+  if (explicitTakeClicked) {
+    const afterEpoch = (await snapshot(page))?.projection.self.controlEpoch;
+    assert.ok(beforeEpoch !== undefined && afterEpoch !== undefined && BigInt(afterEpoch) > BigInt(beforeEpoch), '真实本人接管必须提升权威控制代次，不可仅显示inputReady');
+    record('explicit-take-confirmed', { beforeEpoch, afterEpoch });
+  }
+  record('input-ready');
   report.directionQualification.push(await directionConnections.qualify(page, room.users[player].userId, 'recovery-' + player));
 }
 async function restartServer(room) {
@@ -301,7 +374,42 @@ async function restartServer(room) {
   directionConnections.close(); restorers.delete(directionConnections);
   await server.close(); server = await createAuthorityServer({ pool: database.pool, spatialDirection: { checkpointMs: 50 } });
   directionConnections = observeDirectionConnections(server.runtime); restorers.add(directionConnections); await server.listen(serverPort);
-  for (let player = 0; player < room.count; player++) await recoverPlayer(room, player);
+  // 两人房间暂停时，先并行建立真实连接；复原入口可能比online晚一拍出现。
+  // 记录各人到达可见控件和inputReady的实际次序，失败原样传播并保留完整门槛。
+  const trace = { sessionId: room.sessionId, beforeView: before, events: [] };
+  (report.restartRecoveryTraces ??= []).push(trace);
+  try {
+    await Promise.all(Array.from({ length: room.count }, (_, player) => recoverPlayer(room, player, { trace: trace.events, allowExplicitTake: true })));
+  } catch (error) {
+    trace.failure = { message: error.message, at: new Date().toISOString() };
+    try {
+      const response = await fetch(`http://127.0.0.1:${serverPort}/health`, { signal: AbortSignal.timeout(2000) });
+      trace.backendHealthOnFailure = { status: response.status, ok: response.ok };
+    } catch (probeError) {
+      trace.backendHealthOnFailure = { error: probeError.code ?? probeError.name };
+    }
+    // 只读、失败后诊断：核对后台仍在线时收据查询是否占满数据库连接；
+    // 不延长原20秒验收、不修改session、不让诊断失败覆盖原错误。
+    trace.databasePoolOnFailure = { total: database.pool.totalCount, idle: database.pool.idleCount, waiting: database.pool.waitingCount };
+    trace.receiptQueriesOnFailure = (report.receiptQueryStats ?? []).map(({ pageId, sent, finished, failed, pending, peakPending, lastSentAt, lastSettledAt }) =>
+      ({ pageId, sent, finished, failed, pending, peakPending, lastSentAt, lastSettledAt }));
+    if (database.pool.idleCount > 0) {
+      try {
+        const activity = await database.pool.query(`SELECT state, wait_event_type AS "waitType", wait_event AS "waitEvent", count(*)::int AS count
+          FROM pg_stat_activity WHERE datname=current_database() AND pid<>pg_backend_pid()
+          GROUP BY state, wait_event_type, wait_event ORDER BY count DESC LIMIT 12`);
+        trace.postgresWaitsOnFailure = activity.rows;
+        // 只读追加阻塞链：定位是哪个持锁事务让 control.resume 的 ACK 一直未回。
+        const blockers = await database.pool.query(`SELECT pid, application_name AS "applicationName", state,
+          wait_event_type AS "waitType", wait_event AS "waitEvent", pg_blocking_pids(pid) AS "blockingPids",
+          now() - xact_start AS "xactAge", now() - state_change AS "stateAge", left(query, 600) AS query
+          FROM pg_stat_activity WHERE datname=current_database() AND pid<>pg_backend_pid()
+          ORDER BY (pg_blocking_pids(pid))[1] NULLS LAST, pid LIMIT 20`);
+        trace.postgresBlockersOnFailure = blockers.rows.map(row => ({ ...row, xactAge: String(row.xactAge), stateAge: String(row.stateAge) }));
+      } catch (probeError) { trace.postgresWaitsOnFailure = { error: probeError.code ?? probeError.name }; }
+    } else trace.postgresWaitsOnFailure = { skipped: 'no-idle-pool-connection' };
+    throw error;
+  }
   await assertRoomIdentity(room, database.pool, { defaultEntry: report.rooms.find(row => row.sessionId === room.sessionId).defaultEntry });
   await room.rebindControlledNpcs();
   await until(async () => !(await snapshot(room.pages[0])).projection.paused, '实际服务器重启后正常两人恢复');

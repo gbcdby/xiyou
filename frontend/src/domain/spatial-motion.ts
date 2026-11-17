@@ -55,9 +55,9 @@ export function motionPresentationIdentity(snapshot: SnapshotV2): string {
   const p = snapshot.projection, self = p.self;
   return JSON.stringify([snapshot.sessionId, snapshot.viewId, self.entityRef, self.controlEpoch, p.mapVersion, self.sceneId, self.appearanceEpoch, self.appearanceId]);
 }
-interface TimedPiece { kind: 'motion' | 'hold' | 'legacy'; trail: Position[]; duration: number }
+interface TimedPiece { kind: 'motion' | 'hold' | 'legacy'; trail: Position[]; duration: number; sceneFrom?: number; sceneThrough?: number }
 interface TimedSegment extends TimedPiece { startedAt: number; before: DrawnPose }
-interface TimedMotion { base: DrawnPose; segments: TimedSegment[] }
+interface TimedMotion { base: DrawnPose; segments: TimedSegment[]; anchor?: number }
 
 function piecePose(piece: TimedSegment, now: number): DrawnPose {
   const fraction = Math.max(0, Math.min(1, (now - piece.startedAt) / piece.duration));
@@ -76,20 +76,28 @@ function timedPose(value: TimedMotion, now: number): DrawnPose {
   for (const piece of value.segments) {
     if (now < piece.startedAt) return { ...pose, moving: false };
     pose = piecePose(piece, now);
-    if (now < piece.startedAt + piece.duration) return pose;
+    if (now < piece.startedAt + piece.duration) break;
   }
-  return { ...pose, moving: false };
+  return pose;
 }
 function appendTimed(value: TimedMotion, pieces: TimedPiece[], now: number) {
   while (value.segments[0] && now >= value.segments[0].startedAt + value.segments[0].duration) {
     const completed = value.segments.shift()!; value.base = piecePose(completed, completed.startedAt + completed.duration);
   }
-  let last = value.segments.at(-1), at = Math.max(now, last ? last.startedAt + last.duration : now);
+  const timed = pieces.filter(piece => piece.duration > 0 && piece.sceneFrom !== undefined && piece.sceneThrough !== undefined);
+  if (timed.length && value.anchor === undefined) value.anchor = now - timed[0].sceneFrom!;
+  const last = value.segments.at(-1); let at = last ? last.startedAt + last.duration : now;
   let before = last ? piecePose(last, at) : value.base;
   for (const piece of pieces) {
     if (piece.duration <= 0) continue;
-    last = { ...piece, trail: piece.trail.map(point => ({ ...point })), startedAt: at, before };
-    value.segments.push(last); at += piece.duration; before = piecePose(last, at);
+    // 权威端点共用一个墙钟锚点，尚未收到的区间不能被算作已播放。
+    // 供给迟到只把新段及其后续锚点向后顺延；旧余段、逐段时长与转角保持。
+    const authoritativeAt = value.anchor !== undefined && piece.sceneFrom !== undefined ? piece.sceneFrom + value.anchor : null;
+    const startedAt = Math.max(now, at, authoritativeAt ?? now);
+    if (authoritativeAt !== null && startedAt > authoritativeAt) value.anchor = startedAt - piece.sceneFrom!;
+    const segment: TimedSegment = { ...piece, trail: piece.trail.map(point => ({ ...point })), startedAt, before };
+    const end = startedAt + segment.duration;
+    value.segments.push(segment); at = end; before = piecePose(segment, end);
   }
 }
 function remainingTrail(points: Position[], travelled: number, position: Position): Position[] {
@@ -176,13 +184,23 @@ export class ConfirmedMotion {
               appendTimed(queue, [{ kind: 'legacy', trail: remainingTrail(old.trail, travelled, beforePose.position), duration: old.startedAt + old.duration - now }], now);
             }
             const pieces: TimedPiece[] = person.motionTimeline
-              ? person.motionTimeline.map(span => ({ kind: span.kind, trail: person.motionTrail!.slice(span.fromTrailIndex, span.throughTrailIndex + 1), duration: span.throughSceneTimeMs - span.fromSceneTimeMs }))
+              ? person.motionTimeline.map(span => ({ kind: span.kind, trail: person.motionTrail!.slice(span.fromTrailIndex, span.throughTrailIndex + 1), duration: span.throughSceneTimeMs - span.fromSceneTimeMs,
+                sceneFrom: span.fromSceneTimeMs, sceneThrough: span.throughSceneTimeMs }))
               : [{ kind: 'legacy', trail: person.motionTrail!, duration: person.motionThroughSceneTimeMs! - person.motionFromSceneTimeMs! }];
             const credit = this.#credit;
+            const firstTimed = pieces.find(piece => piece.duration > 0 && piece.sceneFrom !== undefined);
+            if (firstTimed && (queue.anchor === undefined || queueWasEmpty)) {
+              queue.anchor = Math.max(queue.anchor ?? -Infinity, now - firstTimed.sceneFrom!);
+            }
             if (person.motionTimeline && queueWasEmpty && credit?.identity === motionPresentationIdentity(snapshot) && same(credit.position, beforePose.position)) {
-              for (const piece of pieces) {
+              for (let index = 0; index < pieces.length; index++) {
+                const piece = pieces[index];
                 if (piece.kind !== 'hold' || piece.duration <= 0) break;
                 const consumed = Math.min(piece.duration, credit.remaining); piece.duration -= consumed; credit.remaining -= consumed;
+                // 只消费在同点真实呈现过的领先hold；权威后续端点不改写。
+                // 锚点与剩余hold起点一起移动，避免下一批重新补入已抵扣的静止。
+                if (piece.sceneFrom !== undefined) piece.sceneFrom += consumed;
+                if (queue.anchor !== undefined) queue.anchor -= consumed;
                 if (piece.duration > 0) break;
               }
             }
@@ -235,9 +253,10 @@ export class ConfirmedMotion {
   position(reference: string, now: number): Position | null {
     return this.pose(reference, now)?.position || null;
   }
-  /** 位置、朝向和步态共用确认路径；墙钟只采样位置，不能使站立者原地走步。 */
-  pose(reference: string, now: number): DrawnPose | null {
-    const timed = this.#timed.get(reference); if (timed) return timedPose(timed, now);
+  /** 位置、朝向和步态共用确认路径；查询与真实绘制都不能以活动计划掩盖供给断粮。 */
+  pose(reference: string, now: number, _sampledForPaint = false): DrawnPose | null {
+    const timed = this.#timed.get(reference);
+    if (timed) return timedPose(timed, now);
     const value = this.#motions.get(reference); if (!value) return null;
     if (!value.trail || value.duration <= 0) return { position: value.position, facing: value.facing, moving: false, distance: value.distanceBefore };
     const fraction = Math.max(0, Math.min(1, (now - value.startedAt) / value.duration));

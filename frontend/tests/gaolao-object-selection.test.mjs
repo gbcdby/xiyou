@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { selectObject } from './gaolao-real-support.mjs';
+import { openObjects, selectObject } from './gaolao-real-support.mjs';
 import { observeSelectionClicks } from './cuilan-click-observation.mjs';
 
 // 调用真实选择 helper；定位器只模拟已展开详情对底层入口的拦截，不算浏览器命中验收。
@@ -76,4 +76,52 @@ test('前置关闭不吞原对象入口异常，不重试或跳到对象点击',
   const error = new Error('原入口 5000ms 超时'), f = fixture({ entryError: error });
   await assert.rejects(selectObject(f.page, f.reference), value => value === error);
   assert.deepEqual(f.calls, [['close', []], ['entry', []]]);
+});
+
+test('A2 移动路径直接打开对象列表：先正常关闭遮挡详情再普通点击入口', async () => {
+  const f = fixture();
+  const remove = observeSelectionClicks(f.page, event => { f.events.push(event); return f.events.length; });
+  try { await openObjects(f.page); } finally { remove(); }
+  assert.deepEqual(f.calls, [['close', []], ['entry', []]]);
+  assert.deepEqual(f.events.map(event => [event.branch, event.phase]), [
+    ['close-objects', 'called'], [undefined, 'returned'],
+    ['objects-entry', 'called'], [undefined, 'returned'],
+  ]);
+  assert.equal(f.events[0].reference, undefined, '移动入口不伪造先前对象的当前 ref');
+});
+
+test('A2 移动路径没有已展开详情时只点原对象入口', async () => {
+  const f = fixture({ opened: false });
+  await openObjects(f.page);
+  assert.deepEqual(f.calls, [['entry', []]]);
+});
+
+test('A2 关闭详情尚未完成时不穿透底层入口，也不重放关闭', async () => {
+  let release;
+  const pendingClose = new Promise(resolve => { release = resolve; });
+  const f = fixture({ closeWait: pendingClose });
+  let called;
+  const begun = new Promise(resolve => { called = resolve; });
+  const remove = observeSelectionClicks(f.page, event => { if (event.branch === 'close-objects') called(); return 'visible-close'; });
+  const pending = openObjects(f.page);
+  await begun;
+  assert.deepEqual(f.calls, [['close', []]]);
+  release();
+  try { await pending; } finally { remove(); }
+  assert.deepEqual(f.calls, [['close', []], ['entry', []]]);
+});
+
+test('A2 普通可见关闭失败保持原异常，不偷点后面的场景对象', async () => {
+  const original = new Error('详情面板仍然遮挡');
+  const f = fixture({ closeError: original });
+  await assert.rejects(openObjects(f.page), error => error === original);
+  assert.deepEqual(f.calls, [['close', []]]);
+});
+
+test('选择对象仍为原精确 ref 提供一次关闭观察，而移动入口不借用该 ref', async () => {
+  const f = fixture();
+  const remove = observeSelectionClicks(f.page, event => { f.events.push(event); return 'observed'; });
+  try { await selectObject(f.page, f.reference); } finally { remove(); }
+  assert.equal(f.events[0].reference, f.reference);
+  assert.deepEqual(f.calls, [['close', []], ['entry', []], ['object', []], ['heading']]);
 });

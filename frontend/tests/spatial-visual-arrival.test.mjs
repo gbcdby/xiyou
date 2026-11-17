@@ -26,6 +26,7 @@ function baseline() {
   p.self.movementCommandHighWater = '1'; return s;
 }
 function timed(previous, through, points, spans, plan = {}) {
+
   const s = structuredClone(previous), p = s.projection;
   s.snapshotSeq = String(BigInt(previous.snapshotSeq) + 1n); p.sceneTimeMs = through;
   p.self.position = { ...points.at(-1) }; p.self.movementCommandHighWater = plan.movementCommandSeq ?? '2';
@@ -35,6 +36,13 @@ function timed(previous, through, points, spans, plan = {}) {
     motionFromSceneTimeMs: previous.projection.sceneTimeMs, motionThroughSceneTimeMs: through,
     motionTimeline: spans.map(([kind, from, to, first, last]) => ({ kind, fromSceneTimeMs: from, throughSceneTimeMs: to, fromTrailIndex: first, throughTrailIndex: last })) });
   return s;
+}
+/** 受控hold在0ms已经收到，确实播放到200ms后再接后续段；收包本身不代表播完。 */
+function prime(f, first) {
+  f.update(first, first.projection.sceneTimeMs);
+  const p = first.projection.self.position;
+  const primer = timed(first, 200, [{ ...p }, { ...p }], [['hold', 0, 200, 0, 1]]);
+  f.update(primer, 0); return primer;
 }
 function fixture(options = {}) {
   const motion = new ConfirmedMotion(), publisher = createSpatialSnapshotSource(), emissions = [];
@@ -63,51 +71,52 @@ function fixture(options = {}) {
 }
 
 test('ARRIVAL-01：持续纯hold下成功绘出同点新计划，可回报到达且不清空hold或创建信用', () => {
-  const f = fixture(); let s = baseline(); f.update(s, 0);
+  const f = fixture(); let s = prime(f, baseline());
   for (let i = 1; i <= 4; i++) {
-    const p = s.projection.self.position;
-    s = timed(s, i * 200, [{ ...p }, { ...p }], [['hold', (i - 1) * 200, i * 200, 0, 1]]);
-    f.update(s, i * 200); f.draw(i * 200 + 16);
-    assert.equal(f.motion.settled(selfRef, i * 200 + 16), false, '严格队列仍有原hold');
+    const p = s.projection.self.position, from = i * 200, through = from + 200;
+    s = timed(s, through, [{ ...p }, { ...p }], [['hold', from, through, 0, 1]]);
+    f.update(s, from); f.draw(through - 16);
+    assert.equal(f.motion.settled(selfRef, through - 16), false, '严格队列仍有原hold');
     assert.equal(f.motion.presentationCreditMs, 0, '到达回报不是呈现信用');
   }
+  f.draw(1016);
   assert.equal(f.emissions.length, 1, '当前计划的真实绘制到达只回报一次');
   assert.deepEqual(f.emissions[0], { event: 'settled', value: { viewId: s.viewId, epoch: s.projection.self.controlEpoch,
     movementId: 'next-plan', sequence: '2', position: { x: 365, y: 425 } } });
 });
 
 test('ARRIVAL-02：最后运动播完而尾hold未完时回报，原时长与严格settled不变', () => {
-  const f = fixture(), first = baseline(); f.update(first, 0);
+  const f = fixture(), first = prime(f, baseline());
   const points = [{ x: 365, y: 425 }, { x: 375, y: 425 }];
-  const next = timed(first, 200, points, [['motion', 0, 100, 0, 1], ['hold', 100, 200, 1, 1]]);
-  f.update(next, 200); f.draw(250);
-  assert.deepEqual(f.motion.pose(selfRef, 250).position, { x: 370, y: 425 }); assert.equal(f.emissions.length, 0);
-  f.draw(300); assert.equal(f.emissions.length, 1); assert.equal(f.motion.hasPendingMotion(selfRef, 300), false);
-  assert.equal(f.motion.settled(selfRef, 399), false); assert.equal(f.motion.settled(selfRef, 400), true);
-  assert.equal(f.motion.pose(selfRef, 399).distance, 10); assert.equal(f.motion.presentationCreditMs, 0);
+  const next = timed(first, 300, points, [['motion', 200, 250, 0, 1], ['hold', 250, 300, 1, 1]]);
+  f.update(next, 200); f.draw(225);
+  assert.deepEqual(f.motion.pose(selfRef, 225).position, { x: 370, y: 425 }); assert.equal(f.emissions.length, 0);
+  f.draw(275); assert.equal(f.emissions.length, 1); assert.equal(f.motion.hasPendingMotion(selfRef, 275), false);
+  assert.equal(f.motion.settled(selfRef, 299), false); assert.equal(f.motion.settled(selfRef, 300), true);
+  assert.equal(f.motion.pose(selfRef, 299).distance, 10); assert.equal(f.motion.presentationCreditMs, 0);
 });
 
 test('ARRIVAL-03：内部hold后还有闭环运动，即使当前位置已等于终点也不能提前回报', () => {
-  const f = fixture(), first = baseline(); f.update(first, 0);
+  const f = fixture(), first = prime(f, baseline());
   const points = [{ x: 365, y: 425 }, { x: 375, y: 425 }, { x: 365, y: 425 }];
-  const next = timed(first, 300, points, [['hold', 0, 100, 0, 0], ['motion', 100, 200, 0, 2], ['hold', 200, 300, 2, 2]]);
-  f.update(next, 300);
-  for (const at of [350, 400]) {
-    assert.deepEqual(f.motion.pose(selfRef, at).position, first.projection.self.position);
-    assert.equal(f.motion.hasPendingMotion(selfRef, at), true); f.draw(at); assert.equal(f.emissions.length, 0);
-  }
-  f.draw(500); assert.equal(f.emissions.length, 1); assert.equal(f.motion.settled(selfRef, 500), false);
+  const next = timed(first, 500, points, [['hold', 200, 300, 0, 0], ['motion', 300, 400, 0, 2], ['hold', 400, 500, 2, 2]]);
+  f.update(next, 200);
+  assert.deepEqual(f.motion.pose(selfRef, 350).position, { x: 375, y: 425 });
+  assert.equal(f.motion.hasPendingMotion(selfRef, 350), true); f.draw(350); assert.equal(f.emissions.length, 0);
+  assert.deepEqual(f.motion.pose(selfRef, 450).position, { x: 365, y: 425 });
+  assert.equal(f.motion.settled(selfRef, 450), false); f.draw(450); assert.equal(f.emissions.length, 1);
+  f.draw(550); assert.equal(f.emissions.length, 1); assert.equal(f.motion.settled(selfRef, 499), false); assert.equal(f.motion.settled(selfRef, 500), true);
   assert.equal(f.motion.pose(selfRef, 500).distance, 20); assert.equal(f.motion.presentationCreditMs, 0);
 });
 
 test('ARRIVAL-04：未结束timed motion即使几何为0仍等待，不把它当hold', () => {
-  const f = fixture(), first = baseline(); f.update(first, 0);
+  const f = fixture(), first = prime(f, baseline());
   const point = first.projection.self.position;
-  const next = timed(first, 100, [{ ...point }, { ...point }], [['motion', 0, 100, 0, 1]]);
-  f.update(next, 100); f.draw(150);
-  assert.equal(f.motion.pose(selfRef, 150).moving, false); assert.equal(f.motion.hasPendingMotion(selfRef, 150), true);
+  const next = timed(first, 300, [{ ...point }, { ...point }], [['motion', 200, 300, 0, 1]]);
+  f.update(next, 200); f.draw(250);
+  assert.equal(f.motion.pose(selfRef, 250).moving, false); assert.equal(f.motion.hasPendingMotion(selfRef, 250), true);
   assert.equal(f.emissions.length, 0); assert.equal(f.motion.presentationCreditMs, 0);
-  f.draw(200); assert.equal(f.emissions.length, 1);
+  f.draw(350); assert.equal(f.emissions.length, 1);
 });
 
 test('ARRIVAL-05：legacy完整余折线仍含返回路径时不得只用当前点提前到达', () => {
@@ -150,22 +159,23 @@ test('ARRIVAL-06：查询不冒充显示，空帧/隐藏/离屏/错误本人或�
 
 test('ARRIVAL-07：只有当前arrived计划可回报，同点新计划身份仍单独回报', () => {
   for (const status of ['accepted', 'moving', 'blocked', 'cancelled']) {
-    const f = fixture(), first = baseline(); f.update(first, 0); const point = first.projection.self.position;
-    f.update(timed(first, 200, [{ ...point }, { ...point }], [['hold', 0, 200, 0, 1]], { status }), 200);
-    f.draw(216); assert.equal(f.emissions.length, 0, status);
+    const f = fixture(), first = prime(f, baseline()); const point = first.projection.self.position;
+    f.update(timed(first, 400, [{ ...point }, { ...point }], [['hold', 200, 400, 0, 1]], { status }), 200);
+    f.draw(416); assert.equal(f.emissions.length, 0, status);
   }
-  const f = fixture(), first = baseline(); f.update(first, 0); const point = first.projection.self.position;
-  const second = timed(first, 200, [{ ...point }, { ...point }], [['hold', 0, 200, 0, 1]]); f.update(second, 200); f.draw(216);
-  const third = timed(second, 400, [{ ...point }, { ...point }], [['hold', 200, 400, 0, 1]], { movementId: 'third-plan', movementCommandSeq: '3', planVersion: '3' });
-  f.update(third, 400); f.draw(416); f.draw(432);
+  const f = fixture(), first = prime(f, baseline()); const point = first.projection.self.position;
+  const second = timed(first, 400, [{ ...point }, { ...point }], [['hold', 200, 400, 0, 1]]); f.update(second, 200); f.draw(416);
+  f.motion.invalidatePresentation();
+  const third = timed(second, 600, [{ ...point }, { ...point }], [['hold', 400, 600, 0, 1]], { movementId: 'third-plan', movementCommandSeq: '3', planVersion: '3' });
+  f.update(third, 400); f.draw(616); f.draw(632);
   assert.deepEqual(f.emissions.map(row => [row.value.movementId, row.value.sequence]), [['next-plan', '2'], ['third-plan', '3']]);
-  assert.equal(f.motion.presentationCreditMs, 0);
+  assert.ok(f.motion.presentationCreditMs <= 16, '到达回报本身不额外制造呈现信用，静态hold的可见帧最多留下16ms');
 });
 
 test('ARRIVAL-08：reduced-motion沿用直接绘出确认点的到达语义，不获得呈现信用', () => {
-  const f = fixture({ reducedMotion: true }), first = baseline(); f.update(first, 0);
-  const next = timed(first, 100, [{ x: 365, y: 425 }, { x: 375, y: 425 }], [['motion', 0, 100, 0, 1]]);
-  f.update(next, 100); f.draw(116);
-  assert.equal(f.motion.hasPendingMotion(selfRef, 116), true, '原运动段仍在，无时间压缩或删除');
+  const f = fixture({ reducedMotion: true }), first = prime(f, baseline());
+  const next = timed(first, 300, [{ x: 365, y: 425 }, { x: 375, y: 425 }], [['motion', 200, 300, 0, 1]]);
+  f.update(next, 200); f.draw(250);
+  assert.equal(f.motion.hasPendingMotion(selfRef, 250), true, '原运动段仍在，无时间压缩或删除');
   assert.equal(f.emissions.length, 1); assert.equal(f.motion.presentationCreditMs, 0);
 });

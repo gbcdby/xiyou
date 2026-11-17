@@ -49,11 +49,11 @@ for (const credit of [0, 80, 141]) test(`TIME-03：受控呈现单元仅抵扣�
 test('TIME-04：旧余段和下一方向/速度分别保时，不合成平均速度', () => {
   const motion = new ConfirmedMotion(), first = baseline(0, { x: 0, y: 0 }); motion.update(first, 0);
   const second = timed(first, 100, [{ x: 0, y: 0 }, { x: 10, y: 0 }], [['motion', 0, 100, 0, 1]]); motion.update(second, 100);
-  const third = timed(second, 300, [{ x: 10, y: 0 }, { x: 10, y: 40 }], [['motion', 100, 300, 0, 1]]); motion.update(third, 150);
+  const third = timed(second, 300, [{ x: 10, y: 0 }, { x: 10, y: 30 }], [['motion', 100, 300, 0, 1]]); motion.update(third, 150);
   assert.deepEqual(motion.pose(selfRef, 175).position, { x: 7.5, y: 0 });
   assert.deepEqual(motion.pose(selfRef, 200).position, { x: 10, y: 0 });
-  assert.deepEqual(motion.pose(selfRef, 300).position, { x: 10, y: 20 });
-  assert.equal(motion.pose(selfRef, 400).distance, 50); assert.equal(motion.pose(selfRef, 400).moving, false);
+  assert.deepEqual(motion.pose(selfRef, 300).position, { x: 10, y: 15 });
+  assert.equal(motion.pose(selfRef, 400).distance, 40); assert.equal(motion.pose(selfRef, 400).moving, false);
 });
 
 test('TIME-03/04：内部与尾部hold保持原位置和时长，不花领先信用', () => {

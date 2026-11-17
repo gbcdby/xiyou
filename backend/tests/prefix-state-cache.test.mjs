@@ -72,6 +72,37 @@ test('已提交历史前缀重复读取保持原 replay 状态且不再扫描历
   assert.equal(f.observations.scannedEvents, before, '重复已提交前缀不能再次重放全部历史');
 });
 
+test('冷 runtime 观察过的已提交快照在后续同步中直接可用，不回到历史起点', async () => {
+  const f = fixture();
+  const snapshot = await f.at('7');
+  assert.deepEqual(snapshot, f.states[7]);
+  assert.equal(f.observations.scannedEvents, 0, '当前快照不需要读取事件');
+  const next = { ...f.events.at(-1), sessionSeq: '8', eventId: `${sessionId}:E8`,
+    payload: { sceneTimeMs: 40, wallAnchorMs: 40, paused: false } };
+  const stored = encodeJsonbText(reduceWorld(f.states[7], next, content));
+  Object.assign(f.row, { session_seq: '8', state: stored.value, state_text_encoding: stored.encoding });
+  f.client.visibleEvents = [...f.events, next];
+  snapshot.characters['C-host'].name = '调用者不能污染已提交锚点';
+  assert.deepEqual(await f.at('7'), f.states[7]);
+  assert.equal(f.observations.scannedEvents, 0, '后续同步的快照锚点不得重放整段冷历史');
+});
+
+test('读取事务回滚仍可保留先前已提交的行头，但不保留本事务修改', async () => {
+  const f = fixture();
+  await f.run(tx => {
+    tx.state.characters['C-host'].name = '事务内修改';
+    tx.row.state.characters['C-host'].name = '行对象修改';
+    tx.emit('spatial.clock', { sceneTimeMs: 40, wallAnchorMs: 40, paused: false });
+  }, true);
+  const next = { ...f.events.at(-1), sessionSeq: '8', eventId: `${sessionId}:E8`,
+    payload: { sceneTimeMs: 40, wallAnchorMs: 40, paused: false } };
+  const stored = encodeJsonbText(reduceWorld(f.states[7], next, content));
+  Object.assign(f.row, { session_seq: '8', state: stored.value, state_text_encoding: stored.encoding });
+  f.client.visibleEvents = [...f.events, next];
+  assert.deepEqual(await f.at('7'), f.states[7]);
+  assert.equal(f.observations.scannedEvents, 0, '事务开始前已提交的行头不会随本事务回滚失效');
+});
+
 test('历史、零、重复和倒序目标逐项等于未缓存 replay，补读只使用不大于目标的最近前缀', async () => {
   const f = fixture();
   for (const q of ['5', '0', '6', '2', '4', '1', '6']) {
@@ -301,7 +332,7 @@ test('超大项和无法克隆的返回值不缓存，其他已确认项继续�
   f.save(tx, '1'); f.save(tx, '2', { text: '长'.repeat(100) });
   f.save(tx, '3', { function: () => {} });
   assert.equal(f.cache.begin(tx, '3', f.pool).sequence, '1');
-  assert.equal(f.budget.usage.entries, 1); f.cache.close();
+  assert.equal(f.budget.usage.entries, 2, '只有已提交行头和合法历史项占用预算'); f.cache.close();
 });
 
 test('共享全进程预算只共享淘汰额度，不共享 owner 数据；删除会话阻止旧回调填回', () => {
@@ -312,8 +343,9 @@ test('共享全进程预算只共享淘汰额度，不共享 owner 数据；删�
   const pending = f.cache.begin(tx, '2', f.pool);
   f.cache.clearSession('S');
   f.cache.complete(pending, tx, { sessionId: 'S', sessionSeq: '2' }, f.pool);
-  assert.deepEqual(f.budget.usage, { entries: 0, bytes: 0 });
-  second.close(); f.cache.close();
+  assert.equal(f.budget.usage.entries, 1, '删除一个 owner 的会话不能删除另一个 owner 已确认的行头');
+  assert.equal(second.begin(secondTx, '9', secondPool).sequence, '9');
+  second.close(); f.cache.close(); assert.deepEqual(f.budget.usage, { entries: 0, bytes: 0 });
 });
 
 test('跨 owner 总字节数实际触发淘汰，淘汰后旧 owner 返回 miss 而不影响状态语义', () => {
