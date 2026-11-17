@@ -239,7 +239,8 @@ export async function submitSpatial(runtime, handle, raw) {
 export async function syncSpatial(runtime, handle, request, { throughSeqCeiling } = {}) {
     const connection = runtime.connection(handle);
     requireSpatialCapability(connection.capabilities);
-    return runtime.locked(request.sessionId, { kind: 'spatial-sync' }, async (tx) => {
+    const sharedRead = runtime.connectionView(handle)?.schemaVersion === 2 && runtime.spatialSupply.enabled(handle);
+    return runtime.locked(request.sessionId, { kind: 'spatial-sync', ...(sharedRead ? { sessionLock: 'share' } : {}) }, async (tx) => {
         const user = await runtime.access(tx.client, tx.row, connection.token), view = runtime.connectionView(handle), ended = ['Finished', 'Aborted'].includes(tx.state.phase), binding = view?.terminalBinding ?? tx.state.views[user.actorId], actor = tx.state.characters[user.actorId];
         requireSpatialCapability(connection.capabilities, tx.state);
         if (ended && !await runtime.liveConnection(tx, handle)) throw new RuntimeError('UNAUTHENTICATED');

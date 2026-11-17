@@ -150,6 +150,7 @@ export class AuthorityRuntime extends EventEmitter {
   }
   async #lockedBody(sessionId, command, operation) {
     const readOnly = command?.readOnly === true;
+    const sharedRead = command?.kind === 'spatial-sync' && command.sessionLock === 'share';
     requireId(sessionId);
     const client = await this.pool.connect();
     let committed = false;
@@ -160,7 +161,8 @@ export class AuthorityRuntime extends EventEmitter {
     try {
       await client.query(readOnly ? 'BEGIN READ ONLY' : 'BEGIN');
       // 收据只读不取会话行锁，避免重连回放把 control.resume 堵在同一行的锁队列后。
-      const row = (await client.query(readOnly ? 'SELECT * FROM sessions WHERE session_id=$1' : 'SELECT * FROM sessions WHERE session_id=$1 FOR UPDATE', [sessionId])).rows[0];
+      const row = (await client.query(readOnly ? 'SELECT * FROM sessions WHERE session_id=$1'
+        : sharedRead ? 'SELECT * FROM sessions WHERE session_id=$1 FOR SHARE' : 'SELECT * FROM sessions WHERE session_id=$1 FOR UPDATE', [sessionId])).rows[0];
       if (!row) throw new RuntimeError('SESSION_GONE', '本局不可访问。');
       tx = this.buildTransaction(client, row, command.cause);
       if (!readOnly) this.#prefixStates.capture(tx, this.pool);
@@ -188,6 +190,9 @@ export class AuthorityRuntime extends EventEmitter {
     return result;
   }
   async locked(sessionId, command, operation) {
+    return this.#withControlPriority(sessionId, command, () => this.#lockedBody(sessionId, command, operation));
+  }
+  async #withControlPriority(sessionId, command, operation) {
     requireId(sessionId);
     const priority = command?.kind === 'control.resume' || command?.kind === 'control.take';
     let gate = this.#controlPriority.get(sessionId);
@@ -206,7 +211,7 @@ export class AuthorityRuntime extends EventEmitter {
       try { await Promise.race([Promise.all(waitingFor.map(entry => entry.settled)), expired]); }
       finally { clearTimeout(timer); }
     }
-    try { return await this.#lockedBody(sessionId, command, operation); }
+    try { return await operation(); }
     finally {
       if (priority) {
         const entry = gate.pending.get(ticket);
@@ -215,6 +220,40 @@ export class AuthorityRuntime extends EventEmitter {
         if (!gate.pending.size && this.#controlPriority.get(sessionId) === gate) this.#controlPriority.delete(sessionId);
       }
     }
+  }
+  #outboxRecordCovered(record) {
+    if ([...this.#handles.values()].some(handle => this.pendingViewInstallation(handle, record.session_id))) return false;
+    for (const view of this.#views.values()) {
+      if (!view.active || view.sessionId !== record.session_id) continue;
+      if (view.schemaVersion !== 2 || !this.spatialSupply.enabled(view.handle) || !this.spatialSupply.current(view.handle, view)) return false;
+      const through = this.spatialSupply.cursor(view);
+      if (through === null || BigInt(through) < BigInt(record.through_seq)) return false;
+    }
+    return true;
+  }
+  async #publishOutboxProgress(record) {
+    const sessionId = record.session_id, command = 'outbox-progress', events = [];
+    return this.#withControlPriority(sessionId, { kind: command }, async () => {
+      const client = await this.pool.connect(); let committed = false, committing = false;
+      try {
+        await client.query('BEGIN');
+        const row = (await client.query('SELECT session_id FROM sessions WHERE session_id=$1 FOR UPDATE', [sessionId])).rows[0];
+        if (!row) throw new RuntimeError('SESSION_GONE', '本局不可访问。');
+        // 同一排他切点重枚举当前读者与非单调的安装资格；旧枚举或旧binding不授予进度。
+        const covered = this.#outboxRecordCovered(record);
+        if (covered) {
+          await client.query("UPDATE outbox SET status='Published',attempts=attempts+1 WHERE session_id=$1 AND through_seq=$2", [sessionId, record.through_seq]);
+          await this.hooks.beforeCommit?.({ command, sessionId, events });
+        }
+        committing = true; await client.query('COMMIT'); committed = true;
+        if (covered) await this.hooks.afterCommit?.({ command, sessionId, events });
+        return covered;
+      } catch (error) {
+        if (!committed) await client.query('ROLLBACK').catch(() => {});
+        if (committed || committing) throw new RuntimeError('OUTCOME_UNKNOWN', '提交结果尚未确认，请查询原动作身份。');
+        throw error;
+      } finally { client.release(); }
+    }).catch(error => { if (error.code === 'SESSION_GONE') return true; throw error; });
   }
   async applyControlEffects(tx) {
     const actorIds = new Set(tx.events.filter(event => event.kind === 'control.changed').map(event => event.payload.actorId));
@@ -533,7 +572,7 @@ export class AuthorityRuntime extends EventEmitter {
     });
   }
   /** 发布器只读取已提交前缀；新计时模式须有可信入队证据，失败保留Pending。 */
-  async publishPending(deliver = async () => {}, { capability = null } = {}) {
+  async publishPending(deliver = async () => {}, { capability = null, isStopped = () => false } = {}) {
     if (this.#publishing) return { busy: true, examined: 0, published: 0 };
     this.#publishing = true;
     let examined = 0, published = 0;
@@ -541,9 +580,11 @@ export class AuthorityRuntime extends EventEmitter {
       const pending = (await this.pool.query("SELECT o.session_id,o.through_seq FROM outbox o JOIN sessions s ON s.session_id=o.session_id WHERE o.status='Pending' AND ($1::text IS NULL OR s.state->>'protocolCapability'=$1) ORDER BY o.session_id,o.through_seq", [capability])).rows;
       examined = pending.length;
       for (const record of pending) {
+        if (isStopped()) break;
         let installationPending = [...this.#handles.values()].some(handle => this.pendingViewInstallation(handle, record.session_id));
-        for (const view of this.#views.values()) {
-          if (!view.active || view.sessionId !== record.session_id) continue;
+        const views = [...this.#views.values()].filter(view => view.active && view.sessionId === record.session_id);
+        const parallel = views.length > 0 && views.every(view => view.schemaVersion === 2 && this.spatialSupply.enabled(view.handle));
+        const publishView = async view => {
           try {
             for (;;) {
               if (!view.active) break;
@@ -571,10 +612,28 @@ export class AuthorityRuntime extends EventEmitter {
             else if (['FORBIDDEN', 'UNAUTHENTICATED', 'RESYNC_REQUIRED', 'SESSION_GONE'].includes(error.code)) this.retireView(view, true);
             else throw error;
           }
+        };
+        if (parallel) {
+          // 预算限制的是工作数而非成员数；同一成员可以有多条只读handle，第六条仍须得到处理。
+          for (let index = 0; index < views.length; index += 5) {
+            if (isStopped()) return { busy: false, examined, published };
+            const settled = await Promise.allSettled(views.slice(index, index + 5).map(publishView));
+            const failed = settled.find(result => result.status === 'rejected');
+            // 已开始工作必须全部settle，错误不能提前释放single-publisher或泄漏后台读到下一轮。
+            if (failed) throw failed.reason;
+          }
+        } else for (const view of this.#views.values()) {
+          if (view.active && view.sessionId === record.session_id) await publishView(view);
         }
         // 安装等待不阻塞其他读者，也不能把等待中的新视图尚未收到的事件标为已发布。
         if (installationPending) continue;
+        if (isStopped()) break;
         await this.hooks.duringPublish?.({ sessionId: record.session_id, throughSeq: record.through_seq });
+        if (isStopped()) break;
+        if (parallel) {
+          if (await this.#publishOutboxProgress(record)) published++;
+          continue;
+        }
         await this.locked(record.session_id, { kind: 'outbox-progress' }, async tx => {
           await tx.client.query("UPDATE outbox SET status='Published',attempts=attempts+1 WHERE session_id=$1 AND through_seq=$2", [record.session_id, record.through_seq]);
         }).catch(error => { if (error.code !== 'SESSION_GONE') throw error; });

@@ -1,0 +1,1097 @@
+{
+  "schema_version": 1,
+  "feature": "D66 窄供给增量：publish",
+  "tool": {
+    "version": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "model": {
+    "root": "model",
+    "entry": "ParallelPublish.tla"
+  },
+  "profiles": {
+    "positive-publish": {
+      "config": "positive-publish.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "PeerBudget",
+        "LockExclusion",
+        "SettledBeforeProgress",
+        "NoLeakedTasks",
+        "PendingPreventsPublish",
+        "CurrentViewsCovered",
+        "FailureKeepsPending",
+        "ExactRowCommit",
+        "SentProof",
+        "NoStaleSend"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可以用尽；SQL/网络允许永久等待，本模型只检查安全性，不加公平性或最终必达假设。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Budget": 2,
+          "Scenario": "stable"
+        },
+        "peers": 2,
+        "outbox_records": 2,
+        "covered_interleavings_and_faults": [
+          "同record跨handle有界任务、真实发送、全员settle、安装/新view/关闭与逐行进度"
+        ],
+        "excluded_behaviors": [
+          "任意peer数量、真实预算5的第6handle、PG实现证明、传输延迟、200ms、400ms、Canvas/渲染、进程崩溃、多实例、完整系统refinement"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "共享session锁持有至该页COMMIT；world/control/安装持久变化先取同一行排他锁。",
+        "发送证明是原可信传输适配器的同步入队事实；无proof不得推进sent。",
+        "安装pending采用现存候选的保守抽象；资格的非单调变化仍需源码/PG独立核验。"
+      ]
+    },
+    "positive-install": {
+      "config": "positive-install.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "PeerBudget",
+        "LockExclusion",
+        "SettledBeforeProgress",
+        "NoLeakedTasks",
+        "PendingPreventsPublish",
+        "CurrentViewsCovered",
+        "FailureKeepsPending",
+        "ExactRowCommit",
+        "SentProof",
+        "NoStaleSend"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可以用尽；SQL/网络允许永久等待，本模型只检查安全性，不加公平性或最终必达假设。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Budget": 2,
+          "Scenario": "install"
+        },
+        "peers": 2,
+        "outbox_records": 2,
+        "covered_interleavings_and_faults": [
+          "同record跨handle有界任务、真实发送、全员settle、安装/新view/关闭与逐行进度"
+        ],
+        "excluded_behaviors": [
+          "任意peer数量、真实预算5的第6handle、PG实现证明、传输延迟、200ms、400ms、Canvas/渲染、进程崩溃、多实例、完整系统refinement"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "共享session锁持有至该页COMMIT；world/control/安装持久变化先取同一行排他锁。",
+        "发送证明是原可信传输适配器的同步入队事实；无proof不得推进sent。",
+        "安装pending采用现存候选的保守抽象；资格的非单调变化仍需源码/PG独立核验。"
+      ]
+    },
+    "positive-join": {
+      "config": "positive-join.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "PeerBudget",
+        "LockExclusion",
+        "SettledBeforeProgress",
+        "NoLeakedTasks",
+        "PendingPreventsPublish",
+        "CurrentViewsCovered",
+        "FailureKeepsPending",
+        "ExactRowCommit",
+        "SentProof",
+        "NoStaleSend"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可以用尽；SQL/网络允许永久等待，本模型只检查安全性，不加公平性或最终必达假设。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Budget": 2,
+          "Scenario": "join"
+        },
+        "peers": 2,
+        "outbox_records": 2,
+        "covered_interleavings_and_faults": [
+          "同record跨handle有界任务、真实发送、全员settle、安装/新view/关闭与逐行进度"
+        ],
+        "excluded_behaviors": [
+          "任意peer数量、真实预算5的第6handle、PG实现证明、传输延迟、200ms、400ms、Canvas/渲染、进程崩溃、多实例、完整系统refinement"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "共享session锁持有至该页COMMIT；world/control/安装持久变化先取同一行排他锁。",
+        "发送证明是原可信传输适配器的同步入队事实；无proof不得推进sent。",
+        "安装pending采用现存候选的保守抽象；资格的非单调变化仍需源码/PG独立核验。"
+      ]
+    },
+    "positive-failure": {
+      "config": "positive-failure.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "PeerBudget",
+        "LockExclusion",
+        "SettledBeforeProgress",
+        "NoLeakedTasks",
+        "PendingPreventsPublish",
+        "CurrentViewsCovered",
+        "FailureKeepsPending",
+        "ExactRowCommit",
+        "SentProof",
+        "NoStaleSend"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可以用尽；SQL/网络允许永久等待，本模型只检查安全性，不加公平性或最终必达假设。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Budget": 2,
+          "Scenario": "failure"
+        },
+        "peers": 2,
+        "outbox_records": 2,
+        "covered_interleavings_and_faults": [
+          "同record跨handle有界任务、真实发送、全员settle、安装/新view/关闭与逐行进度"
+        ],
+        "excluded_behaviors": [
+          "任意peer数量、真实预算5的第6handle、PG实现证明、传输延迟、200ms、400ms、Canvas/渲染、进程崩溃、多实例、完整系统refinement"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "共享session锁持有至该页COMMIT；world/control/安装持久变化先取同一行排他锁。",
+        "发送证明是原可信传输适配器的同步入队事实；无proof不得推进sent。",
+        "安装pending采用现存候选的保守抽象；资格的非单调变化仍需源码/PG独立核验。"
+      ]
+    },
+    "positive-budget": {
+      "config": "positive-budget.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "PeerBudget",
+        "LockExclusion",
+        "SettledBeforeProgress",
+        "NoLeakedTasks",
+        "PendingPreventsPublish",
+        "CurrentViewsCovered",
+        "FailureKeepsPending",
+        "ExactRowCommit",
+        "SentProof",
+        "NoStaleSend"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可以用尽；SQL/网络允许永久等待，本模型只检查安全性，不加公平性或最终必达假设。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Budget": 1,
+          "Scenario": "stable"
+        },
+        "peers": 2,
+        "outbox_records": 2,
+        "covered_interleavings_and_faults": [
+          "同record跨handle有界任务、真实发送、全员settle、安装/新view/关闭与逐行进度"
+        ],
+        "excluded_behaviors": [
+          "任意peer数量、真实预算5的第6handle、PG实现证明、传输延迟、200ms、400ms、Canvas/渲染、进程崩溃、多实例、完整系统refinement"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "共享session锁持有至该页COMMIT；world/control/安装持久变化先取同一行排他锁。",
+        "发送证明是原可信传输适配器的同步入队事实；无proof不得推进sent。",
+        "安装pending采用现存候选的保守抽象；资格的非单调变化仍需源码/PG独立核验。"
+      ]
+    },
+    "positive-combined": {
+      "config": "positive-combined.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "PeerBudget",
+        "LockExclusion",
+        "SettledBeforeProgress",
+        "NoLeakedTasks",
+        "PendingPreventsPublish",
+        "CurrentViewsCovered",
+        "FailureKeepsPending",
+        "ExactRowCommit",
+        "SentProof",
+        "NoStaleSend"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可以用尽；SQL/网络允许永久等待，本模型只检查安全性，不加公平性或最终必达假设。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Budget": 2,
+          "Scenario": "all"
+        },
+        "peers": 2,
+        "outbox_records": 2,
+        "covered_interleavings_and_faults": [
+          "同record跨handle有界任务、真实发送、全员settle、安装/新view/关闭与逐行进度"
+        ],
+        "excluded_behaviors": [
+          "任意peer数量、真实预算5的第6handle、PG实现证明、传输延迟、200ms、400ms、Canvas/渲染、进程崩溃、多实例、完整系统refinement"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "共享session锁持有至该页COMMIT；world/control/安装持久变化先取同一行排他锁。",
+        "发送证明是原可信传输适配器的同步入队事实；无proof不得推进sent。",
+        "安装pending采用现存候选的保守抽象；资格的非单调变化仍需源码/PG独立核验。"
+      ]
+    },
+    "negative-publish-type": {
+      "config": "negative-publish-type.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可以用尽；SQL/网络允许永久等待，本模型只检查安全性，不加公平性或最终必达假设。",
+      "scope": {
+        "parameters": {
+          "Fault": "type",
+          "Budget": 2,
+          "Scenario": "stable"
+        },
+        "peers": 2,
+        "outbox_records": 2,
+        "covered_interleavings_and_faults": [
+          "同record跨handle有界任务、真实发送、全员settle、安装/新view/关闭与逐行进度"
+        ],
+        "excluded_behaviors": [
+          "任意peer数量、真实预算5的第6handle、PG实现证明、传输延迟、200ms、400ms、Canvas/渲染、进程崩溃、多实例、完整系统refinement"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "共享session锁持有至该页COMMIT；world/control/安装持久变化先取同一行排他锁。",
+        "发送证明是原可信传输适配器的同步入队事实；无proof不得推进sent。",
+        "安装pending采用现存候选的保守抽象；资格的非单调变化仍需源码/PG独立核验。"
+      ]
+    },
+    "negative-unbounded": {
+      "config": "negative-unbounded.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "PeerBudget"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可以用尽；SQL/网络允许永久等待，本模型只检查安全性，不加公平性或最终必达假设。",
+      "scope": {
+        "parameters": {
+          "Fault": "unbounded",
+          "Budget": 1,
+          "Scenario": "stable"
+        },
+        "peers": 2,
+        "outbox_records": 2,
+        "covered_interleavings_and_faults": [
+          "同record跨handle有界任务、真实发送、全员settle、安装/新view/关闭与逐行进度"
+        ],
+        "excluded_behaviors": [
+          "任意peer数量、真实预算5的第6handle、PG实现证明、传输延迟、200ms、400ms、Canvas/渲染、进程崩溃、多实例、完整系统refinement"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "共享session锁持有至该页COMMIT；world/control/安装持久变化先取同一行排他锁。",
+        "发送证明是原可信传输适配器的同步入队事实；无proof不得推进sent。",
+        "安装pending采用现存候选的保守抽象；资格的非单调变化仍需源码/PG独立核验。"
+      ]
+    },
+    "negative-progress-lock": {
+      "config": "negative-progress-lock.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "LockExclusion"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可以用尽；SQL/网络允许永久等待，本模型只检查安全性，不加公平性或最终必达假设。",
+      "scope": {
+        "parameters": {
+          "Fault": "writer-overlap",
+          "Budget": 2,
+          "Scenario": "install"
+        },
+        "peers": 2,
+        "outbox_records": 2,
+        "covered_interleavings_and_faults": [
+          "同record跨handle有界任务、真实发送、全员settle、安装/新view/关闭与逐行进度"
+        ],
+        "excluded_behaviors": [
+          "任意peer数量、真实预算5的第6handle、PG实现证明、传输延迟、200ms、400ms、Canvas/渲染、进程崩溃、多实例、完整系统refinement"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "共享session锁持有至该页COMMIT；world/control/安装持久变化先取同一行排他锁。",
+        "发送证明是原可信传输适配器的同步入队事实；无proof不得推进sent。",
+        "安装pending采用现存候选的保守抽象；资格的非单调变化仍需源码/PG独立核验。"
+      ]
+    },
+    "negative-early-progress": {
+      "config": "negative-early-progress.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "SettledBeforeProgress"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可以用尽；SQL/网络允许永久等待，本模型只检查安全性，不加公平性或最终必达假设。",
+      "scope": {
+        "parameters": {
+          "Fault": "early-progress",
+          "Budget": 2,
+          "Scenario": "stable"
+        },
+        "peers": 2,
+        "outbox_records": 2,
+        "covered_interleavings_and_faults": [
+          "同record跨handle有界任务、真实发送、全员settle、安装/新view/关闭与逐行进度"
+        ],
+        "excluded_behaviors": [
+          "任意peer数量、真实预算5的第6handle、PG实现证明、传输延迟、200ms、400ms、Canvas/渲染、进程崩溃、多实例、完整系统refinement"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "共享session锁持有至该页COMMIT；world/control/安装持久变化先取同一行排他锁。",
+        "发送证明是原可信传输适配器的同步入队事实；无proof不得推进sent。",
+        "安装pending采用现存候选的保守抽象；资格的非单调变化仍需源码/PG独立核验。"
+      ]
+    },
+    "negative-early-release": {
+      "config": "negative-early-release.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoLeakedTasks"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可以用尽；SQL/网络允许永久等待，本模型只检查安全性，不加公平性或最终必达假设。",
+      "scope": {
+        "parameters": {
+          "Fault": "early-release",
+          "Budget": 2,
+          "Scenario": "failure"
+        },
+        "peers": 2,
+        "outbox_records": 2,
+        "covered_interleavings_and_faults": [
+          "同record跨handle有界任务、真实发送、全员settle、安装/新view/关闭与逐行进度"
+        ],
+        "excluded_behaviors": [
+          "任意peer数量、真实预算5的第6handle、PG实现证明、传输延迟、200ms、400ms、Canvas/渲染、进程崩溃、多实例、完整系统refinement"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "共享session锁持有至该页COMMIT；world/control/安装持久变化先取同一行排他锁。",
+        "发送证明是原可信传输适配器的同步入队事实；无proof不得推进sent。",
+        "安装pending采用现存候选的保守抽象；资格的非单调变化仍需源码/PG独立核验。"
+      ]
+    },
+    "negative-ignore-pending": {
+      "config": "negative-ignore-pending.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "PendingPreventsPublish"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可以用尽；SQL/网络允许永久等待，本模型只检查安全性，不加公平性或最终必达假设。",
+      "scope": {
+        "parameters": {
+          "Fault": "ignore-pending",
+          "Budget": 2,
+          "Scenario": "install"
+        },
+        "peers": 2,
+        "outbox_records": 2,
+        "covered_interleavings_and_faults": [
+          "同record跨handle有界任务、真实发送、全员settle、安装/新view/关闭与逐行进度"
+        ],
+        "excluded_behaviors": [
+          "任意peer数量、真实预算5的第6handle、PG实现证明、传输延迟、200ms、400ms、Canvas/渲染、进程崩溃、多实例、完整系统refinement"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "共享session锁持有至该页COMMIT；world/control/安装持久变化先取同一行排他锁。",
+        "发送证明是原可信传输适配器的同步入队事实；无proof不得推进sent。",
+        "安装pending采用现存候选的保守抽象；资格的非单调变化仍需源码/PG独立核验。"
+      ]
+    },
+    "negative-stale-views": {
+      "config": "negative-stale-views.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "CurrentViewsCovered"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可以用尽；SQL/网络允许永久等待，本模型只检查安全性，不加公平性或最终必达假设。",
+      "scope": {
+        "parameters": {
+          "Fault": "stale-views",
+          "Budget": 2,
+          "Scenario": "join"
+        },
+        "peers": 2,
+        "outbox_records": 2,
+        "covered_interleavings_and_faults": [
+          "同record跨handle有界任务、真实发送、全员settle、安装/新view/关闭与逐行进度"
+        ],
+        "excluded_behaviors": [
+          "任意peer数量、真实预算5的第6handle、PG实现证明、传输延迟、200ms、400ms、Canvas/渲染、进程崩溃、多实例、完整系统refinement"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "共享session锁持有至该页COMMIT；world/control/安装持久变化先取同一行排他锁。",
+        "发送证明是原可信传输适配器的同步入队事实；无proof不得推进sent。",
+        "安装pending采用现存候选的保守抽象；资格的非单调变化仍需源码/PG独立核验。"
+      ]
+    },
+    "negative-ignore-failure": {
+      "config": "negative-ignore-failure.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "FailureKeepsPending"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可以用尽；SQL/网络允许永久等待，本模型只检查安全性，不加公平性或最终必达假设。",
+      "scope": {
+        "parameters": {
+          "Fault": "ignore-failure",
+          "Budget": 2,
+          "Scenario": "failure"
+        },
+        "peers": 2,
+        "outbox_records": 2,
+        "covered_interleavings_and_faults": [
+          "同record跨handle有界任务、真实发送、全员settle、安装/新view/关闭与逐行进度"
+        ],
+        "excluded_behaviors": [
+          "任意peer数量、真实预算5的第6handle、PG实现证明、传输延迟、200ms、400ms、Canvas/渲染、进程崩溃、多实例、完整系统refinement"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "共享session锁持有至该页COMMIT；world/control/安装持久变化先取同一行排他锁。",
+        "发送证明是原可信传输适配器的同步入队事实；无proof不得推进sent。",
+        "安装pending采用现存候选的保守抽象；资格的非单调变化仍需源码/PG独立核验。"
+      ]
+    },
+    "negative-batch-progress": {
+      "config": "negative-batch-progress.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "ExactRowCommit"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可以用尽；SQL/网络允许永久等待，本模型只检查安全性，不加公平性或最终必达假设。",
+      "scope": {
+        "parameters": {
+          "Fault": "batch-progress",
+          "Budget": 2,
+          "Scenario": "stable"
+        },
+        "peers": 2,
+        "outbox_records": 2,
+        "covered_interleavings_and_faults": [
+          "同record跨handle有界任务、真实发送、全员settle、安装/新view/关闭与逐行进度"
+        ],
+        "excluded_behaviors": [
+          "任意peer数量、真实预算5的第6handle、PG实现证明、传输延迟、200ms、400ms、Canvas/渲染、进程崩溃、多实例、完整系统refinement"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "共享session锁持有至该页COMMIT；world/control/安装持久变化先取同一行排他锁。",
+        "发送证明是原可信传输适配器的同步入队事实；无proof不得推进sent。",
+        "安装pending采用现存候选的保守抽象；资格的非单调变化仍需源码/PG独立核验。"
+      ]
+    },
+    "negative-fake-proof": {
+      "config": "negative-fake-proof.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "SentProof"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可以用尽；SQL/网络允许永久等待，本模型只检查安全性，不加公平性或最终必达假设。",
+      "scope": {
+        "parameters": {
+          "Fault": "fake-proof",
+          "Budget": 2,
+          "Scenario": "stable"
+        },
+        "peers": 2,
+        "outbox_records": 2,
+        "covered_interleavings_and_faults": [
+          "同record跨handle有界任务、真实发送、全员settle、安装/新view/关闭与逐行进度"
+        ],
+        "excluded_behaviors": [
+          "任意peer数量、真实预算5的第6handle、PG实现证明、传输延迟、200ms、400ms、Canvas/渲染、进程崩溃、多实例、完整系统refinement"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "共享session锁持有至该页COMMIT；world/control/安装持久变化先取同一行排他锁。",
+        "发送证明是原可信传输适配器的同步入队事实；无proof不得推进sent。",
+        "安装pending采用现存候选的保守抽象；资格的非单调变化仍需源码/PG独立核验。"
+      ]
+    },
+    "negative-stale-binding": {
+      "config": "negative-stale-binding.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoStaleSend"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可以用尽；SQL/网络允许永久等待，本模型只检查安全性，不加公平性或最终必达假设。",
+      "scope": {
+        "parameters": {
+          "Fault": "stale-binding",
+          "Budget": 2,
+          "Scenario": "install"
+        },
+        "peers": 2,
+        "outbox_records": 2,
+        "covered_interleavings_and_faults": [
+          "同record跨handle有界任务、真实发送、全员settle、安装/新view/关闭与逐行进度"
+        ],
+        "excluded_behaviors": [
+          "任意peer数量、真实预算5的第6handle、PG实现证明、传输延迟、200ms、400ms、Canvas/渲染、进程崩溃、多实例、完整系统refinement"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "共享session锁持有至该页COMMIT；world/control/安装持久变化先取同一行排他锁。",
+        "发送证明是原可信传输适配器的同步入队事实；无proof不得推进sent。",
+        "安装pending采用现存候选的保守抽象；资格的非单调变化仍需源码/PG独立核验。"
+      ]
+    },
+    "negative-pending-after-check": {
+      "config": "negative-pending-after-check.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "PendingPreventsPublish"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可以用尽；SQL/网络允许永久等待，本模型只检查安全性，不加公平性或最终必达假设。",
+      "scope": {
+        "parameters": {
+          "Fault": "pending-after-check",
+          "Budget": 2,
+          "Scenario": "stable"
+        },
+        "peers": 2,
+        "outbox_records": 2,
+        "covered_interleavings_and_faults": [
+          "同record跨handle有界任务、真实发送、全员settle、安装/新view/关闭与逐行进度"
+        ],
+        "excluded_behaviors": [
+          "任意peer数量、真实预算5的第6handle、PG实现证明、传输延迟、200ms、400ms、Canvas/渲染、进程崩溃、多实例、完整系统refinement"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "共享session锁持有至该页COMMIT；world/control/安装持久变化先取同一行排他锁。",
+        "发送证明是原可信传输适配器的同步入队事实；无proof不得推进sent。",
+        "安装pending采用现存候选的保守抽象；资格的非单调变化仍需源码/PG独立核验。"
+      ]
+    },
+    "negative-join-after-check": {
+      "config": "negative-join-after-check.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "CurrentViewsCovered"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可以用尽；SQL/网络允许永久等待，本模型只检查安全性，不加公平性或最终必达假设。",
+      "scope": {
+        "parameters": {
+          "Fault": "join-without-lock",
+          "Budget": 2,
+          "Scenario": "join"
+        },
+        "peers": 2,
+        "outbox_records": 2,
+        "covered_interleavings_and_faults": [
+          "同record跨handle有界任务、真实发送、全员settle、安装/新view/关闭与逐行进度"
+        ],
+        "excluded_behaviors": [
+          "任意peer数量、真实预算5的第6handle、PG实现证明、传输延迟、200ms、400ms、Canvas/渲染、进程崩溃、多实例、完整系统refinement"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "共享session锁持有至该页COMMIT；world/control/安装持久变化先取同一行排他锁。",
+        "发送证明是原可信传输适配器的同步入队事实；无proof不得推进sent。",
+        "安装pending采用现存候选的保守抽象；资格的非单调变化仍需源码/PG独立核验。"
+      ]
+    },
+    "witness-parallel-peers": {
+      "config": "witness-parallel-peers.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotTwoReaders"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可以用尽；SQL/网络允许永久等待，本模型只检查安全性，不加公平性或最终必达假设。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Budget": 2,
+          "Scenario": "stable"
+        },
+        "peers": 2,
+        "outbox_records": 2,
+        "covered_interleavings_and_faults": [
+          "同record跨handle有界任务、真实发送、全员settle、安装/新view/关闭与逐行进度"
+        ],
+        "excluded_behaviors": [
+          "任意peer数量、真实预算5的第6handle、PG实现证明、传输延迟、200ms、400ms、Canvas/渲染、进程崩溃、多实例、完整系统refinement"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "共享session锁持有至该页COMMIT；world/control/安装持久变化先取同一行排他锁。",
+        "发送证明是原可信传输适配器的同步入队事实；无proof不得推进sent。",
+        "安装pending采用现存候选的保守抽象；资格的非单调变化仍需源码/PG独立核验。"
+      ]
+    },
+    "witness-published-both": {
+      "config": "witness-published-both.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotPublishedBoth"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可以用尽；SQL/网络允许永久等待，本模型只检查安全性，不加公平性或最终必达假设。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Budget": 2,
+          "Scenario": "stable"
+        },
+        "peers": 2,
+        "outbox_records": 2,
+        "covered_interleavings_and_faults": [
+          "同record跨handle有界任务、真实发送、全员settle、安装/新view/关闭与逐行进度"
+        ],
+        "excluded_behaviors": [
+          "任意peer数量、真实预算5的第6handle、PG实现证明、传输延迟、200ms、400ms、Canvas/渲染、进程崩溃、多实例、完整系统refinement"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "共享session锁持有至该页COMMIT；world/control/安装持久变化先取同一行排他锁。",
+        "发送证明是原可信传输适配器的同步入队事实；无proof不得推进sent。",
+        "安装pending采用现存候选的保守抽象；资格的非单调变化仍需源码/PG独立核验。"
+      ]
+    },
+    "witness-independent-rows": {
+      "config": "witness-independent-rows.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotIndependentRows"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可以用尽；SQL/网络允许永久等待，本模型只检查安全性，不加公平性或最终必达假设。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Budget": 2,
+          "Scenario": "stable"
+        },
+        "peers": 2,
+        "outbox_records": 2,
+        "covered_interleavings_and_faults": [
+          "同record跨handle有界任务、真实发送、全员settle、安装/新view/关闭与逐行进度"
+        ],
+        "excluded_behaviors": [
+          "任意peer数量、真实预算5的第6handle、PG实现证明、传输延迟、200ms、400ms、Canvas/渲染、进程崩溃、多实例、完整系统refinement"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "共享session锁持有至该页COMMIT；world/control/安装持久变化先取同一行排他锁。",
+        "发送证明是原可信传输适配器的同步入队事实；无proof不得推进sent。",
+        "安装pending采用现存候选的保守抽象；资格的非单调变化仍需源码/PG独立核验。"
+      ]
+    },
+    "witness-failure-retained": {
+      "config": "witness-failure-retained.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotFailureRetained"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可以用尽；SQL/网络允许永久等待，本模型只检查安全性，不加公平性或最终必达假设。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Budget": 2,
+          "Scenario": "failure"
+        },
+        "peers": 2,
+        "outbox_records": 2,
+        "covered_interleavings_and_faults": [
+          "同record跨handle有界任务、真实发送、全员settle、安装/新view/关闭与逐行进度"
+        ],
+        "excluded_behaviors": [
+          "任意peer数量、真实预算5的第6handle、PG实现证明、传输延迟、200ms、400ms、Canvas/渲染、进程崩溃、多实例、完整系统refinement"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "共享session锁持有至该页COMMIT；world/control/安装持久变化先取同一行排他锁。",
+        "发送证明是原可信传输适配器的同步入队事实；无proof不得推进sent。",
+        "安装pending采用现存候选的保守抽象；资格的非单调变化仍需源码/PG独立核验。"
+      ]
+    },
+    "witness-pending-blocked": {
+      "config": "witness-pending-blocked.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotPendingBlocked"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可以用尽；SQL/网络允许永久等待，本模型只检查安全性，不加公平性或最终必达假设。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Budget": 2,
+          "Scenario": "install"
+        },
+        "peers": 2,
+        "outbox_records": 2,
+        "covered_interleavings_and_faults": [
+          "同record跨handle有界任务、真实发送、全员settle、安装/新view/关闭与逐行进度"
+        ],
+        "excluded_behaviors": [
+          "任意peer数量、真实预算5的第6handle、PG实现证明、传输延迟、200ms、400ms、Canvas/渲染、进程崩溃、多实例、完整系统refinement"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "共享session锁持有至该页COMMIT；world/control/安装持久变化先取同一行排他锁。",
+        "发送证明是原可信传输适配器的同步入队事实；无proof不得推进sent。",
+        "安装pending采用现存候选的保守抽象；资格的非单调变化仍需源码/PG独立核验。"
+      ]
+    },
+    "witness-new-view-blocked": {
+      "config": "witness-new-view-blocked.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotNewViewBlocked"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可以用尽；SQL/网络允许永久等待，本模型只检查安全性，不加公平性或最终必达假设。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Budget": 2,
+          "Scenario": "install"
+        },
+        "peers": 2,
+        "outbox_records": 2,
+        "covered_interleavings_and_faults": [
+          "同record跨handle有界任务、真实发送、全员settle、安装/新view/关闭与逐行进度"
+        ],
+        "excluded_behaviors": [
+          "任意peer数量、真实预算5的第6handle、PG实现证明、传输延迟、200ms、400ms、Canvas/渲染、进程崩溃、多实例、完整系统refinement"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "共享session锁持有至该页COMMIT；world/control/安装持久变化先取同一行排他锁。",
+        "发送证明是原可信传输适配器的同步入队事实；无proof不得推进sent。",
+        "安装pending采用现存候选的保守抽象；资格的非单调变化仍需源码/PG独立核验。"
+      ]
+    },
+    "witness-join-blocked": {
+      "config": "witness-join-blocked.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotJoinBlocked"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可以用尽；SQL/网络允许永久等待，本模型只检查安全性，不加公平性或最终必达假设。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Budget": 2,
+          "Scenario": "join"
+        },
+        "peers": 2,
+        "outbox_records": 2,
+        "covered_interleavings_and_faults": [
+          "同record跨handle有界任务、真实发送、全员settle、安装/新view/关闭与逐行进度"
+        ],
+        "excluded_behaviors": [
+          "任意peer数量、真实预算5的第6handle、PG实现证明、传输延迟、200ms、400ms、Canvas/渲染、进程崩溃、多实例、完整系统refinement"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "共享session锁持有至该页COMMIT；world/control/安装持久变化先取同一行排他锁。",
+        "发送证明是原可信传输适配器的同步入队事实；无proof不得推进sent。",
+        "安装pending采用现存候选的保守抽象；资格的非单调变化仍需源码/PG独立核验。"
+      ]
+    },
+    "witness-close-settled": {
+      "config": "witness-close-settled.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotClosedSettled"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可以用尽；SQL/网络允许永久等待，本模型只检查安全性，不加公平性或最终必达假设。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Budget": 2,
+          "Scenario": "failure"
+        },
+        "peers": 2,
+        "outbox_records": 2,
+        "covered_interleavings_and_faults": [
+          "同record跨handle有界任务、真实发送、全员settle、安装/新view/关闭与逐行进度"
+        ],
+        "excluded_behaviors": [
+          "任意peer数量、真实预算5的第6handle、PG实现证明、传输延迟、200ms、400ms、Canvas/渲染、进程崩溃、多实例、完整系统refinement"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "共享session锁持有至该页COMMIT；world/control/安装持久变化先取同一行排他锁。",
+        "发送证明是原可信传输适配器的同步入队事实；无proof不得推进sent。",
+        "安装pending采用现存候选的保守抽象；资格的非单调变化仍需源码/PG独立核验。"
+      ]
+    },
+    "negative-close-release": {
+      "config": "negative-close-release.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoLeakedTasks"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可以用尽；SQL/网络允许永久等待，本模型只检查安全性，不加公平性或最终必达假设。",
+      "scope": {
+        "parameters": {
+          "Fault": "close-release",
+          "Budget": 2,
+          "Scenario": "failure"
+        },
+        "peers": 2,
+        "outbox_records": 2,
+        "covered_interleavings_and_faults": [
+          "同record跨handle有界任务、真实发送、全员settle、安装/新view/关闭与逐行进度"
+        ],
+        "excluded_behaviors": [
+          "任意peer数量、真实预算5的第6handle、PG实现证明、传输延迟、200ms、400ms、Canvas/渲染、进程崩溃、多实例、完整系统refinement"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "共享session锁持有至该页COMMIT；world/control/安装持久变化先取同一行排他锁。",
+        "发送证明是原可信传输适配器的同步入队事实；无proof不得推进sent。",
+        "安装pending采用现存候选的保守抽象；资格的非单调变化仍需源码/PG独立核验。"
+      ]
+    },
+    "negative-closed-send": {
+      "config": "negative-closed-send.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoStaleSend"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可以用尽；SQL/网络允许永久等待，本模型只检查安全性，不加公平性或最终必达假设。",
+      "scope": {
+        "parameters": {
+          "Fault": "closed-send",
+          "Budget": 2,
+          "Scenario": "failure"
+        },
+        "peers": 2,
+        "outbox_records": 2,
+        "covered_interleavings_and_faults": [
+          "同record跨handle有界任务、真实发送、全员settle、安装/新view/关闭与逐行进度"
+        ],
+        "excluded_behaviors": [
+          "任意peer数量、真实预算5的第6handle、PG实现证明、传输延迟、200ms、400ms、Canvas/渲染、进程崩溃、多实例、完整系统refinement"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "共享session锁持有至该页COMMIT；world/control/安装持久变化先取同一行排他锁。",
+        "发送证明是原可信传输适配器的同步入队事实；无proof不得推进sent。",
+        "安装pending采用现存候选的保守抽象；资格的非单调变化仍需源码/PG独立核验。"
+      ]
+    },
+    "witness-read-failure-retained": {
+      "config": "witness-read-failure-retained.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotReadFailureRetained"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可以用尽；SQL/网络允许永久等待，本模型只检查安全性，不加公平性或最终必达假设。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Budget": 2,
+          "Scenario": "failure"
+        },
+        "peers": 2,
+        "outbox_records": 2,
+        "covered_interleavings_and_faults": [
+          "同record跨handle有界任务、真实发送、全员settle、安装/新view/关闭与逐行进度"
+        ],
+        "excluded_behaviors": [
+          "任意peer数量、真实预算5的第6handle、PG实现证明、传输延迟、200ms、400ms、Canvas/渲染、进程崩溃、多实例、完整系统refinement"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "共享session锁持有至该页COMMIT；world/control/安装持久变化先取同一行排他锁。",
+        "发送证明是原可信传输适配器的同步入队事实；无proof不得推进sent。",
+        "安装pending采用现存候选的保守抽象；资格的非单调变化仍需源码/PG独立核验。"
+      ]
+    },
+    "witness-send-failure-retained": {
+      "config": "witness-send-failure-retained.cfg",
+      "timeout_seconds": 180,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotSendFailureRetained"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可以用尽；SQL/网络允许永久等待，本模型只检查安全性，不加公平性或最终必达假设。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Budget": 2,
+          "Scenario": "failure"
+        },
+        "peers": 2,
+        "outbox_records": 2,
+        "covered_interleavings_and_faults": [
+          "同record跨handle有界任务、真实发送、全员settle、安装/新view/关闭与逐行进度"
+        ],
+        "excluded_behaviors": [
+          "任意peer数量、真实预算5的第6handle、PG实现证明、传输延迟、200ms、400ms、Canvas/渲染、进程崩溃、多实例、完整系统refinement"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "共享session锁持有至该页COMMIT；world/control/安装持久变化先取同一行排他锁。",
+        "发送证明是原可信传输适配器的同步入队事实；无proof不得推进sent。",
+        "安装pending采用现存候选的保守抽象；资格的非单调变化仍需源码/PG独立核验。"
+      ]
+    }
+  }
+}

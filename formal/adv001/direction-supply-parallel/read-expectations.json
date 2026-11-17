@@ -1,0 +1,106 @@
+{
+  "positive-shared": {
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_tlc_exit": 0,
+    "minimum_distinct_states": 50,
+    "target": null,
+    "kind": "positive",
+    "gate": true
+  },
+  "positive-mixed": {
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_tlc_exit": 0,
+    "minimum_distinct_states": 50,
+    "target": null,
+    "kind": "positive",
+    "gate": true
+  },
+  "positive-old-cursor": {
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_tlc_exit": 0,
+    "minimum_distinct_states": 50,
+    "target": null,
+    "kind": "positive",
+    "gate": true
+  },
+  "negative-read-type": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "TypeOK",
+    "kind": "negative-control",
+    "gate": true
+  },
+  "negative-write-overlap": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "LockExclusion",
+    "kind": "negative-control",
+    "gate": true
+  },
+  "negative-ordinary-share": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "EligibleSharedOnly",
+    "kind": "negative-control",
+    "gate": true
+  },
+  "negative-stale-authorization": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "AuthorizedBinding",
+    "kind": "negative-control",
+    "gate": true
+  },
+  "negative-live-head": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "FixedAuthorizedHead",
+    "kind": "negative-control",
+    "gate": true
+  },
+  "negative-old-cursor": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "OldCursorCeiling",
+    "kind": "negative-control",
+    "gate": true
+  },
+  "witness-shared-readers": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotConcurrentShared",
+    "kind": "witness",
+    "gate": true
+  },
+  "witness-read-write": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotReadThenWrite",
+    "kind": "witness",
+    "gate": true
+  },
+  "witness-stale-rejected": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotStaleRejected",
+    "kind": "witness",
+    "gate": true
+  },
+  "witness-read-failure": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotReadFailure",
+    "kind": "witness",
+    "gate": true
+  }
+}
