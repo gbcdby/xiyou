@@ -30,6 +30,11 @@ function retainActions(actions: SpatialDraft[]): SpatialDraft[] {
 // 无界并发会耗尽连接池，使同一时刻的 control.resume 拿不到连接/行锁而超时。
 const RECEIPT_REPLAY_LIMIT = 3;
 function asError(value: unknown): ErrorV2 | null {
+  // 两版错误都必须有自有code；正常批次直接进入原批次校验，避免先做两次完整错误校验。
+  if (value === null || typeof value !== 'object') return null;
+  try { if (!Object.hasOwn(value, 'code')) return null; } catch {
+    // 属性探测异常仍交给原完整校验，不能增加异常出口。
+  }
   try { return validateSpatial('ErrorV2', value); } catch {
     try { const error = validateContract('ErrorResponse', value); return { schemaVersion: 2, code: error.code, message: error.message || '请求未完成。' }; } catch { return null; }
   }
