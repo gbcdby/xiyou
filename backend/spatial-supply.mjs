@@ -44,7 +44,7 @@ export function createSpatialSupply(runtime) {
     const lane = laneFor(handle);
     if (kind === 'rpc' && lane.rpc) return Promise.reject(resync());
     if (kind === 'publisher' && lane.publisher) { lane.publisher.work = work; return lane.publisher.promise; }
-    const item = { work };
+    const item = { kind, work };
     item.promise = new Promise((resolve, reject) => { item.resolve = resolve; item.reject = reject; });
     lane[kind] = item; drain(lane); return item.promise;
   }
@@ -70,11 +70,17 @@ export function createSpatialSupply(runtime) {
     },
     sync(handle, raw, send) {
       const request = parseSpatial('SyncRequestV2', raw), view = runtime.connectionView(handle);
+      // 资格只在入队同一turn捕获；真正旧cursor和前置RPC仍保留历史补读。
+      const admitted = cursor(view), predecessor = laneFor(handle).active;
+      const aligned = current(handle, view) && enabled(handle) && admitted !== null && request.cursor === admitted;
       return enqueue(handle, 'rpc', async () => {
         assertCurrent(handle, view);
         const through = cursor(view);
         if (through === null || request.sessionId !== view.sessionId || request.viewId !== view.viewId || BigInt(request.cursor) > BigInt(through)) throw resync();
-        const batch = await runtime.sync(handle, raw, BigInt(request.cursor) < BigInt(through) ? { throughSeqCeiling: through } : {});
+        // 单lane中同V的新增sent只能来自所捕获publisher的真实入队；它不是客户端应用确认。
+        const continued = aligned && enabled(handle) && predecessor?.kind === 'publisher' && BigInt(through) > BigInt(admitted);
+        const batch = await runtime.sync(handle, raw, continued ? { sentPrefixStart: through }
+          : BigInt(request.cursor) < BigInt(through) ? { throughSeqCeiling: through } : {});
         sentBatch(handle, view, batch, send);
         return batch;
       });

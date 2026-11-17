@@ -39,6 +39,35 @@ test('D66-SUP-01：反向发布后旧请求只读服务器已发前缀，客户�
   assert.equal((await slot.reply).throughSeq, '48'); assert.equal(f.supply.cursor(f.view()), '48');
   await assert.rejects(f.supply.sync(f.handle, raw(f.view(), '49'), () => true), { code: 'RESYNC_REQUIRED' }); assert.equal(reads.length, 2);
 });
+test('RRS-T04：真实ACK超时不取消前置RPC，下一旧请求保留历史补读与RPC优先', { timeout: 10000 }, async t => {
+  const f = await fixture(t), entered = deferred(), release = deferred(), calls = [];
+  let active = 0, maxActive = 0, firstSettled = false, first, second, publishing;
+  f.runtime.sync = async (_handle, value, options = {}) => {
+    const request = JSON.parse(value), index = calls.length;
+    calls.push({ cursor: request.cursor, ...options }); active++; maxActive = Math.max(maxActive, active);
+    try {
+      if (index === 0) { entered.resolve(); await release.promise; }
+      return batch(request, options.throughSeqCeiling ?? (index === 0 ? '45' : '48'), '48');
+    } finally { active--; }
+  };
+  try {
+    const oldSlot = await f.reserve();
+    const timedOut = assert.rejects(oldSlot.reply, /timed out/);
+    first = f.supply.sync(f.handle, raw(f.view()), oldSlot.send);
+    first.then(() => { firstSettled = true; }, () => { firstSettled = true; });
+    await entered.promise; await timedOut;
+    assert.equal(firstSettled, false); assert.equal(f.supply.cursor(f.view()), '40');
+    const nextSlot = await f.reserve();
+    second = f.supply.sync(f.handle, raw(f.view()), nextSlot.send);
+    publishing = f.supply.publish(f.view(), '48', f.push);
+    await tick(); assert.equal(calls.length, 1, '客户端超时不释放服务端lane');
+    release.resolve(); await Promise.all([first, second, publishing]);
+    const recovered = await nextSlot.reply;
+    assert.equal(recovered.fromExclusive, '40'); assert.equal(recovered.throughSeq, '45');
+    assert.deepEqual(calls, [{ cursor: '40' }, { cursor: '40', throughSeqCeiling: '45' }, { cursor: '45' }]);
+    assert.equal(maxActive, 1); assert.equal(f.supply.cursor(f.view()), '48'); assert.equal(f.view().cursor, '40');
+  } finally { release.resolve(); await Promise.allSettled([first, second, publishing].filter(Boolean)); }
+});
 test('D66-SUP-01：最多一活动读、一等待RPC、一合并publisher，RPC优先且无并发扩张', async t => {
   const f = await fixture(t), gate = deferred(), entered = deferred(), calls = []; let active = 0, maxActive = 0;
   f.runtime.sync = async (_h, value) => { const request = JSON.parse(value), at = calls.length; calls.push(request.cursor); active++; maxActive = Math.max(maxActive, active); if (at === 0) { entered.resolve(); await gate.promise; } active--; return batch(request, ['41', '42', '50'][at]); };

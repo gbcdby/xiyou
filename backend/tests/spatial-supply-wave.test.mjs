@@ -302,6 +302,57 @@ test('RG10/RG12：同generation安装blocked无前进不自旋，完成安装交
   } finally { hold.restore(); await subscribing?.catch(() => {}); r.runtime.spatialSupply.publish = original; }
 });
 
+test('RRS-T08：旧G真COMMIT后新提交唤起publisher，竞态RPC推进后W覆盖并自然收束', { timeout: 15000 }, async t => {
+  const r = await room(t), peer = r.peers[0], old = await r.append(); await Promise.all(r.peers.map(r.query));
+  const gEntered = Promise.withResolvers(), releaseG = Promise.withResolvers();
+  const pEntered = Promise.withResolvers(), releaseP = Promise.withResolvers();
+  const rpcEntered = Promise.withResolvers(), releaseRpc = Promise.withResolvers();
+  const originalSync = r.runtime.sync.bind(r.runtime), originalPublish = r.runtime.spatialSupply.publish;
+  const calls = [], waves = []; let focusReads = 0, gateG = true, publishing, reply;
+  t.signal.addEventListener('abort', () => { releaseG.resolve(); releaseP.resolve(); releaseRpc.resolve(); }, { once: true });
+  r.runtime.hooks.afterCommit = async ({ command }) => {
+    if (command === 'outbox-progress' && gateG) { gateG = false; gEntered.resolve(); await releaseG.promise; }
+  };
+  r.runtime.sync = async (handle, raw, internal) => {
+    const value = await originalSync(handle, raw, internal);
+    if (handle === peer.handle) {
+      calls.push({ request: JSON.parse(raw), value });
+      if (++focusReads === 1) { pEntered.resolve(); await releaseP.promise; }
+      else if (focusReads === 2) { rpcEntered.resolve(); await releaseRpc.promise; }
+    }
+    return value;
+  };
+  r.runtime.spatialSupply.publish = function (view, target, ...args) {
+    const call = { handle: view.handle, target, settled: false }; waves.push(call);
+    const promise = originalPublish.call(this, view, target, ...args);
+    promise.then(value => { call.result = value; call.settled = true; }, () => { call.settled = true; }); return promise;
+  };
+  try {
+    publishing = r.flush(); await gEntered.promise;
+    assert.equal((await r.database.pool.query('SELECT status FROM outbox WHERE session_id=$1 AND through_seq=$2', [r.sessionId, old])).rows[0].status, 'Published');
+    // 新通知必须发生在旧G已在途之后；不能让夹具暂停G再等待不存在的wake。
+    const S = await r.append(); await pEntered.promise;
+    const admitted = Promise.withResolvers(); peer.socket.once('sync.request', admitted.resolve);
+    reply = r.query(peer); reply.catch(() => {}); await admitted.promise;
+    const B = await r.append(); releaseP.resolve(); await rpcEntered.promise;
+    await until(() => waves.some(call => call.handle === peer.handle && call.target === B && !call.settled), '新W须等原活动RPC完成');
+    assert.equal(r.runtime.spatialSupply.cursor(r.runtime.connectionView(peer.handle)), S);
+    releaseRpc.resolve(); const ack = await reply;
+    assert.equal(ack.fromExclusive, S); assert.equal(ack.throughSeq, B); assert.equal(ack.syncFrontierSeq, B);
+    await until(() => waves.some(call => call.handle === peer.handle && call.target === B && call.settled), 'covered不能代替W任务自然settle');
+    const covered = waves.find(call => call.handle === peer.handle && call.target === B);
+    assert.deepEqual(covered.result, { covered: true }); assert.equal(focusReads, 2, '新RPC已供给B，W不能重复读取');
+    assert.equal((await r.flush()).busy, true, '旧G函数未settle时不得释放原owner');
+    releaseG.resolve(); const done = await publishing;
+    assert.equal(done.examined, 1); assert.equal(done.published, 1);
+    assert.deepEqual((await r.pending()).map(row => row.through_seq), [S, B], '新提交只供给，不补进本轮固定P');
+    assert.deepEqual((await r.database.pool.query('SELECT status,attempts FROM outbox WHERE session_id=$1 AND through_seq=$2', [r.sessionId, old])).rows, [{ status: 'Published', attempts: 1 }]);
+  } finally {
+    releaseG.resolve(); releaseP.resolve(); releaseRpc.resolve(); await Promise.allSettled([publishing, reply].filter(Boolean));
+    r.runtime.sync = originalSync; r.runtime.spatialSupply.publish = originalPublish; delete r.runtime.hooks.afterCommit;
+  }
+});
+
 test('RG12：初始权威hint查询已返回但函数未放行时的新COMMIT不丢失', { timeout: 15000 }, async t => {
   const r = await room(t), old = await r.append(); await Promise.all(r.peers.map(r.query));
   const entered = Promise.withResolvers(), release = Promise.withResolvers(), original = r.database.pool.query;

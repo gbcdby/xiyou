@@ -236,10 +236,11 @@ export async function submitSpatial(runtime, handle, raw) {
         });
     }
 }
-export async function syncSpatial(runtime, handle, request, { throughSeqCeiling } = {}) {
+export async function syncSpatial(runtime, handle, request, { throughSeqCeiling, sentPrefixStart } = {}) {
     const connection = runtime.connection(handle);
     requireSpatialCapability(connection.capabilities);
-    const sharedRead = runtime.connectionView(handle)?.schemaVersion === 2 && runtime.spatialSupply.enabled(handle);
+    const readView = runtime.connectionView(handle);
+    const sharedRead = readView?.schemaVersion === 2 && runtime.spatialSupply.enabled(handle);
     return runtime.locked(request.sessionId, { kind: 'spatial-sync', ...(sharedRead ? { sessionLock: 'share' } : {}) }, async (tx) => {
         const user = await runtime.access(tx.client, tx.row, connection.token), view = runtime.connectionView(handle), ended = ['Finished', 'Aborted'].includes(tx.state.phase), binding = view?.terminalBinding ?? tx.state.views[user.actorId], actor = tx.state.characters[user.actorId];
         requireSpatialCapability(connection.capabilities, tx.state);
@@ -249,23 +250,30 @@ export async function syncSpatial(runtime, handle, request, { throughSeqCeiling 
             throw new RuntimeError('RESYNC_REQUIRED');
         if (view.ownedEpoch !== null && !['Finished', 'Aborted'].includes(tx.state.phase) && (actor.activeConnectionId !== handle.connectionId || actor.controlEpoch !== view.ownedEpoch))
             throw new RuntimeError('RESYNC_REQUIRED');
+        // 先核原R的全部授权和安装下界，再接受同一V的服务器内部连续起点；不可洗白原请求。
+        if (sentPrefixStart !== undefined && (throughSeqCeiling !== undefined || !sharedRead || !runtime.spatialSupply.enabled(handle)
+            || view !== readView || !runtime.spatialSupply.current(handle, view) || typeof sentPrefixStart !== 'string'
+            || sentPrefixStart !== runtime.spatialSupply.cursor(view) || BigInt(sentPrefixStart) < BigInt(request.cursor)
+            || BigInt(sentPrefixStart) > BigInt(tx.state.sessionSeq))) throw new RuntimeError('RESYNC_REQUIRED');
+        const fromExclusive = sentPrefixStart ?? request.cursor;
+        const trailRequest = fromExclusive === request.cursor ? request : { ...request, cursor: fromExclusive };
         // 公开投影停在已提交事务末尾，不能把空间检查点/合作效果拆在分页两侧。
         // 上界只能由同连接已入队前缀提供；DTO无此字段，仍在本事务重新核授权与完整提交。
         const frontier = throughSeqCeiling ?? tx.state.sessionSeq;
         if (throughSeqCeiling !== undefined && (!runtime.spatialSupply.enabled(handle) || BigInt(frontier) < BigInt(request.cursor) || BigInt(frontier) > BigInt(tx.state.sessionSeq))) throw new RuntimeError('RESYNC_REQUIRED');
-        const limit = String(BigInt(request.cursor) + 256n < BigInt(frontier) ? BigInt(request.cursor) + 256n : BigInt(frontier));
-        const boundary = (await tx.client.query('SELECT through_seq FROM outbox WHERE session_id=$1 AND through_seq>$2 AND through_seq<=$3 ORDER BY through_seq DESC LIMIT 1', [request.sessionId, request.cursor, limit])).rows[0]
-            ?? (await tx.client.query('SELECT through_seq FROM outbox WHERE session_id=$1 AND through_seq>$2 AND through_seq<=$3 ORDER BY through_seq LIMIT 1', [request.sessionId, request.cursor, frontier])).rows[0];
-        const throughSeq = boundary?.through_seq ?? request.cursor;
+        const limit = String(BigInt(fromExclusive) + 256n < BigInt(frontier) ? BigInt(fromExclusive) + 256n : BigInt(frontier));
+        const boundary = (await tx.client.query('SELECT through_seq FROM outbox WHERE session_id=$1 AND through_seq>$2 AND through_seq<=$3 ORDER BY through_seq DESC LIMIT 1', [request.sessionId, fromExclusive, limit])).rows[0]
+            ?? (await tx.client.query('SELECT through_seq FROM outbox WHERE session_id=$1 AND through_seq>$2 AND through_seq<=$3 ORDER BY through_seq LIMIT 1', [request.sessionId, fromExclusive, frontier])).rows[0];
+        const throughSeq = boundary?.through_seq ?? fromExclusive;
         const state = await runtime.stateAt(tx, throughSeq);
         const events = [];
         const direction = !!runtime.spatialDirection && hasDirection(connection.capabilities);
-        if (throughSeq !== request.cursor) {
+        if (throughSeq !== fromExclusive) {
             const projection = spatialProjection(state, tx.content, user.actorId, { connectionId: handle.connectionId, includeDirection: direction, includeAppearance: hasAppearance(connection.capabilities), includeObjectVisual: hasObjectVisual(connection.capabilities), includeSceneOverview: hasSceneOverview(connection.capabilities), ...(view.terminalBinding ? { view: view.terminalBinding } : {}), highWater: await highWater(tx, actor) });
-            if (direction) applySelfTrail(projection, await executedSelfTrail(runtime, tx, user.actorId, request, throughSeq, state, { timed: connection.capabilities.includes(timedTrailCapability) }));
+            if (direction) applySelfTrail(projection, await executedSelfTrail(runtime, tx, user.actorId, trailRequest, throughSeq, state, { timed: connection.capabilities.includes(timedTrailCapability) }));
             events.push({ sessionSeq: throughSeq, eventId: `${request.sessionId}:E${throughSeq}`, kind: 'projection.replace', payload: { projection } });
         }
-        return validateSpatial('BatchV2', { schemaVersion: 2, type: 'world.batch', sessionId: request.sessionId, viewId: request.viewId, fromExclusive: request.cursor, throughSeq, ...(direction ? { syncFrontierSeq: tx.state.sessionSeq } : {}), events });
+        return validateSpatial('BatchV2', { schemaVersion: 2, type: 'world.batch', sessionId: request.sessionId, viewId: request.viewId, fromExclusive, throughSeq, ...(direction ? { syncFrontierSeq: tx.state.sessionSeq } : {}), events });
     });
 }
 /** 内部导航在意图创建时预留序号；后续提交/降级均使用原持久请求。 */
