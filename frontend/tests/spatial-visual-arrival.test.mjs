@@ -37,12 +37,12 @@ function timed(previous, through, points, spans, plan = {}) {
     motionTimeline: spans.map(([kind, from, to, first, last]) => ({ kind, fromSceneTimeMs: from, throughSceneTimeMs: to, fromTrailIndex: first, throughTrailIndex: last })) });
   return s;
 }
-/** 以一段已完成的纯hold建立权威时间锚点，后续确认段可保持尚未播完的余量。 */
+/** 受控hold在0ms已经收到，确实播放到200ms后再接后续段；收包本身不代表播完。 */
 function prime(f, first) {
   f.update(first, first.projection.sceneTimeMs);
   const p = first.projection.self.position;
   const primer = timed(first, 200, [{ ...p }, { ...p }], [['hold', 0, 200, 0, 1]]);
-  f.update(primer, 200); return primer;
+  f.update(primer, 0); return primer;
 }
 function fixture(options = {}) {
   const motion = new ConfirmedMotion(), publisher = createSpatialSnapshotSource(), emissions = [];

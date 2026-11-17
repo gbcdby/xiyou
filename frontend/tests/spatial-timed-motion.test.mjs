@@ -4,7 +4,7 @@ import { ConfirmedMotion, motionPresentationIdentity } from '../src/domain/spati
 import { spatialSnapshot, selfRef } from './spatial-fixture.mjs';
 import { SpatialView } from '../src/domain/spatial-view.ts';
 
-function baseline(sceneTimeMs = 0, position = { x: 950, y: 650 }) {
+function baseline(sceneTimeMs = 34, position = { x: 950, y: 650 }) {
   const snapshot = spatialSnapshot(); snapshot.snapshotSeq = '40';
   const p = snapshot.projection; p.sceneTimeMs = sceneTimeMs;
   p.self.position = { ...position }; p.entities[0].position = { ...position }; return snapshot;
@@ -18,15 +18,15 @@ function timed(previous, through, points, spans, status = 'moving') {
   return snapshot;
 }
 
-test('TIME-01：权威时间线上的141ms静止与28ms运动分别按原时刻采样，查询不产生呈现信用', () => {
+test('TIME-01：无实际呈现时141ms静止与原28ms运动分开，查询不抵扣静止', () => {
   const motion = new ConfirmedMotion(), first = baseline(); motion.update(first, 0);
-  const second = timed(first, 169, [{ x: 950, y: 650 }, { x: 955, y: 650 }], [['hold', 0, 141, 0, 0], ['motion', 141, 169, 0, 1]]);
-  motion.update(second, 169);
-  assert.deepEqual(motion.pose(selfRef, 100), { position: { x: 950, y: 650 }, facing: 'S', moving: false, distance: 0 });
-  assert.equal(motion.pose(selfRef, 155).position.x, 952.5, '28ms运动仍用原时长，不把静止摊入速度');
-  assert.deepEqual(motion.pose(selfRef, 169), { position: { x: 955, y: 650 }, facing: 'E', moving: false, distance: 5 });
-  assert.equal(motion.settled(selfRef, 169), true);
-  assert.equal(motion.presentationCreditMs, 0);
+  const second = timed(first, 203, [{ x: 950, y: 650 }, { x: 955, y: 650 }], [['hold', 34, 175, 0, 0], ['motion', 175, 203, 0, 1]]);
+  motion.pose(selfRef, 200); motion.settled(selfRef, 200); motion.active(200);
+  motion.update(second, 200);
+  assert.deepEqual(motion.pose(selfRef, 228), { position: { x: 950, y: 650 }, facing: 'S', moving: false, distance: 0 });
+  assert.equal(motion.pose(selfRef, 355).position.x, 952.5, '运动只使用原28ms，不把领先静止摊入速度');
+  assert.equal(motion.pose(selfRef, 369).position.x, 955);
+  assert.equal(motion.pose(selfRef, 369).moving, false, '确认队列耗尽时不以Accepted或continuing假装走步');
 });
 
 function present(motion, snapshot, at, serial = 1, renderer = 'controlled-visible-canvas') {
@@ -36,15 +36,13 @@ function present(motion, snapshot, at, serial = 1, renderer = 'controlled-visibl
 }
 
 for (const credit of [0, 80, 141]) test(`TIME-03：受控呈现单元仅抵扣实际封存的${credit}ms，不是Canvas运行证据`, () => {
-  const motion = new ConfirmedMotion(), first = baseline(0, { x: 0, y: 0 }); motion.update(first, 0);
+  const motion = new ConfirmedMotion(), first = baseline(); motion.update(first, 0);
   if (credit) { assert.equal(present(motion, first, 200 - credit), true); motion.sealPresentation(200); }
-  const primer = timed(first, 200, [{ x: 0, y: 0 }, { x: 0, y: 0 }], [['hold', 0, 200, 0, 1]], null);
-  motion.update(primer, 200);
-  const second = timed(primer, 369, [{ x: 0, y: 0 }, { x: 5, y: 0 }], [['hold', 200, 341, 0, 0], ['motion', 341, 369, 0, 1]]);
+  const second = timed(first, 203, [{ x: 950, y: 650 }, { x: 955, y: 650 }], [['hold', 34, 175, 0, 0], ['motion', 175, 203, 0, 1]]);
   motion.update(second, 200);
   const remaining = 141 - credit;
-  assert.equal(motion.pose(selfRef, 200 + remaining + 14).position.x, 2.5);
-  assert.equal(motion.pose(selfRef, 200 + remaining + 28).position.x, 5);
+  assert.equal(motion.pose(selfRef, 200 + remaining + 14).position.x, 952.5);
+  assert.equal(motion.pose(selfRef, 200 + remaining + 28).position.x, 955);
   assert.equal(motion.presentationCreditMs, 0);
 });
 
@@ -52,31 +50,31 @@ test('TIME-04：旧余段和下一方向/速度分别保时，不合成平均速
   const motion = new ConfirmedMotion(), first = baseline(0, { x: 0, y: 0 }); motion.update(first, 0);
   const second = timed(first, 100, [{ x: 0, y: 0 }, { x: 10, y: 0 }], [['motion', 0, 100, 0, 1]]); motion.update(second, 100);
   const third = timed(second, 300, [{ x: 10, y: 0 }, { x: 10, y: 30 }], [['motion', 100, 300, 0, 1]]); motion.update(third, 150);
-  assert.deepEqual(motion.pose(selfRef, 175).position, { x: 10, y: 11.25 });
-  assert.deepEqual(motion.pose(selfRef, 200).position, { x: 10, y: 15 });
-  assert.deepEqual(motion.pose(selfRef, 300).position, { x: 10, y: 30 });
+  assert.deepEqual(motion.pose(selfRef, 175).position, { x: 7.5, y: 0 });
+  assert.deepEqual(motion.pose(selfRef, 200).position, { x: 10, y: 0 });
+  assert.deepEqual(motion.pose(selfRef, 300).position, { x: 10, y: 15 });
   assert.equal(motion.pose(selfRef, 400).distance, 40); assert.equal(motion.pose(selfRef, 400).moving, false);
 });
 
 test('TIME-03/04：内部与尾部hold保持原位置和时长，不花领先信用', () => {
   const motion = new ConfirmedMotion(), first = baseline(0, { x: 0, y: 0 }); motion.update(first, 0);
-  const primer = timed(first, 200, [{ x: 0, y: 0 }, { x: 10, y: 0 }, { x: 10, y: 0 }], [['motion', 0, 100, 0, 1], ['hold', 100, 200, 1, 1]]);
-  motion.update(primer, 200);
-  const second = timed(primer, 500, [{ x: 10, y: 0 }, { x: 20, y: 0 }, { x: 20, y: 10 }, { x: 20, y: 10 }], [
-    ['motion', 200, 300, 0, 1], ['hold', 300, 350, 1, 1], ['motion', 350, 450, 1, 2], ['hold', 450, 500, 2, 3],
+  present(motion, first, 0); motion.sealPresentation(200);
+  const second = timed(first, 300, [{ x: 0, y: 0 }, { x: 10, y: 0 }, { x: 10, y: 10 }], [
+    ['motion', 0, 100, 0, 1], ['hold', 100, 150, 1, 1], ['motion', 150, 250, 1, 2], ['hold', 250, 300, 2, 2],
   ]); motion.update(second, 200);
-  assert.equal(motion.pose(selfRef, 250).position.x, 15);
-  assert.deepEqual(motion.pose(selfRef, 325).position, { x: 20, y: 0 }); assert.equal(motion.pose(selfRef, 325).moving, false);
+  assert.equal(motion.pose(selfRef, 250).position.x, 5);
+  assert.deepEqual(motion.pose(selfRef, 325).position, { x: 10, y: 0 }); assert.equal(motion.pose(selfRef, 325).moving, false);
   assert.equal(motion.pose(selfRef, 400).position.y, 5);
-  assert.equal(motion.pose(selfRef, 499).moving, false); assert.equal(motion.settled(selfRef, 499), false); assert.equal(motion.settled(selfRef, 500), true);
+  assert.equal(motion.pose(selfRef, 475).moving, false); assert.equal(motion.settled(selfRef, 499), false); assert.equal(motion.settled(selfRef, 500), true);
   assert.equal(motion.presentationCreditMs, 0);
 });
 
 test('TIME-03：正常播完旧hold的50ms不能抵扣下一hold30ms', () => {
   const motion = new ConfirmedMotion(), first = baseline(0); motion.update(first, 0);
   const point = first.projection.self.position;
-  const old = timed(first, 50, [point, point], [['hold', 0, 50, 0, 1]], null); motion.update(old, 50);
-  assert.equal(motion.settled(selfRef, 50), true);
+  const old = timed(first, 50, [point, point], [['hold', 0, 50, 0, 1]], null); motion.update(old, 0);
+  assert.equal(present(motion, old, 25), false); motion.sealPresentation(50); assert.equal(motion.presentationCreditMs, 0);
+  assert.equal(present(motion, old, 50, 2), true); motion.sealPresentation(50);
   const next = timed(old, 80, [point, point], [['hold', 50, 80, 0, 1]], null); motion.update(next, 50);
   assert.equal(motion.settled(selfRef, 79), false); assert.equal(motion.settled(selfRef, 80), true);
 });
@@ -84,13 +82,12 @@ test('TIME-03：正常播完旧hold的50ms不能抵扣下一hold30ms', () => {
 test('TIME-03：同点Accepted只封存旧信用，查询/再次绘制不增加；只能消费一次', () => {
   const motion = new ConfirmedMotion(), first = baseline(0, { x: 0, y: 0 }); motion.update(first, 0);
   present(motion, first, 0); motion.sealPresentation(100);
-  const primer = timed(first, 100, [{ x: 0, y: 0 }, { x: 0, y: 0 }], [['hold', 0, 100, 0, 1]], null); motion.update(primer, 100);
-  const accepted = structuredClone(primer); accepted.snapshotSeq = '41'; accepted.projection.movement = { status: 'accepted' }; motion.update(accepted, 100);
+  const accepted = structuredClone(first); accepted.snapshotSeq = '41'; accepted.projection.movement = { status: 'accepted' }; motion.update(accepted, 100);
   assert.equal(present(motion, accepted, 100, 2), false); motion.sealPresentation(150); motion.pose(selfRef, 150);
   assert.equal(motion.presentationCreditMs, 100);
-  const next = timed(accepted, 228, [{ x: 0, y: 0 }, { x: 5, y: 0 }], [['hold', 100, 200, 0, 0], ['motion', 200, 228, 0, 1]]); motion.update(next, 100);
-  assert.equal(motion.pose(selfRef, 114).position.x, 2.5); assert.equal(motion.presentationCreditMs, 0);
-  motion.update(next, 110); assert.equal(motion.pose(selfRef, 128).position.x, 5, '重复同游标输入不重排或再次花信用');
+  const next = timed(accepted, 128, [{ x: 0, y: 0 }, { x: 5, y: 0 }], [['hold', 0, 100, 0, 0], ['motion', 100, 128, 0, 1]]); motion.update(next, 150);
+  assert.equal(motion.pose(selfRef, 164).position.x, 2.5); assert.equal(motion.presentationCreditMs, 0);
+  motion.update(next, 160); assert.equal(motion.pose(selfRef, 178).position.x, 5, '重复同游标输入不重排或再次花信用');
 });
 
 test('TIME-03：隐藏/失效及旧帧重放不恢复信用，未封口update不倒推显示时间', () => {
@@ -102,7 +99,7 @@ test('TIME-03：隐藏/失效及旧帧重放不恢复信用，未封口update不
 
 test('TIME-04：同端点折返不被同位置快路径吞掉，零几何motion保持真实静止', () => {
   const motion = new ConfirmedMotion(), first = baseline(0, { x: 0, y: 0 }); motion.update(first, 0);
-  const loop = timed(first, 200, [{ x: 0, y: 0 }, { x: 10, y: 0 }, { x: 0, y: 0 }], [['motion', 0, 200, 0, 2]]); motion.update(loop, 200);
+  const loop = timed(first, 200, [{ x: 0, y: 0 }, { x: 10, y: 0 }, { x: 0, y: 0 }], [['motion', 0, 200, 0, 2]]); motion.update(loop, 0);
   assert.equal(motion.pose(selfRef, 100).position.x, 10); assert.equal(motion.pose(selfRef, 200).distance, 20);
   const still = timed(loop, 250, [{ x: 0, y: 0 }, { x: 0, y: 0 }], [['motion', 200, 250, 0, 1]], null); motion.update(still, 200);
   assert.equal(motion.pose(selfRef, 225).moving, false); assert.equal(motion.settled(selfRef, 225), false);
@@ -113,8 +110,8 @@ test('TIME-03/04：中途缺字段只接原合法段，保timed余段、不制�
   const motion = new ConfirmedMotion(), first = baseline(0, { x: 0, y: 0 }); motion.update(first, 0);
   const second = timed(first, 100, [{ x: 0, y: 0 }, { x: 10, y: 0 }], [['motion', 0, 100, 0, 1]]); motion.update(second, 0);
   const third = timed(second, 200, [{ x: 10, y: 0 }, { x: 10, y: 20 }], [['motion', 100, 200, 0, 1]]); delete third.projection.entities[0].motionTimeline;
-  motion.update(third, 50); assert.deepEqual(motion.pose(selfRef, 75).position, { x: 10, y: 5 }, '缺字段时只按原路线接一段，不从收包时刻重播旧区间');
-  assert.deepEqual(motion.pose(selfRef, 150).position, { x: 10, y: 20 }); assert.equal(motion.pose(selfRef, 200).distance, 30);
+  motion.update(third, 50); assert.deepEqual(motion.pose(selfRef, 75).position, { x: 7.5, y: 0 });
+  assert.deepEqual(motion.pose(selfRef, 150).position, { x: 10, y: 10 }); assert.equal(motion.pose(selfRef, 200).distance, 30);
 });
 
 test('TIME-03：完整身份/renderer变化清空未用余额和旧待播段', () => {
@@ -133,8 +130,8 @@ test('TIME-03：空但推进游标的Batch不重播继承timeline；重复/部�
   const second = timed(first, 100, [{ x: 0, y: 0 }, { x: 10, y: 0 }], [['motion', 0, 100, 0, 1]], null);
   const batch = { schemaVersion: 2, type: 'world.batch', sessionId: first.sessionId, viewId: first.viewId, fromExclusive: '40', throughSeq: '41',
     events: [{ sessionSeq: '41', eventId: 'event41', kind: 'projection.replace', payload: { projection: second.projection } }] };
-  assert.equal(view.applyBatch(batch, generation), 'applied'); motion.update(view.snapshot, 100);
-  assert.equal(view.applyBatch({ ...batch, fromExclusive: '41', throughSeq: '42', events: [] }, generation), 'applied'); motion.update(view.snapshot, 50);
+  assert.equal(view.applyBatch(batch, generation), 'applied'); motion.update(view.snapshot, 0);
+  assert.equal(view.applyBatch({ ...batch, fromExclusive: '41', throughSeq: '42', events: [] }, generation), 'applied'); motion.update(view.snapshot, 25);
   assert.equal(motion.pose(selfRef, 50).position.x, 5); assert.equal(motion.pose(selfRef, 100).distance, 10);
   assert.equal(view.applyBatch(batch, generation), 'duplicate');
   assert.equal(view.applyBatch({ ...batch, throughSeq: '43' }, generation), 'refetch');

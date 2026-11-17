@@ -6,6 +6,7 @@ import { spatialSnapshot } from './spatial-fixture.mjs';
 
 const trace = JSON.parse(await readFile(new URL('./fixtures/motion-moving-window-ci.json', import.meta.url), 'utf8'));
 const ref = trace.ref;
+const mapVersion = trace.updates.find(entry => entry.movement?.mapVersion).movement.mapVersion;
 
 function snapshot(entry) {
   const result = spatialSnapshot();
@@ -15,7 +16,8 @@ function snapshot(entry) {
   p.sceneTimeMs = entry.sceneTimeMs;
   p.paused = entry.paused;
   Object.assign(p.self, structuredClone(entry.self));
-  p.mapVersion = entry.movement?.mapVersion ?? p.mapVersion;
+  // 空计划不是地图换代；历史基线与后续快照必须使用原件的同一地图身份。
+  p.mapVersion = mapVersion;
   p.movement = entry.movement ? structuredClone(entry.movement) : null;
   const person = { ...p.entities[0], ...structuredClone(entry.person) };
   p.entities = [person];
@@ -38,17 +40,16 @@ function* replay() {
   }
 }
 
-test('CI 原件回放：真实 paint 使用已确认 motion 段时保持走步，hold 不走步', () => {
+test('CI 原件回放：paint与普通采样同义，仅真实待播motion走步，hold不走步', () => {
   const seen = [];
   for (const { entry, motion } of replay()) {
     for (const paint of trace.paints.filter(row => row.snapshotSeq === entry.snapshotSeq)) {
       const plain = motion.pose(ref, paint.motionAt);
       const painted = motion.pose(ref, paint.motionAt, true);
       assert.ok(painted, '真实绘制必须能取到姿态');
-      assert.deepEqual({ position: painted.position, facing: painted.facing, distance: painted.distance },
-        { position: plain.position, facing: plain.facing, distance: plain.distance }, 'paint 采样不能改变位置、朝向或累计路程');
-      const hasMotion = entry.person.motionTimeline.some(span => span.kind === 'motion');
-      assert.equal(painted.moving, hasMotion, `${paint.snapshotSeq} @${paint.motionAt} 的走步必须对应已确认 motion 段`);
+      assert.deepEqual(painted, plain, 'paint采样不能额外制造位置、朝向、路程或走步');
+      if (painted.moving) assert.equal(motion.hasPendingMotion(ref, paint.motionAt), true, '活动计划不能代替真实待播段');
+      if (entry === trace.updates[0]) assert.equal(painted.moving, false, '领先hold必须静止');
       seen.push({ paint, entry, moving: painted.moving });
     }
   }
@@ -67,12 +68,31 @@ test('CI 原件回放：真实 paint 使用已确认 motion 段时保持走步�
   assert.ok(continuous.every(frame => frame.moving), '连续短计划之间不插 idle');
 });
 
-test('CI 原件 DOWN 阶段：paint 采样仍按权威时间锚定，横向漂移小于 4', () => {
+test('CI 原件 DOWN 仍有横向余段：保留未达标反例，不能把收包时刻误当150ms验收点', () => {
+  let exposesDebt = false;
   for (const { entry, motion } of replay()) {
     if (entry.phase !== 'down-only') continue;
     const painted = motion.pose(ref, entry.at, true);
-    assert.ok(Math.abs(painted.position.x - entry.self.position.x) < 4, `${entry.snapshotSeq} 的 paint 采样不能回退显示时钟锚定`);
+    assert.deepEqual(painted, motion.pose(ref, entry.at));
+    if (Math.abs(painted.position.x - entry.self.position.x) >= 4) exposesDebt = true;
   }
+  // 原件无keydown时刻、初始化和完整呈现账本；此断言记录余段，绝非DOWN验收PASS。
+  // 真实150–450ms窗口与<4门槛仍保留在client-experience-browser.mjs。
+  assert.equal(exposesDebt, true, '不得以错误地图重基线或瞬移把历史余段隐藏');
+});
+
+test('相同地图保留未播段，真实地图身份变化才建立当前授权基线', () => {
+  const first = trace.updates[0], next = trace.updates[1];
+  const sameIdentity = new ConfirmedMotion(), changedIdentity = new ConfirmedMotion();
+  for (const motion of [sameIdentity, changedIdentity]) motion.update(snapshot(first), first.at);
+  const before = sameIdentity.pose(ref, next.at);
+  sameIdentity.update(snapshot(next), next.at);
+  assert.deepEqual(sameIdentity.pose(ref, next.at).position, before.position, '同身份不能直接跳到新权威点');
+  const changed = snapshot(next); changed.projection.mapVersion = 'controlled-new-map';
+  changedIdentity.update(changed, next.at);
+  assert.deepEqual(changedIdentity.pose(ref, next.at).position, next.self.position, '换地图后只建立当前授权基线');
+  assert.equal(changedIdentity.pose(ref, next.at).moving, false);
+  assert.equal(changedIdentity.pose(ref, next.at).distance, 0);
 });
 
 test('计划终止后不额外制造走步：cancelled 下 paint 采样与普通采样一致', () => {
@@ -83,6 +103,5 @@ test('计划终止后不额外制造走步：cancelled 下 paint 采样与普通
     const plain = motion.pose(ref, entry.at + 1);
     const painted = motion.pose(ref, entry.at + 1, true);
     assert.equal(painted.moving, plain.moving, `${entry.snapshotSeq} 终止计划不能额外输出走步`);
-    motion.update(snapshot(entry), entry.at);
   }
 });

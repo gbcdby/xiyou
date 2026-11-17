@@ -9,9 +9,9 @@ const snapshot = seq => ({ ...spatialSnapshot(), snapshotSeq: seq });
 test('SUP-04：真实Vue props合并45/48时，稳定source逐条入Motion且当前绘制输入为48', async () => {
   const { source, publish } = createSpatialSnapshotSource(), first = snapshot('40'), propsSeen = [], motionSeen = [], motion = new ConfirmedMotion();
   first.projection.sceneTimeMs = 0; first.projection.self.position = { x: 0, y: 0 }; first.projection.entities[0].position = { x: 0, y: 0 };
-  const state = shallowRef(first);
+  const state = shallowRef(first); let now = 0;
   publish(state.value);
-  const subscription = source.subscribe(value => { if (value) { motionSeen.push(value.snapshotSeq); motion.update(value, value.projection.sceneTimeMs); } else motion.reset(); }, () => assert.fail('有效输入不应隔离'));
+  const subscription = source.subscribe(value => { if (value) { motionSeen.push(value.snapshotSeq); motion.update(value, now); } else motion.reset(); }, () => assert.fail('有效输入不应隔离'));
   const Child = defineComponent({ props: ['snapshot'], setup(props) { watch(() => props.snapshot, value => propsSeen.push(value.snapshotSeq), { immediate: true, flush: 'sync' }); return () => h('canvas'); } });
   const host = { createElement: tag => ({ tag, children: [] }), createText: text => ({ text }), createComment: text => ({ text }), setText() {}, setElementText() {}, parentNode: n => n.parent || null, nextSibling: () => null, insert(n, p) { n.parent = p; p.children.push(n); }, remove() {}, patchProp() {} };
   const app = createRenderer(host).createApp({ setup: () => () => h(Child, { snapshot: state.value }) }); app.mount({ children: [] });
@@ -20,11 +20,13 @@ test('SUP-04：真实Vue props合并45/48时，稳定source逐条入Motion且当
     Object.assign(value.projection.entities[0], { position: { x, y: 0 }, motionTrail: [{ x: x - 10, y: 0 }, { x, y: 0 }], motionFromSceneTimeMs: from, motionThroughSceneTimeMs: through,
       motionTimeline: [{ kind: 'motion', fromSceneTimeMs: from, throughSceneTimeMs: through, fromTrailIndex: 0, throughTrailIndex: 1 }] }); return value;
   };
-  const middle = next('45', 0, 100, 10), latest = next('48', 100, 200, 20); state.value = middle; publish(middle); state.value = latest; publish(latest);
+  const middle = next('45', 0, 100, 10), latest = next('48', 100, 200, 20); now = 100;
+  state.value = middle; publish(middle); state.value = latest; publish(latest);
   assert.equal(subscription.current, latest, '父props还未刷新时，owner的成功消费输入已经是48');
   assert.deepEqual(propsSeen, ['40']); assert.deepEqual(motionSeen, ['40', '45', '48']);
   await nextTick(); assert.deepEqual(propsSeen, ['40', '48']); assert.equal(motion.presentationCreditMs, 0, '同步状态回调不是paint');
-  assert.equal(motion.pose(selfRef, 150).position.x, 15); assert.equal(motion.pose(selfRef, 200).distance, 20);
+  assert.equal(motion.pose(selfRef, 150).position.x, 5, '100ms同时收到的45/48不能回溯消耗45');
+  assert.equal(motion.pose(selfRef, 250).position.x, 15); assert.equal(motion.pose(selfRef, 300).distance, 20);
   subscription.close(); app.unmount();
 });
 test('SUP-04：同身份同seq通知去重，换binding先reset，新挂载只读当前基线', () => {

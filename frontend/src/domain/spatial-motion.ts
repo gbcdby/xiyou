@@ -71,32 +71,30 @@ function piecePose(piece: TimedSegment, now: number): DrawnPose {
   return { position: sampleTrail(piece.trail, fraction), facing, moving: piece.kind !== 'hold' && total > 0 && fraction < 1,
     distance: piece.before.distance + total * fraction };
 }
-function timedPose(value: TimedMotion, now: number, sampledForPaint = false, continuing = false): DrawnPose {
+function timedPose(value: TimedMotion, now: number): DrawnPose {
   let pose = value.base;
-  let source: TimedSegment | null = null;
   for (const piece of value.segments) {
     if (now < piece.startedAt) return { ...pose, moving: false };
-    pose = piecePose(piece, now); source = piece;
+    pose = piecePose(piece, now);
     if (now < piece.startedAt + piece.duration) break;
   }
-  // paint 使用已确认的非零 motion 段且计划仍为 accepted/moving 时，保持走步标志；
-  // 墙钟终点钉在快照到达时刻，不能据此把真实绘制判成静止。hold 与零轨迹段永不走步。
-  if (sampledForPaint && continuing && source && source.kind !== 'hold' && trailLength(source.trail) > 0) return { ...pose, moving: true };
   return pose;
 }
 function appendTimed(value: TimedMotion, pieces: TimedPiece[], now: number) {
   while (value.segments[0] && now >= value.segments[0].startedAt + value.segments[0].duration) {
     const completed = value.segments.shift()!; value.base = piecePose(completed, completed.startedAt + completed.duration);
   }
-  const timed = pieces.filter(piece => piece.sceneFrom !== undefined && piece.sceneThrough !== undefined);
-  if (timed.length && value.anchor === undefined) value.anchor = now - Math.max(...timed.map(piece => piece.sceneThrough!));
-  let last = value.segments.at(-1), at = last ? last.startedAt + last.duration : timed.length ? -Infinity : now;
+  const timed = pieces.filter(piece => piece.duration > 0 && piece.sceneFrom !== undefined && piece.sceneThrough !== undefined);
+  if (timed.length && value.anchor === undefined) value.anchor = now - timed[0].sceneFrom!;
+  const last = value.segments.at(-1); let at = last ? last.startedAt + last.duration : now;
   let before = last ? piecePose(last, at) : value.base;
   for (const piece of pieces) {
     if (piece.duration <= 0) continue;
-    // 有权威时间端点时按同一锚点换算墙钟；已过去的区间只推进基线，不从收包时刻重播。
+    // 权威端点共用一个墙钟锚点，尚未收到的区间不能被算作已播放。
+    // 供给迟到只把新段及其后续锚点向后顺延；旧余段、逐段时长与转角保持。
     const authoritativeAt = value.anchor !== undefined && piece.sceneFrom !== undefined ? piece.sceneFrom + value.anchor : null;
-    const startedAt = authoritativeAt !== null ? Math.max(authoritativeAt, last ? last.startedAt + last.duration : -Infinity) : Math.max(now, at);
+    const startedAt = Math.max(now, at, authoritativeAt ?? now);
+    if (authoritativeAt !== null && startedAt > authoritativeAt) value.anchor = startedAt - piece.sceneFrom!;
     const segment: TimedSegment = { ...piece, trail: piece.trail.map(point => ({ ...point })), startedAt, before };
     const end = startedAt + segment.duration;
     value.segments.push(segment); at = end; before = piecePose(segment, end);
@@ -190,20 +188,19 @@ export class ConfirmedMotion {
                 sceneFrom: span.fromSceneTimeMs, sceneThrough: span.throughSceneTimeMs }))
               : [{ kind: 'legacy', trail: person.motionTrail!, duration: person.motionThroughSceneTimeMs! - person.motionFromSceneTimeMs! }];
             const credit = this.#credit;
-            if (queue.anchor === undefined && pieces.some(piece => piece.sceneFrom !== undefined)) queue.anchor = now - Math.max(...pieces.map(piece => piece.sceneThrough ?? now));
+            const firstTimed = pieces.find(piece => piece.duration > 0 && piece.sceneFrom !== undefined);
+            if (firstTimed && (queue.anchor === undefined || queueWasEmpty)) {
+              queue.anchor = Math.max(queue.anchor ?? -Infinity, now - firstTimed.sceneFrom!);
+            }
             if (person.motionTimeline && queueWasEmpty && credit?.identity === motionPresentationIdentity(snapshot) && same(credit.position, beforePose.position)) {
-              const anchor = queue.anchor ?? now;
               for (let index = 0; index < pieces.length; index++) {
                 const piece = pieces[index];
                 if (piece.kind !== 'hold' || piece.duration <= 0) break;
-                const start = piece.sceneFrom !== undefined ? piece.sceneFrom + anchor : now;
-                if (start < now) break;
                 const consumed = Math.min(piece.duration, credit.remaining); piece.duration -= consumed; credit.remaining -= consumed;
-                for (let next = index + 1; next < pieces.length; next++) {
-                  const later = pieces[next];
-                  if (later.sceneFrom !== undefined) later.sceneFrom -= consumed;
-                  if (later.sceneThrough !== undefined) later.sceneThrough -= consumed;
-                }
+                // 只消费在同点真实呈现过的领先hold；权威后续端点不改写。
+                // 锚点与剩余hold起点一起移动，避免下一批重新补入已抵扣的静止。
+                if (piece.sceneFrom !== undefined) piece.sceneFrom += consumed;
+                if (queue.anchor !== undefined) queue.anchor -= consumed;
                 if (piece.duration > 0) break;
               }
             }
@@ -256,17 +253,10 @@ export class ConfirmedMotion {
   position(reference: string, now: number): Position | null {
     return this.pose(reference, now)?.position || null;
   }
-  /** 位置、朝向和步态共用确认路径；墙钟只采样位置，不能使站立者原地走步。
-   * sampledForPaint 仅供真实画布成功绘制使用，普通查询/校验仍只看段内插值。 */
-  pose(reference: string, now: number, sampledForPaint = false): DrawnPose | null {
+  /** 位置、朝向和步态共用确认路径；查询与真实绘制都不能以活动计划掩盖供给断粮。 */
+  pose(reference: string, now: number, _sampledForPaint = false): DrawnPose | null {
     const timed = this.#timed.get(reference);
-    if (timed) {
-      const p = this.#previous?.projection;
-      const continuing = Boolean(p && !p.paused && (reference === p.self.entityRef
-        ? ['accepted', 'moving'].includes(p.movement?.status ?? '')
-        : p.sceneOverview?.entities.find(entity => entity.entityRef === reference)?.moving === true));
-      return timedPose(timed, now, sampledForPaint, continuing);
-    }
+    if (timed) return timedPose(timed, now);
     const value = this.#motions.get(reference); if (!value) return null;
     if (!value.trail || value.duration <= 0) return { position: value.position, facing: value.facing, moving: false, distance: value.distanceBefore };
     const fraction = Math.max(0, Math.min(1, (now - value.startedAt) / value.duration));
