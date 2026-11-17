@@ -198,6 +198,16 @@ jobs:
           FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-presentation-lifecycle
         # 真实Vue/Canvas与公开DTO组件检查；不代替下方原配置整场动态验收。
         run: npm run test:browser:presentation-lifecycle --prefix frontend
+      - name: 推送通知异常后的原客户端连续确认回归
+        timeout-minutes: 2
+        shell: bash
+        env:
+          FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-rpc-push-notify
+        # 真实PG与两个原浏览器消费者；单一逻辑交错，不代替后续连续输入验收。
+        run: |
+          mkdir -p "$FRONTEND_EVIDENCE_DIR"
+          set -o pipefail
+          node frontend/tests/spatial-rpc-push-notify-browser.mjs 2>&1 | tee "$FRONTEND_EVIDENCE_DIR/stdout.log"
       - name: scene-v3 Canvas、连续输入、地图与目标动态验收
         timeout-minutes: 4
         env:
@@ -227,6 +237,8 @@ jobs:
           # 仅上传具名结果和截图，不上传数据库目录、连接配置或浏览器缓存。
           path: |
             .agent-output/ci/browser-presentation-lifecycle/result.json
+            .agent-output/ci/browser-rpc-push-notify/result.json
+            .agent-output/ci/browser-rpc-push-notify/stdout.log
             .agent-output/ci/browser-client-experience/result.json
             .agent-output/ci/browser-client-experience/result-before-cleanup.json
             .agent-output/ci/browser-client-experience/scene-v3-desktop.png
