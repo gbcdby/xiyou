@@ -1,0 +1,146 @@
+[
+  {
+    "path": "AGENTS.md",
+    "sha256": "9e173fff03f73b349c9c7469d10613a99fad53e085967b90f83ab435ccc190c4",
+    "blob": "8b372339de1790711617d7868708128de1a40119",
+    "matched": true
+  },
+  {
+    "path": "docs/engineering.md",
+    "sha256": "08005356ecb68e87b9c5ba93a2f6491e544bd3a036c93d1f72b4ea488b01e520",
+    "blob": "02fdbb91622398dc6908d859789d7b785da401ea",
+    "matched": true
+  },
+  {
+    "path": "docs/agents/workflow.md",
+    "sha256": "13baab7f28f0f444eb4988bd3675c48413ef3f838f0efda1e8037fae84820877",
+    "blob": "77880b098e7fe7b17fd3f8fb06c1d4392443ab26",
+    "matched": true
+  },
+  {
+    "path": "docs/specs/adv-protocol.md",
+    "sha256": "d33f77a8dea8f2840ef3f36ea12cbb5af234a043a2809ba6c8ce49b59566ac78",
+    "blob": "585a5c6735cea2d522d1523c7973efdc7ec01b3c",
+    "matched": true
+  },
+  {
+    "path": "formal/adv001/direction-supply/SUPPLY_MAP.md",
+    "sha256": "c6d95e52f5a6fc2fc5ab7599199a7317751011f7374eac075e82c36c2e142bae",
+    "blob": "e09363be87d87d08b014845f41d4e233cbc6fdfb",
+    "matched": true
+  },
+  {
+    "path": "formal/adv001/direction-supply/supply/SpatialSupply.tla",
+    "sha256": "40a4cfddbd48f0b69ab51362575f78653fc2000e36ffba85f9225e9575a147d7",
+    "blob": "f38069dd15a36fe3725ea722aa3d2f9f44f0726d",
+    "matched": true
+  },
+  {
+    "path": "formal/adv001/direction-supply-parallel/HANDOFF.md",
+    "sha256": "7d0f54b5b52456e26abf2fde5acd97f7c5a9ad1d6fec16a3054634a3a3259e45",
+    "blob": "ad74a0c73de565c2092e70ed08ca6e64b385a485",
+    "matched": true
+  },
+  {
+    "path": "formal/adv001/direction-supply-parallel/model/SharedRead.tla",
+    "sha256": "d7ef44896498a9c228862ea04e8bf199adfeda18d14fbf72ad2db4c1bcfff893",
+    "blob": "2673063ef47aa3dab4352cff7380c2d30ffd747e",
+    "matched": true
+  },
+  {
+    "path": "formal/adv001/direction-supply-wave/CONTRACT.md",
+    "sha256": "d7060182370c34baa615f7080ddcafc9a6cd5551a8bf22558919ccb9be5efb47",
+    "blob": "4a17d420fd7f901c18da60e4d0529655e363bd93",
+    "matched": true
+  },
+  {
+    "path": "formal/adv001/direction-supply-wave/HANDOFF.md",
+    "sha256": "0d9206921702bcf62a9cdd62e7a9aa608da4a4ea91568634e0f74c27a6667f0c",
+    "blob": "47e21c128a292948a648193eb2afbeb655ddc7cd",
+    "matched": true
+  },
+  {
+    "path": "backend/spatial-supply.mjs",
+    "sha256": "6e35490f8cfb1a6cbb783f687bf184c7f3bc975bd95aa03601301ff6c80b7d24",
+    "blob": "751e93a4abded7e904ed468675e26a2cea7bc9d3",
+    "matched": true
+  },
+  {
+    "path": "backend/spatial-runtime.mjs",
+    "sha256": "3a27d233e28d099f8a5a1329287d603c1f6e4bfb39adfb4f25245f39ef160165",
+    "blob": "7ab36f3d871d3391e6c1838308bb5605dc9bd49b",
+    "matched": true
+  },
+  {
+    "path": "backend/runtime.mjs",
+    "sha256": "ea3bd6865d7030d6b085d533f074fa087e8dfeeeb96192f2549847781fc96628",
+    "blob": "c713ee5cefab33a0dc02259a59a17f5328df901b",
+    "matched": true
+  },
+  {
+    "path": "backend/socket-enqueue.mjs",
+    "sha256": "9735ad439af8a68bba421208fa5065a194912748a8cb42e61deb69beb63d368b",
+    "blob": "521092a9746a42e651acbb3ad3bf7ebc9414739e",
+    "matched": true
+  },
+  {
+    "path": "backend/server.mjs",
+    "sha256": "ad8914b92c76f170d07d4b6528bf2ccbbc18dc357cc62d7b9b15360c71a5c5db",
+    "blob": "b5148430e9f14e2aa9b910b25cf348441a68a4bb",
+    "matched": true
+  },
+  {
+    "path": "frontend/src/network/spatial-session.ts",
+    "sha256": "bb38b2589b0643cb9f1ac3e403b62ce24bedde28ada56fa3c6b977886f8b8a9e",
+    "blob": "c155973e65b6e7c9d1efa93d6a211110479bfa17",
+    "matched": true
+  },
+  {
+    "path": "frontend/src/network/socket-link.ts",
+    "sha256": "0cbfa877d33eb3a46fef7010bb3ae87f056a13770c0713a1492f62b98d3deb31",
+    "blob": "3584f81505525c6a17c8d6261ea2d37740b44f95",
+    "matched": true
+  },
+  {
+    "path": "frontend/src/domain/spatial-view.ts",
+    "sha256": "34848de81c5fd4573be2c8c23428fd2c79461e630cfa3dcd8b459a9dc3a1b76c",
+    "blob": "3647f4eace9e9cfb2ecf7411020152ba931b3914",
+    "matched": true
+  },
+  {
+    "path": "backend/tests/spatial-supply-pg.test.mjs",
+    "sha256": "6c9e51f323ff26078fa917641c2d8430b5c7956595f0e32bdb5ae6c6cd5d6bc1",
+    "blob": "ad610c7d34119f6f9c92b93d62d9411964350a5c",
+    "matched": true
+  },
+  {
+    "path": "backend/tests/spatial-supply.test.mjs",
+    "sha256": "b29a54865e8a1d7d0e430f220abb9b1e9ecd1c88f1198da45c298928f48328d4",
+    "blob": "b5bd4017c324705caa56e803ac36e0853f2716db",
+    "matched": true
+  },
+  {
+    "path": "frontend/src/network/direction-capability.ts",
+    "sha256": "60fff8378a4db1aa369ddf59bb1bce0aaad05808261ce4f4287fe42a58fa7b76",
+    "blob": "d72e990ad68a0bde164d152b80fad90f8befb788",
+    "matched": true
+  },
+  {
+    "path": "frontend/tests/spatial-reply-order.test.mjs",
+    "sha256": "436fb0277f3e84d56e63ad02e88383012cf1af88fa6417b6f415f6d72e5cd9a4",
+    "blob": "aa2d5b5c3d748d7148c21f3010916c11ed7dc870",
+    "matched": true
+  },
+  {
+    "path": "frontend/tests/spatial-inbound-order.test.mjs",
+    "sha256": "928b3449b7aa667a9c1a8dcebfe130e0266e2498019598b6459b4298d814c5bb",
+    "blob": "a421cfaf6f5ac773af8c8f3ab0440a5ddf896e33",
+    "matched": true
+  },
+  {
+    "path": "frontend/tests/spatial-sync-wakeup.test.mjs",
+    "sha256": "0f7105e101f7c0e9df03d7309e05b0ba3ff1554d5dd8a8f0070f71b1264f18cb",
+    "blob": "7831eceadc7ee11a6da0a6cf2e335f4cb39a70b5",
+    "matched": true
+  }
+]

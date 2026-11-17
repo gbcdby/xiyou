@@ -1,0 +1,463 @@
+{
+  "positive-race": {
+    "expected": "PASS_WITHIN_SCOPE",
+    "invariants": [
+      "TypeOK",
+      "LaneDiscipline",
+      "OriginalAuthority",
+      "RaceEligibility",
+      "RaceOrigin",
+      "ReadBoundary",
+      "SentPrefix",
+      "InstalledSeparate",
+      "NoStaleSend",
+      "FixedAuthorizedHead",
+      "ConsumerSafety",
+      "SynchronousConsumption",
+      "LockExclusion",
+      "ProgressCut",
+      "OwnerSettled",
+      "NoCancellation",
+      "NoNewAfterStop",
+      "NoTimeoutSelfWake"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "positive-history": {
+    "expected": "PASS_WITHIN_SCOPE",
+    "invariants": [
+      "TypeOK",
+      "LaneDiscipline",
+      "OriginalAuthority",
+      "RaceEligibility",
+      "RaceOrigin",
+      "ReadBoundary",
+      "SentPrefix",
+      "InstalledSeparate",
+      "NoStaleSend",
+      "FixedAuthorizedHead",
+      "ConsumerSafety",
+      "SynchronousConsumption",
+      "LockExclusion",
+      "ProgressCut",
+      "OwnerSettled",
+      "NoCancellation",
+      "NoNewAfterStop",
+      "NoTimeoutSelfWake"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "positive-predecessor-rpc": {
+    "expected": "PASS_WITHIN_SCOPE",
+    "invariants": [
+      "TypeOK",
+      "LaneDiscipline",
+      "OriginalAuthority",
+      "RaceEligibility",
+      "RaceOrigin",
+      "ReadBoundary",
+      "SentPrefix",
+      "InstalledSeparate",
+      "NoStaleSend",
+      "FixedAuthorizedHead",
+      "ConsumerSafety",
+      "SynchronousConsumption",
+      "LockExclusion",
+      "ProgressCut",
+      "OwnerSettled",
+      "NoCancellation",
+      "NoNewAfterStop",
+      "NoTimeoutSelfWake"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "positive-consumer-rejection": {
+    "expected": "PASS_WITHIN_SCOPE",
+    "invariants": [
+      "TypeOK",
+      "LaneDiscipline",
+      "OriginalAuthority",
+      "RaceEligibility",
+      "RaceOrigin",
+      "ReadBoundary",
+      "SentPrefix",
+      "InstalledSeparate",
+      "NoStaleSend",
+      "FixedAuthorizedHead",
+      "ConsumerSafety",
+      "SynchronousConsumption",
+      "LockExclusion",
+      "ProgressCut",
+      "OwnerSettled",
+      "NoCancellation",
+      "NoNewAfterStop",
+      "NoTimeoutSelfWake"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "positive-identity": {
+    "expected": "PASS_WITHIN_SCOPE",
+    "invariants": [
+      "TypeOK",
+      "LaneDiscipline",
+      "OriginalAuthority",
+      "RaceEligibility",
+      "RaceOrigin",
+      "ReadBoundary",
+      "SentPrefix",
+      "InstalledSeparate",
+      "NoStaleSend",
+      "FixedAuthorizedHead",
+      "ConsumerSafety",
+      "SynchronousConsumption",
+      "LockExclusion",
+      "ProgressCut",
+      "OwnerSettled",
+      "NoCancellation",
+      "NoNewAfterStop",
+      "NoTimeoutSelfWake"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "positive-failure": {
+    "expected": "PASS_WITHIN_SCOPE",
+    "invariants": [
+      "TypeOK",
+      "LaneDiscipline",
+      "OriginalAuthority",
+      "RaceEligibility",
+      "RaceOrigin",
+      "ReadBoundary",
+      "SentPrefix",
+      "InstalledSeparate",
+      "NoStaleSend",
+      "FixedAuthorizedHead",
+      "ConsumerSafety",
+      "SynchronousConsumption",
+      "LockExclusion",
+      "ProgressCut",
+      "OwnerSettled",
+      "NoCancellation",
+      "NoNewAfterStop",
+      "NoTimeoutSelfWake"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "positive-ineligible": {
+    "expected": "PASS_WITHIN_SCOPE",
+    "invariants": [
+      "TypeOK",
+      "LaneDiscipline",
+      "OriginalAuthority",
+      "RaceEligibility",
+      "RaceOrigin",
+      "ReadBoundary",
+      "SentPrefix",
+      "InstalledSeparate",
+      "NoStaleSend",
+      "FixedAuthorizedHead",
+      "ConsumerSafety",
+      "SynchronousConsumption",
+      "LockExclusion",
+      "ProgressCut",
+      "OwnerSettled",
+      "NoCancellation",
+      "NoNewAfterStop",
+      "NoTimeoutSelfWake"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "positive-future-request": {
+    "expected": "PASS_WITHIN_SCOPE",
+    "invariants": [
+      "TypeOK",
+      "LaneDiscipline",
+      "OriginalAuthority",
+      "RaceEligibility",
+      "RaceOrigin",
+      "ReadBoundary",
+      "SentPrefix",
+      "InstalledSeparate",
+      "NoStaleSend",
+      "FixedAuthorizedHead",
+      "ConsumerSafety",
+      "SynchronousConsumption",
+      "LockExclusion",
+      "ProgressCut",
+      "OwnerSettled",
+      "NoCancellation",
+      "NoNewAfterStop",
+      "NoTimeoutSelfWake"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "positive-page-two": {
+    "expected": "PASS_WITHIN_SCOPE",
+    "invariants": [
+      "TypeOK",
+      "LaneDiscipline",
+      "OriginalAuthority",
+      "RaceEligibility",
+      "RaceOrigin",
+      "ReadBoundary",
+      "SentPrefix",
+      "InstalledSeparate",
+      "NoStaleSend",
+      "FixedAuthorizedHead",
+      "ConsumerSafety",
+      "SynchronousConsumption",
+      "LockExclusion",
+      "ProgressCut",
+      "OwnerSettled",
+      "NoCancellation",
+      "NoNewAfterStop",
+      "NoTimeoutSelfWake"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "negative-type-TypeOK": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "TypeOK"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "negative-parallel-lane-LaneDiscipline": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "LaneDiscipline"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "negative-bypass-rpc-LaneDiscipline": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "LaneDiscipline"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "negative-skip-original-OriginalAuthority": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "OriginalAuthority"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "negative-upgrade-old-RaceEligibility": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "RaceEligibility"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "negative-upgrade-rpc-RaceEligibility": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "RaceEligibility"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "negative-force-full-RaceEligibility": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "RaceEligibility"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "negative-fake-proof-RaceOrigin": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "RaceOrigin"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "negative-head-start-ReadBoundary": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "ReadBoundary"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "negative-partial-overlap-ReadBoundary": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "ReadBoundary"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "negative-fake-proof-SentPrefix": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "SentPrefix"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "negative-overwrite-installed-InstalledSeparate": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "InstalledSeparate"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "negative-stale-send-NoStaleSend": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "NoStaleSend"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "negative-head-after-read-FixedAuthorizedHead": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "FixedAuthorizedHead"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "negative-double-apply-ConsumerSafety": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "ConsumerSafety"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "negative-skip-gap-ConsumerSafety": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "ConsumerSafety"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "negative-defer-consumer-SynchronousConsumption": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "SynchronousConsumption"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "negative-read-through-writer-LockExclusion": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "LockExclusion"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "negative-early-g-ProgressCut": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "ProgressCut"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "negative-early-owner-OwnerSettled": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "OwnerSettled"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "negative-cancel-sql-NoCancellation": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "NoCancellation"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "negative-start-after-stop-NoNewAfterStop": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "NoNewAfterStop"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "witness-race-applied": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "NotRaceApplied"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "witness-history-applied": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "NotHistoryApplied"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "witness-rpc-predecessor": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "NotRPCPredecessor"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "witness-rejected-push-recovered": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "NotRejectRecovered"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "witness-timeout-recovered": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "NotTimeoutRecovered"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "witness-old-view-discard": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "NotOldDiscard"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "witness-late-old-link": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "NotLateOld"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "witness-race-wave-covered-g-settled": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "NotWaveCoveredGSettled"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "witness-commit-before-settle": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "NotCommitBeforeSettle"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "witness-stop-drained": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "NotStopDrained"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "negative-timeout-self-demand-NoTimeoutSelfWake": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "NoTimeoutSelfWake"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "negative-unchecked-g-ProgressCut": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "ProgressCut"
+    ],
+    "minimum_distinct_states": 2
+  },
+  "witness-timeout-without-fresh": {
+    "expected": "COUNTEREXAMPLE",
+    "invariants": [
+      "NotTimeoutWaiting"
+    ],
+    "minimum_distinct_states": 2
+  }
+}

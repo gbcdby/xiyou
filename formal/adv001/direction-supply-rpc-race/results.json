@@ -1,0 +1,4698 @@
+{
+  "schema_version": 1,
+  "source_revision": "bb66dac423a7a306752a7474eabc95d7d4d9edb7",
+  "source_tree": "deccc2600f3703f4b158f9b7ef5505680c557f0e",
+  "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+  "verification_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+  "expectations_sha256": "affc8edacd85c1d6a81e233f88c11b248f6cb7387447adb7a720ae54c8f06963",
+  "implementation_status": "NOT_ASSESSED",
+  "independent_review": "PENDING_ROOT_FROZEN_CANDIDATE",
+  "counts": {
+    "positive": 9,
+    "negative-control": 24,
+    "witness": 11
+  },
+  "archives": {
+    "final": {
+      "path": "evidence/final-records.tar.gz",
+      "sha256": "ad24914db17497210095dc76aab6af7d076ae187c69580d83e598274837025fc",
+      "bytes": 784607
+    },
+    "history": {
+      "path": "evidence/history-records.tar.gz",
+      "sha256": "0823656b9d0dee5404d829f1d87195a9ad11230911e5a51d790b7211f1feaa0c",
+      "bytes": 720281
+    }
+  },
+  "tool": {
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+    "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+    "version": "TLC2.19 / v1.7.4",
+    "java": "OpenJDK21.0.13",
+    "workers": 1,
+    "heap_mb": 768,
+    "timeout_seconds": 120,
+    "search": "breadth-first modelcheck"
+  },
+  "runs": [
+    {
+      "phase": "batch-02",
+      "profile": "positive-race",
+      "kind": "positive",
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "process": {
+        "exit_code": 0,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 6669,
+        "distinct_states": 2856,
+        "remaining_states": 0
+      },
+      "started_at": "2026-11-17T14:12:25.993113+00:00",
+      "finished_at": "2026-11-17T14:12:28.559215+00:00",
+      "duration_seconds": 2.566147,
+      "violations": [],
+      "trace_states": 0,
+      "input_snapshot": "runs/positive-race/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/positive-race/result.json",
+          "sha256": "5895c24390c0a5dd9f9f3f824ae213a3f0fa520aca79d8d750cc7047e30abcb5",
+          "bytes": 13751
+        },
+        "manifest.json": {
+          "path": "runs/positive-race/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/positive-race/tlc.log",
+          "sha256": "b6db70108d751c3e7c80c1bc8147d55f4871bb7e8f5352919f25426bc4939335",
+          "bytes": 2654
+        },
+        "messages.json": {
+          "path": "runs/positive-race/messages.json",
+          "sha256": "7411a9f499b6b7aee4ce04885f7a2c970d7c7e7e4312150627ff1c69d59d6031",
+          "bytes": 1909
+        },
+        "runner.log": {
+          "path": "runs/positive-race/runner.log",
+          "sha256": "7c354c0ca1da556f7c13cdc4f2746b8bc01b3058c9759dadaf1d2043b07d90f7",
+          "bytes": 197
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "positive-history",
+      "kind": "positive",
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "process": {
+        "exit_code": 0,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 16093,
+        "distinct_states": 7142,
+        "remaining_states": 0
+      },
+      "started_at": "2026-11-17T14:12:28.666668+00:00",
+      "finished_at": "2026-11-17T14:12:31.441462+00:00",
+      "duration_seconds": 2.774838,
+      "violations": [],
+      "trace_states": 0,
+      "input_snapshot": "runs/positive-history/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/positive-history/result.json",
+          "sha256": "71e770a7b98d275aa8a348aa8a098f60bef91993f203a2fd731c46daeef5b5a5",
+          "bytes": 13791
+        },
+        "manifest.json": {
+          "path": "runs/positive-history/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/positive-history/tlc.log",
+          "sha256": "e774ae6969ed8c57bef5a5f3370df0abd8b18a48b3707606dbd1f6eb568f17a0",
+          "bytes": 2673
+        },
+        "messages.json": {
+          "path": "runs/positive-history/messages.json",
+          "sha256": "43cd95424e47f6b10e43cb15148272fc4d0da4d3f06db5d2c7d7ffcb68b86693",
+          "bytes": 1913
+        },
+        "runner.log": {
+          "path": "runs/positive-history/runner.log",
+          "sha256": "9ec627b4237ab0b24abd372bde3f910136c5b1d7ef7471281ccb69ae0a65e03e",
+          "bytes": 200
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "positive-predecessor-rpc",
+      "kind": "positive",
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "process": {
+        "exit_code": 0,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 720,
+        "distinct_states": 432,
+        "remaining_states": 0
+      },
+      "started_at": "2026-11-17T14:12:31.500626+00:00",
+      "finished_at": "2026-11-17T14:12:32.913629+00:00",
+      "duration_seconds": 1.413048,
+      "violations": [],
+      "trace_states": 0,
+      "input_snapshot": "runs/positive-predecessor-rpc/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/positive-predecessor-rpc/result.json",
+          "sha256": "b997678e3db612a2dc99a51df1bc31229c79041802ebfb821228db26af851174",
+          "bytes": 13893
+        },
+        "manifest.json": {
+          "path": "runs/positive-predecessor-rpc/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/positive-predecessor-rpc/tlc.log",
+          "sha256": "11a8ae6131732be8cb2f9adbfbe267bb5a28bb1e23c5bde24219723259930927",
+          "bytes": 2702
+        },
+        "messages.json": {
+          "path": "runs/positive-predecessor-rpc/messages.json",
+          "sha256": "aa1e9b6b5213e79abfb365a332ae7a8a94d2ed5a907825cea195fed08519660e",
+          "bytes": 1902
+        },
+        "runner.log": {
+          "path": "runs/positive-predecessor-rpc/runner.log",
+          "sha256": "00cff5d0c1ecea7247a582ff99471d63c8cc23a10a9078cc45d006d4e40e3591",
+          "bytes": 208
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "positive-consumer-rejection",
+      "kind": "positive",
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "process": {
+        "exit_code": 0,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 23853,
+        "distinct_states": 10402,
+        "remaining_states": 0
+      },
+      "started_at": "2026-11-17T14:12:32.978926+00:00",
+      "finished_at": "2026-11-17T14:12:37.792114+00:00",
+      "duration_seconds": 4.813232,
+      "violations": [],
+      "trace_states": 0,
+      "input_snapshot": "runs/positive-consumer-rejection/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/positive-consumer-rejection/result.json",
+          "sha256": "eb4cf15d081cc58bb76217463825383a63b855b2bf38f97f999ce8a959f47681",
+          "bytes": 13935
+        },
+        "manifest.json": {
+          "path": "runs/positive-consumer-rejection/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/positive-consumer-rejection/tlc.log",
+          "sha256": "f43b2a48d02c821c173ba41c950b7ebb57e15cb31a59e79fc999e0f58efe4f27",
+          "bytes": 2927
+        },
+        "messages.json": {
+          "path": "runs/positive-consumer-rejection/messages.json",
+          "sha256": "ebb4eb8177be92fcfbbade304e8410a09067f563e2ebe72aea9a4c3efd46b70f",
+          "bytes": 2122
+        },
+        "runner.log": {
+          "path": "runs/positive-consumer-rejection/runner.log",
+          "sha256": "caef6a1488fcc6894885bcdbdc1c53a9cc1efe8be304520e84ba08d4fe6e909d",
+          "bytes": 211
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "positive-identity",
+      "kind": "positive",
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "process": {
+        "exit_code": 0,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 175915,
+        "distinct_states": 72013,
+        "remaining_states": 0
+      },
+      "started_at": "2026-11-17T14:12:37.883721+00:00",
+      "finished_at": "2026-11-17T14:12:50.559918+00:00",
+      "duration_seconds": 12.676241,
+      "violations": [],
+      "trace_states": 0,
+      "input_snapshot": "runs/positive-identity/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/positive-identity/result.json",
+          "sha256": "2a0a2219774c3fbb5fe3b7d73ac0729711a10a7a7d9cea8cee3f85365d72bf0c",
+          "bytes": 13809
+        },
+        "manifest.json": {
+          "path": "runs/positive-identity/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/positive-identity/tlc.log",
+          "sha256": "f08d0eedd79a77befe64124d3fdb6d5a5760fc8c3db58eda55272b42310afc11",
+          "bytes": 2935
+        },
+        "messages.json": {
+          "path": "runs/positive-identity/messages.json",
+          "sha256": "088ffa05bd0d9b89dea3c80e19e9281eadc47e2ef01c4ba88912cc30e1b43a4b",
+          "bytes": 2181
+        },
+        "runner.log": {
+          "path": "runs/positive-identity/runner.log",
+          "sha256": "3917f9e0ed6148f9c998753d7fb5da5eb8f683132ac8dde9608254f45204cd4b",
+          "bytes": 201
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "positive-failure",
+      "kind": "positive",
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "process": {
+        "exit_code": 0,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 118043,
+        "distinct_states": 46338,
+        "remaining_states": 0
+      },
+      "started_at": "2026-11-17T14:12:50.677760+00:00",
+      "finished_at": "2026-11-17T14:12:58.520856+00:00",
+      "duration_seconds": 7.843143,
+      "violations": [],
+      "trace_states": 0,
+      "input_snapshot": "runs/positive-failure/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/positive-failure/result.json",
+          "sha256": "ab6d111fab060912e6ca6675c084e0e432e3408629dd33e3b65d5d5681390264",
+          "bytes": 13794
+        },
+        "manifest.json": {
+          "path": "runs/positive-failure/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/positive-failure/tlc.log",
+          "sha256": "b95a45c91831b5f36f3c8986470ef7e1d29354bcf2e7bdcc5751f2b2721054cf",
+          "bytes": 2927
+        },
+        "messages.json": {
+          "path": "runs/positive-failure/messages.json",
+          "sha256": "f3a871ec364acc285fdb4b6d545027d3aec64b00ffc59b747182e0ab5dd301c7",
+          "bytes": 2178
+        },
+        "runner.log": {
+          "path": "runs/positive-failure/runner.log",
+          "sha256": "82bc9f212bf561d6c2d277090c9d0de1a5b6558a2628643a01d4013238abdf47",
+          "bytes": 200
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "positive-ineligible",
+      "kind": "positive",
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "process": {
+        "exit_code": 0,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 6969,
+        "distinct_states": 2966,
+        "remaining_states": 0
+      },
+      "started_at": "2026-11-17T14:12:58.588963+00:00",
+      "finished_at": "2026-11-17T14:13:00.691462+00:00",
+      "duration_seconds": 2.102541,
+      "violations": [],
+      "trace_states": 0,
+      "input_snapshot": "runs/positive-ineligible/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/positive-ineligible/result.json",
+          "sha256": "6b44aca618b3b7c958129299bb94e28058eda630ff00ccaf7a6dd5f5b3ecec59",
+          "bytes": 13830
+        },
+        "manifest.json": {
+          "path": "runs/positive-ineligible/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/positive-ineligible/tlc.log",
+          "sha256": "0abd1e1c8cd63644a1abe233b359341dd69b8d528f2f401bbbd87837eca17026",
+          "bytes": 2685
+        },
+        "messages.json": {
+          "path": "runs/positive-ineligible/messages.json",
+          "sha256": "e79f198933d13dc80d4111c7cf09b4e4abde48525133c4d0c927e0c8d5f7e7f0",
+          "bytes": 1910
+        },
+        "runner.log": {
+          "path": "runs/positive-ineligible/runner.log",
+          "sha256": "9f9bb8740bf535c7996788c8cf802ecc999cd71ecef76eac287122fa31359c1a",
+          "bytes": 203
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "positive-future-request",
+      "kind": "positive",
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "process": {
+        "exit_code": 0,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 6369,
+        "distinct_states": 2746,
+        "remaining_states": 0
+      },
+      "started_at": "2026-11-17T14:13:00.757152+00:00",
+      "finished_at": "2026-11-17T14:13:03.243730+00:00",
+      "duration_seconds": 2.486622,
+      "violations": [],
+      "trace_states": 0,
+      "input_snapshot": "runs/positive-future-request/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/positive-future-request/result.json",
+          "sha256": "362c8b6af8b0714a9257c6eaf4730ca657e69e876b51145cff27bd1312244b23",
+          "bytes": 13881
+        },
+        "manifest.json": {
+          "path": "runs/positive-future-request/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/positive-future-request/tlc.log",
+          "sha256": "9194201ee4e0261e84e8611990852996a300f1d9380694970472eb6d2a99cf41",
+          "bytes": 2704
+        },
+        "messages.json": {
+          "path": "runs/positive-future-request/messages.json",
+          "sha256": "b952568190fff17a7332d7ccaf0a5bf23594ca8bb48b6492e321ced7b444c0b7",
+          "bytes": 1909
+        },
+        "runner.log": {
+          "path": "runs/positive-future-request/runner.log",
+          "sha256": "d1d5b6a3e58bbad24b274e25c5c9447be56a74a1ae685678f282eb5b4f1fbded",
+          "bytes": 207
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "positive-page-two",
+      "kind": "positive",
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "process": {
+        "exit_code": 0,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 14717,
+        "distinct_states": 6198,
+        "remaining_states": 0
+      },
+      "started_at": "2026-11-17T14:13:03.330886+00:00",
+      "finished_at": "2026-11-17T14:13:06.437385+00:00",
+      "duration_seconds": 3.106546,
+      "violations": [],
+      "trace_states": 0,
+      "input_snapshot": "runs/positive-page-two/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/positive-page-two/result.json",
+          "sha256": "a0c43421a8704cee674173f4154a5ac742c3d0b1aef9002bd8c3121f315078fe",
+          "bytes": 13804
+        },
+        "manifest.json": {
+          "path": "runs/positive-page-two/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/positive-page-two/tlc.log",
+          "sha256": "71a9b662cf111457cbf4e989d5b4f3f5ea2026d22f40269156e02ee0d52fec7b",
+          "bytes": 2678
+        },
+        "messages.json": {
+          "path": "runs/positive-page-two/messages.json",
+          "sha256": "175d6d5ef06cdc264a8876dd1426039472557e1c8971cc6d5bae22d24f5977e1",
+          "bytes": 1913
+        },
+        "runner.log": {
+          "path": "runs/positive-page-two/runner.log",
+          "sha256": "63f09caabb36b37f6db6646576448cf3dc57ebf761d7122f09cd71e56af0a475",
+          "bytes": 201
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "negative-type-TypeOK",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 6,
+        "distinct_states": 5,
+        "remaining_states": 3
+      },
+      "started_at": "2026-11-17T14:13:06.496905+00:00",
+      "finished_at": "2026-11-17T14:13:08.364672+00:00",
+      "duration_seconds": 1.867814,
+      "violations": [
+        "Invariant TypeOK is violated."
+      ],
+      "trace_states": 2,
+      "input_snapshot": "runs/negative-type-TypeOK/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/negative-type-TypeOK/result.json",
+          "sha256": "2f98bbb79b15c723775f010ce2b0acd059d236f0270ff295ac482bdff842210f",
+          "bytes": 13053
+        },
+        "manifest.json": {
+          "path": "runs/negative-type-TypeOK/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/negative-type-TypeOK/tlc.log",
+          "sha256": "de682c38996662df974cd13b2f53f5f35e5752b09aab7d13bc9952cb731c5e1d",
+          "bytes": 10051
+        },
+        "messages.json": {
+          "path": "runs/negative-type-TypeOK/messages.json",
+          "sha256": "8c5f597e702ae90fffcb91dc99d0e6c84410417c4dd8b9a08ae0dba70e93ca49",
+          "bytes": 9646
+        },
+        "runner.log": {
+          "path": "runs/negative-type-TypeOK/runner.log",
+          "sha256": "0ba0b1c974cd0f4b7d81e676d54863b7cbc126e9a2967cc6849be91b5732e887",
+          "bytes": 211
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "negative-parallel-lane-LaneDiscipline",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 3,
+        "distinct_states": 3,
+        "remaining_states": 1
+      },
+      "started_at": "2026-11-17T14:13:08.441878+00:00",
+      "finished_at": "2026-11-17T14:13:09.916633+00:00",
+      "duration_seconds": 1.47481,
+      "violations": [
+        "Invariant LaneDiscipline is violated."
+      ],
+      "trace_states": 2,
+      "input_snapshot": "runs/negative-parallel-lane-LaneDiscipline/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/negative-parallel-lane-LaneDiscipline/result.json",
+          "sha256": "23d174e661b800cca3f0de85af07c5e21e5fff35ec1b831d294d05b8380d34ec",
+          "bytes": 13298
+        },
+        "manifest.json": {
+          "path": "runs/negative-parallel-lane-LaneDiscipline/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/negative-parallel-lane-LaneDiscipline/tlc.log",
+          "sha256": "389fd2ba82f2a611548ff5c3a7e70731492c8fd8b93959f8e98f6b09efd40b87",
+          "bytes": 10143
+        },
+        "messages.json": {
+          "path": "runs/negative-parallel-lane-LaneDiscipline/messages.json",
+          "sha256": "369bcf4f776105e87792133da4c20e8afcdd1f360c0c7dd71cd8e0cd42ea0e9d",
+          "bytes": 9653
+        },
+        "runner.log": {
+          "path": "runs/negative-parallel-lane-LaneDiscipline/runner.log",
+          "sha256": "0366ab8000c0b636dffc59e8179b3488d1c8b0c5afafd31cea441ed5e3625153",
+          "bytes": 228
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "negative-bypass-rpc-LaneDiscipline",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 268,
+        "distinct_states": 148,
+        "remaining_states": 53
+      },
+      "started_at": "2026-11-17T14:13:09.995232+00:00",
+      "finished_at": "2026-11-17T14:13:12.371231+00:00",
+      "duration_seconds": 2.376044,
+      "violations": [
+        "Invariant LaneDiscipline is violated."
+      ],
+      "trace_states": 11,
+      "input_snapshot": "runs/negative-bypass-rpc-LaneDiscipline/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/negative-bypass-rpc-LaneDiscipline/result.json",
+          "sha256": "4d076bd5970fbd65deb6faf066e1fa0be32d6cbd5a2c06fc27190525c2246b56",
+          "bytes": 13272
+        },
+        "manifest.json": {
+          "path": "runs/negative-bypass-rpc-LaneDiscipline/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/negative-bypass-rpc-LaneDiscipline/tlc.log",
+          "sha256": "e742c56a5bc8b32690d8bc317e044c5dd634d9667cf74411a88b7d8472cc2969",
+          "bytes": 49675
+        },
+        "messages.json": {
+          "path": "runs/negative-bypass-rpc-LaneDiscipline/messages.json",
+          "sha256": "0f81b032614b5207a09b67e725a7246df2d9278da057720155d62345b3399f66",
+          "bytes": 51153
+        },
+        "runner.log": {
+          "path": "runs/negative-bypass-rpc-LaneDiscipline/runner.log",
+          "sha256": "7fc9968837a9894ee45959b60faec3d8460af7618f59a08c785222842f8fbb98",
+          "bytes": 225
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "negative-skip-original-OriginalAuthority",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 181,
+        "distinct_states": 113,
+        "remaining_states": 40
+      },
+      "started_at": "2026-11-17T14:13:12.483063+00:00",
+      "finished_at": "2026-11-17T14:13:14.840803+00:00",
+      "duration_seconds": 2.357789,
+      "violations": [
+        "Invariant OriginalAuthority is violated."
+      ],
+      "trace_states": 10,
+      "input_snapshot": "runs/negative-skip-original-OriginalAuthority/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/negative-skip-original-OriginalAuthority/result.json",
+          "sha256": "e9e00117b6f5487d6a100ff6510fa6c23f107382ca842b5c66be8da8d5f899bc",
+          "bytes": 13358
+        },
+        "manifest.json": {
+          "path": "runs/negative-skip-original-OriginalAuthority/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/negative-skip-original-OriginalAuthority/tlc.log",
+          "sha256": "2b94461698b8e56512118bfcf5b5981b5ad52120b1e202a076e98c8788b4ba80",
+          "bytes": 45775
+        },
+        "messages.json": {
+          "path": "runs/negative-skip-original-OriginalAuthority/messages.json",
+          "sha256": "70c3c21e4073e3a02afea283ed28ebc91a89a06dfd9f57dfd74fe1c31b9d8ad3",
+          "bytes": 47040
+        },
+        "runner.log": {
+          "path": "runs/negative-skip-original-OriginalAuthority/runner.log",
+          "sha256": "b0f0874e449ab84c9274e9b01b24a0025db1f8fe537a2e13058c67c471e778da",
+          "bytes": 231
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "negative-upgrade-old-RaceEligibility",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 166,
+        "distinct_states": 104,
+        "remaining_states": 31
+      },
+      "started_at": "2026-11-17T14:13:14.948024+00:00",
+      "finished_at": "2026-11-17T14:13:17.330036+00:00",
+      "duration_seconds": 2.382056,
+      "violations": [
+        "Invariant RaceEligibility is violated."
+      ],
+      "trace_states": 11,
+      "input_snapshot": "runs/negative-upgrade-old-RaceEligibility/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/negative-upgrade-old-RaceEligibility/result.json",
+          "sha256": "5075e1d31bb62ae714493e7a710f102e6e8dd385a5e8dfa5c1d8ec7e1a1d27cc",
+          "bytes": 13301
+        },
+        "manifest.json": {
+          "path": "runs/negative-upgrade-old-RaceEligibility/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/negative-upgrade-old-RaceEligibility/tlc.log",
+          "sha256": "3459746eff3e7298a6272d3016c55f78b17176c2935d0d90009086791672ce55",
+          "bytes": 49601
+        },
+        "messages.json": {
+          "path": "runs/negative-upgrade-old-RaceEligibility/messages.json",
+          "sha256": "2a5972d35fcc0bd0960a9406d5e57fde3d501296230eb083f1829f0dbeb14db7",
+          "bytes": 51075
+        },
+        "runner.log": {
+          "path": "runs/negative-upgrade-old-RaceEligibility/runner.log",
+          "sha256": "60637428751692e8b3bd34753579a8366896127615201cd661da6ee15066a461",
+          "bytes": 227
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "negative-upgrade-rpc-RaceEligibility",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 114,
+        "distinct_states": 71,
+        "remaining_states": 11
+      },
+      "started_at": "2026-11-17T14:13:17.460552+00:00",
+      "finished_at": "2026-11-17T14:13:20.398926+00:00",
+      "duration_seconds": 2.938711,
+      "violations": [
+        "Invariant RaceEligibility is violated."
+      ],
+      "trace_states": 10,
+      "input_snapshot": "runs/negative-upgrade-rpc-RaceEligibility/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/negative-upgrade-rpc-RaceEligibility/result.json",
+          "sha256": "320c7ec706c533af22fce5161a8758c040456aa537d47166df5ee87ddae82ede",
+          "bytes": 13300
+        },
+        "manifest.json": {
+          "path": "runs/negative-upgrade-rpc-RaceEligibility/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/negative-upgrade-rpc-RaceEligibility/tlc.log",
+          "sha256": "66008cc80fb313f596e2c64273462362d825959af213b1c907cf598bfd3ec438",
+          "bytes": 45721
+        },
+        "messages.json": {
+          "path": "runs/negative-upgrade-rpc-RaceEligibility/messages.json",
+          "sha256": "40b395f74e7bdd5365a653cc82923e5d7a3209b6ce53665d31f43ddfbe2a3bf8",
+          "bytes": 47006
+        },
+        "runner.log": {
+          "path": "runs/negative-upgrade-rpc-RaceEligibility/runner.log",
+          "sha256": "4508a1e4e2f1946d7981da6109f43c3d9c7180e4645e51e1e09b9a682fb61707",
+          "bytes": 227
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "negative-force-full-RaceEligibility",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 177,
+        "distinct_states": 113,
+        "remaining_states": 40
+      },
+      "started_at": "2026-11-17T14:13:20.542798+00:00",
+      "finished_at": "2026-11-17T14:13:22.917816+00:00",
+      "duration_seconds": 2.37528,
+      "violations": [
+        "Invariant RaceEligibility is violated."
+      ],
+      "trace_states": 10,
+      "input_snapshot": "runs/negative-force-full-RaceEligibility/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/negative-force-full-RaceEligibility/result.json",
+          "sha256": "be65b49e236d37ca968ee54a4946e77b6f8fc7444a3cbca9fa97e131c8e7ac1b",
+          "bytes": 13287
+        },
+        "manifest.json": {
+          "path": "runs/negative-force-full-RaceEligibility/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/negative-force-full-RaceEligibility/tlc.log",
+          "sha256": "274c785c4cee69fbb035fe4ecb52fb4e3f6670f074946fa67d8caf47bdc2f758",
+          "bytes": 45767
+        },
+        "messages.json": {
+          "path": "runs/negative-force-full-RaceEligibility/messages.json",
+          "sha256": "7210ccfcaf60b37f8d8ab6797dbe8b10beb4a1583d79e9ab69681a038ed358b9",
+          "bytes": 47057
+        },
+        "runner.log": {
+          "path": "runs/negative-force-full-RaceEligibility/runner.log",
+          "sha256": "3c635026c63f7f4463f8467297d43e04fffc6b7dec3bf42b0290104cb0d57aa4",
+          "bytes": 226
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "negative-fake-proof-RaceOrigin",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 108,
+        "distinct_states": 79,
+        "remaining_states": 25
+      },
+      "started_at": "2026-11-17T14:13:23.070415+00:00",
+      "finished_at": "2026-11-17T14:13:25.439195+00:00",
+      "duration_seconds": 2.368825,
+      "violations": [
+        "Invariant RaceOrigin is violated."
+      ],
+      "trace_states": 10,
+      "input_snapshot": "runs/negative-fake-proof-RaceOrigin/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/negative-fake-proof-RaceOrigin/result.json",
+          "sha256": "b13ae084e5ce71c11973550c401a0ad674ec4932422b6fbf6b8fead7f164bafc",
+          "bytes": 13211
+        },
+        "manifest.json": {
+          "path": "runs/negative-fake-proof-RaceOrigin/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/negative-fake-proof-RaceOrigin/tlc.log",
+          "sha256": "222c835d9012fdd07dba4e86d0942f9c0cda44e0234500a4ed6a107c67f1a482",
+          "bytes": 45080
+        },
+        "messages.json": {
+          "path": "runs/negative-fake-proof-RaceOrigin/messages.json",
+          "sha256": "366bf57c45d0428fb07b546558b40d8bc06b9237421960dd877c4ae07c8ba500",
+          "bytes": 46360
+        },
+        "runner.log": {
+          "path": "runs/negative-fake-proof-RaceOrigin/runner.log",
+          "sha256": "8e8276b3fb750d1a7e0c5f5d95cebbac6030ef29ee12b28e6bb8e19de6abc7c0",
+          "bytes": 221
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "negative-head-start-ReadBoundary",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 235,
+        "distinct_states": 140,
+        "remaining_states": 49
+      },
+      "started_at": "2026-11-17T14:13:25.537734+00:00",
+      "finished_at": "2026-11-17T14:13:27.437760+00:00",
+      "duration_seconds": 1.90007,
+      "violations": [
+        "Invariant ReadBoundary is violated."
+      ],
+      "trace_states": 11,
+      "input_snapshot": "runs/negative-head-start-ReadBoundary/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/negative-head-start-ReadBoundary/result.json",
+          "sha256": "68138708e7745767fb02ab8bf04d557d04ee0c863345ae421de9d4720603b176",
+          "bytes": 13241
+        },
+        "manifest.json": {
+          "path": "runs/negative-head-start-ReadBoundary/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/negative-head-start-ReadBoundary/tlc.log",
+          "sha256": "b234c67657e376dd6db471300763549fc9c913b46c547fa64371b1163e94adbc",
+          "bytes": 49580
+        },
+        "messages.json": {
+          "path": "runs/negative-head-start-ReadBoundary/messages.json",
+          "sha256": "d955e1b555abbdd8af64e087685dd176e2283931c1d01e1d40203b71d88d7319",
+          "bytes": 51074
+        },
+        "runner.log": {
+          "path": "runs/negative-head-start-ReadBoundary/runner.log",
+          "sha256": "9dd2967f52f5793b76d3e0891a4e5b6c6441b2c3f1e4a61c0b62a3f43a3dd10e",
+          "bytes": 223
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "negative-partial-overlap-ReadBoundary",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 183,
+        "distinct_states": 113,
+        "remaining_states": 40
+      },
+      "started_at": "2026-11-17T14:13:27.518436+00:00",
+      "finished_at": "2026-11-17T14:13:29.557174+00:00",
+      "duration_seconds": 2.038783,
+      "violations": [
+        "Invariant ReadBoundary is violated."
+      ],
+      "trace_states": 10,
+      "input_snapshot": "runs/negative-partial-overlap-ReadBoundary/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/negative-partial-overlap-ReadBoundary/result.json",
+          "sha256": "a7f25ee9dbe671deb9ce88105ea1fe2a54a4cfce81b1eb3aef7d5f2ad566fa7f",
+          "bytes": 13312
+        },
+        "manifest.json": {
+          "path": "runs/negative-partial-overlap-ReadBoundary/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/negative-partial-overlap-ReadBoundary/tlc.log",
+          "sha256": "5394fff68c89dc04a471c961adea3c5c6f70a0395de298d3c46b1a0b43e5b1c7",
+          "bytes": 45747
+        },
+        "messages.json": {
+          "path": "runs/negative-partial-overlap-ReadBoundary/messages.json",
+          "sha256": "a7c4dacf72bba1e03931f20aa89ec63dcd7f9e616fc81239a9459a02de73a1b7",
+          "bytes": 47027
+        },
+        "runner.log": {
+          "path": "runs/negative-partial-overlap-ReadBoundary/runner.log",
+          "sha256": "122017440b3b1d26f4eebeb96c7a08b6fa1395a129c008026495c65844df3184",
+          "bytes": 228
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "negative-fake-proof-SentPrefix",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 27,
+        "distinct_states": 17,
+        "remaining_states": 4
+      },
+      "started_at": "2026-11-17T14:13:29.673607+00:00",
+      "finished_at": "2026-11-17T14:13:31.709175+00:00",
+      "duration_seconds": 2.035616,
+      "violations": [
+        "Invariant SentPrefix is violated."
+      ],
+      "trace_states": 5,
+      "input_snapshot": "runs/negative-fake-proof-SentPrefix/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/negative-fake-proof-SentPrefix/result.json",
+          "sha256": "70159f7e6b400d75a6aef5024f010a4a1f5108ff281a8418efa733c872474d3e",
+          "bytes": 13209
+        },
+        "manifest.json": {
+          "path": "runs/negative-fake-proof-SentPrefix/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/negative-fake-proof-SentPrefix/tlc.log",
+          "sha256": "8b823b3a20bda8ee96ce2098631ef4d84b96dc7a8f3b86e13f85ddd0a1c0926d",
+          "bytes": 23139
+        },
+        "messages.json": {
+          "path": "runs/negative-fake-proof-SentPrefix/messages.json",
+          "sha256": "d8bc0007f2a1e8c4ce1c1e2ed589abc268525212b071531aa5904d7c7de2fe98",
+          "bytes": 23333
+        },
+        "runner.log": {
+          "path": "runs/negative-fake-proof-SentPrefix/runner.log",
+          "sha256": "7adbc004c4dc603d5637b5bf517e8efd199df9d11136767bf830b810e072056e",
+          "bytes": 221
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "negative-overwrite-installed-InstalledSeparate",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 27,
+        "distinct_states": 17,
+        "remaining_states": 4
+      },
+      "started_at": "2026-11-17T14:13:31.794226+00:00",
+      "finished_at": "2026-11-17T14:13:34.466903+00:00",
+      "duration_seconds": 2.67272,
+      "violations": [
+        "Invariant InstalledSeparate is violated."
+      ],
+      "trace_states": 5,
+      "input_snapshot": "runs/negative-overwrite-installed-InstalledSeparate/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/negative-overwrite-installed-InstalledSeparate/result.json",
+          "sha256": "4ac2b565407b371682f22608c336fe764a55d27f1b3327ccb5a6ce3abbffac8d",
+          "bytes": 13439
+        },
+        "manifest.json": {
+          "path": "runs/negative-overwrite-installed-InstalledSeparate/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/negative-overwrite-installed-InstalledSeparate/tlc.log",
+          "sha256": "c0745c83c58ec91bd3056497b75c837c569effec4178fdbb3dcb6acab997e212",
+          "bytes": 23352
+        },
+        "messages.json": {
+          "path": "runs/negative-overwrite-installed-InstalledSeparate/messages.json",
+          "sha256": "3da3d92864b4094a0b84cc9b633930acad5eb3e5abbe36e5ad41a20961a98c46",
+          "bytes": 23473
+        },
+        "runner.log": {
+          "path": "runs/negative-overwrite-installed-InstalledSeparate/runner.log",
+          "sha256": "f3f29f6b02667320ee0b277bf369d85c6ff0c5ad28e103daac13dd5f371bcc46",
+          "bytes": 237
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "negative-stale-send-NoStaleSend",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 217,
+        "distinct_states": 136,
+        "remaining_states": 62
+      },
+      "started_at": "2026-11-17T14:13:34.550416+00:00",
+      "finished_at": "2026-11-17T14:13:37.143630+00:00",
+      "duration_seconds": 2.593555,
+      "violations": [
+        "Invariant NoStaleSend is violated."
+      ],
+      "trace_states": 6,
+      "input_snapshot": "runs/negative-stale-send-NoStaleSend/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/negative-stale-send-NoStaleSend/result.json",
+          "sha256": "bfc4f84aea365f997a9983e4dbc339dba35ab4e3ad715677233e42f5f1be9bc4",
+          "bytes": 13229
+        },
+        "manifest.json": {
+          "path": "runs/negative-stale-send-NoStaleSend/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/negative-stale-send-NoStaleSend/tlc.log",
+          "sha256": "581b23d2d8a96694386c2d6c77f6060d305f4842be96faa88b581876ea9a7222",
+          "bytes": 27493
+        },
+        "messages.json": {
+          "path": "runs/negative-stale-send-NoStaleSend/messages.json",
+          "sha256": "6eb43e3c6d232286d25d367ecac6b13452b4271e6b5ad5f4881f3bc0b7c97c92",
+          "bytes": 27899
+        },
+        "runner.log": {
+          "path": "runs/negative-stale-send-NoStaleSend/runner.log",
+          "sha256": "7ea55f040033893d379e831d45a21b3e1ddc4e32038962ad75a3e4b8d10fc07c",
+          "bytes": 222
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "negative-head-after-read-FixedAuthorizedHead",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 34,
+        "distinct_states": 22,
+        "remaining_states": 5
+      },
+      "started_at": "2026-11-17T14:13:37.272925+00:00",
+      "finished_at": "2026-11-17T14:13:39.184258+00:00",
+      "duration_seconds": 1.911781,
+      "violations": [
+        "Invariant FixedAuthorizedHead is violated."
+      ],
+      "trace_states": 6,
+      "input_snapshot": "runs/negative-head-after-read-FixedAuthorizedHead/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/negative-head-after-read-FixedAuthorizedHead/result.json",
+          "sha256": "f7e97557c2576fd8f1bb4e5ef3da086867eb4d75c77db3f26cdd1ea1d0f19ed2",
+          "bytes": 13414
+        },
+        "manifest.json": {
+          "path": "runs/negative-head-after-read-FixedAuthorizedHead/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/negative-head-after-read-FixedAuthorizedHead/tlc.log",
+          "sha256": "d2dfa7aa08a667cbbce3a180e77a955be0d1f043d67c072819276cd1ed54f17e",
+          "bytes": 27566
+        },
+        "messages.json": {
+          "path": "runs/negative-head-after-read-FixedAuthorizedHead/messages.json",
+          "sha256": "7a2112d27c3ec1b8f6faf2d45e569b4c65b889d104e08a30e94a66792b104120",
+          "bytes": 27907
+        },
+        "runner.log": {
+          "path": "runs/negative-head-after-read-FixedAuthorizedHead/runner.log",
+          "sha256": "e659b3e3ff98bec3689e4ff7d66c502289bd0dfd90c931c3b2e5cabb767ac6f0",
+          "bytes": 235
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "negative-double-apply-ConsumerSafety",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 38,
+        "distinct_states": 25,
+        "remaining_states": 7
+      },
+      "started_at": "2026-11-17T14:13:39.359714+00:00",
+      "finished_at": "2026-11-17T14:13:41.282209+00:00",
+      "duration_seconds": 1.922545,
+      "violations": [
+        "Invariant ConsumerSafety is violated."
+      ],
+      "trace_states": 6,
+      "input_snapshot": "runs/negative-double-apply-ConsumerSafety/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/negative-double-apply-ConsumerSafety/result.json",
+          "sha256": "07246cbd83b68f0784e1f25f3c66b0d7055d5424a5d36e089b199f6d4b2d6e00",
+          "bytes": 13297
+        },
+        "manifest.json": {
+          "path": "runs/negative-double-apply-ConsumerSafety/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/negative-double-apply-ConsumerSafety/tlc.log",
+          "sha256": "c2c4dd414d65be344d2e9d44ab304de722c29e1cf7dc8df8ea46cb50e190ba2c",
+          "bytes": 27888
+        },
+        "messages.json": {
+          "path": "runs/negative-double-apply-ConsumerSafety/messages.json",
+          "sha256": "6149556eb8722ee6d8319fc661867a7020a7f0152ce77a40ee7fb6d7230e5359",
+          "bytes": 28284
+        },
+        "runner.log": {
+          "path": "runs/negative-double-apply-ConsumerSafety/runner.log",
+          "sha256": "5254469b71beb1b563bdc14618058f2628563d3f1ea707e7efafe6fe2bba8335",
+          "bytes": 227
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "negative-skip-gap-ConsumerSafety",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 904,
+        "distinct_states": 460,
+        "remaining_states": 105
+      },
+      "started_at": "2026-11-17T14:13:41.471125+00:00",
+      "finished_at": "2026-11-17T14:13:43.410246+00:00",
+      "duration_seconds": 1.939178,
+      "violations": [
+        "Invariant ConsumerSafety is violated."
+      ],
+      "trace_states": 14,
+      "input_snapshot": "runs/negative-skip-gap-ConsumerSafety/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/negative-skip-gap-ConsumerSafety/result.json",
+          "sha256": "00419035e3178e13045084290ff5246dbb1560c901b7ae29e133393c5a4f27c2",
+          "bytes": 13245
+        },
+        "manifest.json": {
+          "path": "runs/negative-skip-gap-ConsumerSafety/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/negative-skip-gap-ConsumerSafety/tlc.log",
+          "sha256": "698f6e9e5b57faf95ddf0ae0bb36acf291792b4180549b9c2686f6f35bd536dc",
+          "bytes": 66215
+        },
+        "messages.json": {
+          "path": "runs/negative-skip-gap-ConsumerSafety/messages.json",
+          "sha256": "9686b6d8db4259f2ed3971b92c89271a351cc6efdd35ef5846a57973bbc58955",
+          "bytes": 68541
+        },
+        "runner.log": {
+          "path": "runs/negative-skip-gap-ConsumerSafety/runner.log",
+          "sha256": "38c1a04352ff9784145c663bbeac3549f133793416bdd7a61edf42a0fbb2dad9",
+          "bytes": 223
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "negative-defer-consumer-SynchronousConsumption",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 1252,
+        "distinct_states": 603,
+        "remaining_states": 150
+      },
+      "started_at": "2026-11-17T14:13:43.490509+00:00",
+      "finished_at": "2026-11-17T14:13:45.061663+00:00",
+      "duration_seconds": 1.5712,
+      "violations": [
+        "Invariant SynchronousConsumption is violated."
+      ],
+      "trace_states": 14,
+      "input_snapshot": "runs/negative-defer-consumer-SynchronousConsumption/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/negative-defer-consumer-SynchronousConsumption/result.json",
+          "sha256": "b07aec855095f86ebdb33cbc5fddb16ecc20a0e5ed2751a508e77799b7190022",
+          "bytes": 13448
+        },
+        "manifest.json": {
+          "path": "runs/negative-defer-consumer-SynchronousConsumption/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/negative-defer-consumer-SynchronousConsumption/tlc.log",
+          "sha256": "e8ea479b0b0a9d7abac0a50e63b20861899c62587732154fb5170cda16108a17",
+          "bytes": 66399
+        },
+        "messages.json": {
+          "path": "runs/negative-defer-consumer-SynchronousConsumption/messages.json",
+          "sha256": "757e648fff03925063f937524765902dd8228530a9c55cd69b70676848fe7d50",
+          "bytes": 68663
+        },
+        "runner.log": {
+          "path": "runs/negative-defer-consumer-SynchronousConsumption/runner.log",
+          "sha256": "f5471844a447778ccb87c3845adbb257de8c950f8ecfddfbe5f4936dbeddef44",
+          "bytes": 237
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "negative-read-through-writer-LockExclusion",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 335,
+        "distinct_states": 182,
+        "remaining_states": 64
+      },
+      "started_at": "2026-11-17T14:13:45.256511+00:00",
+      "finished_at": "2026-11-17T14:13:47.063163+00:00",
+      "duration_seconds": 1.80697,
+      "violations": [
+        "Invariant LockExclusion is violated."
+      ],
+      "trace_states": 11,
+      "input_snapshot": "runs/negative-read-through-writer-LockExclusion/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/negative-read-through-writer-LockExclusion/result.json",
+          "sha256": "d14bd2db59f5ca83bb3b85735c6490384631cdf6602362e335f620026f1d1846",
+          "bytes": 13382
+        },
+        "manifest.json": {
+          "path": "runs/negative-read-through-writer-LockExclusion/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/negative-read-through-writer-LockExclusion/tlc.log",
+          "sha256": "fc7421bfe9d70101006624258fbd84e34d558ae594a7f1f12c09ba959f82956a",
+          "bytes": 50419
+        },
+        "messages.json": {
+          "path": "runs/negative-read-through-writer-LockExclusion/messages.json",
+          "sha256": "0f1b84ce48dd09d9596d912c34009cb87e5d9240a928bdd0e990b97b05fb7a15",
+          "bytes": 51894
+        },
+        "runner.log": {
+          "path": "runs/negative-read-through-writer-LockExclusion/runner.log",
+          "sha256": "680fff343d29e29f9eefbf775a9ef819175b223911063af618ffd53117188e5c",
+          "bytes": 233
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "negative-early-g-ProgressCut",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 1216,
+        "distinct_states": 562,
+        "remaining_states": 126
+      },
+      "started_at": "2026-11-17T14:13:47.173732+00:00",
+      "finished_at": "2026-11-17T14:13:48.870343+00:00",
+      "duration_seconds": 1.696661,
+      "violations": [
+        "Invariant ProgressCut is violated."
+      ],
+      "trace_states": 15,
+      "input_snapshot": "runs/negative-early-g-ProgressCut/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/negative-early-g-ProgressCut/result.json",
+          "sha256": "a937b7adc18d9fcaae92e237d9ff6a2d2463984b3af58a1eb988498460d0b291",
+          "bytes": 13187
+        },
+        "manifest.json": {
+          "path": "runs/negative-early-g-ProgressCut/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/negative-early-g-ProgressCut/tlc.log",
+          "sha256": "87bd11c1254400647bda32e45c2c35a479bfa28b3c508d850b95290a6e17d4cb",
+          "bytes": 69683
+        },
+        "messages.json": {
+          "path": "runs/negative-early-g-ProgressCut/messages.json",
+          "sha256": "3d14bdfcac7845f3b027b51e8dde26c8ef007c0af73c464be6a709a0fb4f3388",
+          "bytes": 72162
+        },
+        "runner.log": {
+          "path": "runs/negative-early-g-ProgressCut/runner.log",
+          "sha256": "6e9bc13ae367ed9ecdefb0022044c20ee7e2571a0e5b2b04c81b300f9f928b16",
+          "bytes": 219
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "negative-early-owner-OwnerSettled",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 31,
+        "distinct_states": 18,
+        "remaining_states": 11
+      },
+      "started_at": "2026-11-17T14:13:48.956255+00:00",
+      "finished_at": "2026-11-17T14:13:51.079540+00:00",
+      "duration_seconds": 2.123332,
+      "violations": [
+        "Invariant OwnerSettled is violated."
+      ],
+      "trace_states": 3,
+      "input_snapshot": "runs/negative-early-owner-OwnerSettled/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/negative-early-owner-OwnerSettled/result.json",
+          "sha256": "02658817b92ebe744f3679ff4f28dc59cc6ac25ac0aa2288a7d9a0b252430bf5",
+          "bytes": 13255
+        },
+        "manifest.json": {
+          "path": "runs/negative-early-owner-OwnerSettled/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/negative-early-owner-OwnerSettled/tlc.log",
+          "sha256": "c0d800744076646c2a599ccbdda25a9c11b747d5bcc8e0b9ac8806f42d779747",
+          "bytes": 14144
+        },
+        "messages.json": {
+          "path": "runs/negative-early-owner-OwnerSettled/messages.json",
+          "sha256": "7cfaaf3408d9fe6db8b5efc839eabc3945978f180787b1a1f00665a48f5b2877",
+          "bytes": 13873
+        },
+        "runner.log": {
+          "path": "runs/negative-early-owner-OwnerSettled/runner.log",
+          "sha256": "2f666cc702922ca098a55c533f7eb90caae97560d1ee8e6a68bf4fc8e7835ec9",
+          "bytes": 224
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "negative-cancel-sql-NoCancellation",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 62,
+        "distinct_states": 33,
+        "remaining_states": 17
+      },
+      "started_at": "2026-11-17T14:13:51.225087+00:00",
+      "finished_at": "2026-11-17T14:13:53.474264+00:00",
+      "duration_seconds": 2.249278,
+      "violations": [
+        "Invariant NoCancellation is violated."
+      ],
+      "trace_states": 4,
+      "input_snapshot": "runs/negative-cancel-sql-NoCancellation/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/negative-cancel-sql-NoCancellation/result.json",
+          "sha256": "88d7938e26613c124f7cce08aef901f096e84dab442491a90a90109895c04893",
+          "bytes": 13271
+        },
+        "manifest.json": {
+          "path": "runs/negative-cancel-sql-NoCancellation/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/negative-cancel-sql-NoCancellation/tlc.log",
+          "sha256": "4f36be08df38cfda837f8a587789a7f2d0bf394941a2765e3525632bae30cea4",
+          "bytes": 18018
+        },
+        "messages.json": {
+          "path": "runs/negative-cancel-sql-NoCancellation/messages.json",
+          "sha256": "8a969005e85180fb3c5c9c122fcd05b2cab559b60d9570afbd9aeaed9235b914",
+          "bytes": 17931
+        },
+        "runner.log": {
+          "path": "runs/negative-cancel-sql-NoCancellation/runner.log",
+          "sha256": "0012ed7d8666540ccfecc11f7e5eb0fc21770a92b455ba2bcc24fae1b247011e",
+          "bytes": 225
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "negative-start-after-stop-NoNewAfterStop",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 755,
+        "distinct_states": 415,
+        "remaining_states": 169
+      },
+      "started_at": "2026-11-17T14:13:53.703190+00:00",
+      "finished_at": "2026-11-17T14:13:56.188005+00:00",
+      "duration_seconds": 2.484863,
+      "violations": [
+        "Invariant NoNewAfterStop is violated."
+      ],
+      "trace_states": 9,
+      "input_snapshot": "runs/negative-start-after-stop-NoNewAfterStop/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/negative-start-after-stop-NoNewAfterStop/result.json",
+          "sha256": "598829c179365bc103f9573db8d5d1230c774e2b090c073c4c8b214bdc9207a4",
+          "bytes": 13358
+        },
+        "manifest.json": {
+          "path": "runs/negative-start-after-stop-NoNewAfterStop/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/negative-start-after-stop-NoNewAfterStop/tlc.log",
+          "sha256": "76d3c962b685c7d67fe7ecd2b0dd4d514d01d1f1ba916cefe60d2afba4e40f31",
+          "bytes": 39911
+        },
+        "messages.json": {
+          "path": "runs/negative-start-after-stop-NoNewAfterStop/messages.json",
+          "sha256": "dc4a4eb4ed0ad0a368c34fe8d610c7601a770e1b92c3f3bd08b706994d9b8325",
+          "bytes": 40880
+        },
+        "runner.log": {
+          "path": "runs/negative-start-after-stop-NoNewAfterStop/runner.log",
+          "sha256": "ae372af07e59720f1b570b482f50463628d3891132a6aeee9c74c61f6d14a5b3",
+          "bytes": 231
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "witness-race-applied",
+      "kind": "witness",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 1342,
+        "distinct_states": 664,
+        "remaining_states": 149
+      },
+      "started_at": "2026-11-17T14:13:56.293932+00:00",
+      "finished_at": "2026-11-17T14:13:58.306510+00:00",
+      "duration_seconds": 2.012625,
+      "violations": [
+        "Invariant NotRaceApplied is violated."
+      ],
+      "trace_states": 16,
+      "input_snapshot": "runs/witness-race-applied/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/witness-race-applied/result.json",
+          "sha256": "8a127307993e87d9b1af20b37ba48082515c8e705e8f5d70de2ccde0e8909ec6",
+          "bytes": 13086
+        },
+        "manifest.json": {
+          "path": "runs/witness-race-applied/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/witness-race-applied/tlc.log",
+          "sha256": "ddc1b4d2b05d9612d201a6710db0836f2aa6e2812c6ddd3d1519a2cc62c38e93",
+          "bytes": 75593
+        },
+        "messages.json": {
+          "path": "runs/witness-race-applied/messages.json",
+          "sha256": "a9b19b78e14c4f31da2317bc1724f41c2cacf67bee9e4918e36a2ac6dc2c34d1",
+          "bytes": 78443
+        },
+        "runner.log": {
+          "path": "runs/witness-race-applied/runner.log",
+          "sha256": "3a1ed94bde12156caa0ce0da78b197f0bffeb279833d1bd47649d74f7d0e026e",
+          "bytes": 211
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "witness-history-applied",
+      "kind": "witness",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 701,
+        "distinct_states": 371,
+        "remaining_states": 78
+      },
+      "started_at": "2026-11-17T14:13:58.412441+00:00",
+      "finished_at": "2026-11-17T14:14:00.404954+00:00",
+      "duration_seconds": 1.993132,
+      "violations": [
+        "Invariant NotHistoryApplied is violated."
+      ],
+      "trace_states": 15,
+      "input_snapshot": "runs/witness-history-applied/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/witness-history-applied/result.json",
+          "sha256": "b0697f5bd6075f9452339912b538f3145e42d99c6cfea5874e89c2823da01bbe",
+          "bytes": 13129
+        },
+        "manifest.json": {
+          "path": "runs/witness-history-applied/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/witness-history-applied/tlc.log",
+          "sha256": "e20c89453dbf2c4fbc429d7a40739c5d4943c9ec853c4bd5303f1ce0b57e6cc0",
+          "bytes": 71480
+        },
+        "messages.json": {
+          "path": "runs/witness-history-applied/messages.json",
+          "sha256": "f5a57a0ea8f981814d3fc51eb287dc913a388399c465725d2f3efaee45ca7d77",
+          "bytes": 74114
+        },
+        "runner.log": {
+          "path": "runs/witness-history-applied/runner.log",
+          "sha256": "3e30911db137aa77c9e80bab7fffe7b31da8b73bc6835ed585df7f270d3deddc",
+          "bytes": 214
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "witness-rpc-predecessor",
+      "kind": "witness",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 175,
+        "distinct_states": 111,
+        "remaining_states": 14
+      },
+      "started_at": "2026-11-17T14:14:00.497665+00:00",
+      "finished_at": "2026-11-17T14:14:02.071376+00:00",
+      "duration_seconds": 1.574516,
+      "violations": [
+        "Invariant NotRPCPredecessor is violated."
+      ],
+      "trace_states": 13,
+      "input_snapshot": "runs/witness-rpc-predecessor/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/witness-rpc-predecessor/result.json",
+          "sha256": "522aa2340c4ff50acc99c73db806eb5c483276a439f8f64c9dd79efd1d8eace5",
+          "bytes": 13129
+        },
+        "manifest.json": {
+          "path": "runs/witness-rpc-predecessor/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/witness-rpc-predecessor/tlc.log",
+          "sha256": "da2d0cc755189e8b58205df26366caa5ae10aa25721ef22ca8ce62411a9d83d3",
+          "bytes": 61130
+        },
+        "messages.json": {
+          "path": "runs/witness-rpc-predecessor/messages.json",
+          "sha256": "f753bbc62ddbce68c36d63e447f7685649f468b51c4bdc04ce5480581e1bcfd9",
+          "bytes": 63253
+        },
+        "runner.log": {
+          "path": "runs/witness-rpc-predecessor/runner.log",
+          "sha256": "6e06b0895ce866e33143376d14d247ae9b4e19a3a156b8f49adc9a29c5a81a48",
+          "bytes": 214
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "witness-rejected-push-recovered",
+      "kind": "witness",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 4993,
+        "distinct_states": 2277,
+        "remaining_states": 334
+      },
+      "started_at": "2026-11-17T14:14:02.202941+00:00",
+      "finished_at": "2026-11-17T14:14:04.665520+00:00",
+      "duration_seconds": 2.462625,
+      "violations": [
+        "Invariant NotRejectRecovered is violated."
+      ],
+      "trace_states": 23,
+      "input_snapshot": "runs/witness-rejected-push-recovered/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/witness-rejected-push-recovered/result.json",
+          "sha256": "41ca58f7ff5375ff8c032b92a7c18f25b8ae377fd8121ab71d3e03f9ba5fbee1",
+          "bytes": 13238
+        },
+        "manifest.json": {
+          "path": "runs/witness-rejected-push-recovered/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/witness-rejected-push-recovered/tlc.log",
+          "sha256": "b90fdb739666a6a4e785e91924e326edc50f88cafcda459ae452a48fae1dfee9",
+          "bytes": 114622
+        },
+        "messages.json": {
+          "path": "runs/witness-rejected-push-recovered/messages.json",
+          "sha256": "4203edf77ef84995846f9ea47ff8a7f178399e74ff4cbceb9db373086097ec7c",
+          "bytes": 119373
+        },
+        "runner.log": {
+          "path": "runs/witness-rejected-push-recovered/runner.log",
+          "sha256": "4b6b972acca8259bf20390834fd4a2c465454ac1c8e571ebf8c75edd4a99fc40",
+          "bytes": 222
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "witness-timeout-recovered",
+      "kind": "witness",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 5116,
+        "distinct_states": 2274,
+        "remaining_states": 248
+      },
+      "started_at": "2026-11-17T14:14:04.768470+00:00",
+      "finished_at": "2026-11-17T14:14:07.110135+00:00",
+      "duration_seconds": 2.341712,
+      "violations": [
+        "Invariant NotTimeoutRecovered is violated."
+      ],
+      "trace_states": 24,
+      "input_snapshot": "runs/witness-timeout-recovered/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/witness-timeout-recovered/result.json",
+          "sha256": "f101837c31ffd852183573fc0acca9c2f07012c5a364b118f0524f4be7457600",
+          "bytes": 13163
+        },
+        "manifest.json": {
+          "path": "runs/witness-timeout-recovered/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/witness-timeout-recovered/tlc.log",
+          "sha256": "2ec973553b8729a2db4825fbe0e66b13e0e39c97375210aff34b83bb73f61f1a",
+          "bytes": 120017
+        },
+        "messages.json": {
+          "path": "runs/witness-timeout-recovered/messages.json",
+          "sha256": "305a1a4c55f78d048bef5d4725d56e1a41f3f1fa2bf3d149f622d448ec98597e",
+          "bytes": 125049
+        },
+        "runner.log": {
+          "path": "runs/witness-timeout-recovered/runner.log",
+          "sha256": "3ab2ae2d3b7e94a1bf82d011b72562c12e9be45360a10d59c16ec678c04ab461",
+          "bytes": 216
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "witness-old-view-discard",
+      "kind": "witness",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 73,
+        "distinct_states": 45,
+        "remaining_states": 24
+      },
+      "started_at": "2026-11-17T14:14:07.203716+00:00",
+      "finished_at": "2026-11-17T14:14:08.845376+00:00",
+      "duration_seconds": 1.641704,
+      "violations": [
+        "Invariant NotOldDiscard is violated."
+      ],
+      "trace_states": 4,
+      "input_snapshot": "runs/witness-old-view-discard/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/witness-old-view-discard/result.json",
+          "sha256": "d7cbbfc270f7f931b606cdba3c00373febbdf3f963c04ed49b8d0bffb79fa15d",
+          "bytes": 13134
+        },
+        "manifest.json": {
+          "path": "runs/witness-old-view-discard/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/witness-old-view-discard/tlc.log",
+          "sha256": "2cbf1fc3cff552f66e399a3c9f0334303b3856a19e899b7568bc65d923a3a583",
+          "bytes": 17955
+        },
+        "messages.json": {
+          "path": "runs/witness-old-view-discard/messages.json",
+          "sha256": "8b0eb9255120051cefe4670d9c0e585dc2289448f3fbaa19fa80a239e1c5fae9",
+          "bytes": 17918
+        },
+        "runner.log": {
+          "path": "runs/witness-old-view-discard/runner.log",
+          "sha256": "2d2bcbd5cf1676b47299ab39d0334f1c48f5708952a1ee3c08e91e79310f8b9e",
+          "bytes": 215
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "witness-late-old-link",
+      "kind": "witness",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 10707,
+        "distinct_states": 5651,
+        "remaining_states": 1592
+      },
+      "started_at": "2026-11-17T14:14:08.959112+00:00",
+      "finished_at": "2026-11-17T14:14:11.364705+00:00",
+      "duration_seconds": 2.405638,
+      "violations": [
+        "Invariant NotLateOld is violated."
+      ],
+      "trace_states": 14,
+      "input_snapshot": "runs/witness-late-old-link/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/witness-late-old-link/result.json",
+          "sha256": "95858ac26e52a5fc4f4a94cd8ac45008516981fdca3e7826ee35d35acdab4d29",
+          "bytes": 13096
+        },
+        "manifest.json": {
+          "path": "runs/witness-late-old-link/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/witness-late-old-link/tlc.log",
+          "sha256": "f8bdf8bc2474e028b5a33e2ea1beeef5e710755a4ee42f9189278a2ad801685d",
+          "bytes": 67064
+        },
+        "messages.json": {
+          "path": "runs/witness-late-old-link/messages.json",
+          "sha256": "144fcb04342b4ab36f081a1d46480af1746181ed79d9c2ef5245cc0f56185a9f",
+          "bytes": 69488
+        },
+        "runner.log": {
+          "path": "runs/witness-late-old-link/runner.log",
+          "sha256": "b5abb7a92d697129e972d93a2afcde444a572b38ab444dd8816a84bf8c887847",
+          "bytes": 212
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "witness-race-wave-covered-g-settled",
+      "kind": "witness",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 6492,
+        "distinct_states": 2759,
+        "remaining_states": 21
+      },
+      "started_at": "2026-11-17T14:14:11.475758+00:00",
+      "finished_at": "2026-11-17T14:14:13.587637+00:00",
+      "duration_seconds": 2.111926,
+      "violations": [
+        "Invariant NotWaveCoveredGSettled is violated."
+      ],
+      "trace_states": 31,
+      "input_snapshot": "runs/witness-race-wave-covered-g-settled/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/witness-race-wave-covered-g-settled/result.json",
+          "sha256": "0ee77be9508eccf55af7ab7710de8e0bc05fd89b35dad93137ea31c7038288dc",
+          "bytes": 13297
+        },
+        "manifest.json": {
+          "path": "runs/witness-race-wave-covered-g-settled/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/witness-race-wave-covered-g-settled/tlc.log",
+          "sha256": "5723a1ea469ff524e7e54208ea3ef27410191d7a29d6cadc6c9d8d8f47c96ec7",
+          "bytes": 158558
+        },
+        "messages.json": {
+          "path": "runs/witness-race-wave-covered-g-settled/messages.json",
+          "sha256": "da4281d440543c6f4984401f72e3dd1a9b00473ad2500b14d8a695cb563e7559",
+          "bytes": 165385
+        },
+        "runner.log": {
+          "path": "runs/witness-race-wave-covered-g-settled/runner.log",
+          "sha256": "7ed0eaad5d8729141603be88da606b4d3e037870cc5ad4ef5e460426e3a4f618",
+          "bytes": 226
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "witness-commit-before-settle",
+      "kind": "witness",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 632,
+        "distinct_states": 334,
+        "remaining_states": 89
+      },
+      "started_at": "2026-11-17T14:14:13.671968+00:00",
+      "finished_at": "2026-11-17T14:14:15.661849+00:00",
+      "duration_seconds": 1.989939,
+      "violations": [
+        "Invariant NotCommitBeforeSettle is violated."
+      ],
+      "trace_states": 13,
+      "input_snapshot": "runs/witness-commit-before-settle/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/witness-commit-before-settle/result.json",
+          "sha256": "1488513d14db6a8188e955a18999e65ba9250594af10020fe5ddf7fc1dadac4e",
+          "bytes": 13202
+        },
+        "manifest.json": {
+          "path": "runs/witness-commit-before-settle/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/witness-commit-before-settle/tlc.log",
+          "sha256": "671ef670a135e17efa989cef013c32decfe73d563d61ea34469b150b1b760990",
+          "bytes": 60011
+        },
+        "messages.json": {
+          "path": "runs/witness-commit-before-settle/messages.json",
+          "sha256": "ced64a4d28c958af363be1f49f7db65422742dd2f973b227776a54a218fa916c",
+          "bytes": 62023
+        },
+        "runner.log": {
+          "path": "runs/witness-commit-before-settle/runner.log",
+          "sha256": "d5edc502f247362557e2b37d739b532495f29b1f580cebb0a52470a968b91d96",
+          "bytes": 219
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "witness-stop-drained",
+      "kind": "witness",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 32252,
+        "distinct_states": 13781,
+        "remaining_states": 2659
+      },
+      "started_at": "2026-11-17T14:14:15.773555+00:00",
+      "finished_at": "2026-11-17T14:14:18.673610+00:00",
+      "duration_seconds": 2.9001,
+      "violations": [
+        "Invariant NotStopDrained is violated."
+      ],
+      "trace_states": 19,
+      "input_snapshot": "runs/witness-stop-drained/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/witness-stop-drained/result.json",
+          "sha256": "5b2c58a06ed9eebfab0e5373be00dd15af4f1f8caac33d5c7609f37c4ca0fd26",
+          "bytes": 13089
+        },
+        "manifest.json": {
+          "path": "runs/witness-stop-drained/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/witness-stop-drained/tlc.log",
+          "sha256": "f44278a993c46f7601cbcbc3b3ebc81aea72a5153058c81ea0ee034e225fdf4f",
+          "bytes": 83583
+        },
+        "messages.json": {
+          "path": "runs/witness-stop-drained/messages.json",
+          "sha256": "2a65b4a3c6f8a72e3e6e2ac34eea2c2344ffa7fa7c86619a71e3d1338278ea4f",
+          "bytes": 86802
+        },
+        "runner.log": {
+          "path": "runs/witness-stop-drained/runner.log",
+          "sha256": "3a48b5f9ef06f6c57a2a53e785b5f4879a511d5fe243013a84bcdda4607aa8f6",
+          "bytes": 211
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "negative-timeout-self-demand-NoTimeoutSelfWake",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 904,
+        "distinct_states": 460,
+        "remaining_states": 105
+      },
+      "started_at": "2026-11-17T14:14:18.760643+00:00",
+      "finished_at": "2026-11-17T14:14:20.456195+00:00",
+      "duration_seconds": 1.695597,
+      "violations": [
+        "Invariant NoTimeoutSelfWake is violated."
+      ],
+      "trace_states": 14,
+      "input_snapshot": "runs/negative-timeout-self-demand-NoTimeoutSelfWake/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/negative-timeout-self-demand-NoTimeoutSelfWake/result.json",
+          "sha256": "6357cc27c11e39be234fdb6e3e587d6720c5d25c50676113bec03d5c32adc07c",
+          "bytes": 13445
+        },
+        "manifest.json": {
+          "path": "runs/negative-timeout-self-demand-NoTimeoutSelfWake/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/negative-timeout-self-demand-NoTimeoutSelfWake/tlc.log",
+          "sha256": "9e715bf459787525867fcfcfc51d363f51423611eb2808e8124bc6eb53b33ca1",
+          "bytes": 66441
+        },
+        "messages.json": {
+          "path": "runs/negative-timeout-self-demand-NoTimeoutSelfWake/messages.json",
+          "sha256": "6954584dae8fc10c499f40a5236dd28622321695297114be5f3561a97fd52ca2",
+          "bytes": 68703
+        },
+        "runner.log": {
+          "path": "runs/negative-timeout-self-demand-NoTimeoutSelfWake/runner.log",
+          "sha256": "abbf7c1af60eca86534409ff3307830c518545406eb51addc47657d9807b3ade",
+          "bytes": 237
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "negative-unchecked-g-ProgressCut",
+      "kind": "negative-control",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 4961,
+        "distinct_states": 2768,
+        "remaining_states": 922
+      },
+      "started_at": "2026-11-17T14:14:20.522892+00:00",
+      "finished_at": "2026-11-17T14:14:22.292220+00:00",
+      "duration_seconds": 1.769372,
+      "violations": [
+        "Invariant ProgressCut is violated."
+      ],
+      "trace_states": 12,
+      "input_snapshot": "runs/negative-unchecked-g-ProgressCut/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/negative-unchecked-g-ProgressCut/result.json",
+          "sha256": "26bcbe9cde90a378416633bcfed6240d7aa5eb871e91e4ccc7215b24a6c5662e",
+          "bytes": 13246
+        },
+        "manifest.json": {
+          "path": "runs/negative-unchecked-g-ProgressCut/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/negative-unchecked-g-ProgressCut/tlc.log",
+          "sha256": "e90004d1b028d03d2ade33266d45426c2e9ab19276b10d1d6ff94ca00f8a866f",
+          "bytes": 56179
+        },
+        "messages.json": {
+          "path": "runs/negative-unchecked-g-ProgressCut/messages.json",
+          "sha256": "75f3d73bf272d24edb9f84457e67570c71fcb63390bd14a6d160ad27f2fa2159",
+          "bytes": 57982
+        },
+        "runner.log": {
+          "path": "runs/negative-unchecked-g-ProgressCut/runner.log",
+          "sha256": "60779d34868c029c8efb605d6b7a8ab6767e974f6a010c03adb573c924b715e0",
+          "bytes": 223
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    },
+    {
+      "phase": "batch-02",
+      "profile": "witness-timeout-without-fresh",
+      "kind": "witness",
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "statistics": {
+        "generated_states": 1025,
+        "distinct_states": 516,
+        "remaining_states": 116
+      },
+      "started_at": "2026-11-17T14:14:22.360713+00:00",
+      "finished_at": "2026-11-17T14:14:24.007334+00:00",
+      "duration_seconds": 1.646667,
+      "violations": [
+        "Invariant NotTimeoutWaiting is violated."
+      ],
+      "trace_states": 15,
+      "input_snapshot": "runs/witness-timeout-without-fresh/input",
+      "raw": {
+        "result.json": {
+          "path": "runs/witness-timeout-without-fresh/result.json",
+          "sha256": "c35e3955a7705290248f44124200cf6bd249df324852d32ed8578531fb2100b0",
+          "bytes": 13210
+        },
+        "manifest.json": {
+          "path": "runs/witness-timeout-without-fresh/manifest.json",
+          "sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82",
+          "bytes": 80273
+        },
+        "tlc.log": {
+          "path": "runs/witness-timeout-without-fresh/tlc.log",
+          "sha256": "e4138540732a16805e43c9a61d12cfffa857f0110878d2be64cd6f3905d7c8f5",
+          "bytes": 70214
+        },
+        "messages.json": {
+          "path": "runs/witness-timeout-without-fresh/messages.json",
+          "sha256": "163ccbf08348f7de611212c912c13cd3a275482c7685c1a5df859b81e131076e",
+          "bytes": 72750
+        },
+        "runner.log": {
+          "path": "runs/witness-timeout-without-fresh/runner.log",
+          "sha256": "175494ee6070d5f29aa626b134b1cd01e8ebd0d4fa87de537f7d95aadc32f1ef",
+          "bytes": 220
+        }
+      },
+      "model_sha256": "c8ba941940e555b21071cb6156085e440660664d214fc9c9506b9726e2f028b4",
+      "manifest_sha256": "e0bb2289eda2ea6b5d0904fdeb2e9aa705cc1376804a4ea6079d45a1adf03a82"
+    }
+  ],
+  "history": {
+    "reason": "原解析错误、探索和经独立审查后被R2替代的R1原件，不能计入最终候选通过",
+    "runs": [
+      {
+        "phase": "explore-01",
+        "profile": "positive-race",
+        "kind": "positive",
+        "status": "TOOL_ERROR",
+        "reason": "TLC_REPORTED_ERROR",
+        "process": {
+          "exit_code": 150,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": null,
+          "distinct_states": null,
+          "remaining_states": null
+        },
+        "started_at": "2026-11-17T14:04:28.294052+00:00",
+        "finished_at": "2026-11-17T14:04:29.152456+00:00",
+        "duration_seconds": 0.858445,
+        "violations": [],
+        "trace_states": 0,
+        "input_snapshot": "runs/explore-01/positive-race/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/explore-01/positive-race/result.json",
+            "sha256": "60050321a4dc0e121cc56d219a7df048893253f12848420500bbf248d4fbb5f2",
+            "bytes": 12931
+          },
+          "manifest.json": {
+            "path": "runs/explore-01/positive-race/manifest.json",
+            "sha256": "0ed4495f8a8dc5f356e60013f092d30c62c5980b7fc217b0b1da7b10c4d4b738",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/explore-01/positive-race/tlc.log",
+            "sha256": "f9c78d9e808cf1bb9440df2a8a92d66535bf88237d5471fa49d325d99f68cc8c",
+            "bytes": 1492
+          },
+          "messages.json": {
+            "path": "runs/explore-01/positive-race/messages.json",
+            "sha256": "ff3cd19eda80a435c981f0967d8f53cc49ec48fdab0c7281dc005099d4bd3bd2",
+            "bytes": 856
+          }
+        },
+        "model_sha256": "78eecc0118606bc9f81273af8db3eac163da2251920d49bd3a2b1032aa9d8c14",
+        "manifest_sha256": "0ed4495f8a8dc5f356e60013f092d30c62c5980b7fc217b0b1da7b10c4d4b738"
+      },
+      {
+        "phase": "explore-02",
+        "profile": "positive-race",
+        "kind": "positive",
+        "status": "PASS_WITHIN_SCOPE",
+        "reason": "COMPLETE_MODEL_CHECK",
+        "process": {
+          "exit_code": 0,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 6669,
+          "distinct_states": 2856,
+          "remaining_states": 0
+        },
+        "started_at": "2026-11-17T14:04:47.480755+00:00",
+        "finished_at": "2026-11-17T14:04:49.630483+00:00",
+        "duration_seconds": 2.149774,
+        "violations": [],
+        "trace_states": 0,
+        "input_snapshot": "runs/explore-02/positive-race/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/explore-02/positive-race/result.json",
+            "sha256": "4127c844cadcf94aaee09be865d3f140232641020f695594fc679147ed9512a3",
+            "bytes": 12982
+          },
+          "manifest.json": {
+            "path": "runs/explore-02/positive-race/manifest.json",
+            "sha256": "0ed4495f8a8dc5f356e60013f092d30c62c5980b7fc217b0b1da7b10c4d4b738",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/explore-02/positive-race/tlc.log",
+            "sha256": "20fbe49ec475cee81cb28ada39f7082ab27b246d3f68171f22b870b260396764",
+            "bytes": 2593
+          },
+          "messages.json": {
+            "path": "runs/explore-02/positive-race/messages.json",
+            "sha256": "c17defd9e0f4111032767a05a9cf9c4bf856c12eece98acb858cc4e031eb703b",
+            "bytes": 1908
+          }
+        },
+        "model_sha256": "35390d6225b6c65a53d1667e5cb6c1af6401bcb5397bbdce89433bfd695135cb",
+        "manifest_sha256": "0ed4495f8a8dc5f356e60013f092d30c62c5980b7fc217b0b1da7b10c4d4b738"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "negative-bypass-rpc-LaneDiscipline",
+        "kind": "negative-control",
+        "status": "COUNTEREXAMPLE",
+        "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+        "process": {
+          "exit_code": 12,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 268,
+          "distinct_states": 148,
+          "remaining_states": 53
+        },
+        "started_at": "2026-11-17T14:06:45.939524+00:00",
+        "finished_at": "2026-11-17T14:06:47.540587+00:00",
+        "duration_seconds": 1.601106,
+        "violations": [
+          "Invariant LaneDiscipline is violated."
+        ],
+        "trace_states": 11,
+        "input_snapshot": "runs/batch-01/negative-bypass-rpc-LaneDiscipline/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/negative-bypass-rpc-LaneDiscipline/result.json",
+            "sha256": "2640b7f76faf42d23313cd01f402a91be2b17c77f272553adc65e44ce46b333d",
+            "bytes": 12689
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/negative-bypass-rpc-LaneDiscipline/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/negative-bypass-rpc-LaneDiscipline/tlc.log",
+            "sha256": "f96660fc0f2baf9f83d5ad99c5150d49713a90f8a2b9dca19796ab709c3cc993",
+            "bytes": 49334
+          },
+          "messages.json": {
+            "path": "runs/batch-01/negative-bypass-rpc-LaneDiscipline/messages.json",
+            "sha256": "215c7351b14cd02a13ad1a2e5c5c0a65224860231ae86478237a1bf6f1f6f7e2",
+            "bytes": 50801
+          },
+          "runner.log": {
+            "path": "runs/batch-01/negative-bypass-rpc-LaneDiscipline/runner.log",
+            "sha256": "c2ae0587c870cadac8d344c46b15ecb158a0f5642c003cbe0f1780da85296977",
+            "bytes": 225
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "negative-cancel-sql-NoCancellation",
+        "kind": "negative-control",
+        "status": "COUNTEREXAMPLE",
+        "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+        "process": {
+          "exit_code": 12,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 66,
+          "distinct_states": 37,
+          "remaining_states": 21
+        },
+        "started_at": "2026-11-17T14:07:12.742435+00:00",
+        "finished_at": "2026-11-17T14:07:14.254676+00:00",
+        "duration_seconds": 1.512285,
+        "violations": [
+          "Invariant NoCancellation is violated."
+        ],
+        "trace_states": 4,
+        "input_snapshot": "runs/batch-01/negative-cancel-sql-NoCancellation/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/negative-cancel-sql-NoCancellation/result.json",
+            "sha256": "ba208e734696ce4fdd75f7a64e67ddf752e1572d3c09da311d481e7f293d5ecd",
+            "bytes": 12688
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/negative-cancel-sql-NoCancellation/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/negative-cancel-sql-NoCancellation/tlc.log",
+            "sha256": "650066b791a98e5c9cb0c15df7ece42657b3cc3a30cc8bc9756ff53d044075d8",
+            "bytes": 17891
+          },
+          "messages.json": {
+            "path": "runs/batch-01/negative-cancel-sql-NoCancellation/messages.json",
+            "sha256": "5e7327e639feb40d229fce3ed4923cf9b69369bcce8ad990a2aef72337d51086",
+            "bytes": 17800
+          },
+          "runner.log": {
+            "path": "runs/batch-01/negative-cancel-sql-NoCancellation/runner.log",
+            "sha256": "9a96762546c40df46af74c0bcb6917574e2194d767a68aa33582b12956ef3bd2",
+            "bytes": 225
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "negative-defer-consumer-SynchronousConsumption",
+        "kind": "negative-control",
+        "status": "COUNTEREXAMPLE",
+        "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+        "process": {
+          "exit_code": 12,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 1252,
+          "distinct_states": 603,
+          "remaining_states": 150
+        },
+        "started_at": "2026-11-17T14:07:06.095514+00:00",
+        "finished_at": "2026-11-17T14:07:07.924540+00:00",
+        "duration_seconds": 1.829072,
+        "violations": [
+          "Invariant SynchronousConsumption is violated."
+        ],
+        "trace_states": 14,
+        "input_snapshot": "runs/batch-01/negative-defer-consumer-SynchronousConsumption/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/negative-defer-consumer-SynchronousConsumption/result.json",
+            "sha256": "1b23d8b87e0dabefa9c6dca70a84cef0fa44bf4be98f2fd0b09a116fb53f9a0e",
+            "bytes": 12867
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/negative-defer-consumer-SynchronousConsumption/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/negative-defer-consumer-SynchronousConsumption/tlc.log",
+            "sha256": "708c15f0cae866d0479a7ca72df7551828b4625522aaabce8743f307c48ec5b6",
+            "bytes": 65963
+          },
+          "messages.json": {
+            "path": "runs/batch-01/negative-defer-consumer-SynchronousConsumption/messages.json",
+            "sha256": "a8382bf6244e72353c5474b633034bca36cab98dab807ab77440fa175b4b4f1a",
+            "bytes": 68213
+          },
+          "runner.log": {
+            "path": "runs/batch-01/negative-defer-consumer-SynchronousConsumption/runner.log",
+            "sha256": "96c978eb2f3ebc3023cd7096564d38d59a2811f1a7f24ec35ddaccab7b5c7908",
+            "bytes": 237
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "negative-double-apply-ConsumerSafety",
+        "kind": "negative-control",
+        "status": "COUNTEREXAMPLE",
+        "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+        "process": {
+          "exit_code": 12,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 38,
+          "distinct_states": 25,
+          "remaining_states": 7
+        },
+        "started_at": "2026-11-17T14:07:03.034247+00:00",
+        "finished_at": "2026-11-17T14:07:04.399912+00:00",
+        "duration_seconds": 1.365709,
+        "violations": [
+          "Invariant ConsumerSafety is violated."
+        ],
+        "trace_states": 6,
+        "input_snapshot": "runs/batch-01/negative-double-apply-ConsumerSafety/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/negative-double-apply-ConsumerSafety/result.json",
+            "sha256": "2ab82ba5d8b1ac38afc0f710ee6db13144024b1568790aa3e3b9308126ab9c96",
+            "bytes": 12714
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/negative-double-apply-ConsumerSafety/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/negative-double-apply-ConsumerSafety/tlc.log",
+            "sha256": "623d4c9f59ef129ea8c966f74f91709af36b16730c3c6838ca4cb56a4eef00d8",
+            "bytes": 27699
+          },
+          "messages.json": {
+            "path": "runs/batch-01/negative-double-apply-ConsumerSafety/messages.json",
+            "sha256": "85990b3d7bdd0ec9b5ebf71376fb9d1201bdae4cab3c81f0afd064c99225141d",
+            "bytes": 28089
+          },
+          "runner.log": {
+            "path": "runs/batch-01/negative-double-apply-ConsumerSafety/runner.log",
+            "sha256": "42009c6f7a6cf18447fc67e999070705d7024affe07c5e9d8f0efb8662229ade",
+            "bytes": 227
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "negative-early-g-ProgressCut",
+        "kind": "negative-control",
+        "status": "COUNTEREXAMPLE",
+        "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+        "process": {
+          "exit_code": 12,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 1216,
+          "distinct_states": 562,
+          "remaining_states": 126
+        },
+        "started_at": "2026-11-17T14:07:09.498487+00:00",
+        "finished_at": "2026-11-17T14:07:11.099812+00:00",
+        "duration_seconds": 1.601367,
+        "violations": [
+          "Invariant ProgressCut is violated."
+        ],
+        "trace_states": 15,
+        "input_snapshot": "runs/batch-01/negative-early-g-ProgressCut/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/negative-early-g-ProgressCut/result.json",
+            "sha256": "17a42e762ab8859b5a8f33c672fd4a05a837c6f2dcff386ee56f0fa28d867874",
+            "bytes": 12604
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/negative-early-g-ProgressCut/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/negative-early-g-ProgressCut/tlc.log",
+            "sha256": "86ec84faea0111c0323f7f9dfeccb438a9050171fc064ee51ef468899f08361e",
+            "bytes": 69216
+          },
+          "messages.json": {
+            "path": "runs/batch-01/negative-early-g-ProgressCut/messages.json",
+            "sha256": "40e917d0de0f1be3ac9a8b9d65d2c381f4fa4ae3146986af49f3ae487678d185",
+            "bytes": 71680
+          },
+          "runner.log": {
+            "path": "runs/batch-01/negative-early-g-ProgressCut/runner.log",
+            "sha256": "8598419b524ac07fd8d2fefe10475598f967841e868b00d8fb25cfc754bfdc02",
+            "bytes": 219
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "negative-early-owner-OwnerSettled",
+        "kind": "negative-control",
+        "status": "COUNTEREXAMPLE",
+        "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+        "process": {
+          "exit_code": 12,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 907,
+          "distinct_states": 416,
+          "remaining_states": 171
+        },
+        "started_at": "2026-11-17T14:07:11.173261+00:00",
+        "finished_at": "2026-11-17T14:07:12.659674+00:00",
+        "duration_seconds": 1.486456,
+        "violations": [
+          "Invariant OwnerSettled is violated."
+        ],
+        "trace_states": 8,
+        "input_snapshot": "runs/batch-01/negative-early-owner-OwnerSettled/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/negative-early-owner-OwnerSettled/result.json",
+            "sha256": "3e2a4ffaf57d9490a7cbb96f0608aca92da63b1a376a55760567306aebf75d37",
+            "bytes": 12675
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/negative-early-owner-OwnerSettled/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/negative-early-owner-OwnerSettled/tlc.log",
+            "sha256": "a189516292ad3cd41fb9394c55c658e857ff06ff2fef16f02a1c2730570bd813",
+            "bytes": 35774
+          },
+          "messages.json": {
+            "path": "runs/batch-01/negative-early-owner-OwnerSettled/messages.json",
+            "sha256": "c46191dcea55578b264598315ea14f5736b9c0a097e854819ca6d308baba929e",
+            "bytes": 36581
+          },
+          "runner.log": {
+            "path": "runs/batch-01/negative-early-owner-OwnerSettled/runner.log",
+            "sha256": "86e3660ccd0de8a168232ca9fb4b8ff965df08400d642def27a3a9ab8afef9a0",
+            "bytes": 224
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "negative-fake-proof-RaceOrigin",
+        "kind": "negative-control",
+        "status": "COUNTEREXAMPLE",
+        "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+        "process": {
+          "exit_code": 12,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 108,
+          "distinct_states": 79,
+          "remaining_states": 25
+        },
+        "started_at": "2026-11-17T14:06:53.307749+00:00",
+        "finished_at": "2026-11-17T14:06:54.633474+00:00",
+        "duration_seconds": 1.325769,
+        "violations": [
+          "Invariant RaceOrigin is violated."
+        ],
+        "trace_states": 10,
+        "input_snapshot": "runs/batch-01/negative-fake-proof-RaceOrigin/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/negative-fake-proof-RaceOrigin/result.json",
+            "sha256": "e0ed355315f75daadc4a76a7831248e73da626b6e1a59746135f5f456d8ea5d6",
+            "bytes": 12628
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/negative-fake-proof-RaceOrigin/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/negative-fake-proof-RaceOrigin/tlc.log",
+            "sha256": "feaa7fcd1533e909b7477f30e8ce4e362e3fe57d9058ea7351d06a1c8579ab46",
+            "bytes": 44765
+          },
+          "messages.json": {
+            "path": "runs/batch-01/negative-fake-proof-RaceOrigin/messages.json",
+            "sha256": "b5a0db1860719cfbc88656d9586ee1ba5a4d93b44e9ce6f06397b309053d5001",
+            "bytes": 46035
+          },
+          "runner.log": {
+            "path": "runs/batch-01/negative-fake-proof-RaceOrigin/runner.log",
+            "sha256": "6b6616eacc4da722de7b97fddac8e21c5876ad306125822eb05eaa531e439ddc",
+            "bytes": 221
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "negative-fake-proof-SentPrefix",
+        "kind": "negative-control",
+        "status": "COUNTEREXAMPLE",
+        "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+        "process": {
+          "exit_code": 12,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 27,
+          "distinct_states": 17,
+          "remaining_states": 4
+        },
+        "started_at": "2026-11-17T14:06:57.507081+00:00",
+        "finished_at": "2026-11-17T14:06:58.772069+00:00",
+        "duration_seconds": 1.265125,
+        "violations": [
+          "Invariant SentPrefix is violated."
+        ],
+        "trace_states": 5,
+        "input_snapshot": "runs/batch-01/negative-fake-proof-SentPrefix/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/negative-fake-proof-SentPrefix/result.json",
+            "sha256": "398d5483f34a583c06b9fb4734fae385bc2f5b871b97653aace0e290e3f7d56c",
+            "bytes": 12626
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/negative-fake-proof-SentPrefix/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/negative-fake-proof-SentPrefix/tlc.log",
+            "sha256": "10f8c56f27025e321bc6935e15fec4572ed6397fdab912ce10da0800a99bbf87",
+            "bytes": 22985
+          },
+          "messages.json": {
+            "path": "runs/batch-01/negative-fake-proof-SentPrefix/messages.json",
+            "sha256": "584ac7f71fd60888cceb275b79c1bdf6a6a07a97417f655626681c32f4afd9a5",
+            "bytes": 23174
+          },
+          "runner.log": {
+            "path": "runs/batch-01/negative-fake-proof-SentPrefix/runner.log",
+            "sha256": "516ad6cc8b2aba4bad0c6163ca25eeba05fed1529b899101b6ccabf1711e8d51",
+            "bytes": 221
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "negative-force-full-RaceEligibility",
+        "kind": "negative-control",
+        "status": "COUNTEREXAMPLE",
+        "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+        "process": {
+          "exit_code": 12,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 177,
+          "distinct_states": 113,
+          "remaining_states": 40
+        },
+        "started_at": "2026-11-17T14:06:51.933591+00:00",
+        "finished_at": "2026-11-17T14:06:53.241506+00:00",
+        "duration_seconds": 1.30797,
+        "violations": [
+          "Invariant RaceEligibility is violated."
+        ],
+        "trace_states": 10,
+        "input_snapshot": "runs/batch-01/negative-force-full-RaceEligibility/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/negative-force-full-RaceEligibility/result.json",
+            "sha256": "d6d2b6d8bb6c09f86f06a92efd784fff38804915d7746c62b6dcd30248f8707e",
+            "bytes": 12704
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/negative-force-full-RaceEligibility/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/negative-force-full-RaceEligibility/tlc.log",
+            "sha256": "0b8aa2b8ac1995ead92c8035e26d4f432ba4a8b7e036a29d6795b31ef6de382d",
+            "bytes": 45455
+          },
+          "messages.json": {
+            "path": "runs/batch-01/negative-force-full-RaceEligibility/messages.json",
+            "sha256": "4b2c19246a5cba88ce1f961fad21786747abad9697aefb129ce9c61c3c5e6c19",
+            "bytes": 46735
+          },
+          "runner.log": {
+            "path": "runs/batch-01/negative-force-full-RaceEligibility/runner.log",
+            "sha256": "d4b37eac85ebd7532ab1a74070aa94cfac7320317f4cfaf49f08d2871893c44b",
+            "bytes": 226
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "negative-head-after-read-FixedAuthorizedHead",
+        "kind": "negative-control",
+        "status": "COUNTEREXAMPLE",
+        "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+        "process": {
+          "exit_code": 12,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 34,
+          "distinct_states": 22,
+          "remaining_states": 5
+        },
+        "started_at": "2026-11-17T14:07:01.600763+00:00",
+        "finished_at": "2026-11-17T14:07:02.942492+00:00",
+        "duration_seconds": 1.341771,
+        "violations": [
+          "Invariant FixedAuthorizedHead is violated."
+        ],
+        "trace_states": 6,
+        "input_snapshot": "runs/batch-01/negative-head-after-read-FixedAuthorizedHead/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/negative-head-after-read-FixedAuthorizedHead/result.json",
+            "sha256": "3da5529ab411d2528ec37c98d2e4eee72d475c0b8b244e1b33a67e9349054bb1",
+            "bytes": 12831
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/negative-head-after-read-FixedAuthorizedHead/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/negative-head-after-read-FixedAuthorizedHead/tlc.log",
+            "sha256": "e62d2b2fe2e365a0fa616de9bba5c38df896fe180ba7823d8dfc0b7ee53572c4",
+            "bytes": 27378
+          },
+          "messages.json": {
+            "path": "runs/batch-01/negative-head-after-read-FixedAuthorizedHead/messages.json",
+            "sha256": "e1c2269c569ce6ee67726c45b0cc6cf34dcc0ef5b9c89d4e040b9b7bac8bab66",
+            "bytes": 27713
+          },
+          "runner.log": {
+            "path": "runs/batch-01/negative-head-after-read-FixedAuthorizedHead/runner.log",
+            "sha256": "496d86ea170d3261646d87396f05c089dc1e66e67bff6e709fcce91bb3856774",
+            "bytes": 235
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "negative-head-start-ReadBoundary",
+        "kind": "negative-control",
+        "status": "COUNTEREXAMPLE",
+        "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+        "process": {
+          "exit_code": 12,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 235,
+          "distinct_states": 140,
+          "remaining_states": 49
+        },
+        "started_at": "2026-11-17T14:06:54.695953+00:00",
+        "finished_at": "2026-11-17T14:06:56.069113+00:00",
+        "duration_seconds": 1.373205,
+        "violations": [
+          "Invariant ReadBoundary is violated."
+        ],
+        "trace_states": 11,
+        "input_snapshot": "runs/batch-01/negative-head-start-ReadBoundary/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/negative-head-start-ReadBoundary/result.json",
+            "sha256": "3a6fea570411382e8fc35c7145719abf5b1b3da908bcf47e0ceffa7610a05a4d",
+            "bytes": 12659
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/negative-head-start-ReadBoundary/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/negative-head-start-ReadBoundary/tlc.log",
+            "sha256": "0ac04ee6ed8e2ceefc3d0e022cb3f00b2a6b2242d4c3ef67b9e21ea2ae281646",
+            "bytes": 49235
+          },
+          "messages.json": {
+            "path": "runs/batch-01/negative-head-start-ReadBoundary/messages.json",
+            "sha256": "35f1d1b882d346768c87edcd7e57d3ee76c9448a19ef4c0a9ad0ad0972a6d328",
+            "bytes": 50718
+          },
+          "runner.log": {
+            "path": "runs/batch-01/negative-head-start-ReadBoundary/runner.log",
+            "sha256": "04b030868fba2d2624fb507b5462eb3044f23774cac8d6b4068878195a5469d4",
+            "bytes": 223
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "negative-overwrite-installed-InstalledSeparate",
+        "kind": "negative-control",
+        "status": "COUNTEREXAMPLE",
+        "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+        "process": {
+          "exit_code": 12,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 27,
+          "distinct_states": 17,
+          "remaining_states": 4
+        },
+        "started_at": "2026-11-17T14:06:58.836367+00:00",
+        "finished_at": "2026-11-17T14:07:00.173476+00:00",
+        "duration_seconds": 1.337155,
+        "violations": [
+          "Invariant InstalledSeparate is violated."
+        ],
+        "trace_states": 5,
+        "input_snapshot": "runs/batch-01/negative-overwrite-installed-InstalledSeparate/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/negative-overwrite-installed-InstalledSeparate/result.json",
+            "sha256": "0c1b81e2c287d47e8e3cebee1782407f752d6eba57efe20bca9cd5cde646b69a",
+            "bytes": 12857
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/negative-overwrite-installed-InstalledSeparate/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/negative-overwrite-installed-InstalledSeparate/tlc.log",
+            "sha256": "4770fa60052fc6fb5cf327dc32080f5c3bbb9170f4056933d2c8374c53225b69",
+            "bytes": 23199
+          },
+          "messages.json": {
+            "path": "runs/batch-01/negative-overwrite-installed-InstalledSeparate/messages.json",
+            "sha256": "c208fd8c945eba6d634f9bd143e60d8448d93b9fe7410983322c20cba1c35b96",
+            "bytes": 23315
+          },
+          "runner.log": {
+            "path": "runs/batch-01/negative-overwrite-installed-InstalledSeparate/runner.log",
+            "sha256": "3aa2bba913ee9afb0b69a0ab3bbf7c11d01a4ab7e2d5340a544bac3472ac1a58",
+            "bytes": 237
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "negative-parallel-lane-LaneDiscipline",
+        "kind": "negative-control",
+        "status": "COUNTEREXAMPLE",
+        "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+        "process": {
+          "exit_code": 12,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 3,
+          "distinct_states": 3,
+          "remaining_states": 1
+        },
+        "started_at": "2026-11-17T14:06:44.718282+00:00",
+        "finished_at": "2026-11-17T14:06:45.876802+00:00",
+        "duration_seconds": 1.158564,
+        "violations": [
+          "Invariant LaneDiscipline is violated."
+        ],
+        "trace_states": 2,
+        "input_snapshot": "runs/batch-01/negative-parallel-lane-LaneDiscipline/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/negative-parallel-lane-LaneDiscipline/result.json",
+            "sha256": "40727383411c1bc06df5e9ed5e0927e1d28d74e47d7f159ef15fc578c18a3166",
+            "bytes": 12716
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/negative-parallel-lane-LaneDiscipline/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/negative-parallel-lane-LaneDiscipline/tlc.log",
+            "sha256": "66fba3316c516a18ab751139edff47857f21bc85ad957c2b740a6b56f929df99",
+            "bytes": 10081
+          },
+          "messages.json": {
+            "path": "runs/batch-01/negative-parallel-lane-LaneDiscipline/messages.json",
+            "sha256": "a417a8f64793d28d82518a0234df03905a32ef5db09b7676016e282dd56336af",
+            "bytes": 9589
+          },
+          "runner.log": {
+            "path": "runs/batch-01/negative-parallel-lane-LaneDiscipline/runner.log",
+            "sha256": "9f7525105a11c14e983e2ff99eb9dff9de6fec24a9144d6e3a04fe86c49d2201",
+            "bytes": 228
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "negative-partial-overlap-ReadBoundary",
+        "kind": "negative-control",
+        "status": "COUNTEREXAMPLE",
+        "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+        "process": {
+          "exit_code": 12,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 183,
+          "distinct_states": 113,
+          "remaining_states": 40
+        },
+        "started_at": "2026-11-17T14:06:56.134227+00:00",
+        "finished_at": "2026-11-17T14:06:57.436924+00:00",
+        "duration_seconds": 1.302741,
+        "violations": [
+          "Invariant ReadBoundary is violated."
+        ],
+        "trace_states": 10,
+        "input_snapshot": "runs/batch-01/negative-partial-overlap-ReadBoundary/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/negative-partial-overlap-ReadBoundary/result.json",
+            "sha256": "ad6391cbeb34977037b29d9a78d36af1bcf0dfcd23e06f6afef4db4757af3cb6",
+            "bytes": 12729
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/negative-partial-overlap-ReadBoundary/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/negative-partial-overlap-ReadBoundary/tlc.log",
+            "sha256": "1de4321b8976f081b93ede11ce66ef93e4237504f906e407dd5f4f88a4af663f",
+            "bytes": 45435
+          },
+          "messages.json": {
+            "path": "runs/batch-01/negative-partial-overlap-ReadBoundary/messages.json",
+            "sha256": "de5fedf51606d84fb5e46a1c2b5ff8f62178a4f22f9b513a94dfcb1931ca5e22",
+            "bytes": 46705
+          },
+          "runner.log": {
+            "path": "runs/batch-01/negative-partial-overlap-ReadBoundary/runner.log",
+            "sha256": "cd552ef574efc818ba6ddfaf734d4986aecb187e9da90443265e50f2f21b5c45",
+            "bytes": 228
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "negative-read-through-writer-LockExclusion",
+        "kind": "negative-control",
+        "status": "COUNTEREXAMPLE",
+        "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+        "process": {
+          "exit_code": 12,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 335,
+          "distinct_states": 182,
+          "remaining_states": 64
+        },
+        "started_at": "2026-11-17T14:07:08.012033+00:00",
+        "finished_at": "2026-11-17T14:07:09.430703+00:00",
+        "duration_seconds": 1.418732,
+        "violations": [
+          "Invariant LockExclusion is violated."
+        ],
+        "trace_states": 11,
+        "input_snapshot": "runs/batch-01/negative-read-through-writer-LockExclusion/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/negative-read-through-writer-LockExclusion/result.json",
+            "sha256": "2fa1c2d9b937623b4f643be175be92b79c595d9a654d374a193a7c5b961abcca",
+            "bytes": 12800
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/negative-read-through-writer-LockExclusion/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/negative-read-through-writer-LockExclusion/tlc.log",
+            "sha256": "4c5c4815bfa0ac81154d62ff96fbfee4121ae9cacdcd6e98d976adb46cb1c4f8",
+            "bytes": 50077
+          },
+          "messages.json": {
+            "path": "runs/batch-01/negative-read-through-writer-LockExclusion/messages.json",
+            "sha256": "58c1ccee1dc4553c12fe5b458f15b74704dd40a7508aab5fbc588e404e23f6ce",
+            "bytes": 51541
+          },
+          "runner.log": {
+            "path": "runs/batch-01/negative-read-through-writer-LockExclusion/runner.log",
+            "sha256": "cd26ed26c73bde270f1bf122eca51e3a8b6b0e0930c6c32643983c035e2212cc",
+            "bytes": 233
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "negative-skip-gap-ConsumerSafety",
+        "kind": "negative-control",
+        "status": "COUNTEREXAMPLE",
+        "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+        "process": {
+          "exit_code": 12,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 904,
+          "distinct_states": 460,
+          "remaining_states": 105
+        },
+        "started_at": "2026-11-17T14:07:04.463699+00:00",
+        "finished_at": "2026-11-17T14:07:06.032577+00:00",
+        "duration_seconds": 1.568976,
+        "violations": [
+          "Invariant ConsumerSafety is violated."
+        ],
+        "trace_states": 14,
+        "input_snapshot": "runs/batch-01/negative-skip-gap-ConsumerSafety/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/negative-skip-gap-ConsumerSafety/result.json",
+            "sha256": "2909f0e4d6a33ecb2cd2e819ef9fe68ef5d17742d6e289df6b9026761cce4774",
+            "bytes": 12662
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/negative-skip-gap-ConsumerSafety/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/negative-skip-gap-ConsumerSafety/tlc.log",
+            "sha256": "f7d7232a46d643a996079aab07166e11b697b8a092d20b5d7d7b4fa0331fac42",
+            "bytes": 65778
+          },
+          "messages.json": {
+            "path": "runs/batch-01/negative-skip-gap-ConsumerSafety/messages.json",
+            "sha256": "c5a0fe49e3ef9f6ffe8beba9b2259b1f50cc889184bb053b52e68ae3bebe4cde",
+            "bytes": 68090
+          },
+          "runner.log": {
+            "path": "runs/batch-01/negative-skip-gap-ConsumerSafety/runner.log",
+            "sha256": "a26236e6e84a1a29b32cfd91e860cc1b5ea0ac8a0e9efa603c1080d2321d0543",
+            "bytes": 223
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "negative-skip-original-OriginalAuthority",
+        "kind": "negative-control",
+        "status": "COUNTEREXAMPLE",
+        "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+        "process": {
+          "exit_code": 12,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 181,
+          "distinct_states": 113,
+          "remaining_states": 40
+        },
+        "started_at": "2026-11-17T14:06:47.608714+00:00",
+        "finished_at": "2026-11-17T14:06:48.975199+00:00",
+        "duration_seconds": 1.366531,
+        "violations": [
+          "Invariant OriginalAuthority is violated."
+        ],
+        "trace_states": 10,
+        "input_snapshot": "runs/batch-01/negative-skip-original-OriginalAuthority/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/negative-skip-original-OriginalAuthority/result.json",
+            "sha256": "bde1ac950b50ea18d856924dc578d1968e3739e5f4b52e5ac9c89e2d031a0f39",
+            "bytes": 12775
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/negative-skip-original-OriginalAuthority/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/negative-skip-original-OriginalAuthority/tlc.log",
+            "sha256": "47bfdaa813fefb94534451f0eea848ba0659292c9c34a74164d1204b5241984f",
+            "bytes": 45464
+          },
+          "messages.json": {
+            "path": "runs/batch-01/negative-skip-original-OriginalAuthority/messages.json",
+            "sha256": "7ccb7058641cd9a3dfd85894f747ade38bef01b7ecfbeaa4fa44ff70fa1cf932",
+            "bytes": 46719
+          },
+          "runner.log": {
+            "path": "runs/batch-01/negative-skip-original-OriginalAuthority/runner.log",
+            "sha256": "700bd86603ac085c1ef5bff391850c402836dd5e623fa6e4a3f248094282299c",
+            "bytes": 231
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "negative-stale-send-NoStaleSend",
+        "kind": "negative-control",
+        "status": "COUNTEREXAMPLE",
+        "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+        "process": {
+          "exit_code": 12,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 217,
+          "distinct_states": 136,
+          "remaining_states": 62
+        },
+        "started_at": "2026-11-17T14:07:00.241029+00:00",
+        "finished_at": "2026-11-17T14:07:01.540284+00:00",
+        "duration_seconds": 1.299321,
+        "violations": [
+          "Invariant NoStaleSend is violated."
+        ],
+        "trace_states": 6,
+        "input_snapshot": "runs/batch-01/negative-stale-send-NoStaleSend/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/negative-stale-send-NoStaleSend/result.json",
+            "sha256": "c23bf60480ae88ad42923ebb0fe7d7775a843bce49f4b196c5d34c50f1c205e6",
+            "bytes": 12646
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/negative-stale-send-NoStaleSend/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/negative-stale-send-NoStaleSend/tlc.log",
+            "sha256": "b992a53e06371e5bc75401781fb877cca7120cd3d0a27374b83736975dab2054",
+            "bytes": 27308
+          },
+          "messages.json": {
+            "path": "runs/batch-01/negative-stale-send-NoStaleSend/messages.json",
+            "sha256": "2d872dc62851c21a841eadc1f2c08c1bcde8bd3975c954baf029d1776b737914",
+            "bytes": 27708
+          },
+          "runner.log": {
+            "path": "runs/batch-01/negative-stale-send-NoStaleSend/runner.log",
+            "sha256": "bffbe71b9569d6fab1f246d9d4a70b8340a6038b39374dd236228b98529fb883",
+            "bytes": 222
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "negative-start-after-stop-NoNewAfterStop",
+        "kind": "negative-control",
+        "status": "COUNTEREXAMPLE",
+        "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+        "process": {
+          "exit_code": 12,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 964,
+          "distinct_states": 495,
+          "remaining_states": 195
+        },
+        "started_at": "2026-11-17T14:07:14.309874+00:00",
+        "finished_at": "2026-11-17T14:07:15.734982+00:00",
+        "duration_seconds": 1.425174,
+        "violations": [
+          "Invariant NoNewAfterStop is violated."
+        ],
+        "trace_states": 9,
+        "input_snapshot": "runs/batch-01/negative-start-after-stop-NoNewAfterStop/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/negative-start-after-stop-NoNewAfterStop/result.json",
+            "sha256": "8ebc37dd9f78157d6f64b7b11fa1d58e002a4e99ae980f4affbc1bc41836005b",
+            "bytes": 12775
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/negative-start-after-stop-NoNewAfterStop/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/negative-start-after-stop-NoNewAfterStop/tlc.log",
+            "sha256": "0f7a7c8503d3aff235cff8be8090cd709097ace2b4bbade73159f1b6f6bd6177",
+            "bytes": 39629
+          },
+          "messages.json": {
+            "path": "runs/batch-01/negative-start-after-stop-NoNewAfterStop/messages.json",
+            "sha256": "0571b3e891c272666bc3da09d6eda394e6bd42ac74ffe5210e161ef82eef16d3",
+            "bytes": 40589
+          },
+          "runner.log": {
+            "path": "runs/batch-01/negative-start-after-stop-NoNewAfterStop/runner.log",
+            "sha256": "c7fed22bc19fa5e501406cdc8f2def0c65ac70c607858ed286c7b83b00dc33fa",
+            "bytes": 231
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "negative-type-TypeOK",
+        "kind": "negative-control",
+        "status": "COUNTEREXAMPLE",
+        "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+        "process": {
+          "exit_code": 12,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 6,
+          "distinct_states": 5,
+          "remaining_states": 3
+        },
+        "started_at": "2026-11-17T14:06:43.213974+00:00",
+        "finished_at": "2026-11-17T14:06:44.655040+00:00",
+        "duration_seconds": 1.441111,
+        "violations": [
+          "Invariant TypeOK is violated."
+        ],
+        "trace_states": 2,
+        "input_snapshot": "runs/batch-01/negative-type-TypeOK/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/negative-type-TypeOK/result.json",
+            "sha256": "4608d51c39ad14f44559b14ab41aa6ff805351113ebc875df0b93a5e7caa7537",
+            "bytes": 12470
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/negative-type-TypeOK/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/negative-type-TypeOK/tlc.log",
+            "sha256": "b41fd7e0ecbdb231731e910358480c049098b5c96ab7ebc66993f4d40fb295e2",
+            "bytes": 9989
+          },
+          "messages.json": {
+            "path": "runs/batch-01/negative-type-TypeOK/messages.json",
+            "sha256": "d9bda68014bce95c1e6107110f60d3dc105fe255554a0931b881a2576bc675bb",
+            "bytes": 9582
+          },
+          "runner.log": {
+            "path": "runs/batch-01/negative-type-TypeOK/runner.log",
+            "sha256": "b7ba6120e3370e2af79121e2b5c04b52321ce3add53b85efc5c415fc83adeba1",
+            "bytes": 211
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "negative-upgrade-old-RaceEligibility",
+        "kind": "negative-control",
+        "status": "COUNTEREXAMPLE",
+        "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+        "process": {
+          "exit_code": 12,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 166,
+          "distinct_states": 104,
+          "remaining_states": 31
+        },
+        "started_at": "2026-11-17T14:06:49.048391+00:00",
+        "finished_at": "2026-11-17T14:06:50.346129+00:00",
+        "duration_seconds": 1.297838,
+        "violations": [
+          "Invariant RaceEligibility is violated."
+        ],
+        "trace_states": 11,
+        "input_snapshot": "runs/batch-01/negative-upgrade-old-RaceEligibility/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/negative-upgrade-old-RaceEligibility/result.json",
+            "sha256": "c0c72e14c77beaccd68f946b99991b4d9667a34ea4b70e016505b94d4ce9a3a1",
+            "bytes": 12718
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/negative-upgrade-old-RaceEligibility/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/negative-upgrade-old-RaceEligibility/tlc.log",
+            "sha256": "39d1a4414f6b7f57c2cd9f0f61f3e6472fa22d87221cd580ce066993a5ff50b6",
+            "bytes": 49258
+          },
+          "messages.json": {
+            "path": "runs/batch-01/negative-upgrade-old-RaceEligibility/messages.json",
+            "sha256": "c457e1fa533cc70a447aa890e1d815c2fbbfb5e337e237433e188c2d104b7377",
+            "bytes": 50721
+          },
+          "runner.log": {
+            "path": "runs/batch-01/negative-upgrade-old-RaceEligibility/runner.log",
+            "sha256": "ac83fd23fecf07d8e86ff1e2bc57792b476ea23a543c38af52764de47b5ccda3",
+            "bytes": 227
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "negative-upgrade-rpc-RaceEligibility",
+        "kind": "negative-control",
+        "status": "COUNTEREXAMPLE",
+        "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+        "process": {
+          "exit_code": 12,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 177,
+          "distinct_states": 113,
+          "remaining_states": 40
+        },
+        "started_at": "2026-11-17T14:06:50.439010+00:00",
+        "finished_at": "2026-11-17T14:06:51.865828+00:00",
+        "duration_seconds": 1.426864,
+        "violations": [
+          "Invariant RaceEligibility is violated."
+        ],
+        "trace_states": 10,
+        "input_snapshot": "runs/batch-01/negative-upgrade-rpc-RaceEligibility/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/negative-upgrade-rpc-RaceEligibility/result.json",
+            "sha256": "12c67ece534e2db0aad94aa1bc4d677658c803a0b27101be97af36be0896218e",
+            "bytes": 12717
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/negative-upgrade-rpc-RaceEligibility/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/negative-upgrade-rpc-RaceEligibility/tlc.log",
+            "sha256": "43f4971b2655e1f0b56b2d4ead534ac9083c5ad88a92923d85b04a429cd90bea",
+            "bytes": 45402
+          },
+          "messages.json": {
+            "path": "runs/batch-01/negative-upgrade-rpc-RaceEligibility/messages.json",
+            "sha256": "453d4cda2341a5c0f1fced3571dc312b752999d067d6165270c25cc1fd516540",
+            "bytes": 46677
+          },
+          "runner.log": {
+            "path": "runs/batch-01/negative-upgrade-rpc-RaceEligibility/runner.log",
+            "sha256": "a8465a74a1e688d23ba9c7b7783bb06e065fa567107f37d5f4316886fd555721",
+            "bytes": 227
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "positive-consumer-rejection",
+        "kind": "positive",
+        "status": "PASS_WITHIN_SCOPE",
+        "reason": "COMPLETE_MODEL_CHECK",
+        "process": {
+          "exit_code": 0,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 23853,
+          "distinct_states": 10402,
+          "remaining_states": 0
+        },
+        "started_at": "2026-11-17T14:06:18.236594+00:00",
+        "finished_at": "2026-11-17T14:06:20.803214+00:00",
+        "duration_seconds": 2.566664,
+        "violations": [],
+        "trace_states": 0,
+        "input_snapshot": "runs/batch-01/positive-consumer-rejection/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/positive-consumer-rejection/result.json",
+            "sha256": "3f2d77177714dc08ba869282e0079e6a21686d95143ef204737de7b6d373566a",
+            "bytes": 13298
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/positive-consumer-rejection/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/positive-consumer-rejection/tlc.log",
+            "sha256": "a619fbecf90af3cf0ba7a154f864bea6fa9d8034adf6940e67f97b1ab3d2cbf8",
+            "bytes": 2730
+          },
+          "messages.json": {
+            "path": "runs/batch-01/positive-consumer-rejection/messages.json",
+            "sha256": "31fc5deaf9153fcca4449279f87eb80f2b3185506e0d8a9d98ed5d6c5020f27b",
+            "bytes": 1915
+          },
+          "runner.log": {
+            "path": "runs/batch-01/positive-consumer-rejection/runner.log",
+            "sha256": "991567bb7c726d6b42c35e75e4a20df1ddd35da215b2e53dddb0c47d501d7b2b",
+            "bytes": 211
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "positive-failure",
+        "kind": "positive",
+        "status": "PASS_WITHIN_SCOPE",
+        "reason": "COMPLETE_MODEL_CHECK",
+        "process": {
+          "exit_code": 0,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 118448,
+          "distinct_states": 46466,
+          "remaining_states": 0
+        },
+        "started_at": "2026-11-17T14:06:30.253281+00:00",
+        "finished_at": "2026-11-17T14:06:36.223492+00:00",
+        "duration_seconds": 5.970256,
+        "violations": [],
+        "trace_states": 0,
+        "input_snapshot": "runs/batch-01/positive-failure/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/positive-failure/result.json",
+            "sha256": "58e21e7277bc6f05c637d50dbbb1930e7e8aced162d3eba6cb1504b3a31c0cd9",
+            "bytes": 13157
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/positive-failure/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/positive-failure/tlc.log",
+            "sha256": "ff35c6d057c955dabbebe8a704044de5cbe2af9e1c47002c268843e62017d492",
+            "bytes": 2930
+          },
+          "messages.json": {
+            "path": "runs/batch-01/positive-failure/messages.json",
+            "sha256": "256c300697142a6fd5a80140c0467bd0608ea5c9b9c52e7bdb4508d000331cf4",
+            "bytes": 2181
+          },
+          "runner.log": {
+            "path": "runs/batch-01/positive-failure/runner.log",
+            "sha256": "8b64a16b022eef51850c72fbecda30b1171d454aab8b09cd11dc9a6e8c171128",
+            "bytes": 200
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "positive-future-request",
+        "kind": "positive",
+        "status": "PASS_WITHIN_SCOPE",
+        "reason": "COMPLETE_MODEL_CHECK",
+        "process": {
+          "exit_code": 0,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 6369,
+          "distinct_states": 2746,
+          "remaining_states": 0
+        },
+        "started_at": "2026-11-17T14:06:38.255146+00:00",
+        "finished_at": "2026-11-17T14:06:40.571254+00:00",
+        "duration_seconds": 2.31616,
+        "violations": [],
+        "trace_states": 0,
+        "input_snapshot": "runs/batch-01/positive-future-request/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/positive-future-request/result.json",
+            "sha256": "3856d239a79b1ec60f78ed20f2b130659f43ea293850ebc4b92d320ddde4aded",
+            "bytes": 13243
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/positive-future-request/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/positive-future-request/tlc.log",
+            "sha256": "9615399c80f9084d39fce5010d74382be3884ac8aaf4e74ad1b87e92ec74a8c9",
+            "bytes": 2703
+          },
+          "messages.json": {
+            "path": "runs/batch-01/positive-future-request/messages.json",
+            "sha256": "7bf67c63c016e4e2d5e912c78f7caf571ad3e45ab7dd3677129756ad1661bc88",
+            "bytes": 1908
+          },
+          "runner.log": {
+            "path": "runs/batch-01/positive-future-request/runner.log",
+            "sha256": "682f2e13e47e41f4e6f0a8ddec8b2847f693846bb4810a13c5982735466872a8",
+            "bytes": 207
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "positive-history",
+        "kind": "positive",
+        "status": "PASS_WITHIN_SCOPE",
+        "reason": "COMPLETE_MODEL_CHECK",
+        "process": {
+          "exit_code": 0,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 16093,
+          "distinct_states": 7142,
+          "remaining_states": 0
+        },
+        "started_at": "2026-11-17T14:06:11.358037+00:00",
+        "finished_at": "2026-11-17T14:06:14.033541+00:00",
+        "duration_seconds": 2.675611,
+        "violations": [],
+        "trace_states": 0,
+        "input_snapshot": "runs/batch-01/positive-history/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/positive-history/result.json",
+            "sha256": "ad7d5718b3807969712574875c216e41b07b28650717c5c934d42a24422b19ed",
+            "bytes": 13154
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/positive-history/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/positive-history/tlc.log",
+            "sha256": "777bbbd1dad798fe7a597cb94ed56d9a1c417284cbb9852cd5ac2a276bcbe722",
+            "bytes": 2672
+          },
+          "messages.json": {
+            "path": "runs/batch-01/positive-history/messages.json",
+            "sha256": "357b0dc5e827aac0d0b180a9ed9857218e7bac3c9e60d11df4d7791a6a9dd76f",
+            "bytes": 1912
+          },
+          "runner.log": {
+            "path": "runs/batch-01/positive-history/runner.log",
+            "sha256": "e4c4b28f8d1abcbd483b30096efa1aeb6db4ad4923c93c598c720fea1661a43c",
+            "bytes": 200
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "positive-identity",
+        "kind": "positive",
+        "status": "PASS_WITHIN_SCOPE",
+        "reason": "COMPLETE_MODEL_CHECK",
+        "process": {
+          "exit_code": 0,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 175915,
+          "distinct_states": 72013,
+          "remaining_states": 0
+        },
+        "started_at": "2026-11-17T14:06:20.883444+00:00",
+        "finished_at": "2026-11-17T14:06:30.190844+00:00",
+        "duration_seconds": 9.307444,
+        "violations": [],
+        "trace_states": 0,
+        "input_snapshot": "runs/batch-01/positive-identity/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/positive-identity/result.json",
+            "sha256": "277face302258dbccdf367d75cd4716f45424700cdb928112ec53449e1bbb46b",
+            "bytes": 13171
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/positive-identity/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/positive-identity/tlc.log",
+            "sha256": "52e8104394eeeb2da4f5812a6f55225ebdcc36ebc31709233b7bb80efb8bf6de",
+            "bytes": 2936
+          },
+          "messages.json": {
+            "path": "runs/batch-01/positive-identity/messages.json",
+            "sha256": "2b3f4ae626221bfdf25ee4143386b3fe8e722f5236660bbd5a9dff99a6c6303a",
+            "bytes": 2182
+          },
+          "runner.log": {
+            "path": "runs/batch-01/positive-identity/runner.log",
+            "sha256": "1306d04797bc0bcb38b98d8cfb79cd9aee1224e1ac7f40684f165a5b30a15ca5",
+            "bytes": 201
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "positive-ineligible",
+        "kind": "positive",
+        "status": "PASS_WITHIN_SCOPE",
+        "reason": "COMPLETE_MODEL_CHECK",
+        "process": {
+          "exit_code": 0,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 6969,
+          "distinct_states": 2966,
+          "remaining_states": 0
+        },
+        "started_at": "2026-11-17T14:06:36.281612+00:00",
+        "finished_at": "2026-11-17T14:06:38.172381+00:00",
+        "duration_seconds": 1.890979,
+        "violations": [],
+        "trace_states": 0,
+        "input_snapshot": "runs/batch-01/positive-ineligible/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/positive-ineligible/result.json",
+            "sha256": "6f5f34be52533a78de04f851c8a0b3ff2257535d26c8e32fbc81024c5762a708",
+            "bytes": 13193
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/positive-ineligible/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/positive-ineligible/tlc.log",
+            "sha256": "06e6b7c10eb0457919b3c2b28aa10be47c7942f3d2651b35d9f971ce06dd677a",
+            "bytes": 2685
+          },
+          "messages.json": {
+            "path": "runs/batch-01/positive-ineligible/messages.json",
+            "sha256": "7d94a3d59632da1bc8ff8aa17bb8de366f708350b55e922c88cdcc26474e35e5",
+            "bytes": 1910
+          },
+          "runner.log": {
+            "path": "runs/batch-01/positive-ineligible/runner.log",
+            "sha256": "41bcc593630c29c2e13bf090b6f0e8ee9eed2bd5384cbc7ed2f348889acd01b1",
+            "bytes": 203
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "positive-page-two",
+        "kind": "positive",
+        "status": "PASS_WITHIN_SCOPE",
+        "reason": "COMPLETE_MODEL_CHECK",
+        "process": {
+          "exit_code": 0,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 14717,
+          "distinct_states": 6198,
+          "remaining_states": 0
+        },
+        "started_at": "2026-11-17T14:06:40.636920+00:00",
+        "finished_at": "2026-11-17T14:06:43.150577+00:00",
+        "duration_seconds": 2.513703,
+        "violations": [],
+        "trace_states": 0,
+        "input_snapshot": "runs/batch-01/positive-page-two/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/positive-page-two/result.json",
+            "sha256": "d6acff48c98243c5ad44bc077ddde689e121826c9460710170e78fc9f2acc25d",
+            "bytes": 13167
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/positive-page-two/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/positive-page-two/tlc.log",
+            "sha256": "3ca32eaf522d001a0bf7b5fc5d21e103d85c542fa212766bedf067eb1dfd592e",
+            "bytes": 2677
+          },
+          "messages.json": {
+            "path": "runs/batch-01/positive-page-two/messages.json",
+            "sha256": "aa8860d8e3928ad322afdec45848c3a3ca9007743941a22c1799acbab90454fa",
+            "bytes": 1912
+          },
+          "runner.log": {
+            "path": "runs/batch-01/positive-page-two/runner.log",
+            "sha256": "99bf75653f8db04ef6d798961edaf23241a8686b2f417b3f2452b41ce111ffa9",
+            "bytes": 201
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "positive-predecessor-rpc",
+        "kind": "positive",
+        "status": "PASS_WITHIN_SCOPE",
+        "reason": "COMPLETE_MODEL_CHECK",
+        "process": {
+          "exit_code": 0,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 39565,
+          "distinct_states": 17430,
+          "remaining_states": 0
+        },
+        "started_at": "2026-11-17T14:06:14.099845+00:00",
+        "finished_at": "2026-11-17T14:06:18.155731+00:00",
+        "duration_seconds": 4.056006,
+        "violations": [],
+        "trace_states": 0,
+        "input_snapshot": "runs/batch-01/positive-predecessor-rpc/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/positive-predecessor-rpc/result.json",
+            "sha256": "78508d1d293a341d8b8b60490b3f2c38e7418788aba3eb3aa9684908407d7c67",
+            "bytes": 13259
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/positive-predecessor-rpc/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/positive-predecessor-rpc/tlc.log",
+            "sha256": "6cea63b753b869409b5aa9015f8c182770ba93d83f88c55e9c5b249c45aa6a87",
+            "bytes": 2715
+          },
+          "messages.json": {
+            "path": "runs/batch-01/positive-predecessor-rpc/messages.json",
+            "sha256": "45b611e9c5d7fa138a297fb85ab6deb97ea28def858c224e0c49cfc6a6b1162b",
+            "bytes": 1915
+          },
+          "runner.log": {
+            "path": "runs/batch-01/positive-predecessor-rpc/runner.log",
+            "sha256": "e113ab0ec30bb9158255222d30b3aa31503cf2bb2ba5d03c97d1d6191adf539c",
+            "bytes": 208
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "positive-race",
+        "kind": "positive",
+        "status": "PASS_WITHIN_SCOPE",
+        "reason": "COMPLETE_MODEL_CHECK",
+        "process": {
+          "exit_code": 0,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 6669,
+          "distinct_states": 2856,
+          "remaining_states": 0
+        },
+        "started_at": "2026-11-17T14:06:09.051404+00:00",
+        "finished_at": "2026-11-17T14:06:11.251654+00:00",
+        "duration_seconds": 2.200303,
+        "violations": [],
+        "trace_states": 0,
+        "input_snapshot": "runs/batch-01/positive-race/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/positive-race/result.json",
+            "sha256": "765aa2b808bdbced1111faef471d94d6dad0a2227781fa272221c70f6fabc265",
+            "bytes": 13114
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/positive-race/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/positive-race/tlc.log",
+            "sha256": "01eca1b0bde637dcac27498867cf7717ad6b3ecd36cf01cf6a077306cd0e8d9b",
+            "bytes": 2655
+          },
+          "messages.json": {
+            "path": "runs/batch-01/positive-race/messages.json",
+            "sha256": "f5a3cc2980d8adb7693ac8df1403d912b87517bec0e6bc74b0bc7e0402b55f6f",
+            "bytes": 1910
+          },
+          "runner.log": {
+            "path": "runs/batch-01/positive-race/runner.log",
+            "sha256": "14b4d181f68cd57c03c3844618fff788de2514135a80514e0196a4613ac93019",
+            "bytes": 197
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "witness-commit-before-settle",
+        "kind": "witness",
+        "status": "COUNTEREXAMPLE",
+        "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+        "process": {
+          "exit_code": 12,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 632,
+          "distinct_states": 334,
+          "remaining_states": 89
+        },
+        "started_at": "2026-11-17T14:07:30.163188+00:00",
+        "finished_at": "2026-11-17T14:07:31.637014+00:00",
+        "duration_seconds": 1.473875,
+        "violations": [
+          "Invariant NotCommitBeforeSettle is violated."
+        ],
+        "trace_states": 13,
+        "input_snapshot": "runs/batch-01/witness-commit-before-settle/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/witness-commit-before-settle/result.json",
+            "sha256": "206a5a6bbcd37592878a9e8b7df9160b4f868e8de926e4b415674ccffe94f82a",
+            "bytes": 12619
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/witness-commit-before-settle/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/witness-commit-before-settle/tlc.log",
+            "sha256": "0560dabf2745d10f648d0e71898901a08d1242315ffcec0cb60d5aba61bcf0ed",
+            "bytes": 59605
+          },
+          "messages.json": {
+            "path": "runs/batch-01/witness-commit-before-settle/messages.json",
+            "sha256": "66280eec87b187d8877ba5b71987ef0d20e871fc11baf808302320ee5257183e",
+            "bytes": 61604
+          },
+          "runner.log": {
+            "path": "runs/batch-01/witness-commit-before-settle/runner.log",
+            "sha256": "3bdc4b8d87ba4fcb5774c510f53629e1becae390a9c8b41bb63a58972e7d7a85",
+            "bytes": 219
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "witness-history-applied",
+        "kind": "witness",
+        "status": "COUNTEREXAMPLE",
+        "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+        "process": {
+          "exit_code": 12,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 701,
+          "distinct_states": 371,
+          "remaining_states": 78
+        },
+        "started_at": "2026-11-17T14:07:17.516708+00:00",
+        "finished_at": "2026-11-17T14:07:18.950243+00:00",
+        "duration_seconds": 1.433578,
+        "violations": [
+          "Invariant NotHistoryApplied is violated."
+        ],
+        "trace_states": 15,
+        "input_snapshot": "runs/batch-01/witness-history-applied/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/witness-history-applied/result.json",
+            "sha256": "6ed46bbad2365aba17bab0f0197802bb155fac9aad4f7da5984c87799d9c73c2",
+            "bytes": 12546
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/witness-history-applied/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/witness-history-applied/tlc.log",
+            "sha256": "70c8a57b75572dad9a655b2f33d2f05a454318c3a6de04e5a64673ef693a3a68",
+            "bytes": 71013
+          },
+          "messages.json": {
+            "path": "runs/batch-01/witness-history-applied/messages.json",
+            "sha256": "37834495be96c841f45790e143215c5094e1d2a8e698c8a4f22bf06391c0bf16",
+            "bytes": 73632
+          },
+          "runner.log": {
+            "path": "runs/batch-01/witness-history-applied/runner.log",
+            "sha256": "86c7dbce2f96cdcb7d58a3dbefb581c806f598086727a54196100368e8b72731",
+            "bytes": 214
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "witness-late-old-link",
+        "kind": "witness",
+        "status": "COUNTEREXAMPLE",
+        "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+        "process": {
+          "exit_code": 12,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 10707,
+          "distinct_states": 5651,
+          "remaining_states": 1592
+        },
+        "started_at": "2026-11-17T14:07:25.445042+00:00",
+        "finished_at": "2026-11-17T14:07:28.081895+00:00",
+        "duration_seconds": 2.636901,
+        "violations": [
+          "Invariant NotLateOld is violated."
+        ],
+        "trace_states": 14,
+        "input_snapshot": "runs/batch-01/witness-late-old-link/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/witness-late-old-link/result.json",
+            "sha256": "cea0ddaa1ede70f3f159978843f0d5a395916ce0019fe3351c161caeefce01c6",
+            "bytes": 12513
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/witness-late-old-link/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/witness-late-old-link/tlc.log",
+            "sha256": "594af2b9336521d734ca6a894e09c3da280db10bfe7b13fa399901a6524ea762",
+            "bytes": 66631
+          },
+          "messages.json": {
+            "path": "runs/batch-01/witness-late-old-link/messages.json",
+            "sha256": "25a2329a924e589f1387ba63772608910f9cedebc4f7df3fe0025b5f5abf119f",
+            "bytes": 69041
+          },
+          "runner.log": {
+            "path": "runs/batch-01/witness-late-old-link/runner.log",
+            "sha256": "4e74041bcccc2b9f079ce1306c1af3192d969c3b0c9b6bc50b39484f76d06603",
+            "bytes": 212
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "witness-old-view-discard",
+        "kind": "witness",
+        "status": "COUNTEREXAMPLE",
+        "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+        "process": {
+          "exit_code": 12,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 73,
+          "distinct_states": 45,
+          "remaining_states": 24
+        },
+        "started_at": "2026-11-17T14:07:23.928529+00:00",
+        "finished_at": "2026-11-17T14:07:25.383063+00:00",
+        "duration_seconds": 1.454579,
+        "violations": [
+          "Invariant NotOldDiscard is violated."
+        ],
+        "trace_states": 4,
+        "input_snapshot": "runs/batch-01/witness-old-view-discard/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/witness-old-view-discard/result.json",
+            "sha256": "1fd7dd8bd602e9456954e8c5f06b043c596bcd13da51d9a484540750c186b9d5",
+            "bytes": 12551
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/witness-old-view-discard/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/witness-old-view-discard/tlc.log",
+            "sha256": "97bd60449afde637e4c2fda527084c014f7b0fd16105cf278da46a327e92966d",
+            "bytes": 17830
+          },
+          "messages.json": {
+            "path": "runs/batch-01/witness-old-view-discard/messages.json",
+            "sha256": "7e24b7e12842667bceb27ce39f5206f9af4651d56509fde63b195f02cc7feab9",
+            "bytes": 17789
+          },
+          "runner.log": {
+            "path": "runs/batch-01/witness-old-view-discard/runner.log",
+            "sha256": "96bd52fc2a49afec077a4d0e01fa2cf376c441c6306c91021233f57c57b89e91",
+            "bytes": 215
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "witness-race-applied",
+        "kind": "witness",
+        "status": "COUNTEREXAMPLE",
+        "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+        "process": {
+          "exit_code": 12,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 1342,
+          "distinct_states": 664,
+          "remaining_states": 149
+        },
+        "started_at": "2026-11-17T14:07:15.896625+00:00",
+        "finished_at": "2026-11-17T14:07:17.399148+00:00",
+        "duration_seconds": 1.502575,
+        "violations": [
+          "Invariant NotRaceApplied is violated."
+        ],
+        "trace_states": 16,
+        "input_snapshot": "runs/batch-01/witness-race-applied/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/witness-race-applied/result.json",
+            "sha256": "9c21c806e4aa69aa2342ea3578a1a86e7f2f79ddf016408ffd6a3546b4e2f3ea",
+            "bytes": 12503
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/witness-race-applied/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/witness-race-applied/tlc.log",
+            "sha256": "a2ae227713e224d96800e03cee2830f576484555bdd925a881ef9cd472d69ac8",
+            "bytes": 75095
+          },
+          "messages.json": {
+            "path": "runs/batch-01/witness-race-applied/messages.json",
+            "sha256": "c9661aece7e915bf9f7d519574a2080892113f4412cb76bf7fd02b579eb715fb",
+            "bytes": 77929
+          },
+          "runner.log": {
+            "path": "runs/batch-01/witness-race-applied/runner.log",
+            "sha256": "111f71494d319cb2526bf088fcdc0ea422a98374a03143af91cb5987ac25aa0a",
+            "bytes": 211
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "witness-race-wave-covered-g-settled",
+        "kind": "witness",
+        "status": "COUNTEREXAMPLE",
+        "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+        "process": {
+          "exit_code": 12,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 6492,
+          "distinct_states": 2759,
+          "remaining_states": 21
+        },
+        "started_at": "2026-11-17T14:07:28.155342+00:00",
+        "finished_at": "2026-11-17T14:07:30.086294+00:00",
+        "duration_seconds": 1.931523,
+        "violations": [
+          "Invariant NotWaveCoveredGSettled is violated."
+        ],
+        "trace_states": 31,
+        "input_snapshot": "runs/batch-01/witness-race-wave-covered-g-settled/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/witness-race-wave-covered-g-settled/result.json",
+            "sha256": "50e8eac05d602cf4188b4e94a342089c66f33863f0a10ebcdbdfd817c3cc75c9",
+            "bytes": 12714
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/witness-race-wave-covered-g-settled/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/witness-race-wave-covered-g-settled/tlc.log",
+            "sha256": "9ec55ada0897b4a4a389a11464239f2f613cfc7703b01960da19fdf847dcf064",
+            "bytes": 157597
+          },
+          "messages.json": {
+            "path": "runs/batch-01/witness-race-wave-covered-g-settled/messages.json",
+            "sha256": "106c3aeafedbd7c629dd878a5a236a8e84f50fb65a7cf9c3512eeb1720e6f738",
+            "bytes": 164393
+          },
+          "runner.log": {
+            "path": "runs/batch-01/witness-race-wave-covered-g-settled/runner.log",
+            "sha256": "8dea52488cbc894014360fe4c253681c69592c70920cd073a2c062de4ff37a4b",
+            "bytes": 226
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "witness-rejected-push-recovered",
+        "kind": "witness",
+        "status": "COUNTEREXAMPLE",
+        "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+        "process": {
+          "exit_code": 12,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 4993,
+          "distinct_states": 2277,
+          "remaining_states": 334
+        },
+        "started_at": "2026-11-17T14:07:20.453819+00:00",
+        "finished_at": "2026-11-17T14:07:22.120056+00:00",
+        "duration_seconds": 1.666349,
+        "violations": [
+          "Invariant NotRejectRecovered is violated."
+        ],
+        "trace_states": 23,
+        "input_snapshot": "runs/batch-01/witness-rejected-push-recovered/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/witness-rejected-push-recovered/result.json",
+            "sha256": "5f7fb0b073028e67f58f4264f078c6c574e247abb3d6fec1a22234d5c672e7bb",
+            "bytes": 12655
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/witness-rejected-push-recovered/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/witness-rejected-push-recovered/tlc.log",
+            "sha256": "7df295b5252d4bf4b74ba138bde20625988f80880803cfdc74d8834441143a0f",
+            "bytes": 113907
+          },
+          "messages.json": {
+            "path": "runs/batch-01/witness-rejected-push-recovered/messages.json",
+            "sha256": "57bae8b665677d6eaae93cf13369f0f2d9ad71523bc2504e88efb9bd58a7ca4d",
+            "bytes": 118635
+          },
+          "runner.log": {
+            "path": "runs/batch-01/witness-rejected-push-recovered/runner.log",
+            "sha256": "b4780274e801e82e84bd81d039a319d9562494d112faf2d3676b92577f3c2ecf",
+            "bytes": 222
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "witness-rpc-predecessor",
+        "kind": "witness",
+        "status": "COUNTEREXAMPLE",
+        "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+        "process": {
+          "exit_code": 12,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 673,
+          "distinct_states": 353,
+          "remaining_states": 92
+        },
+        "started_at": "2026-11-17T14:07:19.010533+00:00",
+        "finished_at": "2026-11-17T14:07:20.386995+00:00",
+        "duration_seconds": 1.376507,
+        "violations": [
+          "Invariant NotRPCPredecessor is violated."
+        ],
+        "trace_states": 13,
+        "input_snapshot": "runs/batch-01/witness-rpc-predecessor/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/witness-rpc-predecessor/result.json",
+            "sha256": "401d974d6f035a207efa51bf89638a8ce90b14e4059a2377c7e1f88d8654fbb0",
+            "bytes": 12545
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/witness-rpc-predecessor/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/witness-rpc-predecessor/tlc.log",
+            "sha256": "a50b86df1ce184409ac46aad717b7724ad37f9f18e33b1631c9ab97cc15fe270",
+            "bytes": 60714
+          },
+          "messages.json": {
+            "path": "runs/batch-01/witness-rpc-predecessor/messages.json",
+            "sha256": "182ef04a70ef2bc35ad36bd0636a87709e46919e17b5d89f88ed6d4d50cc8677",
+            "bytes": 62824
+          },
+          "runner.log": {
+            "path": "runs/batch-01/witness-rpc-predecessor/runner.log",
+            "sha256": "9ad03fcf2bd021ddfa0721c06b8642bc40719b55accaed7012d45aa26af76545",
+            "bytes": 214
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "witness-stop-drained",
+        "kind": "witness",
+        "status": "COUNTEREXAMPLE",
+        "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+        "process": {
+          "exit_code": 12,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 32657,
+          "distinct_states": 13909,
+          "remaining_states": 2659
+        },
+        "started_at": "2026-11-17T14:07:31.717583+00:00",
+        "finished_at": "2026-11-17T14:07:34.385054+00:00",
+        "duration_seconds": 2.667517,
+        "violations": [
+          "Invariant NotStopDrained is violated."
+        ],
+        "trace_states": 19,
+        "input_snapshot": "runs/batch-01/witness-stop-drained/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/witness-stop-drained/result.json",
+            "sha256": "c50ce7f59c7eb71efc3e8a95c9cd596e7f50dba8f7eebb65ae2903b7c0ffd498",
+            "bytes": 12508
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/witness-stop-drained/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/witness-stop-drained/tlc.log",
+            "sha256": "aeacdb75534c2e9389c07735595310d40a4a983bce252442086afc7ea44e9cc3",
+            "bytes": 82992
+          },
+          "messages.json": {
+            "path": "runs/batch-01/witness-stop-drained/messages.json",
+            "sha256": "6320081389ac3a410e65f656db84dbf8116624ea48c2940093172ba44ccef86f",
+            "bytes": 86192
+          },
+          "runner.log": {
+            "path": "runs/batch-01/witness-stop-drained/runner.log",
+            "sha256": "c5fee8fd631f3bcfaaaa5478ba265c08f106b0ea15c8e411b4c63b3d43971022",
+            "bytes": 211
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      },
+      {
+        "phase": "batch-01",
+        "profile": "witness-timeout-recovered",
+        "kind": "witness",
+        "status": "COUNTEREXAMPLE",
+        "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+        "process": {
+          "exit_code": 12,
+          "timed_out": false,
+          "interrupted": false
+        },
+        "statistics": {
+          "generated_states": 4251,
+          "distinct_states": 1932,
+          "remaining_states": 225
+        },
+        "started_at": "2026-11-17T14:07:22.187499+00:00",
+        "finished_at": "2026-11-17T14:07:23.863597+00:00",
+        "duration_seconds": 1.676145,
+        "violations": [
+          "Invariant NotTimeoutRecovered is violated."
+        ],
+        "trace_states": 23,
+        "input_snapshot": "runs/batch-01/witness-timeout-recovered/input",
+        "raw": {
+          "result.json": {
+            "path": "runs/batch-01/witness-timeout-recovered/result.json",
+            "sha256": "7b151d1450d4ded04206b3dc160a7d394d53def27c8e6a2bf8497b03c0f5dd23",
+            "bytes": 12580
+          },
+          "manifest.json": {
+            "path": "runs/batch-01/witness-timeout-recovered/manifest.json",
+            "sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020",
+            "bytes": 73301
+          },
+          "tlc.log": {
+            "path": "runs/batch-01/witness-timeout-recovered/tlc.log",
+            "sha256": "96f5271f2b11fcde4eaf9c8b382b5e28530b51da5bbf44ce8d81f09da62181d5",
+            "bytes": 114141
+          },
+          "messages.json": {
+            "path": "runs/batch-01/witness-timeout-recovered/messages.json",
+            "sha256": "b37c199d77c28f20ef8b44b4da079728ba26af04a583155734adfa7057f28392",
+            "bytes": 118895
+          },
+          "runner.log": {
+            "path": "runs/batch-01/witness-timeout-recovered/runner.log",
+            "sha256": "97ef0ecd1ade14d1f5eb71295b34f669b7d027168e9ff6e3ea35391ef59dec79",
+            "bytes": 216
+          }
+        },
+        "model_sha256": "8699cf50662301e12af1460d11272c732f1a255adccfacb7ae8785fe0c41911b",
+        "manifest_sha256": "99c21a46893033cd14cd36b13713c0fc4a7052330704ade385d9e38ab232d020"
+      }
+    ]
+  },
+  "archiving": {
+    "raw_bytes_unchanged": true,
+    "included": "每次result/manifest/TLC完整stdout/messages、所有输入快照；批次runner stdout与原汇总；固定runner源码",
+    "excluded": "官方工具jar和可重建TLC states/runtime-home/tmp不入版本库；工具SHA和运行命令保留；原本地运行目录未删除",
+    "absolute_paths": "原result/runner stdout内执行路径作为历史事实原样保留；正式导航使用本目录相对路径"
+  }
+}
