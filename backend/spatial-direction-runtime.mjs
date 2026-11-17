@@ -23,7 +23,8 @@ export function committedPublisher({ runtime, deliver, track = promise => promis
     dirty = false; includeLegacy = false;
     let repeat = false;
     try {
-      const result = await runtime.publishPending(deliver, { capability });
+      const result = await runtime.publishPending(deliver, { capability, isStopped: () => stopped });
+      if (stopped) return;
       const pending = (await runtime.pool.query("SELECT 1 FROM outbox o JOIN sessions s ON s.session_id=o.session_id WHERE o.status='Pending' AND ($1::text IS NULL OR s.state->>'protocolCapability'=$1) LIMIT 1", [includeLegacy ? null : capability])).rowCount > 0;
       dirty ||= pending;
       // 本轮尚未尝试的新提交须再读一次，不能被旧安装围栏的零进展吞掉。
