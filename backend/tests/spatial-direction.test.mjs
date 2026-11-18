@@ -4,6 +4,7 @@ import { startTestPostgres } from '../test-support/postgres.mjs';
 import { AuthorityRuntime, createRuntime } from '../runtime.mjs';
 import { decodeJsonbText } from '../jsonb-text.mjs';
 import { committedPublisher } from '../spatial-direction-runtime.mjs';
+import { executeSpatial } from '../spatial-runtime.mjs';
 
 const capabilities = ['spatial-v2', 'spatial-direction-v1', 'spatial-scene-overview-v1'];
 const timedCapabilities = [...capabilities, 'spatial-timed-trail-v1'];
@@ -103,9 +104,60 @@ test('方向锁内授权：三能力命中，旧两能力和其他动作保持�
       try {
         assert.equal((await submit(r, action)).status, 'Accepted');
         assertActionAuthorization(observed.trace, r, joined && action.kind !== 'move_to');
+        assert.equal(observed.trace.queries.filter(sql => sql.startsWith('SELECT handled_seq FROM spatial_command_sources')).length, action.kind === 'move_direction' ? 0 : 1);
+        assert.equal(observed.trace.queries.filter(sql => sql.startsWith('INSERT INTO spatial_command_sources')).length, 1);
       } finally { observed.restore(); }
     }
   }
+});
+
+test('公开方向水位：正序号、大整数、相等回退、issued保留与新epoch原Receipt', async () => {
+  const r = await room(timedCapabilities), actorId = own(await state(r)).characterId;
+  const epoch = r.snapshot.projection.self.controlEpoch;
+  const sources = async () => (await database.pool.query('SELECT control_epoch,issued_seq,handled_seq FROM spatial_command_sources WHERE session_id=$1 AND actor_id=$2 ORDER BY control_epoch', [r.sessionId, actorId])).rows;
+  assert.deepEqual(await sources(), []);
+  const original = request(r, direction(r, 1, 'E'));
+  const accepted = await runtime.submit(r.handles[0], original);
+  assert.equal(accepted.status, 'Accepted');
+  assert.deepEqual(await sources(), [{ control_epoch: epoch, issued_seq: '0', handled_seq: '1' }]);
+  const issued = '9007199254741009', larger = '9007199254740993';
+  await database.pool.query('UPDATE spatial_command_sources SET issued_seq=$4 WHERE session_id=$1 AND actor_id=$2 AND control_epoch=$3', [r.sessionId, actorId, epoch, issued]);
+  assert.equal((await submit(r, direction(r, larger, 'S'))).status, 'Accepted');
+  const advanced = [{ control_epoch: epoch, issued_seq: issued, handled_seq: larger }];
+  assert.deepEqual(await sources(), advanced, '方向处理不能覆盖已有issued_seq，也不能把大序号转成Number');
+  for (const action of [direction(r, larger, 'W'), direction(r, 2, 'W'), { ...direction(r, larger, 'N'), mapVersion: 'stale-map' }]) {
+    assert.equal((await submit(r, action)).code, 'STALE_MOVEMENT_COMMAND');
+    assert.deepEqual(await sources(), advanced, '相等/回退拒绝不能改变任一水位');
+  }
+  const taken = await runtime.control(r.handles[0], JSON.stringify({ schemaVersion: 2, type: 'control.take', sessionId: r.sessionId,
+    viewId: r.snapshot.viewId, actorRef: r.snapshot.projection.self.entityRef, nonce: crypto.randomUUID() }));
+  assert.ok(BigInt(taken.controlEpoch) > BigInt(epoch));
+  r.snapshot = taken.snapshot;
+  assert.equal((await submit(r, direction(r, 1, 'E'))).status, 'Accepted');
+  const afterTake = [...advanced, { control_epoch: taken.controlEpoch, issued_seq: '0', handled_seq: '1' }];
+  assert.deepEqual(await sources(), afterTake, '新epoch独立从1开始，旧epoch的两项水位保留');
+  const replayed = observeSubmission();
+  try {
+    assert.deepEqual(await runtime.submit(r.handles[0], original), accepted);
+    assert.equal(replayed.trace.queries.some(sql => sql.includes('spatial_command_sources')), false, '原Receipt先返回，不重新检查或写入当前epoch水位');
+  } finally { replayed.restore(); }
+  assert.deepEqual(await sources(), afterTake);
+});
+
+test('公开方向入口资格：未带内部开关的直接调用保留原查询与validate', async () => {
+  const r = await room(timedCapabilities), envelope = JSON.parse(request(r, direction(r, 1, 'E')));
+  const observed = observeSubmission(); let validations = 0;
+  try {
+    const receipt = await runtime.locked(r.sessionId, { kind: 'direction-entry-qualification' }, async tx => {
+      const user = await runtime.access(tx.client, tx.row, r.users[0].token, { sessionLock: 'update' });
+      return executeSpatial(runtime, tx, envelope, { ...user, principalKind: 'human' },
+        async actor => actor.mode === 'HumanControlled' && actor.activeConnectionId === r.handles[0].connectionId && await runtime.liveConnection(tx, r.handles[0]),
+        { validate: () => { validations++; } });
+    });
+    assert.equal(receipt.status, 'Accepted'); assert.equal(validations, 1);
+    assert.equal(observed.trace.queries.filter(sql => sql.startsWith('SELECT handled_seq FROM spatial_command_sources')).length, 1);
+    assert.equal(observed.trace.queries.filter(sql => sql.startsWith('INSERT INTO spatial_command_sources')).length, 1);
+  } finally { observed.restore(); }
 });
 
 test('方向锁内授权：原Receipt、停止围栏、领域拒绝水位与控制授权保留', async () => {

@@ -167,10 +167,16 @@ export async function executeSpatial(runtime, tx, request, principal, authorized
         if (actor.controlEpoch !== request.controlEpoch || !await authorized(actor))
             throw new RuleError('STALE_CONTROL');
         if (['move_to', 'move_direction', 'stop_move'].includes(request.action.kind)) {
-            const current = await highWater(tx, actor);
-            if (BigInt(request.action.movementCommandSeq) <= BigInt(current))
-                throw new RuleError('STALE_MOVEMENT_COMMAND');
-            await tx.client.query('INSERT INTO spatial_command_sources(session_id,actor_id,control_epoch,handled_seq) VALUES($1,$2,$3,$4) ON CONFLICT(session_id,actor_id,control_epoch) DO UPDATE SET handled_seq=EXCLUDED.handled_seq', [request.sessionId, actor.characterId, actor.controlEpoch, request.action.movementCommandSeq]);
+            // 仅已验证公开方向合并水位读写；内部调用及其他移动动作保留原路径。
+            if (direction && options.publicDirectionWatermark === true) {
+                const claimed = await tx.client.query('INSERT INTO spatial_command_sources(session_id,actor_id,control_epoch,handled_seq) VALUES($1,$2,$3,$4) ON CONFLICT(session_id,actor_id,control_epoch) DO UPDATE SET handled_seq=EXCLUDED.handled_seq WHERE spatial_command_sources.handled_seq < EXCLUDED.handled_seq RETURNING handled_seq', [request.sessionId, actor.characterId, actor.controlEpoch, request.action.movementCommandSeq]);
+                if (claimed.rows.length === 0) throw new RuleError('STALE_MOVEMENT_COMMAND');
+            } else {
+                const current = await highWater(tx, actor);
+                if (BigInt(request.action.movementCommandSeq) <= BigInt(current))
+                    throw new RuleError('STALE_MOVEMENT_COMMAND');
+                await tx.client.query('INSERT INTO spatial_command_sources(session_id,actor_id,control_epoch,handled_seq) VALUES($1,$2,$3,$4) ON CONFLICT(session_id,actor_id,control_epoch) DO UPDATE SET handled_seq=EXCLUDED.handled_seq', [request.sessionId, actor.characterId, actor.controlEpoch, request.action.movementCommandSeq]);
+            }
         }
         if (tx.state.phase !== 'Running')
             throw new RuleError('SESSION_NOT_RUNNING');
@@ -221,7 +227,7 @@ export async function submitSpatial(runtime, handle, raw) {
             if (!isSpatial(tx.state))
                 throw new RuntimeError('INVALID_MESSAGE');
             requireSpatialCapability(connection.capabilities, tx.state);
-            return executeSpatial(runtime, tx, request, { ...user, principalKind: 'human' }, async (actor) => actor.mode === 'HumanControlled' && actor.activeConnectionId === handle.connectionId && await runtime.liveConnection(tx, handle));
+            return executeSpatial(runtime, tx, request, { ...user, principalKind: 'human' }, async (actor) => actor.mode === 'HumanControlled' && actor.activeConnectionId === handle.connectionId && await runtime.liveConnection(tx, handle), request.action.kind === 'move_direction' ? { publicDirectionWatermark: true } : {});
         });
     }
     catch (error) {
