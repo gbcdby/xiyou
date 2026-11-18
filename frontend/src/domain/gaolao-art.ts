@@ -7,22 +7,44 @@ export interface SpriteFrame {
   bounds: { x: number; y: number; width: number; height: number };
 }
 
-export function spriteResourcePaths(appearanceId: string | undefined): string[] {
-  if (appearanceId !== 'gaocai') return [];
-  return Object.values(gaocai.native).flatMap(group => [group.idle, ...group.walk].map(frame => `/assets/gaolaozhuang/gaocai/${frame.file}`));
+export interface SpriteAsset {
+  file: string; width: number; height: number;
+  footPivot: { x: number; y: number }; scale: number;
+}
+export interface SpriteManifest {
+  cycleDistance: number;
+  directions: Readonly<Record<string, { nativeDirection: string; mirrorX: boolean }>>;
+  native: Readonly<Record<string, { idle: SpriteAsset; walk: readonly SpriteAsset[] }>>;
+}
+export type SpriteCatalog = Readonly<Record<string, { basePath: string; manifest: SpriteManifest }>>;
+
+/** 只注册已验资源；角色扩展只改目录，不改变 Canvas 的通用消费接口。 */
+export const appearanceSpriteCatalog: SpriteCatalog = Object.freeze({
+  gaocai: { basePath: '/assets/gaolaozhuang/gaocai', manifest: gaocai },
+});
+function entryFor(appearanceId: string | undefined, catalog: SpriteCatalog) {
+  return appearanceId && Object.hasOwn(catalog, appearanceId) ? catalog[appearanceId] : null;
+}
+export function spriteResourcePaths(appearanceId: string | undefined, catalog: SpriteCatalog = appearanceSpriteCatalog): string[] {
+  const entry = entryFor(appearanceId, catalog);
+  if (!entry) return [];
+  return [...new Set(Object.values(entry.manifest.native).flatMap(group => [group.idle, ...group.walk].map(frame => `${entry.basePath}/${frame.file}`)))];
 }
 
 /** 输入仅为服务端授权的当前外观键；不解析 entityRef、称呼或真实角色。 */
-export function spriteForAppearance(appearanceId: string | undefined, facing: Facing, moving: boolean, distance: number, reducedMotion = false): SpriteFrame | null {
-  if (appearanceId !== 'gaocai') return null;
-  const direction = gaocai.directions[facing.toLowerCase() as keyof typeof gaocai.directions];
+export function spriteForAppearance(appearanceId: string | undefined, facing: Facing, moving: boolean, distance: number, reducedMotion = false, catalog: SpriteCatalog = appearanceSpriteCatalog): SpriteFrame | null {
+  const entry = entryFor(appearanceId, catalog);
+  if (!entry) return null;
+  const manifest = entry.manifest;
+  const direction = manifest.directions[facing.toLowerCase()];
   if (!direction) return null;
-  const native = gaocai.native[direction.nativeDirection as keyof typeof gaocai.native];
+  const native = manifest.native[direction.nativeDirection];
+  if (!native || !native.walk.length || !(manifest.cycleDistance > 0)) return null;
   const frame = moving && !reducedMotion
-    ? native.walk[Math.floor(Math.max(0, distance) / gaocai.cycleDistance * native.walk.length) % native.walk.length]
+    ? native.walk[Math.floor(Math.max(0, distance) / manifest.cycleDistance * native.walk.length) % native.walk.length]
     : native.idle;
   // scale 已是源组校准后的最终值；不再次乘 groupScale 或按每帧边界归一化。
-  return { href: `/assets/gaolaozhuang/gaocai/${frame.file}`, mirrorX: direction.mirrorX, bounds: { x: -frame.footPivot.x * frame.scale, y: -frame.footPivot.y * frame.scale, width: frame.width * frame.scale, height: frame.height * frame.scale } };
+  return { href: `${entry.basePath}/${frame.file}`, mirrorX: direction.mirrorX, bounds: { x: -frame.footPivot.x * frame.scale, y: -frame.footPivot.y * frame.scale, width: frame.width * frame.scale, height: frame.height * frame.scale } };
 }
 
 export function sceneArtwork(sceneId: string | undefined): string | null {
