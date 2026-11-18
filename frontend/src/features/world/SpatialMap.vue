@@ -160,6 +160,7 @@ onBeforeUnmount(() => {
   snapshotSubscription?.close(); snapshotSubscription = null; presentation?.invalidate(); motion.reset(); releaseKeys(); stopped = true; mounted = false; if (frame) cancelAnimationFrame(frame); observer?.disconnect(); intersection?.disconnect(); visibility?.disconnect(); unsubscribe?.(); reduced?.removeEventListener('change', motionPreference);
   window.removeEventListener('resize', resize); window.removeEventListener('keyup', keyup, true); window.removeEventListener('blur', blur); document.removeEventListener('visibilitychange', hidden);
   window.removeEventListener('scroll', visibilityChanged, true);
+  painter?.dispose(); painter = null;
 });
 </script>
 

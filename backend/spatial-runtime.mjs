@@ -262,7 +262,9 @@ export async function syncSpatial(runtime, handle, request, { throughSeqCeiling,
         const frontier = throughSeqCeiling ?? tx.state.sessionSeq;
         if (throughSeqCeiling !== undefined && (!runtime.spatialSupply.enabled(handle) || BigInt(frontier) < BigInt(request.cursor) || BigInt(frontier) > BigInt(tx.state.sessionSeq))) throw new RuntimeError('RESYNC_REQUIRED');
         const limit = String(BigInt(fromExclusive) + 256n < BigInt(frontier) ? BigInt(fromExclusive) + 256n : BigInt(frontier));
-        const boundary = (await tx.client.query('SELECT through_seq FROM outbox WHERE session_id=$1 AND through_seq>$2 AND through_seq<=$3 ORDER BY through_seq DESC LIMIT 1', [request.sessionId, fromExclusive, limit])).rows[0]
+        const boundary = fromExclusive === frontier ? undefined
+            : sharedRead && throughSeqCeiling === undefined && limit === frontier ? { through_seq: frontier }
+            : (await tx.client.query('SELECT through_seq FROM outbox WHERE session_id=$1 AND through_seq>$2 AND through_seq<=$3 ORDER BY through_seq DESC LIMIT 1', [request.sessionId, fromExclusive, limit])).rows[0]
             ?? (await tx.client.query('SELECT through_seq FROM outbox WHERE session_id=$1 AND through_seq>$2 AND through_seq<=$3 ORDER BY through_seq LIMIT 1', [request.sessionId, fromExclusive, frontier])).rows[0];
         const throughSeq = boundary?.through_seq ?? fromExclusive;
         const state = await runtime.stateAt(tx, throughSeq);

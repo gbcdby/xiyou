@@ -1,3 +1,4 @@
+import { BackgroundRasterCache } from './background-raster-cache.ts';
 import type { EntityViewV2, Facing, ItemViewV2, Position, SnapshotV2, TargetViewV2 } from '../../../game/spatial-types.ts';
 import { sceneDisplayProjection } from '../domain/spatial-display.ts';
 import { ConfirmedMotion } from '../domain/spatial-motion.ts';
@@ -7,6 +8,7 @@ import { foregroundOpacity, orderSceneEntries, sceneGroupAssets, sceneLayerPrese
 import { layoutSpatialLabels, type SpatialLabel, type SpatialLabelInput } from '../domain/spatial-labels.ts';
 import { sceneFit, screenPoint, worldPoint, type CanvasFit } from '../domain/spatial-canvas-geometry.ts';
 import { CanvasAssets, sharedCanvasAssets } from './canvas-assets.ts';
+import { ObjectRasterCache } from './object-raster-cache.ts';
 
 interface DrawPerson extends EntityViewV2 { position: Position; drawnFacing: Facing; moving: boolean; distance: number; art: SpriteFrame | null }
 interface DrawObject { ref: string; key: string; kind: 'item' | 'target' | 'door'; name: string; position: Position; depthY: number; visualKey?: string; file?: string; variant?: string; bounds: SceneRect }
@@ -32,6 +34,7 @@ const absolute = (position: Position, bounds: SceneRect, mirror = false): SceneR
 export class SpatialCanvas {
   #canvas: HTMLCanvasElement; #front: CanvasRenderingContext2D; #buffer: HTMLCanvasElement; #context: CanvasRenderingContext2D;
   #assets: CanvasAssets; #paths = new Set<string>(); #hits: Hit[] = []; #width = 1; #height = 1; #dpr = 1; #serial = 0;
+  #objectRaster = new ObjectRasterCache(); #backgroundRaster = new BackgroundRasterCache();
   #scope = ''; #scopeGeneration = 0; #labelKey = ''; #labelLayout: ReturnType<typeof layoutSpatialLabels> = { labels: [], omitted: 0 };
   constructor(canvas: HTMLCanvasElement, assets = sharedCanvasAssets) {
     this.#canvas = canvas; this.#assets = assets;
@@ -40,16 +43,19 @@ export class SpatialCanvas {
     this.#front = front; this.#buffer = buffer; this.#context = context;
   }
   resize(width: number, height: number, dpr: number) {
+    if (this.#width !== Math.max(1, width) || this.#height !== Math.max(1, height) || this.#dpr !== Math.max(1, dpr || 1)) { this.#objectRaster.clear(); this.#backgroundRaster.clear(); }
     this.#width = Math.max(1, width); this.#height = Math.max(1, height); this.#dpr = Math.max(1, dpr || 1);
     const pixels = { width: Math.max(1, Math.round(this.#width * this.#dpr)), height: Math.max(1, Math.round(this.#height * this.#dpr)) };
     for (const canvas of [this.#canvas, this.#buffer]) {
-      if (canvas.width !== pixels.width) canvas.width = pixels.width;
-      if (canvas.height !== pixels.height) canvas.height = pixels.height;
+      let reset = false;
+      if (canvas.width !== pixels.width) { canvas.width = pixels.width; reset = true; }
+      if (canvas.height !== pixels.height) { canvas.height = pixels.height; reset = true; }
+      if (canvas === this.#buffer && reset) this.#backgroundRaster.contextReset();
     }
   }
   prepare(snapshot: SnapshotV2) {
     const p = sceneDisplayProjection(snapshot.projection), context = objectArtContext(snapshot), presentation = sceneLayerPresentation(context);
-    const scope = JSON.stringify(context); if (scope !== this.#scope) { this.#scope = scope; this.#scopeGeneration++; this.#labelKey = ''; }
+    const scope = JSON.stringify(context); if (scope !== this.#scope) { this.#scope = scope; this.#scopeGeneration++; this.#labelKey = ''; this.#objectRaster.clear(); this.#backgroundRaster.clear(); }
     const paths = new Set<string>();
     if (presentation.resources) for (const asset of sceneGroupAssets(presentation.resources)) paths.add(asset.file);
     else if (!presentation.registered) { const artwork = sceneArtwork(p.scene?.sceneId); if (artwork) paths.add(artwork); }
@@ -58,7 +64,10 @@ export class SpatialCanvas {
     this.#paths = paths; this.#assets.ensure(paths);
   }
   retry() { this.#assets.retry(this.#paths); }
+  /** 只释放派生像素，不在卸载时新增前台写入或资源通知。 */
+  dispose() { this.#objectRaster.clear(); this.#backgroundRaster.clear(); }
   clear() {
+    this.#objectRaster.clear(); this.#backgroundRaster.clear();
     this.#front.setTransform(1, 0, 0, 1, 0, 0); this.#front.clearRect(0, 0, this.#canvas.width, this.#canvas.height);
     this.#context.setTransform(1, 0, 0, 1, 0, 0); this.#context.clearRect(0, 0, this.#buffer.width, this.#buffer.height);
     frames.delete(this.#canvas); this.#hits = []; this.#labelKey = ''; this.#paths = new Set();
@@ -87,6 +96,11 @@ export class SpatialCanvas {
     return null;
   }
   paint(snapshot: SnapshotV2, motion: ConfirmedMotion, now: number, options: { selected?: string; personLabels?: Record<string, string>; reducedMotion: boolean; beforeFrontWrite?: () => void }): CanvasSceneFrame | null {
+    let complete = false;
+    try { const frame = this.#paint(snapshot, motion, now, options); complete = true; return frame; }
+    finally { this.#backgroundRaster.finish(complete); }
+  }
+  #paint(snapshot: SnapshotV2, motion: ConfirmedMotion, now: number, options: { selected?: string; personLabels?: Record<string, string>; reducedMotion: boolean; beforeFrontWrite?: () => void }): CanvasSceneFrame | null {
     const p = sceneDisplayProjection(snapshot.projection), scene = p.scene; if (!scene) { this.clear(); return null; }
     const context = this.#context, artContext = objectArtContext(snapshot), presentation = sceneLayerPresentation(artContext), group = presentation.resources;
     const groupAssets = group ? sceneGroupAssets(group) : [], dimensionsValid = groupAssets.every(asset => { const image = this.#assets.image(asset.file); return !image || image.naturalWidth === asset.pixelSize.width && image.naturalHeight === asset.pixelSize.height; });
@@ -100,14 +114,25 @@ export class SpatialCanvas {
     };
     if (groupFailed && !frame.failed.length) frame.failed.push('scene-metadata');
     this.#hits = [];
-    context.setTransform(this.#dpr, 0, 0, this.#dpr, 0, 0); context.globalAlpha = 1; context.fillStyle = '#eee3cb'; context.fillRect(0, 0, this.#width, this.#height);
+    context.setTransform(this.#dpr, 0, 0, this.#dpr, 0, 0); context.globalAlpha = 1; context.fillStyle = '#eee3cb';
+    const baseImage = group && groupReady ? this.#assets.image(group.base.file) : null;
+    const backgroundRestored = group && baseImage
+      ? this.#backgroundRaster.begin(context, baseImage, group.base.worldRect, { viewport: frame.viewport, fit }, scene)
+      : (this.#backgroundRaster.clear(), false);
+    if (!backgroundRestored) context.fillRect(0, 0, this.#width, this.#height);
     context.save(); context.translate(fit.x, fit.y); context.scale(fit.scale, fit.scale); context.beginPath(); context.rect(0, 0, scene.width, scene.height); context.clip();
     const drawSceneImage = (asset: SceneAsset, kind: string, opacity = 1, depthY?: number) => {
       const image = this.#assets.image(asset.file); if (!image) return;
-      const b = asset.worldRect; context.save(); context.globalAlpha = opacity; context.drawImage(image, b.x, b.y, b.width, b.height); context.restore();
+      const b = asset.worldRect; context.save(); context.globalAlpha = opacity;
+      if (kind !== 'base' || !backgroundRestored) context.drawImage(image, b.x, b.y, b.width, b.height);
+      context.restore();
       frame.sceneImages.push({ file: asset.file, bounds: b, kind, opacity, ...(depthY !== undefined ? { depthY } : {}) });
     };
-    if (group && groupReady) { drawSceneImage(group.base, 'base'); for (const floor of group.floors) drawSceneImage(floor, 'floor'); }
+    if (group && groupReady) {
+      drawSceneImage(group.base, 'base');
+      if (!backgroundRestored) this.#backgroundRaster.capture(context);
+      for (const floor of group.floors) drawSceneImage(floor, 'floor');
+    }
     else if (backgroundImage) { context.drawImage(backgroundImage, 0, 0, scene.width, scene.height); frame.sceneImages.push({ file: background!, bounds: frame.view, kind: 'legacy', opacity: 1 }); }
     else {
       context.fillStyle = '#e5ecd9'; context.strokeStyle = '#bccbad'; context.lineWidth = 2;
@@ -146,7 +171,7 @@ export class SpatialCanvas {
     const drawObject = (object: ItemViewV2 | TargetViewV2, position: Position, kind: DrawObject['kind'], depthY: number, selectedFrame: ObjectArtFrame | null = selectObjectArt(object, artContext, 'map')) => {
       const image = selectedFrame && this.#assets.image(selectedFrame.file), bounds = image ? selectedFrame!.bounds : { x: -13, y: -13, width: 26, height: 26 };
       context.save(); context.translate(position.x, position.y);
-      if (image && selectedFrame) context.drawImage(image, bounds.x, bounds.y, bounds.width, bounds.height);
+      if (image && selectedFrame) { if (!this.#objectRaster.draw(context, image, bounds, { dpr: this.#dpr, fit, position })) context.drawImage(image, bounds.x, bounds.y, bounds.width, bounds.height); }
       else { context.fillStyle = kind === 'item' ? '#f8e3ac' : '#e8d6b3'; context.strokeStyle = '#76572e'; context.lineWidth = 2; context.beginPath(); if (kind === 'item') { context.moveTo(0, -10); context.lineTo(12, 0); context.lineTo(0, 10); context.lineTo(-12, 0); context.closePath(); } else context.roundRect(-13, -13, 26, 26, 4); context.fill(); context.stroke(); }
       context.restore();
       frame.objects.push({ ref: object.entityRef, key: objectInstanceKey(artContext, object), kind, name: object.name, position, depthY, visualKey: object.visualKey, bounds, ...(image && selectedFrame ? { file: selectedFrame.file, variant: selectedFrame.variant } : {}) });

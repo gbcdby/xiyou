@@ -192,6 +192,28 @@ jobs:
       - name: 安装已锁定 Playwright 对应的 Chromium
         working-directory: frontend
         run: npx --no-install playwright install --with-deps chromium
+      - name: 对象栅格固定输入的严格RGBA像素回归
+        timeout-minutes: 2
+        shell: bash
+        env:
+          FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-object-raster
+        # 同一候选先冻结再单次检查；任意RGBA差异失败，不重试，默认success依赖。
+        run: |
+          mkdir -p "$FRONTEND_EVIDENCE_DIR"
+          set -o pipefail
+          node frontend/tests/object-raster-browser-check.mjs --freeze-only --output "$FRONTEND_EVIDENCE_DIR" 2>&1 | tee "$FRONTEND_EVIDENCE_DIR/stdout.log"
+          node frontend/tests/object-raster-browser-check.mjs --manifest "$FRONTEND_EVIDENCE_DIR/input-manifest.json" --output "$FRONTEND_EVIDENCE_DIR" 2>&1 | tee -a "$FRONTEND_EVIDENCE_DIR/stdout.log"
+      - name: 完整背景捕获固定输入的严格RGBA像素回归
+        timeout-minutes: 2
+        shell: bash
+        env:
+          FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-background-raster
+        # 四几何八对；真miss/hit与真fallback分别判定，不包含性能计量或重试。
+        run: |
+          mkdir -p "$FRONTEND_EVIDENCE_DIR"
+          set -o pipefail
+          node frontend/tests/background-raster-browser-check.mjs --freeze-only --output "$FRONTEND_EVIDENCE_DIR" 2>&1 | tee "$FRONTEND_EVIDENCE_DIR/stdout.log"
+          node frontend/tests/background-raster-browser-check.mjs --manifest "$FRONTEND_EVIDENCE_DIR/input-manifest.json" --output "$FRONTEND_EVIDENCE_DIR" 2>&1 | tee -a "$FRONTEND_EVIDENCE_DIR/stdout.log"
       - name: 桌面与窄屏呈现生命周期组件回归
         timeout-minutes: 2
         env:
@@ -236,6 +258,14 @@ jobs:
           name: browser-direction-evidence-${{ github.run_id }}-${{ github.run_attempt }}
           # 仅上传具名结果和截图，不上传数据库目录、连接配置或浏览器缓存。
           path: |
+            .agent-output/ci/browser-object-raster/input-manifest.json
+            .agent-output/ci/browser-object-raster/result.json
+            .agent-output/ci/browser-object-raster/stdout.log
+            .agent-output/ci/browser-object-raster/difference-*.png
+            .agent-output/ci/browser-background-raster/input-manifest.json
+            .agent-output/ci/browser-background-raster/result.json
+            .agent-output/ci/browser-background-raster/stdout.log
+            .agent-output/ci/browser-background-raster/difference-*.png
             .agent-output/ci/browser-presentation-lifecycle/result.json
             .agent-output/ci/browser-rpc-push-notify/result.json
             .agent-output/ci/browser-rpc-push-notify/stdout.log

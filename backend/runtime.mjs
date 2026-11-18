@@ -30,6 +30,8 @@ const validId = value => typeof value === 'string' && /^[A-Za-z0-9][A-Za-z0-9_.:
 const requireId = value => { if (!validId(value)) throw new RuntimeError('INVALID_MESSAGE', '标识格式无效。'); };
 // 普通事务最多让位这么久；到点后不再被后来到达的控制请求续期。
 export const CONTROL_PRIORITY_WAIT_MS = 250;
+// 每批四参数一行，保留完整事件序列；同一事务内按块串行写入。
+const SPATIAL_EVENT_BATCH_SIZE = 256;
 export function clientReceipt(receipt) {
   if (receipt.schemaVersion === 2) return validateSpatial('ReceiptV2', receipt.publicReceipt);
   const { key, ...fields } = receipt;
@@ -137,9 +139,21 @@ export class AuthorityRuntime extends EventEmitter {
   }
   async persist(tx) {
     if (tx.events.length) {
-      for (const event of tx.events) {
-        const stored = isSpatial(tx.state) ? encodeJsonbText(event) : { value: event, encoding: null };
-        await tx.client.query('INSERT INTO world_events(session_id,session_seq,event,event_text_encoding) VALUES($1,$2,$3,$4)', [tx.row.session_id, event.sessionSeq, stored.value, stored.encoding]);
+      if (isSpatial(tx.state) && tx.events.length > 1) {
+        for (let start = 0; start < tx.events.length; start += SPATIAL_EVENT_BATCH_SIZE) {
+          const values = [], rows = [];
+          for (const event of tx.events.slice(start, start + SPATIAL_EVENT_BATCH_SIZE)) {
+            const stored = encodeJsonbText(event), offset = values.length;
+            values.push(tx.row.session_id, event.sessionSeq, stored.value, stored.encoding);
+            rows.push(`($${offset + 1},$${offset + 2},$${offset + 3},$${offset + 4})`);
+          }
+          await tx.client.query('INSERT INTO world_events(session_id,session_seq,event,event_text_encoding) VALUES' + rows.join(','), values);
+        }
+      } else {
+        for (const event of tx.events) {
+          const stored = isSpatial(tx.state) ? encodeJsonbText(event) : { value: event, encoding: null };
+          await tx.client.query('INSERT INTO world_events(session_id,session_seq,event,event_text_encoding) VALUES($1,$2,$3,$4)', [tx.row.session_id, event.sessionSeq, stored.value, stored.encoding]);
+        }
       }
       await tx.client.query('INSERT INTO outbox(session_id,from_exclusive,through_seq) VALUES($1,$2,$3)', [tx.row.session_id, tx.row.state.sessionSeq, tx.state.sessionSeq]);
     }

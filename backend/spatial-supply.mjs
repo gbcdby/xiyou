@@ -1,3 +1,4 @@
+import { setImmediate as yieldToIO } from 'node:timers/promises';
 import { parseSpatial } from '../protocol/spatial.mjs';
 import { RuntimeError } from './errors.mjs';
 import { consumeQueuedPacket } from './socket-enqueue.mjs';
@@ -105,6 +106,11 @@ export function createSpatialSupply(runtime) {
           }
           if (!current(handle, binding)) continue;
           if (batch.throughSeq === through) return { blocked: true };
+          if (enabled(handle)) {
+            // 原读事务已释放；保留活动lane，让出后再核binding，发送和proof仍同步完成。
+            await yieldToIO();
+            if (!current(handle, binding)) continue;
+          }
           sentBatch(handle, binding, batch, send, 'push');
           return { covered: BigInt(batch.throughSeq) >= BigInt(target), progressed: true };
         }

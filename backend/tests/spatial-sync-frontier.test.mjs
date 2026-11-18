@@ -5,19 +5,22 @@ import { AuthorityRuntime, createRuntime } from '../runtime.mjs';
 
 const directionCaps = ['spatial-v2', 'spatial-direction-v1'];
 const now = () => Date.parse('2026-11-15T00:00:00Z');
-let database, pool, commitGate;
+let database, pool, commitGate, syncTrace;
 before(async () => {
   database = await startTestPostgres('sync-frontier', { outputSubdirectory: 'direction-server' });
   pool = { query: (...args) => database.pool.query(...args), connect: async () => {
-    const client = await database.pool.connect();
+    const client = await database.pool.connect(), trace = syncTrace;
     return new Proxy(client, { get(target, key) {
       if (key === 'query') return async (...args) => {
+        trace?.queries.push(args[0]);
         const result = await client.query(...args);
         if (args[0] === 'COMMIT' && commitGate && !commitGate.claimed) {
           const gate = commitGate; gate.claimed = true; gate.enter(); await gate.released;
         }
+        if (['BEGIN', 'COMMIT', 'ROLLBACK'].includes(args[0])) trace?.steps.push(args[0]);
         return result;
       };
+      if (key === 'release') return (...args) => { trace?.steps.push('release'); return client.release(...args); };
       const value = Reflect.get(target, key); return typeof value === 'function' ? value.bind(target) : value;
     } });
   } };
@@ -44,7 +47,7 @@ async function room(t, { enabled = true, caps = directionCaps, legacy = false } 
   }
   return { runtime, users, sessionId, handles, snapshots };
 }
-const sync = (r, cursor) => r.runtime.sync(r.handles[0], JSON.stringify({ schemaVersion: 2, type: 'sync.request', sessionId: r.sessionId, viewId: r.snapshots[0].viewId, cursor }));
+const sync = (r, cursor, internal = {}) => r.runtime.sync(r.handles[0], JSON.stringify({ schemaVersion: 2, type: 'sync.request', sessionId: r.sessionId, viewId: r.snapshots[0].viewId, cursor }), internal);
 const persisted = async r => (await pool.query('SELECT session_seq,logical_time,state FROM sessions WHERE session_id=$1', [r.sessionId])).rows[0];
 const pending = async r => (await pool.query("SELECT through_seq FROM outbox WHERE session_id=$1 AND status='Pending' ORDER BY through_seq", [r.sessionId])).rows;
 function countSync(r) {
@@ -67,6 +70,189 @@ async function speak(r, index = 0) {
   return r.runtime.submit(r.handles[index], JSON.stringify({ schemaVersion: 2, sessionId: r.sessionId, viewId: s.viewId, actorRef: s.projection.self.entityRef,
     controlEpoch: s.projection.self.controlEpoch, baseSeq: s.snapshotSeq, clientActionId: crypto.randomUUID(), action: { kind: 'speak', text: '前缀回归的公开事件', channel: 'public', recipientRefs: [] } }));
 }
+
+function observeEmptySync(r, { beforeFault = false } = {}) {
+  const trace = { queries: [], stateAt: [], steps: [] }, runtime = r.runtime;
+  const build = runtime.buildTransaction, stateAt = runtime.stateAt, persist = runtime.persist, hooks = runtime.hooks;
+  syncTrace = trace;
+  runtime.buildTransaction = function (...args) {
+    const tx = build.apply(this, args);
+    tx.afterCommit.push(() => trace.steps.push('effect'));
+    tx.afterFinish.push(flags => trace.steps.push(['afterFinish', flags]));
+    return tx;
+  };
+  runtime.stateAt = function (tx, throughSeq) {
+    trace.stateAt.push(throughSeq); trace.steps.push('stateAt');
+    return stateAt.call(this, tx, throughSeq);
+  };
+  runtime.persist = function (tx) { trace.steps.push('persist'); return persist.call(this, tx); };
+  runtime.hooks = {
+    beforeCommit() { trace.steps.push('beforeCommit'); if (beforeFault) throw new Error('空批提交前受控失败'); },
+    afterCommit() { trace.steps.push('afterCommit'); },
+  };
+  return { trace, restore() {
+    syncTrace = undefined; runtime.buildTransaction = build; runtime.stateAt = stateAt; runtime.persist = persist; runtime.hooks = hooks;
+  } };
+}
+const boundaryReads = trace => trace.queries.filter(sql => sql.startsWith('SELECT through_seq FROM outbox'));
+
+async function appendBoundaryEvents(r, count = 1) {
+  return r.runtime.locked(r.sessionId, { kind: 'head-boundary-fixture' }, tx => {
+    for (let i = 0; i < count; i++) tx.emit('spatial.clock', {
+      sceneTimeMs: tx.state.sceneTimeMs, wallAnchorMs: tx.state.wallAnchorMs, paused: tx.state.paused,
+    });
+    return tx.state.sessionSeq;
+  });
+}
+
+test('已提交头边界：三能力非空读取等于原SQL结果，显式上界与事务回滚保留', async t => {
+  const r = await room(t, { caps: [...directionCaps, 'spatial-timed-trail-v1'] });
+  assert.equal(r.runtime.connectionView(r.handles[0]).schemaVersion, 2);
+  assert.equal(r.runtime.spatialSupply.enabled(r.handles[0]), true);
+  const from = (await persisted(r)).session_seq, earlier = await appendBoundaryEvents(r), head = await appendBoundaryEvents(r, 2);
+  await pool.query("UPDATE outbox SET status='Published' WHERE session_id=$1 AND through_seq=$2", [r.sessionId, head]);
+  const oracle = (await pool.query('SELECT through_seq FROM outbox WHERE session_id=$1 AND through_seq>$2 AND through_seq<=$3 ORDER BY through_seq DESC LIMIT 1', [r.sessionId, from, head])).rows[0];
+  assert.equal(oracle.through_seq, head, '原边界SQL仍选择已Published的当前完整事务头');
+  const outbox = () => pool.query('SELECT from_exclusive,through_seq,status,attempts FROM outbox WHERE session_id=$1 ORDER BY through_seq', [r.sessionId]).then(result => result.rows);
+  const eventCount = () => pool.query('SELECT count(*) AS count FROM world_events WHERE session_id=$1', [r.sessionId]).then(result => result.rows[0].count);
+  const before = await persisted(r), oldOutbox = await outbox(), oldEvents = await eventCount();
+  let actual;
+  const fast = observeEmptySync(r);
+  try {
+    actual = await sync(r, from);
+    assert.equal(actual.fromExclusive, from); assert.equal(actual.throughSeq, oracle.through_seq); assert.equal(actual.syncFrontierSeq, head);
+    assert.equal(actual.events[0].sessionSeq, head);
+    assert.deepEqual(boundaryReads(fast.trace), []);
+    assert.equal(fast.trace.stateAt[0], head, '省去边界SQL仍调用原stateAt(head)');
+    assert.ok(fast.trace.queries.some(sql => sql.endsWith('FOR SHARE')));
+    assert.ok(fast.trace.queries.some(sql => sql.startsWith('SELECT event,event_text_encoding FROM world_events')), '本人轨迹仍读取原连续事件');
+    assert.equal(fast.trace.queries.some(sql => /^(INSERT|UPDATE|DELETE)\b/.test(sql)), false);
+    assert.deepEqual(fast.trace.steps.filter(step => step !== 'stateAt'), ['BEGIN', 'persist', 'beforeCommit', 'COMMIT', 'effect', 'afterCommit',
+      ['afterFinish', { committed: true, committing: true }], 'release']);
+  } finally { fast.restore(); }
+  const bounded = observeEmptySync(r);
+  try {
+    assert.deepEqual(await sync(r, from, { throughSeqCeiling: head }), actual, '显式head上界走原SQL，完整Batch与快路等值');
+    assert.equal(boundaryReads(bounded.trace).length, 1);
+    const old = await sync(r, from, { throughSeqCeiling: String(BigInt(earlier) + 1n) });
+    assert.equal(old.throughSeq, earlier, '事务中间的旧上界仍退到原完整提交边界');
+    assert.equal(old.syncFrontierSeq, head); assert.equal(old.events[0].sessionSeq, earlier);
+    assert.equal(boundaryReads(bounded.trace).length, 2);
+    assert.ok(boundaryReads(bounded.trace).every(sql => sql.includes('DESC LIMIT 1')));
+  } finally { bounded.restore(); }
+  const failed = observeEmptySync(r, { beforeFault: true });
+  try {
+    await assert.rejects(sync(r, from), /空批提交前受控失败/);
+    assert.deepEqual(boundaryReads(failed.trace), []);
+    assert.equal(failed.trace.stateAt[0], head);
+    assert.deepEqual(failed.trace.steps.filter(step => step !== 'stateAt'), ['BEGIN', 'persist', 'beforeCommit', 'ROLLBACK',
+      ['afterFinish', { committed: false, committing: false }], 'release']);
+  } finally { failed.restore(); }
+  assert.deepEqual(await persisted(r), before); assert.deepEqual(await outbox(), oldOutbox); assert.equal(await eventCount(), oldEvents);
+});
+
+test('已提交头边界：三能力正差恰256仍选择当前完整事务头', async t => {
+  const r = await room(t, { caps: [...directionCaps, 'spatial-timed-trail-v1'] });
+  assert.equal(r.runtime.spatialSupply.enabled(r.handles[0]), true);
+  const from = (await persisted(r)).session_seq, head = await appendBoundaryEvents(r, 256), before = await persisted(r);
+  assert.equal(BigInt(head) - BigInt(from), 256n);
+  const observed = observeEmptySync(r);
+  try {
+    const batch = await sync(r, from);
+    assert.equal(batch.throughSeq, head); assert.equal(batch.syncFrontierSeq, head); assert.equal(batch.events[0].sessionSeq, head);
+    assert.deepEqual(boundaryReads(observed.trace), []); assert.equal(observed.trace.stateAt[0], head);
+  } finally { observed.restore(); }
+  assert.deepEqual(await persisted(r), before);
+});
+
+test('已提交头边界：缺timed-trail能力的非空头读取仍走原边界SQL', async t => {
+  const r = await room(t);
+  assert.equal(r.runtime.spatialSupply.enabled(r.handles[0]), false);
+  const from = (await persisted(r)).session_seq, head = await appendBoundaryEvents(r);
+  const observed = observeEmptySync(r);
+  try {
+    const batch = await sync(r, from);
+    assert.equal(batch.throughSeq, head); assert.equal(batch.syncFrontierSeq, head);
+    assert.equal(boundaryReads(observed.trace).length, 1);
+    assert.ok(boundaryReads(observed.trace)[0].includes('DESC LIMIT 1'));
+    assert.ok(observed.trace.queries.some(sql => sql.endsWith('FOR UPDATE')));
+  } finally { observed.restore(); }
+});
+
+test('空读取区间：同头空批省去边界SQL，仍保留提交与回滚生命周期', async t => {
+  const r = await room(t, { caps: [...directionCaps, 'spatial-timed-trail-v1'] });
+  const before = await persisted(r), oldPending = await pending(r), head = before.session_seq;
+  const successful = observeEmptySync(r);
+  try {
+    assert.deepEqual(await sync(r, head), { schemaVersion: 2, type: 'world.batch', sessionId: r.sessionId,
+      viewId: r.snapshots[0].viewId, fromExclusive: head, throughSeq: head, syncFrontierSeq: head, events: [] });
+    assert.deepEqual(successful.trace.stateAt, [head]);
+    assert.deepEqual(boundaryReads(successful.trace), []);
+    assert.ok(successful.trace.queries.some(sql => sql.endsWith('FOR SHARE')), '同头仍取得原会话共享锁');
+    assert.ok(successful.trace.queries.some(sql => sql.includes('FROM runtime_users')));
+    assert.ok(successful.trace.queries.some(sql => sql.includes('FROM session_access')));
+    assert.equal(successful.trace.queries.some(sql => /^(INSERT|UPDATE|DELETE)\b/.test(sql)), false);
+    assert.deepEqual(successful.trace.steps, ['BEGIN', 'stateAt', 'persist', 'beforeCommit', 'COMMIT', 'effect', 'afterCommit',
+      ['afterFinish', { committed: true, committing: true }], 'release']);
+  } finally { successful.restore(); }
+  const failed = observeEmptySync(r, { beforeFault: true });
+  try {
+    await assert.rejects(sync(r, head), /空批提交前受控失败/);
+    assert.deepEqual(failed.trace.stateAt, [head]);
+    assert.deepEqual(boundaryReads(failed.trace), []);
+    assert.deepEqual(failed.trace.steps, ['BEGIN', 'stateAt', 'persist', 'beforeCommit', 'ROLLBACK',
+      ['afterFinish', { committed: false, committing: false }], 'release']);
+  } finally { failed.restore(); }
+  assert.deepEqual(await persisted(r), before);
+  assert.deepEqual(await pending(r), oldPending);
+});
+
+test('空读取区间：旧上界等于起点仍读取真实历史，缺失前缀保持原失败', async t => {
+  const r = await room(t, { caps: [...directionCaps, 'spatial-timed-trail-v1'] });
+  // 独立writer使新前缀从未进入reader缓存；不能用暖缓存掩盖真实缺失。
+  const writer = new AuthorityRuntime({ pool, now }); t.after(() => writer.close());
+  const append = () => writer.locked(r.sessionId, { kind: 'empty-range-history-fixture' }, tx => {
+    tx.emit('spatial.clock', { sceneTimeMs: tx.state.sceneTimeMs, wallAnchorMs: tx.state.wallAnchorMs, paused: tx.state.paused });
+    return tx.state.sessionSeq;
+  });
+  const from = await append(), head = await append(), before = await persisted(r);
+  const removed = (await database.pool.query('DELETE FROM world_events WHERE session_id=$1 AND session_seq=$2 RETURNING event,event_text_encoding', [r.sessionId, from])).rows[0];
+  assert.ok(removed, '负例必须实际移除未缓存的目标事件');
+  const observed = observeEmptySync(r);
+  try {
+    await assert.rejects(sync(r, from, { throughSeqCeiling: from }), error => error.code === 'RESYNC_REQUIRED' && error.message === '所需事件前缀当前不可用。');
+    assert.deepEqual(observed.trace.stateAt, [from]);
+    assert.deepEqual(boundaryReads(observed.trace), []);
+    assert.ok(observed.trace.queries.some(sql => sql.startsWith('SELECT event,event_text_encoding FROM world_events')), '须实际查询缺失的PG历史');
+    assert.deepEqual(observed.trace.steps, ['BEGIN', 'stateAt', 'ROLLBACK',
+      ['afterFinish', { committed: false, committing: false }], 'release']);
+  } finally {
+    observed.restore();
+    await database.pool.query('INSERT INTO world_events(session_id,session_seq,event,event_text_encoding) VALUES($1,$2,$3,$4)', [r.sessionId, from, removed.event, removed.event_text_encoding]);
+  }
+  assert.deepEqual(await sync(r, from, { throughSeqCeiling: from }), { schemaVersion: 2, type: 'world.batch', sessionId: r.sessionId,
+    viewId: r.snapshots[0].viewId, fromExclusive: from, throughSeq: from, syncFrontierSeq: head, events: [] });
+  assert.deepEqual(await persisted(r), before);
+});
+
+test('空读取区间：相等边界不能跳过原视图、安装下界、上界和读权守卫', async t => {
+  const r = await room(t, { caps: [...directionCaps, 'spatial-timed-trail-v1'] }), head = (await persisted(r)).session_seq;
+  const observed = observeEmptySync(r);
+  try {
+    await assert.rejects(r.runtime.sync(r.handles[0], JSON.stringify({ schemaVersion: 2, type: 'sync.request', sessionId: r.sessionId, viewId: 'old-view', cursor: head })), { code: 'RESYNC_REQUIRED' });
+    await assert.rejects(sync(r, '0', { throughSeqCeiling: '0' }), { code: 'RESYNC_REQUIRED' });
+    await assert.rejects(sync(r, head, { throughSeqCeiling: String(BigInt(head) + 1n) }), { code: 'RESYNC_REQUIRED' });
+    await assert.rejects(sync(r, head, { sentPrefixStart: head }), { code: 'RESYNC_REQUIRED' });
+    await database.pool.query('UPDATE session_access SET active=false WHERE session_id=$1 AND user_id=$2', [r.sessionId, r.users[0].userId]);
+    await assert.rejects(sync(r, head), { code: 'FORBIDDEN' });
+    await database.pool.query('UPDATE runtime_users SET active=false WHERE user_id=$1', [r.users[0].userId]);
+    await assert.rejects(sync(r, head), { code: 'UNAUTHENTICATED' });
+    assert.deepEqual(observed.trace.stateAt, []);
+    assert.deepEqual(boundaryReads(observed.trace), []);
+    assert.equal(observed.trace.steps.filter(step => step === 'ROLLBACK').length, 6);
+    assert.equal(observed.trace.steps.filter(step => step === 'release').length, 6);
+  } finally { observed.restore(); }
+});
 
 test('D66 v0.3：真实提交前缀保持整事务分页，frontier是同锁世界末尾且读取不推进时间', async t => {
   const r = await room(t), from = (await persisted(r)).session_seq;

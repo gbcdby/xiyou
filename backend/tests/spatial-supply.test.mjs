@@ -127,3 +127,124 @@ test('D66-SUP-02：安装/fence守卫、功能OFF和方向-only不借新模式�
   f.connection.capabilities = ['spatial-v2', 'spatial-direction-v1']; assert.equal(f.supply.enabled(f.handle), false);
   f.connection.capabilities = caps; f.runtime.spatialDirection = null; assert.equal(f.supply.enabled(f.handle), false);
 });
+
+test('Y-T1：非空publisher在原读finally后让出，真实proof前水位不前进', async t => {
+  const f = await fixture(t), order = []; let beforeSend;
+  f.runtime.sync = async (_handle, value) => {
+    try { return batch(JSON.parse(value), '45'); }
+    finally {
+      order.push('read-finished');
+      setImmediate(() => { order.push('io-opportunity'); beforeSend = f.supply.cursor(f.view()); });
+    }
+  };
+  const result = await f.supply.publish(f.view(), '45', (value, binding) => {
+    order.push('send'); assert.equal(f.supply.cursor(binding), '40'); return f.push(value, binding);
+  });
+  await tick();
+  assert.deepEqual(order, ['read-finished', 'io-opportunity', 'send']);
+  assert.equal(beforeSend, '40'); assert.equal(f.supply.cursor(f.view()), '45'); assert.equal(f.view().cursor, '40');
+  assert.deepEqual(result, { covered: true, progressed: true });
+});
+
+test('Y-T2：让出期间保持活动lane，随后RPC仍先于等待publisher并沿真实sent续读', async t => {
+  const f = await fixture(t), slot = await f.reserve(), calls = []; let rpc, next, during;
+  f.runtime.sync = async (_handle, value, options = {}) => {
+    const request = JSON.parse(value), index = calls.length;
+    calls.push({ cursor: request.cursor, ...options });
+    if (index === 0) setImmediate(() => {
+      rpc = f.supply.sync(f.handle, raw(f.view()), slot.send); rpc.catch(() => {});
+      next = f.supply.publish(f.view(), '50', f.push); next.catch(() => {});
+      queueMicrotask(() => { during = { reads: calls.length, sent: f.supply.cursor(f.view()) }; });
+    });
+    return batch({ ...request, cursor: options.sentPrefixStart ?? request.cursor }, ['45', '48', '50'][index]);
+  };
+  const first = f.supply.publish(f.view(), '45', f.push);
+  try {
+    await first;
+    assert.deepEqual(during, { reads: 1, sent: '40' });
+    assert.ok(rpc && next); await Promise.all([rpc, next]);
+    const reply = await slot.reply;
+    assert.equal(reply.fromExclusive, '45'); assert.equal(reply.throughSeq, '48');
+    assert.deepEqual(calls, [{ cursor: '40' }, { cursor: '40', sentPrefixStart: '45' }, { cursor: '48' }]);
+    assert.equal(f.supply.cursor(f.view()), '50'); assert.equal(f.view().cursor, '40');
+  } finally { await Promise.allSettled([first, rpc, next].filter(Boolean)); }
+});
+
+test('Y-T3：让出期间失效不发旧候选，重绑定仍只有原两次attempt', async t => {
+  for (const changes of [1, 2]) await t.test(`连续更换${changes}次binding`, async t => {
+    const f = await fixture(t), slots = [], calls = [], sent = [];
+    for (let index = 0; index < changes; index++) slots.push(await f.reserve());
+    f.runtime.sync = async (_handle, value) => {
+      const request = JSON.parse(value), index = calls.length; calls.push(request.viewId);
+      if (index < changes) setImmediate(() => {
+        const view = f.replace(`view-${index + 2}`, String(50 + index * 10));
+        f.supply.snapshot(f.handle, { schemaVersion: 2, type: 'world.snapshot', sessionId: view.sessionId,
+          viewId: view.viewId, snapshotSeq: view.cursor }, slots[index].send);
+      });
+      return batch(request, String(Number(request.cursor) + 5));
+    };
+    const result = await f.supply.publish(f.view(), '55', (value, binding) => { sent.push(value.viewId); return f.push(value, binding); });
+    await Promise.all(slots.map(slot => slot.reply));
+    assert.deepEqual(calls, ['view-one', 'view-2']);
+    assert.deepEqual(sent, changes === 1 ? ['view-2'] : []);
+    assert.deepEqual(result, changes === 1 ? { covered: true, progressed: true } : { blocked: true });
+    assert.equal(f.supply.cursor(f.view()), changes === 1 ? '55' : '60');
+  });
+  for (const [name, invalidate] of [
+    ['pending', f => f.pending(true)], ['closing', f => { f.connection.closing = true; }],
+    ['scope fence', f => { f.connection.viewScopeFence = 2; }],
+  ]) await t.test(name, async t => {
+    const f = await fixture(t); let reads = 0, sends = 0;
+    f.runtime.sync = async (_handle, value) => { reads++; setImmediate(() => invalidate(f)); return batch(JSON.parse(value), '45'); };
+    assert.deepEqual(await f.supply.publish(f.view(), '45', (value, binding) => { sends++; return f.push(value, binding); }), { blocked: true });
+    assert.equal(reads, 1); assert.equal(sends, 0); assert.equal(f.supply.cursor(f.view()), '40');
+  });
+});
+
+test('Y-T4：让出期间的新head不改原完整批次，真实发送后current失效仍不能推进水位', async t => {
+  await t.test('固定已读批次', async t => {
+    const f = await fixture(t), sent = []; let head = '45', reads = 0;
+    f.runtime.sync = async (_handle, value) => {
+      reads++; const candidate = batch(JSON.parse(value), head); setImmediate(() => { head = '90'; }); return candidate;
+    };
+    assert.deepEqual(await f.supply.publish(f.view(), '45', (value, binding) => { sent.push(value); return f.push(value, binding); }), { covered: true, progressed: true });
+    assert.equal(head, '90'); assert.equal(reads, 1); assert.deepEqual(sent, [batch(JSON.parse(raw(f.view())), '45')]);
+    assert.equal(f.supply.cursor(f.view()), '45'); assert.equal(f.view().cursor, '40');
+  });
+  await t.test('真实packet后current失败保留Pending', async t => {
+    const f = await fixture(t), view = f.view(); let yielded = false, sentAfterYield = false;
+    f.runtime.sync = async (_handle, value) => { setImmediate(() => { yielded = true; }); return batch(JSON.parse(value), '45'); };
+    await assert.rejects(f.supply.publish(view, '45', (value, binding) => {
+      sentAfterYield = yielded; const proof = f.push(value, binding); f.connection.closing = true; return proof;
+    }), error => error.code === 'RESYNC_REQUIRED' && error.keepSpatialPending === true);
+    assert.equal(sentAfterYield, true); assert.equal(view.active, false); assert.equal(view.cursor, '40'); assert.equal(f.supply.cursor(view), null);
+  });
+});
+
+test('Y-T5：ACK、空批、已覆盖、旧能力与原读错误不增加publisher等待', async t => {
+  for (const mode of ['ack', 'empty', 'covered', 'off', 'legacy', 'direction-only', 'FORBIDDEN', 'OUTCOME_UNKNOWN']) await t.test(mode, async t => {
+    const f = await fixture(t); let opportunity = false, reads = 0, sends = 0;
+    if (mode === 'off') f.runtime.spatialDirection = null;
+    if (mode === 'legacy') f.connection.capabilities = ['spatial-v1'];
+    if (mode === 'direction-only') f.connection.capabilities = ['spatial-v2', 'spatial-direction-v1'];
+    const slot = mode === 'ack' ? await f.reserve() : null;
+    f.runtime.sync = async (_handle, value) => {
+      reads++;
+      if (mode === 'FORBIDDEN' || mode === 'OUTCOME_UNKNOWN') throw Object.assign(new Error('原读失败'), { code: mode });
+      return batch(JSON.parse(value), mode === 'empty' ? '40' : '45');
+    };
+    setImmediate(() => { opportunity = true; });
+    if (slot) {
+      await f.supply.sync(f.handle, raw(f.view()), slot.send);
+    } else {
+      const work = f.supply.publish(f.view(), mode === 'covered' ? '40' : '45', (value, binding) => { sends++; return f.push(value, binding); });
+      if (mode === 'FORBIDDEN' || mode === 'OUTCOME_UNKNOWN') await assert.rejects(work, { code: mode });
+      else assert.deepEqual(await work, mode === 'covered' ? { covered: true } : mode === 'empty' ? { blocked: true } : { covered: true, progressed: true });
+    }
+    assert.equal(opportunity, false, '上述路径不等待下一Immediate阶段');
+    assert.equal(reads, mode === 'covered' ? 0 : 1);
+    if (!slot) assert.equal(sends, ['off', 'legacy', 'direction-only'].includes(mode) ? 1 : 0);
+    if (slot) await slot.reply;
+    await tick();
+  });
+});
