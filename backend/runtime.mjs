@@ -110,9 +110,9 @@ export class AuthorityRuntime extends EventEmitter {
     if (!user) throw new RuntimeError('UNAUTHENTICATED', '请重新登录。');
     return { userId: user.user_id, name: user.name, principalId: `human:${user.user_id}`, ...(sessionId === undefined ? {} : { actorId: user.actor_id }) };
   }
-  async access(client, row, token, { sharedSessionRead = false } = {}) {
-    // 仅原共享同步在同Session行锁内启用；ACL写方也持该锁，仍在这里新读账号与读权。
-    if (sharedSessionRead === true) {
+  async access(client, row, token, { sessionLock } = {}) {
+    // 仅指定同步/方向提交在原同Session行锁内传入；不建立锁或缓存授权，仍在这里新读账号与读权。
+    if (sessionLock === 'share' || sessionLock === 'update') {
       const user = await this.authenticate(token, client, row.session_id);
       if (user.actorId === null) throw new RuntimeError('FORBIDDEN', '当前账号无权访问本局。');
       return user;

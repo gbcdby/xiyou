@@ -213,9 +213,11 @@ export async function submitSpatial(runtime, handle, raw) {
     requireSpatialCapability(connection.capabilities);
     await runtime.authenticate(connection.token);
     if (request.action.kind === 'move_direction' && (!runtime.spatialDirection || !hasDirection(connection.capabilities))) throw new RuntimeError('INVALID_MESSAGE', '方向短段必须先由本次连接协商。');
+    const lockedDirectionAccess = !!runtime.spatialDirection && ['move_direction', 'stop_move'].includes(request.action.kind)
+        && ['spatial-v2', directionCapability, timedTrailCapability].every(capability => connection.capabilities.includes(capability));
     try {
         return await runtime.locked(request.sessionId, { kind: 'spatial-action' }, async (tx) => {
-            const user = await runtime.access(tx.client, tx.row, connection.token);
+            const user = await runtime.access(tx.client, tx.row, connection.token, lockedDirectionAccess ? { sessionLock: 'update' } : undefined);
             if (!isSpatial(tx.state))
                 throw new RuntimeError('INVALID_MESSAGE');
             requireSpatialCapability(connection.capabilities, tx.state);
@@ -242,7 +244,7 @@ export async function syncSpatial(runtime, handle, request, { throughSeqCeiling,
     const readView = runtime.connectionView(handle);
     const sharedRead = readView?.schemaVersion === 2 && runtime.spatialSupply.enabled(handle);
     return runtime.locked(request.sessionId, { kind: 'spatial-sync', ...(sharedRead ? { sessionLock: 'share' } : {}) }, async (tx) => {
-        const user = await runtime.access(tx.client, tx.row, connection.token, { sharedSessionRead: sharedRead }), view = runtime.connectionView(handle), ended = ['Finished', 'Aborted'].includes(tx.state.phase), binding = view?.terminalBinding ?? tx.state.views[user.actorId], actor = tx.state.characters[user.actorId];
+        const user = await runtime.access(tx.client, tx.row, connection.token, sharedRead ? { sessionLock: 'share' } : undefined), view = runtime.connectionView(handle), ended = ['Finished', 'Aborted'].includes(tx.state.phase), binding = view?.terminalBinding ?? tx.state.views[user.actorId], actor = tx.state.characters[user.actorId];
         requireSpatialCapability(connection.capabilities, tx.state);
         if (ended && !await runtime.liveConnection(tx, handle)) throw new RuntimeError('UNAUTHENTICATED');
         if (view?.terminalBinding && (!ended || view.cursor !== tx.state.sessionSeq)) throw new RuntimeError('RESYNC_REQUIRED');

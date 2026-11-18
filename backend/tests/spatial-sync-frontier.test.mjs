@@ -184,7 +184,7 @@ test('锁内授权：真实撤权等待当前共享读，后继读取必须拒�
   const locked = Promise.withResolvers(), releaseRead = Promise.withResolvers(), writerBorrowed = Promise.withResolvers();
   let reading, revoking, intercepted = false, revoked = false;
   r.runtime.access = async function (...args) {
-    if (!intercepted && args[3]?.sharedSessionRead) {
+    if (!intercepted && args[3]?.sessionLock === 'share') {
       intercepted = true;
       const row = (await args[0].query('SELECT pg_backend_pid() AS pid')).rows[0];
       locked.resolve(row.pid); await releaseRead.promise;
