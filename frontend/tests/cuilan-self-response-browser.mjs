@@ -11,6 +11,7 @@ import { sampleSharedPersonalEffects, assertBothActiveEffects, assertSharedStopp
 import { repository, sourceIdentity, saveJSON, sha256, until, sleep } from './network-support.mjs';
 import { browserRoom, snapshot, clientState, openReading } from './gaolao-real-support.mjs';
 import { productionProfile, caseIds, assertCompleteReport, clickAction, askAppearance, describeItems, askItems, personalState, cancelPersonal, returnItem, holdSubmissions, holdCommittedReceipt, deferLeaseMaintenance, authoritativeState, sceneDecision, assertRoomIdentity, createCuilanReportCollector, finalizeCuilanReport } from './cuilan-self-response-support.mjs';
+import { nextRecoveryAction } from './cuilan-self-response-recovery.mjs';
 
 const output = resolve(process.env.FRONTEND_EVIDENCE_DIR || resolve(repository, '.agent-output/cuilan-production-browser'));
 await mkdir(output, { recursive: true });
@@ -266,17 +267,59 @@ async function interruptAppearance(room) {
   assert.ok((await state(room)).chapter.disguise);
   await bindingInterruption(room, player, 'appearance', granted.consent.consentId);
 }
-async function recoverPlayer(room, player, { reload = true } = {}) {
-  const page = room.pages[player]; if (reload) await page.reload();
+async function recoverPlayer(room, player, { reload = true, trace = null, allowExplicitTake = false } = {}) {
+  const record = (step, detail = {}) => { if (trace) trace.push({ player, step, at: new Date().toISOString(), ...detail }); };
+  const page = room.pages[player]; record('start');
+  if (reload) { await page.reload(); record('reloaded'); }
   await until(async () => (await clientState(page)).connection === 'online', '真实页面网络恢复', 20000);
+  record('online');
+  const beforeEpoch = (await snapshot(page))?.projection.self.controlEpoch;
   const resume = page.getByRole('button', { name: '恢复本人控制', exact: true });
-  if (await resume.isVisible()) await resume.click();
-  await until(async () => (await clientState(page)).inputReady, '真实页面恢复本人控制', 20000);
+  const take = page.getByRole('button', { name: '明确接管此角色', exact: true });
+  let clicked = false, explicitTakeClicked = false;
+  // 正常恢复优先。服务器重启后PG中可能仍保留旧连接的控制租约，协议明确要求
+  // CONTROL_HELD 时本人点击「明确接管」；同epoch且本地命令序号丢失也必须新建控制代次。
+  // 连接代次再次变为 connecting/online 时允许本人重新点击，不能让一次失效的点击吃掉20秒；
+  // 只有重启专用路径允许显式接管回退，其他重连仍需原恢复条件。控制恢复轮询的20秒上限不变。
+  await until(async () => {
+    const state = await clientState(page);
+    const action = nextRecoveryAction(state, { clicked, explicitTakeClicked }, allowExplicitTake);
+    if (action.kind === 'ready') return true;
+    if (action.kind === 'reset') { clicked = false; explicitTakeClicked = false; return false; }
+    if (action.kind === 'resume') {
+      assert.ok(await resume.isVisible(), '本人恢复入口必须是真实可见控件');
+      await resume.click();
+      clicked = true;
+      record('resume-clicked');
+    } else if (action.kind === 'take') {
+      assert.ok(await take.isVisible(), '本人明确接管入口必须是真实可见控件');
+      const epoch = (await snapshot(page))?.projection.self.controlEpoch;
+      await take.click();
+      explicitTakeClicked = true;
+      record('explicit-take-clicked', { reason: action.reason, beforeTakeEpoch: epoch });
+    }
+    return false;
+  }, '真实页面恢复本人控制', 20000);
+  if (explicitTakeClicked) {
+    const afterEpoch = (await snapshot(page))?.projection.self.controlEpoch;
+    assert.ok(beforeEpoch !== undefined && afterEpoch !== undefined && BigInt(afterEpoch) > BigInt(beforeEpoch), '真实本人接管必须提升权威控制代次，不可仅显示inputReady');
+    record('explicit-take-confirmed', { beforeEpoch, afterEpoch });
+  }
+  record('input-ready');
 }
 async function restartServer(room) {
   const before = (await snapshot(room.pages[0])).viewId;
   await server.close(); server = await createAuthorityServer({ pool: database.pool }); await server.listen(serverPort);
-  for (let player = 0; player < room.count; player++) await recoverPlayer(room, player);
+  // 两人房间暂停时，先并行建立真实连接；复原入口可能比online晚一拍出现。
+  // 记录各人到达可见控件和inputReady的实际次序，失败原样传播并保留完整门槛。
+  const trace = { sessionId: room.sessionId, beforeView: before, events: [] };
+  (report.restartRecoveryTraces ??= []).push(trace);
+  try {
+    await Promise.all(Array.from({ length: room.count }, (_, player) => recoverPlayer(room, player, { trace: trace.events, allowExplicitTake: true })));
+  } catch (error) {
+    trace.failure = { message: error.message, at: new Date().toISOString() };
+    throw error;
+  }
   await assertRoomIdentity(room, database.pool, { defaultEntry: report.rooms.find(row => row.sessionId === room.sessionId).defaultEntry });
   await room.rebindControlledNpcs();
   await until(async () => !(await snapshot(room.pages[0])).projection.paused, '实际服务器重启后正常两人恢复');

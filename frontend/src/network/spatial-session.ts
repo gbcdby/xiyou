@@ -17,6 +17,8 @@ function retainActions(actions: SpatialDraft[]): SpatialDraft[] {
   let confirmed = 80;
   return [...actions].reverse().filter(action => action.status === 'waiting' || action.status === 'unknown' || confirmed-- > 0).reverse();
 }
+// 重连回放逐个查询原动作，但最多保留三条在途请求，为控制恢复保留连接池容量。
+const RECEIPT_REPLAY_LIMIT = 3;
 function asError(value: unknown): ErrorV2 | null {
   try { return validateSpatial('ErrorV2', value); } catch {
     try { const error = validateContract('ErrorResponse', value); return { schemaVersion: 2, code: error.code, message: error.message || '请求未完成。' }; } catch { return null; }
@@ -41,6 +43,8 @@ export class SpatialSessionClient {
   #heartbeat: ReturnType<typeof setInterval> | null = null; #retryTimer: ReturnType<typeof setTimeout> | null = null;
   #syncKey = ''; #syncRevision = 0;
   #displayedArrival = '';
+  #replayQueue: string[] = []; #replaying = false; #replaySerial = 0;
+  #controlIdleWaiters: (() => void)[] = [];
   constructor(api: ReceiptReader, connect: ConnectLink, options: Options = {}) {
     this.#api = api; this.#connect = connect;
     this.#options = { onChange: options.onChange ?? (() => {}), onUnauthenticated: options.onUnauthenticated ?? (() => {}), id: options.id ?? (() => crypto.randomUUID()), heartbeatMs: options.heartbeatMs ?? 1000, reconnectDelayMs: options.reconnectDelayMs ?? 1000, waitForVisualArrival: options.waitForVisualArrival ?? false };
@@ -62,6 +66,7 @@ export class SpatialSessionClient {
     this.#openConnection();
   }
   close() {
+    this.#releaseControlIdle();
     this.#serial++; if (this.#heartbeat) clearInterval(this.#heartbeat); if (this.#retryTimer) clearTimeout(this.#retryTimer);
     this.#heartbeat = null; this.#retryTimer = null; const link = this.#link; this.#link = null; link?.close();
     this.#view.begin(''); this.#sessionId = ''; this.#token = ''; this.#connection = 'idle'; this.#source = null; this.#queued = null; this.#controlBusy = false; this.#pendingControl = null; this.#syncKey = ''; this.#message = '';
@@ -69,6 +74,7 @@ export class SpatialSessionClient {
   }
   reconnect() { if (this.#sessionId && this.#token) this.#openConnection(); }
   #openConnection() {
+    this.#releaseControlIdle();
     if (this.#retryTimer) clearTimeout(this.#retryTimer); this.#retryTimer = null;
     const serial = ++this.#serial; const generation = this.#view.begin(this.#sessionId);
     const old = this.#link; this.#link = null; old?.close(); this.#source = null; this.#queued = null; this.#pendingControl = null; this.#controlBusy = false; this.#syncKey = '';
@@ -89,6 +95,7 @@ export class SpatialSessionClient {
   }
   #disconnect(serial: number, retry = true) {
     if (serial !== this.#serial) return;
+    this.#releaseControlIdle();
     const next = ++this.#serial; const link = this.#link; this.#link = null; link?.close(); this.#view.begin(this.#sessionId);
     this.#source = null; this.#queued = null; this.#controlBusy = false; this.#pendingControl = null; this.#syncKey = ''; this.#connection = 'offline'; this.#message = '连接已断开，正在重新获取授权视图。';
     this.#actions = this.#actions.map(a => a.status === 'waiting' ? { ...a, status: 'unknown', detail: '原动作结果未知，可恢复后查询或原样重试。' } : a); this.#publish();
@@ -113,7 +120,7 @@ export class SpatialSessionClient {
       if (asError(value)) { this.#initialFailure(value, serial); return; }
       if (this.#view.acceptSnapshot(value, generation) !== 'applied') { this.#disconnect(serial, false); this.#message = '空间授权视图校验未通过，请重新连接。'; this.#publish(); return; }
       this.#connection = 'online'; this.#message = ''; this.#publish(); void this.sync();
-      for (const draft of this.#actions.filter(a => a.status === 'unknown')) void this.query(draft.id);
+      this.#replayUnknown(this.#actions.filter(a => a.status === 'unknown').map(a => a.id), serial);
     } catch { this.#disconnect(serial); }
   }
   #batch(value: unknown, generation: number) {
@@ -208,6 +215,30 @@ export class SpatialSessionClient {
       this.#update(draft.id, { receipt, status: receipt.status === 'Accepted' ? 'accepted' : 'rejected', detail: receipt.status === 'Rejected' ? spatialErrorMessage(receipt.code) : envelope.action.kind === 'move_to' ? '路线已受理；实际到达以后才会操作。' : '服务器已确认。' }); this.#drainQueued(); void this.sync();
     } catch { this.#update(draft.id, { status: 'unknown', detail: '收据校验未通过，结果仍待确认。' }); }
   }
+  // 每批至多三条；本批全部收束后才启动下一批。连接代次变化使旧队列失效。
+  #replayUnknown(ids: string[], serial: number) {
+    this.#replaySerial = serial; this.#replayQueue = [...ids];
+    if (this.#replaying) return;
+    this.#replaying = true;
+    queueMicrotask(() => void this.#drainReplay());
+  }
+  async #drainReplay() {
+    while (this.#replayQueue.length && this.#serial === this.#replaySerial) {
+      // 控制恢复期间不再启动新一批收据查询；已在途的原查询继续按原语义收束。
+      if (this.#controlBusy || this.#pendingControl) {
+        await new Promise<void>(resolve => this.#controlIdleWaiters.push(resolve));
+        continue;
+      }
+      const active: Promise<unknown>[] = [];
+      while (active.length < RECEIPT_REPLAY_LIMIT && this.#replayQueue.length && this.#serial === this.#replaySerial) {
+        const id = this.#replayQueue.shift()!;
+        active.push(this.query(id).catch(() => {}));
+      }
+      if (!active.length) break;
+      await Promise.all(active);
+    }
+    this.#replaying = false;
+  }
   async query(id: string) {
     const draft = this.#actions.find(a => a.id === id); const serial = this.#serial; if (!draft || !this.#view.snapshot) return;
     try { const value = await this.#api.receipt(this.#sessionId, id); if (serial !== this.#serial) return; if (value) this.#receipt(draft, value); else this.#update(id, { status: 'unknown', detail: '尚未查到收据，可原样重试。' }); }
@@ -236,8 +267,9 @@ export class SpatialSessionClient {
       if (!knownSource) this.#source = newEpoch ? new MovementCommandSource(response.controlEpoch) : null;
       this.#pendingControl = null; this.#message = this.#source ? '已恢复本人控制。' : '本地输入序号已丢失，请明确接管以建立新的控制周期。'; this.#publish();
     } catch { if (serial === this.#serial) { this.#message = '控制结果待确认，再次点击会重试原请求。'; this.#publish(); } }
-    finally { if (serial === this.#serial) { this.#controlBusy = false; this.#publish(); void this.sync(); } }
+    finally { if (serial === this.#serial) { this.#controlBusy = false; this.#publish(); this.#releaseControlIdle(); void this.sync(); } }
   }
+  #releaseControlIdle() { for (const resolve of this.#controlIdleWaiters.splice(0)) resolve(); }
   #drainQueued() {
     const queued = this.#queued; const snapshot = this.#view.snapshot; if (!queued || !snapshot) return;
     const p = snapshot.projection; const movement = p.movement;
