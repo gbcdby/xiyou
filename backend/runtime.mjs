@@ -25,6 +25,8 @@ const digest = value => createHash('sha256').update(typeof value === 'string' ? 
 const id = prefix => `${prefix}-${randomUUID()}`;
 const validId = value => typeof value === 'string' && /^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}(?![\s\S])/.test(value);
 const requireId = value => { if (!validId(value)) throw new RuntimeError('INVALID_MESSAGE', '标识格式无效。'); };
+// 普通事务最多让位这么久；到点后不再被后来到达的控制请求续期。
+export const CONTROL_PRIORITY_WAIT_MS = 250;
 export function clientReceipt(receipt) {
   if (receipt.schemaVersion === 2) return validateSpatial('ReceiptV2', receipt.publicReceipt);
   const { key, ...fields } = receipt;
@@ -44,6 +46,7 @@ export class AuthorityRuntime extends EventEmitter {
   #internals = new WeakMap();
   #views = new Map();
   #publishing = false;
+  #controlPriority = new Map();
   constructor({ pool, now = Date.now, hooks = {} }) {
     super(); this.pool = pool; this.now = now; this.hooks = hooks;
   }
@@ -75,6 +78,8 @@ export class AuthorityRuntime extends EventEmitter {
     if (notify && wasActive) this.emit('view-revoked', { connectionId, sessionId: view.sessionId });
   }
   async close() {
+    for (const gate of this.#controlPriority.values()) for (const entry of gate.pending.values()) entry.resolve();
+    this.#controlPriority.clear();
     for (const view of this.#views.values()) this.retireView(view);
     this.#handles.clear(); this.removeAllListeners();
   }
@@ -135,7 +140,8 @@ export class AuthorityRuntime extends EventEmitter {
       await tx.client.query('UPDATE sessions SET state=$2, session_seq=$3, logical_time=$4, state_text_encoding=$5 WHERE session_id=$1', [tx.row.session_id, stored.value, tx.state.sessionSeq, tx.time, stored.encoding]);
     }
   }
-  async locked(sessionId, command, operation) {
+  async #lockedBody(sessionId, command, operation) {
+    const readOnly = command?.readOnly === true;
     requireId(sessionId);
     const client = await this.pool.connect();
     let committed = false;
@@ -144,22 +150,26 @@ export class AuthorityRuntime extends EventEmitter {
     let deferredError;
     let result;
     try {
-      await client.query('BEGIN');
-      const row = (await client.query('SELECT * FROM sessions WHERE session_id=$1 FOR UPDATE', [sessionId])).rows[0];
+      await client.query(readOnly ? 'BEGIN READ ONLY' : 'BEGIN');
+      // 收据只读不取会话行锁，避免重连回放把 control.resume 堵在同一行的锁队列后。
+      const row = (await client.query(readOnly ? 'SELECT * FROM sessions WHERE session_id=$1'
+        : 'SELECT * FROM sessions WHERE session_id=$1 FOR UPDATE', [sessionId])).rows[0];
       if (!row) throw new RuntimeError('SESSION_GONE', '本局不可访问。');
       tx = this.buildTransaction(client, row, command.cause);
       result = await operation(tx);
       if (result instanceof RuntimeError) { deferredError = result; result = null; }
-      await this.persist(tx);
-      await this.hooks.beforeCommit?.({ command: command.kind, sessionId, events: tx.events });
+      if (!readOnly) await this.persist(tx);
+      if (!readOnly) await this.hooks.beforeCommit?.({ command: command.kind, sessionId, events: tx.events });
       committing = true; await client.query('COMMIT'); committed = true;
-      for (const effect of tx.afterCommit) await effect();
-      await this.hooks.afterCommit?.({ command: command.kind, sessionId, events: tx.events });
-      await this.applyControlEffects(tx);
-      // 仅进程内提交订阅者使用事务起点；不写入 WorldEvent、客户端投影或模型上下文。
-      if (tx.events.length) {
-        const policyWake=isSpatial(tx.row.state)?scenePolicy.scenePolicyWake(tx):null;
-        this.emit('commit', { sessionId, events: tx.events, ...(isSpatial(tx.row.state) ? { spatialPauseBefore: tx.row.state.paused } : {}), ...(policyWake?{scenePolicyWake:policyWake}:{}) });
+      if (!readOnly) {
+        for (const effect of tx.afterCommit) await effect();
+        await this.hooks.afterCommit?.({ command: command.kind, sessionId, events: tx.events });
+        await this.applyControlEffects(tx);
+        // 仅进程内提交订阅者使用事务起点；不写入 WorldEvent、客户端投影或模型上下文。
+        if (tx.events.length) {
+          const policyWake=isSpatial(tx.row.state)?scenePolicy.scenePolicyWake(tx):null;
+          this.emit('commit', { sessionId, events: tx.events, ...(isSpatial(tx.row.state) ? { spatialPauseBefore: tx.row.state.paused } : {}), ...(policyWake?{scenePolicyWake:policyWake}:{}) });
+        }
       }
     } catch (error) {
       if (!committed) await client.query('ROLLBACK').catch(() => {});
@@ -168,6 +178,38 @@ export class AuthorityRuntime extends EventEmitter {
     } finally { for (const cleanup of tx?.afterFinish ?? []) cleanup({ committed, committing }); client.release(); }
     if (deferredError) throw deferredError;
     return result;
+  }
+  async locked(sessionId, command, operation) {
+    return this.#withControlPriority(sessionId, command, () => this.#lockedBody(sessionId, command, operation));
+  }
+  async #withControlPriority(sessionId, command, operation) {
+    requireId(sessionId);
+    const priority = command?.kind === 'control.resume' || command?.kind === 'control.take';
+    let gate = this.#controlPriority.get(sessionId);
+    let ticket;
+    if (priority) {
+      if (!gate) { gate = { sequence: 0, pending: new Map() }; this.#controlPriority.set(sessionId, gate); }
+      ticket = ++gate.sequence;
+      let resolve;
+      const settled = new Promise(done => { resolve = done; });
+      gate.pending.set(ticket, { settled, resolve });
+    } else if (gate?.pending.size) {
+      // 只让位于到达时已在门内的控制请求；后来的控制不能无限续期普通事务的等待。
+      const waitingFor = [...gate.pending.values()];
+      let timer;
+      const expired = new Promise(resolve => { timer = setTimeout(resolve, CONTROL_PRIORITY_WAIT_MS); timer.unref?.(); });
+      try { await Promise.race([Promise.all(waitingFor.map(entry => entry.settled)), expired]); }
+      finally { clearTimeout(timer); }
+    }
+    try { return await operation(); }
+    finally {
+      if (priority) {
+        const entry = gate.pending.get(ticket);
+        entry?.resolve?.();
+        gate.pending.delete(ticket);
+        if (!gate.pending.size && this.#controlPriority.get(sessionId) === gate) this.#controlPriority.delete(sessionId);
+      }
+    }
   }
   async applyControlEffects(tx) {
     const actorIds = new Set(tx.events.filter(event => event.kind === 'control.changed').map(event => event.payload.actorId));
@@ -611,7 +653,7 @@ export class AuthorityRuntime extends EventEmitter {
   async receipt(token, sessionId, actionId) {
     requireId(actionId);
     await this.authenticate(token);
-    return this.locked(sessionId, { kind: 'receipt' }, async tx => {
+    return this.locked(sessionId, { kind: 'receipt', readOnly: true }, async tx => {
       const user = await this.access(tx.client, tx.row, token);
       const row = (await tx.client.query('SELECT receipt,actor_id FROM action_receipts WHERE session_id=$1 AND principal_id=$2 AND client_action_id=$3', [sessionId, user.principalId, actionId])).rows[0];
       if (!row) return null;
