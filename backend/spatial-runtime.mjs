@@ -242,7 +242,7 @@ export async function syncSpatial(runtime, handle, request, { throughSeqCeiling,
     const readView = runtime.connectionView(handle);
     const sharedRead = readView?.schemaVersion === 2 && runtime.spatialSupply.enabled(handle);
     return runtime.locked(request.sessionId, { kind: 'spatial-sync', ...(sharedRead ? { sessionLock: 'share' } : {}) }, async (tx) => {
-        const user = await runtime.access(tx.client, tx.row, connection.token), view = runtime.connectionView(handle), ended = ['Finished', 'Aborted'].includes(tx.state.phase), binding = view?.terminalBinding ?? tx.state.views[user.actorId], actor = tx.state.characters[user.actorId];
+        const user = await runtime.access(tx.client, tx.row, connection.token, { sharedSessionRead: sharedRead }), view = runtime.connectionView(handle), ended = ['Finished', 'Aborted'].includes(tx.state.phase), binding = view?.terminalBinding ?? tx.state.views[user.actorId], actor = tx.state.characters[user.actorId];
         requireSpatialCapability(connection.capabilities, tx.state);
         if (ended && !await runtime.liveConnection(tx, handle)) throw new RuntimeError('UNAUTHENTICATED');
         if (view?.terminalBinding && (!ended || view.cursor !== tx.state.sessionSeq)) throw new RuntimeError('RESYNC_REQUIRED');

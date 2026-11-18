@@ -100,13 +100,23 @@ export class AuthorityRuntime extends EventEmitter {
     await this.pool.query('INSERT INTO runtime_users(user_id,name,token_hash) VALUES($1,$2,$3)', [userId, name.trim(), digest(token)]);
     return { token, userId, name: name.trim() };
   }
-  async authenticate(token, client = this.pool) {
+  /** 内部Session参数只由持锁access传入；普通认证不关联ACL。 */
+  async authenticate(token, client = this.pool, sessionId) {
     if (typeof token !== 'string' || token.length > 256) throw new RuntimeError('UNAUTHENTICATED', '请重新登录。');
-    const user = (await client.query('SELECT user_id, name FROM runtime_users WHERE token_hash=$1 AND active', [digest(token)])).rows[0];
+    const user = (await client.query(sessionId === undefined
+      ? 'SELECT user_id, name FROM runtime_users WHERE token_hash=$1 AND active'
+      : 'SELECT u.user_id,u.name,a.actor_id FROM runtime_users u LEFT JOIN session_access a ON a.session_id=$2 AND a.user_id=u.user_id AND a.active WHERE u.token_hash=$1 AND u.active',
+    sessionId === undefined ? [digest(token)] : [digest(token), sessionId])).rows[0];
     if (!user) throw new RuntimeError('UNAUTHENTICATED', '请重新登录。');
-    return { userId: user.user_id, name: user.name, principalId: `human:${user.user_id}` };
+    return { userId: user.user_id, name: user.name, principalId: `human:${user.user_id}`, ...(sessionId === undefined ? {} : { actorId: user.actor_id }) };
   }
-  async access(client, row, token) {
+  async access(client, row, token, { sharedSessionRead = false } = {}) {
+    // 仅原共享同步在同Session行锁内启用；ACL写方也持该锁，仍在这里新读账号与读权。
+    if (sharedSessionRead === true) {
+      const user = await this.authenticate(token, client, row.session_id);
+      if (user.actorId === null) throw new RuntimeError('FORBIDDEN', '当前账号无权访问本局。');
+      return user;
+    }
     const user = await this.authenticate(token, client);
     const access = (await client.query('SELECT actor_id FROM session_access WHERE session_id=$1 AND user_id=$2 AND active', [row.session_id, user.userId])).rows[0];
     if (!access) throw new RuntimeError('FORBIDDEN', '当前账号无权访问本局。');

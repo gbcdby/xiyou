@@ -105,6 +105,116 @@ async function appendBoundaryEvents(r, count = 1) {
   });
 }
 
+test('锁内授权：共享读与原两语句结果等值，默认只读收据保留原路径', async t => {
+  const r = await room(t, { caps: [...directionCaps, 'spatial-timed-trail-v1'] });
+  assert.equal(r.runtime.spatialSupply.enabled(r.handles[0]), true);
+  const from = (await persisted(r)).session_seq, head = await appendBoundaryEvents(r), before = await persisted(r);
+  const access = r.runtime.access, authenticate = r.runtime.authenticate;
+  const authCalls = [];
+  r.runtime.authenticate = function (...args) { authCalls.push(args[2]); return authenticate.apply(this, args); };
+  try {
+    for (const cursor of [head, from]) {
+      let actual;
+      const joined = observeEmptySync(r), count = authCalls.length;
+      try {
+        actual = await sync(r, cursor);
+        assert.equal(authCalls.length, count + 1, '联合读取仍经过真实authenticate方法边界');
+        assert.equal(authCalls.at(-1), r.sessionId);
+        assert.ok(joined.trace.queries.some(sql => sql.endsWith('FOR SHARE')));
+        assert.equal(joined.trace.queries.filter(sql => sql.includes('FROM runtime_users')).length, 1);
+        assert.equal(joined.trace.queries.filter(sql => sql.includes('LEFT JOIN session_access')).length, 1);
+        assert.equal(joined.trace.queries.filter(sql => sql.includes('FROM session_access')).length, 0);
+      } finally { joined.restore(); }
+      const original = observeEmptySync(r);
+      r.runtime.access = function (client, row, token) { return access.call(this, client, row, token); };
+      try {
+        assert.deepEqual(await sync(r, cursor), actual, '原默认两语句授权仍给出同一完整空/非空Batch');
+        assert.equal(original.trace.queries.filter(sql => sql.includes('FROM runtime_users')).length, 1);
+        assert.equal(original.trace.queries.filter(sql => sql.includes('FROM session_access')).length, 1);
+        assert.equal(original.trace.queries.some(sql => sql.includes('LEFT JOIN session_access')), false);
+      } finally { r.runtime.access = access; original.restore(); }
+    }
+    const receipt = observeEmptySync(r);
+    try {
+      assert.equal(await r.runtime.receipt(r.users[0].token, r.sessionId, crypto.randomUUID()), null);
+      assert.ok(receipt.trace.queries.includes('BEGIN READ ONLY'));
+      assert.ok(receipt.trace.queries.includes('SELECT * FROM sessions WHERE session_id=$1'));
+      assert.equal(receipt.trace.queries.some(sql => sql.includes('LEFT JOIN session_access')), false);
+      assert.equal(receipt.trace.queries.filter(sql => sql.includes('FROM runtime_users')).length, 1);
+      assert.equal(receipt.trace.queries.filter(sql => sql.includes('FROM session_access')).length, 1);
+    } finally { receipt.restore(); }
+  } finally { r.runtime.access = access; r.runtime.authenticate = authenticate; }
+  assert.deepEqual(await persisted(r), before);
+});
+
+test('锁内授权：联合查询故障仍回滚，缺本局ACL先于内部参数拒绝', async t => {
+  const r = await room(t, { caps: [...directionCaps, 'spatial-timed-trail-v1'] });
+  const before = await persisted(r), oldPending = await pending(r), head = before.session_seq;
+  const authenticate = r.runtime.authenticate, failure = new Error('联合授权查询受控失败'); let faults = 0;
+  r.runtime.authenticate = function (token, client, ...options) {
+    const faulted = new Proxy(client, { get(target, key) {
+      if (key === 'query') return (sql, ...args) => {
+        if (sql.includes('LEFT JOIN session_access')) { faults++; throw failure; }
+        return target.query(sql, ...args);
+      };
+      return Reflect.get(target, key);
+    } });
+    return authenticate.call(this, token, faulted, ...options);
+  };
+  const failed = observeEmptySync(r);
+  try {
+    await assert.rejects(sync(r, head), error => error === failure);
+    assert.equal(faults, 1); assert.deepEqual(failed.trace.stateAt, []);
+    assert.deepEqual(failed.trace.steps, ['BEGIN', 'ROLLBACK', ['afterFinish', { committed: false, committing: false }], 'release']);
+  } finally { failed.restore(); r.runtime.authenticate = authenticate; }
+  assert.deepEqual(await persisted(r), before); assert.deepEqual(await pending(r), oldPending);
+  await database.pool.query('DELETE FROM session_access WHERE session_id=$1 AND user_id=$2', [r.sessionId, r.users[0].userId]);
+  const denied = observeEmptySync(r);
+  try {
+    await assert.rejects(sync(r, head, { sentPrefixStart: '不可信内部值' }), { code: 'FORBIDDEN' });
+    assert.equal(denied.trace.queries.filter(sql => sql.includes('LEFT JOIN session_access')).length, 1);
+    assert.deepEqual(denied.trace.stateAt, []);
+    assert.deepEqual(denied.trace.steps, ['BEGIN', 'ROLLBACK', ['afterFinish', { committed: false, committing: false }], 'release']);
+  } finally { denied.restore(); }
+});
+
+test('锁内授权：真实撤权等待当前共享读，后继读取必须拒绝', { timeout: 15000 }, async t => {
+  const r = await room(t, { caps: [...directionCaps, 'spatial-timed-trail-v1'] }), head = (await persisted(r)).session_seq;
+  const access = r.runtime.access, connect = pool.connect;
+  const locked = Promise.withResolvers(), releaseRead = Promise.withResolvers(), writerBorrowed = Promise.withResolvers();
+  let reading, revoking, intercepted = false, revoked = false;
+  r.runtime.access = async function (...args) {
+    if (!intercepted && args[3]?.sharedSessionRead) {
+      intercepted = true;
+      const row = (await args[0].query('SELECT pg_backend_pid() AS pid')).rows[0];
+      locked.resolve(row.pid); await releaseRead.promise;
+    }
+    return access.apply(this, args);
+  };
+  try {
+    reading = sync(r, head); reading.catch(() => {}); const readerPid = await locked.promise;
+    pool.connect = async (...args) => {
+      const client = await connect(...args), row = (await client.query('SELECT pg_backend_pid() AS pid')).rows[0];
+      writerBorrowed.resolve(row.pid); return client;
+    };
+    revoking = r.runtime.revokeAccess(r.sessionId, r.users[0].userId).then(() => { revoked = true; }); revoking.catch(() => {});
+    const writerPid = await writerBorrowed.promise; pool.connect = connect;
+    let blocked = false; const deadline = Date.now() + 3000;
+    while (Date.now() < deadline) {
+      blocked = (await database.pool.query('SELECT $1::integer = ANY(pg_blocking_pids($2::integer)) AS blocked', [readerPid, writerPid])).rows[0].blocked;
+      if (blocked) break;
+      await new Promise(resolve => setTimeout(resolve, 5));
+    }
+    assert.equal(blocked, true, '真实PG必须观察到撤权事务被当前共享读的Session行锁阻塞');
+    assert.equal(revoked, false);
+    releaseRead.resolve(); assert.equal((await reading).throughSeq, head); await revoking;
+    await assert.rejects(sync(r, head), { code: 'FORBIDDEN' });
+  } finally {
+    releaseRead.resolve(); pool.connect = connect; r.runtime.access = access;
+    await Promise.allSettled([reading, revoking].filter(Boolean));
+  }
+});
+
 test('已提交头边界：三能力非空读取等于原SQL结果，显式上界与事务回滚保留', async t => {
   const r = await room(t, { caps: [...directionCaps, 'spatial-timed-trail-v1'] });
   assert.equal(r.runtime.connectionView(r.handles[0]).schemaVersion, 2);
@@ -190,7 +300,7 @@ test('空读取区间：同头空批省去边界SQL，仍保留提交与回滚�
     assert.deepEqual(boundaryReads(successful.trace), []);
     assert.ok(successful.trace.queries.some(sql => sql.endsWith('FOR SHARE')), '同头仍取得原会话共享锁');
     assert.ok(successful.trace.queries.some(sql => sql.includes('FROM runtime_users')));
-    assert.ok(successful.trace.queries.some(sql => sql.includes('FROM session_access')));
+    assert.ok(successful.trace.queries.some(sql => sql.includes('LEFT JOIN session_access')));
     assert.equal(successful.trace.queries.some(sql => /^(INSERT|UPDATE|DELETE)\b/.test(sql)), false);
     assert.deepEqual(successful.trace.steps, ['BEGIN', 'stateAt', 'persist', 'beforeCommit', 'COMMIT', 'effect', 'afterCommit',
       ['afterFinish', { committed: true, committing: true }], 'release']);
