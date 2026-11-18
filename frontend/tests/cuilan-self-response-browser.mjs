@@ -341,7 +341,7 @@ async function recoverPlayer(room, player, { reload = true, trace = null, allowE
   // 正常恢复优先。服务器重启后PG中可能仍保留旧连接的控制租约，协议明确要求
   // CONTROL_HELD 时本人点击「明确接管」；同epoch且本地命令序号丢失也必须新建控制代次。
   // 连接代次再次变为 connecting/online 时允许本人重新点击，不能让一次失效的点击吃掉20秒；
-  // 只有重启专用路径允许显式接管回退，其他重连仍需原恢复条件。总20秒上限不变。
+  // 只有重启专用路径允许显式接管回退，其他重连仍需原恢复条件。控制恢复轮询的20秒上限不变。
   await until(async () => {
     const state = await clientState(page);
     const action = nextRecoveryAction(state, { clicked, explicitTakeClicked }, allowExplicitTake);

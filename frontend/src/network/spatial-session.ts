@@ -26,8 +26,7 @@ function retainActions(actions: SpatialDraft[]): SpatialDraft[] {
   let confirmed = 80;
   return [...actions].reverse().filter(action => action.status === 'waiting' || action.status === 'unknown' || confirmed-- > 0).reverse();
 }
-// 重连后回放未知收据时限制在途数量：每个查询都占用一条数据库连接并锁定同一会话行，
-// 无界并发会耗尽连接池，使同一时刻的 control.resume 拿不到连接/行锁而超时。
+// 重连回放逐个查询原动作，但最多保留三条在途请求，为控制恢复保留连接池容量。
 const RECEIPT_REPLAY_LIMIT = 3;
 function asError(value: unknown): ErrorV2 | null {
   // 两版错误都必须有自有code；正常批次直接进入原批次校验，避免先做两次完整错误校验。
@@ -355,8 +354,7 @@ export class SpatialSessionClient {
       this.#update(draft.id, { receipt, status: receipt.status === 'Accepted' ? 'accepted' : 'rejected', detail: receipt.status === 'Rejected' ? spatialErrorMessage(receipt.code) : envelope.action.kind === 'move_to' ? '路线已受理；实际到达以后才会操作。' : '服务器已确认。' }); this.#drainQueued(); this.#drainNavigation(); void this.sync();
     } catch { this.#update(draft.id, { status: 'unknown', detail: '收据校验未通过，结果仍待确认。' }); }
   }
-  // 重连回放：保留逐个查询语义，但在途查询数有界。每次只启动 RECEIPT_REPLAY_LIMIT 条，
-  // 完成一条再启下一条；连接代次变化时整队作废，避免旧连接的查询打到新会话。
+  // 每批至多三条；本批全部收束后才启动下一批。连接代次变化使旧队列失效。
   #replayUnknown(ids: string[], serial: number) {
     this.#replaySerial = serial; this.#replayQueue = [...ids];
     if (this.#replaying) return;

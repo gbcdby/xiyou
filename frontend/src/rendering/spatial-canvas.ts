@@ -193,7 +193,14 @@ export class SpatialCanvas {
       } else if (entry.kind === 'person') {
         const person = entry.person, art = person.art; context.save(); context.translate(person.position.x, person.position.y);
         context.fillStyle = '#2f3c2940'; context.beginPath(); context.ellipse(0, -1, 17, 6, 0, 0, Math.PI * 2); context.fill();
-        if (art) { if (art.mirrorX) context.scale(-1, 1); context.drawImage(this.#assets.image(art.href)!, art.bounds.x, art.bounds.y, art.bounds.width, art.bounds.height); }
+        if (art) {
+          if (art.mirrorX) context.scale(-1, 1);
+          const image = this.#assets.image(art.href)!;
+          if (!image || person.moving || art.mirrorX
+            || !this.#objectRaster.draw(context, image, art.bounds, { dpr: this.#dpr, fit, position: person.position })) {
+            context.drawImage(image, art.bounds.x, art.bounds.y, art.bounds.width, art.bounds.height);
+          }
+        }
         else {
           context.fillStyle = person.entityRef === p.self.entityRef ? '#7b9283' : '#c7b99b'; context.strokeStyle = '#365e52'; context.lineWidth = 1.5;
           context.beginPath(); context.ellipse(0, -64, 8, 9, 0, 0, Math.PI * 2); context.fill(); context.stroke(); context.fill(new Path2D(bodyPath)); context.stroke(new Path2D(bodyPath)); context.fill(new Path2D(hatPath)); context.stroke(new Path2D(hatPath));
