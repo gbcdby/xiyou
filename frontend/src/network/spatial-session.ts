@@ -15,7 +15,11 @@ import { directionTarget, mapRoute } from '../domain/spatial-navigation.ts';
 
 export interface SpatialDraft { id: string; raw: string; status: 'waiting' | 'unknown' | 'accepted' | 'rejected'; detail: string; receipt: ReceiptV2 | null }
 export interface NavigationState { destinationSceneId: string; destination: Position; phase: 'approaching-exit' | 'crossing' | 'approaching-destination' }
-export interface SpatialState { connection: ConnectionState; snapshot: SnapshotV2 | null; actions: SpatialDraft[]; message: string; controlBusy: boolean; inputReady: boolean; queuedAction: string | null; navigation: NavigationState | null; timedTrail?: boolean }
+type InputBlocker = 'connection' | 'control' | 'phase';
+export type DirectionInputState = { readonly ready: true; readonly blocker: null }
+  | { readonly ready: false; readonly blocker: InputBlocker | 'movement' | 'invalid-draft' };
+export interface SpatialState { connection: ConnectionState; snapshot: SnapshotV2 | null; actions: SpatialDraft[]; message: string; controlBusy: boolean; inputReady: boolean; directionInput: DirectionInputState; queuedAction: string | null; navigation: NavigationState | null; timedTrail?: boolean }
+export const DIRECTION_MOVEMENT_PENDING_MESSAGE = '上一项移动或停步结果尚未确认，请先查询或原样重试。';
 interface Options { onChange?: (state: SpatialState) => void; onUnauthenticated?: (token: string) => void; id?: () => string; heartbeatMs?: number; reconnectDelayMs?: number; waitForVisualArrival?: boolean }
 interface ReceiptReader { receipt(sessionId: string, actionId: string): Promise<ReceiptV2 | null> }
 interface QueuedAction { action: ActionV2; sequence: string; epoch: string; viewId: string; mapVersion: string; movementId?: string; targetRef?: string; targetSignature?: string }
@@ -73,7 +77,10 @@ export class SpatialSessionClient {
   get state(): SpatialState {
     const snapshot = this.#view.snapshot;
     const navigation = this.#navigation ? { destinationSceneId: this.#navigation.destinationSceneId, destination: { ...this.#navigation.destination }, phase: this.#navigation.phase } : null;
-    return { connection: this.#connection, snapshot, actions: [...this.#actions], message: this.#message, controlBusy: this.#controlBusy, inputReady: Boolean(snapshot?.projection.self.canControl && this.#source?.controlEpoch === snapshot.projection.self.controlEpoch), queuedAction: this.#queued ? '到达后重新检查并操作' : null, navigation,
+    const directionInput = this.#directionInputState(snapshot);
+    // 只收束本身已过期的方向阻塞说明；其他错误和通知仍保留原值。
+    const message = this.#message === DIRECTION_MOVEMENT_PENDING_MESSAGE && directionInput.blocker !== 'movement' ? '' : this.#message;
+    return { connection: this.#connection, snapshot, actions: [...this.#actions], message, controlBusy: this.#controlBusy, inputReady: Boolean(snapshot?.projection.self.canControl && this.#source?.controlEpoch === snapshot.projection.self.controlEpoch), directionInput, queuedAction: this.#queued ? '到达后重新检查并操作' : null, navigation,
       timedTrail: this.#connection === 'online' && this.#timedLink(this.#link) };
   }
   #timedLink(link: SessionLink | null): boolean { return Boolean(link?.acceptedCapabilities?.includes(DIRECTION_CAPABILITY) && link.acceptedCapabilities.includes(TIMED_TRAIL_CAPABILITY)); }
@@ -286,12 +293,18 @@ export class SpatialSessionClient {
       }
     }
   }
+  #inputBlocker(snapshot: SnapshotV2 | null): InputBlocker | null {
+    if (!snapshot || !this.#link?.connected || this.#connection !== 'online') return 'connection';
+    if (!snapshot.projection.self.canControl || this.#source?.controlEpoch !== snapshot.projection.self.controlEpoch) return 'control';
+    if (snapshot.projection.phase !== 'Running') return 'phase';
+    return null;
+  }
   #ready(): SnapshotV2 {
-    const snapshot = this.#view.snapshot;
-    if (!snapshot || !this.#link?.connected || this.#connection !== 'online') throw new Error('请先连接并同步房间。');
-    if (!snapshot.projection.self.canControl || this.#source?.controlEpoch !== snapshot.projection.self.controlEpoch) throw new Error('请先恢复本人控制，建立新的输入源。');
-    if (snapshot.projection.phase !== 'Running') throw new Error('当前阶段不能执行新动作。');
-    return snapshot;
+    const snapshot = this.#view.snapshot, blocker = this.#inputBlocker(snapshot);
+    if (blocker === 'connection') throw new Error('请先连接并同步房间。');
+    if (blocker === 'control') throw new Error('请先恢复本人控制，建立新的输入源。');
+    if (blocker === 'phase') throw new Error('当前阶段不能执行新动作。');
+    return snapshot!;
   }
   async move(position: Position, options: { targetRef?: string; anchorId?: string } = {}, after?: ActionV2) {
     const snapshot = this.#ready(); const scene = snapshot.projection.scene; if (!scene) throw new Error('当前没有可行走场景。');
@@ -457,12 +470,22 @@ export class SpatialSessionClient {
     } catch { if (serial === this.#serial) { this.#message = installed ? '控制视图已确认，显示更新暂未完成。' : '控制结果待确认，再次点击会重试原请求。'; this.#publish(); } }
     finally { if (serial === this.#serial) { this.#controlBusy = false; this.#publish(); this.#releaseControlIdle(); void this.sync(); } }
   }
-  #readyDirection() {
-    const snapshot = this.#ready();
-    if (this.#actions.some(draft => {
+  #directionMovementBlocked(): boolean {
+    return this.#actions.some(draft => {
       const kind = this.#draftEnvelope(draft).action.kind;
       return (draft.status === 'unknown' && ['move_to', 'move_direction', 'stop_move'].includes(kind)) || (draft.status === 'waiting' && kind === 'stop_move' && !this.#direction.canResumeAfterStop);
-    })) throw new Error('上一项移动或停步结果尚未确认，请先查询或原样重试。');
+    });
+  }
+  #directionInputState(snapshot: SnapshotV2 | null): DirectionInputState {
+    const blocker = this.#inputBlocker(snapshot);
+    if (blocker) return { ready: false, blocker };
+    // 这里只观察当前原守卫，不建立或恢复输入；实际准入仍独立严格校验。
+    try { return this.#directionMovementBlocked() ? { ready: false, blocker: 'movement' } : { ready: true, blocker: null }; }
+    catch { return { ready: false, blocker: 'invalid-draft' }; }
+  }
+  #readyDirection() {
+    const snapshot = this.#ready();
+    if (this.#directionMovementBlocked()) throw new Error(DIRECTION_MOVEMENT_PENDING_MESSAGE);
     return snapshot;
   }
   setDirection(vector: Position | null) {

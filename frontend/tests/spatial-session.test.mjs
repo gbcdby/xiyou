@@ -370,7 +370,7 @@ test('D66-DEC：raw改写重新严格校验、失败不缓存，同原串的状�
       h.client.setDirection({ x: 0, y: 1 });
       assert.equal(wires(), 1, '完整校验失败时不能发出方向请求');
     }
-    assert.equal(parses(invalid), 2, '失败串每次重新严格解析，不复用失败或旧成功结果');
+    assert.equal(parses(invalid), 4, '两次实际准入和各自发布的只读方向资格均严格解析失败，不复用失败或旧成功结果');
   }
   const changed = JSON.stringify({ ...envelope, action: { kind: 'stop_move', movementCommandSeq: '99' } });
   draft.raw = changed; draft.status = 'unknown';

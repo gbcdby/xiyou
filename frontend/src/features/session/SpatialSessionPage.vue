@@ -23,6 +23,7 @@ import type { GuidanceAction } from '../../domain/gaolao-guidance.ts';
 import { navigationScene } from '../../domain/gaolao-map-overview.ts';
 import { isGaolaoProjection, proposeEnding } from '../../domain/gaolao-actions.ts';
 import { SpatialRecapClient } from '../../network/spatial-recap-client.ts';
+import { DIRECTION_MOVEMENT_PENDING_MESSAGE } from '../../network/spatial-session.ts';
 import GaolaoChapterState from '../character/GaolaoChapterState.vue';
 import GaolaoInteractionPanel from '../character/GaolaoInteractionPanel.vue';
 import GaolaoRecapPanel from '../recap/GaolaoRecapPanel.vue';
@@ -69,10 +70,18 @@ const duties = { A: '迎客联络', B: '内院照应', C: '木作帮手', D: '�
 const ownDuties = computed(() => projection.value?.chapter?.responsibilities.map(duty => duties[duty]).join('、') || '同行旅伴');
 const unknownCount = computed(() => spatialState.value.actions.filter(action => action.status === 'unknown').length);
 const guidance = computed(() => gaolaoGuidance(projection.value, { online: online.value, inputReady: spatialState.value.inputReady, unknownCount: unknownCount.value }));
+const directionNotice = computed(() => canAct.value && spatialState.value.directionInput.blocker === 'movement'
+  ? '上次移动或停步还待确认，请查询原动作；确认后重新按方向键。' : '');
+const visibleNetworkMessage = computed(() => {
+  const message = spatialState.value.message;
+  // 本次成功和方向自身说明不能盖住当前恢复条件；真正的其他错误仍优先。
+  if (message === '已恢复本人控制。' && spatialState.value.inputReady && (hud.value || directionNotice.value)) return '';
+  if (message === DIRECTION_MOVEMENT_PENDING_MESSAGE && directionNotice.value) return '';
+  return message;
+});
+const currentNotice = computed(() => spatialNotice.value || spatialStorageNotice.value || visibleNetworkMessage.value || directionNotice.value);
 const currentStatus = computed(() => {
-  // 成功恢复控制已经由可操作状态表达，不让该一次性确认盖住之后的行走状态。
-  const networkMessage = spatialState.value.message === '已恢复本人控制。' && spatialState.value.inputReady ? '' : spatialState.value.message;
-  const notice = spatialNotice.value || spatialStorageNotice.value || networkMessage;
+  const notice = currentNotice.value;
   if (notice) return { text: notice, tone: 'uncertain' as const };
   const status = guidance.value?.status;
   const navigation = spatialState.value.navigation;
@@ -221,7 +230,7 @@ function ownerName(reference: string) { const p = projection.value; return p?.se
       <div><RouterLink to="/" class="back-link">返回房间大厅</RouterLink><h1>{{ isGaolao ? '高老庄 · 同行记' : '高老庄 · 行走灰盒' }}</h1><p>房间 <code>{{ sessionId }}</code><button class="text-button" @click="copy">{{ copied ? '已复制' : '复制房间号' }}</button></p></div>
       <div class="spatial-connection" role="status">{{ connectionNames[spatialState.connection] }}<small v-if="projection">{{ projection.paused ? 'Ⅱ 等待同伴，场景已暂停' : projection.phase === 'Running' ? '场景运行中' : projection.phase === 'Lobby' ? '等待启程' : '这一程已结束' }}</small></div>
     </header>
-    <p v-if="!hud && (spatialNotice || spatialStorageNotice || spatialState.message)" class="notice warning" role="status">{{ spatialNotice || spatialStorageNotice || spatialState.message }}</p>
+    <p v-if="!hud && currentNotice" class="notice warning" role="status">{{ currentNotice }}</p>
     <section v-if="!projection" class="panel session-empty"><h2>{{ !identity ? '先登录再进入房间' : connectionNames[spatialState.connection] }}</h2><p>{{ !identity ? authNotice || '返回大厅留下称呼，再加入伙伴的房间。' : '连接后会显示你所在的场景。' }}</p><RouterLink v-if="!identity" to="/" class="primary-button">返回大厅</RouterLink><button v-else class="secondary-button" @click="spatialClient.reconnect()">重新连接</button></section>
     <template v-else>
       <section v-if="projection.phase === 'Lobby'" class="panel waiting-room"><p class="eyebrow">等待同行</p><h2>{{ roomCount === null ? '等待人数同步' : roomCount + ' 位旅伴已相聚' }}</h2><p>2–5 位真人可以开始。启程后，各自在自己的浏览器中控制角色。</p><button class="primary-button" :disabled="!online || starting || (roomCount !== null && roomCount < 2)" @click="start">{{ starting ? '正在开始…' : '开始同行（房主）' }}</button><p v-if="startNotice" role="status">{{ startNotice }}</p></section>
