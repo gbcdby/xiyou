@@ -8,7 +8,7 @@ import { beginSelectionClick, endSelectionClick } from './cuilan-click-observati
 export const snapshot = page => page.evaluate(async () => (await import('/src/state/spatial-store.ts')).spatialState.value.snapshot);
 export const clientState = page => page.evaluate(async () => {
   const s = (await import('/src/state/spatial-store.ts')).spatialState.value;
-  return { connection: s.connection, inputReady: s.inputReady, message: s.message, queuedAction: s.queuedAction, navigation: s.navigation, actions: s.actions };
+  return { connection: s.connection, inputReady: s.inputReady, directionInput: s.directionInput, message: s.message, queuedAction: s.queuedAction, navigation: s.navigation, actions: s.actions };
 });
 const escapeRegex = text => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const samePosition = (a, b) => a?.x === b?.x && a?.y === b?.y;

@@ -6,6 +6,13 @@ import ts from 'typescript';
 import { SpatialSessionClient } from '../src/network/spatial-session.ts';
 import { spatialSnapshot, spatialBatch, selfRef } from './spatial-fixture.mjs';
 import { validateSpatial } from '../../protocol/spatial.mjs';
+import { clientState as browserClientState } from './gaolao-real-support.mjs';
+
+// 固定输入在注册测试前完成，定向运行也不能抢先读取尚未初始化的源码。
+const [pageSource, browserSource] = await Promise.all([
+  readFile(new URL('../src/features/session/SpatialSessionPage.vue', import.meta.url), 'utf8'),
+  readFile(new URL('./client-experience-browser.mjs', import.meta.url), 'utf8'),
+]);
 
 const flush = () => new Promise(resolve => setImmediate(resolve));
 const settle = async () => { await flush(); await flush(); };
@@ -222,7 +229,6 @@ test('RDY-04：旧movement提示消失后，新真实Unknown可再次表达当�
 
 
 // 只执行真实Page的状态计算；没有挂载页面、DOM、HTTP或浏览器。
-const pageSource = await readFile(new URL('../src/features/session/SpatialSessionPage.vue', import.meta.url), 'utf8');
 function pageStatus(state, hudValue) {
   const script = pageSource.match(/<script setup lang="ts">([\s\S]*?)<\/script>/)?.[1]; assert.ok(script);
   const parsed = ts.createSourceFile('SpatialSessionPage.ts', script, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
@@ -265,7 +271,16 @@ test('RDY-04：真实Page当前原因在HUD/非HUD提前可读，不被恢复成
   });
 });
 
-const browserSource = await readFile(new URL('./client-experience-browser.mjs', import.meta.url), 'utf8');
+// 执行真实helper交给page.evaluate的完整回调与投影；仅替换浏览器专用模块地址。
+// 固定状态经模块JSON序列化提供，不手写helper返回DTO，也不启动页面或应用。
+function pageWithState(state) {
+  const moduleURL = 'data:text/javascript,' + encodeURIComponent('export const spatialState = ' + JSON.stringify({ value: state }) + ';');
+  return { async evaluate(callback) {
+    const source = callback.toString(), imported = "import('/src/state/spatial-store.ts')";
+    assert.equal(source.split(imported).length, 2, '只替换真实helper唯一的状态模块导入');
+    return new Function('return (' + source.replace(imported, 'import(' + JSON.stringify(moduleURL) + ')') + ')();')();
+  } };
+}
 function reloadPredicate() {
   const parsed = ts.createSourceFile('client-experience-browser.mjs', browserSource, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
   const calls = [];
@@ -279,10 +294,12 @@ function reloadPredicate() {
   const code = ts.transpileModule('const check = ' + expression + ';', {
     compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext },
   }).outputText;
-  return state => new Function('clientState', 'page', code + '\nreturn check();')(async () => state, {});
+  return state => new Function('clientState', 'page', code + '\nreturn check();')(browserClientState, pageWithState(state));
 }
 test('RDY-05：原reload等待点不把控制源就绪当成方向资格，原Receipt完成后才通过', async t => {
-  const h = await room(t, { drafts: [saved('move_direction')] }), read = reloadPredicate();
+  const h = await room(t, { drafts: [saved('move_direction')], control: false }), read = reloadPredicate();
+  assert.equal(await read(h.client.state), false, '真实helper投影不能在控制源尚未恢复时放行');
+  await h.client.control('resume'); await settle();
   assert.equal(h.client.state.inputReady, true);
   assert.equal(await read(h.client.state), false, '原移动Unknown尚在，不能提前按新方向');
   h.resolveQueries(() => null); await settle();
@@ -292,5 +309,3 @@ test('RDY-05：原reload等待点不把控制源就绪当成方向资格，原Re
   assert.equal(await read(h.client.state), true);
   assert.equal(h.wires.length, 0, '等待谓词不提交动作或复活输入');
 });
-
-
