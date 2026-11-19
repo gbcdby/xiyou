@@ -1,7 +1,7 @@
 import { canonicalize, compareDecimal, validateContract } from '../../../protocol/index.mjs';
 import { MovementCommandSource, parseSpatial, validateSpatial } from '../../../protocol/spatial.mjs';
-import type { ActionV2, BatchV2, ControlRequestV2, ErrorV2, Facing, Position, PublicEnvelope, ReceiptV2, SnapshotV2 } from '../../../game/spatial-types.ts';
-import { SpatialView } from '../domain/spatial-view.ts';
+import type { ActionV2, ControlRequestV2, ErrorV2, Facing, Position, PublicEnvelope, ReceiptV2, SnapshotV2 } from '../../../game/spatial-types.ts';
+import { SpatialView, type BatchApplicationMetadata } from '../domain/spatial-view.ts';
 import type { ConnectLink, RequestEvent, SessionLink } from './link.ts';
 import type { BatchResult } from '../domain/client-view.ts';
 import type { ConnectionState } from './session-client.ts';
@@ -238,10 +238,11 @@ export class SpatialSessionClient {
       });
     } catch { this.#disconnect(serial); }
   }
-  #batch(value: unknown, generation: number, requestRefetch = true, record?: (result: BatchResult) => void) {
+  #batch(value: unknown, generation: number, requestRefetch = true, record?: (result: BatchResult, metadata: BatchApplicationMetadata) => void) {
     if (this.#handleError(value)) return 'stale';
-    const result = this.#view.applyBatch(value, generation);
-    record?.(result); // View已接受的结果先固定，后续显示订阅者失败不能重放本批。
+    const metadata: BatchApplicationMetadata = {};
+    const result = this.#view.applyBatch(value, generation, metadata);
+    record?.(result, metadata); // View已接受的结果先固定，后续显示订阅者失败不能重放本批。
     if (result === 'applied') { this.#publish(); this.#drainQueued(); this.#drainNavigation(); }
     else if (result === 'resync') this.#openConnection();
     else if (result === 'refetch' && requestRefetch) void this.sync();
@@ -267,7 +268,7 @@ export class SpatialSessionClient {
           const error = asError(value);
           if (error && ['UNAUTHENTICATED', 'FORBIDDEN', 'SESSION_GONE', 'UPGRADE_REQUIRED'].includes(error.code)) { this.#handleError(value); return; }
           if (generation !== this.#view.generation || revision !== this.#syncRevision) return;
-          this.#batch(value, generation, false, result => { outcome.result = result; if (result === 'applied') outcome.frontier = (value as BatchV2).syncFrontierSeq; });
+          this.#batch(value, generation, false, (result, metadata) => { outcome.result = result; if (result === 'applied') outcome.frontier = metadata.syncFrontierSeq; });
         });
         // 本次回复自身无法应用，不算外部fresh需求，避免无限refetch自循环。
         if (outcome.result !== 'applied') break;

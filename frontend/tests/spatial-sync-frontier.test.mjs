@@ -1,6 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { SpatialSessionClient } from '../src/network/spatial-session.ts';
+import { SpatialView } from '../src/domain/spatial-view.ts';
+import { shallowRef } from 'vue';
+import { observeDirectionClient } from './direction-observer.mjs';
 import { spatialSnapshot, spatialBatch } from './spatial-fixture.mjs';
 
 const flush = () => new Promise(resolve => setImmediate(resolve));
@@ -102,5 +105,43 @@ test('D66 v0.3：新view或新link使旧分页目标失效，旧回复不安装'
     assert.equal(h.requests.length, 3); assert.equal(h.client.state.snapshot.snapshotSeq, '11');
     assert.equal(h.client.state.snapshot.viewId, mode === '新view' ? 'new-view-1' : h.snapshot.viewId);
     assert.ok([...h.maximum.values()].every(value => value === 1));
+  });
+});
+
+test('SC02-04：实际Session经过原方向观察接点，成功前沿不重读后来变化的raw', async t => {
+  const h = await room(t), state = shallowRef({ snapshot: null, actions: [] });
+  class SocketStub { emit() {} emitEvent() {} }
+  const observer = observeDirectionClient({ SpatialView, spatialState: state, inputTarget: new EventTarget(), SocketClass: SocketStub });
+  const observedApply = SpatialView.prototype.applyBatch;
+  SpatialView.prototype.applyBatch = function (...args) {
+    const result = Reflect.apply(observedApply, this, args);
+    if (result === 'applied') args[0].syncFrontierSeq = '1000';
+    return result;
+  };
+  t.after(() => { SpatialView.prototype.applyBatch = observedApply; observer.stop(); });
+  observer.begin(h.snapshot.projection.self.entityRef);
+  h.setRead(q => h.page(q, String(BigInt(q.cursor) + 1n)));
+  await h.client.sync();
+  assert.equal(h.requests.length, 1, '分页目标只能来自View本次应用结果，不能重新读raw');
+  assert.equal(h.client.state.snapshot.snapshotSeq, '11');
+  const evidence = observer.read();
+  assert.equal(evidence.applications.length, 1, '生产仍经过原applyBatch观察入口');
+  assert.equal(evidence.applications[0].result, 'applied'); assert.equal(evidence.applications[0].after, '11');
+  assert.deepEqual(evidence.errors, []);
+});
+
+test('SC02-04：实际Session拒绝隐藏前沿而不执行其getter，不推进旧快照', async t => {
+  for (const count of [0, 1, 2]) await t.test(String(count), async t => {
+    const h = await room(t); let reads = 0;
+    h.setRead(q => {
+      const value = h.page(q, count === 2 ? '12' : '11');
+      if (count === 0) value.events = [];
+      if (count === 2) { value.events.unshift(structuredClone(value.events[0])); value.events[0].sessionSeq = '11'; value.events[0].eventId = 'hidden-frontier-first'; }
+      delete value.syncFrontierSeq;
+      Object.defineProperty(value, 'syncFrontierSeq', { get() { reads++; return '1000'; } });
+      return value;
+    });
+    await h.client.sync();
+    assert.equal(h.requests.length, 1); assert.equal(h.client.state.snapshot.snapshotSeq, '10'); assert.equal(reads, 0);
   });
 });

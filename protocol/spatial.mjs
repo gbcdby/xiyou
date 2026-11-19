@@ -150,6 +150,34 @@ function validateSceneOverview(projection) {
     }
     if (new Set(catalog.map(scene => scene.sceneId)).size !== catalog.length || sceneId && !catalog.some(scene => scene.sceneId === sceneId)) fail('$.mapCatalog');
 }
+function checkProjectionRelations(projection) {
+    if (!projection.entities.some(e => e.entityRef === projection.self.entityRef))
+        fail('$.self');
+    const refs = [...projection.entities, ...projection.items, ...projection.targets].map(e => e.entityRef);
+    if (new Set(refs).size !== refs.length)
+        fail('$.entities');
+    if (['Finished', 'Aborted'].includes(projection.phase) && projection.self.canControl)
+        fail('$.self.canControl');
+    for (const entity of projection.entities) {
+        const trailKeys = ['motionTrail', 'motionFromSceneTimeMs', 'motionThroughSceneTimeMs'];
+        const present = trailKeys.filter(key => Object.hasOwn(entity, key)).length;
+        if (present !== 0 && present !== 3)
+            fail('$.entities.motionTrail');
+        if (present && (entity.motionTrail.length < 2 || entity.motionFromSceneTimeMs > entity.motionThroughSceneTimeMs || entity.motionThroughSceneTimeMs > projection.sceneTimeMs || canonicalize(entity.motionTrail.at(-1)) !== canonicalize(entity.position)))
+            fail('$.entities.motionTrail');
+    }
+    for (const item of projection.items)
+        if (item.location.kind === 'held' && !projection.entities.some(entity => entity.entityRef === item.location.ownerRef))
+            fail('$.items.location');
+}
+// 只复用同一次owned Batch已经完成的投影结构与三组语义；字段约束仍来自唯一schema。
+const snapshotShellSchema = Object.freeze({ ...spatialSchema.$defs.SnapshotV2,
+    properties: Object.freeze({ ...spatialSchema.$defs.SnapshotV2.properties, projection: Object.freeze({}) }) });
+/** 仅检查已验证投影组装后的Snapshot壳及专属关系；不是unknown的完整验证入口。 */
+export function checkSpatialSnapshotShellAndRelations(snapshot) {
+    checkSpatialSchema(snapshotShellSchema, snapshot);
+    checkProjectionRelations(snapshot.projection);
+}
 export function validateSpatial(name, value) {
     canonicalize(value);
     if (!Object.hasOwn(spatialSchema.$defs, name))
@@ -186,26 +214,7 @@ export function validateSpatial(name, value) {
         }
     }
     const projection = name === 'ProjectionV2' ? value : name === 'SnapshotV2' ? value.projection : null;
-    if (projection) {
-        if (!projection.entities.some(e => e.entityRef === projection.self.entityRef))
-            fail('$.self');
-        const refs = [...projection.entities, ...projection.items, ...projection.targets].map(e => e.entityRef);
-        if (new Set(refs).size !== refs.length)
-            fail('$.entities');
-        if (['Finished', 'Aborted'].includes(projection.phase) && projection.self.canControl)
-            fail('$.self.canControl');
-        for (const entity of projection.entities) {
-            const trailKeys = ['motionTrail', 'motionFromSceneTimeMs', 'motionThroughSceneTimeMs'];
-            const present = trailKeys.filter(key => Object.hasOwn(entity, key)).length;
-            if (present !== 0 && present !== 3)
-                fail('$.entities.motionTrail');
-            if (present && (entity.motionTrail.length < 2 || entity.motionFromSceneTimeMs > entity.motionThroughSceneTimeMs || entity.motionThroughSceneTimeMs > projection.sceneTimeMs || canonicalize(entity.motionTrail.at(-1)) !== canonicalize(entity.position)))
-                fail('$.entities.motionTrail');
-        }
-        for (const item of projection.items)
-            if (item.location.kind === 'held' && !projection.entities.some(entity => entity.entityRef === item.location.ownerRef))
-                fail('$.items.location');
-    }
+    if (projection) checkProjectionRelations(projection);
     return value;
 }
 export const parseSpatial = (name, raw) => validateSpatial(name, parseStrictJSON(raw, { maxBytes: ['ProjectionV2','SnapshotV2','BatchV2','ControlResponseV2','RecapV2'].includes(name) ? Infinity : 65536 }));

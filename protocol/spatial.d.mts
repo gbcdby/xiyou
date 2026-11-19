@@ -6,6 +6,7 @@ export const gaolaoPersonalProfiles: readonly GaolaoPersonalProfile[];
 export function gaolaoPersonalProfile(value: unknown): GaolaoPersonalProfile | null;
 export function parseSpatial<K extends keyof SpatialContracts>(name: K, raw: string): SpatialContracts[K];
 export function validateSpatial<K extends keyof SpatialContracts>(name: K, value: unknown): SpatialContracts[K];
+export function checkSpatialSnapshotShellAndRelations(value: T.SnapshotV2): void;
 export function gaolaoInteraction<A extends T.GaolaoInteractionV2>(value: A): A;
 export function isGaolaoInteraction(value: T.ActionV2): value is T.GaolaoInteractionV2;
 export interface SpatialContracts {
