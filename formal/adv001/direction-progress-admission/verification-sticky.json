@@ -1,0 +1,742 @@
+{
+  "schema_version": 1,
+  "feature": "D66-PLA sticky 准入：r2 转换及已采纳 r3 兼容 SHARE 与条件性进度",
+  "tool": {
+    "version": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "model": {
+    "root": "model/sticky",
+    "entry": "StickyAdmission.tla"
+  },
+  "requirements": [
+    {
+      "id": "PLA-04/05/09/11",
+      "statement": "保留合并的 wait/capability 请求、固定模式、不自旋恢复及真实清理；仅为有限抽象",
+      "properties": [
+        "PendingWaitRetained",
+        "ClaimedWaitMode",
+        "FrozenMode",
+        "NoRestoreDrivenRepeat",
+        "CleanupOwnsSlot"
+      ]
+    }
+  ],
+  "profiles": {
+    "sticky-core": {
+      "config": "sticky-core.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "OwnerUnique",
+        "LockExclusion",
+        "FrozenMode",
+        "PendingWaitRetained",
+        "ClaimedWaitMode",
+        "CapabilityRetained",
+        "ClaimedCapability",
+        "WaitContinuation",
+        "NoRestoreDrivenRepeat",
+        "CurrentCoverage",
+        "ActualCommitOnly",
+        "MissEffectFree",
+        "CleanupOwnsSlot",
+        "DrainedOwner",
+        "StoppedOwnerDrained"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "允许有限输入用尽或外部无限等待；明示的时序性质仅采用声明的公平条件。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "normal",
+          "InitialMode": "try",
+          "InitialRows": 1
+        },
+        "expected_outcome": "PASS_WITHIN_SCOPE",
+        "kind": "safety",
+        "minimum_distinct_states": 100,
+        "minimum_basis": "分开 request/start/owner/supply/SQL/cleanup/final-probe 转换；各场景有限下限均在执行前给出。",
+        "covered_interleavings_and_faults": [
+          "normal",
+          "none"
+        ],
+        "excluded_behaviors": [
+          "完整详细 G/W 组合证明",
+          "实际 PostgreSQL 或 JavaScript 精化证明",
+          "无界 peer 数",
+          "延迟"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "writer 排队时兼容 SHARE 可进入；实际持有排他锁仍排除 SHARE",
+        "每次 runtime 调用抽象为有限记录结果；详细 G/W 另行检查",
+        "不假设 FIFO 或写者优先"
+      ]
+    },
+    "sticky-carry": {
+      "config": "sticky-carry.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "OwnerUnique",
+        "LockExclusion",
+        "FrozenMode",
+        "PendingWaitRetained",
+        "ClaimedWaitMode",
+        "CapabilityRetained",
+        "ClaimedCapability",
+        "WaitContinuation",
+        "NoRestoreDrivenRepeat",
+        "CurrentCoverage",
+        "ActualCommitOnly",
+        "MissEffectFree",
+        "CleanupOwnsSlot",
+        "DrainedOwner",
+        "StoppedOwnerDrained"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "允许有限输入用尽或外部无限等待；明示的时序性质仅采用声明的公平条件。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "carry-gap",
+          "InitialMode": "wait",
+          "InitialRows": 2
+        },
+        "expected_outcome": "PASS_WITHIN_SCOPE",
+        "kind": "safety",
+        "minimum_distinct_states": 100,
+        "minimum_basis": "分开 request/start/owner/supply/SQL/cleanup/final-probe 转换；各场景有限下限均在执行前给出。",
+        "covered_interleavings_and_faults": [
+          "carry-gap",
+          "none"
+        ],
+        "excluded_behaviors": [
+          "完整详细 G/W 组合证明",
+          "实际 PostgreSQL 或 JavaScript 精化证明",
+          "无界 peer 数",
+          "延迟"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "writer 排队时兼容 SHARE 可进入；实际持有排他锁仍排除 SHARE",
+        "每次 runtime 调用抽象为有限记录结果；详细 G/W 另行检查",
+        "不假设 FIFO 或写者优先"
+      ]
+    },
+    "negative-drop-wait-continuation": {
+      "config": "negative-drop-wait-continuation.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "WaitContinuation"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "允许有限输入用尽或外部无限等待；明示的时序性质仅采用声明的公平条件。",
+      "scope": {
+        "parameters": {
+          "Fault": "drop-wait-continuation",
+          "Scenario": "carry-gap",
+          "InitialMode": "wait",
+          "InitialRows": 2
+        },
+        "expected_outcome": "COUNTEREXAMPLE",
+        "kind": "negative_control",
+        "minimum_distinct_states": 12,
+        "minimum_basis": "分开 request/start/owner/supply/SQL/cleanup/final-probe 转换；各场景有限下限均在执行前给出。",
+        "covered_interleavings_and_faults": [
+          "carry-gap",
+          "drop-wait-continuation"
+        ],
+        "excluded_behaviors": [
+          "完整详细 G/W 组合证明",
+          "实际 PostgreSQL 或 JavaScript 精化证明",
+          "无界 peer 数",
+          "延迟"
+        ],
+        "liveness": "NOT_CHECKED",
+        "expected_violation": "WaitContinuation"
+      },
+      "assumptions": [
+        "writer 排队时兼容 SHARE 可进入；实际持有排他锁仍排除 SHARE",
+        "每次 runtime 调用抽象为有限记录结果；详细 G/W 另行检查",
+        "不假设 FIFO 或写者优先"
+      ]
+    },
+    "sticky-busy": {
+      "config": "sticky-busy.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "OwnerUnique",
+        "LockExclusion",
+        "FrozenMode",
+        "PendingWaitRetained",
+        "ClaimedWaitMode",
+        "CapabilityRetained",
+        "ClaimedCapability",
+        "WaitContinuation",
+        "NoRestoreDrivenRepeat",
+        "CurrentCoverage",
+        "ActualCommitOnly",
+        "MissEffectFree",
+        "CleanupOwnsSlot",
+        "DrainedOwner",
+        "StoppedOwnerDrained"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "允许有限输入用尽或外部无限等待；明示的时序性质仅采用声明的公平条件。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "busy",
+          "InitialMode": "wait",
+          "InitialRows": 1
+        },
+        "expected_outcome": "PASS_WITHIN_SCOPE",
+        "kind": "safety",
+        "minimum_distinct_states": 100,
+        "minimum_basis": "分开 request/start/owner/supply/SQL/cleanup/final-probe 转换；各场景有限下限均在执行前给出。",
+        "covered_interleavings_and_faults": [
+          "busy",
+          "none"
+        ],
+        "excluded_behaviors": [
+          "完整详细 G/W 组合证明",
+          "实际 PostgreSQL 或 JavaScript 精化证明",
+          "无界 peer 数",
+          "延迟"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "writer 排队时兼容 SHARE 可进入；实际持有排他锁仍排除 SHARE",
+        "每次 runtime 调用抽象为有限记录结果；详细 G/W 另行检查",
+        "不假设 FIFO 或写者优先"
+      ]
+    },
+    "sticky-error": {
+      "config": "sticky-error.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "OwnerUnique",
+        "LockExclusion",
+        "FrozenMode",
+        "PendingWaitRetained",
+        "ClaimedWaitMode",
+        "CapabilityRetained",
+        "ClaimedCapability",
+        "WaitContinuation",
+        "NoRestoreDrivenRepeat",
+        "CurrentCoverage",
+        "ActualCommitOnly",
+        "MissEffectFree",
+        "CleanupOwnsSlot",
+        "DrainedOwner",
+        "StoppedOwnerDrained"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "允许有限输入用尽或外部无限等待；明示的时序性质仅采用声明的公平条件。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "error",
+          "InitialMode": "wait",
+          "InitialRows": 1
+        },
+        "expected_outcome": "PASS_WITHIN_SCOPE",
+        "kind": "safety",
+        "minimum_distinct_states": 100,
+        "minimum_basis": "分开 request/start/owner/supply/SQL/cleanup/final-probe 转换；各场景有限下限均在执行前给出。",
+        "covered_interleavings_and_faults": [
+          "error",
+          "none"
+        ],
+        "excluded_behaviors": [
+          "完整详细 G/W 组合证明",
+          "实际 PostgreSQL 或 JavaScript 精化证明",
+          "无界 peer 数",
+          "延迟"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "writer 排队时兼容 SHARE 可进入；实际持有排他锁仍排除 SHARE",
+        "每次 runtime 调用抽象为有限记录结果；详细 G/W 另行检查",
+        "不假设 FIFO 或写者优先"
+      ]
+    },
+    "sticky-zero": {
+      "config": "sticky-zero.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "OwnerUnique",
+        "LockExclusion",
+        "FrozenMode",
+        "PendingWaitRetained",
+        "ClaimedWaitMode",
+        "CapabilityRetained",
+        "ClaimedCapability",
+        "WaitContinuation",
+        "NoRestoreDrivenRepeat",
+        "CurrentCoverage",
+        "ActualCommitOnly",
+        "MissEffectFree",
+        "CleanupOwnsSlot",
+        "DrainedOwner",
+        "StoppedOwnerDrained"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "允许有限输入用尽或外部无限等待；明示的时序性质仅采用声明的公平条件。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "zero",
+          "InitialMode": "wait",
+          "InitialRows": 1
+        },
+        "expected_outcome": "PASS_WITHIN_SCOPE",
+        "kind": "safety",
+        "minimum_distinct_states": 20,
+        "minimum_basis": "分开 request/start/owner/supply/SQL/cleanup/final-probe 转换；各场景有限下限均在执行前给出。",
+        "covered_interleavings_and_faults": [
+          "zero",
+          "none"
+        ],
+        "excluded_behaviors": [
+          "完整详细 G/W 组合证明",
+          "实际 PostgreSQL 或 JavaScript 精化证明",
+          "无界 peer 数",
+          "延迟"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "writer 排队时兼容 SHARE 可进入；实际持有排他锁仍排除 SHARE",
+        "每次 runtime 调用抽象为有限记录结果；详细 G/W 另行检查",
+        "不假设 FIFO 或写者优先"
+      ]
+    },
+    "negative-try-clears-wait": {
+      "config": "negative-try-clears-wait.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "PendingWaitRetained"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "允许有限输入用尽或外部无限等待；明示的时序性质仅采用声明的公平条件。",
+      "scope": {
+        "parameters": {
+          "Fault": "try-clears-wait",
+          "Scenario": "normal",
+          "InitialMode": "try",
+          "InitialRows": 1
+        },
+        "expected_outcome": "COUNTEREXAMPLE",
+        "kind": "negative_control",
+        "minimum_distinct_states": 3,
+        "minimum_basis": "分开 request/start/owner/supply/SQL/cleanup/final-probe 转换；各场景有限下限均在执行前给出。",
+        "covered_interleavings_and_faults": [
+          "normal",
+          "try-clears-wait"
+        ],
+        "excluded_behaviors": [
+          "完整详细 G/W 组合证明",
+          "实际 PostgreSQL 或 JavaScript 精化证明",
+          "无界 peer 数",
+          "延迟"
+        ],
+        "liveness": "NOT_CHECKED",
+        "expected_violation": "PendingWaitRetained"
+      },
+      "assumptions": [
+        "writer 排队时兼容 SHARE 可进入；实际持有排他锁仍排除 SHARE",
+        "每次 runtime 调用抽象为有限记录结果；详细 G/W 另行检查",
+        "不假设 FIFO 或写者优先"
+      ]
+    },
+    "negative-finish-clears-wait": {
+      "config": "negative-finish-clears-wait.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "PendingWaitRetained"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "允许有限输入用尽或外部无限等待；明示的时序性质仅采用声明的公平条件。",
+      "scope": {
+        "parameters": {
+          "Fault": "finish-clears-new-wait",
+          "Scenario": "normal",
+          "InitialMode": "try",
+          "InitialRows": 1
+        },
+        "expected_outcome": "COUNTEREXAMPLE",
+        "kind": "negative_control",
+        "minimum_distinct_states": 12,
+        "minimum_basis": "分开 request/start/owner/supply/SQL/cleanup/final-probe 转换；各场景有限下限均在执行前给出。",
+        "covered_interleavings_and_faults": [
+          "normal",
+          "finish-clears-new-wait"
+        ],
+        "excluded_behaviors": [
+          "完整详细 G/W 组合证明",
+          "实际 PostgreSQL 或 JavaScript 精化证明",
+          "无界 peer 数",
+          "延迟"
+        ],
+        "liveness": "NOT_CHECKED",
+        "expected_violation": "PendingWaitRetained"
+      },
+      "assumptions": [
+        "writer 排队时兼容 SHARE 可进入；实际持有排他锁仍排除 SHARE",
+        "每次 runtime 调用抽象为有限记录结果；详细 G/W 另行检查",
+        "不假设 FIFO 或写者优先"
+      ]
+    },
+    "negative-busy-consumes-wait": {
+      "config": "negative-busy-consumes-wait.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "PendingWaitRetained"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "允许有限输入用尽或外部无限等待；明示的时序性质仅采用声明的公平条件。",
+      "scope": {
+        "parameters": {
+          "Fault": "busy-consumes-wait",
+          "Scenario": "busy",
+          "InitialMode": "wait",
+          "InitialRows": 1
+        },
+        "expected_outcome": "COUNTEREXAMPLE",
+        "kind": "negative_control",
+        "minimum_distinct_states": 4,
+        "minimum_basis": "分开 request/start/owner/supply/SQL/cleanup/final-probe 转换；各场景有限下限均在执行前给出。",
+        "covered_interleavings_and_faults": [
+          "busy",
+          "busy-consumes-wait"
+        ],
+        "excluded_behaviors": [
+          "完整详细 G/W 组合证明",
+          "实际 PostgreSQL 或 JavaScript 精化证明",
+          "无界 peer 数",
+          "延迟"
+        ],
+        "liveness": "NOT_CHECKED",
+        "expected_violation": "PendingWaitRetained"
+      },
+      "assumptions": [
+        "writer 排队时兼容 SHARE 可进入；实际持有排他锁仍排除 SHARE",
+        "每次 runtime 调用抽象为有限记录结果；详细 G/W 另行检查",
+        "不假设 FIFO 或写者优先"
+      ]
+    },
+    "negative-busy-spin": {
+      "config": "negative-busy-spin.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "NoRestoreDrivenRepeat"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "允许有限输入用尽或外部无限等待；明示的时序性质仅采用声明的公平条件。",
+      "scope": {
+        "parameters": {
+          "Fault": "busy-spin",
+          "Scenario": "busy",
+          "InitialMode": "wait",
+          "InitialRows": 1
+        },
+        "expected_outcome": "COUNTEREXAMPLE",
+        "kind": "negative_control",
+        "minimum_distinct_states": 4,
+        "minimum_basis": "分开 request/start/owner/supply/SQL/cleanup/final-probe 转换；各场景有限下限均在执行前给出。",
+        "covered_interleavings_and_faults": [
+          "busy",
+          "busy-spin"
+        ],
+        "excluded_behaviors": [
+          "完整详细 G/W 组合证明",
+          "实际 PostgreSQL 或 JavaScript 精化证明",
+          "无界 peer 数",
+          "延迟"
+        ],
+        "liveness": "NOT_CHECKED",
+        "expected_violation": "NoRestoreDrivenRepeat"
+      },
+      "assumptions": [
+        "writer 排队时兼容 SHARE 可进入；实际持有排他锁仍排除 SHARE",
+        "每次 runtime 调用抽象为有限记录结果；详细 G/W 另行检查",
+        "不假设 FIFO 或写者优先"
+      ]
+    },
+    "negative-error-spin": {
+      "config": "negative-error-spin.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "NoRestoreDrivenRepeat"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "允许有限输入用尽或外部无限等待；明示的时序性质仅采用声明的公平条件。",
+      "scope": {
+        "parameters": {
+          "Fault": "error-spin",
+          "Scenario": "error",
+          "InitialMode": "wait",
+          "InitialRows": 1
+        },
+        "expected_outcome": "COUNTEREXAMPLE",
+        "kind": "negative_control",
+        "minimum_distinct_states": 13,
+        "minimum_basis": "分开 request/start/owner/supply/SQL/cleanup/final-probe 转换；各场景有限下限均在执行前给出。",
+        "covered_interleavings_and_faults": [
+          "error",
+          "error-spin"
+        ],
+        "excluded_behaviors": [
+          "完整详细 G/W 组合证明",
+          "实际 PostgreSQL 或 JavaScript 精化证明",
+          "无界 peer 数",
+          "延迟"
+        ],
+        "liveness": "NOT_CHECKED",
+        "expected_violation": "NoRestoreDrivenRepeat"
+      },
+      "assumptions": [
+        "writer 排队时兼容 SHARE 可进入；实际持有排他锁仍排除 SHARE",
+        "每次 runtime 调用抽象为有限记录结果；详细 G/W 另行检查",
+        "不假设 FIFO 或写者优先"
+      ]
+    },
+    "negative-inherit-before-repeat": {
+      "config": "negative-inherit-before-repeat.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "NoRestoreDrivenRepeat"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "允许有限输入用尽或外部无限等待；明示的时序性质仅采用声明的公平条件。",
+      "scope": {
+        "parameters": {
+          "Fault": "inherit-before-repeat",
+          "Scenario": "zero",
+          "InitialMode": "wait",
+          "InitialRows": 1
+        },
+        "expected_outcome": "COUNTEREXAMPLE",
+        "kind": "negative_control",
+        "minimum_distinct_states": 6,
+        "minimum_basis": "分开 request/start/owner/supply/SQL/cleanup/final-probe 转换；各场景有限下限均在执行前给出。",
+        "covered_interleavings_and_faults": [
+          "zero",
+          "inherit-before-repeat"
+        ],
+        "excluded_behaviors": [
+          "完整详细 G/W 组合证明",
+          "实际 PostgreSQL 或 JavaScript 精化证明",
+          "无界 peer 数",
+          "延迟"
+        ],
+        "liveness": "NOT_CHECKED",
+        "expected_violation": "NoRestoreDrivenRepeat"
+      },
+      "assumptions": [
+        "writer 排队时兼容 SHARE 可进入；实际持有排他锁仍排除 SHARE",
+        "每次 runtime 调用抽象为有限记录结果；详细 G/W 另行检查",
+        "不假设 FIFO 或写者优先"
+      ]
+    },
+    "finite-wait-service": {
+      "config": "finite-wait-service.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "OwnerUnique",
+        "LockExclusion",
+        "PendingWaitRetained",
+        "ClaimedWaitMode",
+        "NoRestoreDrivenRepeat",
+        "ActualCommitOnly",
+        "CleanupOwnsSlot",
+        "DrainedOwner"
+      ],
+      "expected_properties": [
+        "WaitGetsOpportunity",
+        "EventuallyPublished"
+      ],
+      "checks_deadlock": false,
+      "deadlock_reason": "允许有限输入用尽或外部无限等待；明示的时序性质仅采用声明的公平条件。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "fair-finite",
+          "InitialMode": "wait",
+          "InitialRows": 1
+        },
+        "expected_outcome": "PASS_WITHIN_SCOPE",
+        "kind": "safety",
+        "minimum_distinct_states": 100,
+        "minimum_basis": "分开 request/start/owner/supply/SQL/cleanup/final-probe 转换；各场景有限下限均在执行前给出。",
+        "covered_interleavings_and_faults": [
+          "fair-finite",
+          "none"
+        ],
+        "excluded_behaviors": [
+          "完整详细 G/W 组合证明",
+          "实际 PostgreSQL 或 JavaScript 精化证明",
+          "无界 peer 数",
+          "延迟"
+        ],
+        "liveness": "CONDITIONAL",
+        "environment": "两个 reader 各最多进入一次及一个其他 writer；资格固定；已准入持锁者最终释放；仅使用声明的弱公平"
+      },
+      "assumptions": [
+        "writer 排队时兼容 SHARE 可进入；实际持有排他锁仍排除 SHARE",
+        "每次 runtime 调用抽象为有限记录结果；详细 G/W 另行检查",
+        "不假设 FIFO 或写者优先"
+      ]
+    },
+    "overlap-wait-starvation": {
+      "config": "overlap-wait-starvation.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "OwnerUnique",
+        "LockExclusion",
+        "ActualCommitOnly"
+      ],
+      "expected_properties": [
+        "EventuallyPublished"
+      ],
+      "checks_deadlock": false,
+      "deadlock_reason": "允许有限输入用尽或外部无限等待；明示的时序性质仅采用声明的公平条件。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "fair-overlap",
+          "InitialMode": "wait",
+          "InitialRows": 1
+        },
+        "expected_outcome": "COUNTEREXAMPLE",
+        "kind": "environment_boundary_counterexample",
+        "minimum_distinct_states": 25,
+        "minimum_basis": "分开 request/start/owner/supply/SQL/cleanup/final-probe 转换；各场景有限下限均在执行前给出。",
+        "covered_interleavings_and_faults": [
+          "fair-overlap",
+          "none"
+        ],
+        "excluded_behaviors": [
+          "完整详细 G/W 组合证明",
+          "实际 PostgreSQL 或 JavaScript 精化证明",
+          "无界 peer 数",
+          "延迟"
+        ],
+        "liveness": "CONDITIONAL",
+        "expected_violation": "EventuallyPublished",
+        "environment": "writer 等待时两个 reader 可反复进入；各持锁 reader 最终释放；无 FIFO 或写者优先"
+      },
+      "assumptions": [
+        "writer 排队时兼容 SHARE 可进入；实际持有排他锁仍排除 SHARE",
+        "每次 runtime 调用抽象为有限记录结果；详细 G/W 另行检查",
+        "不假设 FIFO 或写者优先"
+      ]
+    },
+    "overlap-all-try-starvation": {
+      "config": "overlap-all-try-starvation.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "OwnerUnique",
+        "LockExclusion",
+        "ActualCommitOnly"
+      ],
+      "expected_properties": [
+        "EventuallyPublished"
+      ],
+      "checks_deadlock": false,
+      "deadlock_reason": "允许有限输入用尽或外部无限等待；明示的时序性质仅采用声明的公平条件。",
+      "scope": {
+        "parameters": {
+          "Fault": "all-try",
+          "Scenario": "fair-overlap",
+          "InitialMode": "try",
+          "InitialRows": 1
+        },
+        "expected_outcome": "COUNTEREXAMPLE",
+        "kind": "environment_boundary_counterexample",
+        "minimum_distinct_states": 25,
+        "minimum_basis": "分开 request/start/owner/supply/SQL/cleanup/final-probe 转换；各场景有限下限均在执行前给出。",
+        "covered_interleavings_and_faults": [
+          "fair-overlap",
+          "all-try"
+        ],
+        "excluded_behaviors": [
+          "完整详细 G/W 组合证明",
+          "实际 PostgreSQL 或 JavaScript 精化证明",
+          "无界 peer 数",
+          "延迟"
+        ],
+        "liveness": "CONDITIONAL",
+        "expected_violation": "EventuallyPublished",
+        "environment": "writer 等待时两个 reader 可反复进入；各持锁 reader 最终释放；无 FIFO 或写者优先"
+      },
+      "assumptions": [
+        "writer 排队时兼容 SHARE 可进入；实际持有排他锁仍排除 SHARE",
+        "每次 runtime 调用抽象为有限记录结果；详细 G/W 另行检查",
+        "不假设 FIFO 或写者优先"
+      ]
+    }
+  }
+}

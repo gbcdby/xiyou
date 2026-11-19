@@ -1,0 +1,500 @@
+{
+  "schema_version": 1,
+  "feature": "D66-PLA Wave 锁准入的有限安全增量",
+  "tool": {
+    "version": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "model": {
+    "root": "model/wave",
+    "entry": "WaveAdmission.tla"
+  },
+  "requirements": [
+    {
+      "id": "PLA-07/09",
+      "statement": "保留原有限 G/W 安全性；最后 G settle 前完成 NOWAIT miss 的真实清理；不声明活性",
+      "properties": [
+        "MissCleanupHeld",
+        "MissEffectFree",
+        "AdmissionSettled",
+        "DrainedOwner"
+      ]
+    }
+  ],
+  "profiles": {
+    "try-one-record": {
+      "config": "positive-try-one-record.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "SingleSlots",
+        "PeerBudget",
+        "FiniteWave",
+        "LockExclusion",
+        "AdmissionSettled",
+        "DrainedOwner",
+        "NoSQLCancellation",
+        "NoNewAfterStop",
+        "OrderedAttempts",
+        "ExactRowCommit",
+        "ActualCommitOnly",
+        "PendingBlocks",
+        "CurrentCoverage",
+        "SentProof",
+        "FailureDoesNotAdvance",
+        "SuccessfulSentRetained",
+        "NoStaleSend",
+        "FixedAuthorizedHead",
+        "RPCBoundary",
+        "NoBusyRetry",
+        "ProgressOpportunity",
+        "MissCleanupHeld",
+        "MissEffectFree"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可能用尽，外部操作可能停滞；本配置不声明终止或活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "core",
+          "Budget": 1,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 1,
+          "ProgressLock": "try"
+        },
+        "expected_outcome": "PASS_WITHIN_SCOPE",
+        "minimum_distinct_states": 50,
+        "minimum_basis": "两个 peer、一条旧记录、一个新 head，分开 G/W/SQL/send 与四个 miss 清理阶段；distinct 少于 50 时调查范围。",
+        "covered_interleavings_and_faults": [
+          "单 owner 与一个 G/W 槽",
+          "G 在途时新的有限 W 进入 SHARE",
+          "非致命 try 拒绝在 G settle 前完成真实 rollback/release",
+          "最后 G 开始 draining 时仍有冻结的 W 组"
+        ],
+        "excluded_behaviors": [
+          "外层 sticky 调度器",
+          "JavaScript 实现的精化证明",
+          "TLC 公平性",
+          "实际 PostgreSQL 锁队列",
+          "close/mixed/error/install/RPC 场景",
+          "rollback 失败或 COMMIT 结果未知",
+          "任意 peer 数或延迟"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "保留原 WaveProgress 读/发送证明和资格抽象",
+        "不假设 FIFO 或写者优先",
+        "已知 miss 只指指定 NOWAIT SELECT 的拒绝；清理阶段显式建模"
+      ]
+    },
+    "negative-early-miss-settle": {
+      "config": "negative-early-miss-settle.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "MissCleanupHeld"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可能用尽，外部操作可能停滞；本配置不声明终止或活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "early-miss-settle",
+          "Scenario": "core",
+          "Budget": 1,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 1,
+          "ProgressLock": "try"
+        },
+        "expected_outcome": "COUNTEREXAMPLE",
+        "expected_violation": "MissCleanupHeld",
+        "kind": "negative_control",
+        "minimum_distinct_states": 9,
+        "minimum_basis": "显式包含准入、world 提交、wave/lane/SQL/read 及 try miss 路径；提前释放多一个转换。",
+        "covered_interleavings_and_faults": [
+          "negative-early-miss-settle"
+        ],
+        "excluded_behaviors": [
+          "完整安全性证明",
+          "活性",
+          "JavaScript 实现的精化证明"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原有限 Wave 授权与发送证明抽象",
+        "不假设公平性、FIFO 或写者优先"
+      ]
+    },
+    "negative-miss-publishes": {
+      "config": "negative-miss-publishes.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "MissEffectFree"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可能用尽，外部操作可能停滞；本配置不声明终止或活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "miss-publishes",
+          "Scenario": "core",
+          "Budget": 1,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 1,
+          "ProgressLock": "try"
+        },
+        "expected_outcome": "COUNTEREXAMPLE",
+        "expected_violation": "MissEffectFree",
+        "kind": "negative_control",
+        "minimum_distinct_states": 8,
+        "minimum_basis": "显式包含准入、world 提交、wave/lane/SQL/read 及 try miss 路径；提前释放多一个转换。",
+        "covered_interleavings_and_faults": [
+          "negative-miss-publishes"
+        ],
+        "excluded_behaviors": [
+          "完整安全性证明",
+          "活性",
+          "JavaScript 实现的精化证明"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原有限 Wave 授权与发送证明抽象",
+        "不假设公平性、FIFO 或写者优先"
+      ]
+    },
+    "witness-miss-while-wave": {
+      "config": "witness-miss-while-wave.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "NotMissWhileWave"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可能用尽，外部操作可能停滞；本配置不声明终止或活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "core",
+          "Budget": 1,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 1,
+          "ProgressLock": "try"
+        },
+        "expected_outcome": "COUNTEREXAMPLE",
+        "expected_violation": "NotMissWhileWave",
+        "kind": "reachability_witness",
+        "minimum_distinct_states": 8,
+        "minimum_basis": "显式包含准入、world 提交、wave/lane/SQL/read 及 try miss 路径；提前释放多一个转换。",
+        "covered_interleavings_and_faults": [
+          "witness-miss-while-wave"
+        ],
+        "excluded_behaviors": [
+          "完整安全性证明",
+          "活性",
+          "JavaScript 实现的精化证明"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原有限 Wave 授权与发送证明抽象",
+        "不假设公平性、FIFO 或写者优先"
+      ]
+    },
+    "try-two-record-failure": {
+      "config": "try-two-record-failure.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "SingleSlots",
+        "PeerBudget",
+        "FiniteWave",
+        "LockExclusion",
+        "AdmissionSettled",
+        "DrainedOwner",
+        "NoSQLCancellation",
+        "NoNewAfterStop",
+        "OrderedAttempts",
+        "ExactRowCommit",
+        "ActualCommitOnly",
+        "PendingBlocks",
+        "CurrentCoverage",
+        "SentProof",
+        "FailureDoesNotAdvance",
+        "SuccessfulSentRetained",
+        "NoStaleSend",
+        "FixedAuthorizedHead",
+        "RPCBoundary",
+        "NoBusyRetry",
+        "ProgressOpportunity",
+        "MissCleanupHeld",
+        "MissEffectFree",
+        "MissFailureDiscarded",
+        "UnknownNotMiss"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可能用尽，外部操作可能停滞；本配置不声明终止或活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "failure",
+          "Budget": 1,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2,
+          "ProgressLock": "try"
+        },
+        "expected_outcome": "PASS_WITHIN_SCOPE",
+        "kind": "safety",
+        "minimum_distinct_states": 100,
+        "minimum_basis": "按场景区分 G/W/SQL 与清理路径；下限在执行前声明。",
+        "covered_interleavings_and_faults": [
+          "failure",
+          "none",
+          "固定的有限记录集合"
+        ],
+        "excluded_behaviors": [
+          "外层发布器",
+          "JavaScript 精化证明",
+          "PG 公平性或写者优先",
+          "真实时间"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原有限 Wave 授权与发送证明抽象",
+        "不假设公平性、FIFO 或写者优先"
+      ]
+    },
+    "negative-reuse-dirty-client": {
+      "config": "negative-reuse-dirty-client.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "MissFailureDiscarded"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可能用尽，外部操作可能停滞；本配置不声明终止或活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "reuse-dirty-client",
+          "Scenario": "failure",
+          "Budget": 1,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2,
+          "ProgressLock": "try"
+        },
+        "expected_outcome": "COUNTEREXAMPLE",
+        "kind": "negative_control",
+        "minimum_distinct_states": 9,
+        "minimum_basis": "按场景区分 G/W/SQL 与清理路径；下限在执行前声明。",
+        "covered_interleavings_and_faults": [
+          "failure",
+          "reuse-dirty-client",
+          "固定的有限记录集合"
+        ],
+        "excluded_behaviors": [
+          "外层发布器",
+          "JavaScript 精化证明",
+          "PG 公平性或写者优先",
+          "真实时间"
+        ],
+        "liveness": "NOT_CHECKED",
+        "expected_violation": "MissFailureDiscarded"
+      },
+      "assumptions": [
+        "原有限 Wave 授权与发送证明抽象",
+        "不假设公平性、FIFO 或写者优先"
+      ]
+    },
+    "negative-unknown-as-miss": {
+      "config": "negative-unknown-as-miss.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "UnknownNotMiss"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可能用尽，外部操作可能停滞；本配置不声明终止或活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "unknown-as-miss",
+          "Scenario": "failure",
+          "Budget": 1,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2,
+          "ProgressLock": "try"
+        },
+        "expected_outcome": "COUNTEREXAMPLE",
+        "kind": "negative_control",
+        "minimum_distinct_states": 7,
+        "minimum_basis": "按场景区分 G/W/SQL 与清理路径；下限在执行前声明。",
+        "covered_interleavings_and_faults": [
+          "failure",
+          "unknown-as-miss",
+          "固定的有限记录集合"
+        ],
+        "excluded_behaviors": [
+          "外层发布器",
+          "JavaScript 精化证明",
+          "PG 公平性或写者优先",
+          "真实时间"
+        ],
+        "liveness": "NOT_CHECKED",
+        "expected_violation": "UnknownNotMiss"
+      },
+      "assumptions": [
+        "原有限 Wave 授权与发送证明抽象",
+        "不假设公平性、FIFO 或写者优先"
+      ]
+    },
+    "try-one-record-close": {
+      "config": "try-one-record-close.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "SingleSlots",
+        "PeerBudget",
+        "FiniteWave",
+        "LockExclusion",
+        "AdmissionSettled",
+        "DrainedOwner",
+        "NoSQLCancellation",
+        "NoNewAfterStop",
+        "OrderedAttempts",
+        "ExactRowCommit",
+        "ActualCommitOnly",
+        "PendingBlocks",
+        "CurrentCoverage",
+        "SentProof",
+        "FailureDoesNotAdvance",
+        "SuccessfulSentRetained",
+        "NoStaleSend",
+        "FixedAuthorizedHead",
+        "RPCBoundary",
+        "NoBusyRetry",
+        "ProgressOpportunity",
+        "MissCleanupHeld",
+        "MissEffectFree"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可能用尽，外部操作可能停滞；本配置不声明终止或活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "close",
+          "Budget": 1,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 1,
+          "ProgressLock": "try"
+        },
+        "expected_outcome": "PASS_WITHIN_SCOPE",
+        "kind": "safety",
+        "minimum_distinct_states": 100,
+        "minimum_basis": "按场景区分 G/W/SQL 与清理路径；下限在执行前声明。",
+        "covered_interleavings_and_faults": [
+          "close",
+          "none",
+          "固定的有限记录集合"
+        ],
+        "excluded_behaviors": [
+          "外层发布器",
+          "JavaScript 精化证明",
+          "PG 公平性或写者优先",
+          "真实时间"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "原有限 Wave 授权与发送证明抽象",
+        "不假设公平性、FIFO 或写者优先"
+      ]
+    },
+    "witness-closed-drained": {
+      "config": "witness-closed-drained.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "NotClosedDrained"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入可能用尽，外部操作可能停滞；本配置不声明终止或活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "close",
+          "Budget": 1,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 1,
+          "ProgressLock": "try"
+        },
+        "expected_outcome": "COUNTEREXAMPLE",
+        "kind": "reachability_witness",
+        "minimum_distinct_states": 12,
+        "minimum_basis": "按场景区分 G/W/SQL 与清理路径；下限在执行前声明。",
+        "covered_interleavings_and_faults": [
+          "close",
+          "none",
+          "固定的有限记录集合"
+        ],
+        "excluded_behaviors": [
+          "外层发布器",
+          "JavaScript 精化证明",
+          "PG 公平性或写者优先",
+          "真实时间"
+        ],
+        "liveness": "NOT_CHECKED",
+        "expected_violation": "NotClosedDrained"
+      },
+      "assumptions": [
+        "原有限 Wave 授权与发送证明抽象",
+        "不假设公平性、FIFO 或写者优先"
+      ]
+    }
+  }
+}

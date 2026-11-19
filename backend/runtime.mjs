@@ -255,13 +255,22 @@ export class AuthorityRuntime extends EventEmitter {
     }
     return true;
   }
-  async #publishOutboxProgress(record) {
+  async #publishOutboxProgress(record, progressLock = 'wait') {
     const sessionId = record.session_id, command = 'outbox-progress', events = [];
     return this.#withControlPriority(sessionId, { kind: command }, async () => {
-      const client = await this.pool.connect(); let committed = false, committing = false;
+      const client = await this.pool.connect(); let committed = false, committing = false, releaseError;
       try {
         await client.query('BEGIN');
-        const row = (await client.query('SELECT session_id FROM sessions WHERE session_id=$1 FOR UPDATE', [sessionId])).rows[0];
+        let row;
+        try {
+          row = (await client.query('SELECT session_id FROM sessions WHERE session_id=$1 FOR UPDATE' + (progressLock === 'try' ? ' NOWAIT' : ''), [sessionId])).rows[0];
+        } catch (error) {
+          if (progressLock !== 'try' || error.code !== '55P03') throw error;
+          // 只有这次锁申请碰忙可延期；真实回滚完成前不能释放G或复用client。
+          try { await client.query('ROLLBACK'); }
+          catch (rollbackError) { releaseError = rollbackError; throw rollbackError; }
+          return false;
+        }
         if (!row) throw new RuntimeError('SESSION_GONE', '本局不可访问。');
         // 同一排他切点重枚举当前读者与非单调的安装资格；旧枚举或旧binding不授予进度。
         const covered = this.#outboxRecordCovered(record);
@@ -273,10 +282,10 @@ export class AuthorityRuntime extends EventEmitter {
         if (covered) await this.hooks.afterCommit?.({ command, sessionId, events });
         return covered;
       } catch (error) {
-        if (!committed) await client.query('ROLLBACK').catch(() => {});
+        if (!committed && !releaseError) await client.query('ROLLBACK').catch(() => {});
         if (committed || committing) throw new RuntimeError('OUTCOME_UNKNOWN', '提交结果尚未确认，请查询原动作身份。');
         throw error;
-      } finally { client.release(); }
+      } finally { client.release(releaseError); }
     }).catch(error => { if (error.code === 'SESSION_GONE') return true; throw error; });
   }
   async applyControlEffects(tx) {
@@ -596,7 +605,7 @@ export class AuthorityRuntime extends EventEmitter {
     });
   }
   /** 原owner内只协调一个session；有限P逐行进度G与有限发送波次W各至多一个。 */
-  async #publishSessionWaves(records, deliver, isStopped) {
+  async #publishSessionWaves(records, deliver, isStopped, progressLock) {
     const sessionId = records[0].session_id;
     let head = records.at(-1).through_seq, generation = 0, attempted = -1, retryPage = false;
     let index = 0, published = 0, wave = null, progress = null, owedProgress = false;
@@ -654,7 +663,7 @@ export class AuthorityRuntime extends EventEmitter {
       progress = (async () => {
         await this.hooks.duringPublish?.({ sessionId, throughSeq: record.through_seq });
         // G已接纳后沿原helper自然收束；后来的W失败不能假取消它或撤销真实COMMIT。
-        if (await this.#publishOutboxProgress(record)) published++;
+        if (await this.#publishOutboxProgress(record, progressLock)) published++;
       })().then(() => {
         progress = null;
         // 游标到尾不是终止：最后G实际settle后才禁新W，既有W仍须完成有限分组。
@@ -695,7 +704,7 @@ export class AuthorityRuntime extends EventEmitter {
     return published;
   }
   /** 发布器只读取已提交前缀；新计时模式须有可信入队证据，失败保留Pending。 */
-  async publishPending(deliver = async () => {}, { capability = null, isStopped = () => false } = {}) {
+  async publishPending(deliver = async () => {}, { capability = null, isStopped = () => false, progressLock = 'wait' } = {}) {
     if (this.#publishing) return { busy: true, examined: 0, published: 0 };
     this.#publishing = true;
     let examined = 0, published = 0;
@@ -711,7 +720,7 @@ export class AuthorityRuntime extends EventEmitter {
         if (parallel) {
           let end = recordIndex + 1;
           while (end < pending.length && pending[end].session_id === record.session_id) end++;
-          published += await this.#publishSessionWaves(pending.slice(recordIndex, end), deliver, isStopped);
+          published += await this.#publishSessionWaves(pending.slice(recordIndex, end), deliver, isStopped, progressLock);
           recordIndex = end - 1;
           continue;
         }

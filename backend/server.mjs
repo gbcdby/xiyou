@@ -133,8 +133,9 @@ export async function createAuthorityServer({ pool, now, hooks, log = () => {}, 
       }
       const rows = (await pool.query("SELECT session_id FROM sessions WHERE state->>'phase' IN ('Lobby','Running') AND ($1 OR state->>'protocolCapability'='spatial-v2')", [legacyDue])).rows;
       for (const row of rows) await runtime.maintenance(row.session_id);
+      // 公开publish固定wait；每次维护都保留阻塞登记机会，与能力筛选独立。
       if (direction) direction.publish(legacyDue ? null : 'spatial-v2');
-      else await runtime.publishPending(deliver, { capability: legacyDue ? null : 'spatial-v2' });
+      else await runtime.publishPending(deliver, { capability: legacyDue ? null : 'spatial-v2', progressLock: 'wait' });
     } catch (error) { log('后台维护暂未完成，将保留原记录重试。', { code: errorResponse(error).code }); }
     finally { pulsing = false; }
   };

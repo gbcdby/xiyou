@@ -1,8 +1,8 @@
 import { errorResponse } from './errors.mjs';
 
-/** COMMIT 监听只标脏。发布中再次提交不丢唤醒；无进展或异常交回原 200ms 兜底。 */
+/** COMMIT 只标脏并尝试快速发布；既有维护的阻塞需求不能被后来的提交覆盖。 */
 export function committedPublisher({ runtime, deliver, track = promise => promise, log = () => {} }) {
-  let stopped = false, running = false, scheduled = null, dirty = false, includeLegacy = false, generation = 0;
+  let stopped = false, running = false, scheduled = null, dirty = false, includeLegacy = false, pendingBlocking = false, generation = 0;
   function schedule() {
     if (stopped || running || scheduled) return;
     scheduled = setImmediate(() => {
@@ -10,28 +10,39 @@ export function committedPublisher({ runtime, deliver, track = promise => promis
       if (!stopped) track(run());
     });
   }
-  function request(capability = 'spatial-v2') {
+  function request(capability = 'spatial-v2', { progressLock = 'wait' } = {}) {
     if (stopped) return;
     dirty = true; generation++;
+    pendingBlocking ||= progressLock !== 'try';
     if (capability === null) includeLegacy = true;
     schedule();
   }
   async function run() {
     if (stopped || running || !dirty) return;
     running = true;
-    const started = generation, capability = includeLegacy ? null : 'spatial-v2';
-    dirty = false; includeLegacy = false;
+    const started = generation, capability = includeLegacy ? null : 'spatial-v2', runBlocking = pendingBlocking;
+    dirty = false; includeLegacy = false; pendingBlocking = false;
     let repeat = false;
     try {
-      const result = await runtime.publishPending(deliver, { capability, isStopped: () => stopped });
+      const result = await runtime.publishPending(deliver, { capability, isStopped: () => stopped, progressLock: runBlocking ? 'wait' : 'try' });
       if (stopped) return;
+      if (result?.busy) {
+        // 未取得owner，领取的需求仍未服务；只由下一个既有入口再次唤醒。
+        dirty = true; pendingBlocking ||= runBlocking; includeLegacy ||= capability === null;
+        return;
+      }
       const pending = (await runtime.pool.query("SELECT 1 FROM outbox o JOIN sessions s ON s.session_id=o.session_id WHERE o.status='Pending' AND ($1::text IS NULL OR s.state->>'protocolCapability'=$1) LIMIT 1", [includeLegacy ? null : capability])).rowCount > 0;
+      if (stopped) return;
       dirty ||= pending;
-      // 本轮尚未尝试的新提交须再读一次，不能被旧安装围栏的零进展吞掉。
-      // 新一轮会记住当前代次；若仍只有同一批无进展记录，就交回定时兜底。
-      repeat = dirty && !result?.busy && (result?.published > 0 || generation !== started || includeLegacy);
+      const freshRequest = generation !== started;
+      // 先判是否续轮，再继承模式；继承位本身不能让零进展Pending空转。
+      repeat = pendingBlocking || (dirty && (result?.published > 0 || freshRequest || includeLegacy));
+      if (repeat && !freshRequest) pendingBlocking ||= runBlocking;
     } catch (error) {
-      dirty = true;
+      const freshBlocking = pendingBlocking;
+      dirty = true; pendingBlocking ||= runBlocking; includeLegacy ||= capability === null;
+      // 只给在途新到的wait一次后续机会，不能把恢复位误当成新请求。
+      repeat = freshBlocking;
       log('提交后的空间发布暂未完成，将保留 Pending 重试。', { code: errorResponse(error).code });
     } finally {
       running = false;
@@ -51,10 +62,10 @@ export function attachSpatialDirection({ runtime, deliver, track, log = () => {}
   const rooms = new Set();
   let stopped = false, scanning = false;
   const onCommit = ({ events }) => {
-    if (events.some(event => event.schemaVersion === 2)) publisher.request();
+    if (events.some(event => event.schemaVersion === 2)) publisher.request('spatial-v2', { progressLock: 'try' });
   };
   runtime.on('commit', onCommit);
-  const onSupplyReady = () => publisher.request();
+  const onSupplyReady = () => publisher.request('spatial-v2', { progressLock: 'wait' });
   runtime.on('spatial-supply-ready', onSupplyReady);
   async function checkpoint() {
     if (stopped || scanning) return;
@@ -75,7 +86,7 @@ export function attachSpatialDirection({ runtime, deliver, track, log = () => {}
   const timer = setInterval(() => track(checkpoint()), runtime.spatialDirection.checkpointMs);
   timer.unref();
   return {
-    publish: capability => publisher.request(capability),
+    publish: capability => publisher.request(capability, { progressLock: 'wait' }),
     close() { stopped = true; clearInterval(timer); runtime.off('commit', onCommit); runtime.off('spatial-supply-ready', onSupplyReady); publisher.close(); },
   };
 }
