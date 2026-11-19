@@ -120,6 +120,12 @@ D66-LB 在每次 `advanceSpatialTime` 的原事务内，以一次真实 SQL 观�
 
 每条原请求仍从自己的首次发送起算 400ms，改向、第二次发送、retry 或绑定更换均不能延长旧截止。较新同向 Accepted 不解除较旧 Unknown；未知结果沿原路径冻结并请求一次独立 stop。旧 Rejected 仍按当前最新已发送 id、intent 与 generation 判定，不能误停新方向；旧代次回调不复活旧持键，只按原机制收束自身身份。两方向槽满仍能沿原独立 stop 路径停步；stop 序号覆盖只在同一 controlEpoch 比较，跨 epoch 继续原围栏。合并前须满足 DS2-01～06：同向共享的旧实现负例、原每实例预算及 30/60/120Hz 等效、满槽最新意图、乱序与首 400ms 截止、两层容量/跨绑定/原 Receipt 恢复、兼容路径；补充最小有限状态模型、敏感性负对照、源码映射及独立审查。模型不证明实时延迟、几何或自然无 idle；原 36/180/100/400/50/200、完整确认历史、真实 hold/paint 信用与下述产品门槛保持。
 
+2026-11-20 [D66-RC 已应用方向收据补读消重](https://github.com/gbcdby/xiyou/issues/66)已采纳为方向读取调度的窄例外。仅首次实时 `move_direction` 的合法 Accepted、结果命令序号相同、当前同 id/raw 草稿仍 waiting 且无既定 Receipt 时，可以在原收束、发布和排队处理之后省去本收据末尾一次自动 sync。实际投递与末尾判定须保持同一物理 link、serial、view generation、sync revision、DirectionIntent 实例和完整 session/view/controlEpoch/actor/appearance/scene/map 绑定；连接仍在线并确认方向与 timed 双能力、无控制 pending/busy、投影 Running 且当前输入源仍有本人控制。覆盖只能来自完整校验、连续应用、克隆冻结后的 Snapshot，以十进制比较 `snapshotSeq >= observedSeq`；收到或发送的水位、目标 frontier、Receipt 本身及未播放画面都不算已应用证明。同步发布可能重入，故末尾必须重读，无法确认或判定异常即走原补读。
+
+该例外只满足本 Receipt 的提交前缀，明确接受后续状态或撤权获知时刻可能变化：被省略的事务原本可能顺带读取更新事实。每次实际动作和读取仍由服务端重新授权；publisher、heartbeat、显式 sync、push 失配补读、控制后补读及所有错误处理保持，同 link 实际到达的撤权仍立即清视图与输入，旧 link 不能影响新连接。不得清掉其他原因的 syncDemand、取消在途同步或修改单 link 一槽、每轮8页和固定 frontier；不新增网络无限延迟或关闭 heartbeat 下的有界进度保证。query、原样 retry、重连回放、Unknown/400ms后迟到/已收束旧 ACK、Rejected、错身份、stop、move_to及旧能力均不获得该例外。原两方向槽、独立 stop、截止、完整 timed 历史、逐条 owner 通知和真实 hold/paint 信用不变。
+
+合并前须满足 RC-01～08：原实现冗余见证及大整数、未覆盖/不适用回退、其他同步需求组合、实际撤权与旧 link、原身份恢复/截止、实际投递和发布重入绑定、真实 Snapshot source/Motion 的未播放历史及后续 push、相关回归与类型检查。源码义务仅映射为 `send/#deliver` 标识首次来源、`#receipt` 原收束后按当前完整前缀决定是否进入原 sync；不增加持续状态或改变原控制/恢复/sync 状态机，故不新增或重跑无关 TLC。已有方向模型没有证明该读取触发例外或未来授权观测时延，若扩大这些边界须重新建模和审查。组件通过不证明旧空档根因、性能收益或下述自然体验门通过。
+
 同一实际启用候选仍须通过真实 Canvas 的原输入时长、连续移动、速度/累计距离、DOWN 轴向和短按/停步门槛，不能用受控呈现单元或无画布数值探针代替。当前这些完整门槛须以真实证据收口，不能从设计或组件限定 PASS 推导。不得削弱旧守卫或删断言刷绿；旧测试若只断言已被用户明确取代的 human 显示范围，按本修订精确更新，并保留 NPC/秘密与交互负对照。
 
 一次独立设计需求/标准短审后，UX-C/UX-HUD才能释放实现；这是[项目工作流](../agents/workflow.md#一项工作的闭环)既有门槛。规格与两UX单元进入一个组合PR，经完整候选独立双轴、适用检查、实际merge与main核验后记录其完成；ANIM按真实覆盖后续独立PR交付，总票按全部范围判断关闭，父Spec仍按其原义判断。

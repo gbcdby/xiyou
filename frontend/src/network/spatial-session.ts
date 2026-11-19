@@ -21,6 +21,7 @@ interface ReceiptReader { receipt(sessionId: string, actionId: string): Promise<
 interface QueuedAction { action: ActionV2; sequence: string; epoch: string; viewId: string; mapVersion: string; movementId?: string; targetRef?: string; targetSignature?: string }
 interface NavigationStep { sequence: string; sceneId: string; originSceneId: string; movementId?: string; crossing?: ActionV2; exitId?: string }
 interface NavigationPlan extends NavigationState { viewId: string; epoch: string; mapVersion: string; step: NavigationStep | null }
+interface DirectionDelivery { link: SessionLink; serial: number; generation: number; revision: number; direction: ContinuousDirection | DirectionIntent; binding: string; raw: string }
 function retainActions(actions: SpatialDraft[]): SpatialDraft[] {
   // 只有已有确定结果的历史计入上限；未决请求必须一直保留原串，直到收据确认。
   let confirmed = 80;
@@ -327,7 +328,7 @@ export class SpatialSessionClient {
     if (action.kind === 'stop_move' && this.#direction instanceof DirectionIntent && this.#pendingStop()) throw new Error('原停步请求仍未决，请查询原请求。');
     const envelope: PublicEnvelope = validateSpatial('PublicEnvelope', { schemaVersion: 2, sessionId: snapshot.sessionId, viewId: snapshot.viewId, actorRef: snapshot.projection.self.entityRef, clientActionId: this.#options.id(), controlEpoch: snapshot.projection.self.controlEpoch, baseSeq: snapshot.snapshotSeq, action });
     const draft: SpatialDraft = { id: envelope.clientActionId, raw: canonicalize(envelope), status: 'waiting', detail: action.kind === 'move_to' ? '正在提交路线，尚未到达。' : '等待服务器确认。', receipt: null };
-    this.#actions = retainActions([...this.#actions, draft]); this.#armDirectionDeadline(draft); this.#publish(); await this.#deliver(draft);
+    this.#actions = retainActions([...this.#actions, draft]); this.#armDirectionDeadline(draft); this.#publish(); await this.#deliver(draft, true);
     return this.#actions.find(value => value.id === draft.id);
   }
   async retry(id: string) {
@@ -338,18 +339,48 @@ export class SpatialSessionClient {
     const frozen = kind === 'move_direction' || kind === 'stop_move' && this.#direction instanceof DirectionIntent;
     this.#update(id, { status: frozen ? 'unknown' : 'waiting', detail: '正在原样重试，不重新分配命令序号。' }); await this.#deliver(draft);
   }
-  async #deliver(draft: SpatialDraft) {
+  #receiptBinding(link: SessionLink): string {
+    try {
+      const p = this.#view.snapshot?.projection;
+      return this.#link === link && link.connected && this.#timedLink(link) && this.#connection === 'online'
+        && !this.#pendingControl && !this.#controlBusy && this.#direction instanceof DirectionIntent
+        && p?.phase === 'Running' && p.self.canControl && this.#source?.controlEpoch === p.self.controlEpoch ? this.#directionBinding : '';
+    } catch { return ''; } // 无法确认时只关闭消重，不改变原收据与同步路径。
+  }
+  #receiptCovered(delivery: DirectionDelivery, envelope: PublicEnvelope, observedSeq: string): boolean {
+    try {
+      const snapshot = this.#view.snapshot, p = snapshot?.projection, action = envelope.action;
+      return Boolean(snapshot && p && action.kind === 'move_direction' && delivery.binding
+        && this.#receiptBinding(delivery.link) === delivery.binding && delivery.serial === this.#serial
+        && delivery.generation === this.#view.generation && delivery.revision === this.#syncRevision && delivery.direction === this.#direction
+        && envelope.sessionId === snapshot.sessionId && envelope.viewId === snapshot.viewId && envelope.actorRef === p.self.entityRef
+        && envelope.controlEpoch === p.self.controlEpoch && action.sceneId === p.self.sceneId && action.mapVersion === p.mapVersion
+        && compareDecimal(snapshot.snapshotSeq, observedSeq) >= 0);
+    } catch { return false; }
+  }
+  async #deliver(draft: SpatialDraft, firstDelivery = false) {
     const serial = this.#serial; const link = this.#link; if (!link) return;
     try {
-      const value = await link.request('player.action.request', draft.raw); if (serial !== this.#serial) return;
+      const raw = draft.raw, binding = firstDelivery ? this.#receiptBinding(link) : '';
+      // 只绑定本次首次实际投递；query/retry和旧Promise不从当前快照补造资格。
+      const delivery = binding ? { link, serial, generation: this.#view.generation, revision: this.#syncRevision,
+        direction: this.#direction, binding, raw } : undefined;
+      const value = await link.request('player.action.request', raw); if (serial !== this.#serial) return;
       if (this.#handleError(value)) { this.#update(draft.id, { status: 'unknown', detail: '请求尚无确定收据，请查询原动作。' }); return; }
-      this.#receipt(draft, value);
+      this.#receipt(draft, value, delivery);
     } catch { if (serial === this.#serial) this.#update(draft.id, { status: 'unknown', detail: '确认尚未收到；可以查询或原样重试。' }); }
   }
-  #receipt(draft: SpatialDraft, value: unknown) {
+  #receipt(draft: SpatialDraft, value: unknown, delivery?: DirectionDelivery) {
     try {
       const receipt = validateSpatial('ReceiptV2', value); const envelope = this.#draftEnvelope(draft);
       if (receipt.sessionId !== envelope.sessionId || receipt.clientActionId !== envelope.clientActionId) throw new Error('收据与原请求不匹配。');
+      let observedSeq: string | undefined;
+      try {
+        const current = this.#actions.find(value => value.id === draft.id);
+        if (delivery && current?.status === 'waiting' && !current.receipt && current.raw === delivery.raw && draft.raw === delivery.raw
+          && envelope.action.kind === 'move_direction' && receipt.status === 'Accepted'
+          && receipt.result.movementCommandSeq === envelope.action.movementCommandSeq) observedSeq = receipt.observedSeq;
+      } catch { /* 消重资格不明仍按原收据收束，并请求原补读。 */ }
       const queued = this.#queued;
       if (envelope.action.kind === 'move_to' && queued?.sequence === envelope.action.movementCommandSeq && queued.epoch === envelope.controlEpoch && queued.viewId === envelope.viewId) {
         if (receipt.status === 'Rejected') this.#queued = null;
@@ -360,7 +391,9 @@ export class SpatialSessionClient {
         if (receipt.status === 'Rejected') this.#cancelNavigation(spatialErrorMessage(receipt.code));
         else navigation.step.movementId = receipt.result.movementId;
       }
-      this.#update(draft.id, { receipt, status: receipt.status === 'Accepted' ? 'accepted' : 'rejected', detail: receipt.status === 'Rejected' ? spatialErrorMessage(receipt.code) : envelope.action.kind === 'move_to' ? '路线已受理；实际到达以后才会操作。' : '服务器已确认。' }); this.#drainQueued(); this.#drainNavigation(); void this.sync();
+      this.#update(draft.id, { receipt, status: receipt.status === 'Accepted' ? 'accepted' : 'rejected', detail: receipt.status === 'Rejected' ? spatialErrorMessage(receipt.code) : envelope.action.kind === 'move_to' ? '路线已受理；实际到达以后才会操作。' : '服务器已确认。' }); this.#drainQueued(); this.#drainNavigation();
+      // 发布可同步重入；末尾重读完整绑定与已安装前缀，仅省本收据需求，不清其他syncDemand。
+      if (observedSeq === undefined || !delivery || !this.#receiptCovered(delivery, envelope, observedSeq)) void this.sync();
     } catch { this.#update(draft.id, { status: 'unknown', detail: '收据校验未通过，结果仍待确认。' }); }
   }
   // 每批至多三条；本批全部收束后才启动下一批。连接代次变化使旧队列失效。
