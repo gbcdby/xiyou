@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { SpatialSessionClient } from '../src/network/spatial-session.ts';
 import { spatialSnapshot, spatialBatch } from './spatial-fixture.mjs';
+import { directionClock } from '../src/domain/spatial-direction.ts';
 
 const flush = () => new Promise(resolve => setImmediate(resolve));
 async function room(t, enabled = true) {
@@ -112,4 +113,63 @@ test('D66-CLIENT-02：同绑定查询原方向Receipt可释放本地代次，未
   assert.equal(h.wires.length, 3, '查询不自动恢复此前持键');
   h.client.setDirection({ x: -1, y: 0 }); await flush();
   assert.equal(h.wires.length, 4, '两条原Receipt确认后新的明确输入可以发出');
+});
+
+
+test('DS2-05：两条同向跨绑定仍由原账本限槽，stop和原截止各自保持', async t => {
+  for (const ending of ['两槽满立即停步', '原截止后查询恢复']) await t.test(ending, async t => {
+    let now = 0, next = 0, h; const jobs = new Map(), savedClock = { ...directionClock };
+    // 复用现有方向测试的有限时钟，只替换公开clock，不替换客户端判定或账本。
+    Object.assign(directionClock, {
+      now: () => now,
+      setTimeout(callback, delay) { const id = ++next; jobs.set(id, { callback, at: now + delay }); return id; },
+      clearTimeout(id) { jobs.delete(id); },
+    });
+    t.after(() => { h?.client.close(); Object.assign(directionClock, savedClock); });
+    const advance = async through => {
+      for (;;) {
+        const entry = [...jobs].sort((a, b) => a[1].at - b[1].at).find(([, job]) => job.at <= through); if (!entry) break;
+        jobs.delete(entry[0]); now = entry[1].at; entry[1].callback(); await flush();
+      }
+      now = through; await flush();
+    };
+    h = await room(t); h.holdDirections();
+    h.client.setDirection({ x: 1, y: 0 }); await flush(); await advance(100);
+    assert.deepEqual(h.wires.map(raw => JSON.parse(raw).action.direction), ['E', 'E']);
+    const originals = [...h.wires], requests = originals.map(raw => JSON.parse(raw)), ids = requests.map(request => request.clientActionId);
+    assert.deepEqual(requests.map(request => request.action.movementCommandSeq), ['1', '2']);
+    await advance(150);
+    const changed = structuredClone(h.client.state.snapshot); changed.projection.mapVersion = 'new-map';
+    h.handlers.batch(spatialBatch(changed, '11')); h.client.setDirection({ x: 0, y: 1 }); await flush();
+    assert.equal(h.wires.length, 2, '新controller的空Map不能绕过两条旧同向原账本');
+    await assert.rejects(h.client.send({ kind: 'move_direction', sceneId: 'yard', mapVersion: 'new-map', direction: 'W', movementCommandSeq: '3' }, true), /未决|确认/);
+    if (ending === '两槽满立即停步') {
+      h.client.setDirection(null); await flush();
+      const stop = JSON.parse(h.wires[2]);
+      assert.equal(stop.action.kind, 'stop_move'); assert.equal(stop.action.movementCommandSeq, '3');
+      assert.equal(stop.controlEpoch, requests[0].controlEpoch, '覆盖只在同一控制epoch解释');
+      h.completeDirection(0); h.completeDirection(1); await flush(); await advance(700);
+      assert.equal(h.wires.length, 3, '原同向回调不恢复已全松方向');
+    } else {
+      await advance(399); assert.deepEqual(h.client.state.actions.slice(0, 2).map(draft => draft.status), ['waiting', 'waiting']);
+      await advance(400); assert.deepEqual(h.client.state.actions.slice(0, 2).map(draft => draft.status), ['unknown', 'waiting']);
+      assert.deepEqual(h.wires.map(raw => JSON.parse(raw).action.kind), ['move_direction', 'move_direction', 'stop_move']);
+      assert.equal(JSON.parse(h.wires[2]).action.movementCommandSeq, '3');
+      await advance(499); assert.equal(h.client.state.actions.find(draft => draft.id === ids[1]).status, 'waiting');
+      await advance(500); assert.deepEqual(h.client.state.actions.slice(0, 2).map(draft => draft.status), ['unknown', 'unknown']);
+      assert.equal(h.wires.length, 3, '第二原截止不重复发stop，也不按新绑定重启400ms');
+      for (const id of ids) await h.client.query(id);
+      await advance(650); assert.equal(h.wires.length, 3, '原Receipt查询只收束，不恢复旧持键');
+      assert.deepEqual(h.client.state.actions.slice(0, 2).map(draft => draft.status), ['accepted', 'accepted']);
+      h.client.setDirection({ x: -1, y: 0 }); await flush();
+      assert.deepEqual(JSON.parse(h.wires[3]).action, { kind: 'move_direction', sceneId: 'yard', mapVersion: 'new-map', direction: 'W', movementCommandSeq: '4' }, '原Receipt已定案时，未回的旧Promise不永久占全会话槽');
+      h.completeDirection(0); h.completeDirection(1); await flush();
+      assert.equal(h.wires.length, 4, '旧网络回调只收束其原身份');
+      assert.equal(h.client.state.actions.filter(draft => ['waiting', 'unknown'].includes(draft.status) && JSON.parse(draft.raw).action.kind === 'move_direction').length, 1);
+      h.client.setDirection(null); await flush();
+      assert.equal(JSON.parse(h.wires[4]).action.movementCommandSeq, '5'); assert.equal(JSON.parse(h.wires[4]).action.kind, 'stop_move');
+      h.completeDirection(2); await flush(); await advance(1100); assert.equal(h.wires.length, 5);
+    }
+    assert.deepEqual(h.client.state.actions.filter(draft => ids.includes(draft.id)).map(draft => draft.raw), originals, '跨绑定、截止、查询和迟到回调均保留两个原串');
+  });
 });

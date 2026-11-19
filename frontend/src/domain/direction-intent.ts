@@ -76,7 +76,7 @@ export class DirectionIntent {
     const deadline = Math.min(...current.map(p => p.at + DIRECTION_RECEIPT_DEADLINE_MS));
     const credits = Math.min(2, this.#credits + (now - this.#creditAt) / DIRECTION_INTERVAL_MS);
     const budgetAt = now + (credits >= 1 - 1e-9 ? 0 : (1 - credits) * DIRECTION_INTERVAL_MS);
-    const available = this.#pending.size < 2 && (this.#options.canSend?.() ?? true) && !current.some(p => p.intent === this.#intent);
+    const available = this.#pending.size < 2 && (this.#options.canSend?.() ?? true);
     const sendAt = available ? Math.max(this.#sentIntent === this.#intent ? this.#nextAt : now, budgetAt) : Infinity;
     const due = Math.min(deadline, sendAt); if (!Number.isFinite(due)) return;
     if (due <= now + 1e-8) this.#tick();

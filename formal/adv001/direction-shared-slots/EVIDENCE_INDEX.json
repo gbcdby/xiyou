@@ -1,0 +1,939 @@
+{
+  "schema_version": 1,
+  "state": "FINAL_CONTENT_AWAITING_INDEPENDENT_BINDING",
+  "artifact_base_identity": ".agent-output/outbox-progress-lock-admission-20261119/normal-analysis/direction-shared-slots-model",
+  "note": "27个已结束原记录；原25条完整保留，只追加两个正run。实际manifest/input/result原件未改写；本机械封装等待独立绑定，不声明自然门通过。",
+  "model_identities": {
+    "safety": {
+      "bytes": 16822,
+      "sha256": "787fdc589633ef6922bc43060e0b26da89705c3b26257a353e64c30a82d35249"
+    },
+    "controls": {
+      "bytes": 18375,
+      "sha256": "c50dacfdc8233af7506dc59a59413e84adfc44e239b34e480608c76e14c1c53b"
+    },
+    "probes": {
+      "bytes": 1309,
+      "sha256": "4ed65b3e2619b03a7e44fb4f6eae22a6af06fd4476177c0c6fd6e301607ce45e"
+    }
+  },
+  "repository_manifest_origins": [
+    {
+      "repository_manifest": "verification-safety.json",
+      "bytes": 8966,
+      "sha256": "c97dc34956abc3b6d09d1f10dfabe128ba6260067be0df8ff9f62b8f7a0c3a33",
+      "original_manifest": "completion-r3/verification-core.json",
+      "original_identity": {
+        "bytes": 8994,
+        "sha256": "c54713f1ad2662a63c0cfcf504a780334c5fc6f2e85684c395de9049607d9014"
+      },
+      "changes": [
+        "model.root",
+        "design.path"
+      ],
+      "all_other_json_values_identical": true
+    },
+    {
+      "repository_manifest": "verification-negative.json",
+      "bytes": 17140,
+      "sha256": "050cc300a7162892092a0efd673ada2d6bd77fee3ac12018f9f7a949e1d88c67",
+      "original_manifest": "controls-r1/verification-negative.json",
+      "original_identity": {
+        "bytes": 17166,
+        "sha256": "43b8d0c5e69b3e3b2f09a09c91b0e02428d33def5c626ebcf740465e9f3d9d66"
+      },
+      "changes": [
+        "model.root",
+        "design.path"
+      ],
+      "all_other_json_values_identical": true
+    },
+    {
+      "repository_manifest": "verification-witness.json",
+      "bytes": 21231,
+      "sha256": "d915fa21cbc907a3c878e53e2e6bad4500a59a92fa6d6aecd72c6ea431433d22",
+      "original_manifests": [
+        {
+          "path": "controls-r1/verification-witness.json",
+          "bytes": 18940,
+          "sha256": "a074a426c9c61b09a0684587725fdaf233d64ee35da98fdfcef837b13b520fe5"
+        },
+        {
+          "path": "witness-old-move-r2/verification-witness.json",
+          "bytes": 2903,
+          "sha256": "129a8f15f7a2b29b08503ea490af092793b3ed24f9b45cf5d507ea15eebee01a"
+        }
+      ],
+      "changes": [
+        "model.root",
+        "design.path",
+        "feature",
+        "merge witness-old-move-finally profile",
+        "scope.description for six precisely qualified witness profiles"
+      ],
+      "model_cfg_invariant_parameters_resources_unchanged": true
+    }
+  ],
+  "included_finished_records": [
+    {
+      "run_id": "core-shared-completion-r1",
+      "classification": "positive_safety",
+      "result": {
+        "artifact_relative_path": "runs/core-shared-completion-r1/result.json",
+        "bytes": 7347,
+        "sha256": "a6cf50339a4891ccdbb3b4a940b6bb6fc9f4c81aaa9e16c6aa57926cc841b4aa"
+      },
+      "actual_run_manifest": {
+        "artifact_relative_path": "runs/core-shared-completion-r1/manifest.json",
+        "bytes": 8097,
+        "sha256": "f6f8513f9c6391893d3920b323852de85a5afd77188bef2749113a87cfe65313"
+      },
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "profile": "core-shared",
+      "duration_seconds": 130.264396,
+      "completed": true,
+      "statistics": {
+        "generated_states": 25453553,
+        "distinct_states": 6321710,
+        "remaining_states": 0
+      },
+      "expected_target": null,
+      "qualified_observation": null,
+      "observation_basis": "原result字段；目标匹配和具体前缀资格由root实际执行及独立reviewer读轨迹确认，本打包阶段仅只读汇总",
+      "warning_codes": [],
+      "error_codes": []
+    },
+    {
+      "run_id": "core-shared-r2",
+      "classification": "timeout",
+      "result": {
+        "artifact_relative_path": "runs/core-shared-r2/result.json",
+        "bytes": 7148,
+        "sha256": "87c281a71adbe405e947bf7e8ffb4bf4e51e569c02da35b2c8815f0971a76b0e"
+      },
+      "actual_run_manifest": {
+        "artifact_relative_path": "runs/core-shared-r2/manifest.json",
+        "bytes": 7372,
+        "sha256": "bdeee08bf674b8df6a761b9e4f49f4cba50b897711c379304b9da273faa2d2cb"
+      },
+      "status": "INCONCLUSIVE",
+      "reason": "TIMEOUT",
+      "profile": "core-shared",
+      "duration_seconds": 60.574925,
+      "completed": false,
+      "statistics": {
+        "generated_states": null,
+        "distinct_states": null,
+        "remaining_states": null
+      },
+      "expected_target": null,
+      "qualified_observation": null,
+      "observation_basis": "原result字段；目标匹配和具体前缀资格由root实际执行及独立reviewer读轨迹确认，本打包阶段仅只读汇总",
+      "warning_codes": [],
+      "error_codes": []
+    },
+    {
+      "run_id": "core-shared-r3-projected",
+      "classification": "timeout",
+      "result": {
+        "artifact_relative_path": "runs/core-shared-r3-projected/result.json",
+        "bytes": 7268,
+        "sha256": "8320e853845f70d7e96fd6be2e1b632b1269855d0203cc3d3e05ad7332b3827a"
+      },
+      "actual_run_manifest": {
+        "artifact_relative_path": "runs/core-shared-r3-projected/manifest.json",
+        "bytes": 7729,
+        "sha256": "0db9067721e8e0f2bbb934ffd6df5534da46dc1dedef6f71dbe6e23d70ffd264"
+      },
+      "status": "INCONCLUSIVE",
+      "reason": "TIMEOUT",
+      "profile": "core-shared",
+      "duration_seconds": 60.518096,
+      "completed": false,
+      "statistics": {
+        "generated_states": null,
+        "distinct_states": null,
+        "remaining_states": null
+      },
+      "expected_target": null,
+      "qualified_observation": null,
+      "observation_basis": "原result字段；目标匹配和具体前缀资格由root实际执行及独立reviewer读轨迹确认，本打包阶段仅只读汇总",
+      "warning_codes": [],
+      "error_codes": []
+    },
+    {
+      "run_id": "core-rebinding-completion-r1",
+      "classification": "timeout",
+      "result": {
+        "artifact_relative_path": "runs/core-rebinding-completion-r1/result.json",
+        "bytes": 7316,
+        "sha256": "8dbe6c84330fff5c14dc5eed61a980a3e4f1fe04a7db0b32a503df5c922e6ae1"
+      },
+      "actual_run_manifest": {
+        "artifact_relative_path": "runs/core-rebinding-completion-r1/manifest.json",
+        "bytes": 8097,
+        "sha256": "f6f8513f9c6391893d3920b323852de85a5afd77188bef2749113a87cfe65313"
+      },
+      "status": "INCONCLUSIVE",
+      "reason": "TIMEOUT",
+      "profile": "core-rebinding",
+      "duration_seconds": 240.561314,
+      "completed": false,
+      "statistics": {
+        "generated_states": null,
+        "distinct_states": null,
+        "remaining_states": null
+      },
+      "expected_target": null,
+      "qualified_observation": null,
+      "observation_basis": "原result字段；目标匹配和具体前缀资格由root实际执行及独立reviewer读轨迹确认，本打包阶段仅只读汇总",
+      "warning_codes": [],
+      "error_codes": []
+    },
+    {
+      "run_id": "core-deadline-completion-r1",
+      "classification": "timeout",
+      "result": {
+        "artifact_relative_path": "runs/core-deadline-completion-r1/result.json",
+        "bytes": 7303,
+        "sha256": "d2e683fc2c2b5cfdc1af01133a8cc70862c1df04e23ae55545c8018b01df361c"
+      },
+      "actual_run_manifest": {
+        "artifact_relative_path": "runs/core-deadline-completion-r1/manifest.json",
+        "bytes": 8097,
+        "sha256": "f6f8513f9c6391893d3920b323852de85a5afd77188bef2749113a87cfe65313"
+      },
+      "status": "INCONCLUSIVE",
+      "reason": "TIMEOUT",
+      "profile": "core-deadline",
+      "duration_seconds": 240.632908,
+      "completed": false,
+      "statistics": {
+        "generated_states": null,
+        "distinct_states": null,
+        "remaining_states": null
+      },
+      "expected_target": null,
+      "qualified_observation": null,
+      "observation_basis": "原result字段；目标匹配和具体前缀资格由root实际执行及独立reviewer读轨迹确认，本打包阶段仅只读汇总",
+      "warning_codes": [],
+      "error_codes": []
+    },
+    {
+      "run_id": "negative-session-capacity-r1",
+      "classification": "negative_control",
+      "result": {
+        "artifact_relative_path": "runs/negative-session-capacity-r1/result.json",
+        "bytes": 9543,
+        "sha256": "fefa728b0efd954c65f64def6f730b4cb0bc155ca562cc14f5a473b0a087be21"
+      },
+      "actual_run_manifest": {
+        "artifact_relative_path": "runs/negative-session-capacity-r1/manifest.json",
+        "bytes": 17166,
+        "sha256": "43b8d0c5e69b3e3b2f09a09c91b0e02428d33def5c626ebcf740465e9f3d9d66"
+      },
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "profile": "negative-session-capacity",
+      "duration_seconds": 2.315357,
+      "completed": false,
+      "statistics": {
+        "generated_states": 22595,
+        "distinct_states": 10722,
+        "remaining_states": 7902
+      },
+      "expected_target": "SessionMoveCapacity",
+      "qualified_observation": null,
+      "observation_basis": "原result字段；目标匹配和具体前缀资格由root实际执行及独立reviewer读轨迹确认，本打包阶段仅只读汇总",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ]
+    },
+    {
+      "run_id": "negative-old-deadline-r1",
+      "classification": "negative_control",
+      "result": {
+        "artifact_relative_path": "runs/negative-old-deadline-r1/result.json",
+        "bytes": 9423,
+        "sha256": "ada9fb1b69c4f93350c2b76f22bc2acfc9432283c17ad2e21e0a573115555311"
+      },
+      "actual_run_manifest": {
+        "artifact_relative_path": "runs/negative-old-deadline-r1/manifest.json",
+        "bytes": 17166,
+        "sha256": "43b8d0c5e69b3e3b2f09a09c91b0e02428d33def5c626ebcf740465e9f3d9d66"
+      },
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "profile": "negative-old-deadline",
+      "duration_seconds": 1.493957,
+      "completed": false,
+      "statistics": {
+        "generated_states": 66,
+        "distinct_states": 40,
+        "remaining_states": 24
+      },
+      "expected_target": "OriginalDeadline",
+      "qualified_observation": null,
+      "observation_basis": "原result字段；目标匹配和具体前缀资格由root实际执行及独立reviewer读轨迹确认，本打包阶段仅只读汇总",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ]
+    },
+    {
+      "run_id": "negative-unknown-freeze-r1",
+      "classification": "negative_control",
+      "result": {
+        "artifact_relative_path": "runs/negative-unknown-freeze-r1/result.json",
+        "bytes": 9483,
+        "sha256": "3aee48374e9c5c3e1ed8c1bbe327e9229f34c898801e2978569cf3bc5a21b7d5"
+      },
+      "actual_run_manifest": {
+        "artifact_relative_path": "runs/negative-unknown-freeze-r1/manifest.json",
+        "bytes": 17166,
+        "sha256": "43b8d0c5e69b3e3b2f09a09c91b0e02428d33def5c626ebcf740465e9f3d9d66"
+      },
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "profile": "negative-unknown-freeze",
+      "duration_seconds": 1.575676,
+      "completed": false,
+      "statistics": {
+        "generated_states": 1972,
+        "distinct_states": 989,
+        "remaining_states": 669
+      },
+      "expected_target": "UnknownFreezes",
+      "qualified_observation": null,
+      "observation_basis": "原result字段；目标匹配和具体前缀资格由root实际执行及独立reviewer读轨迹确认，本打包阶段仅只读汇总",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ]
+    },
+    {
+      "run_id": "negative-old-generation-r1",
+      "classification": "negative_control",
+      "result": {
+        "artifact_relative_path": "runs/negative-old-generation-r1/result.json",
+        "bytes": 9495,
+        "sha256": "6adae3bc9a7647926b9b6bb23c9edf10addea9e1bb482cabf28a72b7cda134e6"
+      },
+      "actual_run_manifest": {
+        "artifact_relative_path": "runs/negative-old-generation-r1/manifest.json",
+        "bytes": 17166,
+        "sha256": "43b8d0c5e69b3e3b2f09a09c91b0e02428d33def5c626ebcf740465e9f3d9d66"
+      },
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "profile": "negative-old-generation",
+      "duration_seconds": 1.529775,
+      "completed": false,
+      "statistics": {
+        "generated_states": 1006,
+        "distinct_states": 556,
+        "remaining_states": 399
+      },
+      "expected_target": "OldCallbackIsolation",
+      "qualified_observation": null,
+      "observation_basis": "原result字段；目标匹配和具体前缀资格由root实际执行及独立reviewer读轨迹确认，本打包阶段仅只读汇总",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ]
+    },
+    {
+      "run_id": "negative-same-intent-latest-id-r1",
+      "classification": "negative_control",
+      "result": {
+        "artifact_relative_path": "runs/negative-same-intent-latest-id-r1/result.json",
+        "bytes": 9614,
+        "sha256": "415e775ca62521cc0c022bde301e5a8209e908e51d6e5a3029da137fcf4fe297"
+      },
+      "actual_run_manifest": {
+        "artifact_relative_path": "runs/negative-same-intent-latest-id-r1/manifest.json",
+        "bytes": 17166,
+        "sha256": "43b8d0c5e69b3e3b2f09a09c91b0e02428d33def5c626ebcf740465e9f3d9d66"
+      },
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "profile": "negative-same-intent-latest-id",
+      "duration_seconds": 1.931612,
+      "completed": false,
+      "statistics": {
+        "generated_states": 1823,
+        "distinct_states": 955,
+        "remaining_states": 619
+      },
+      "expected_target": "ObsoleteRejectIgnored",
+      "qualified_observation": null,
+      "observation_basis": "原result字段；目标匹配和具体前缀资格由root实际执行及独立reviewer读轨迹确认，本打包阶段仅只读汇总",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ]
+    },
+    {
+      "run_id": "negative-latest-intent-r1",
+      "classification": "negative_control",
+      "result": {
+        "artifact_relative_path": "runs/negative-latest-intent-r1/result.json",
+        "bytes": 9461,
+        "sha256": "0f79cfb7349b370f2cacdc870ff0c1ac970dabb41eb5b21a4fb8eb957fa9852f"
+      },
+      "actual_run_manifest": {
+        "artifact_relative_path": "runs/negative-latest-intent-r1/manifest.json",
+        "bytes": 17166,
+        "sha256": "43b8d0c5e69b3e3b2f09a09c91b0e02428d33def5c626ebcf740465e9f3d9d66"
+      },
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "profile": "negative-latest-intent",
+      "duration_seconds": 1.450858,
+      "completed": false,
+      "statistics": {
+        "generated_states": 365,
+        "distinct_states": 189,
+        "remaining_states": 141
+      },
+      "expected_target": "LatestIntentOnly",
+      "qualified_observation": null,
+      "observation_basis": "原result字段；目标匹配和具体前缀资格由root实际执行及独立reviewer读轨迹确认，本打包阶段仅只读汇总",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ]
+    },
+    {
+      "run_id": "negative-clear-budget-r1",
+      "classification": "negative_control",
+      "result": {
+        "artifact_relative_path": "runs/negative-clear-budget-r1/result.json",
+        "bytes": 9472,
+        "sha256": "14fe66a0d2b417481b022ac047ee48cb71ef74e59ddb727b4dc171b48a6ca36d"
+      },
+      "actual_run_manifest": {
+        "artifact_relative_path": "runs/negative-clear-budget-r1/manifest.json",
+        "bytes": 17166,
+        "sha256": "43b8d0c5e69b3e3b2f09a09c91b0e02428d33def5c626ebcf740465e9f3d9d66"
+      },
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "profile": "negative-clear-budget",
+      "duration_seconds": 26.781768,
+      "completed": false,
+      "statistics": {
+        "generated_states": 1493927,
+        "distinct_states": 467473,
+        "remaining_states": 262345
+      },
+      "expected_target": "PerInstanceBudget",
+      "qualified_observation": null,
+      "observation_basis": "原result字段；目标匹配和具体前缀资格由root实际执行及独立reviewer读轨迹确认，本打包阶段仅只读汇总",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ]
+    },
+    {
+      "run_id": "negative-cadence-r1",
+      "classification": "negative_control",
+      "result": {
+        "artifact_relative_path": "runs/negative-cadence-r1/result.json",
+        "bytes": 9377,
+        "sha256": "98882f5fff5600a24babe8827d1b053b6ba9c33b1f51f93e7eebc2895b20c429"
+      },
+      "actual_run_manifest": {
+        "artifact_relative_path": "runs/negative-cadence-r1/manifest.json",
+        "bytes": 17166,
+        "sha256": "43b8d0c5e69b3e3b2f09a09c91b0e02428d33def5c626ebcf740465e9f3d9d66"
+      },
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "profile": "negative-cadence",
+      "duration_seconds": 1.101519,
+      "completed": false,
+      "statistics": {
+        "generated_states": 24,
+        "distinct_states": 9,
+        "remaining_states": 2
+      },
+      "expected_target": "SameIntentCadence",
+      "qualified_observation": null,
+      "observation_basis": "原result字段；目标匹配和具体前缀资格由root实际执行及独立reviewer读轨迹确认，本打包阶段仅只读汇总",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ]
+    },
+    {
+      "run_id": "negative-receipt-id-r1",
+      "classification": "negative_control",
+      "result": {
+        "artifact_relative_path": "runs/negative-receipt-id-r1/result.json",
+        "bytes": 9393,
+        "sha256": "b7cab1492fab53dd2ef28920cb3116c136eafa65d9bcf59b647864541c1c5e9a"
+      },
+      "actual_run_manifest": {
+        "artifact_relative_path": "runs/negative-receipt-id-r1/manifest.json",
+        "bytes": 17166,
+        "sha256": "43b8d0c5e69b3e3b2f09a09c91b0e02428d33def5c626ebcf740465e9f3d9d66"
+      },
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "profile": "negative-receipt-id",
+      "duration_seconds": 1.308971,
+      "completed": false,
+      "statistics": {
+        "generated_states": 137,
+        "distinct_states": 83,
+        "remaining_states": 55
+      },
+      "expected_target": "ReceiptIdentity",
+      "qualified_observation": null,
+      "observation_basis": "原result字段；目标匹配和具体前缀资格由root实际执行及独立reviewer读轨迹确认，本打包阶段仅只读汇总",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ]
+    },
+    {
+      "run_id": "witness-two-same-r1",
+      "classification": "reachability_probe",
+      "result": {
+        "artifact_relative_path": "runs/witness-two-same-r1/result.json",
+        "bytes": 9353,
+        "sha256": "9409e17d78199c13f50ddbfa6f88d9cce6baf37fca8407339f33ce17541fcc8b"
+      },
+      "actual_run_manifest": {
+        "artifact_relative_path": "runs/witness-two-same-r1/manifest.json",
+        "bytes": 18940,
+        "sha256": "a074a426c9c61b09a0684587725fdaf233d64ee35da98fdfcef837b13b520fe5"
+      },
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "profile": "witness-two-same",
+      "duration_seconds": 1.569253,
+      "completed": false,
+      "statistics": {
+        "generated_states": 66,
+        "distinct_states": 40,
+        "remaining_states": 24
+      },
+      "expected_target": "NeverTwoSame",
+      "qualified_observation": null,
+      "observation_basis": "原result字段；目标匹配和具体前缀资格由root实际执行及独立reviewer读轨迹确认，本打包阶段仅只读汇总",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ]
+    },
+    {
+      "run_id": "witness-latest-release-r1",
+      "classification": "reachability_probe",
+      "result": {
+        "artifact_relative_path": "runs/witness-latest-release-r1/result.json",
+        "bytes": 9490,
+        "sha256": "029c812b4baba55ca0d6385d43034f46ade62eb6698e5a4dc753fcbaa753b8e2"
+      },
+      "actual_run_manifest": {
+        "artifact_relative_path": "runs/witness-latest-release-r1/manifest.json",
+        "bytes": 18940,
+        "sha256": "a074a426c9c61b09a0684587725fdaf233d64ee35da98fdfcef837b13b520fe5"
+      },
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "profile": "witness-latest-release",
+      "duration_seconds": 41.512836,
+      "completed": false,
+      "statistics": {
+        "generated_states": 2055820,
+        "distinct_states": 650508,
+        "remaining_states": 377280
+      },
+      "expected_target": "NeverLatestAfterRelease",
+      "qualified_observation": "实际原前缀：两个初始Input发生在E/E发送前；两同向满槽后仅改W，真实释放后发W。不证明满槽后先S再W。",
+      "observation_basis": "原result字段；目标匹配和具体前缀资格由root实际执行及独立reviewer读轨迹确认，本打包阶段仅只读汇总",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ]
+    },
+    {
+      "run_id": "witness-cross-binding-r1",
+      "classification": "reachability_probe",
+      "result": {
+        "artifact_relative_path": "runs/witness-cross-binding-r1/result.json",
+        "bytes": 9452,
+        "sha256": "794409be33175078396cf1425a470715939e22370a27312648f51dbc7705cba2"
+      },
+      "actual_run_manifest": {
+        "artifact_relative_path": "runs/witness-cross-binding-r1/manifest.json",
+        "bytes": 18940,
+        "sha256": "a074a426c9c61b09a0684587725fdaf233d64ee35da98fdfcef837b13b520fe5"
+      },
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "profile": "witness-cross-binding",
+      "duration_seconds": 2.871146,
+      "completed": false,
+      "statistics": {
+        "generated_states": 325,
+        "distinct_states": 196,
+        "remaining_states": 130
+      },
+      "expected_target": "NeverCrossBindingFull",
+      "qualified_observation": null,
+      "observation_basis": "原result字段；目标匹配和具体前缀资格由root实际执行及独立reviewer读轨迹确认，本打包阶段仅只读汇总",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ]
+    },
+    {
+      "run_id": "witness-query-before-return-r1",
+      "classification": "reachability_probe",
+      "result": {
+        "artifact_relative_path": "runs/witness-query-before-return-r1/result.json",
+        "bytes": 9555,
+        "sha256": "2c10f8dd9dec22d433bf26afbaa9075b0f0c5f7faa971859532017fd9d94fcf9"
+      },
+      "actual_run_manifest": {
+        "artifact_relative_path": "runs/witness-query-before-return-r1/manifest.json",
+        "bytes": 18940,
+        "sha256": "a074a426c9c61b09a0684587725fdaf233d64ee35da98fdfcef837b13b520fe5"
+      },
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "profile": "witness-query-before-return",
+      "duration_seconds": 1.886813,
+      "completed": false,
+      "statistics": {
+        "generated_states": 22,
+        "distinct_states": 12,
+        "remaining_states": 5
+      },
+      "expected_target": "NeverQueryBeforeReturn",
+      "qualified_observation": null,
+      "observation_basis": "原result字段；目标匹配和具体前缀资格由root实际执行及独立reviewer读轨迹确认，本打包阶段仅只读汇总",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ]
+    },
+    {
+      "run_id": "witness-ledger-reuse-r1",
+      "classification": "reachability_probe",
+      "result": {
+        "artifact_relative_path": "runs/witness-ledger-reuse-r1/result.json",
+        "bytes": 9496,
+        "sha256": "99811ecd0f396745542b3eb94ba4e08a5bf00adf2fa9ec9f1880fb88a0ddbc55"
+      },
+      "actual_run_manifest": {
+        "artifact_relative_path": "runs/witness-ledger-reuse-r1/manifest.json",
+        "bytes": 18940,
+        "sha256": "a074a426c9c61b09a0684587725fdaf233d64ee35da98fdfcef837b13b520fe5"
+      },
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "profile": "witness-ledger-reuse",
+      "duration_seconds": 6.16283,
+      "completed": false,
+      "statistics": {
+        "generated_states": 87813,
+        "distinct_states": 40637,
+        "remaining_states": 29161
+      },
+      "expected_target": "NeverResolvedLedgerReuse",
+      "qualified_observation": null,
+      "observation_basis": "原result字段；目标匹配和具体前缀资格由root实际执行及独立reviewer读轨迹确认，本打包阶段仅只读汇总",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ]
+    },
+    {
+      "run_id": "witness-stop-with-two-r1",
+      "classification": "reachability_probe",
+      "result": {
+        "artifact_relative_path": "runs/witness-stop-with-two-r1/result.json",
+        "bytes": 9428,
+        "sha256": "97063002c4adfb80078da705111c9c53c3d8d8291589605c5915b6f76b89792f"
+      },
+      "actual_run_manifest": {
+        "artifact_relative_path": "runs/witness-stop-with-two-r1/manifest.json",
+        "bytes": 18940,
+        "sha256": "a074a426c9c61b09a0684587725fdaf233d64ee35da98fdfcef837b13b520fe5"
+      },
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "profile": "witness-stop-with-two",
+      "duration_seconds": 1.930744,
+      "completed": false,
+      "statistics": {
+        "generated_states": 715,
+        "distinct_states": 406,
+        "remaining_states": 288
+      },
+      "expected_target": "NeverStopWithTwo",
+      "qualified_observation": "实际原前缀：两未决move为S/E异向，Unknown触发自动stop；证明独立stop与两个move共存，不证明两同向全松stop。",
+      "observation_basis": "原result字段；目标匹配和具体前缀资格由root实际执行及独立reviewer读轨迹确认，本打包阶段仅只读汇总",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ]
+    },
+    {
+      "run_id": "witness-old-unknown-r1",
+      "classification": "reachability_probe",
+      "result": {
+        "artifact_relative_path": "runs/witness-old-unknown-r1/result.json",
+        "bytes": 9443,
+        "sha256": "f0c7d93623d48e08803af343f5ce7b724e56e910e8fc03014e31bd6acb156863"
+      },
+      "actual_run_manifest": {
+        "artifact_relative_path": "runs/witness-old-unknown-r1/manifest.json",
+        "bytes": 18940,
+        "sha256": "a074a426c9c61b09a0684587725fdaf233d64ee35da98fdfcef837b13b520fe5"
+      },
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "profile": "witness-old-unknown",
+      "duration_seconds": 2.961924,
+      "completed": false,
+      "statistics": {
+        "generated_states": 895,
+        "distinct_states": 562,
+        "remaining_states": 404
+      },
+      "expected_target": "NeverNewerAcceptedOlderUnknown",
+      "qualified_observation": "实际原前缀：id1先Unknown，随后id2Accepted，最终旧Unknown与较新Accepted共存。不证明较新Accepted先到。",
+      "observation_basis": "原result字段；目标匹配和具体前缀资格由root实际执行及独立reviewer读轨迹确认，本打包阶段仅只读汇总",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ]
+    },
+    {
+      "run_id": "witness-same-reject-ignored-r1",
+      "classification": "reachability_probe",
+      "result": {
+        "artifact_relative_path": "runs/witness-same-reject-ignored-r1/result.json",
+        "bytes": 9563,
+        "sha256": "40d82189d3af2fbdd4d68556081e939c2a27f3a678df6c303cdd8cdf625d2f73"
+      },
+      "actual_run_manifest": {
+        "artifact_relative_path": "runs/witness-same-reject-ignored-r1/manifest.json",
+        "bytes": 18940,
+        "sha256": "a074a426c9c61b09a0684587725fdaf233d64ee35da98fdfcef837b13b520fe5"
+      },
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "profile": "witness-same-reject-ignored",
+      "duration_seconds": 3.495591,
+      "completed": false,
+      "statistics": {
+        "generated_states": 4534,
+        "distinct_states": 2090,
+        "remaining_states": 1134
+      },
+      "expected_target": "NeverLateSameRejectIgnored",
+      "qualified_observation": "实际原前缀：id1先Rejected并Handle，随后id2Accepted；旧拒绝未误halt。不证明较新Accepted先到。",
+      "observation_basis": "原result字段；目标匹配和具体前缀资格由root实际执行及独立reviewer读轨迹确认，本打包阶段仅只读汇总",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ]
+    },
+    {
+      "run_id": "witness-old-finally-r1",
+      "classification": "reachability_probe",
+      "result": {
+        "artifact_relative_path": "runs/witness-old-finally-r1/result.json",
+        "bytes": 9425,
+        "sha256": "052f4ba5f5a8b28f3a799e0ca2a00eb44186781e2df21c2c0ec743c3a38450a0"
+      },
+      "actual_run_manifest": {
+        "artifact_relative_path": "runs/witness-old-finally-r1/manifest.json",
+        "bytes": 18940,
+        "sha256": "a074a426c9c61b09a0684587725fdaf233d64ee35da98fdfcef837b13b520fe5"
+      },
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "profile": "witness-old-finally",
+      "duration_seconds": 3.37297,
+      "completed": false,
+      "statistics": {
+        "generated_states": 3896,
+        "distinct_states": 2016,
+        "remaining_states": 1459
+      },
+      "expected_target": "NeverOldFinally",
+      "qualified_observation": "实际原前缀：旧stop finally，local一直FALSE；本原profile不承担旧move entry从TRUE到FALSE的释放资格。",
+      "observation_basis": "原result字段；目标匹配和具体前缀资格由root实际执行及独立reviewer读轨迹确认，本打包阶段仅只读汇总",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ]
+    },
+    {
+      "run_id": "old-guard-absence-r1",
+      "classification": "sensitivity_absence",
+      "result": {
+        "artifact_relative_path": "runs/old-guard-absence-r1/result.json",
+        "bytes": 9378,
+        "sha256": "3a6704e59da397b6d556d663d70bafb65641216622da04992092694c8603376f"
+      },
+      "actual_run_manifest": {
+        "artifact_relative_path": "runs/old-guard-absence-r1/manifest.json",
+        "bytes": 18940,
+        "sha256": "a074a426c9c61b09a0684587725fdaf233d64ee35da98fdfcef837b13b520fe5"
+      },
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "profile": "old-guard-absence",
+      "duration_seconds": 2.788187,
+      "completed": true,
+      "statistics": {
+        "generated_states": 19640,
+        "distinct_states": 7834,
+        "remaining_states": 0
+      },
+      "expected_target": null,
+      "qualified_observation": null,
+      "observation_basis": "原result字段；目标匹配和具体前缀资格由root实际执行及独立reviewer读轨迹确认，本打包阶段仅只读汇总",
+      "warning_codes": [],
+      "error_codes": []
+    },
+    {
+      "run_id": "witness-old-move-finally-r2",
+      "classification": "reachability_probe",
+      "result": {
+        "artifact_relative_path": "runs/witness-old-move-finally-r2/result.json",
+        "bytes": 6502,
+        "sha256": "60d8da5f79db8c65a9eb0c6fbbf4f93f4cf192ab181d957cb4fff909e79389d0"
+      },
+      "actual_run_manifest": {
+        "artifact_relative_path": "runs/witness-old-move-finally-r2/manifest.json",
+        "bytes": 2903,
+        "sha256": "129a8f15f7a2b29b08503ea490af092793b3ed24f9b45cf5d507ea15eebee01a"
+      },
+      "status": "COUNTEREXAMPLE",
+      "reason": "PROPERTY_OR_DEADLOCK_VIOLATION",
+      "profile": "witness-old-move-finally",
+      "duration_seconds": 1.82094,
+      "completed": false,
+      "statistics": {
+        "generated_states": 647,
+        "distinct_states": 378,
+        "remaining_states": 199
+      },
+      "expected_target": "NeverOldFinally",
+      "qualified_observation": "加强profile实际前缀：唯一move自身最新Rejected的Handle触发halt，之后Finally令该move local从TRUE到FALSE；clears=0/current=1，不是外部clear或bind的见证。",
+      "observation_basis": "原result字段；目标匹配和具体前缀资格由root实际执行及独立reviewer读轨迹确认，本打包阶段仅只读汇总",
+      "warning_codes": [],
+      "error_codes": [
+        2110,
+        2121
+      ]
+    },
+    {
+      "run_id": "core-rebinding-completion-r3",
+      "classification": "positive_safety",
+      "result": {
+        "artifact_relative_path": "runs/core-rebinding-completion-r3/result.json",
+        "bytes": 7388,
+        "sha256": "3e69c67c03499d425bf70ae93a1d48e8c47e2bdf63199cb383b7f9d9e5aca290"
+      },
+      "actual_run_manifest": {
+        "artifact_relative_path": "runs/core-rebinding-completion-r3/manifest.json",
+        "bytes": 8994,
+        "sha256": "c54713f1ad2662a63c0cfcf504a780334c5fc6f2e85684c395de9049607d9014"
+      },
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "profile": "core-rebinding",
+      "duration_seconds": 645.107619,
+      "completed": true,
+      "statistics": {
+        "generated_states": 140535032,
+        "distinct_states": 33931337,
+        "remaining_states": 0
+      },
+      "expected_target": null,
+      "qualified_observation": null,
+      "observation_basis": "已完成原result字段与固定输入身份机械校验；不声称独立审查或自然验收",
+      "warning_codes": [],
+      "error_codes": []
+    },
+    {
+      "run_id": "core-deadline-completion-r3",
+      "classification": "positive_safety",
+      "result": {
+        "artifact_relative_path": "runs/core-deadline-completion-r3/result.json",
+        "bytes": 7374,
+        "sha256": "bfb63ddc3084709a405b3866ee08134ae964c856dc65e31894e83d1e0430e24c"
+      },
+      "actual_run_manifest": {
+        "artifact_relative_path": "runs/core-deadline-completion-r3/manifest.json",
+        "bytes": 8994,
+        "sha256": "c54713f1ad2662a63c0cfcf504a780334c5fc6f2e85684c395de9049607d9014"
+      },
+      "status": "PASS_WITHIN_SCOPE",
+      "reason": "COMPLETE_MODEL_CHECK",
+      "profile": "core-deadline",
+      "duration_seconds": 294.138328,
+      "completed": true,
+      "statistics": {
+        "generated_states": 56166377,
+        "distinct_states": 13183795,
+        "remaining_states": 0
+      },
+      "expected_target": null,
+      "qualified_observation": null,
+      "observation_basis": "已完成原result字段与固定输入身份机械校验；不声称独立审查或自然验收",
+      "warning_codes": [],
+      "error_codes": []
+    }
+  ],
+  "pending_root_only": [],
+  "strict_order_scope": "严格“较新Accepted先／旧Unknown或Rejected后”、“两旧同向满槽后S再W”、“全松触发独立stop”与外部clear/bind的针对顺序归root已实际完成的69项单元／session测试；本包不把那些测试结果升级成TLC见证，也不声称现有最短前缀已展示这些严格顺序。",
+  "source_map_origin": {
+    "historical_r2": "contract-source-map-r2.md",
+    "bytes": 10144,
+    "sha256": "1b324fe6b236cafed7b43fad776ce583c9223dcc264def9ac737aad6e84c8f67",
+    "prepared_r1_source_map": {
+      "bytes": 10597,
+      "sha256": "b36d0516fcc5f1d923e0df559f7cff6b331f3f5d301c788f35788e92bca0465d"
+    },
+    "adaptation": "补真实见证前缀资格、25项已结束记录及两个正结果待填；不改20性质或模型。"
+  },
+  "finalized_from": {
+    "source_candidate_manifest_sha256": "fd14bebfc2f81d79701de66f2b483693183d231b05c8ece16cf54182ac182e11",
+    "source_record_count": 25,
+    "added_run_ids": [
+      "core-rebinding-completion-r3",
+      "core-deadline-completion-r3"
+    ]
+  }
+}

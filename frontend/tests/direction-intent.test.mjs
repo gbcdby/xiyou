@@ -64,9 +64,9 @@ test('DIR-CLIENT：两槽满只保留最新意图，全松stop不等待两条旧
 
 test('DIR-CLIENT：原请求400ms未定案只发一次stop并冻结，不积压续发', async t => {
   const time = clock(), calls = [], errors = [];
-  const input = new DirectionIntent({ clock: time, send: async () => { calls.push('move'); return new Promise(() => {}); }, stop: async () => { calls.push('stop'); }, fail: message => errors.push(message) });
+  const input = new DirectionIntent({ clock: time, send: async () => { calls.push({ kind: 'move', at: time.now() }); return new Promise(() => {}); }, stop: async () => { calls.push({ kind: 'stop', at: time.now() }); }, fail: message => errors.push(message) });
   t.after(() => input.clear()); input.set({ x: 1, y: 0 }); await time.advance(1000); input.set({ x: 0, y: 1 }); await time.advance(2000);
-  assert.deepEqual(calls, ['move', 'stop']); assert.equal(errors.length, 1);
+  assert.deepEqual(calls, [{ kind: 'move', at: 0 }, { kind: 'move', at: 100 }, { kind: 'stop', at: 400 }]); assert.equal(errors.length, 1);
 });
 
 test('D66-CLIENT-01：原stop在途时重复全松只合并意图，确认后续发最新持键', async t => {
@@ -87,4 +87,91 @@ test('D66-CLIENT-01：原stop在途时重复全松只合并意图，确认后续
     if (ending === '及时确认') { assert.ok(resumed.length > 0); assert.deepEqual(resumed[0].vector, { x: 1, y: 0 }); }
     else assert.equal(resumed.length, 0, '未知/取消代次的迟到stop不能恢复持键');
   });
+});
+
+
+test('DS2-01/02：同向按原100ms占用第二槽，原ACK不提前下一次同向续发', async t => {
+  const time = clock(), calls = [], complete = [];
+  const input = new DirectionIntent({ clock: time,
+    send: vector => { calls.push({ vector, at: time.now() }); return new Promise(resolve => complete.push(resolve)); }, stop: async () => {} });
+  t.after(() => input.clear());
+  input.set({ x: 1, y: 0 }); await flush();
+  await time.advance(99); assert.equal(calls.length, 1, '同向不能在100ms前用第二槽');
+  await time.advance(100);
+  assert.deepEqual(calls, [{ vector: { x: 1, y: 0 }, at: 0 }, { vector: { x: 1, y: 0 }, at: 100 }], '同向原ACK未回也可使用空第二槽');
+  await time.advance(180); assert.equal(calls.length, 2, '两条原方向都在途时不得增发');
+  complete[0]('accepted'); await flush();
+  assert.equal(calls.length, 2, '释放槽不把同向nextAt提前到ACK时刻');
+  await time.advance(199); assert.equal(calls.length, 2);
+  await time.advance(200); assert.deepEqual(calls[2], { vector: { x: 1, y: 0 }, at: 200 });
+  await time.advance(299); assert.equal(calls.length, 3, '第二和第三条占满两个原槽');
+  input.clear(); complete[1]('accepted'); complete[2]('accepted'); await flush();
+  await time.advance(1000); assert.equal(calls.length, 3, '取消后原回调只收束自己的槽');
+});
+
+
+test('DS2-03/04：两旧同向满槽只续最新改向，旧拒绝不误停而最新拒绝仍停', async t => {
+  const time = clock(), calls = [], complete = [];
+  const input = new DirectionIntent({ clock: time,
+    send: vector => { calls.push({ kind: 'move', vector, at: time.now() }); return new Promise(resolve => complete.push(resolve)); },
+    stop: async () => { calls.push({ kind: 'stop', at: time.now() }); } });
+  t.after(() => input.clear());
+  input.set({ x: 1, y: 0 }); await flush(); await time.advance(100);
+  assert.deepEqual(calls.map(call => call.at), [0, 100]);
+  await time.advance(110); input.set({ x: 0, y: 1 });
+  await time.advance(120); input.set({ x: -1, y: 0 }); await flush();
+  assert.equal(calls.length, 2, '两条已发同向不为改向假释放');
+  await time.advance(180); complete[1]('accepted'); await flush();
+  assert.deepEqual(calls[2], { kind: 'move', vector: { x: -1, y: 0 }, at: 180 }, '只发送当时最新W，不能补发已被替换的S或E');
+  complete[0]('rejected'); await flush();
+  assert.equal(calls.length, 3, 'E1旧拒绝不得停掉已发送的新W');
+  await time.advance(200); complete[2]('rejected'); await flush();
+  assert.deepEqual(calls[3], { kind: 'stop', at: 200 }, '当前最新已发送请求拒绝仍停止');
+  input.set({ x: 0, y: 1 }); await time.advance(1000);
+  assert.equal(calls.length, 4, '拒绝冻结后不由旧回调或新set直接复活');
+});
+
+test('DS2-04：较新同向Accepted不能冲销较旧原请求Unknown或原400ms截止', async t => {
+  for (const ending of ['原请求返回Unknown', '原请求到400ms']) await t.test(ending, async t => {
+    const time = clock(), calls = [], complete = [], errors = [];
+    const input = new DirectionIntent({ clock: time,
+      send: vector => { calls.push({ kind: 'move', vector, at: time.now() }); return new Promise(resolve => complete.push(resolve)); },
+      stop: async () => { calls.push({ kind: 'stop', at: time.now() }); }, fail: message => errors.push(message) });
+    t.after(() => input.clear());
+    input.set({ x: 1, y: 0 }); await flush(); await time.advance(100);
+    assert.deepEqual(calls.map(call => call.at), [0, 100]);
+    await time.advance(150); complete[1]('accepted'); await flush();
+    if (ending === '原请求返回Unknown') {
+      await time.advance(160); complete[0]('unknown'); await flush();
+      assert.deepEqual(calls.map(({ kind, at }) => ({ kind, at })), [{ kind: 'move', at: 0 }, { kind: 'move', at: 100 }, { kind: 'stop', at: 160 }]);
+    } else {
+      await time.advance(399); assert.deepEqual(calls.map(call => call.at), [0, 100, 200]);
+      await time.advance(400);
+      assert.deepEqual(calls.map(({ kind, at }) => ({ kind, at })), [{ kind: 'move', at: 0 }, { kind: 'move', at: 100 }, { kind: 'move', at: 200 }, { kind: 'stop', at: 400 }], '第二次发送和较新成功都不延长E1的原截止');
+      complete[0]('accepted'); complete[2]('accepted'); await flush();
+    }
+    const count = calls.length; input.set({ x: 0, y: 1 }); await time.advance(1000);
+    assert.equal(calls.length, count, 'Unknown后的迟到成功不复活持键');
+    assert.equal(calls.filter(call => call.kind === 'stop').length, 1); assert.equal(errors.length, 1);
+  });
+});
+
+
+test('DS2-04：同intent较新E2已Accepted，E1迟到Rejected不误停且200ms仍续E', async t => {
+  const time = clock(), calls = [], complete = [];
+  const input = new DirectionIntent({ clock: time,
+    send: vector => { calls.push({ kind: 'move', vector, at: time.now() }); return new Promise(resolve => complete.push(resolve)); },
+    stop: async () => { calls.push({ kind: 'stop', at: time.now() }); } });
+  t.after(() => input.clear());
+  input.set({ x: 1, y: 0 }); await flush(); await time.advance(100);
+  assert.deepEqual(calls.map(call => call.at), [0, 100]);
+  await time.advance(150); complete[1]('accepted'); await flush();
+  await time.advance(160); complete[0]('rejected'); await flush();
+  assert.equal(calls.filter(call => call.kind === 'stop').length, 0, '同intent仍必须按已发送id区分旧拒绝');
+  assert.equal(calls.length, 2);
+  await time.advance(199); assert.equal(calls.length, 2, 'E2确认与E1拒绝均不提前100ms原节奏');
+  await time.advance(200);
+  assert.deepEqual(calls[2], { kind: 'move', vector: { x: 1, y: 0 }, at: 200 }, '旧拒绝不能取消当前同向续发');
+  input.clear(); complete[2]('accepted'); await flush(); await time.advance(700);
+  assert.equal(calls.length, 3);
 });

@@ -1,0 +1,234 @@
+{
+  "schema_version": 1,
+  "feature": "D66-DS2 正安全投影：相同状态范围的完整探索资源配置；非自然验收",
+  "tool": {
+    "version": "v1.7.4 / TLC 2.19（沿项目已实际使用字节）",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "model": {
+    "root": "safety",
+    "entry": "DirectionSharedSlots.tla"
+  },
+  "design": {
+    "path": "DESIGN.md",
+    "bytes": 10777,
+    "sha256": "3f9286fb6896b4e346c2899db0705881b710e08fca0cd0512eac2f0ae35e0800",
+    "adoption": "https://github.com/gbcdby/xiyou/issues/66#issuecomment-7000269439"
+  },
+  "implementation_status": "NOT_ASSESSED",
+  "execution_status": "NOT_RUN",
+  "profiles": {
+    "core-shared": {
+      "config": "core-shared.cfg",
+      "timeout_seconds": 240,
+      "workers": 4,
+      "heap_mb": 1024,
+      "expected_invariants": [
+        "TypeOK",
+        "LocalMoveCapacity",
+        "SessionMoveCapacity",
+        "SessionStopCapacity",
+        "OriginalDeadline",
+        "OriginalIdentity",
+        "ReceiptOnlySettlement",
+        "PerInstanceBudget",
+        "SameIntentCadence",
+        "StopSequenceCoverage",
+        "LatestIntentOnly",
+        "UnknownFreezes",
+        "PendingStopBlocks",
+        "LocalDeadlineFirst",
+        "OldCallbackIsolation",
+        "ObsoleteRejectIgnored",
+        "ReceiptIdentity",
+        "CallbackOwnRelease",
+        "ClearRetainsLocal",
+        "NoCallbackResurrection"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有界输入、请求和实例用尽或外部ACK/回调永久不派发是允许停顿；此批仅安全性，不用死锁关闭冒充活性。",
+      "scope": {
+        "parameters": {
+          "MaxRequests": 3,
+          "MaxTime": 1,
+          "MaxInputs": 3,
+          "MaxClears": 0,
+          "ControllerCount": 1,
+          "Fault": "none"
+        },
+        "expected_outcome": "PASS_WITHIN_SCOPE",
+        "kind": "safety",
+        "time_unit_ms": 100,
+        "receipt_due_ticks": 4,
+        "liveness": "NOT_CHECKED",
+        "implementation_status": "NOT_ASSESSED",
+        "excluded": [
+          "PG",
+          "呈现",
+          "硬实时截止保证",
+          "跨controlEpoch序号数值比较",
+          "任意规模",
+          "连续实数时间/50ms token分数"
+        ]
+      },
+      "assumptions": [
+        "仅一个controlEpoch；两个controller是同epoch的不同绑定实例。",
+        "同步发送的局部登记、会话guard及原draft追加在首次await前视为一个原子动作。",
+        "真实Receipt可先于旧Promise的handler/finally；有效Receipt对同一原身份的既定结果一致。",
+        "时钟与deadline任务分开，达到due不强制立刻派发；ACK先与timer先都保留。",
+        "每实例token；clear不重置，重绑定新实例沿原构造初始化。"
+      ]
+    },
+    "core-rebinding": {
+      "config": "core-rebinding.cfg",
+      "timeout_seconds": 900,
+      "workers": 8,
+      "heap_mb": 2048,
+      "expected_invariants": [
+        "TypeOK",
+        "LocalMoveCapacity",
+        "SessionMoveCapacity",
+        "SessionStopCapacity",
+        "OriginalDeadline",
+        "OriginalIdentity",
+        "ReceiptOnlySettlement",
+        "PerInstanceBudget",
+        "SameIntentCadence",
+        "StopSequenceCoverage",
+        "LatestIntentOnly",
+        "UnknownFreezes",
+        "PendingStopBlocks",
+        "LocalDeadlineFirst",
+        "OldCallbackIsolation",
+        "ObsoleteRejectIgnored",
+        "ReceiptIdentity",
+        "CallbackOwnRelease",
+        "ClearRetainsLocal",
+        "NoCallbackResurrection"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有界输入、请求和实例用尽或外部ACK/回调永久不派发是允许停顿；此批仅安全性，不用死锁关闭冒充活性。",
+      "scope": {
+        "parameters": {
+          "MaxRequests": 3,
+          "MaxTime": 1,
+          "MaxInputs": 2,
+          "MaxClears": 1,
+          "ControllerCount": 2,
+          "Fault": "none"
+        },
+        "expected_outcome": "PASS_WITHIN_SCOPE",
+        "kind": "safety",
+        "time_unit_ms": 100,
+        "receipt_due_ticks": 4,
+        "liveness": "NOT_CHECKED",
+        "implementation_status": "NOT_ASSESSED",
+        "excluded": [
+          "PG",
+          "呈现",
+          "硬实时截止保证",
+          "跨controlEpoch序号数值比较",
+          "任意规模",
+          "连续实数时间/50ms token分数"
+        ]
+      },
+      "assumptions": [
+        "仅一个controlEpoch；两个controller是同epoch的不同绑定实例。",
+        "同步发送的局部登记、会话guard及原draft追加在首次await前视为一个原子动作。",
+        "真实Receipt可先于旧Promise的handler/finally；有效Receipt对同一原身份的既定结果一致。",
+        "时钟与deadline任务分开，达到due不强制立刻派发；ACK先与timer先都保留。",
+        "每实例token；clear不重置，重绑定新实例沿原构造初始化。"
+      ]
+    },
+    "core-deadline": {
+      "config": "core-deadline.cfg",
+      "timeout_seconds": 900,
+      "workers": 8,
+      "heap_mb": 2048,
+      "expected_invariants": [
+        "TypeOK",
+        "LocalMoveCapacity",
+        "SessionMoveCapacity",
+        "SessionStopCapacity",
+        "OriginalDeadline",
+        "OriginalIdentity",
+        "ReceiptOnlySettlement",
+        "PerInstanceBudget",
+        "SameIntentCadence",
+        "StopSequenceCoverage",
+        "LatestIntentOnly",
+        "UnknownFreezes",
+        "PendingStopBlocks",
+        "LocalDeadlineFirst",
+        "OldCallbackIsolation",
+        "ObsoleteRejectIgnored",
+        "ReceiptIdentity",
+        "CallbackOwnRelease",
+        "ClearRetainsLocal",
+        "NoCallbackResurrection"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有界输入、请求和实例用尽或外部ACK/回调永久不派发是允许停顿；此批仅安全性，不用死锁关闭冒充活性。",
+      "scope": {
+        "parameters": {
+          "MaxRequests": 3,
+          "MaxTime": 4,
+          "MaxInputs": 1,
+          "MaxClears": 0,
+          "ControllerCount": 2,
+          "Fault": "none"
+        },
+        "expected_outcome": "PASS_WITHIN_SCOPE",
+        "kind": "safety",
+        "time_unit_ms": 100,
+        "receipt_due_ticks": 4,
+        "liveness": "NOT_CHECKED",
+        "implementation_status": "NOT_ASSESSED",
+        "excluded": [
+          "PG",
+          "呈现",
+          "硬实时截止保证",
+          "跨controlEpoch序号数值比较",
+          "任意规模",
+          "连续实数时间/50ms token分数"
+        ]
+      },
+      "assumptions": [
+        "仅一个controlEpoch；两个controller是同epoch的不同绑定实例。",
+        "同步发送的局部登记、会话guard及原draft追加在首次await前视为一个原子动作。",
+        "真实Receipt可先于旧Promise的handler/finally；有效Receipt对同一原身份的既定结果一致。",
+        "时钟与deadline任务分开，达到due不强制立刻派发；ACK先与timer先都保留。",
+        "每实例token；clear不重置，重绑定新实例沿原构造初始化。"
+      ]
+    }
+  },
+  "projection": {
+    "from_sha256": "c50dacfdc8233af7506dc59a59413e84adfc44e239b34e480608c76e14c1c53b",
+    "map": "P(s)=[s EXCEPT !.seen={}]",
+    "excluded_use": "任何Never*可达性探针；此类仍用controls-r1原c50模型。",
+    "prior_result": "core-shared-r2 60.574925s TIMEOUT/INCONCLUSIVE，原scope未完成，原件保留。"
+  },
+  "resource_adaptation": {
+    "reason": "两次60秒有限探索未穷尽；保持模型、cfg、全部20性质和所有状态边界，独立增加完整穷尽资源。",
+    "prior_result": "../runs/core-shared-r3-projected/result.json",
+    "prior_result_sha256": "8320e853845f70d7e96fd6be2e1b632b1269855d0203cc3d3e05ad7332b3827a",
+    "natural_budget_change": false,
+    "rebinding_followup": {
+      "reason": "原240秒跨绑定配置持续探索而未穷尽；维持相同787模型、cfg、20性质、有限参数和BFS，独立增加该profile计算资源。",
+      "prior_result": "../runs/core-rebinding-completion-r1/result.json",
+      "prior_result_sha256": "8dbe6c84330fff5c14dc5eed61a980a3e4f1fe04a7db0b32a503df5c922e6ae1",
+      "natural_budget_change": false,
+      "guaranteed_completion": false
+    },
+    "deadline_followup": {
+      "reason": "原240秒截止配置持续探索而未穷尽；维持相同787模型、cfg、20性质、有限参数和BFS，独立增加该profile计算资源。",
+      "prior_result": "../runs/core-deadline-completion-r1/result.json",
+      "prior_result_sha256": "d2e683fc2c2b5cfdc1af01133a8cc70862c1df04e23ae55545c8018b01df361c",
+      "natural_budget_change": false,
+      "guaranteed_completion": false
+    }
+  }
+}
