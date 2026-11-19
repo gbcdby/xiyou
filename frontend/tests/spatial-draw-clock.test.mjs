@@ -3,6 +3,7 @@ import test from 'node:test';
 import { readFile } from 'node:fs/promises';
 import ts from 'typescript';
 import { ConfirmedMotion } from '../src/domain/spatial-motion.ts';
+import { spatialSnapshot, selfRef } from './spatial-fixture.mjs';
 import { createSpatialSnapshotSource } from '../src/domain/spatial-snapshot-source.ts';
 import { visibleSelf } from '../src/rendering/spatial-presentation.ts';
 import { assertPaintContinuity } from './canvas-browser-support.mjs';
@@ -100,9 +101,9 @@ test('draw只采一次当前时钟，paint、视觉到达与下一帧判断消�
   const motion = new ConfirmedMotion();
   motion.update(baseline, 0); motion.update(primer, 100); motion.update(current, 100);
   assert.equal(motion.hasPendingMotion(trace.identity.entityRef, 150), true); assert.equal(motion.active(150), true);
-  const pendingMotion = motion.hasPendingMotion.bind(motion), active = motion.active.bind(motion);
+  const pendingMotion = motion.hasPendingMotion.bind(motion), needsFrame = motion.needsFrame.bind(motion);
   motion.hasPendingMotion = (reference, now) => { calls.push(['hasPendingMotion', now]); return pendingMotion(reference, now); };
-  motion.active = now => { calls.push(['active', now]); return active(now); };
+  motion.needsFrame = now => { calls.push(['needsFrame', now]); return needsFrame(now); };
   const input = createSpatialSnapshotSource(), stale = snapshot(trace.updates[0]);
   const subscription = input.source.subscribe(() => {}, assert.fail); input.publish(current);
   const draw = drawCallback({ props: { snapshot: stale, snapshotSource: input.source }, canvas: controlledCanvas(), displaySnapshot: { value: stale }, snapshotSubscription: subscription, failed: { value: false }, reducedMotion: false,
@@ -112,5 +113,22 @@ test('draw只采一次当前时钟，paint、视觉到达与下一帧判断消�
     emit() {}, schedule() { scheduled++; } });
   draw(266.6666666667);
   subscription.close();
-  assert.equal(clockReads, 1); assert.deepEqual(calls, [['paint', 150], ['hasPendingMotion', 150], ['active', 150]]); assert.equal(scheduled, 1);
+  assert.equal(clockReads, 1); assert.deepEqual(calls, [['paint', 150], ['hasPendingMotion', 150], ['needsFrame', 150]]); assert.equal(scheduled, 1);
+});
+
+test('RD-07：实际draw采样在运动尾前，paint跨尾后仍安排最后idle帧', () => {
+  const first = spatialSnapshot(); first.projection.sceneTimeMs = 0; first.snapshotSeq = '1';
+  const point = first.projection.self.position, current = structuredClone(first), end = { x: point.x + 10, y: point.y };
+  current.snapshotSeq = '2'; current.projection.sceneTimeMs = 100; current.projection.self.position = end;
+  Object.assign(current.projection.entities[0], { position: end, motionTrail: [point, end], motionFromSceneTimeMs: 0, motionThroughSceneTimeMs: 100,
+    motionTimeline: [{ kind: 'motion', fromTrailIndex: 0, throughTrailIndex: 1, fromSceneTimeMs: 0, throughSceneTimeMs: 100 }] });
+  const motion = new ConfirmedMotion(); motion.update(first, 0); motion.update(current, 0);
+  let clock = 99, scheduled = 0; const painted = [], queryAt = [], needsFrame = motion.needsFrame.bind(motion);
+  motion.needsFrame = now => { queryAt.push(now); return needsFrame(now); };
+  const draw = drawCallback({ props: { snapshot: current }, displaySnapshot: { value: current }, motion, canvas: controlledCanvas(), failed: { value: false }, reducedMotion: false,
+    performance: { now: () => clock }, emit() {}, schedule() { scheduled++; },
+    painter: { paint(value, actualMotion, now) { const pose = actualMotion.pose(selfRef, now); painted.push(pose); clock += 2; return drawnFrame(value, pose); } } });
+  draw(); assert.equal(painted[0].moving, true); assert.equal(clock, 101); assert.equal(scheduled, 1);
+  draw(); assert.equal(painted[1].moving, false); assert.deepEqual(painted[1].position, end); assert.equal(scheduled, 1);
+  assert.deepEqual(queryAt, [99, 101], '续绘消费本帧采样值，不能用跨尾后的完成时刻停掉最后idle');
 });

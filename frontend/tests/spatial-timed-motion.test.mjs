@@ -85,6 +85,67 @@ function holding(through = 50, spans = [['hold', 0, through, 0, 1]]) {
   motion.update(snapshot, 0); return { motion, snapshot, point };
 }
 
+test('RD-01/04：纯hold不需自动续绘，但完整时长和真实封口信用保持', () => {
+  const { motion, snapshot } = holding(100, [['hold', 0, 50, 0, 0], ['hold', 50, 100, 0, 1]]);
+  const before = [motion.pose(selfRef, 25), motion.pose(selfRef, 75), motion.pose(selfRef, 100)];
+  assert.equal(present(motion, snapshot, 25, 1, 'canvas', 30), true);
+  for (const at of [25, 75, 100, 120, 25]) assert.equal(motion.needsFrame(at), false);
+  assert.equal(motion.active(25), true); assert.equal(motion.settled(selfRef, 99), false);
+  assert.equal(motion.settled(selfRef, 100), true); assert.equal(motion.presentationCreditMs, 0);
+  assert.deepEqual([motion.pose(selfRef, 25), motion.pose(selfRef, 75), motion.pose(selfRef, 100)], before, '查询不剪段、不快进、不移动锚点');
+  motion.sealPresentation(120); assert.equal(motion.presentationCreditMs, 20, '只有真实封口计算完整hold尾后的后缀');
+  motion.needsFrame(150); motion.sealPresentation(150); assert.equal(motion.presentationCreditMs, 20, '查询不能重开或重复计入凭据');
+});
+
+test('RD-02：只看当前moving不足，未来运动、折返、零几何与legacy均继续绘制', () => {
+  const point = { x: 950, y: 650 }, other = { x: 960, y: 650 };
+  for (const [points, spans, queryAt] of [
+    [[point, other], [['hold', 0, 50, 0, 0], ['motion', 50, 100, 0, 1]], 25],
+    [[point, other, point], [['motion', 0, 30, 0, 1], ['hold', 30, 60, 1, 1], ['motion', 60, 100, 1, 2]], 45],
+    [[point, other, point], [['hold', 0, 50, 0, 0], ['motion', 50, 100, 0, 2]], 25],
+    [[point, point], [['hold', 0, 50, 0, 0], ['motion', 50, 100, 0, 1]], 25],
+  ]) {
+    const motion = new ConfirmedMotion(), first = baseline(0); motion.update(first, 0);
+    motion.update(timed(first, 100, points, spans, null), 0);
+    assert.equal(motion.pose(selfRef, queryAt).moving, false);
+    assert.equal(motion.needsFrame(queryAt), true); assert.equal(motion.needsFrame(99), true);
+    assert.equal(motion.needsFrame(100), false); assert.equal(motion.settled(selfRef, 100), true);
+  }
+  const legacy = holding(), next = timed(legacy.snapshot, 100, [point, point], [['hold', 50, 100, 0, 1]], null);
+  delete next.projection.entities[0].motionTimeline; legacy.motion.update(next, 25);
+  assert.equal(legacy.motion.pose(selfRef, 30).moving, false); assert.equal(legacy.motion.needsFrame(30), true);
+  assert.equal(legacy.motion.needsFrame(99), true); assert.equal(legacy.motion.needsFrame(100), false);
+});
+
+test('RD-03：本人纯hold不能停止另一实体的旧协议运动', () => {
+  const first = baseline(0), npc = { ...structuredClone(first.projection.entities[0]), entityRef: 'npc-redraw', position: { x: 700, y: 500 } };
+  first.projection.entities.push(npc); const motion = new ConfirmedMotion(); motion.update(first, 0);
+  const point = first.projection.self.position, next = timed(first, 200, [point, point], [['hold', 0, 200, 0, 1]], null);
+  const end = { x: 718, y: 500 };
+  Object.assign(next.projection.entities[1], { position: end, motionTrail: [npc.position, end], motionFromSceneTimeMs: 0, motionThroughSceneTimeMs: 100 });
+  motion.update(next, 0);
+  assert.equal(motion.pose(selfRef, 25).moving, false); assert.equal(motion.pose(npc.entityRef, 25).moving, true);
+  assert.equal(motion.needsFrame(25), true); assert.equal(motion.needsFrame(100), false);
+  assert.equal(motion.active(100), true); assert.equal(motion.settled(selfRef, 199), false);
+});
+
+test('RD-01：非有限时间、异点或无法证明的hold保守续绘', () => {
+  const valid = holding(); for (const now of [NaN, Infinity, -Infinity]) assert.equal(valid.motion.needsFrame(now), true);
+  const point = { x: 950, y: 650 }, other = { x: 960, y: 650 };
+  for (const [points, spans, updateAt] of [
+    [[point, other], [['hold', 0, 100, 0, 1]], 0],
+    [[point, point], [['hold', 0, 100, 1, 0]], 0],
+    [[point, point], [['hold', 0, Infinity, 0, 1]], 0],
+    [[point, point], [['hold', 0, 100, 0, 1]], NaN],
+    [[point, point], [['unknown', 0, 100, 0, 1]], 0],
+    [[point, { x: NaN, y: 650 }, point], [['hold', 0, 100, 0, 2]], 0],
+  ]) {
+    const motion = new ConfirmedMotion(), first = baseline(0); motion.update(first, 0);
+    const next = timed(first, 100, points, spans, null), original = structuredClone(next);
+    motion.update(next, updateAt); assert.equal(motion.needsFrame(25), true); assert.deepEqual(next, original, '防御查询不更改输入');
+  }
+});
+
 test('TIME-03：纯hold帧凭据只在封口时计入完整队列尾后的历史后缀', () => {
   const { motion, snapshot } = holding();
   assert.equal(present(motion, snapshot, 25), true); assert.equal(motion.presentationCreditMs, 0);

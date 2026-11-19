@@ -302,6 +302,34 @@ export class ConfirmedMotion {
   }
   active(now: number): boolean { return [...this.#motions.values()].some(value => value.trail && now < value.startedAt + value.duration)
     || [...this.#timed.values()].some(value => { const last = value.segments.at(-1); return last && now < last.startedAt + last.duration; }); }
+  /** 只决定是否自动续绘；纯hold仍保留全部播放时间，查询不改变队列或呈现信用。 */
+  needsFrame(now: number): boolean {
+    if (!Number.isFinite(now)) return true;
+    for (const value of this.#motions.values()) {
+      if (value.trail && (!Number.isFinite(value.startedAt) || !Number.isFinite(value.duration)
+        || !Number.isFinite(value.startedAt + value.duration) || now < value.startedAt + value.duration)) return true;
+    }
+    for (const value of this.#timed.values()) {
+      const pending: TimedSegment[] = [];
+      for (const piece of value.segments) {
+        const endAt = piece.startedAt + piece.duration;
+        if (!Number.isFinite(piece.startedAt) || !Number.isFinite(piece.duration) || piece.duration <= 0 || !Number.isFinite(endAt)) return true;
+        if (now >= endAt) continue;
+        // 未来段也必须检查；零几何motion和legacy仍须等到原时间结束。
+        if (piece.kind !== 'hold') return true;
+        pending.push(piece);
+      }
+      if (!pending.length) continue;
+      const pose = timedPose(value, now);
+      if (pose.moving || !Number.isFinite(pose.position.x) || !Number.isFinite(pose.position.y) || !Number.isFinite(pose.distance)) return true;
+      for (const piece of pending) {
+        if (!piece.trail.length || !piece.trail.every(point => same(point, pose.position))) return true;
+        const end = piecePose(piece, piece.startedAt + piece.duration);
+        if (!same(end.position, pose.position) || end.facing !== pose.facing || end.distance !== pose.distance || end.moving) return true;
+      }
+    }
+    return false;
+  }
 }
 
 function timedPoseOrLegacy(motion: ConfirmedMotion, reference: string, now: number, position: Position, facing: Facing): DrawnPose {

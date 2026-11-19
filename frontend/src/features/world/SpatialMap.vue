@@ -74,7 +74,7 @@ function draw() {
     const key = `${snapshot.viewId}:${p.self.controlEpoch}:${p.movement.movementId}:${p.movement.movementCommandSeq}`;
     if (settledKey !== key) { settledKey = key; emit('settled', { viewId: snapshot.viewId, epoch: p.self.controlEpoch, movementId: p.movement.movementId, sequence: p.movement.movementCommandSeq, position: p.self.position }); }
   }
-  if (!reducedMotion && motion.active(now)) schedule();
+  if (!reducedMotion && motion.needsFrame(now)) schedule();
 }
 function resize() {
   presentation?.invalidate();

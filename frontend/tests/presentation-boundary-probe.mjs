@@ -22,7 +22,7 @@ export function installCanvasBoundaryProbe() {
     if (!pending) return Reflect.apply(originalPaint, this, arguments);
     const canvas = front(), row = { mode: pending, sampledAt, hasProductionCallback: typeof options.beforeFrontWrite === 'function',
       previousSerial: readCanvasFrame(canvas)?.serial, events: [], queries: [] };
-    const run = { row, canvas, motion, pixels: pixels(canvas), bufferSeen: false, waitingActive: false };
+    const run = { row, canvas, motion, pixels: pixels(canvas), bufferSeen: false, waitingFrameQuery: false };
     pending = null; rows.push(row); current = run; last = run;
     try {
       if (row.mode === 'null-result') { row.nullResult = true; return null; }
@@ -61,14 +61,14 @@ export function installCanvasBoundaryProbe() {
     try {
       if (run.row.mode === 'painted-error') throw new Error('受控成功返回后资格失败');
       const accepted = Reflect.apply(originalPainted, this, arguments);
-      run.row.accepted = accepted; run.row.creditAfterPaint = run.motion.presentationCreditMs; run.waitingActive = true; return accepted;
+      run.row.accepted = accepted; run.row.creditAfterPaint = run.motion.presentationCreditMs; run.waitingFrameQuery = true; return accepted;
     } finally { presenting = null; }
   };
-  for (const name of ['settled', 'active']) {
+  for (const name of ['settled', 'needsFrame']) {
     const original = ConfirmedMotion.prototype[name];
     ConfirmedMotion.prototype[name] = function (...args) {
-      const run = presenting ?? (name === 'active' && last?.waitingActive ? last : null);
-      if (run?.motion === this) { run.row.queries.push({ name, at: args.at(-1) }); if (name === 'active') run.waitingActive = false; }
+      const run = presenting ?? (name === 'needsFrame' && last?.waitingFrameQuery ? last : null);
+      if (run?.motion === this) { run.row.queries.push({ name, at: args.at(-1) }); if (name === 'needsFrame') run.waitingFrameQuery = false; }
       return Reflect.apply(original, this, args);
     };
   }
