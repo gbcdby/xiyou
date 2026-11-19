@@ -50,9 +50,11 @@ export async function advanceSpatialTime(tx) {
     if (!isSpatial(tx.state) || ['Finished', 'Aborted'].includes(tx.state.phase))
         return;
     const wall = Date.parse(tx.time), actors = Object.values(tx.state.characters).filter(a => a.kind === 'human' && a.mode === 'HumanControlled');
+    const rows = actors.length ? (await tx.client.query('SELECT connection_id,active,lease_until FROM connections WHERE connection_id=ANY($1::text[])', [actors.map(a => a.activeConnectionId)])).rows : [];
+    const byConnection = new Map(rows.map(row => [row.connection_id, row]));
     const leases = [];
     for (const a of actors) {
-        const row = (await tx.client.query('SELECT active,lease_until FROM connections WHERE connection_id=$1', [a.activeConnectionId])).rows[0];
+        const row = byConnection.get(a.activeConnectionId);
         if (row)
             leases.push({ actorId: a.characterId, active: row.active, until: Date.parse(row.lease_until) });
     }

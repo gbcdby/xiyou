@@ -326,3 +326,118 @@ test('A2 用途参数与结束轮在未知确认、恢复换视图后逐字重�
   assert.deepEqual(originals.map(raw => JSON.parse(raw).action), actions);
   restored.client.close();
 });
+
+
+// 只在测试内见证严格 JSON 入口；保留原编码器的 this、参数、返回与异常。
+function observeDraftParses(t) {
+  const counts = new Map(), original = TextEncoder.prototype.encode;
+  t.mock.method(TextEncoder.prototype, 'encode', function (...args) {
+    if (typeof args[0] === 'string') counts.set(args[0], (counts.get(args[0]) ?? 0) + 1);
+    return Reflect.apply(original, this, args);
+  });
+  return raw => counts.get(raw) ?? 0;
+}
+
+test('D66-DEC：同草稿原串的公开方向检查复用完整解析，新确认对象独立校验', async t => {
+  const parses = observeDraftParses(t), h = harness(); t.after(() => h.client.close());
+  h.client.open('spatial-room', 'token'); h.handlers.connected(); await flush(); await h.client.control('resume');
+  await h.client.send({ kind: 'wait' });
+  const draft = h.client.state.actions[0], raw = draft.raw;
+  assert.equal(draft.status, 'accepted');
+  assert.equal(parses(raw), 2, '发送草稿与确认后新草稿分别完成一次严格解析，不跨对象复用');
+  h.client.setDirection({ x: 1, y: 0 });
+  for (let index = 0; index < 8; index++) h.client.setDirection({ x: 1, y: 0 });
+  await flush();
+  assert.equal(h.client.state.actions.find(value => value.id === draft.id), draft);
+  assert.equal(parses(raw), 2, '同一个已确认草稿反复进入方向检查不再执行完整解析');
+  const requests = h.requests.filter(value => value.event === 'player.action.request').map(value => JSON.parse(value.value));
+  assert.deepEqual(requests.map(value => value.action.kind), ['wait', 'move_to']);
+  assert.equal(requests[0].clientActionId, draft.id); assert.equal(h.requests.find(value => value.event === 'player.action.request').value, raw);
+});
+
+test('D66-DEC：raw改写重新严格校验、失败不缓存，同原串的状态裁决仍实时进行', async t => {
+  const parses = observeDraftParses(t), h = harness(); t.after(() => h.client.close());
+  h.client.open('spatial-room', 'token'); h.handlers.connected(); await flush(); await h.client.control('resume');
+  await h.client.send({ kind: 'wait' });
+  const draft = h.client.state.actions[0], original = draft.raw, envelope = JSON.parse(original);
+  const duplicate = original.replace('"schemaVersion":2', '"schemaVersion":2,"schemaVersion":2');
+  const missingField = JSON.stringify({ ...envelope, action: { kind: 'move_direction', sceneId: 'yard', direction: 'S', movementCommandSeq: '99' } });
+  assert.notEqual(duplicate, original);
+  const wires = () => h.requests.filter(value => value.event === 'player.action.request').length;
+  for (const invalid of [duplicate, missingField]) {
+    draft.raw = invalid;
+    for (let attempt = 0; attempt < 2; attempt++) {
+      h.client.setDirection({ x: 0, y: 1 });
+      assert.equal(wires(), 1, '完整校验失败时不能发出方向请求');
+    }
+    assert.equal(parses(invalid), 2, '失败串每次重新严格解析，不复用失败或旧成功结果');
+  }
+  const changed = JSON.stringify({ ...envelope, action: { kind: 'stop_move', movementCommandSeq: '99' } });
+  draft.raw = changed; draft.status = 'unknown';
+  h.client.setDirection({ x: 0, y: 1 });
+  assert.equal(parses(changed), 1); assert.equal(wires(), 1);
+  assert.match(h.client.state.message, /上一项移动或停步结果尚未确认/);
+  draft.status = 'rejected';
+  h.client.setDirection({ x: 0, y: 1 }); await flush();
+  assert.equal(parses(changed), 1, '缓存仅复用解析，不缓存上一次Unknown阻塞裁决');
+  assert.equal(wires(), 2, '当前状态解除阻塞后，原方向逻辑继续发送');
+});
+
+test('D66-DEC：草稿raw变化后旧Receipt不能借缓存中的旧动作身份通过', async t => {
+  const h = harness(); t.after(() => h.client.close());
+  h.client.open('spatial-room', 'token'); h.handlers.connected(); await flush(); await h.client.control('resume');
+  let finish;
+  h.actionReplies.push(request => new Promise(resolve => {
+    finish = () => resolve({ schemaVersion: 2, sessionId: request.sessionId, clientActionId: request.clientActionId,
+      status: 'Accepted', code: 'OK', observedSeq: '10', actionEventRange: null, result: { status: 'cancelled' } });
+  }));
+  const pending = h.client.send({ kind: 'wait' }); await flush();
+  const draft = h.client.state.actions[0], original = draft.raw;
+  draft.raw = JSON.stringify({ ...JSON.parse(original), clientActionId: 'changed-while-waiting' });
+  finish(); await pending;
+  const current = h.client.state.actions.find(value => value.id === draft.id);
+  assert.equal(current.status, 'unknown'); assert.equal(current.receipt, null);
+  assert.match(current.detail, /收据校验未通过/);
+  assert.equal(current.raw, draft.raw);
+  assert.deepEqual(h.requests.filter(value => value.event === 'player.action.request').map(value => value.value), [original], '原请求只发送一次且保持原字节');
+});
+
+test('D66-DEC：客户端及草稿对象各自缓存，open仍检查当前session与draft身份', async t => {
+  const parses = observeDraftParses(t), first = harness(), second = harness();
+  t.after(() => { first.client.close(); second.client.close(); });
+  const raw = JSON.stringify({ schemaVersion: 2, sessionId: 'spatial-room', viewId: 'spatial-view-1', actorRef: selfRef,
+    clientActionId: 'cached-open', controlEpoch: '2', baseSeq: '1', action: { kind: 'wait' } });
+  const draft = { id: 'cached-open', raw, status: 'unknown', detail: '', receipt: null };
+  first.client.open('spatial-room', 'token', [draft]); second.client.open('spatial-room', 'token', [draft]);
+  assert.equal(parses(raw), 2, '同一个外部对象在两个客户端各自完整校验');
+  assert.equal(first.client.state.actions.length, 1); assert.equal(second.client.state.actions.length, 1);
+  assert.notEqual(first.client.state.actions[0], draft); assert.notEqual(first.client.state.actions[0], second.client.state.actions[0]);
+  first.client.open('spatial-room', 'token', [{ ...draft }]);
+  assert.equal(parses(raw), 3, '同id同raw的新对象不能命中旧对象缓存');
+  first.client.open('other-room', 'token', [draft]);
+  assert.equal(first.client.state.actions.length, 0, '解析缓存不能绕过当前session匹配');
+  draft.id = 'different-id'; second.client.open('spatial-room', 'token', [draft]);
+  assert.equal(second.client.state.actions.length, 0, '解析缓存不能绕过当前draft.id匹配');
+  assert.equal(parses(raw), 3, '命中只省去严格解析，当前匹配判断仍独立执行');
+
+  // 恢复时生成的新内部草稿尚未解析；运行时缺少raw仍须进入原严格解析器。
+  const { parseSpatial } = await import('../../protocol/spatial.mjs');
+  let release;
+  const waiting = new Promise(resolve => { release = resolve; });
+  const uncached = harness({}, () => waiting);
+  t.after(() => { uncached.client.close(); release(null); });
+  const external = { id: 'uncached-undefined', raw: JSON.stringify({ ...JSON.parse(raw), clientActionId: 'uncached-undefined' }), status: 'unknown', detail: '', receipt: null };
+  uncached.client.open('spatial-room', 'token', [external]); uncached.handlers.connected(); await flush();
+  const restored = uncached.client.state.actions[0];
+  assert.notEqual(restored, external); assert.equal(restored.status, 'unknown');
+  restored.raw = undefined;
+  let expected;
+  try { parseSpatial('PublicEnvelope', undefined); } catch (failure) { expected = failure; }
+  assert.ok(expected); assert.notEqual(expected.constructor, TypeError);
+  for (let attempt = 0; attempt < 2; attempt++) {
+    await assert.rejects(uncached.client.retry(restored.id), failure => failure.constructor === expected.constructor
+      && failure.message === expected.message && failure.code === expected.code,
+    '未缓存且raw缺失时不能跳到cached.envelope的TypeError，必须保留原parser异常');
+  }
+  assert.equal(uncached.requests.filter(value => value.event === 'player.action.request').length, 0);
+});

@@ -52,6 +52,7 @@ export class SpatialSessionClient {
   #view = new SpatialView(); #api: ReceiptReader; #connect: ConnectLink; #options: Required<Options>;
   #link: SessionLink | null = null; #serial = 0; #sessionId = ''; #token = '';
   #connection: ConnectionState = 'idle'; #message = ''; #actions: SpatialDraft[] = [];
+  #draftEnvelopes = new WeakMap<SpatialDraft, { raw: string; envelope: PublicEnvelope }>();
   #source: MovementCommandSource | null = null; #queued: QueuedAction | null = null; #controlBusy = false;
   #pendingControl: { request: ControlRequestV2; raw: string; serial: number } | null = null;
   #heartbeat: ReturnType<typeof setInterval> | null = null; #retryTimer: ReturnType<typeof setTimeout> | null = null;
@@ -90,7 +91,7 @@ export class SpatialSessionClient {
       this.#direction.clear(); this.#directionBinding = binding;
       const fail = (message: string) => { this.#message = message; this.#publish(); };
       this.#direction = enabled ? new DirectionIntent({ send: vector => this.#sendDirectionIntent(vector), stop: () => this.#stopDirection(), canSend: () => this.#hasDirectionCapacity(), fail, uncertain: () => {
-        this.#actions = this.#actions.map(draft => draft.status === 'waiting' && ['move_direction', 'stop_move'].includes(parseSpatial('PublicEnvelope', draft.raw).action.kind)
+        this.#actions = this.#actions.map(draft => draft.status === 'waiting' && ['move_direction', 'stop_move'].includes(this.#draftEnvelope(draft).action.kind)
           ? { ...draft, status: 'unknown', detail: '原移动结果尚未确认，请查询或原样重试。' } : draft);
       } }) : new ContinuousDirection({ send: vector => this.#moveDirection(vector), stop: () => this.#stopDirection(), reset: () => { this.#directionAnchor = null; }, fail });
     }
@@ -103,7 +104,7 @@ export class SpatialSessionClient {
     this.#actions = retainActions(this.#actions.map(a => a.id === id ? (a.receipt && (patch.status === 'unknown' || patch.status === 'waiting') ? a : { ...a, ...patch }) : a));
     const draft = this.#actions.find(value => value.id === id);
     if (draft?.status !== 'waiting') this.#clearDirectionDeadline(id);
-    const kind = draft && parseSpatial('PublicEnvelope', draft.raw).action.kind;
+    const kind = draft && this.#draftEnvelope(draft).action.kind;
     const becameUnknown = draft?.status === 'unknown' && before?.status !== 'unknown' && (kind === 'move_direction' || kind === 'stop_move' && this.#direction instanceof DirectionIntent);
     // Unknown冻结会话待发意图；后续查询只收束原串，不能恢复未知前的持键。
     if (becameUnknown) this.#direction.clear();
@@ -113,21 +114,29 @@ export class SpatialSessionClient {
     if (becameUnknown && kind === 'move_direction' && !this.#pendingStop() && this.#needsDirectionStop()) void this.#stopDirection().catch(() => {});
     if (this.#direction instanceof DirectionIntent) this.#direction.refresh();
   }
+  #draftEnvelope(draft: SpatialDraft): PublicEnvelope {
+    const raw = draft.raw, cached = this.#draftEnvelopes.get(draft);
+    // 仅复用同草稿、同原串的完整校验结果；当前绑定与动作状态仍由调用方检查。
+    if (cached && cached.raw === raw) return cached.envelope;
+    const envelope = parseSpatial('PublicEnvelope', raw);
+    this.#draftEnvelopes.set(draft, { raw, envelope });
+    return envelope;
+  }
   #hasDirectionCapacity() {
     let directions = 0;
     for (const draft of this.#actions) {
       if (!['waiting', 'unknown'].includes(draft.status)) continue;
-      const kind = parseSpatial('PublicEnvelope', draft.raw).action.kind;
+      const kind = this.#draftEnvelope(draft).action.kind;
       if (kind === 'stop_move' || draft.status === 'unknown' && ['move_to', 'move_direction'].includes(kind)) return false;
       if (kind === 'move_direction') directions++;
     }
     return directions < 2;
   }
-  #pendingStop() { return this.#actions.some(draft => ['waiting', 'unknown'].includes(draft.status) && parseSpatial('PublicEnvelope', draft.raw).action.kind === 'stop_move'); }
+  #pendingStop() { return this.#actions.some(draft => ['waiting', 'unknown'].includes(draft.status) && this.#draftEnvelope(draft).action.kind === 'stop_move'); }
   #needsDirectionStop() {
     let move = '0', stop = '0';
     for (const draft of this.#actions) {
-      const envelope = parseSpatial('PublicEnvelope', draft.raw), action = envelope.action;
+      const envelope = this.#draftEnvelope(draft), action = envelope.action;
       if (envelope.sessionId !== this.#sessionId || envelope.controlEpoch !== this.#source?.controlEpoch) continue;
       if (action.kind === 'move_direction' && compareDecimal(action.movementCommandSeq, move) > 0) move = action.movementCommandSeq;
       if (action.kind === 'stop_move' && draft.status !== 'rejected' && compareDecimal(action.movementCommandSeq, stop) > 0) stop = action.movementCommandSeq;
@@ -142,7 +151,7 @@ export class SpatialSessionClient {
   #clearDirectionDeadlines() { for (const id of this.#directionDeadlines.keys()) this.#clearDirectionDeadline(id); }
   #releaseControlIdle() { for (const resolve of this.#controlIdleWaiters.splice(0)) resolve(); }
   #armDirectionDeadline(draft: SpatialDraft) {
-    const kind = parseSpatial('PublicEnvelope', draft.raw).action.kind;
+    const kind = this.#draftEnvelope(draft).action.kind;
     if (kind !== 'move_direction' && !(kind === 'stop_move' && this.#direction instanceof DirectionIntent)) return;
     this.#clearDirectionDeadline(draft.id);
     // 原请求在会话账本计时；地图/视图重新绑定不延长400ms，也不丢失未决原串。
@@ -154,7 +163,7 @@ export class SpatialSessionClient {
   open(sessionId: string, token: string, drafts: SpatialDraft[] = []) {
     this.close(); this.#sessionId = sessionId; this.#token = token;
     this.#actions = drafts.flatMap(draft => {
-      try { const e = parseSpatial('PublicEnvelope', draft.raw); return e.sessionId === sessionId && e.clientActionId === draft.id ? [{ id: e.clientActionId, raw: draft.raw, status: 'unknown' as const, detail: '原动作等待查询确认。', receipt: null }] : []; } catch { return []; }
+      try { const e = this.#draftEnvelope(draft); return e.sessionId === sessionId && e.clientActionId === draft.id ? [{ id: e.clientActionId, raw: draft.raw, status: 'unknown' as const, detail: '原动作等待查询确认。', receipt: null }] : []; } catch { return []; }
     });
     if (this.#options.heartbeatMs > 0) this.#heartbeat = setInterval(() => { if (this.#connection === 'online') void this.sync(); }, this.#options.heartbeatMs);
     this.#openConnection();
@@ -323,7 +332,7 @@ export class SpatialSessionClient {
   }
   async retry(id: string) {
     const draft = this.#actions.find(a => a.id === id); if (!draft || draft.status !== 'unknown' || !this.#link?.connected || !this.#view.snapshot) return;
-    const kind = parseSpatial('PublicEnvelope', draft.raw).action.kind;
+    const kind = this.#draftEnvelope(draft).action.kind;
     if (kind === 'move_direction' && !this.#link.acceptedCapabilities?.includes(DIRECTION_CAPABILITY)) { this.#message = '当前兼容连接不能重发该方向请求，请查询原结果。'; this.#publish(); return; }
     // 原方向重试仍属于同一个Unknown；只有原Receipt能解除冻结，不重新开始400ms。
     const frozen = kind === 'move_direction' || kind === 'stop_move' && this.#direction instanceof DirectionIntent;
@@ -339,7 +348,7 @@ export class SpatialSessionClient {
   }
   #receipt(draft: SpatialDraft, value: unknown) {
     try {
-      const receipt = validateSpatial('ReceiptV2', value); const envelope = parseSpatial('PublicEnvelope', draft.raw);
+      const receipt = validateSpatial('ReceiptV2', value); const envelope = this.#draftEnvelope(draft);
       if (receipt.sessionId !== envelope.sessionId || receipt.clientActionId !== envelope.clientActionId) throw new Error('收据与原请求不匹配。');
       const queued = this.#queued;
       if (envelope.action.kind === 'move_to' && queued?.sequence === envelope.action.movementCommandSeq && queued.epoch === envelope.controlEpoch && queued.viewId === envelope.viewId) {
@@ -418,7 +427,7 @@ export class SpatialSessionClient {
   #readyDirection() {
     const snapshot = this.#ready();
     if (this.#actions.some(draft => {
-      const kind = parseSpatial('PublicEnvelope', draft.raw).action.kind;
+      const kind = this.#draftEnvelope(draft).action.kind;
       return (draft.status === 'unknown' && ['move_to', 'move_direction', 'stop_move'].includes(kind)) || (draft.status === 'waiting' && kind === 'stop_move' && !this.#direction.canResumeAfterStop);
     })) throw new Error('上一项移动或停步结果尚未确认，请先查询或原样重试。');
     return snapshot;
