@@ -118,41 +118,51 @@ export function parseStrictJSON(raw, { maxBytes = 65536, maxDepth = 32 } = {}) {
 /** UTF-8 输入、UTF-16 键名排序、无 Unicode 归一化；数组顺序有语义。 */
 export function canonicalize(value) {
   const seen = new Set();
+  // 每次调用独享输出片段；检查与递归顺序保持原规范编码语义。
+  const pieces = [];
   const encode = (item, path, depth) => {
     if (depth > 32) fail('消息嵌套过深', path);
-    if (item === null) return 'null';
-    if (typeof item === 'boolean') return item ? 'true' : 'false';
+    if (item === null) { pieces.push('null'); return; }
+    if (typeof item === 'boolean') { pieces.push(item ? 'true' : 'false'); return; }
     if (typeof item === 'string') {
       if (!validUnicode(item)) fail('字符串含不完整的 Unicode 代理对', path);
-      return JSON.stringify(item);
+      pieces.push(JSON.stringify(item));
+      return;
     }
-    if (typeof item === 'number' && Number.isSafeInteger(item)) return JSON.stringify(item);
+    if (typeof item === 'number' && Number.isSafeInteger(item)) { pieces.push(JSON.stringify(item)); return; }
     if (typeof item !== 'object' || seen.has(item)) fail('值不能规范编码', path);
     const prototype = Object.getPrototypeOf(item);
     if (!Array.isArray(item) && prototype !== Object.prototype && prototype !== null) fail('值必须是普通 JSON 对象', path);
     seen.add(item);
-    let result;
     if (Array.isArray(item)) {
       if (Reflect.ownKeys(item).length !== item.length + 1) fail('数组不能含稀疏项或额外属性', path);
-      const values = [];
+      pieces.push('[');
       for (let i = 0; i < item.length; i++) {
         const descriptor = Object.getOwnPropertyDescriptor(item, String(i));
         if (!descriptor || !descriptor.enumerable || !('value' in descriptor)) fail('数组必须只包含连续的自有数据项', path + '[' + i + ']');
-        values.push(encode(descriptor.value, path + '[' + i + ']', depth + 1));
+        if (i) pieces.push(',');
+        encode(descriptor.value, path + '[' + i + ']', depth + 1);
       }
-      result = '[' + values.join(',') + ']';
+      pieces.push(']');
     } else {
       if (Object.getOwnPropertySymbols(item).length) fail('JSON 对象不能含 Symbol 键', path);
-      result = '{' + Object.keys(item).sort().map(key => {
+      const keys = Object.keys(item).sort();
+      pieces.push('{');
+      for (let i = 0; i < keys.length; i++) {
+        const key = keys[i];
         const descriptor = Object.getOwnPropertyDescriptor(item, key);
         if (!descriptor || !('value' in descriptor)) fail('JSON 对象不能含访问器', path);
-        return encode(key, path, depth + 1) + ':' + encode(descriptor.value, `${path}.${key}`, depth + 1);
-      }).join(',') + '}';
+        if (i) pieces.push(',');
+        encode(key, path, depth + 1);
+        pieces.push(':');
+        encode(descriptor.value, `${path}.${key}`, depth + 1);
+      }
+      pieces.push('}');
     }
     seen.delete(item);
-    return result;
   };
-  return encode(value, '$', 0);
+  encode(value, '$', 0);
+  return pieces.join('');
 }
 
 import { contractSchema, contractNames } from './schema.mjs';
