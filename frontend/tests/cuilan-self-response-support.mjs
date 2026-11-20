@@ -8,6 +8,7 @@ import { pipeline } from 'node:stream/promises';
 import { types } from 'node:util';
 import { gaolaoPersonalProfile, validateSpatial } from '../../protocol/spatial.mjs';
 import { contentDigest } from '../../content/index.mjs';
+import { entityRef, publicResourceRevision, resolveRef } from '../../game/spatial-world.mjs';
 import { until } from './network-support.mjs';
 import { snapshot, clientState, selectObject, openReading, waitHumanReceipt } from './gaolao-real-support.mjs';
 import { assertBothActiveEffects, assertSharedStopTransaction, assertOriginalReceiptRead } from '../../backend/test-support/personal-shared-effects.mjs';
@@ -338,6 +339,37 @@ export function holdSubmissions(runtime, predicate, expectedCount = 2) {
     return original.call(this, handle, raw);
   };
   return { ready, held, release, close() { release(); runtime.submit = original; } };
+}
+
+/** 仅检查提交屏障内同一份私有 PG 快照；内部身份/版本只进入验收报告，不进入公开 DTO。 */
+export function captureAppearanceCompetition(state, content, requests, userIds) {
+  assert.equal(requests.length, 2); assert.equal(new Set(userIds).size, 2);
+  assert.equal(new Set(requests.map(request => request.clientActionId)).size, 2, '必须是两个独立动作');
+  const members = userIds.map(userId => {
+    const member = state.members.find(row => row.userId === userId);
+    assert.ok(member, '竞争者须为本局实际玩家'); return member;
+  });
+  const contenders = requests.map(request => {
+    assert.equal(request.sessionId, state.sessionId);
+    assert.equal(request.action.kind, 'interact'); assert.equal(request.action.operationId, 'gz-request-appearance');
+    const member = members.find(row => state.views[row.characterId]?.viewId === request.viewId && entityRef(state.views[row.characterId], row.characterId) === request.actorRef);
+    assert.ok(member, '原请求必须使用本人当前 view/actorRef');
+    const observerId = member.characterId, observer = state.characters[observerId], view = state.views[observerId];
+    assert.equal(observer.kind, 'human'); assert.equal(observer.mode, 'HumanControlled');
+    assert.equal(request.controlEpoch, observer.controlEpoch);
+    assert.ok(BigInt(request.baseSeq) <= BigInt(state.sessionSeq));
+    const target = resolveRef({ state, content }, observerId, request.action.targetRef, request.viewId);
+    assert.equal(target.characterId, content.chapterRules.people.cuilan, '各自合法 ref 必须解析为同一真实本人');
+    assert.equal(request.action.expectedTargetRevision, publicResourceRevision(state, observerId, view, target), '屏障前各自公开别名必须对应同一当前内部版本');
+    return { clientActionId: request.clientActionId, observerId, viewId: request.viewId, actorRef: request.actorRef, targetRef: request.action.targetRef,
+      publicRevision: request.action.expectedTargetRevision, targetId: target.characterId, internalRevision: target.resourceRevision, baseSeq: request.baseSeq };
+  });
+  assert.equal(new Set(contenders.map(row => row.observerId)).size, 2, '两个实际观察者，不能用同一人重复动作代替竞争');
+  assert.equal(contenders[0].targetId, contenders[1].targetId);
+  assert.equal(contenders[0].internalRevision, contenders[1].internalRevision, '真实竞争同一底层人物版本，不比较跨观察者公开别名');
+  assert.notEqual(contenders[0].targetRef, contenders[1].targetRef);
+  assert.notEqual(contenders[0].publicRevision, contenders[1].publicRevision, '不同观察者继续保留独立公开版本');
+  return { scope: 'test-private-authority-before-release', sessionId: state.sessionId, snapshotSeq: state.sessionSeq, contenders };
 }
 
 /** 延迟真实已提交 ACK 及其历史读取；不制造 Receipt、不再次提交。 */

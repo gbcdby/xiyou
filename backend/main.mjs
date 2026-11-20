@@ -3,7 +3,7 @@ import { createAuthorityServer } from './server.mjs';
 
 if (!process.env.DATABASE_URL) throw new Error('请通过 DATABASE_URL 指定真实 PostgreSQL 数据库。');
 const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL, max: 16 });
-const server = await createAuthorityServer({ pool, log: (message, fields) => console.error(message, fields ?? {}) });
+const server = await createAuthorityServer({ pool, spatialDirection: { checkpointMs: 50 }, log: (message, fields) => console.error(message, fields ?? {}) });
 const port = Number(process.env.PORT ?? 3000);
 if (!Number.isInteger(port) || port < 0 || port > 65535) throw new Error('PORT 必须为有效端口。');
 const address = await server.listen(port, process.env.HOST ?? '127.0.0.1');

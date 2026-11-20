@@ -135,6 +135,8 @@ NPC“走到物件再拿取”拆为导航、权威到达、重新检查、实�
 
 ## 5. 感知引用与全链路投影
 
+**2026-11-15 首章human物理显示修订：**[GZ-UX-01 §2.1](gaolao-client-experience.md#21-人类全场物理显示与原感知分离)采用经能力协商、仅人类可用的sceneOverview/mapCatalog，物理显示不再依赖距离裁剪；原感知数组、NPC知识/听闻、真正秘密及交互守卫保持。严格schema与缓存控制响应兼容裁剪必须同步，不能仅增加optional字段。v0.1已经独审采纳并释放实施；v0.2纠正公开角色版本必须是观察者/ref绑定别名、不能泄露内部真实计数，覆盖原感知与overview及历史缓存响应。状态和唯一实施记录见[#66](https://github.com/gbcdby/xiyou/issues/66)。
+
 ### 5.1 引用生命周期
 
 服务端内部真实实体 ID 永远稳定，外观是独立版本，真实翠兰和借貌悟空始终不同实体。`EntityRef` 绑定 `(sessionId, observerCharacterId, viewEpoch, entityId, appearanceEpoch)`；绑定是服务端私有记录，输出仅不透明 ref。引用有 `active/historical/retired` 状态，不接受客户端自行指定绑定。
@@ -179,6 +181,8 @@ Ref 不可猜只降低枚举风险，真正权限仍在每次服务端解析时�
 **SP06 新领路者入口（2026-11-13，#33 / #34）：** 未参与上一份同意的人不能读取其许可或路线，自己的 `consents/follows` 为空仍可合法提出新的安排。正常客户端只从自己当前可见人物 DTO 取得 `entityRef/resourceRevision`，发送 `expectedTargetRevision`；缺少该公开版本时不能退回私有同意版本 `0`。私有同意槽的版本、先前请求者、领路者、目的地与路线不新增到公开投影。
 
 规则先保留原真实主体、请求者/本人/领路者近距无遮挡、真人在线、开门和合法目的地守卫，再比较当前人物 `resourceRevision`，旧值拒绝为 `STALE_PRECONDITION`。比较成功后在同一 Session 锁定事务内读取私有 follow 槽当前版本，创建新的 `proposed`，并增加本人人物 `resourceRevision`；原回应/撤回也增加这个版本。该版本原已公开，仅表示人物语义状态变化，不是私有同意版本；普通行走只推进 `spatialRevision`，其它语义变化可以保守地使准备中的提议过期。新入口不新增授权服务或同意能力，不改变 policyRoute 的资料、起点、路线或本人选择语义。
+
+**2026-11-15 公共版本表示纠偏：**上段人物版本的内部递增与陈旧拒绝语义保持；按 [GZ-UX-01 v0.2 §2.1](gaolao-client-experience.md#21-人类全场物理显示与原感知分离)，浏览器得到及回送的是当前观察者/ref绑定别名，服务端先解析并重验真实绑定，再重算当前别名比较，不能直接暴露内部计数。历史 nonce 仍返回原时点授权与原结果，仅将角色版本安全重表达，不执行新动作或改写旧 Receipt。
 
 闭合 schema 同时保留旧 `expectedConsentVersion` 形态并执行其原精确同意版本守卫；不得同时提交两种版本或都不提交。新旧格式成功提议均在同一事务内增加人物版本，避免旧格式成功后旧公开参数仍可覆盖它。同一公开版本的并发提议至多一个提交。purpose 由动作种类固定，subject、requester、view、epoch、leader 与 destination 由原引用解析、认证主体及完整请求摘要共同绑定，不能把一次提议用于另一范围。
 

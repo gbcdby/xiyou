@@ -1,0 +1,1056 @@
+{
+  "schema_version": 1,
+  "feature": "D66 同连接读取、可信入队与恰一次应用的有限模型",
+  "tool": {
+    "version": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "model": {
+    "root": "supply",
+    "entry": "SpatialSupply.tla"
+  },
+  "profiles": {
+    "positive-supply": {
+      "config": "positive-supply.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "ReadCapacity",
+        "InstalledSeparate",
+        "SentPrefix",
+        "NoStaleAdvance",
+        "OrderedApplication",
+        "ExactlyOnce"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "只检查有限输入与可永久延迟网络的供给安全；有限 jobs 用尽或客户端不继续接收是允许环境停滞，不声明调度/网络活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxJobs": 2,
+          "MaxHead": 2,
+          "Scenario": "full"
+        },
+        "covered_interleavings_and_faults": [
+          "一个当前连接及一次重连，每连接最多一次view更换；各link独立lane/网络到达",
+          "真实发送入队后才推进sent；失败/构造本身不推进；installed基线独立",
+          "已应用内容前缀恰一次；旧身份不能安装到当前绑定"
+        ],
+        "excluded_behaviors": [
+          "任意消息数量、多 peer outbox 完成证明、物理网络交付/时延、400ms、8页循环的精确计数、CPU/SQL性能、Canvas及真实呈现信用、Crash、多实例、全部模型组合"
+        ],
+        "liveness": "NOT_CHECKED",
+        "completion_boundary": "完整组合探索配置；本轮门槛不运行，不算有限分解通过。"
+      },
+      "assumptions": [
+        "每个模型 Enqueue 成功对应真实当前连接的一次同步入队证据；emit 返回值/ACK void 不建立事实。",
+        "单连接 Socket.IO FIFO 只指消息接收顺序；客户端何时应用由本模型单独表达。",
+        "每页对应完整已提交事务前缀，读授权仍由原事务校验；当前 head 不代表未来事件。",
+        "更换 view 的控制请求已经使客户端旧代次无权安装，重连有新 link 身份。"
+      ]
+    },
+    "positive-lane": {
+      "config": "positive-lane.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "ReadCapacity",
+        "InstalledSeparate",
+        "SentPrefix"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "只检查有限输入与可永久延迟网络的供给安全；有限 jobs 用尽或客户端不继续接收是允许环境停滞，不声明调度/网络活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxJobs": 3,
+          "MaxHead": 0,
+          "Scenario": "lane"
+        },
+        "covered_interleavings_and_faults": [
+          "稳定同一link/view；最多3个读取任务与两个合并通知；没有内容前缀增长",
+          "真实发送入队后才推进sent；失败/构造本身不推进；installed基线独立",
+          "内容域为空，只检查基线和资源边界，不计非空Batch验收"
+        ],
+        "excluded_behaviors": [
+          "任意消息数量、多 peer outbox 完成证明、物理网络交付/时延、400ms、8页循环的精确计数、CPU/SQL性能、Canvas及真实呈现信用、Crash、多实例、全部模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "每个模型 Enqueue 成功对应真实当前连接的一次同步入队证据；emit 返回值/ACK void 不建立事实。",
+        "单连接 Socket.IO FIFO 只指消息接收顺序；客户端何时应用由本模型单独表达。",
+        "每页对应完整已提交事务前缀，读授权仍由原事务校验；当前 head 不代表未来事件。",
+        "更换 view 的控制请求已经使客户端旧代次无权安装，重连有新 link 身份。"
+      ]
+    },
+    "negative-type": {
+      "config": "negative-type.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "只检查有限输入与可永久延迟网络的供给安全；有限 jobs 用尽或客户端不继续接收是允许环境停滞，不声明调度/网络活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "type",
+          "MaxJobs": 1,
+          "MaxHead": 1,
+          "Scenario": "full"
+        },
+        "covered_interleavings_and_faults": [
+          "一个当前连接及一次重连，每连接最多一次view更换；各link独立lane/网络到达",
+          "真实发送入队后才推进sent；失败/构造本身不推进；installed基线独立",
+          "已应用内容前缀恰一次；旧身份不能安装到当前绑定"
+        ],
+        "excluded_behaviors": [
+          "任意消息数量、多 peer outbox 完成证明、物理网络交付/时延、400ms、8页循环的精确计数、CPU/SQL性能、Canvas及真实呈现信用、Crash、多实例、全部模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "每个模型 Enqueue 成功对应真实当前连接的一次同步入队证据；emit 返回值/ACK void 不建立事实。",
+        "单连接 Socket.IO FIFO 只指消息接收顺序；客户端何时应用由本模型单独表达。",
+        "每页对应完整已提交事务前缀，读授权仍由原事务校验；当前 head 不代表未来事件。",
+        "更换 view 的控制请求已经使客户端旧代次无权安装，重连有新 link 身份。"
+      ]
+    },
+    "negative-parallel": {
+      "config": "negative-parallel.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "ReadCapacity"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "只检查有限输入与可永久延迟网络的供给安全；有限 jobs 用尽或客户端不继续接收是允许环境停滞，不声明调度/网络活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "parallel-read",
+          "MaxJobs": 2,
+          "MaxHead": 0,
+          "Scenario": "full"
+        },
+        "covered_interleavings_and_faults": [
+          "一个当前连接及一次重连，每连接最多一次view更换；各link独立lane/网络到达",
+          "真实发送入队后才推进sent；失败/构造本身不推进；installed基线独立",
+          "内容域为空，只检查基线和资源边界，不计非空Batch验收"
+        ],
+        "excluded_behaviors": [
+          "任意消息数量、多 peer outbox 完成证明、物理网络交付/时延、400ms、8页循环的精确计数、CPU/SQL性能、Canvas及真实呈现信用、Crash、多实例、全部模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "每个模型 Enqueue 成功对应真实当前连接的一次同步入队证据；emit 返回值/ACK void 不建立事实。",
+        "单连接 Socket.IO FIFO 只指消息接收顺序；客户端何时应用由本模型单独表达。",
+        "每页对应完整已提交事务前缀，读授权仍由原事务校验；当前 head 不代表未来事件。",
+        "更换 view 的控制请求已经使客户端旧代次无权安装，重连有新 link 身份。"
+      ]
+    },
+    "negative-waiting": {
+      "config": "negative-waiting.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "ReadCapacity"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "只检查有限输入与可永久延迟网络的供给安全；有限 jobs 用尽或客户端不继续接收是允许环境停滞，不声明调度/网络活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "waiting-overflow",
+          "MaxJobs": 3,
+          "MaxHead": 0,
+          "Scenario": "full"
+        },
+        "covered_interleavings_and_faults": [
+          "一个当前连接及一次重连，每连接最多一次view更换；各link独立lane/网络到达",
+          "真实发送入队后才推进sent；失败/构造本身不推进；installed基线独立",
+          "内容域为空，只检查基线和资源边界，不计非空Batch验收"
+        ],
+        "excluded_behaviors": [
+          "任意消息数量、多 peer outbox 完成证明、物理网络交付/时延、400ms、8页循环的精确计数、CPU/SQL性能、Canvas及真实呈现信用、Crash、多实例、全部模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "每个模型 Enqueue 成功对应真实当前连接的一次同步入队证据；emit 返回值/ACK void 不建立事实。",
+        "单连接 Socket.IO FIFO 只指消息接收顺序；客户端何时应用由本模型单独表达。",
+        "每页对应完整已提交事务前缀，读授权仍由原事务校验；当前 head 不代表未来事件。",
+        "更换 view 的控制请求已经使客户端旧代次无权安装，重连有新 link 身份。"
+      ]
+    },
+    "negative-publisher": {
+      "config": "negative-publisher.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "ReadCapacity"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "只检查有限输入与可永久延迟网络的供给安全；有限 jobs 用尽或客户端不继续接收是允许环境停滞，不声明调度/网络活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "publisher-overflow",
+          "MaxJobs": 1,
+          "MaxHead": 0,
+          "Scenario": "full"
+        },
+        "covered_interleavings_and_faults": [
+          "一个当前连接及一次重连，每连接最多一次view更换；各link独立lane/网络到达",
+          "真实发送入队后才推进sent；失败/构造本身不推进；installed基线独立",
+          "内容域为空，只检查基线和资源边界，不计非空Batch验收"
+        ],
+        "excluded_behaviors": [
+          "任意消息数量、多 peer outbox 完成证明、物理网络交付/时延、400ms、8页循环的精确计数、CPU/SQL性能、Canvas及真实呈现信用、Crash、多实例、全部模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "每个模型 Enqueue 成功对应真实当前连接的一次同步入队证据；emit 返回值/ACK void 不建立事实。",
+        "单连接 Socket.IO FIFO 只指消息接收顺序；客户端何时应用由本模型单独表达。",
+        "每页对应完整已提交事务前缀，读授权仍由原事务校验；当前 head 不代表未来事件。",
+        "更换 view 的控制请求已经使客户端旧代次无权安装，重连有新 link 身份。"
+      ]
+    },
+    "negative-installed": {
+      "config": "negative-installed.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "InstalledSeparate"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "只检查有限输入与可永久延迟网络的供给安全；有限 jobs 用尽或客户端不继续接收是允许环境停滞，不声明调度/网络活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "overwrite-installed",
+          "MaxJobs": 1,
+          "MaxHead": 1,
+          "Scenario": "full"
+        },
+        "covered_interleavings_and_faults": [
+          "一个当前连接及一次重连，每连接最多一次view更换；各link独立lane/网络到达",
+          "真实发送入队后才推进sent；失败/构造本身不推进；installed基线独立",
+          "已应用内容前缀恰一次；旧身份不能安装到当前绑定"
+        ],
+        "excluded_behaviors": [
+          "任意消息数量、多 peer outbox 完成证明、物理网络交付/时延、400ms、8页循环的精确计数、CPU/SQL性能、Canvas及真实呈现信用、Crash、多实例、全部模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "每个模型 Enqueue 成功对应真实当前连接的一次同步入队证据；emit 返回值/ACK void 不建立事实。",
+        "单连接 Socket.IO FIFO 只指消息接收顺序；客户端何时应用由本模型单独表达。",
+        "每页对应完整已提交事务前缀，读授权仍由原事务校验；当前 head 不代表未来事件。",
+        "更换 view 的控制请求已经使客户端旧代次无权安装，重连有新 link 身份。"
+      ]
+    },
+    "negative-fake-enqueue": {
+      "config": "negative-fake-enqueue.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "SentPrefix"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "只检查有限输入与可永久延迟网络的供给安全；有限 jobs 用尽或客户端不继续接收是允许环境停滞，不声明调度/网络活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "fake-enqueue",
+          "MaxJobs": 1,
+          "MaxHead": 1,
+          "Scenario": "full"
+        },
+        "covered_interleavings_and_faults": [
+          "一个当前连接及一次重连，每连接最多一次view更换；各link独立lane/网络到达",
+          "真实发送入队后才推进sent；失败/构造本身不推进；installed基线独立",
+          "已应用内容前缀恰一次；旧身份不能安装到当前绑定"
+        ],
+        "excluded_behaviors": [
+          "任意消息数量、多 peer outbox 完成证明、物理网络交付/时延、400ms、8页循环的精确计数、CPU/SQL性能、Canvas及真实呈现信用、Crash、多实例、全部模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "每个模型 Enqueue 成功对应真实当前连接的一次同步入队证据；emit 返回值/ACK void 不建立事实。",
+        "单连接 Socket.IO FIFO 只指消息接收顺序；客户端何时应用由本模型单独表达。",
+        "每页对应完整已提交事务前缀，读授权仍由原事务校验；当前 head 不代表未来事件。",
+        "更换 view 的控制请求已经使客户端旧代次无权安装，重连有新 link 身份。"
+      ]
+    },
+    "negative-cursor": {
+      "config": "negative-cursor.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "SentPrefix"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "只检查有限输入与可永久延迟网络的供给安全；有限 jobs 用尽或客户端不继续接收是允许环境停滞，不声明调度/网络活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "trust-cursor",
+          "MaxJobs": 1,
+          "MaxHead": 2,
+          "Scenario": "full"
+        },
+        "covered_interleavings_and_faults": [
+          "一个当前连接及一次重连，每连接最多一次view更换；各link独立lane/网络到达",
+          "真实发送入队后才推进sent；失败/构造本身不推进；installed基线独立",
+          "已应用内容前缀恰一次；旧身份不能安装到当前绑定"
+        ],
+        "excluded_behaviors": [
+          "任意消息数量、多 peer outbox 完成证明、物理网络交付/时延、400ms、8页循环的精确计数、CPU/SQL性能、Canvas及真实呈现信用、Crash、多实例、全部模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "每个模型 Enqueue 成功对应真实当前连接的一次同步入队证据；emit 返回值/ACK void 不建立事实。",
+        "单连接 Socket.IO FIFO 只指消息接收顺序；客户端何时应用由本模型单独表达。",
+        "每页对应完整已提交事务前缀，读授权仍由原事务校验；当前 head 不代表未来事件。",
+        "更换 view 的控制请求已经使客户端旧代次无权安装，重连有新 link 身份。"
+      ]
+    },
+    "negative-old-install": {
+      "config": "negative-old-install.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "SentPrefix"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "只检查有限输入与可永久延迟网络的供给安全；有限 jobs 用尽或客户端不继续接收是允许环境停滞，不声明调度/网络活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "old-install",
+          "MaxJobs": 1,
+          "MaxHead": 1,
+          "Scenario": "full"
+        },
+        "covered_interleavings_and_faults": [
+          "一个当前连接及一次重连，每连接最多一次view更换；各link独立lane/网络到达",
+          "真实发送入队后才推进sent；失败/构造本身不推进；installed基线独立",
+          "已应用内容前缀恰一次；旧身份不能安装到当前绑定"
+        ],
+        "excluded_behaviors": [
+          "任意消息数量、多 peer outbox 完成证明、物理网络交付/时延、400ms、8页循环的精确计数、CPU/SQL性能、Canvas及真实呈现信用、Crash、多实例、全部模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "每个模型 Enqueue 成功对应真实当前连接的一次同步入队证据；emit 返回值/ACK void 不建立事实。",
+        "单连接 Socket.IO FIFO 只指消息接收顺序；客户端何时应用由本模型单独表达。",
+        "每页对应完整已提交事务前缀，读授权仍由原事务校验；当前 head 不代表未来事件。",
+        "更换 view 的控制请求已经使客户端旧代次无权安装，重连有新 link 身份。"
+      ]
+    },
+    "negative-stale": {
+      "config": "negative-stale.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoStaleAdvance"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "只检查有限输入与可永久延迟网络的供给安全；有限 jobs 用尽或客户端不继续接收是允许环境停滞，不声明调度/网络活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "stale-binding",
+          "MaxJobs": 1,
+          "MaxHead": 1,
+          "Scenario": "full"
+        },
+        "covered_interleavings_and_faults": [
+          "一个当前连接及一次重连，每连接最多一次view更换；各link独立lane/网络到达",
+          "真实发送入队后才推进sent；失败/构造本身不推进；installed基线独立",
+          "已应用内容前缀恰一次；旧身份不能安装到当前绑定"
+        ],
+        "excluded_behaviors": [
+          "任意消息数量、多 peer outbox 完成证明、物理网络交付/时延、400ms、8页循环的精确计数、CPU/SQL性能、Canvas及真实呈现信用、Crash、多实例、全部模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "每个模型 Enqueue 成功对应真实当前连接的一次同步入队证据；emit 返回值/ACK void 不建立事实。",
+        "单连接 Socket.IO FIFO 只指消息接收顺序；客户端何时应用由本模型单独表达。",
+        "每页对应完整已提交事务前缀，读授权仍由原事务校验；当前 head 不代表未来事件。",
+        "更换 view 的控制请求已经使客户端旧代次无权安装，重连有新 link 身份。"
+      ]
+    },
+    "negative-callback": {
+      "config": "negative-callback.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "OrderedApplication"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "只检查有限输入与可永久延迟网络的供给安全；有限 jobs 用尽或客户端不继续接收是允许环境停滞，不声明调度/网络活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "ack-after-push",
+          "MaxJobs": 2,
+          "MaxHead": 2,
+          "Scenario": "full"
+        },
+        "covered_interleavings_and_faults": [
+          "一个当前连接及一次重连，每连接最多一次view更换；各link独立lane/网络到达",
+          "真实发送入队后才推进sent；失败/构造本身不推进；installed基线独立",
+          "已应用内容前缀恰一次；旧身份不能安装到当前绑定"
+        ],
+        "excluded_behaviors": [
+          "任意消息数量、多 peer outbox 完成证明、物理网络交付/时延、400ms、8页循环的精确计数、CPU/SQL性能、Canvas及真实呈现信用、Crash、多实例、全部模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "每个模型 Enqueue 成功对应真实当前连接的一次同步入队证据；emit 返回值/ACK void 不建立事实。",
+        "单连接 Socket.IO FIFO 只指消息接收顺序；客户端何时应用由本模型单独表达。",
+        "每页对应完整已提交事务前缀，读授权仍由原事务校验；当前 head 不代表未来事件。",
+        "更换 view 的控制请求已经使客户端旧代次无权安装，重连有新 link 身份。"
+      ]
+    },
+    "negative-duplicate": {
+      "config": "negative-duplicate.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "ExactlyOnce"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "只检查有限输入与可永久延迟网络的供给安全；有限 jobs 用尽或客户端不继续接收是允许环境停滞，不声明调度/网络活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "double-apply",
+          "MaxJobs": 1,
+          "MaxHead": 1,
+          "Scenario": "full"
+        },
+        "covered_interleavings_and_faults": [
+          "一个当前连接及一次重连，每连接最多一次view更换；各link独立lane/网络到达",
+          "真实发送入队后才推进sent；失败/构造本身不推进；installed基线独立",
+          "已应用内容前缀恰一次；旧身份不能安装到当前绑定"
+        ],
+        "excluded_behaviors": [
+          "任意消息数量、多 peer outbox 完成证明、物理网络交付/时延、400ms、8页循环的精确计数、CPU/SQL性能、Canvas及真实呈现信用、Crash、多实例、全部模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "每个模型 Enqueue 成功对应真实当前连接的一次同步入队证据；emit 返回值/ACK void 不建立事实。",
+        "单连接 Socket.IO FIFO 只指消息接收顺序；客户端何时应用由本模型单独表达。",
+        "每页对应完整已提交事务前缀，读授权仍由原事务校验；当前 head 不代表未来事件。",
+        "更换 view 的控制请求已经使客户端旧代次无权安装，重连有新 link 身份。"
+      ]
+    },
+    "witness-baseline": {
+      "config": "witness-baseline.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoBaselineWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "只检查有限输入与可永久延迟网络的供给安全；有限 jobs 用尽或客户端不继续接收是允许环境停滞，不声明调度/网络活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxJobs": 1,
+          "MaxHead": 0,
+          "Scenario": "full"
+        },
+        "covered_interleavings_and_faults": [
+          "一个当前连接及一次重连，每连接最多一次view更换；各link独立lane/网络到达",
+          "真实发送入队后才推进sent；失败/构造本身不推进；installed基线独立",
+          "内容域为空，只检查基线和资源边界，不计非空Batch验收"
+        ],
+        "excluded_behaviors": [
+          "任意消息数量、多 peer outbox 完成证明、物理网络交付/时延、400ms、8页循环的精确计数、CPU/SQL性能、Canvas及真实呈现信用、Crash、多实例、全部模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "每个模型 Enqueue 成功对应真实当前连接的一次同步入队证据；emit 返回值/ACK void 不建立事实。",
+        "单连接 Socket.IO FIFO 只指消息接收顺序；客户端何时应用由本模型单独表达。",
+        "每页对应完整已提交事务前缀，读授权仍由原事务校验；当前 head 不代表未来事件。",
+        "更换 view 的控制请求已经使客户端旧代次无权安装，重连有新 link 身份。"
+      ]
+    },
+    "witness-capacity": {
+      "config": "witness-capacity.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoCapacityWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "只检查有限输入与可永久延迟网络的供给安全；有限 jobs 用尽或客户端不继续接收是允许环境停滞，不声明调度/网络活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxJobs": 2,
+          "MaxHead": 0,
+          "Scenario": "full"
+        },
+        "covered_interleavings_and_faults": [
+          "一个当前连接及一次重连，每连接最多一次view更换；各link独立lane/网络到达",
+          "真实发送入队后才推进sent；失败/构造本身不推进；installed基线独立",
+          "内容域为空，只检查基线和资源边界，不计非空Batch验收"
+        ],
+        "excluded_behaviors": [
+          "任意消息数量、多 peer outbox 完成证明、物理网络交付/时延、400ms、8页循环的精确计数、CPU/SQL性能、Canvas及真实呈现信用、Crash、多实例、全部模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "每个模型 Enqueue 成功对应真实当前连接的一次同步入队证据；emit 返回值/ACK void 不建立事实。",
+        "单连接 Socket.IO FIFO 只指消息接收顺序；客户端何时应用由本模型单独表达。",
+        "每页对应完整已提交事务前缀，读授权仍由原事务校验；当前 head 不代表未来事件。",
+        "更换 view 的控制请求已经使客户端旧代次无权安装，重连有新 link 身份。"
+      ]
+    },
+    "witness-old-view-waiting": {
+      "config": "witness-old-view-waiting.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoOldViewWaitingWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "只检查有限输入与可永久延迟网络的供给安全；有限 jobs 用尽或客户端不继续接收是允许环境停滞，不声明调度/网络活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxJobs": 2,
+          "MaxHead": 1,
+          "Scenario": "full"
+        },
+        "covered_interleavings_and_faults": [
+          "一个当前连接及一次重连，每连接最多一次view更换；各link独立lane/网络到达",
+          "真实发送入队后才推进sent；失败/构造本身不推进；installed基线独立",
+          "已应用内容前缀恰一次；旧身份不能安装到当前绑定"
+        ],
+        "excluded_behaviors": [
+          "任意消息数量、多 peer outbox 完成证明、物理网络交付/时延、400ms、8页循环的精确计数、CPU/SQL性能、Canvas及真实呈现信用、Crash、多实例、全部模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "每个模型 Enqueue 成功对应真实当前连接的一次同步入队证据；emit 返回值/ACK void 不建立事实。",
+        "单连接 Socket.IO FIFO 只指消息接收顺序；客户端何时应用由本模型单独表达。",
+        "每页对应完整已提交事务前缀，读授权仍由原事务校验；当前 head 不代表未来事件。",
+        "更换 view 的控制请求已经使客户端旧代次无权安装，重连有新 link 身份。"
+      ]
+    },
+    "witness-separation": {
+      "config": "witness-separation.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoSeparationWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "只检查有限输入与可永久延迟网络的供给安全；有限 jobs 用尽或客户端不继续接收是允许环境停滞，不声明调度/网络活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxJobs": 1,
+          "MaxHead": 1,
+          "Scenario": "full"
+        },
+        "covered_interleavings_and_faults": [
+          "一个当前连接及一次重连，每连接最多一次view更换；各link独立lane/网络到达",
+          "真实发送入队后才推进sent；失败/构造本身不推进；installed基线独立",
+          "已应用内容前缀恰一次；旧身份不能安装到当前绑定"
+        ],
+        "excluded_behaviors": [
+          "任意消息数量、多 peer outbox 完成证明、物理网络交付/时延、400ms、8页循环的精确计数、CPU/SQL性能、Canvas及真实呈现信用、Crash、多实例、全部模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "每个模型 Enqueue 成功对应真实当前连接的一次同步入队证据；emit 返回值/ACK void 不建立事实。",
+        "单连接 Socket.IO FIFO 只指消息接收顺序；客户端何时应用由本模型单独表达。",
+        "每页对应完整已提交事务前缀，读授权仍由原事务校验；当前 head 不代表未来事件。",
+        "更换 view 的控制请求已经使客户端旧代次无权安装，重连有新 link 身份。"
+      ]
+    },
+    "witness-prefix": {
+      "config": "witness-prefix.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoPrefixWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "只检查有限输入与可永久延迟网络的供给安全；有限 jobs 用尽或客户端不继续接收是允许环境停滞，不声明调度/网络活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxJobs": 2,
+          "MaxHead": 2,
+          "Scenario": "full"
+        },
+        "covered_interleavings_and_faults": [
+          "一个当前连接及一次重连，每连接最多一次view更换；各link独立lane/网络到达",
+          "真实发送入队后才推进sent；失败/构造本身不推进；installed基线独立",
+          "已应用内容前缀恰一次；旧身份不能安装到当前绑定"
+        ],
+        "excluded_behaviors": [
+          "任意消息数量、多 peer outbox 完成证明、物理网络交付/时延、400ms、8页循环的精确计数、CPU/SQL性能、Canvas及真实呈现信用、Crash、多实例、全部模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "每个模型 Enqueue 成功对应真实当前连接的一次同步入队证据；emit 返回值/ACK void 不建立事实。",
+        "单连接 Socket.IO FIFO 只指消息接收顺序；客户端何时应用由本模型单独表达。",
+        "每页对应完整已提交事务前缀，读授权仍由原事务校验；当前 head 不代表未来事件。",
+        "更换 view 的控制请求已经使客户端旧代次无权安装，重连有新 link 身份。"
+      ]
+    },
+    "witness-stale-reject": {
+      "config": "witness-stale-reject.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoStaleRejectWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "只检查有限输入与可永久延迟网络的供给安全；有限 jobs 用尽或客户端不继续接收是允许环境停滞，不声明调度/网络活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxJobs": 1,
+          "MaxHead": 1,
+          "Scenario": "full"
+        },
+        "covered_interleavings_and_faults": [
+          "一个当前连接及一次重连，每连接最多一次view更换；各link独立lane/网络到达",
+          "真实发送入队后才推进sent；失败/构造本身不推进；installed基线独立",
+          "已应用内容前缀恰一次；旧身份不能安装到当前绑定"
+        ],
+        "excluded_behaviors": [
+          "任意消息数量、多 peer outbox 完成证明、物理网络交付/时延、400ms、8页循环的精确计数、CPU/SQL性能、Canvas及真实呈现信用、Crash、多实例、全部模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "每个模型 Enqueue 成功对应真实当前连接的一次同步入队证据；emit 返回值/ACK void 不建立事实。",
+        "单连接 Socket.IO FIFO 只指消息接收顺序；客户端何时应用由本模型单独表达。",
+        "每页对应完整已提交事务前缀，读授权仍由原事务校验；当前 head 不代表未来事件。",
+        "更换 view 的控制请求已经使客户端旧代次无权安装，重连有新 link 身份。"
+      ]
+    },
+    "witness-old-install": {
+      "config": "witness-old-install.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoOldInstallWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "只检查有限输入与可永久延迟网络的供给安全；有限 jobs 用尽或客户端不继续接收是允许环境停滞，不声明调度/网络活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxJobs": 1,
+          "MaxHead": 1,
+          "Scenario": "full"
+        },
+        "covered_interleavings_and_faults": [
+          "一个当前连接及一次重连，每连接最多一次view更换；各link独立lane/网络到达",
+          "真实发送入队后才推进sent；失败/构造本身不推进；installed基线独立",
+          "已应用内容前缀恰一次；旧身份不能安装到当前绑定"
+        ],
+        "excluded_behaviors": [
+          "任意消息数量、多 peer outbox 完成证明、物理网络交付/时延、400ms、8页循环的精确计数、CPU/SQL性能、Canvas及真实呈现信用、Crash、多实例、全部模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "每个模型 Enqueue 成功对应真实当前连接的一次同步入队证据；emit 返回值/ACK void 不建立事实。",
+        "单连接 Socket.IO FIFO 只指消息接收顺序；客户端何时应用由本模型单独表达。",
+        "每页对应完整已提交事务前缀，读授权仍由原事务校验；当前 head 不代表未来事件。",
+        "更换 view 的控制请求已经使客户端旧代次无权安装，重连有新 link 身份。"
+      ]
+    },
+    "witness-send-failure": {
+      "config": "witness-send-failure.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoFailureWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "只检查有限输入与可永久延迟网络的供给安全；有限 jobs 用尽或客户端不继续接收是允许环境停滞，不声明调度/网络活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxJobs": 1,
+          "MaxHead": 1,
+          "Scenario": "full"
+        },
+        "covered_interleavings_and_faults": [
+          "一个当前连接及一次重连，每连接最多一次view更换；各link独立lane/网络到达",
+          "真实发送入队后才推进sent；失败/构造本身不推进；installed基线独立",
+          "已应用内容前缀恰一次；旧身份不能安装到当前绑定"
+        ],
+        "excluded_behaviors": [
+          "任意消息数量、多 peer outbox 完成证明、物理网络交付/时延、400ms、8页循环的精确计数、CPU/SQL性能、Canvas及真实呈现信用、Crash、多实例、全部模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "每个模型 Enqueue 成功对应真实当前连接的一次同步入队证据；emit 返回值/ACK void 不建立事实。",
+        "单连接 Socket.IO FIFO 只指消息接收顺序；客户端何时应用由本模型单独表达。",
+        "每页对应完整已提交事务前缀，读授权仍由原事务校验；当前 head 不代表未来事件。",
+        "更换 view 的控制请求已经使客户端旧代次无权安装，重连有新 link 身份。"
+      ]
+    },
+    "witness-ack-push": {
+      "config": "witness-ack-push.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoAckPushWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "只检查有限输入与可永久延迟网络的供给安全；有限 jobs 用尽或客户端不继续接收是允许环境停滞，不声明调度/网络活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxJobs": 2,
+          "MaxHead": 2,
+          "Scenario": "full"
+        },
+        "covered_interleavings_and_faults": [
+          "一个当前连接及一次重连，每连接最多一次view更换；各link独立lane/网络到达",
+          "真实发送入队后才推进sent；失败/构造本身不推进；installed基线独立",
+          "已应用内容前缀恰一次；旧身份不能安装到当前绑定"
+        ],
+        "excluded_behaviors": [
+          "任意消息数量、多 peer outbox 完成证明、物理网络交付/时延、400ms、8页循环的精确计数、CPU/SQL性能、Canvas及真实呈现信用、Crash、多实例、全部模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "每个模型 Enqueue 成功对应真实当前连接的一次同步入队证据；emit 返回值/ACK void 不建立事实。",
+        "单连接 Socket.IO FIFO 只指消息接收顺序；客户端何时应用由本模型单独表达。",
+        "每页对应完整已提交事务前缀，读授权仍由原事务校验；当前 head 不代表未来事件。",
+        "更换 view 的控制请求已经使客户端旧代次无权安装，重连有新 link 身份。"
+      ]
+    },
+    "positive-order": {
+      "config": "positive-order.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "ReadCapacity",
+        "InstalledSeparate",
+        "SentPrefix",
+        "OrderedApplication",
+        "ExactlyOnce"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "只检查有限输入与可永久延迟网络的供给安全；有限 jobs 用尽或客户端不继续接收是允许环境停滞，不声明调度/网络活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxJobs": 2,
+          "MaxHead": 2,
+          "Scenario": "order"
+        },
+        "covered_interleavings_and_faults": [
+          "稳定同一link/view；读取、完整入队、ACK callback/push/Promise交错",
+          "真实发送入队后才推进sent；失败/构造本身不推进；installed基线独立",
+          "已应用内容前缀恰一次；旧身份不能安装到当前绑定"
+        ],
+        "excluded_behaviors": [
+          "任意消息数量、多 peer outbox 完成证明、物理网络交付/时延、400ms、8页循环的精确计数、CPU/SQL性能、Canvas及真实呈现信用、Crash、多实例、全部模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "每个模型 Enqueue 成功对应真实当前连接的一次同步入队证据；emit 返回值/ACK void 不建立事实。",
+        "单连接 Socket.IO FIFO 只指消息接收顺序；客户端何时应用由本模型单独表达。",
+        "每页对应完整已提交事务前缀，读授权仍由原事务校验；当前 head 不代表未来事件。",
+        "更换 view 的控制请求已经使客户端旧代次无权安装，重连有新 link 身份。"
+      ]
+    },
+    "positive-view": {
+      "config": "positive-view.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "ReadCapacity",
+        "InstalledSeparate",
+        "SentPrefix",
+        "NoStaleAdvance",
+        "OrderedApplication",
+        "ExactlyOnce"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "只检查有限输入与可永久延迟网络的供给安全；有限 jobs 用尽或客户端不继续接收是允许环境停滞，不声明调度/网络活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxJobs": 2,
+          "MaxHead": 1,
+          "Scenario": "view"
+        },
+        "covered_interleavings_and_faults": [
+          "同一link最多一次view更换；旧活动读取和新view等待，未重连",
+          "真实发送入队后才推进sent；失败/构造本身不推进；installed基线独立",
+          "已应用内容前缀恰一次；旧身份不能安装到当前绑定"
+        ],
+        "excluded_behaviors": [
+          "任意消息数量、多 peer outbox 完成证明、物理网络交付/时延、400ms、8页循环的精确计数、CPU/SQL性能、Canvas及真实呈现信用、Crash、多实例、全部模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "每个模型 Enqueue 成功对应真实当前连接的一次同步入队证据；emit 返回值/ACK void 不建立事实。",
+        "单连接 Socket.IO FIFO 只指消息接收顺序；客户端何时应用由本模型单独表达。",
+        "每页对应完整已提交事务前缀，读授权仍由原事务校验；当前 head 不代表未来事件。",
+        "更换 view 的控制请求已经使客户端旧代次无权安装，重连有新 link 身份。"
+      ]
+    },
+    "positive-reconnect": {
+      "config": "positive-reconnect.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "ReadCapacity",
+        "InstalledSeparate",
+        "SentPrefix",
+        "NoStaleAdvance",
+        "OrderedApplication",
+        "ExactlyOnce"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "只检查有限输入与可永久延迟网络的供给安全；有限 jobs 用尽或客户端不继续接收是允许环境停滞，不声明调度/网络活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxJobs": 2,
+          "MaxHead": 2,
+          "Scenario": "reconnect"
+        },
+        "covered_interleavings_and_faults": [
+          "一次link替换；新旧link独立lane/按各自FIFO到达；每link的view固定",
+          "真实发送入队后才推进sent；失败/构造本身不推进；installed基线独立",
+          "已应用内容前缀恰一次；旧身份不能安装到当前绑定"
+        ],
+        "excluded_behaviors": [
+          "任意消息数量、多 peer outbox 完成证明、物理网络交付/时延、400ms、8页循环的精确计数、CPU/SQL性能、Canvas及真实呈现信用、Crash、多实例、全部模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "每个模型 Enqueue 成功对应真实当前连接的一次同步入队证据；emit 返回值/ACK void 不建立事实。",
+        "单连接 Socket.IO FIFO 只指消息接收顺序；客户端何时应用由本模型单独表达。",
+        "每页对应完整已提交事务前缀，读授权仍由原事务校验；当前 head 不代表未来事件。",
+        "更换 view 的控制请求已经使客户端旧代次无权安装，重连有新 link 身份。"
+      ]
+    },
+    "negative-omission": {
+      "config": "negative-omission.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "ExactlyOnce"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "只检查有限输入与可永久延迟网络的供给安全；有限 jobs 用尽或客户端不继续接收是允许环境停滞，不声明调度/网络活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "omit-apply",
+          "MaxJobs": 1,
+          "MaxHead": 1,
+          "Scenario": "order"
+        },
+        "covered_interleavings_and_faults": [
+          "稳定同一link/view；读取、完整入队、ACK callback/push/Promise交错",
+          "真实发送入队后才推进sent；失败/构造本身不推进；installed基线独立",
+          "已应用内容前缀恰一次；旧身份不能安装到当前绑定"
+        ],
+        "excluded_behaviors": [
+          "任意消息数量、多 peer outbox 完成证明、物理网络交付/时延、400ms、8页循环的精确计数、CPU/SQL性能、Canvas及真实呈现信用、Crash、多实例、全部模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "每个模型 Enqueue 成功对应真实当前连接的一次同步入队证据；emit 返回值/ACK void 不建立事实。",
+        "单连接 Socket.IO FIFO 只指消息接收顺序；客户端何时应用由本模型单独表达。",
+        "每页对应完整已提交事务前缀，读授权仍由原事务校验；当前 head 不代表未来事件。",
+        "更换 view 的控制请求已经使客户端旧代次无权安装，重连有新 link 身份。"
+      ]
+    },
+    "witness-late-old-link": {
+      "config": "witness-late-old-link.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoLateOldLinkWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "只检查有限输入与可永久延迟网络的供给安全；有限 jobs 用尽或客户端不继续接收是允许环境停滞，不声明调度/网络活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxJobs": 2,
+          "MaxHead": 2,
+          "Scenario": "reconnect"
+        },
+        "covered_interleavings_and_faults": [
+          "一次link替换；新旧link独立lane/按各自FIFO到达；每link的view固定",
+          "真实发送入队后才推进sent；失败/构造本身不推进；installed基线独立",
+          "已应用内容前缀恰一次；旧身份不能安装到当前绑定"
+        ],
+        "excluded_behaviors": [
+          "任意消息数量、多 peer outbox 完成证明、物理网络交付/时延、400ms、8页循环的精确计数、CPU/SQL性能、Canvas及真实呈现信用、Crash、多实例、全部模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "每个模型 Enqueue 成功对应真实当前连接的一次同步入队证据；emit 返回值/ACK void 不建立事实。",
+        "单连接 Socket.IO FIFO 只指消息接收顺序；客户端何时应用由本模型单独表达。",
+        "每页对应完整已提交事务前缀，读授权仍由原事务校验；当前 head 不代表未来事件。",
+        "更换 view 的控制请求已经使客户端旧代次无权安装，重连有新 link 身份。"
+      ]
+    },
+    "witness-two-links-active": {
+      "config": "witness-two-links-active.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoTwoLinkActiveWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "只检查有限输入与可永久延迟网络的供给安全；有限 jobs 用尽或客户端不继续接收是允许环境停滞，不声明调度/网络活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxJobs": 2,
+          "MaxHead": 0,
+          "Scenario": "reconnect"
+        },
+        "covered_interleavings_and_faults": [
+          "一次link替换；新旧link独立lane/按各自FIFO到达；每link的view固定",
+          "真实发送入队后才推进sent；失败/构造本身不推进；installed基线独立",
+          "内容域为空，只检查基线和资源边界，不计非空Batch验收"
+        ],
+        "excluded_behaviors": [
+          "任意消息数量、多 peer outbox 完成证明、物理网络交付/时延、400ms、8页循环的精确计数、CPU/SQL性能、Canvas及真实呈现信用、Crash、多实例、全部模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "每个模型 Enqueue 成功对应真实当前连接的一次同步入队证据；emit 返回值/ACK void 不建立事实。",
+        "单连接 Socket.IO FIFO 只指消息接收顺序；客户端何时应用由本模型单独表达。",
+        "每页对应完整已提交事务前缀，读授权仍由原事务校验；当前 head 不代表未来事件。",
+        "更换 view 的控制请求已经使客户端旧代次无权安装，重连有新 link 身份。"
+      ]
+    },
+    "negative-old-snapshot": {
+      "config": "negative-old-snapshot.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoStaleAdvance"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "只检查有限输入与可永久延迟网络的供给安全；有限 jobs 用尽或客户端不继续接收是允许环境停滞，不声明调度/网络活性。",
+      "scope": {
+        "parameters": {
+          "Fault": "old-snapshot",
+          "MaxJobs": 1,
+          "MaxHead": 0,
+          "Scenario": "reconnect"
+        },
+        "covered_interleavings_and_faults": [
+          "一次link替换；新旧link独立lane/按各自FIFO到达；每link的view固定",
+          "真实发送入队后才推进sent；失败/构造本身不推进；installed基线独立",
+          "内容域为空，只检查基线和资源边界，不计非空Batch验收"
+        ],
+        "excluded_behaviors": [
+          "任意消息数量、多 peer outbox 完成证明、物理网络交付/时延、400ms、8页循环的精确计数、CPU/SQL性能、Canvas及真实呈现信用、Crash、多实例、全部模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "每个模型 Enqueue 成功对应真实当前连接的一次同步入队证据；emit 返回值/ACK void 不建立事实。",
+        "单连接 Socket.IO FIFO 只指消息接收顺序；客户端何时应用由本模型单独表达。",
+        "每页对应完整已提交事务前缀，读授权仍由原事务校验；当前 head 不代表未来事件。",
+        "更换 view 的控制请求已经使客户端旧代次无权安装，重连有新 link 身份。"
+      ]
+    }
+  }
+}

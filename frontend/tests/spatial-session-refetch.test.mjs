@@ -44,9 +44,9 @@ test('SV02-05：同步响应重入推进后，保留内层快照并从当前游�
         outer.events[0].payload.projection.self.name = '不应安装的外层';
         inner.events[0].payload.projection.self.name = '内层已确认';
         const projection = outer.events[0].payload.projection;
-        projection.targets = new Proxy([], { get(array, key, receiver) {
-          if (key === 'forEach') { calls++; projection.targets = []; h.handlers.batch(inner); }
-          return Reflect.get(array, key, receiver);
+        projection.targets = new Proxy([], { ownKeys(array) {
+          calls++; projection.targets = []; h.handlers.batch(inner);
+          return Reflect.ownKeys(array);
         } });
         return outer;
       }
@@ -66,7 +66,7 @@ test('SV02-05：同步响应重入推进后，保留内层快照并从当前游�
   } finally { h.client.close(); }
 });
 
-test('SV02-06：等待时推送缺口不被同key丢掉，即使本页响应为空重复', async () => {
+test('SV02-06：等待时推送缺口在原轮后补取，即使本页响应为空重复', async () => {
   const h = harness(); let release;
   try {
     await h.start();
@@ -75,7 +75,7 @@ test('SV02-06：等待时推送缺口不被同key丢掉，即使本页响应为�
     const pending = h.client.sync();
     h.handlers.batch(spatialBatch({ ...h.initial, snapshotSeq: '12' }, '13'));
     assert.equal(h.requests.length, 1, '同一页仍保持单个在途请求');
-    release(); await pending;
+    release(); await pending; await flush(); await flush();
     assert.deepEqual(h.requests.map(request => request.cursor), ['10', '10']);
     assert.equal(h.client.state.snapshot.snapshotSeq, '10');
   } finally { release?.(); h.client.close(); }
@@ -134,16 +134,21 @@ test('SV02-08：应用发布中启动控制事务，旧轮停止且新视图独�
   } finally { releaseControl?.(); if (control) await control; h.client.close(); }
 });
 
-test('SV02-09：旁路补取意图不能把错误视图的stale响应变成续页', async () => {
-  const h = harness(); let release;
-  try {
-    await h.start();
-    h.setReply(request => new Promise(resolve => { release = () => resolve({ ...empty(request), viewId: 'wrong-view' }); }));
-    const pending = h.client.sync();
-    h.handlers.batch(spatialBatch({ ...h.initial, snapshotSeq: '12' }, '13'));
-    release(); await pending;
-    assert.equal(h.requests.length, 1); assert.equal(h.client.state.snapshot.viewId, h.initial.viewId);
-  } finally { release?.(); h.client.close(); }
+test('SV02-09：错误view结束本轮，只有独立外部需求可以开启后继轮', async t => {
+  for (const fresh of [false, true]) await t.test(String(fresh), async () => {
+    const h = harness(); let release;
+    try {
+      await h.start();
+      h.setReply(request => h.requests.length === 1
+        ? new Promise(resolve => { release = () => resolve({ ...empty(request), viewId: 'wrong-view' }); })
+        : empty(request));
+      const pending = h.client.sync();
+      if (fresh) h.handlers.batch(spatialBatch({ ...h.initial, snapshotSeq: '12' }, '13'));
+      release(); await pending; await flush(); await flush();
+      assert.deepEqual(h.requests.map(q => q.cursor), fresh ? ['10', '10'] : ['10']);
+      assert.equal(h.client.state.snapshot.viewId, h.initial.viewId); assert.equal(h.client.state.snapshot.snapshotSeq, '10');
+    } finally { release?.(); h.client.close(); }
+  });
 });
 
 test('SV02-09：有补取意图时撤权响应仍立即清空视图并停止', async () => {

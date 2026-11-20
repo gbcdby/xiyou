@@ -1,0 +1,249 @@
+{
+  "schema_version": "work-result/v1",
+  "work_id": "xiyou-66-rpc-replay-supply-design-r1",
+  "skill": "worker-design",
+  "outcome": "COMPLETE",
+  "design_status": "DRAFT_FOR_INDEPENDENT_REVIEW",
+  "subject": {
+    "kind": "git_commit",
+    "id": "bb66dac423a7a306752a7474eabc95d7d4d9edb7",
+    "tree": "deccc2600f3703f4b158f9b7ef5505680c557f0e",
+    "source_hash_count": 416,
+    "status": ""
+  },
+  "created_at": "2026-11-17T13:42:50.891431+00:00",
+  "spec_ref": "/workspace/scratch/af1da4413c53/xiyou-supply-wave-diagnostic/.agent-output/rpc-replay-supply-design/design-r1.md",
+  "basis_issue": "https://github.com/gbcdby/xiyou/issues/66#issuecomment-6949508120",
+  "source_inputs": {
+    "AGENTS.md": {
+      "sha256": "9e173fff03f73b349c9c7469d10613a99fad53e085967b90f83ab435ccc190c4",
+      "blob": "8b372339de1790711617d7868708128de1a40119"
+    },
+    "docs/engineering.md": {
+      "sha256": "08005356ecb68e87b9c5ba93a2f6491e544bd3a036c93d1f72b4ea488b01e520",
+      "blob": "02fdbb91622398dc6908d859789d7b785da401ea"
+    },
+    "docs/agents/workflow.md": {
+      "sha256": "13baab7f28f0f444eb4988bd3675c48413ef3f838f0efda1e8037fae84820877",
+      "blob": "77880b098e7fe7b17fd3f8fb06c1d4392443ab26"
+    },
+    "docs/specs/adv-protocol.md": {
+      "sha256": "d33f77a8dea8f2840ef3f36ea12cbb5af234a043a2809ba6c8ce49b59566ac78",
+      "blob": "585a5c6735cea2d522d1523c7973efdc7ec01b3c"
+    },
+    "formal/adv001/direction-supply/SUPPLY_MAP.md": {
+      "sha256": "c6d95e52f5a6fc2fc5ab7599199a7317751011f7374eac075e82c36c2e142bae",
+      "blob": "e09363be87d87d08b014845f41d4e233cbc6fdfb"
+    },
+    "formal/adv001/direction-supply/supply/SpatialSupply.tla": {
+      "sha256": "40a4cfddbd48f0b69ab51362575f78653fc2000e36ffba85f9225e9575a147d7",
+      "blob": "f38069dd15a36fe3725ea722aa3d2f9f44f0726d"
+    },
+    "formal/adv001/direction-supply-parallel/HANDOFF.md": {
+      "sha256": "7d0f54b5b52456e26abf2fde5acd97f7c5a9ad1d6fec16a3054634a3a3259e45",
+      "blob": "ad74a0c73de565c2092e70ed08ca6e64b385a485"
+    },
+    "formal/adv001/direction-supply-parallel/model/SharedRead.tla": {
+      "sha256": "d7ef44896498a9c228862ea04e8bf199adfeda18d14fbf72ad2db4c1bcfff893",
+      "blob": "2673063ef47aa3dab4352cff7380c2d30ffd747e"
+    },
+    "formal/adv001/direction-supply-wave/CONTRACT.md": {
+      "sha256": "d7060182370c34baa615f7080ddcafc9a6cd5551a8bf22558919ccb9be5efb47",
+      "blob": "4a17d420fd7f901c18da60e4d0529655e363bd93"
+    },
+    "formal/adv001/direction-supply-wave/HANDOFF.md": {
+      "sha256": "0d9206921702bcf62a9cdd62e7a9aa608da4a4ea91568634e0f74c27a6667f0c",
+      "blob": "47e21c128a292948a648193eb2afbeb655ddc7cd"
+    },
+    "backend/spatial-supply.mjs": {
+      "sha256": "6e35490f8cfb1a6cbb783f687bf184c7f3bc975bd95aa03601301ff6c80b7d24",
+      "blob": "751e93a4abded7e904ed468675e26a2cea7bc9d3"
+    },
+    "backend/spatial-runtime.mjs": {
+      "sha256": "3a27d233e28d099f8a5a1329287d603c1f6e4bfb39adfb4f25245f39ef160165",
+      "blob": "7ab36f3d871d3391e6c1838308bb5605dc9bd49b"
+    },
+    "backend/runtime.mjs": {
+      "sha256": "ea3bd6865d7030d6b085d533f074fa087e8dfeeeb96192f2549847781fc96628",
+      "blob": "c713ee5cefab33a0dc02259a59a17f5328df901b"
+    },
+    "backend/socket-enqueue.mjs": {
+      "sha256": "9735ad439af8a68bba421208fa5065a194912748a8cb42e61deb69beb63d368b",
+      "blob": "521092a9746a42e651acbb3ad3bf7ebc9414739e"
+    },
+    "backend/server.mjs": {
+      "sha256": "ad8914b92c76f170d07d4b6528bf2ccbbc18dc357cc62d7b9b15360c71a5c5db",
+      "blob": "b5148430e9f14e2aa9b910b25cf348441a68a4bb"
+    },
+    "frontend/src/network/spatial-session.ts": {
+      "sha256": "bb38b2589b0643cb9f1ac3e403b62ce24bedde28ada56fa3c6b977886f8b8a9e",
+      "blob": "c155973e65b6e7c9d1efa93d6a211110479bfa17"
+    },
+    "frontend/src/network/socket-link.ts": {
+      "sha256": "0cbfa877d33eb3a46fef7010bb3ae87f056a13770c0713a1492f62b98d3deb31",
+      "blob": "3584f81505525c6a17c8d6261ea2d37740b44f95"
+    },
+    "frontend/src/domain/spatial-view.ts": {
+      "sha256": "34848de81c5fd4573be2c8c23428fd2c79461e630cfa3dcd8b459a9dc3a1b76c",
+      "blob": "3647f4eace9e9cfb2ecf7411020152ba931b3914"
+    },
+    "backend/tests/spatial-supply-pg.test.mjs": {
+      "sha256": "6c9e51f323ff26078fa917641c2d8430b5c7956595f0e32bdb5ae6c6cd5d6bc1",
+      "blob": "ad610c7d34119f6f9c92b93d62d9411964350a5c"
+    },
+    "backend/tests/spatial-supply.test.mjs": {
+      "sha256": "b29a54865e8a1d7d0e430f220abb9b1e9ecd1c88f1198da45c298928f48328d4",
+      "blob": "b5bd4017c324705caa56e803ac36e0853f2716db"
+    },
+    "frontend/src/network/direction-capability.ts": {
+      "sha256": "60fff8378a4db1aa369ddf59bb1bce0aaad05808261ce4f4287fe42a58fa7b76",
+      "blob": "d72e990ad68a0bde164d152b80fad90f8befb788"
+    },
+    "frontend/tests/spatial-reply-order.test.mjs": {
+      "sha256": "436fb0277f3e84d56e63ad02e88383012cf1af88fa6417b6f415f6d72e5cd9a4",
+      "blob": "aa2d5b5c3d748d7148c21f3010916c11ed7dc870"
+    },
+    "frontend/tests/spatial-inbound-order.test.mjs": {
+      "sha256": "928b3449b7aa667a9c1a8dcebfe130e0266e2498019598b6459b4298d814c5bb",
+      "blob": "a421cfaf6f5ac773af8c8f3ab0440a5ddf896e33"
+    },
+    "frontend/tests/spatial-sync-wakeup.test.mjs": {
+      "sha256": "0f7105e101f7c0e9df03d7309e05b0ba3ff1554d5dd8a8f0070f71b1264f18cb",
+      "blob": "7831eceadc7ee11a6da0a6cf2e335f4cb39a70b5"
+    }
+  },
+  "evidence": [
+    {
+      "id": "single-diagnostic",
+      "locator": "/workspace/scratch/af1da4413c53/xiyou-supply-wave-diagnostic/.agent-output/supply-wave-diagnostic/investigation.md",
+      "sha256": "aa69bb63103e4081a76d60f263b2f4d771eb1fbf055e10b76a61ff7b256530d5",
+      "scope": "同一固定候选的一次DIAGNOSTIC，RPC659/push632/W673的真实时序；不证明拟议修复",
+      "status": "OBSERVED",
+      "producer": "recovery_fix/worker-investigate",
+      "subject_id": "bb66dac423a7a306752a7474eabc95d7d4d9edb7"
+    },
+    {
+      "id": "consumer-and-adapter-test-definitions",
+      "locator": "source_inputs中的spatial-reply-order/spatial-inbound-order/spatial-sync-wakeup/spatial-supply-pg",
+      "scope": "仅静态读取现有测试定义，区分真实Socket与受控transport；本设计轮没有执行，不证明新分支",
+      "status": "STATIC_READ",
+      "subject_id": "bb66dac423a7a306752a7474eabc95d7d4d9edb7"
+    }
+  ],
+  "changed_assumptions": [
+    {
+      "id": "RRS-01",
+      "scope": "仅R=入场sent且active predecessor为publisher、同binding随后真实sent前进的RPC",
+      "replacement": "仍完整授权；有效from可取该binding执行时可信sent，非原请求cursor；真正历史请求继续旧ceiling路径",
+      "dto_change": false,
+      "modeled_transition_changed": true
+    }
+  ],
+  "implementation_proposed": [
+    {
+      "file": "backend/spatial-supply.mjs",
+      "changes": [
+        "保留item既有kind",
+        "RPC closure入场sent/前置publisher资格",
+        "仅资格成立选内部sentPrefixStart；原lane/优先/proof不变"
+      ]
+    },
+    {
+      "file": "backend/spatial-runtime.mjs",
+      "changes": [
+        "先按原R完整授权",
+        "验证server-only有效起点",
+        "有效from统一用于原分页/历史/轨迹/Batch；锁/COMMIT不变"
+      ]
+    }
+  ],
+  "compatibility": {
+    "unchanged": [
+      "defaultOFF",
+      "legacy",
+      "direction-only",
+      "direct-runtime-sync",
+      "historical-cursor-at-admission",
+      "predecessor-rpc",
+      "wave/G/5-peer/200ms/page256/8-page",
+      "frontend/protocol/proof"
+    ],
+    "explicit_changed_subset": "混合session内的full-cap handle也仅在同一资格成立时可用新规则；混合publisher fallback和不合格peer不变"
+  },
+  "validation": [
+    {
+      "id": "RRS-T01",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "RRS-T02",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "RRS-T03",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "RRS-T04",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "RRS-T05",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "RRS-T06",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "RRS-T07",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "RRS-T08",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "RRS-T09",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "RRS-T10",
+      "status": "NOT_RUN"
+    }
+  ],
+  "formal": {
+    "status": "NOT_RUN",
+    "scope": "SpatialSupply读起点/入场资格小增量；有限consumer拒收/ACK超时/一次fresh需求见证；SharedRead两种ceiling映射；wave接口align",
+    "no_blanket_tlc_required": true
+  },
+  "unresolved": [
+    "独立需求/标准审查未执行",
+    "有限模型增量及负控未执行",
+    "真实PG/Socket/客户端回归未执行",
+    "该变化是否足以通过原normal仍未知",
+    "不声称移除已观测SQL响应等待或量化修复78.6ms",
+    "同link先入队不是客户端应用确认；新ACKfrom不匹配及拒收后历史恢复的真实组合仍NOT_RUN",
+    "无heartbeat/fresh需求或永久拒收时不保证自动恢复或性能liveness",
+    "同binding sent来源为当前源码静态论证，新增写点/旁路发送/active替换必须返回设计"
+  ],
+  "next_action": "总控独立审查本草案及窄模型增量；采纳后再释放实现与原门验证。",
+  "frozen_at": "2026-11-17T13:48:48.651305+00:00",
+  "static_obligations": [
+    {
+      "id": "RRS-SENT-ORIGIN",
+      "status": "STATIC_ARGUMENT",
+      "scope": "私有sent仅sentBatch/proof推进、snapshot仅初始化、唯一active与RPC优先证明同V的S>A来源于所捕获publisher；新交错NOT_RUN"
+    },
+    {
+      "id": "RRS-CONSUMER",
+      "status": "STATIC_ARGUMENT",
+      "scope": "合法同link/view push同步应用；拒收后新ACK不连续则refetch，不跳游标；有fresh需求时下一真正旧cursor可沿历史路径恢复；拒收/timeout新组合NOT_RUN"
+    },
+    {
+      "id": "RRS-HISTORY",
+      "status": "REQUIRED",
+      "scope": "原R授权/安装下界不变；不前移installed、不删历史、不改旧cursor分页；撤权/换view仍按原错误和快照恢复"
+    }
+  ]
+}

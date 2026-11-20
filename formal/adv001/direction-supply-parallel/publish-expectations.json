@@ -1,0 +1,250 @@
+{
+  "positive-publish": {
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_tlc_exit": 0,
+    "minimum_distinct_states": 50,
+    "target": null,
+    "kind": "positive",
+    "gate": true
+  },
+  "positive-install": {
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_tlc_exit": 0,
+    "minimum_distinct_states": 50,
+    "target": null,
+    "kind": "positive",
+    "gate": true
+  },
+  "positive-join": {
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_tlc_exit": 0,
+    "minimum_distinct_states": 50,
+    "target": null,
+    "kind": "positive",
+    "gate": true
+  },
+  "positive-failure": {
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_tlc_exit": 0,
+    "minimum_distinct_states": 50,
+    "target": null,
+    "kind": "positive",
+    "gate": true
+  },
+  "positive-budget": {
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_tlc_exit": 0,
+    "minimum_distinct_states": 50,
+    "target": null,
+    "kind": "positive",
+    "gate": true
+  },
+  "positive-combined": {
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_tlc_exit": 0,
+    "minimum_distinct_states": 50,
+    "target": null,
+    "kind": "positive",
+    "gate": true
+  },
+  "negative-publish-type": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "TypeOK",
+    "kind": "negative-control",
+    "gate": true
+  },
+  "negative-unbounded": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "PeerBudget",
+    "kind": "negative-control",
+    "gate": true
+  },
+  "negative-progress-lock": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "LockExclusion",
+    "kind": "negative-control",
+    "gate": true
+  },
+  "negative-early-progress": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "SettledBeforeProgress",
+    "kind": "negative-control",
+    "gate": true
+  },
+  "negative-early-release": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NoLeakedTasks",
+    "kind": "negative-control",
+    "gate": true
+  },
+  "negative-ignore-pending": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "PendingPreventsPublish",
+    "kind": "negative-control",
+    "gate": true
+  },
+  "negative-stale-views": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "CurrentViewsCovered",
+    "kind": "negative-control",
+    "gate": true
+  },
+  "negative-ignore-failure": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "FailureKeepsPending",
+    "kind": "negative-control",
+    "gate": true
+  },
+  "negative-batch-progress": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "ExactRowCommit",
+    "kind": "negative-control",
+    "gate": true
+  },
+  "negative-fake-proof": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "SentProof",
+    "kind": "negative-control",
+    "gate": true
+  },
+  "negative-stale-binding": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NoStaleSend",
+    "kind": "negative-control",
+    "gate": true
+  },
+  "negative-pending-after-check": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "PendingPreventsPublish",
+    "kind": "negative-control",
+    "gate": true
+  },
+  "negative-join-after-check": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "CurrentViewsCovered",
+    "kind": "negative-control",
+    "gate": true
+  },
+  "witness-parallel-peers": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotTwoReaders",
+    "kind": "witness",
+    "gate": true
+  },
+  "witness-published-both": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotPublishedBoth",
+    "kind": "witness",
+    "gate": true
+  },
+  "witness-independent-rows": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotIndependentRows",
+    "kind": "witness",
+    "gate": true
+  },
+  "witness-failure-retained": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotFailureRetained",
+    "kind": "witness",
+    "gate": true
+  },
+  "witness-pending-blocked": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotPendingBlocked",
+    "kind": "witness",
+    "gate": true
+  },
+  "witness-new-view-blocked": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotNewViewBlocked",
+    "kind": "witness",
+    "gate": true
+  },
+  "witness-join-blocked": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotJoinBlocked",
+    "kind": "witness",
+    "gate": true
+  },
+  "witness-close-settled": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotClosedSettled",
+    "kind": "witness",
+    "gate": true
+  },
+  "negative-close-release": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NoLeakedTasks",
+    "kind": "negative-control",
+    "gate": true
+  },
+  "negative-closed-send": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NoStaleSend",
+    "kind": "negative-control",
+    "gate": true
+  },
+  "witness-read-failure-retained": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotReadFailureRetained",
+    "kind": "witness",
+    "gate": true
+  },
+  "witness-send-failure-retained": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotSendFailureRetained",
+    "kind": "witness",
+    "gate": true
+  }
+}

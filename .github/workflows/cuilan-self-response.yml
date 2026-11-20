@@ -1,9 +1,9 @@
 name: 翠兰本人生产流程
 
 on:
+  # 日常验证走本地 `npm run ci:local -- --job cuilan`；云端仅 main 合并后背书与手动按需执行。
   push:
     branches: [main]
-  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -75,6 +75,7 @@ jobs:
             .agent-output/ci/browser-cuilan-self-response/startup.json
             .agent-output/ci/browser-cuilan-self-response/result-before-cleanup.json
             .agent-output/ci/browser-cuilan-self-response/result.json
+            .agent-output/ci/browser-cuilan-self-response/p05-node-profile.json
             .agent-output/ci/browser-cuilan-self-response/stdout.log
             .agent-output/ci/browser-cuilan-self-response/*.png
             .agent-output/ci/cuilan-process-restart/startup.json

@@ -52,7 +52,7 @@ export async function checkSceneLayerResources({ browser, output, report, sample
   const set = value => { validateSpatial('SnapshotV2', value); return page.evaluate(value => window.objectVisualFixture.setSnapshot(value), value); };
   const count = (selector, expected, label) => until(async () => await page.locator(selector).count() === expected, label, 6000);
   const status = expected => until(async () => await page.locator('.spatial-map').getAttribute('data-scene-layer-status') === expected, '场景组状态 ' + expected, 6000);
-  const retry = async () => page.locator('.spatial-map-note').getByRole('button', { name: '重新载入图像', exact: true }).click();
+  const retry = async () => page.locator('.spatial-map-note').getByRole('button', { name: '重新载入场景', exact: true }).click();
   const release = async () => { const routes = pending.splice(0); for (const route of routes) await fulfill(route); };
   const picture = async (locator, name) => { const file = resolve(output, name); const bytes = await locator.screenshot({ path: file }); const value = { file: name, sha256: sha256(bytes) }; evidence.screenshots.push(value); return value.sha256; };
   const closed = samples.fixed, open = samples['door-open'];
@@ -77,7 +77,7 @@ export async function checkSceneLayerResources({ browser, output, report, sample
     assert.equal(await page.locator('.spatial-scene-base').count(), 0, '部分完成不暴露半组');
     staticMode = 'good'; await release(); await status('ready');
     await count('.spatial-scene-base', 1, '完整底图'); await count('.spatial-scene-floor', 1, '完整地面'); await count('.spatial-scene-foreground', 1, '完整前沿');
-    await page.locator('.spatial-map-note').getByRole('button', { name: '重新载入图像', exact: true }).waitFor();
+    await page.locator('.spatial-map-note').getByRole('button', { name: '重新载入场景', exact: true }).waitFor();
     assert.equal(await page.locator('.spatial-scene-door image').count(), 0); assert.equal(await page.locator('.spatial-neutral-door').count(), 1);
     const target = closed.projection.targets.find(value => value.visualKey === 'timber-door');
     const doorTarget = page.locator('.spatial-target[aria-label="选择' + target.name + '"]');
@@ -131,7 +131,7 @@ export async function checkSceneLayerResources({ browser, output, report, sample
     // 已离场的旧组同时有迟到error与load，二者都不能给当前场景留下失败状态。
     await pending.shift().abort('failed'); await release(); await page.waitForLoadState('networkidle');
     assert.equal(await page.locator('.spatial-scene-door,.spatial-scene-base').count(), 0);
-    assert.equal(await page.locator('.spatial-map-note').getByRole('button', { name: '重新载入图像', exact: true }).count(), 0);
+    assert.equal(await page.locator('.spatial-map-note').getByRole('button', { name: '重新载入场景', exact: true }).count(), 0);
     const returnedBackground = new URL(await page.locator('.spatial-scene-art').getAttribute('href'), page.url());
     assert.equal(returnedBackground.pathname, '/assets/gaolaozhuang/scenes/village-road.png');
     assert.match(returnedBackground.search, /^(?:\?retry=[1-9]\d*)?$/, '只允许原图像重试参数');

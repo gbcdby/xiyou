@@ -1,9 +1,10 @@
 name: 自动检查
 
 on:
+  # 日常验证走本地 `npm run ci:local`（scripts/ci-local.mjs），避免每个 PR 提交都触发云端全量套件。
+  # 云端保留：main 合并后背书 + 手动按需执行；最终证据仍以对应提交的 Actions run 为准。
   push:
     branches: [main]
-  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -14,8 +15,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  checks:
-    name: 协议、规则、联机与浏览器
+  core:
+    name: 协议、规则、联机与前端构建
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     env:
@@ -62,6 +63,32 @@ jobs:
         run: |
           npm test --prefix frontend
           npm run build --prefix frontend
+
+  browser_static:
+    name: 首章静态资源浏览器
+    needs: core
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      CI: 'true'
+      CHROMIUM_ARGS: '[]'
+    steps:
+      - name: 读取候选
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: 准备 Node.js 24
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            frontend/package-lock.json
+      - name: 安装已锁定依赖
+        run: |
+          npm ci
+          npm ci --prefix frontend
       - name: 安装已锁定 Playwright 对应的 Chromium
         working-directory: frontend
         run: npx --no-install playwright install --with-deps chromium
@@ -76,10 +103,220 @@ jobs:
           mkdir -p "$FRONTEND_EVIDENCE_DIR"
           set -o pipefail
           node frontend/tests/static-release-browser.mjs 2>&1 | tee "$FRONTEND_EVIDENCE_DIR/stdout.log"
+      - name: 保留浏览器结果与截图
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: browser-static-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          # 仅上传具名结果和截图，不上传数据库目录、连接配置或浏览器缓存。
+          path: |
+            .agent-output/ci/browser-static-release/startup.json
+            .agent-output/ci/browser-static-release/stdout.log
+            .agent-output/ci/browser-static-release/postgres.log
+            .agent-output/ci/browser-static-release/run/result.json
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 7
+
+  browser_spatial:
+    name: 多人空间与对象几何浏览器
+    needs: core
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      CI: 'true'
+      CHROMIUM_ARGS: '[]'
+    steps:
+      - name: 读取候选
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: 准备 Node.js 24
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            frontend/package-lock.json
+      - name: 安装已锁定依赖
+        run: |
+          npm ci
+          npm ci --prefix frontend
+      - name: 安装已锁定 Playwright 对应的 Chromium
+        working-directory: frontend
+        run: npx --no-install playwright install --with-deps chromium
       - name: 真实多人空间浏览器检查
         env:
           FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-spatial
         run: node frontend/tests/spatial-browser-check.mjs
+      - name: 保留浏览器结果与截图
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: browser-spatial-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          # 仅上传具名结果和截图，不上传数据库目录、连接配置或浏览器缓存。
+          path: |
+            .agent-output/ci/browser-spatial/result.json
+            .agent-output/ci/browser-spatial/result-before-cleanup.json
+            .agent-output/ci/browser-spatial/object-geometry-result.json
+            .agent-output/ci/browser-spatial/*.png
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 7
+
+  browser_direction:
+    name: 连续输入与新模式多人浏览器
+    needs: core
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      CI: 'true'
+      CHROMIUM_ARGS: '[]'
+    steps:
+      - name: 读取候选
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: 准备 Node.js 24
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            frontend/package-lock.json
+      - name: 安装已锁定依赖
+        run: |
+          npm ci
+          npm ci --prefix frontend
+      - name: 安装已锁定 Playwright 对应的 Chromium
+        working-directory: frontend
+        run: npx --no-install playwright install --with-deps chromium
+      - name: 对象栅格固定输入的严格RGBA像素回归
+        timeout-minutes: 2
+        shell: bash
+        env:
+          FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-object-raster
+        # 同一候选先冻结再单次检查；任意RGBA差异失败，不重试，默认success依赖。
+        run: |
+          mkdir -p "$FRONTEND_EVIDENCE_DIR"
+          set -o pipefail
+          node frontend/tests/object-raster-browser-check.mjs --freeze-only --output "$FRONTEND_EVIDENCE_DIR" 2>&1 | tee "$FRONTEND_EVIDENCE_DIR/stdout.log"
+          node frontend/tests/object-raster-browser-check.mjs --manifest "$FRONTEND_EVIDENCE_DIR/input-manifest.json" --output "$FRONTEND_EVIDENCE_DIR" 2>&1 | tee -a "$FRONTEND_EVIDENCE_DIR/stdout.log"
+      - name: 完整背景捕获固定输入的严格RGBA像素回归
+        timeout-minutes: 2
+        shell: bash
+        env:
+          FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-background-raster
+        # 四几何八对；真miss/hit与真fallback分别判定，不包含性能计量或重试。
+        run: |
+          mkdir -p "$FRONTEND_EVIDENCE_DIR"
+          set -o pipefail
+          node frontend/tests/background-raster-browser-check.mjs --freeze-only --output "$FRONTEND_EVIDENCE_DIR" 2>&1 | tee "$FRONTEND_EVIDENCE_DIR/stdout.log"
+          node frontend/tests/background-raster-browser-check.mjs --manifest "$FRONTEND_EVIDENCE_DIR/input-manifest.json" --output "$FRONTEND_EVIDENCE_DIR" 2>&1 | tee -a "$FRONTEND_EVIDENCE_DIR/stdout.log"
+      - name: 桌面与窄屏呈现生命周期组件回归
+        timeout-minutes: 2
+        env:
+          FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-presentation-lifecycle
+        # 真实Vue/Canvas与公开DTO组件检查；不代替下方原配置整场动态验收。
+        run: npm run test:browser:presentation-lifecycle --prefix frontend
+      - name: 推送通知异常后的原客户端连续确认回归
+        timeout-minutes: 2
+        shell: bash
+        env:
+          FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-rpc-push-notify
+        # 真实PG与两个原浏览器消费者；单一逻辑交错，不代替后续连续输入验收。
+        run: |
+          mkdir -p "$FRONTEND_EVIDENCE_DIR"
+          set -o pipefail
+          node frontend/tests/spatial-rpc-push-notify-browser.mjs 2>&1 | tee "$FRONTEND_EVIDENCE_DIR/stdout.log"
+      - name: scene-v3 Canvas、连续输入、地图与目标动态验收
+        timeout-minutes: 4
+        env:
+          FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-client-experience
+          VITE_GAOLAO_CONTENT_VERSION: 'gaolaozhuang-scene-v3'
+        # 当前正式内容；两个独立账号真实UI/PG/Socket。录像不替代断言、独审或真人试玩。
+        run: node frontend/tests/client-experience-browser.mjs
+      - name: 同配置已接受斜向180ms迟到确认与真实Canvas
+        timeout-minutes: 4
+        env:
+          FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-direction-late
+          VITE_GAOLAO_CONTENT_VERSION: 'gaolaozhuang-scene-v3'
+        # 默认success依赖：normal通过才运行，首个冻结SE样本失格也失败，不挑样本重试。
+        run: node frontend/tests/client-experience-browser.mjs late-accepted-se-180
+      - name: 同配置五个真实新模式客户端供给与Canvas
+        timeout-minutes: 4
+        env:
+          FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-direction-five
+          VITE_GAOLAO_CONTENT_VERSION: 'gaolaozhuang-scene-v3'
+        # late通过才继续；一名运动者、五个实际应用前缀的读者，不人为加快心跳。
+        run: node frontend/tests/client-experience-browser.mjs five-person
+      - name: 保留浏览器结果与截图
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: browser-direction-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          # 仅上传具名结果和截图，不上传数据库目录、连接配置或浏览器缓存。
+          path: |
+            .agent-output/ci/browser-object-raster/input-manifest.json
+            .agent-output/ci/browser-object-raster/result.json
+            .agent-output/ci/browser-object-raster/stdout.log
+            .agent-output/ci/browser-object-raster/difference-*.png
+            .agent-output/ci/browser-background-raster/input-manifest.json
+            .agent-output/ci/browser-background-raster/result.json
+            .agent-output/ci/browser-background-raster/stdout.log
+            .agent-output/ci/browser-background-raster/difference-*.png
+            .agent-output/ci/browser-presentation-lifecycle/result.json
+            .agent-output/ci/browser-rpc-push-notify/result.json
+            .agent-output/ci/browser-rpc-push-notify/stdout.log
+            .agent-output/ci/browser-client-experience/result.json
+            .agent-output/ci/browser-client-experience/result-before-cleanup.json
+            .agent-output/ci/browser-client-experience/scene-v3-desktop.png
+            .agent-output/ci/browser-client-experience/scene-v3-map-route.png
+            .agent-output/ci/browser-client-experience/scene-v3-narrow.png
+            .agent-output/ci/browser-client-experience/scene-v3-failure.png
+            .agent-output/ci/browser-client-experience/scene-v3-demo.webm
+            .agent-output/ci/browser-direction-late/result.json
+            .agent-output/ci/browser-direction-late/result-before-cleanup.json
+            .agent-output/ci/browser-direction-late/scene-v3-failure.png
+            .agent-output/ci/browser-direction-late/scene-v3-demo.webm
+            .agent-output/ci/browser-direction-five/result.json
+            .agent-output/ci/browser-direction-five/result-before-cleanup.json
+            .agent-output/ci/browser-direction-five/scene-v3-failure.png
+            .agent-output/ci/browser-direction-five/scene-v3-demo.webm
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 7
+
+  browser_legacy:
+    name: 旧版 A2 章节浏览器
+    needs: core
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      CI: 'true'
+      CHROMIUM_ARGS: '[]'
+    steps:
+      - name: 读取候选
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: 准备 Node.js 24
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            frontend/package-lock.json
+      - name: 安装已锁定依赖
+        run: |
+          npm ci
+          npm ci --prefix frontend
+      - name: 安装已锁定 Playwright 对应的 Chromium
+        working-directory: frontend
+        run: npx --no-install playwright install --with-deps chromium
       - name: 旧版 A2 高老庄真实 2 人与 5 人章节及授权复盘
         env:
           FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-gaolao
@@ -87,6 +324,48 @@ jobs:
         # 与 browserRoom 的旧内容夹具一致；此回归不充当 scene-v2 场景策略验收。
         # 玩家操作走真实页面，NPC 只使用受信受控策略；不替代独立的 900 秒验收。
         run: npm run test:browser:gaolao --prefix frontend
+      - name: 保留浏览器结果与截图
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: browser-legacy-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          # 仅上传具名结果和截图，不上传数据库目录、连接配置或浏览器缓存。
+          path: |
+            .agent-output/ci/browser-gaolao/result.json
+            .agent-output/ci/browser-gaolao/result-before-cleanup.json
+            .agent-output/ci/browser-gaolao/*.png
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 7
+
+  browser_retention:
+    name: 未决请求与恢复浏览器
+    needs: core
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      CI: 'true'
+      CHROMIUM_ARGS: '[]'
+    steps:
+      - name: 读取候选
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: 准备 Node.js 24
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            frontend/package-lock.json
+      - name: 安装已锁定依赖
+        run: |
+          npm ci
+          npm ci --prefix frontend
+      - name: 安装已锁定 Playwright 对应的 Chromium
+        working-directory: frontend
+        run: npx --no-install playwright install --with-deps chromium
       - name: 未决请求、持久恢复与原样重试检查
         env:
           FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-retention
@@ -95,21 +374,37 @@ jobs:
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
-          name: browser-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          name: browser-retention-evidence-${{ github.run_id }}-${{ github.run_attempt }}
           # 仅上传具名结果和截图，不上传数据库目录、连接配置或浏览器缓存。
           path: |
-            .agent-output/ci/browser-spatial/result.json
-            .agent-output/ci/browser-spatial/result-before-cleanup.json
-            .agent-output/ci/browser-spatial/*.png
             .agent-output/ci/browser-retention/report.json
             .agent-output/ci/browser-retention/pending-actions.png
-            .agent-output/ci/browser-gaolao/result.json
-            .agent-output/ci/browser-gaolao/result-before-cleanup.json
-            .agent-output/ci/browser-gaolao/*.png
-            .agent-output/ci/browser-static-release/startup.json
-            .agent-output/ci/browser-static-release/stdout.log
-            .agent-output/ci/browser-static-release/postgres.log
-            .agent-output/ci/browser-static-release/run/result.json
           include-hidden-files: true
           if-no-files-found: warn
           retention-days: 7
+
+  checks:
+    name: 协议、规则、联机与浏览器
+    if: always()
+    needs: [core, browser_static, browser_spatial, browser_direction, browser_legacy, browser_retention]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: 确认全部原门槛通过
+        shell: bash
+        env:
+          CORE_RESULT: ${{ needs.core.result }}
+          STATIC_RESULT: ${{ needs.browser_static.result }}
+          SPATIAL_RESULT: ${{ needs.browser_spatial.result }}
+          DIRECTION_RESULT: ${{ needs.browser_direction.result }}
+          LEGACY_RESULT: ${{ needs.browser_legacy.result }}
+          RETENTION_RESULT: ${{ needs.browser_retention.result }}
+        run: |
+          names=(core static spatial direction legacy retention)
+          results=("$CORE_RESULT" "$STATIC_RESULT" "$SPATIAL_RESULT" "$DIRECTION_RESULT" "$LEGACY_RESULT" "$RETENTION_RESULT")
+          failed=0
+          for index in "${!names[@]}"; do
+            printf '%s=%s\n' "${names[$index]}" "${results[$index]}"
+            if [[ "${results[$index]}" != success ]]; then failed=1; fi
+          done
+          exit "$failed"

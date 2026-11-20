@@ -1,0 +1,422 @@
+{
+  "positive-two-rows": {
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_tlc_exit": 0,
+    "minimum_distinct_states": 50,
+    "target": null,
+    "kind": "positive"
+  },
+  "positive-one-row-budget": {
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_tlc_exit": 0,
+    "minimum_distinct_states": 50,
+    "target": null,
+    "kind": "positive"
+  },
+  "positive-rpc": {
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_tlc_exit": 0,
+    "minimum_distinct_states": 50,
+    "target": null,
+    "kind": "positive"
+  },
+  "positive-failure": {
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_tlc_exit": 0,
+    "minimum_distinct_states": 50,
+    "target": null,
+    "kind": "positive"
+  },
+  "positive-pending": {
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_tlc_exit": 0,
+    "minimum_distinct_states": 50,
+    "target": null,
+    "kind": "positive"
+  },
+  "positive-view": {
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_tlc_exit": 0,
+    "minimum_distinct_states": 50,
+    "target": null,
+    "kind": "positive"
+  },
+  "positive-join": {
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_tlc_exit": 0,
+    "minimum_distinct_states": 50,
+    "target": null,
+    "kind": "positive"
+  },
+  "positive-close": {
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_tlc_exit": 0,
+    "minimum_distinct_states": 50,
+    "target": null,
+    "kind": "positive"
+  },
+  "positive-mixed": {
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_tlc_exit": 0,
+    "minimum_distinct_states": 50,
+    "target": null,
+    "kind": "positive"
+  },
+  "positive-merge": {
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_tlc_exit": 0,
+    "minimum_distinct_states": 50,
+    "target": null,
+    "kind": "positive"
+  },
+  "positive-pagination": {
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_tlc_exit": 0,
+    "minimum_distinct_states": 50,
+    "target": null,
+    "kind": "positive"
+  },
+  "negative-type": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "TypeOK",
+    "kind": "negative-control"
+  },
+  "negative-second-owner": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "SingleSlots",
+    "kind": "negative-control"
+  },
+  "negative-second-progress": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "SingleSlots",
+    "kind": "negative-control"
+  },
+  "negative-second-wave": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "SingleSlots",
+    "kind": "negative-control"
+  },
+  "negative-exceed-budget": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "PeerBudget",
+    "kind": "negative-control"
+  },
+  "negative-read-through-lock": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "LockExclusion",
+    "kind": "negative-control"
+  },
+  "negative-progress-through-read": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "LockExclusion",
+    "kind": "negative-control"
+  },
+  "negative-early-progress": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "AdmissionSettled",
+    "kind": "negative-control"
+  },
+  "negative-early-release": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "DrainedOwner",
+    "kind": "negative-control"
+  },
+  "negative-cancel-sql": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NoSQLCancellation",
+    "kind": "negative-control"
+  },
+  "negative-start-after-stop": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NoNewAfterStop",
+    "kind": "negative-control"
+  },
+  "negative-wave-after-drain": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NoNewAfterStop",
+    "kind": "negative-control"
+  },
+  "negative-reorder-rows": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "OrderedAttempts",
+    "kind": "negative-control"
+  },
+  "negative-batch-update": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "ExactRowCommit",
+    "kind": "negative-control"
+  },
+  "negative-precommit-published": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "ActualCommitOnly",
+    "kind": "negative-control"
+  },
+  "negative-rollback-commit": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "ActualCommitOnly",
+    "kind": "negative-control"
+  },
+  "negative-ignore-pending": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "PendingBlocks",
+    "kind": "negative-control"
+  },
+  "negative-pending-after-check": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "PendingBlocks",
+    "kind": "negative-control"
+  },
+  "negative-stale-coverage": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "CurrentCoverage",
+    "kind": "negative-control"
+  },
+  "negative-join-after-check": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "CurrentCoverage",
+    "kind": "negative-control"
+  },
+  "negative-fake-proof": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "SentProof",
+    "kind": "negative-control"
+  },
+  "negative-rollback-peer": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "SuccessfulSentRetained",
+    "kind": "negative-control"
+  },
+  "negative-failure-as-success": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "FailureDoesNotAdvance",
+    "kind": "negative-control"
+  },
+  "negative-stale-send": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NoStaleSend",
+    "kind": "negative-control"
+  },
+  "negative-hint-as-authority": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "FixedAuthorizedHead",
+    "kind": "negative-control"
+  },
+  "negative-bypass-rpc": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "RPCBoundary",
+    "kind": "negative-control"
+  },
+  "negative-rpc-above-ceiling": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "RPCBoundary",
+    "kind": "negative-control"
+  },
+  "negative-chase-wave": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "FiniteWave",
+    "kind": "negative-control"
+  },
+  "negative-repeat-peer": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "FiniteWave",
+    "kind": "negative-control"
+  },
+  "negative-busy-retry": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NoBusyRetry",
+    "kind": "negative-control"
+  },
+  "negative-erase-owed": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "ProgressOpportunity",
+    "kind": "negative-control"
+  },
+  "negative-bypass-opportunity": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "ProgressOpportunity",
+    "kind": "negative-control"
+  },
+  "witness-stopped-sql": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotStoppedSQLWait",
+    "kind": "witness"
+  },
+  "witness-one-row-overlap": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotQueuedOverlap",
+    "kind": "witness"
+  },
+  "witness-two-row-overlap": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotQueuedOverlap",
+    "kind": "witness"
+  },
+  "witness-rpc-lane": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotReadBehindRPC",
+    "kind": "witness"
+  },
+  "witness-lock-wait": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotReadWaitingOnProgress",
+    "kind": "witness"
+  },
+  "witness-committed-wave": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotCommittedWhileWave",
+    "kind": "witness"
+  },
+  "witness-completed-overlap": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotCompletedOverlap",
+    "kind": "witness"
+  },
+  "witness-send-error-drain": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotFailureDrained",
+    "kind": "witness"
+  },
+  "witness-read-error-drain": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotReadFailureDrained",
+    "kind": "witness"
+  },
+  "witness-unknown-retained": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotUnknownRetained",
+    "kind": "witness"
+  },
+  "witness-close-drain": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotClosedDrained",
+    "kind": "witness"
+  },
+  "witness-mixed-drain": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotMixedDrained",
+    "kind": "witness"
+  },
+  "witness-pending-blocked": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotPendingBlocked",
+    "kind": "witness"
+  },
+  "witness-view-discard": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotViewDiscarded",
+    "kind": "witness"
+  },
+  "witness-merge-opportunity": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotOpportunityGiven",
+    "kind": "witness"
+  },
+  "witness-pagination": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotPagination",
+    "kind": "witness"
+  },
+  "witness-drain-second-group": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotFinalGroupAfterDrain",
+    "kind": "witness"
+  }
+}

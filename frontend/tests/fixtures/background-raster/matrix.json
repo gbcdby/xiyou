@@ -1,0 +1,505 @@
+{
+  "schemaVersion": 1,
+  "scope": "BACKGROUND_CAPTURE_8_FULL_RENDERER_PIXEL_PAIRS_NOT_NATURAL_ACCEPTANCE",
+  "baseline": {
+    "commit": "cde021da365777d9870e8e6df3d72fb8b9090ef6",
+    "tree": "c2ce93b4b201fb2c1136b766bbbdf0ff35dc4d69",
+    "file": "frontend/src/rendering/spatial-canvas.ts",
+    "sha256": "4500b595c27b6a99300471e5cbc2caaf3b708d3f9bdf0612655b720f0c324204",
+    "containsObjectCache": true
+  },
+  "provenance": {
+    "designSHA256": "4c42b170fb8dd80e6f15ae3d86037dae7a9c7fa0593e22b9286f698c73e911e1",
+    "fixedPixelPlanSHA256": "28bd5e07e8001404363b7b22fa75c2d333c34fce93df3125b827103302abf0fa",
+    "originalPixelFixtureSHA256": "74e28bd0512e4fd03ef4d9fa9e11620d27e5dd24ca78e2ab0b662c2ea1f3614d",
+    "originalInputSHA256": "9668379ab6c468393d1018b66e84d01ff825b9cb2e398bf1376473b4780d2c2a"
+  },
+  "geometries": [
+    {
+      "id": "G1",
+      "width": 1226,
+      "height": 684,
+      "dpr": 1,
+      "expected": [
+        "miss",
+        "hit"
+      ]
+    },
+    {
+      "id": "G2",
+      "width": 980.5,
+      "height": 612.25,
+      "dpr": 1.25,
+      "expected": [
+        "fallback",
+        "fallback"
+      ]
+    },
+    {
+      "id": "G3",
+      "width": 799.5,
+      "height": 600.25,
+      "dpr": 2,
+      "expected": [
+        "fallback",
+        "fallback"
+      ]
+    },
+    {
+      "id": "G4",
+      "width": 980.25,
+      "height": 612.15,
+      "dpr": 1.25,
+      "expected": [
+        "miss",
+        "hit"
+      ]
+    }
+  ],
+  "phases": [
+    "first",
+    "repeat"
+  ],
+  "stateByPhase": [
+    0,
+    1
+  ],
+  "sceneId": "gaolao-courtyard",
+  "rendererCases": [
+    {
+      "id": "behind-closed-selected-object",
+      "self": {
+        "x": 1145,
+        "y": 340
+      },
+      "parcel": {
+        "x": 1145,
+        "y": 350
+      },
+      "open": false,
+      "selected": "parcel",
+      "foregroundOpacity": 0.35
+    },
+    {
+      "id": "front-open-selected-person",
+      "self": {
+        "x": 1145,
+        "y": 430
+      },
+      "parcel": {
+        "x": 1145,
+        "y": 350
+      },
+      "open": true,
+      "selected": "self",
+      "foregroundOpacity": 1
+    }
+  ],
+  "objectPaths": [
+    "/assets/gaolaozhuang/static-v1/objects/timber-door/closed.png",
+    "/assets/gaolaozhuang/static-v1/objects/timber-door/open.png",
+    "/assets/gaolaozhuang/static-v1/objects/cloth-parcel.png",
+    "/assets/gaolaozhuang/static-v1/objects/folded-letter.png",
+    "/assets/gaolaozhuang/static-v1/objects/hemp-rope-loose.png",
+    "/assets/gaolaozhuang/static-v1/objects/ledger-book.png",
+    "/assets/gaolaozhuang/static-v1/objects/farm-rake.png"
+  ],
+  "assets": {
+    "/assets/gaolaozhuang/static-v1/scenes/courtyard-rear-v3/base.png": {
+      "width": 1586,
+      "height": 992,
+      "bytes": 3491493,
+      "sha256": "773d764cfea18cfedd7d010f4cbb1cded08c238de8ff3773c4b51b5e9e7e5150"
+    },
+    "/assets/gaolaozhuang/static-v1/scenes/courtyard-rear-v3/foreground/left-post.png": {
+      "width": 28,
+      "height": 162,
+      "bytes": 8830,
+      "sha256": "e9821901d1216319a8f03e09d7098a48a9acc94d95b8f9f481c83f5fd287a444"
+    },
+    "/assets/gaolaozhuang/static-v1/scenes/courtyard-rear-v3/foreground/right-post.png": {
+      "width": 30,
+      "height": 172,
+      "bytes": 9618,
+      "sha256": "7e96a30801cef38059490576b792f1266827f093d35b974535811b718a801ba2"
+    },
+    "/assets/gaolaozhuang/static-v1/scenes/courtyard-rear-v3/foreground/lintel.png": {
+      "width": 258,
+      "height": 17,
+      "bytes": 7385,
+      "sha256": "ae042e8bf22360f2854255df9090e66beb02cb20fcb944cdd5f3b4a5668a5bb4"
+    },
+    "/assets/gaolaozhuang/static-v1/scenes/courtyard-rear-v3/foreground/step-face.png": {
+      "width": 118,
+      "height": 19,
+      "bytes": 4688,
+      "sha256": "fe43528e0a05719626733e1190a35949946c16a2690b0262926834520bfd2750"
+    },
+    "/assets/gaolaozhuang/static-v1/scenes/courtyard-rear-v3/replace-mask.png": {
+      "width": 1586,
+      "height": 992,
+      "bytes": 8570,
+      "sha256": "71958b61a338e61cb0371ed69c7b1cceeb868414b15d80ffe8b38d50423fca7d"
+    },
+    "/assets/gaolaozhuang/static-v1/scenes/village-tea-r2/base.png": {
+      "width": 1586,
+      "height": 992,
+      "bytes": 3822004,
+      "sha256": "113ffd51efe32a9e450b42d5656d4f128f81044017846da0f4f961bfff4846f7"
+    },
+    "/assets/gaolaozhuang/static-v1/scenes/village-tea-r2/floor.png": {
+      "width": 1586,
+      "height": 992,
+      "bytes": 29382,
+      "sha256": "447ae4777f8b2d6c4d25398f6750d7216cde03f833a87eb46e226e888dbae6f3"
+    },
+    "/assets/gaolaozhuang/static-v1/scenes/village-tea-r2/foreground/fixed-open-leaf.png": {
+      "width": 48,
+      "height": 112,
+      "bytes": 12185,
+      "sha256": "45cb73f0da9744e0322a2ff2a32310e76aa0a8d9cff8216546301e778e013a72"
+    },
+    "/assets/gaolaozhuang/static-v1/scenes/village-tea-r2/foreground/entry-eaves-post.png": {
+      "width": 33,
+      "height": 181,
+      "bytes": 15029,
+      "sha256": "39d6df1465cd24721eaff647f88f09afbd4cf5278c8a9b776d50f8a36c70f151"
+    },
+    "/assets/gaolaozhuang/static-v1/scenes/village-tea-r2/replace-mask.png": {
+      "width": 1586,
+      "height": 992,
+      "bytes": 10861,
+      "sha256": "10fa148d11afacfec899112a48f6dbf632b924d001cddbcde84d24cff7b148a8"
+    },
+    "/assets/gaolaozhuang/gaocai/idle/s.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 148111,
+      "sha256": "7490762a7485374b409a983a8930c7769bc3b72303e0da9f1ac0978e3abc4bc6"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/s/00.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 149628,
+      "sha256": "1590e4fa1bee654505fb6b2601ad29d3134f578f98439a6e9a4266308ac6f243"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/s/01.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 145713,
+      "sha256": "bee82c51f096114a6dfa9a7fb13fa25a7ce92e3ebae38b3a31e16877dbf9e584"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/s/02.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 142185,
+      "sha256": "e05a7a772eb1186d4d830416216654ba87dd3194f134fcfee2579997a012698f"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/s/03.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 147594,
+      "sha256": "c7f90208b9e898831f715689836e2d79a92edbf58f0d2f294b916f5534377bb4"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/s/04.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 148769,
+      "sha256": "fd1daf8c56f471e1b52d2f9ffc708cdfe7e0fdc930ddfef49f06ca18dbe5fd8f"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/s/05.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 147521,
+      "sha256": "fb61f2d9e18e9e6eee2b1371cfa8f707a44910af4d1de552eddf68d5978f67ef"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/s/06.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 146708,
+      "sha256": "f90cb1f665556bc6b568dae91b43b69d70ea9d77c4cd1ce6b8f0c9b2fce5cbc5"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/s/07.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 150417,
+      "sha256": "dde68f590bc8768a6cc4fa06d08288e1e6bd3c08679162da05f9d021d0f402b3"
+    },
+    "/assets/gaolaozhuang/gaocai/idle/se.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 140778,
+      "sha256": "6ef7a476a20d155a90e5333e4149dad2396dd24bfd9c6b83175d09c532a81050"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/se/00.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 163629,
+      "sha256": "822ed7a30323b04159d61f40b875cab4d7e69685eb8c80eb228c767ecf76d217"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/se/01.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 149834,
+      "sha256": "0a1d7b8a455ffbeb6f8ea8750102f3d0bec2145b59591c1fad2926d41fbea982"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/se/02.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 133740,
+      "sha256": "3e828b6606085eedb89090f70a52261da9a7dcc4bf1b740c485a5d622e6661e5"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/se/03.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 157390,
+      "sha256": "ff7fa7052adadc4d08b49c05d7de9dd02c048fb13b1878b0d9c048e4bcd94f4f"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/se/04.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 149014,
+      "sha256": "9222446a29e6daa1fdcbffc213187e808f12692d712fa7da59e5e21fac46d6ef"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/se/05.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 138123,
+      "sha256": "103079b93062e1cd6dcafc158af2398a4842b094bed486e21e95b567f02117d0"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/se/06.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 129547,
+      "sha256": "2338fad366f32451a87e7c3e29ead830997f6acbdf3ed7cf373d1cd33b467c94"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/se/07.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 161205,
+      "sha256": "c8157318c4d0fd43d362ba049fe2a28b33217a5353f1ee62a0efdfd945e4eb11"
+    },
+    "/assets/gaolaozhuang/gaocai/idle/e.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 101573,
+      "sha256": "a97fde0c260577abced6e2c5e2019dcfe69fe3b13fbc979152dad93580b2f5c3"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/e/00.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 154983,
+      "sha256": "6d01aa034142e341fcf5913522e0af0c3ab721dab9176ca2297129e9be9f0a80"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/e/01.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 135899,
+      "sha256": "6735085cdf9229473116e9da93aa2d6ee4a6443ecb7b51f5a24a485b3889d736"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/e/02.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 112648,
+      "sha256": "59fb4e96278dca293eab05cc18b4e0e894ca3cabe5110621e3d0e5b5681aff91"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/e/03.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 145181,
+      "sha256": "0624dc68a16102146e3aa379ea85e14205c20f076dddd83f5bffc238db7c1299"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/e/04.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 154835,
+      "sha256": "e2f148d5426615c2dce2718971e7a703207a93471e8a9707641f7452fdcdb9f7"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/e/05.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 125412,
+      "sha256": "ea3f83ca19da849499bed8c69a6e956995084cd8ad01822eed30afb6984e0d44"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/e/06.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 106105,
+      "sha256": "9cc5f017a967d9035b1a011628f3bd311a125c59833c15e163c21344d0876080"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/e/07.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 145289,
+      "sha256": "87a5656919173cf8b108dc1683e408ce18188f4ba96fb85934c1445b043c78f8"
+    },
+    "/assets/gaolaozhuang/gaocai/idle/ne.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 125662,
+      "sha256": "42f47821089fad4375677eafa1f5f8d76eb7f595bff1646f5165cf0d9ec4dfea"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/ne/00.png": {
+      "width": 373,
+      "height": 528,
+      "bytes": 148175,
+      "sha256": "71c0f137484234fed29d7ba83c87965338d5769e46c2dda515c345636b50ff73"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/ne/01.png": {
+      "width": 373,
+      "height": 528,
+      "bytes": 130939,
+      "sha256": "a41ccb498a81c39a7b15bebd214181a493b0d4436caf32fe8254e81463d40477"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/ne/02.png": {
+      "width": 372,
+      "height": 528,
+      "bytes": 125402,
+      "sha256": "beafec7aa46e0796dfcc436318edf376106862a4ff80892888309ac0fb269fdc"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/ne/03.png": {
+      "width": 373,
+      "height": 528,
+      "bytes": 140492,
+      "sha256": "0abae8d43c3c68c2dc06426be3d6bb82f50cb7de6beb588606bf05f85e265c30"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/ne/04.png": {
+      "width": 550,
+      "height": 714,
+      "bytes": 271448,
+      "sha256": "c09ef1bfcbf38b2a275b8221e4468be84a6325e65b98019bcee57536909e4603"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/ne/05.png": {
+      "width": 551,
+      "height": 714,
+      "bytes": 255825,
+      "sha256": "8bdc6bfe20995457e95e1faa7f04c6f1ef73aaaf3af9a453b593afd4b1965c10"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/ne/06.png": {
+      "width": 551,
+      "height": 714,
+      "bytes": 208193,
+      "sha256": "83a044f0a1e3a9277c460427d0a6b434086e5ca1c312e2da5e43392ca63fa7dd"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/ne/07.png": {
+      "width": 550,
+      "height": 714,
+      "bytes": 258591,
+      "sha256": "e0693ef4b63104426bddcf05219e171e3aacffc1f7955593dacef05c38363a86"
+    },
+    "/assets/gaolaozhuang/gaocai/idle/n.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 143074,
+      "sha256": "1d8fa1198816921121ae814a6b0c4f47bdbb18d428fd56a0f74ae978ccb390ed"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/n/00.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 140818,
+      "sha256": "b640448e219806bb4978bf4ec045e64eb167ff1bba1a61cbbf0ce31ea2387651"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/n/01.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 133083,
+      "sha256": "3c1f88b64f770c4057e63703756d359acba014a1c000c7ddeaf35e9223c32926"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/n/02.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 134104,
+      "sha256": "d08bd6f30a2febb4ceee1a951bfd4396376c37315c2c18d7fc09b88003d00e40"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/n/03.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 134460,
+      "sha256": "68ce4be947356fde1b392874c8cf8026b6c588561286b308ac2afd69a5d6d0d5"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/n/04.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 141541,
+      "sha256": "7a63d5095225e06440d5b054bfb538664e7e67e42930504dbe94384c6d76bcc3"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/n/05.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 138748,
+      "sha256": "9e17ea39d73dbd8907f70936a68ff0f4d1eb135156152643f39cec742350e1ef"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/n/06.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 138227,
+      "sha256": "8c7027aa93da8c095a97b97929f04ff2ed020ab37e55d1e659cdf936b953bc9c"
+    },
+    "/assets/gaolaozhuang/gaocai/walk/n/07.png": {
+      "width": 362,
+      "height": 543,
+      "bytes": 137372,
+      "sha256": "4eb0f9d20620aa8b595f9d5cf5fe5290a58d141730d6f7abcbff27ad22443899"
+    },
+    "/assets/gaolaozhuang/static-v1/objects/timber-door/closed.png": {
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1840689,
+      "sha256": "fdbbb6aa5d4b04ea21b744b3153543fae6460c2cf0ba75ae575937b17af8b854"
+    },
+    "/assets/gaolaozhuang/static-v1/objects/timber-door/open.png": {
+      "width": 1254,
+      "height": 1254,
+      "bytes": 651470,
+      "sha256": "a9f4524367acf0495bd2d286739d21e392f8a2ac04ee4f8b90581f719a2b5c2b"
+    },
+    "/assets/gaolaozhuang/static-v1/objects/cloth-parcel.png": {
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1111516,
+      "sha256": "3f0523ce53c2c5262dea2312897b4a377c571cb0a144ecb1df972567e5750ff4"
+    },
+    "/assets/gaolaozhuang/static-v1/objects/folded-letter.png": {
+      "width": 1254,
+      "height": 1254,
+      "bytes": 829815,
+      "sha256": "557a25a567256d506d23308a6c2aad95762db83119d5bbefaa50e2fc7d2df7ae"
+    },
+    "/assets/gaolaozhuang/static-v1/objects/hemp-rope-loose.png": {
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1138086,
+      "sha256": "2d333379118006c89c6913139459cd7d4ac8454c233c7bd2ebb86cfaf0f69a38"
+    },
+    "/assets/gaolaozhuang/static-v1/objects/ledger-book.png": {
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1660336,
+      "sha256": "5b0308091cd81aa6d0a4e3484f9fb324bccabc07b45aa7d6c3be7be78bedded3"
+    },
+    "/assets/gaolaozhuang/static-v1/objects/farm-rake.png": {
+      "width": 1254,
+      "height": 1254,
+      "bytes": 473910,
+      "sha256": "21453bbac758c364f8ce3ccd758311706f2531c67fb0f7f1797ba977b2a3cae1"
+    }
+  },
+  "threshold": {
+    "rgbaDifferentBytes": 0,
+    "sourceImagesToBackgroundCache": 0
+  },
+  "limits": {
+    "pixelPairs": 8,
+    "rendererPaintCalls": 16,
+    "originalPNG": 63,
+    "originalPNGMaximum": 65,
+    "bodyMs": 65000,
+    "assetReadyMs": 20000,
+    "resultBytes": 1048576,
+    "retry": 0
+  },
+  "catalogs": {
+    "frontend/src/assets/gaolao-object-art.json": "91fd3f51937bd123e3d92d5021dc03cbd3fe4eaea3594f23904a305d2628904d",
+    "frontend/src/assets/gaolao-scene-layers.json": "b2ce86f27897f7fd437b3c4eab113a53ee89f2790dd7fef806dc793c9244e569"
+  }
+}

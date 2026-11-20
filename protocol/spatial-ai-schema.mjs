@@ -18,8 +18,9 @@ const toolProperties = {
   expectedTargetRevision: ref('DecimalString'), evidenceRef: ref('EntityRef'), consentId: ref('EntityRef'),
   expectedConsentVersion: ref('DecimalString'), purpose: ref('ConsentPurpose'), scope: ref('ConsentScopeViewV2'),
 };
-const projection = { ...spatialSchema.$defs.ProjectionV2, properties: {
-  ...spatialSchema.$defs.ProjectionV2.properties,
+const modelProjection = omit(spatialSchema.$defs.ProjectionV2, ['sceneOverview', 'mapCatalog']);
+const projection = { ...modelProjection, properties: {
+  ...modelProjection.properties,
   self: ref('SpatialModelSelfV2'), entities: array(ref('SpatialModelEntityV2')),
   items: array(ref('SpatialModelItemV2')), movement: nullable(ref('SpatialModelMovementV2')),
 } };
@@ -36,7 +37,7 @@ const all = {
   SpatialProposedIntentV2: object({ schemaVersion: lit(2), decisionId: ref('Id'), toolCalls: { ...array(ref('SpatialModelActionV2'), 1), minItems: 1 } }),
   SpatialModelToolV2: object(toolProperties, Object.keys(toolProperties).filter(key => !['kind', 'description'].includes(key))),
   SpatialModelSelfV2: omit(spatialSchema.$defs.SelfViewV2, ['controlEpoch', 'canControl', 'movementCommandHighWater']),
-  SpatialModelEntityV2: omit(spatialSchema.$defs.EntityViewV2, ['motionTrail', 'motionFromSceneTimeMs', 'motionThroughSceneTimeMs']),
+  SpatialModelEntityV2: omit(spatialSchema.$defs.EntityViewV2, ['motionTrail', 'motionFromSceneTimeMs', 'motionThroughSceneTimeMs', 'motionTimeline']),
   SpatialModelItemV2: omit(spatialSchema.$defs.ItemViewV2, ['reclaimHolderEpoch']),
   SpatialModelMovementV2: omit(spatialSchema.$defs.PlanViewV2, ['movementCommandSeq']),
   SpatialModelProjectionV2: projection,

@@ -107,12 +107,10 @@ test('SV02-02：真实Session消费者接到重叠结果后请求当前游标，
     requests.length = 0;
     const outer = spatialBatch(initial, '13'), inner = spatialBatch(initial, '11');
     const projection = outer.events[0].payload.projection; let calls = 0, installed;
-    projection.targets = new Proxy([], { get(array, key, receiver) {
-      if (key === 'forEach') {
-        calls++; projection.targets = [];
-        handlers.batch(inner); installed = client.state.snapshot;
-      }
-      return Reflect.get(array, key, receiver);
+    projection.targets = new Proxy([], { ownKeys(array) {
+      calls++; projection.targets = [];
+      handlers.batch(inner); installed = client.state.snapshot;
+      return Reflect.ownKeys(array);
     } });
     handlers.batch(outer);
     await new Promise(resolve => setImmediate(resolve));
@@ -162,9 +160,10 @@ test('SV02-03：入口stale仍在读取旧输入之前返回', () => {
   assert.equal(reads, 0); assert.equal(view.snapshot, null);
 });
 
-test('SV02-03：原生clone内才换代安装新快照，最终守卫仍保留新归属', () => {
-  const { view, generation, initial } = initialized(), batch = spatialBatch(initial);
-  const projection = batch.events[0].payload.projection;
+test('SV02-03：fallback原生clone内才换代安装新快照，最终守卫仍保留新归属', () => {
+  const { view, generation, initial } = initialized(), batch = spatialBatch(initial, '12');
+  batch.events.unshift(spatialBatch(initial, '11').events[0]);
+  const projection = batch.events[1].payload.projection;
   const replacement = spatialSnapshot(); replacement.viewId = 'clone-reentrant-view';
   let reflected = 0, clonedReads = 0, installed;
   projection.targets = new Proxy([], { get(array, key, receiver) {

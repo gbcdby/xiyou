@@ -1,0 +1,289 @@
+{
+  "schemaVersion": 1,
+  "scope": "C-R1/C-R2/C-R3/C-R4 有界对象栅格对照；非性能或动态UX验收",
+  "baseline": {
+    "commit": "b462fd84d12060fe15d402763f01192f5fe69b88",
+    "file": "frontend/src/rendering/spatial-canvas.ts",
+    "sha256": "33375d29a575daf3bada523afb8282d36df35f79e59d88dd7114ce56742a91fd"
+  },
+  "scene": {
+    "width": 1600,
+    "height": 1000
+  },
+  "geometries": [
+    {
+      "id": "G1",
+      "width": 1226,
+      "height": 684,
+      "dpr": 1,
+      "background": "original"
+    },
+    {
+      "id": "G2",
+      "width": 980.5,
+      "height": 612.25,
+      "dpr": 1.25,
+      "background": "checker"
+    },
+    {
+      "id": "G3",
+      "width": 799.5,
+      "height": 600.25,
+      "dpr": 2,
+      "background": "transparent"
+    }
+  ],
+  "variants": [
+    {
+      "id": "timber-door-closed",
+      "visualKey": "timber-door",
+      "variant": "closed",
+      "sceneId": "gaolao-courtyard",
+      "position": {
+        "x": 1250,
+        "y": 425
+      },
+      "asset": {
+        "file": "/assets/gaolaozhuang/static-v1/objects/timber-door/closed.png",
+        "width": 1254,
+        "height": 1254,
+        "pivot": {
+          "x": 589.0112228425464,
+          "y": 1038.7528844306155
+        },
+        "scale": 0.19300559700514067,
+        "layer": "object",
+        "offset": {
+          "x": 0,
+          "y": -60
+        }
+      },
+      "sha256": "fdbbb6aa5d4b04ea21b744b3153543fae6460c2cf0ba75ae575937b17af8b854"
+    },
+    {
+      "id": "timber-door-open",
+      "visualKey": "timber-door",
+      "variant": "open",
+      "sceneId": "gaolao-courtyard",
+      "position": {
+        "x": 1250,
+        "y": 425
+      },
+      "asset": {
+        "file": "/assets/gaolaozhuang/static-v1/objects/timber-door/open.png",
+        "width": 1254,
+        "height": 1254,
+        "pivot": {
+          "x": 589.0112228425464,
+          "y": 1038.7528844306155
+        },
+        "scale": 0.19300559700514067,
+        "layer": "object",
+        "offset": {
+          "x": 0,
+          "y": -60
+        }
+      },
+      "sha256": "a9f4524367acf0495bd2d286739d21e392f8a2ac04ee4f8b90581f719a2b5c2b"
+    },
+    {
+      "id": "cloth-parcel-loose",
+      "visualKey": "cloth-parcel",
+      "variant": "loose",
+      "sceneId": "gaolao-courtyard",
+      "position": {
+        "x": 1320,
+        "y": 300
+      },
+      "asset": {
+        "file": "/assets/gaolaozhuang/static-v1/objects/cloth-parcel.png",
+        "width": 1254,
+        "height": 1254,
+        "pivot": {
+          "x": 620,
+          "y": 940
+        },
+        "scale": 0.03455723542116631,
+        "layer": "object",
+        "offset": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "sha256": "3f0523ce53c2c5262dea2312897b4a377c571cb0a144ecb1df972567e5750ff4"
+    },
+    {
+      "id": "folded-letter-loose",
+      "visualKey": "folded-letter",
+      "variant": "loose",
+      "sceneId": "gaolao-courtyard",
+      "position": {
+        "x": 1320,
+        "y": 300
+      },
+      "asset": {
+        "file": "/assets/gaolaozhuang/static-v1/objects/folded-letter.png",
+        "width": 1254,
+        "height": 1254,
+        "pivot": {
+          "x": 624,
+          "y": 650
+        },
+        "scale": 0.0226628895184136,
+        "layer": "object",
+        "offset": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "sha256": "557a25a567256d506d23308a6c2aad95762db83119d5bbefaa50e2fc7d2df7ae"
+    },
+    {
+      "id": "hemp-rope-loose",
+      "visualKey": "hemp-rope",
+      "variant": "loose",
+      "sceneId": "gaolao-courtyard",
+      "position": {
+        "x": 365,
+        "y": 425
+      },
+      "asset": {
+        "file": "/assets/gaolaozhuang/static-v1/objects/hemp-rope-loose.png",
+        "width": 1254,
+        "height": 1254,
+        "pivot": {
+          "x": 627,
+          "y": 680
+        },
+        "scale": 0.031904287138584245,
+        "layer": "object",
+        "offset": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "sha256": "2d333379118006c89c6913139459cd7d4ac8454c233c7bd2ebb86cfaf0f69a38"
+    },
+    {
+      "id": "ledger-book-default",
+      "visualKey": "ledger-book",
+      "variant": "default",
+      "sceneId": "gaolao-courtyard",
+      "position": {
+        "x": 260,
+        "y": 405
+      },
+      "asset": {
+        "file": "/assets/gaolaozhuang/static-v1/objects/ledger-book.png",
+        "width": 1254,
+        "height": 1254,
+        "pivot": {
+          "x": 624,
+          "y": 645
+        },
+        "scale": 0.023090586145648313,
+        "layer": "object",
+        "offset": {
+          "x": 32,
+          "y": -100
+        }
+      },
+      "sha256": "5b0308091cd81aa6d0a4e3484f9fb324bccabc07b45aa7d6c3be7be78bedded3"
+    },
+    {
+      "id": "farm-rake-loose",
+      "visualKey": "farm-rake",
+      "variant": "loose",
+      "sceneId": "gaolao-village-road",
+      "position": {
+        "x": 1450,
+        "y": 275
+      },
+      "asset": {
+        "file": "/assets/gaolaozhuang/static-v1/objects/farm-rake.png",
+        "width": 1254,
+        "height": 1254,
+        "pivot": {
+          "x": 627,
+          "y": 640
+        },
+        "scale": 0.046473029045643155,
+        "layer": "object",
+        "offset": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "sha256": "21453bbac758c364f8ce3ccd758311706f2531c67fb0f7f1797ba977b2a3cae1"
+    }
+  ],
+  "phases": [
+    "miss",
+    "hit"
+  ],
+  "clips": [
+    {
+      "id": "door-left-clip",
+      "geometry": "G3",
+      "variant": "timber-door-closed",
+      "position": {
+        "x": 0,
+        "y": 425
+      }
+    },
+    {
+      "id": "letter-bottom-right-clip",
+      "geometry": "G3",
+      "variant": "folded-letter-loose",
+      "position": {
+        "x": 1599.75,
+        "y": 999.75
+      }
+    }
+  ],
+  "checker": {
+    "cssCell": 32,
+    "colors": [
+      "#243c56",
+      "#eacb8f"
+    ]
+  },
+  "rendererCases": [
+    {
+      "id": "behind-closed-selected-object",
+      "self": {
+        "x": 1145,
+        "y": 340
+      },
+      "parcel": {
+        "x": 1145,
+        "y": 350
+      },
+      "open": false,
+      "selected": "parcel",
+      "foregroundOpacity": 0.35
+    },
+    {
+      "id": "front-open-selected-person",
+      "self": {
+        "x": 1145,
+        "y": 430
+      },
+      "parcel": {
+        "x": 1145,
+        "y": 350
+      },
+      "open": true,
+      "selected": "self",
+      "foregroundOpacity": 1
+    }
+  ],
+  "limits": {
+    "entries": 32,
+    "pixels": 1048576,
+    "singlePixels": 262144
+  },
+  "threshold": {
+    "rgbaDifferentBytes": 0
+  }
+}

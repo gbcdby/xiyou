@@ -1,10 +1,11 @@
 import { RuleError } from './rules.mjs';
-import { opaqueRef, next, sceneOf, obstacleEnabled, conditionMet, locationOf, inRange, unoccluded, canSee, ensureView, entityRef, resolveRef } from './spatial-world.mjs';
+import { opaqueRef, next, sceneOf, obstacleEnabled, conditionMet, locationOf, inRange, unoccluded, canSee, ensureView, entityRef, resolveRef, publicPhysical, publicMotionViews } from './spatial-world.mjs';
 import { findPath, walkable, clearSegment, pointAlongPath, facingAlongPath, distance, visibleSegment } from './spatial-geometry.mjs';
 import { isGaolao, observerName, copyGaolaoEvidence } from './gaolao-world.mjs';
 import { applyGaolaoAction,checkGaolaoMovement,checkGaolaoItem } from './gaolao-rules.mjs';
 import {gaolaoNavigationRejection} from './gaolao-navigation.mjs';
 import { changePersonalItem, personalAppearancePathAllowed } from './gaolao-personal.mjs';
+import { directionDestination } from './spatial-direction.mjs';
 const refuse = code => { throw new RuleError(code); };
 const active = plan => plan && ['accepted', 'moving'].includes(plan.status);
 const online = (tx, a) => a?.kind === 'human' && a.mode === 'HumanControlled' && tx.liveActorIds?.has(a.characterId);
@@ -50,6 +51,7 @@ export function advanceSpatialPositions(tx, sceneTimeMs) {
         p.travelled = travel;
         p.status = nextPoint.arrived ? 'arrived' : 'moving';
         a.motionViews = {};
+        a.publicMotionViews = publicMotionViews(before, a, segments, before.sceneTimeMs, sceneTimeMs);
         for (const observer of Object.values(before.characters)) {
             const view = before.views[observer.characterId];
             // 观察者同期运动或重建视图时宁可不给轨迹，也不能追补当时未看见的区段。
@@ -156,7 +158,8 @@ function cooperate(tx, actorId, action) {
     return record.phase === 'locked' ? { status: 'locked' } : {};
 }
 export function applySpatialAction(tx, actorId, principalKind, request, navigationDependencies = null) {
-    const a = tx.state.characters[actorId], action = request.action;
+    const a = tx.state.characters[actorId];
+    let action = request.action;
     const resolve = ref => resolveRef(tx, actorId, ref, request.viewId);
     if (principalKind === 'proxy' && !['move_to', 'stop_move', 'inspect', 'speak', 'wait'].includes(action.kind))
         refuse('RULE_VIOLATION');
@@ -169,6 +172,10 @@ export function applySpatialAction(tx, actorId, principalKind, request, navigati
         if (active(a.movement))
             emitActor(tx, { ...a, movement: { ...a.movement, status: 'cancelled', reason: '已停止行走。' } });
         return { movementCommandSeq: action.movementCommandSeq, status: 'cancelled' };
+    }
+    if (action.kind === 'move_direction') {
+        if (principalKind !== 'human' || a.kind !== 'human') refuse('RULE_VIOLATION');
+        action = { kind: 'move_to', movementCommandSeq: action.movementCommandSeq, sceneId: action.sceneId, destination: directionDestination(tx.state, tx.content, a, action) };
     }
     if (action.kind === 'move_to') {
         checkGaolaoMovement(tx,actorId,action);
@@ -184,7 +191,8 @@ export function applySpatialAction(tx, actorId, principalKind, request, navigati
             near(tx, a, { sceneId: a.sceneId, position: current.anchors.find(x => x.anchorId === exit.anchorId).position });
             origin = exit.destination;
         }
-        const target = action.targetRef ? resolve(action.targetRef) : null;
+        const target = action.targetRef ? resolveRef(tx, actorId, action.targetRef, request.viewId, { visible: principalKind !== 'human' }) : null;
+        if (target && principalKind === 'human' && !publicPhysical(tx.state, actorId, target) && !canSee(tx.state, tx.content, actorId, target)) refuse('STALE_REFERENCE');
         if (target && locationOf(tx.state, target)?.sceneId !== action.sceneId)
             refuse('STALE_REFERENCE');
         if (action.anchorId && !destinationScene.anchors.some(x => x.anchorId === action.anchorId && distance(x.position, action.destination) === 0))

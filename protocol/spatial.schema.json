@@ -7,7 +7,10 @@
         "spatial-v2",
         "spatial-appearance-v1",
         "spatial-object-visual-v1",
-        "gaolao-personal-consent-v1"
+        "gaolao-personal-consent-v1",
+        "spatial-scene-overview-v1",
+        "spatial-direction-v1",
+        "spatial-timed-trail-v1"
       ]
     },
     "PersonalPermissionTermV1": {
@@ -953,6 +956,34 @@
             "movementCommandSeq",
             "sceneId",
             "destination"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "move_direction"
+            },
+            "movementCommandSeq": {
+              "$ref": "#/$defs/PositiveDecimalString"
+            },
+            "sceneId": {
+              "$ref": "#/$defs/Id"
+            },
+            "mapVersion": {
+              "$ref": "#/$defs/Id"
+            },
+            "direction": {
+              "$ref": "#/$defs/Facing"
+            }
+          },
+          "required": [
+            "kind",
+            "movementCommandSeq",
+            "sceneId",
+            "mapVersion",
+            "direction"
           ],
           "additionalProperties": false
         },
@@ -2290,6 +2321,45 @@
       ],
       "additionalProperties": false
     },
+    "MotionTimelineSpanV1": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "enum": [
+            "motion",
+            "hold"
+          ]
+        },
+        "fromSceneTimeMs": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "throughSceneTimeMs": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "fromTrailIndex": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4095
+        },
+        "throughTrailIndex": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4095
+        }
+      },
+      "required": [
+        "kind",
+        "fromSceneTimeMs",
+        "throughSceneTimeMs",
+        "fromTrailIndex",
+        "throughTrailIndex"
+      ],
+      "additionalProperties": false
+    },
     "EntityViewV2": {
       "type": "object",
       "properties": {
@@ -2345,6 +2415,14 @@
           "type": "integer",
           "minimum": 0,
           "maximum": 9007199254740991
+        },
+        "motionTimeline": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/MotionTimelineSpanV1"
+          },
+          "maxItems": 4096,
+          "minItems": 1
         },
         "resourceRevision": {
           "$ref": "#/$defs/DecimalString"
@@ -2576,6 +2654,311 @@
         "resourceRevision",
         "availableOperations",
         "fields"
+      ],
+      "additionalProperties": false
+    },
+    "SceneEntityViewV1": {
+      "type": "object",
+      "properties": {
+        "entityRef": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "appearanceEpoch": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "resourceRevision": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "moving": {
+          "type": "boolean"
+        },
+        "appearanceId": {
+          "$ref": "#/$defs/AppearanceIdV2"
+        },
+        "sceneId": {
+          "$ref": "#/$defs/Id"
+        },
+        "position": {
+          "$ref": "#/$defs/Position"
+        },
+        "facing": {
+          "$ref": "#/$defs/Facing"
+        },
+        "motionTrail": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Position"
+          },
+          "maxItems": 4096
+        },
+        "motionFromSceneTimeMs": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "motionThroughSceneTimeMs": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "motionTimeline": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/MotionTimelineSpanV1"
+          },
+          "maxItems": 4096,
+          "minItems": 1
+        }
+      },
+      "required": [
+        "entityRef",
+        "name",
+        "appearanceEpoch",
+        "resourceRevision",
+        "moving",
+        "sceneId",
+        "position",
+        "facing"
+      ],
+      "additionalProperties": false
+    },
+    "SceneItemViewV1": {
+      "type": "object",
+      "properties": {
+        "entityRef": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "resourceRevision": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "location": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "ground"
+            },
+            "sceneId": {
+              "$ref": "#/$defs/Id"
+            },
+            "position": {
+              "$ref": "#/$defs/Position"
+            }
+          },
+          "required": [
+            "kind",
+            "sceneId",
+            "position"
+          ],
+          "additionalProperties": false
+        },
+        "visualKey": {
+          "$ref": "#/$defs/ObjectVisualKeyV1"
+        },
+        "visualState": {
+          "enum": [
+            "loose",
+            "fixed",
+            "default"
+          ]
+        }
+      },
+      "required": [
+        "entityRef",
+        "name",
+        "resourceRevision",
+        "location",
+        "visualState"
+      ],
+      "additionalProperties": false
+    },
+    "SceneTargetViewV1": {
+      "type": "object",
+      "properties": {
+        "entityRef": {
+          "$ref": "#/$defs/EntityRef"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "resourceRevision": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "sceneId": {
+          "$ref": "#/$defs/Id"
+        },
+        "position": {
+          "$ref": "#/$defs/Position"
+        },
+        "visualKey": {
+          "$ref": "#/$defs/ObjectVisualKeyV1"
+        },
+        "visualState": {
+          "enum": [
+            "open",
+            "closed",
+            "default"
+          ]
+        }
+      },
+      "required": [
+        "entityRef",
+        "name",
+        "resourceRevision",
+        "sceneId",
+        "position",
+        "visualState"
+      ],
+      "additionalProperties": false
+    },
+    "SceneOverviewV1": {
+      "type": "object",
+      "properties": {
+        "entities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SceneEntityViewV1"
+          },
+          "maxItems": 256
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SceneItemViewV1"
+          },
+          "maxItems": 256
+        },
+        "targets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SceneTargetViewV1"
+          },
+          "maxItems": 256
+        }
+      },
+      "required": [
+        "entities",
+        "items",
+        "targets"
+      ],
+      "additionalProperties": false
+    },
+    "PublicMapScene": {
+      "type": "object",
+      "properties": {
+        "sceneId": {
+          "$ref": "#/$defs/Id"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000000
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000000
+        },
+        "unitsPerPixel": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000
+        },
+        "walkableAreas": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "areaId": {
+                "$ref": "#/$defs/Id"
+              },
+              "polygon": {
+                "$ref": "#/$defs/Polygon"
+              }
+            },
+            "required": [
+              "areaId",
+              "polygon"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 256
+        },
+        "anchors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "anchorId": {
+                "$ref": "#/$defs/Id"
+              },
+              "position": {
+                "$ref": "#/$defs/Position"
+              },
+              "label": {
+                "type": "string",
+                "maxLength": 120
+              }
+            },
+            "required": [
+              "anchorId",
+              "position",
+              "label"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 256
+        },
+        "exits": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "exitId": {
+                "$ref": "#/$defs/Id"
+              },
+              "anchorId": {
+                "$ref": "#/$defs/Id"
+              },
+              "destinationSceneId": {
+                "$ref": "#/$defs/Id"
+              },
+              "destination": {
+                "$ref": "#/$defs/Position"
+              }
+            },
+            "required": [
+              "exitId",
+              "anchorId",
+              "destinationSceneId",
+              "destination"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 256
+        }
+      },
+      "required": [
+        "sceneId",
+        "name",
+        "width",
+        "height",
+        "unitsPerPixel",
+        "walkableAreas",
+        "anchors",
+        "exits"
       ],
       "additionalProperties": false
     },
@@ -3094,6 +3477,16 @@
         },
         "chapter": {
           "$ref": "#/$defs/ChapterViewV2"
+        },
+        "sceneOverview": {
+          "$ref": "#/$defs/SceneOverviewV1"
+        },
+        "mapCatalog": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PublicMapScene"
+          },
+          "maxItems": 16
         }
       },
       "required": [
@@ -3171,6 +3564,9 @@
           "$ref": "#/$defs/DecimalString"
         },
         "throughSeq": {
+          "$ref": "#/$defs/DecimalString"
+        },
+        "syncFrontierSeq": {
           "$ref": "#/$defs/DecimalString"
         },
         "events": {

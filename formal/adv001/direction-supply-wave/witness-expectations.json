@@ -1,0 +1,30 @@
+{
+  "witness-second-group-after-drain": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotSecondGroupAfterDrain",
+    "kind": "witness"
+  },
+  "witness-single-row-full-cycle": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotSingleRowFullCycle",
+    "kind": "witness"
+  },
+  "witness-late-send-failure": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotLateFailureDrained",
+    "kind": "witness"
+  },
+  "witness-next-row-waits": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "minimum_distinct_states": 2,
+    "target": "NotNextRowWaiting",
+    "kind": "witness"
+  }
+}

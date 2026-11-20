@@ -32,6 +32,8 @@ await server.close();
 
 `createMockServer({pool, now?, hooks?, minIntervalMs?, maxCallsPerSession?, log?})` 由 [mock-main.mjs](../mock-main.mjs) 导出，组合上述两个接口并返回 `{runtime, ai, listen(), close()}`；pool 仍归调用方。它在关闭时停止角色登记、取消在途推理，并等待权威服务和 AI 收束。命令入口拥有自己的 pool，额外等待已接入 PostgreSQL 客户端的真实 `end` 事件，随后进程正常退出。旧输出恢复、未知 Receipt 查询、原决定去重和预算约束均复用 [单 AI 运行边界](README.md)，不重置原意图身份。
 
+`createMockServer` 另接受可选 `spatialDirection` 并原样传给权威服务，缺省 `false` 保留既有集成行为；`npm run start:mock` 命令明确选择 `{checkpointMs: 50}`。该配置不改变受控策略、调用预算或恢复流程。
+
 ## 策略与知识边界
 
 [mock-provider.mjs](mock-provider.mjs) 无数据库、内容、文件或 Runtime 依赖，也没有会话缓存。`createMockProvider('tangseng' | 'wukong')` 只消费本次 Gateway 的 `current`、`memory`、Decision 和允许工具；同样的合法输入产生相同原文。该策略只接受对应核心 NPC 的主体，不能用于代理继承核心权限。

@@ -1,0 +1,462 @@
+{
+  "schema_version": 1,
+  "feature": "D66-DS2有限可达性：原10项及加强旧move finally；按真实前缀限定见证资格",
+  "tool": {
+    "version": "v1.7.4 / TLC 2.19（沿项目已实际使用字节）",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "model": {
+    "root": "controls",
+    "entry": "DirectionSharedSlotsProbes.tla"
+  },
+  "design": {
+    "path": "DESIGN.md",
+    "bytes": 10777,
+    "sha256": "3f9286fb6896b4e346c2899db0705881b710e08fca0cd0512eac2f0ae35e0800",
+    "adoption": "https://github.com/gbcdby/xiyou/issues/66#issuecomment-7000269439"
+  },
+  "implementation_status": "NOT_ASSESSED",
+  "execution_status": "NOT_RUN",
+  "profiles": {
+    "witness-two-same": {
+      "config": "witness-two-same.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "NeverTwoSame"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入和原请求用尽、外部响应永久延迟均允许停顿；此profile为安全反例或可达性探针，不声明活性。",
+      "scope": {
+        "parameters": {
+          "MaxRequests": 2,
+          "MaxTime": 1,
+          "MaxInputs": 1,
+          "MaxClears": 0,
+          "ControllerCount": 1,
+          "Fault": "none"
+        },
+        "kind": "reachability_probe",
+        "expected_outcome": "COUNTEREXAMPLE",
+        "expected_violation": "NeverTwoSame",
+        "description": "两个同向/同intent原未决请求同时占槽。",
+        "time_unit_ms": 100,
+        "receipt_due_ticks": 4,
+        "liveness": "NOT_CHECKED",
+        "implementation_status": "NOT_ASSESSED",
+        "model_core_sha256": "c50dacfdc8233af7506dc59a59413e84adfc44e239b34e480608c76e14c1c53b",
+        "scope_limit": "仅该有限profile；见证不是全称活性，负控不是生产缺陷。"
+      },
+      "assumptions": [
+        "仅一个controlEpoch；两个controller是同epoch的不同绑定实例。",
+        "同步发送的局部登记、会话guard及原draft追加在首次await前视为一个原子动作。",
+        "真实Receipt可先于旧Promise的handler/finally；有效Receipt对同一原身份的既定结果一致。",
+        "时钟与deadline任务分开，达到due不强制立刻派发；ACK先与timer先都保留。",
+        "每实例token；clear不重置，重绑定新实例沿原构造初始化。"
+      ]
+    },
+    "witness-latest-release": {
+      "config": "witness-latest-release.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "NeverLatestAfterRelease"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入和原请求用尽、外部响应永久延迟均允许停顿；此profile为安全反例或可达性探针，不声明活性。",
+      "scope": {
+        "parameters": {
+          "MaxRequests": 3,
+          "MaxTime": 1,
+          "MaxInputs": 3,
+          "MaxClears": 0,
+          "ControllerCount": 1,
+          "Fault": "none"
+        },
+        "kind": "reachability_probe",
+        "expected_outcome": "COUNTEREXAMPLE",
+        "expected_violation": "NeverLatestAfterRelease",
+        "description": "实际原前缀：两个初始Input发生在E/E发送前；两同向满槽后仅改W，真实释放后发W。不证明满槽后先S再W。",
+        "time_unit_ms": 100,
+        "receipt_due_ticks": 4,
+        "liveness": "NOT_CHECKED",
+        "implementation_status": "NOT_ASSESSED",
+        "model_core_sha256": "c50dacfdc8233af7506dc59a59413e84adfc44e239b34e480608c76e14c1c53b",
+        "scope_limit": "仅该有限profile；见证不是全称活性，负控不是生产缺陷。"
+      },
+      "assumptions": [
+        "仅一个controlEpoch；两个controller是同epoch的不同绑定实例。",
+        "同步发送的局部登记、会话guard及原draft追加在首次await前视为一个原子动作。",
+        "真实Receipt可先于旧Promise的handler/finally；有效Receipt对同一原身份的既定结果一致。",
+        "时钟与deadline任务分开，达到due不强制立刻派发；ACK先与timer先都保留。",
+        "每实例token；clear不重置，重绑定新实例沿原构造初始化。"
+      ]
+    },
+    "witness-cross-binding": {
+      "config": "witness-cross-binding.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "NeverCrossBindingFull"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入和原请求用尽、外部响应永久延迟均允许停顿；此profile为安全反例或可达性探针，不声明活性。",
+      "scope": {
+        "parameters": {
+          "MaxRequests": 2,
+          "MaxTime": 1,
+          "MaxInputs": 1,
+          "MaxClears": 0,
+          "ControllerCount": 2,
+          "Fault": "none"
+        },
+        "kind": "reachability_probe",
+        "expected_outcome": "COUNTEREXAMPLE",
+        "expected_violation": "NeverCrossBindingFull",
+        "description": "新实例local空，旧全会话两原身份仍未决。",
+        "time_unit_ms": 100,
+        "receipt_due_ticks": 4,
+        "liveness": "NOT_CHECKED",
+        "implementation_status": "NOT_ASSESSED",
+        "model_core_sha256": "c50dacfdc8233af7506dc59a59413e84adfc44e239b34e480608c76e14c1c53b",
+        "scope_limit": "仅该有限profile；见证不是全称活性，负控不是生产缺陷。"
+      },
+      "assumptions": [
+        "仅一个controlEpoch；两个controller是同epoch的不同绑定实例。",
+        "同步发送的局部登记、会话guard及原draft追加在首次await前视为一个原子动作。",
+        "真实Receipt可先于旧Promise的handler/finally；有效Receipt对同一原身份的既定结果一致。",
+        "时钟与deadline任务分开，达到due不强制立刻派发；ACK先与timer先都保留。",
+        "每实例token；clear不重置，重绑定新实例沿原构造初始化。"
+      ]
+    },
+    "witness-query-before-return": {
+      "config": "witness-query-before-return.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "NeverQueryBeforeReturn"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入和原请求用尽、外部响应永久延迟均允许停顿；此profile为安全反例或可达性探针，不声明活性。",
+      "scope": {
+        "parameters": {
+          "MaxRequests": 1,
+          "MaxTime": 0,
+          "MaxInputs": 1,
+          "MaxClears": 0,
+          "ControllerCount": 1,
+          "Fault": "none"
+        },
+        "kind": "reachability_probe",
+        "expected_outcome": "COUNTEREXAMPLE",
+        "expected_violation": "NeverQueryBeforeReturn",
+        "description": "查询原Receipt已确定，旧网络Promise尚pending、local仍占实例entry。",
+        "time_unit_ms": 100,
+        "receipt_due_ticks": 4,
+        "liveness": "NOT_CHECKED",
+        "implementation_status": "NOT_ASSESSED",
+        "model_core_sha256": "c50dacfdc8233af7506dc59a59413e84adfc44e239b34e480608c76e14c1c53b",
+        "scope_limit": "仅该有限profile；见证不是全称活性，负控不是生产缺陷。"
+      },
+      "assumptions": [
+        "仅一个controlEpoch；两个controller是同epoch的不同绑定实例。",
+        "同步发送的局部登记、会话guard及原draft追加在首次await前视为一个原子动作。",
+        "真实Receipt可先于旧Promise的handler/finally；有效Receipt对同一原身份的既定结果一致。",
+        "时钟与deadline任务分开，达到due不强制立刻派发；ACK先与timer先都保留。",
+        "每实例token；clear不重置，重绑定新实例沿原构造初始化。"
+      ]
+    },
+    "witness-ledger-reuse": {
+      "config": "witness-ledger-reuse.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "NeverResolvedLedgerReuse"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入和原请求用尽、外部响应永久延迟均允许停顿；此profile为安全反例或可达性探针，不声明活性。",
+      "scope": {
+        "parameters": {
+          "MaxRequests": 3,
+          "MaxTime": 1,
+          "MaxInputs": 2,
+          "MaxClears": 0,
+          "ControllerCount": 2,
+          "Fault": "none"
+        },
+        "kind": "reachability_probe",
+        "expected_outcome": "COUNTEREXAMPLE",
+        "expected_violation": "NeverResolvedLedgerReuse",
+        "description": "旧实例local两条仍在，原Receipt释放全局身份后新实例可占其空出的ledger槽。",
+        "time_unit_ms": 100,
+        "receipt_due_ticks": 4,
+        "liveness": "NOT_CHECKED",
+        "implementation_status": "NOT_ASSESSED",
+        "model_core_sha256": "c50dacfdc8233af7506dc59a59413e84adfc44e239b34e480608c76e14c1c53b",
+        "scope_limit": "仅该有限profile；见证不是全称活性，负控不是生产缺陷。"
+      },
+      "assumptions": [
+        "仅一个controlEpoch；两个controller是同epoch的不同绑定实例。",
+        "同步发送的局部登记、会话guard及原draft追加在首次await前视为一个原子动作。",
+        "真实Receipt可先于旧Promise的handler/finally；有效Receipt对同一原身份的既定结果一致。",
+        "时钟与deadline任务分开，达到due不强制立刻派发；ACK先与timer先都保留。",
+        "每实例token；clear不重置，重绑定新实例沿原构造初始化。"
+      ]
+    },
+    "witness-stop-with-two": {
+      "config": "witness-stop-with-two.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "NeverStopWithTwo"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入和原请求用尽、外部响应永久延迟均允许停顿；此profile为安全反例或可达性探针，不声明活性。",
+      "scope": {
+        "parameters": {
+          "MaxRequests": 3,
+          "MaxTime": 1,
+          "MaxInputs": 2,
+          "MaxClears": 0,
+          "ControllerCount": 1,
+          "Fault": "none"
+        },
+        "kind": "reachability_probe",
+        "expected_outcome": "COUNTEREXAMPLE",
+        "expected_violation": "NeverStopWithTwo",
+        "description": "实际原前缀：两未决move为S/E异向，Unknown触发自动stop；证明独立stop与两个move共存，不证明两同向全松stop。",
+        "time_unit_ms": 100,
+        "receipt_due_ticks": 4,
+        "liveness": "NOT_CHECKED",
+        "implementation_status": "NOT_ASSESSED",
+        "model_core_sha256": "c50dacfdc8233af7506dc59a59413e84adfc44e239b34e480608c76e14c1c53b",
+        "scope_limit": "仅该有限profile；见证不是全称活性，负控不是生产缺陷。"
+      },
+      "assumptions": [
+        "仅一个controlEpoch；两个controller是同epoch的不同绑定实例。",
+        "同步发送的局部登记、会话guard及原draft追加在首次await前视为一个原子动作。",
+        "真实Receipt可先于旧Promise的handler/finally；有效Receipt对同一原身份的既定结果一致。",
+        "时钟与deadline任务分开，达到due不强制立刻派发；ACK先与timer先都保留。",
+        "每实例token；clear不重置，重绑定新实例沿原构造初始化。"
+      ]
+    },
+    "witness-old-unknown": {
+      "config": "witness-old-unknown.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "NeverNewerAcceptedOlderUnknown"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入和原请求用尽、外部响应永久延迟均允许停顿；此profile为安全反例或可达性探针，不声明活性。",
+      "scope": {
+        "parameters": {
+          "MaxRequests": 3,
+          "MaxTime": 4,
+          "MaxInputs": 1,
+          "MaxClears": 0,
+          "ControllerCount": 1,
+          "Fault": "none"
+        },
+        "kind": "reachability_probe",
+        "expected_outcome": "COUNTEREXAMPLE",
+        "expected_violation": "NeverNewerAcceptedOlderUnknown",
+        "description": "实际原前缀：id1先Unknown，随后id2Accepted，最终旧Unknown与较新Accepted共存。不证明较新Accepted先到。",
+        "time_unit_ms": 100,
+        "receipt_due_ticks": 4,
+        "liveness": "NOT_CHECKED",
+        "implementation_status": "NOT_ASSESSED",
+        "model_core_sha256": "c50dacfdc8233af7506dc59a59413e84adfc44e239b34e480608c76e14c1c53b",
+        "scope_limit": "仅该有限profile；见证不是全称活性，负控不是生产缺陷。"
+      },
+      "assumptions": [
+        "仅一个controlEpoch；两个controller是同epoch的不同绑定实例。",
+        "同步发送的局部登记、会话guard及原draft追加在首次await前视为一个原子动作。",
+        "真实Receipt可先于旧Promise的handler/finally；有效Receipt对同一原身份的既定结果一致。",
+        "时钟与deadline任务分开，达到due不强制立刻派发；ACK先与timer先都保留。",
+        "每实例token；clear不重置，重绑定新实例沿原构造初始化。"
+      ]
+    },
+    "witness-same-reject-ignored": {
+      "config": "witness-same-reject-ignored.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "NeverLateSameRejectIgnored"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入和原请求用尽、外部响应永久延迟均允许停顿；此profile为安全反例或可达性探针，不声明活性。",
+      "scope": {
+        "parameters": {
+          "MaxRequests": 2,
+          "MaxTime": 1,
+          "MaxInputs": 1,
+          "MaxClears": 0,
+          "ControllerCount": 1,
+          "Fault": "none"
+        },
+        "kind": "reachability_probe",
+        "expected_outcome": "COUNTEREXAMPLE",
+        "expected_violation": "NeverLateSameRejectIgnored",
+        "description": "实际原前缀：id1先Rejected并Handle，随后id2Accepted；旧拒绝未误halt。不证明较新Accepted先到。",
+        "time_unit_ms": 100,
+        "receipt_due_ticks": 4,
+        "liveness": "NOT_CHECKED",
+        "implementation_status": "NOT_ASSESSED",
+        "model_core_sha256": "c50dacfdc8233af7506dc59a59413e84adfc44e239b34e480608c76e14c1c53b",
+        "scope_limit": "仅该有限profile；见证不是全称活性，负控不是生产缺陷。"
+      },
+      "assumptions": [
+        "仅一个controlEpoch；两个controller是同epoch的不同绑定实例。",
+        "同步发送的局部登记、会话guard及原draft追加在首次await前视为一个原子动作。",
+        "真实Receipt可先于旧Promise的handler/finally；有效Receipt对同一原身份的既定结果一致。",
+        "时钟与deadline任务分开，达到due不强制立刻派发；ACK先与timer先都保留。",
+        "每实例token；clear不重置，重绑定新实例沿原构造初始化。"
+      ]
+    },
+    "witness-old-finally": {
+      "config": "witness-old-finally.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "NeverOldFinally"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入和原请求用尽、外部响应永久延迟均允许停顿；此profile为安全反例或可达性探针，不声明活性。",
+      "scope": {
+        "parameters": {
+          "MaxRequests": 2,
+          "MaxTime": 0,
+          "MaxInputs": 2,
+          "MaxClears": 1,
+          "ControllerCount": 2,
+          "Fault": "none"
+        },
+        "kind": "reachability_probe",
+        "expected_outcome": "COUNTEREXAMPLE",
+        "expected_violation": "NeverOldFinally",
+        "description": "实际原前缀：旧stop finally，local一直FALSE；本原profile不承担旧move entry从TRUE到FALSE的释放资格。",
+        "time_unit_ms": 100,
+        "receipt_due_ticks": 4,
+        "liveness": "NOT_CHECKED",
+        "implementation_status": "NOT_ASSESSED",
+        "model_core_sha256": "c50dacfdc8233af7506dc59a59413e84adfc44e239b34e480608c76e14c1c53b",
+        "scope_limit": "仅该有限profile；见证不是全称活性，负控不是生产缺陷。"
+      },
+      "assumptions": [
+        "仅一个controlEpoch；两个controller是同epoch的不同绑定实例。",
+        "同步发送的局部登记、会话guard及原draft追加在首次await前视为一个原子动作。",
+        "真实Receipt可先于旧Promise的handler/finally；有效Receipt对同一原身份的既定结果一致。",
+        "时钟与deadline任务分开，达到due不强制立刻派发；ACK先与timer先都保留。",
+        "每实例token；clear不重置，重绑定新实例沿原构造初始化。"
+      ]
+    },
+    "old-guard-absence": {
+      "config": "old-guard-absence.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "NeverTwoSame"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入和原请求用尽、外部响应永久延迟均允许停顿；此profile为安全反例或可达性探针，不声明活性。",
+      "scope": {
+        "parameters": {
+          "MaxRequests": 2,
+          "MaxTime": 1,
+          "MaxInputs": 1,
+          "MaxClears": 0,
+          "ControllerCount": 1,
+          "Fault": "old-serialization"
+        },
+        "kind": "sensitivity_absence",
+        "expected_outcome": "PASS_WITHIN_SCOPE",
+        "expected_violation": null,
+        "description": "隔离恢复旧同intent串行guard：同范围不得找到两同向同时未决（配对灵敏度）。",
+        "time_unit_ms": 100,
+        "receipt_due_ticks": 4,
+        "liveness": "NOT_CHECKED",
+        "implementation_status": "NOT_ASSESSED",
+        "model_core_sha256": "c50dacfdc8233af7506dc59a59413e84adfc44e239b34e480608c76e14c1c53b",
+        "scope_limit": "仅该有限profile；见证不是全称活性，负控不是生产缺陷。"
+      },
+      "assumptions": [
+        "仅一个controlEpoch；两个controller是同epoch的不同绑定实例。",
+        "同步发送的局部登记、会话guard及原draft追加在首次await前视为一个原子动作。",
+        "真实Receipt可先于旧Promise的handler/finally；有效Receipt对同一原身份的既定结果一致。",
+        "时钟与deadline任务分开，达到due不强制立刻派发；ACK先与timer先都保留。",
+        "每实例token；clear不重置，重绑定新实例沿原构造初始化。"
+      ]
+    },
+    "witness-old-move-finally": {
+      "config": "witness-old-move-finally.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 512,
+      "expected_invariants": [
+        "TypeOK",
+        "NeverOldFinally"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入和原请求用尽、外部响应永久延迟均允许停顿；此profile为安全反例或可达性探针，不声明活性。",
+      "scope": {
+        "parameters": {
+          "MaxRequests": 1,
+          "MaxTime": 0,
+          "MaxInputs": 1,
+          "MaxClears": 1,
+          "ControllerCount": 2,
+          "Fault": "none"
+        },
+        "kind": "reachability_probe",
+        "expected_outcome": "COUNTEREXAMPLE",
+        "expected_violation": "NeverOldFinally",
+        "description": "加强profile实际前缀：唯一move自身最新Rejected的Handle触发halt，之后Finally令该move local从TRUE到FALSE；clears=0/current=1，不是外部clear或bind的见证。",
+        "time_unit_ms": 100,
+        "receipt_due_ticks": 4,
+        "liveness": "NOT_CHECKED",
+        "implementation_status": "NOT_ASSESSED",
+        "model_core_sha256": "c50dacfdc8233af7506dc59a59413e84adfc44e239b34e480608c76e14c1c53b",
+        "scope_limit": "仅该有限profile；见证不是全称活性，负控不是生产缺陷。"
+      },
+      "assumptions": [
+        "仅一个controlEpoch；两个controller是同epoch的不同绑定实例。",
+        "同步发送的局部登记、会话guard及原draft追加在首次await前视为一个原子动作。",
+        "真实Receipt可先于旧Promise的handler/finally；有效Receipt对同一原身份的既定结果一致。",
+        "时钟与deadline任务分开，达到due不强制立刻派发；ACK先与timer先都保留。",
+        "每实例token；clear不重置，重绑定新实例沿原构造初始化。"
+      ]
+    }
+  }
+}

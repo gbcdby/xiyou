@@ -1,0 +1,1115 @@
+{
+  "source": "#66 comment 6920472565 / ghdl73 browser result",
+  "phaseDownStart": 5857,
+  "baseline": {
+    "at": 4897.7,
+    "seq": "46",
+    "scene": 805,
+    "position": {
+      "x": 950,
+      "y": 650
+    },
+    "facing": "S",
+    "movementStatus": null
+  },
+  "updates": [
+    {
+      "at": 4937.100000000006,
+      "seq": "50",
+      "scene": 1013,
+      "position": {
+        "x": 953,
+        "y": 650
+      },
+      "facing": "E",
+      "movementStatus": "moving",
+      "person": {
+        "moving": true,
+        "motionTrail": [
+          {
+            "x": 950,
+            "y": 650
+          },
+          {
+            "x": 953,
+            "y": 650
+          }
+        ],
+        "motionFromSceneTimeMs": 805,
+        "motionThroughSceneTimeMs": 1013,
+        "motionTimeline": [
+          {
+            "kind": "hold",
+            "fromSceneTimeMs": 805,
+            "throughSceneTimeMs": 998,
+            "fromTrailIndex": 0,
+            "throughTrailIndex": 0
+          },
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 998,
+            "throughSceneTimeMs": 1013,
+            "fromTrailIndex": 0,
+            "throughTrailIndex": 1
+          }
+        ]
+      }
+    },
+    {
+      "at": 4988.399999999994,
+      "seq": "52",
+      "scene": 1059,
+      "position": {
+        "x": 961,
+        "y": 650
+      },
+      "facing": "E",
+      "movementStatus": "moving",
+      "person": {
+        "moving": true,
+        "motionTrail": [
+          {
+            "x": 953,
+            "y": 650
+          },
+          {
+            "x": 961,
+            "y": 650
+          }
+        ],
+        "motionFromSceneTimeMs": 1013,
+        "motionThroughSceneTimeMs": 1059,
+        "motionTimeline": [
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 1013,
+            "throughSceneTimeMs": 1059,
+            "fromTrailIndex": 0,
+            "throughTrailIndex": 1
+          }
+        ]
+      }
+    },
+    {
+      "at": 5078.5,
+      "seq": "59",
+      "scene": 1161,
+      "position": {
+        "x": 979,
+        "y": 650
+      },
+      "facing": "E",
+      "movementStatus": "moving",
+      "person": {
+        "moving": true,
+        "motionTrail": [
+          {
+            "x": 961,
+            "y": 650
+          },
+          {
+            "x": 971,
+            "y": 650
+          },
+          {
+            "x": 977,
+            "y": 650
+          },
+          {
+            "x": 979,
+            "y": 650
+          }
+        ],
+        "motionFromSceneTimeMs": 1059,
+        "motionThroughSceneTimeMs": 1161,
+        "motionTimeline": [
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 1059,
+            "throughSceneTimeMs": 1114,
+            "fromTrailIndex": 0,
+            "throughTrailIndex": 1
+          },
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 1114,
+            "throughSceneTimeMs": 1148,
+            "fromTrailIndex": 1,
+            "throughTrailIndex": 2
+          },
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 1148,
+            "throughSceneTimeMs": 1161,
+            "fromTrailIndex": 2,
+            "throughTrailIndex": 3
+          }
+        ]
+      }
+    },
+    {
+      "at": 5146.5,
+      "seq": "66",
+      "scene": 1223,
+      "position": {
+        "x": 991,
+        "y": 650
+      },
+      "facing": "E",
+      "movementStatus": "accepted",
+      "person": {
+        "moving": true,
+        "motionTrail": [
+          {
+            "x": 979,
+            "y": 650
+          },
+          {
+            "x": 986,
+            "y": 650
+          },
+          {
+            "x": 988,
+            "y": 650
+          },
+          {
+            "x": 991,
+            "y": 650
+          }
+        ],
+        "motionFromSceneTimeMs": 1161,
+        "motionThroughSceneTimeMs": 1223,
+        "motionTimeline": [
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 1161,
+            "throughSceneTimeMs": 1200,
+            "fromTrailIndex": 0,
+            "throughTrailIndex": 1
+          },
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 1200,
+            "throughSceneTimeMs": 1209,
+            "fromTrailIndex": 1,
+            "throughTrailIndex": 2
+          },
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 1209,
+            "throughSceneTimeMs": 1223,
+            "fromTrailIndex": 2,
+            "throughTrailIndex": 3
+          }
+        ]
+      }
+    },
+    {
+      "at": 5268.300000000003,
+      "seq": "73",
+      "scene": 1316,
+      "position": {
+        "x": 1008,
+        "y": 650
+      },
+      "facing": "E",
+      "movementStatus": "accepted",
+      "person": {
+        "moving": true,
+        "motionTrail": [
+          {
+            "x": 991,
+            "y": 650
+          },
+          {
+            "x": 996,
+            "y": 650
+          },
+          {
+            "x": 1006,
+            "y": 650
+          },
+          {
+            "x": 1008,
+            "y": 650
+          }
+        ],
+        "motionFromSceneTimeMs": 1223,
+        "motionThroughSceneTimeMs": 1316,
+        "motionTimeline": [
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 1223,
+            "throughSceneTimeMs": 1252,
+            "fromTrailIndex": 0,
+            "throughTrailIndex": 1
+          },
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 1252,
+            "throughSceneTimeMs": 1306,
+            "fromTrailIndex": 1,
+            "throughTrailIndex": 2
+          },
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 1306,
+            "throughSceneTimeMs": 1316,
+            "fromTrailIndex": 2,
+            "throughTrailIndex": 3
+          }
+        ]
+      }
+    },
+    {
+      "at": 5347.300000000003,
+      "seq": "77",
+      "scene": 1397,
+      "position": {
+        "x": 1023,
+        "y": 650
+      },
+      "facing": "E",
+      "movementStatus": "moving",
+      "person": {
+        "moving": true,
+        "motionTrail": [
+          {
+            "x": 1008,
+            "y": 650
+          },
+          {
+            "x": 1016,
+            "y": 650
+          },
+          {
+            "x": 1023,
+            "y": 650
+          }
+        ],
+        "motionFromSceneTimeMs": 1316,
+        "motionThroughSceneTimeMs": 1397,
+        "motionTimeline": [
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 1316,
+            "throughSceneTimeMs": 1363,
+            "fromTrailIndex": 0,
+            "throughTrailIndex": 1
+          },
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 1363,
+            "throughSceneTimeMs": 1397,
+            "fromTrailIndex": 1,
+            "throughTrailIndex": 2
+          }
+        ]
+      }
+    },
+    {
+      "at": 5392.199999999997,
+      "seq": "84",
+      "scene": 1461,
+      "position": {
+        "x": 1034,
+        "y": 650
+      },
+      "facing": "E",
+      "movementStatus": "moving",
+      "person": {
+        "moving": true,
+        "motionTrail": [
+          {
+            "x": 1023,
+            "y": 650
+          },
+          {
+            "x": 1026,
+            "y": 650
+          },
+          {
+            "x": 1030,
+            "y": 650
+          },
+          {
+            "x": 1034,
+            "y": 650
+          }
+        ],
+        "motionFromSceneTimeMs": 1397,
+        "motionThroughSceneTimeMs": 1461,
+        "motionTimeline": [
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 1397,
+            "throughSceneTimeMs": 1417,
+            "fromTrailIndex": 0,
+            "throughTrailIndex": 1
+          },
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 1417,
+            "throughSceneTimeMs": 1440,
+            "fromTrailIndex": 1,
+            "throughTrailIndex": 2
+          },
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 1440,
+            "throughSceneTimeMs": 1461,
+            "fromTrailIndex": 2,
+            "throughTrailIndex": 3
+          }
+        ]
+      }
+    },
+    {
+      "at": 5516.699999999997,
+      "seq": "91",
+      "scene": 1568,
+      "position": {
+        "x": 1053,
+        "y": 650
+      },
+      "facing": "E",
+      "movementStatus": "moving",
+      "person": {
+        "moving": true,
+        "motionTrail": [
+          {
+            "x": 1034,
+            "y": 650
+          },
+          {
+            "x": 1045,
+            "y": 650
+          },
+          {
+            "x": 1050,
+            "y": 650
+          },
+          {
+            "x": 1053,
+            "y": 650
+          }
+        ],
+        "motionFromSceneTimeMs": 1461,
+        "motionThroughSceneTimeMs": 1568,
+        "motionTimeline": [
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 1461,
+            "throughSceneTimeMs": 1521,
+            "fromTrailIndex": 0,
+            "throughTrailIndex": 1
+          },
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 1521,
+            "throughSceneTimeMs": 1553,
+            "fromTrailIndex": 1,
+            "throughTrailIndex": 2
+          },
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 1553,
+            "throughSceneTimeMs": 1568,
+            "fromTrailIndex": 2,
+            "throughTrailIndex": 3
+          }
+        ]
+      }
+    },
+    {
+      "at": 5531.399999999994,
+      "seq": "95",
+      "scene": 1612,
+      "position": {
+        "x": 1061,
+        "y": 650
+      },
+      "facing": "E",
+      "movementStatus": "moving",
+      "person": {
+        "moving": true,
+        "motionTrail": [
+          {
+            "x": 1053,
+            "y": 650
+          },
+          {
+            "x": 1059,
+            "y": 650
+          },
+          {
+            "x": 1061,
+            "y": 650
+          }
+        ],
+        "motionFromSceneTimeMs": 1568,
+        "motionThroughSceneTimeMs": 1612,
+        "motionTimeline": [
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 1568,
+            "throughSceneTimeMs": 1601,
+            "fromTrailIndex": 0,
+            "throughTrailIndex": 1
+          },
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 1601,
+            "throughSceneTimeMs": 1612,
+            "fromTrailIndex": 1,
+            "throughTrailIndex": 2
+          }
+        ]
+      }
+    },
+    {
+      "at": 5593.5,
+      "seq": "100",
+      "scene": 1669,
+      "position": {
+        "x": 1069,
+        "y": 654
+      },
+      "facing": "SE",
+      "movementStatus": "moving",
+      "person": {
+        "moving": true,
+        "motionTrail": [
+          {
+            "x": 1061,
+            "y": 650
+          },
+          {
+            "x": 1065,
+            "y": 650
+          },
+          {
+            "x": 1069,
+            "y": 654
+          }
+        ],
+        "motionFromSceneTimeMs": 1612,
+        "motionThroughSceneTimeMs": 1669,
+        "motionTimeline": [
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 1612,
+            "throughSceneTimeMs": 1636,
+            "fromTrailIndex": 0,
+            "throughTrailIndex": 1
+          },
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 1636,
+            "throughSceneTimeMs": 1669,
+            "fromTrailIndex": 1,
+            "throughTrailIndex": 2
+          }
+        ]
+      }
+    },
+    {
+      "at": 5648.199999999997,
+      "seq": "105",
+      "scene": 1726,
+      "position": {
+        "x": 1076,
+        "y": 661
+      },
+      "facing": "SE",
+      "movementStatus": "accepted",
+      "person": {
+        "moving": true,
+        "motionTrail": [
+          {
+            "x": 1069,
+            "y": 654
+          },
+          {
+            "x": 1074,
+            "y": 659
+          },
+          {
+            "x": 1076,
+            "y": 661
+          }
+        ],
+        "motionFromSceneTimeMs": 1669,
+        "motionThroughSceneTimeMs": 1726,
+        "motionTimeline": [
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 1669,
+            "throughSceneTimeMs": 1705,
+            "fromTrailIndex": 0,
+            "throughTrailIndex": 1
+          },
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 1705,
+            "throughSceneTimeMs": 1726,
+            "fromTrailIndex": 1,
+            "throughTrailIndex": 2
+          }
+        ]
+      }
+    },
+    {
+      "at": 5699.800000000003,
+      "seq": "107",
+      "scene": 1767,
+      "position": {
+        "x": 1081,
+        "y": 666
+      },
+      "facing": "SE",
+      "movementStatus": "moving",
+      "person": {
+        "moving": true,
+        "motionTrail": [
+          {
+            "x": 1076,
+            "y": 661
+          },
+          {
+            "x": 1081,
+            "y": 666
+          }
+        ],
+        "motionFromSceneTimeMs": 1726,
+        "motionThroughSceneTimeMs": 1767,
+        "motionTimeline": [
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 1726,
+            "throughSceneTimeMs": 1767,
+            "fromTrailIndex": 0,
+            "throughTrailIndex": 1
+          }
+        ]
+      }
+    },
+    {
+      "at": 5736.5,
+      "seq": "111",
+      "scene": 1824,
+      "position": {
+        "x": 1088,
+        "y": 673
+      },
+      "facing": "SE",
+      "movementStatus": "moving",
+      "person": {
+        "moving": true,
+        "motionTrail": [
+          {
+            "x": 1081,
+            "y": 666
+          },
+          {
+            "x": 1087,
+            "y": 672
+          },
+          {
+            "x": 1088,
+            "y": 673
+          }
+        ],
+        "motionFromSceneTimeMs": 1767,
+        "motionThroughSceneTimeMs": 1824,
+        "motionTimeline": [
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 1767,
+            "throughSceneTimeMs": 1809,
+            "fromTrailIndex": 0,
+            "throughTrailIndex": 1
+          },
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 1809,
+            "throughSceneTimeMs": 1824,
+            "fromTrailIndex": 1,
+            "throughTrailIndex": 2
+          }
+        ]
+      }
+    },
+    {
+      "at": 5791.399999999994,
+      "seq": "116",
+      "scene": 1874,
+      "position": {
+        "x": 1095,
+        "y": 680
+      },
+      "facing": "SE",
+      "movementStatus": "moving",
+      "person": {
+        "moving": true,
+        "motionTrail": [
+          {
+            "x": 1088,
+            "y": 673
+          },
+          {
+            "x": 1091,
+            "y": 676
+          },
+          {
+            "x": 1095,
+            "y": 680
+          }
+        ],
+        "motionFromSceneTimeMs": 1824,
+        "motionThroughSceneTimeMs": 1874,
+        "motionTimeline": [
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 1824,
+            "throughSceneTimeMs": 1844,
+            "fromTrailIndex": 0,
+            "throughTrailIndex": 1
+          },
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 1844,
+            "throughSceneTimeMs": 1874,
+            "fromTrailIndex": 1,
+            "throughTrailIndex": 2
+          }
+        ]
+      }
+    },
+    {
+      "at": 5841.5,
+      "seq": "118",
+      "scene": 1902,
+      "position": {
+        "x": 1098,
+        "y": 683
+      },
+      "facing": "SE",
+      "movementStatus": "moving",
+      "person": {
+        "moving": true,
+        "motionTrail": [
+          {
+            "x": 1095,
+            "y": 680
+          },
+          {
+            "x": 1098,
+            "y": 683
+          }
+        ],
+        "motionFromSceneTimeMs": 1874,
+        "motionThroughSceneTimeMs": 1902,
+        "motionTimeline": [
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 1874,
+            "throughSceneTimeMs": 1902,
+            "fromTrailIndex": 0,
+            "throughTrailIndex": 1
+          }
+        ]
+      }
+    },
+    {
+      "at": 5893.300000000003,
+      "seq": "123",
+      "scene": 1956,
+      "position": {
+        "x": 1105,
+        "y": 690
+      },
+      "facing": "SE",
+      "movementStatus": "moving",
+      "person": {
+        "moving": true,
+        "motionTrail": [
+          {
+            "x": 1098,
+            "y": 683
+          },
+          {
+            "x": 1103,
+            "y": 688
+          },
+          {
+            "x": 1105,
+            "y": 690
+          }
+        ],
+        "motionFromSceneTimeMs": 1902,
+        "motionThroughSceneTimeMs": 1956,
+        "motionTimeline": [
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 1902,
+            "throughSceneTimeMs": 1942,
+            "fromTrailIndex": 0,
+            "throughTrailIndex": 1
+          },
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 1942,
+            "throughSceneTimeMs": 1956,
+            "fromTrailIndex": 1,
+            "throughTrailIndex": 2
+          }
+        ]
+      }
+    },
+    {
+      "at": 5947.600000000006,
+      "seq": "130",
+      "scene": 2030,
+      "position": {
+        "x": 1111,
+        "y": 700
+      },
+      "facing": "S",
+      "movementStatus": "moving",
+      "person": {
+        "moving": true,
+        "motionTrail": [
+          {
+            "x": 1105,
+            "y": 690
+          },
+          {
+            "x": 1111,
+            "y": 696
+          },
+          {
+            "x": 1111,
+            "y": 698
+          },
+          {
+            "x": 1111,
+            "y": 700
+          }
+        ],
+        "motionFromSceneTimeMs": 1956,
+        "motionThroughSceneTimeMs": 2030,
+        "motionTimeline": [
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 1956,
+            "throughSceneTimeMs": 2007,
+            "fromTrailIndex": 0,
+            "throughTrailIndex": 1
+          },
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 2007,
+            "throughSceneTimeMs": 2018,
+            "fromTrailIndex": 1,
+            "throughTrailIndex": 2
+          },
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 2018,
+            "throughSceneTimeMs": 2030,
+            "fromTrailIndex": 2,
+            "throughTrailIndex": 3
+          }
+        ]
+      }
+    },
+    {
+      "at": 6002.399999999994,
+      "seq": "132",
+      "scene": 2069,
+      "position": {
+        "x": 1111,
+        "y": 707
+      },
+      "facing": "S",
+      "movementStatus": "moving",
+      "person": {
+        "moving": true,
+        "motionTrail": [
+          {
+            "x": 1111,
+            "y": 700
+          },
+          {
+            "x": 1111,
+            "y": 707
+          }
+        ],
+        "motionFromSceneTimeMs": 2030,
+        "motionThroughSceneTimeMs": 2069,
+        "motionTimeline": [
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 2030,
+            "throughSceneTimeMs": 2069,
+            "fromTrailIndex": 0,
+            "throughTrailIndex": 1
+          }
+        ]
+      }
+    },
+    {
+      "at": 6059.899999999994,
+      "seq": "137",
+      "scene": 2141,
+      "position": {
+        "x": 1111,
+        "y": 720
+      },
+      "facing": "S",
+      "movementStatus": "moving",
+      "person": {
+        "moving": true,
+        "motionTrail": [
+          {
+            "x": 1111,
+            "y": 707
+          },
+          {
+            "x": 1111,
+            "y": 714
+          },
+          {
+            "x": 1111,
+            "y": 720
+          }
+        ],
+        "motionFromSceneTimeMs": 2069,
+        "motionThroughSceneTimeMs": 2141,
+        "motionTimeline": [
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 2069,
+            "throughSceneTimeMs": 2106,
+            "fromTrailIndex": 0,
+            "throughTrailIndex": 1
+          },
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 2106,
+            "throughSceneTimeMs": 2141,
+            "fromTrailIndex": 1,
+            "throughTrailIndex": 2
+          }
+        ]
+      }
+    },
+    {
+      "at": 6100.899999999994,
+      "seq": "139",
+      "scene": 2168,
+      "position": {
+        "x": 1111,
+        "y": 725
+      },
+      "facing": "S",
+      "movementStatus": "moving",
+      "person": {
+        "moving": true,
+        "motionTrail": [
+          {
+            "x": 1111,
+            "y": 720
+          },
+          {
+            "x": 1111,
+            "y": 725
+          }
+        ],
+        "motionFromSceneTimeMs": 2141,
+        "motionThroughSceneTimeMs": 2168,
+        "motionTimeline": [
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 2141,
+            "throughSceneTimeMs": 2168,
+            "fromTrailIndex": 0,
+            "throughTrailIndex": 1
+          }
+        ]
+      }
+    },
+    {
+      "at": 6157.5,
+      "seq": "146",
+      "scene": 2238,
+      "position": {
+        "x": 1111,
+        "y": 738
+      },
+      "facing": "S",
+      "movementStatus": "moving",
+      "person": {
+        "moving": true,
+        "motionTrail": [
+          {
+            "x": 1111,
+            "y": 725
+          },
+          {
+            "x": 1111,
+            "y": 734
+          },
+          {
+            "x": 1111,
+            "y": 735
+          },
+          {
+            "x": 1111,
+            "y": 738
+          }
+        ],
+        "motionFromSceneTimeMs": 2168,
+        "motionThroughSceneTimeMs": 2238,
+        "motionTimeline": [
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 2168,
+            "throughSceneTimeMs": 2216,
+            "fromTrailIndex": 0,
+            "throughTrailIndex": 1
+          },
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 2216,
+            "throughSceneTimeMs": 2224,
+            "fromTrailIndex": 1,
+            "throughTrailIndex": 2
+          },
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 2224,
+            "throughSceneTimeMs": 2238,
+            "fromTrailIndex": 2,
+            "throughTrailIndex": 3
+          }
+        ]
+      }
+    },
+    {
+      "at": 6260.899999999994,
+      "seq": "153",
+      "scene": 2340,
+      "position": {
+        "x": 1111,
+        "y": 756
+      },
+      "facing": "S",
+      "movementStatus": "accepted",
+      "person": {
+        "moving": true,
+        "motionTrail": [
+          {
+            "x": 1111,
+            "y": 738
+          },
+          {
+            "x": 1111,
+            "y": 745
+          },
+          {
+            "x": 1111,
+            "y": 755
+          },
+          {
+            "x": 1111,
+            "y": 756
+          }
+        ],
+        "motionFromSceneTimeMs": 2238,
+        "motionThroughSceneTimeMs": 2340,
+        "motionTimeline": [
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 2238,
+            "throughSceneTimeMs": 2278,
+            "fromTrailIndex": 0,
+            "throughTrailIndex": 1
+          },
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 2278,
+            "throughSceneTimeMs": 2333,
+            "fromTrailIndex": 1,
+            "throughTrailIndex": 2
+          },
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 2333,
+            "throughSceneTimeMs": 2340,
+            "fromTrailIndex": 2,
+            "throughTrailIndex": 3
+          }
+        ]
+      }
+    },
+    {
+      "at": 6338.699999999997,
+      "seq": "159",
+      "scene": 2428,
+      "position": {
+        "x": 1111,
+        "y": 772
+      },
+      "facing": "S",
+      "movementStatus": "moving",
+      "person": {
+        "moving": true,
+        "motionTrail": [
+          {
+            "x": 1111,
+            "y": 756
+          },
+          {
+            "x": 1111,
+            "y": 763
+          },
+          {
+            "x": 1111,
+            "y": 770
+          },
+          {
+            "x": 1111,
+            "y": 772
+          }
+        ],
+        "motionFromSceneTimeMs": 2340,
+        "motionThroughSceneTimeMs": 2428,
+        "motionTimeline": [
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 2340,
+            "throughSceneTimeMs": 2379,
+            "fromTrailIndex": 0,
+            "throughTrailIndex": 1
+          },
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 2379,
+            "throughSceneTimeMs": 2420,
+            "fromTrailIndex": 1,
+            "throughTrailIndex": 2
+          },
+          {
+            "kind": "motion",
+            "fromSceneTimeMs": 2420,
+            "throughSceneTimeMs": 2428,
+            "fromTrailIndex": 2,
+            "throughTrailIndex": 3
+          }
+        ]
+      }
+    }
+  ]
+}

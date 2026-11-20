@@ -1,0 +1,1679 @@
+{
+  "schema_version": 1,
+  "work_id": "D66-PLA",
+  "mode": "有限设计检查与有范围的人工源码对应",
+  "baseline": {
+    "commit": "a4a5151438f9b397010ea7979a66b18fc28c39ee",
+    "tree": "3189b45e964b37a8b531df276c561784a5471bb4"
+  },
+  "designs": {
+    "r2_sha256": "ddfa4e844d9cecde1dbde10d46ec52a7e03f693eb5f9bb371f354fa4756d767b",
+    "r3_sha256": "8ea1ea52b11f6b3d93be2804682273f985af17b72abde9786684ec91619c493c"
+  },
+  "implementation_source_manifest_sha256": "62324487c7d401bd90d80e6ef3936af3c1e750bf78cbab972f7780f77689fdb4",
+  "implementation_files": {
+    "backend/runtime.mjs": {
+      "bytes": 76594,
+      "sha256": "36bc618fa994eb5af680ada32700cadd40395d921e1764953144027bd71e4228"
+    },
+    "backend/spatial-direction-runtime.mjs": {
+      "bytes": 4925,
+      "sha256": "4bcd66651fe80d860810bd7f57f709f78ae214702eeb4c116b56f832a917ffa3"
+    },
+    "backend/server.mjs": {
+      "bytes": 10522,
+      "sha256": "212474ea1eaca771308295a93e35373feeaca8ca60112395f8b0a298b6c6bc79"
+    },
+    "docs/specs/gaolao-client-experience.md": {
+      "bytes": 21048,
+      "sha256": "74eade1fa8114741ad9b32d617c052fd655f9e8c2094ded5a307b70ee2787918"
+    },
+    "backend/tests/spatial-direction-publisher.test.mjs": {
+      "bytes": 17387,
+      "sha256": "df59e4014397ac4e4aeb173f3c75087dae4f853232e1d119d467bfacbd7afe72"
+    },
+    "backend/tests/spatial-progress-lock-admission.test.mjs": {
+      "bytes": 4297,
+      "sha256": "533d3d0b8fbeaf2bdd489917510eac5ed4ec5e8f1d5a7f857836adb025941d86"
+    },
+    "backend/tests/spatial-progress-lock-errors.test.mjs": {
+      "bytes": 7387,
+      "sha256": "f492b1bc105d7d2a6b9177fbf03bcb7655b042cdca5239ccf54615616167ccee"
+    },
+    "backend/tests/spatial-progress-lock-lifecycle.test.mjs": {
+      "bytes": 14281,
+      "sha256": "33a4b4216f22321e83c1c21208dfdb06b13529bf253db434c72064ff307e2092"
+    }
+  },
+  "implementation_commit_note": "执行时为 a4 上已冻结、尚未提交的源码字节；最终提交由包含本目录的 Git commit 标识。",
+  "model_identity": {
+    "wave": {
+      "module": "model/wave/WaveAdmission.tla",
+      "executed_sha256": "859e047d291f70215222caf2885a94ce89cdfb83800fd767216d7eb3318eb897",
+      "executed_bytes": 19519,
+      "published_sha256": "6be8cfc3fc83ffeb561ed1125830c0fed06f8f0dd87ce4e81de6715aaac48e96",
+      "published_bytes": 19506,
+      "comment_stripped_code_sha256": "4fba38d766cdfd3e97c0c5b5f89346440ae76f38ebbfe2f2ea31b8266c5b2e81",
+      "transfer": "COMMENT_ONLY_IDENTICAL_CODE_NOT_RERUN",
+      "configs": [
+        {
+          "path": "model/wave/negative-early-miss-settle.cfg",
+          "sha256": "8e3c6cf154d357c10c2d7e03549940a76ba2a155e38128a01354443d2ae32a4d",
+          "bytes": 239
+        },
+        {
+          "path": "model/wave/negative-miss-publishes.cfg",
+          "sha256": "5efec9893c7b73f4a630fdfd3db5fc84ef43c3d4cadc4a69d0b3829b48d6119f",
+          "bytes": 235
+        },
+        {
+          "path": "model/wave/negative-reuse-dirty-client.cfg",
+          "sha256": "ab525444eef1722a91bc1b28a9a229c36769f0b00c066d3d8b2998c52192305a",
+          "bytes": 248
+        },
+        {
+          "path": "model/wave/negative-unknown-as-miss.cfg",
+          "sha256": "f3f9375e5d3c6bae5492f729a292327ebd418754b1f6caa95573843897fc0c5c",
+          "bytes": 239
+        },
+        {
+          "path": "model/wave/positive-try-one-record.cfg",
+          "sha256": "5270ba6959164181a99158d96a3ddde7d414a23fd179144840183e02bc6c3cae",
+          "bytes": 605
+        },
+        {
+          "path": "model/wave/try-one-record-close.cfg",
+          "sha256": "dc7e89474a7dcacaccabffd15acfc858ccd54fbe896794781a6422de02dd821c",
+          "bytes": 606
+        },
+        {
+          "path": "model/wave/try-two-record-failure.cfg",
+          "sha256": "268ef87d0dd8ae86da5e5945b67656f6b4870cd1b096e516d9dd78de93857e1e",
+          "bytes": 648
+        },
+        {
+          "path": "model/wave/witness-closed-drained.cfg",
+          "sha256": "f0edc7d27478fdf3c89a5dbc58c3ee9e8641b4ca5e16518a445f95dcd9922c0b",
+          "bytes": 228
+        },
+        {
+          "path": "model/wave/witness-miss-while-wave.cfg",
+          "sha256": "083b4d93fccbc4808095b796e86c3e63d43aa623cc0d5dee6e34fc8764a9459e",
+          "bytes": 227
+        }
+      ]
+    },
+    "sticky": {
+      "module": "model/sticky/StickyAdmission.tla",
+      "executed_sha256": "ddb8eb90a9495e32cf6e34d44e10eceee6a04c1e39b2b6faa3d978fe5b4b35b0",
+      "executed_bytes": 13145,
+      "published_sha256": "c0e5f7084490b7d983a1ffa5392466a4007125a60669d5a801cd845b44920725",
+      "published_bytes": 13159,
+      "comment_stripped_code_sha256": "59dc492d91d48777a085f45aff8c3a8e4a639055bf0e27d8730f8c1f6460c870",
+      "transfer": "COMMENT_ONLY_IDENTICAL_CODE_NOT_RERUN",
+      "configs": [
+        {
+          "path": "model/sticky/finite-wait-service.cfg",
+          "sha256": "2e752ee8749636b533bb0ca8afd535d8bfd76afd8d2a89a9f70836f10165e0ea",
+          "bytes": 360
+        },
+        {
+          "path": "model/sticky/negative-busy-consumes-wait.cfg",
+          "sha256": "648dd3aff297a78786f681ae2820dd8c59e5c78a42f7b653e3c71c9f4746f03c",
+          "bytes": 184
+        },
+        {
+          "path": "model/sticky/negative-busy-spin.cfg",
+          "sha256": "e66634f96b3eadc9f497b8a92a43d29569041d5c227493a9a1c897afc7f2445d",
+          "bytes": 177
+        },
+        {
+          "path": "model/sticky/negative-drop-wait-continuation.cfg",
+          "sha256": "48045c28ebef78e977d3369a5a49c31b846c941957bf0ec28592da885cd83799",
+          "bytes": 190
+        },
+        {
+          "path": "model/sticky/negative-error-spin.cfg",
+          "sha256": "1a0e125daae813f3f48285dd1c5940fd44a2a6741002847ed8b1849a28a17c3e",
+          "bytes": 179
+        },
+        {
+          "path": "model/sticky/negative-finish-clears-wait.cfg",
+          "sha256": "e38ffae4bfaed5780f37e5ffa2b6cdc8b9974a933fcdef8a398ef588ddc5e193",
+          "bytes": 189
+        },
+        {
+          "path": "model/sticky/negative-inherit-before-repeat.cfg",
+          "sha256": "8c9cea5ea8229962f0f186c373976d67207de349ce3e808cef6766648f34a6df",
+          "bytes": 189
+        },
+        {
+          "path": "model/sticky/negative-try-clears-wait.cfg",
+          "sha256": "f76ba1749647cee04422d213bfe1f2f23d7823426103bab9dd43702a0224c4b6",
+          "bytes": 182
+        },
+        {
+          "path": "model/sticky/overlap-all-try-starvation.cfg",
+          "sha256": "ebc95904abf2def2536fdc33f0df11187675a42759ec67b5ff4b0e7e5f377f5c",
+          "bytes": 244
+        },
+        {
+          "path": "model/sticky/overlap-wait-starvation.cfg",
+          "sha256": "3dadc57db496dbc03fe645e53fe736a57dfb108aa6098def54a5df6c49d542a6",
+          "bytes": 242
+        },
+        {
+          "path": "model/sticky/sticky-busy.cfg",
+          "sha256": "320d251b1131f0a51c8eb8763a4ff34abb7c99308295a05761cd77761dc32727",
+          "bytes": 424
+        },
+        {
+          "path": "model/sticky/sticky-carry.cfg",
+          "sha256": "53f1596c2f71e25cd0805d1e4be6a6f49fa1d8c4749a930fd3a640505a2257f3",
+          "bytes": 429
+        },
+        {
+          "path": "model/sticky/sticky-core.cfg",
+          "sha256": "4627cc27ad86f8235622d5c249e2ffdfb6868251338832600595849d35702762",
+          "bytes": 425
+        },
+        {
+          "path": "model/sticky/sticky-error.cfg",
+          "sha256": "c920cad795b7d4ab0a84793dc86bbf64a80bdf25c3e783a817665ab648b9c282",
+          "bytes": 425
+        },
+        {
+          "path": "model/sticky/sticky-zero.cfg",
+          "sha256": "788b005e72c9659848490e9f40dc7b9ada37f755fedd76c585b4fedf9f88a4c2",
+          "bytes": 424
+        }
+      ]
+    }
+  },
+  "manifest_identity": {
+    "wave": {
+      "executed_latest_sha256": "184c8fb8e720e89f3dd162c93c79c8645713f0cbc9e10ce70112573f0a618c41",
+      "published_sha256": "b93559f76ffeea67e42323a9ddf7cd0ec92c6361baaa690e6ba42d5e9dee18fb",
+      "description_translation_only": true,
+      "changed_paths": [
+        [
+          "feature"
+        ],
+        [
+          "requirements",
+          0,
+          "statement"
+        ],
+        [
+          "profiles",
+          "try-one-record",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "try-one-record",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "try-one-record",
+          "scope",
+          "covered_interleavings_and_faults",
+          0
+        ],
+        [
+          "profiles",
+          "try-one-record",
+          "scope",
+          "covered_interleavings_and_faults",
+          1
+        ],
+        [
+          "profiles",
+          "try-one-record",
+          "scope",
+          "covered_interleavings_and_faults",
+          2
+        ],
+        [
+          "profiles",
+          "try-one-record",
+          "scope",
+          "covered_interleavings_and_faults",
+          3
+        ],
+        [
+          "profiles",
+          "try-one-record",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "try-one-record",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "try-one-record",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "try-one-record",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "try-one-record",
+          "scope",
+          "excluded_behaviors",
+          4
+        ],
+        [
+          "profiles",
+          "try-one-record",
+          "scope",
+          "excluded_behaviors",
+          5
+        ],
+        [
+          "profiles",
+          "try-one-record",
+          "scope",
+          "excluded_behaviors",
+          6
+        ],
+        [
+          "profiles",
+          "try-one-record",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "try-one-record",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "try-one-record",
+          "assumptions",
+          2
+        ],
+        [
+          "profiles",
+          "negative-early-miss-settle",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "negative-early-miss-settle",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "negative-early-miss-settle",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "negative-early-miss-settle",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "negative-early-miss-settle",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "negative-early-miss-settle",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "negative-early-miss-settle",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "negative-miss-publishes",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "negative-miss-publishes",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "negative-miss-publishes",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "negative-miss-publishes",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "negative-miss-publishes",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "negative-miss-publishes",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "negative-miss-publishes",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "witness-miss-while-wave",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "witness-miss-while-wave",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "witness-miss-while-wave",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "witness-miss-while-wave",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "witness-miss-while-wave",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "witness-miss-while-wave",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "witness-miss-while-wave",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "try-two-record-failure",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "try-two-record-failure",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "try-two-record-failure",
+          "scope",
+          "covered_interleavings_and_faults",
+          2
+        ],
+        [
+          "profiles",
+          "try-two-record-failure",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "try-two-record-failure",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "try-two-record-failure",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "try-two-record-failure",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "try-two-record-failure",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "try-two-record-failure",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "negative-reuse-dirty-client",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "negative-reuse-dirty-client",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "negative-reuse-dirty-client",
+          "scope",
+          "covered_interleavings_and_faults",
+          2
+        ],
+        [
+          "profiles",
+          "negative-reuse-dirty-client",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "negative-reuse-dirty-client",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "negative-reuse-dirty-client",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "negative-reuse-dirty-client",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "negative-reuse-dirty-client",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "negative-reuse-dirty-client",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "negative-unknown-as-miss",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "negative-unknown-as-miss",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "negative-unknown-as-miss",
+          "scope",
+          "covered_interleavings_and_faults",
+          2
+        ],
+        [
+          "profiles",
+          "negative-unknown-as-miss",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "negative-unknown-as-miss",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "negative-unknown-as-miss",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "negative-unknown-as-miss",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "negative-unknown-as-miss",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "negative-unknown-as-miss",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "try-one-record-close",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "try-one-record-close",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "try-one-record-close",
+          "scope",
+          "covered_interleavings_and_faults",
+          2
+        ],
+        [
+          "profiles",
+          "try-one-record-close",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "try-one-record-close",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "try-one-record-close",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "try-one-record-close",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "try-one-record-close",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "try-one-record-close",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "witness-closed-drained",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "witness-closed-drained",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "witness-closed-drained",
+          "scope",
+          "covered_interleavings_and_faults",
+          2
+        ],
+        [
+          "profiles",
+          "witness-closed-drained",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "witness-closed-drained",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "witness-closed-drained",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "witness-closed-drained",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "witness-closed-drained",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "witness-closed-drained",
+          "assumptions",
+          1
+        ]
+      ],
+      "execution_note": "早期 Wave 执行使用当时较小的 profile 清单；逐次实际 manifest SHA 在 results 中保留。"
+    },
+    "sticky": {
+      "executed_latest_sha256": "151b5203045814065fad847a695ff04134307ce69bd0e661ca7c9fd9d6fc15c0",
+      "published_sha256": "41d41e59ba45f0277ba060564acc3e22edbb52c48248e949f28dc7568d113d16",
+      "description_translation_only": true,
+      "changed_paths": [
+        [
+          "feature"
+        ],
+        [
+          "requirements",
+          0,
+          "statement"
+        ],
+        [
+          "profiles",
+          "sticky-core",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "sticky-core",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "sticky-core",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "sticky-core",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "sticky-core",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "sticky-core",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "sticky-core",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "sticky-core",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "sticky-core",
+          "assumptions",
+          2
+        ],
+        [
+          "profiles",
+          "sticky-carry",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "sticky-carry",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "sticky-carry",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "sticky-carry",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "sticky-carry",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "sticky-carry",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "sticky-carry",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "sticky-carry",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "sticky-carry",
+          "assumptions",
+          2
+        ],
+        [
+          "profiles",
+          "negative-drop-wait-continuation",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "negative-drop-wait-continuation",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "negative-drop-wait-continuation",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "negative-drop-wait-continuation",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "negative-drop-wait-continuation",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "negative-drop-wait-continuation",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "negative-drop-wait-continuation",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "negative-drop-wait-continuation",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "negative-drop-wait-continuation",
+          "assumptions",
+          2
+        ],
+        [
+          "profiles",
+          "sticky-busy",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "sticky-busy",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "sticky-busy",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "sticky-busy",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "sticky-busy",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "sticky-busy",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "sticky-busy",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "sticky-busy",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "sticky-busy",
+          "assumptions",
+          2
+        ],
+        [
+          "profiles",
+          "sticky-error",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "sticky-error",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "sticky-error",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "sticky-error",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "sticky-error",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "sticky-error",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "sticky-error",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "sticky-error",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "sticky-error",
+          "assumptions",
+          2
+        ],
+        [
+          "profiles",
+          "sticky-zero",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "sticky-zero",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "sticky-zero",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "sticky-zero",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "sticky-zero",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "sticky-zero",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "sticky-zero",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "sticky-zero",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "sticky-zero",
+          "assumptions",
+          2
+        ],
+        [
+          "profiles",
+          "negative-try-clears-wait",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "negative-try-clears-wait",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "negative-try-clears-wait",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "negative-try-clears-wait",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "negative-try-clears-wait",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "negative-try-clears-wait",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "negative-try-clears-wait",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "negative-try-clears-wait",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "negative-try-clears-wait",
+          "assumptions",
+          2
+        ],
+        [
+          "profiles",
+          "negative-finish-clears-wait",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "negative-finish-clears-wait",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "negative-finish-clears-wait",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "negative-finish-clears-wait",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "negative-finish-clears-wait",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "negative-finish-clears-wait",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "negative-finish-clears-wait",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "negative-finish-clears-wait",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "negative-finish-clears-wait",
+          "assumptions",
+          2
+        ],
+        [
+          "profiles",
+          "negative-busy-consumes-wait",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "negative-busy-consumes-wait",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "negative-busy-consumes-wait",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "negative-busy-consumes-wait",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "negative-busy-consumes-wait",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "negative-busy-consumes-wait",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "negative-busy-consumes-wait",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "negative-busy-consumes-wait",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "negative-busy-consumes-wait",
+          "assumptions",
+          2
+        ],
+        [
+          "profiles",
+          "negative-busy-spin",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "negative-busy-spin",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "negative-busy-spin",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "negative-busy-spin",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "negative-busy-spin",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "negative-busy-spin",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "negative-busy-spin",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "negative-busy-spin",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "negative-busy-spin",
+          "assumptions",
+          2
+        ],
+        [
+          "profiles",
+          "negative-error-spin",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "negative-error-spin",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "negative-error-spin",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "negative-error-spin",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "negative-error-spin",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "negative-error-spin",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "negative-error-spin",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "negative-error-spin",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "negative-error-spin",
+          "assumptions",
+          2
+        ],
+        [
+          "profiles",
+          "negative-inherit-before-repeat",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "negative-inherit-before-repeat",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "negative-inherit-before-repeat",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "negative-inherit-before-repeat",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "negative-inherit-before-repeat",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "negative-inherit-before-repeat",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "negative-inherit-before-repeat",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "negative-inherit-before-repeat",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "negative-inherit-before-repeat",
+          "assumptions",
+          2
+        ],
+        [
+          "profiles",
+          "finite-wait-service",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "finite-wait-service",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "finite-wait-service",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "finite-wait-service",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "finite-wait-service",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "finite-wait-service",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "finite-wait-service",
+          "scope",
+          "environment"
+        ],
+        [
+          "profiles",
+          "finite-wait-service",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "finite-wait-service",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "finite-wait-service",
+          "assumptions",
+          2
+        ],
+        [
+          "profiles",
+          "overlap-wait-starvation",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "overlap-wait-starvation",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "overlap-wait-starvation",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "overlap-wait-starvation",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "overlap-wait-starvation",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "overlap-wait-starvation",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "overlap-wait-starvation",
+          "scope",
+          "environment"
+        ],
+        [
+          "profiles",
+          "overlap-wait-starvation",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "overlap-wait-starvation",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "overlap-wait-starvation",
+          "assumptions",
+          2
+        ],
+        [
+          "profiles",
+          "overlap-all-try-starvation",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "overlap-all-try-starvation",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "overlap-all-try-starvation",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "overlap-all-try-starvation",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "overlap-all-try-starvation",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "overlap-all-try-starvation",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "overlap-all-try-starvation",
+          "scope",
+          "environment"
+        ],
+        [
+          "profiles",
+          "overlap-all-try-starvation",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "overlap-all-try-starvation",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "overlap-all-try-starvation",
+          "assumptions",
+          2
+        ]
+      ],
+      "execution_note": "早期 Wave 执行使用当时较小的 profile 清单；逐次实际 manifest SHA 在 results 中保留。"
+    }
+  },
+  "tool": {
+    "jar_version": "v1.7.4 / TLC 2.19",
+    "jar_sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+    "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+    "java": "OpenJDK 21.0.13"
+  },
+  "implementation_negative_controls": [
+    {
+      "name": "unconditional-wait-inherit",
+      "classification": "IMPLEMENTATION_NEGATIVE_CONTROL",
+      "tlc": "NO_TLC_MUTATION",
+      "archive_directory": "negative-api/unconditional-wait-inherit",
+      "result_sha256": "96a63e041538b1d73650d8a5d3c7a69a275e02693e35feaa4f847101604f1838",
+      "stdout_sha256": "b06a2dd01f4ee2c15acb2c18c372e3a5ea18e2a3a5cb66620b7ebfee23196b63",
+      "exit_code": 1,
+      "elapsed_seconds": 0.26758101399900625,
+      "binding_mismatches": []
+    },
+    {
+      "name": "early-generation-snapshot",
+      "classification": "IMPLEMENTATION_NEGATIVE_CONTROL",
+      "tlc": "NO_TLC_MUTATION",
+      "archive_directory": "negative-api/early-generation-snapshot",
+      "result_sha256": "29e43bbf86b223e2d9496859dd6911cc0be86ecaad54dd7e1dfa08a739242142",
+      "stdout_sha256": "f80dee476435be199b4057f54e96229b8823b1f2723e47eeeb4e330c3b550ca8",
+      "exit_code": 1,
+      "elapsed_seconds": 0.26725752700076555,
+      "binding_mismatches": []
+    }
+  ],
+  "layered_coverage_review": "PASS_WITHIN_IMPLEMENTATION_NEGATIVE_CONTROL_SCOPE；两项真实公共API负控兑现敏感义务；NO_TLC_MUTATION，TLC总数仍24",
+  "evidence_audit": {
+    "file": "model-review/evidence-review-r2.json",
+    "sha256": "54c954e2802b119d04615f1e501602fcbf88df377952e085a34bf61392c13656"
+  },
+  "transfer_status": "COMMENT_AND_DESCRIPTION_ONLY_NOT_RERUN_ACCEPTED_WITHIN_SCOPE",
+  "product_gate_status": "本模型包不声明自然产品通过、CI 或合并",
+  "independent_review_references": {
+    "formal-candidate-audit.json": {
+      "sha256": "2ee617983cc44732afd85f716b01b934e736e419b7dd15ac961b48b63bd9750e",
+      "archive_path": "model-review/formal-candidate-audit.json"
+    },
+    "pla11-layered-negative-review.md": {
+      "sha256": "36c6f101c99629d57915bf3fb8409079538378bc4741047af2c297529c02aaf7",
+      "archive_path": "model-review/pla11-layered-negative-review.md"
+    },
+    "temporal-counterexample-review.md": {
+      "sha256": "71f54d094bba21fb70415b528ceb94d4392bf90f247df644526c4ae561aa53cb",
+      "archive_path": "model-review/temporal-counterexample-review.md"
+    }
+  }
+}

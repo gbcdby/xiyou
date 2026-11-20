@@ -4,21 +4,37 @@ import { validateSpatial, parseSpatial, gaolaoPersonalProfile } from '../protoco
 import { RuntimeError } from './errors.mjs';
 import { RuleError } from '../game/rules.mjs';
 import { encodeJsonbText, decodeJsonbText } from './jsonb-text.mjs';
-import { isSpatial, opaqueRef, next, ensureView, entityRef, spatialProjection, resolveRef } from '../game/spatial-world.mjs';
+import { isSpatial, opaqueRef, next, ensureView, entityRef, spatialProjection, resolveRef, publicAppearanceEpoch, publicResourceRevision } from '../game/spatial-world.mjs';
 import { applySpatialAction, advanceSpatialPositions, invalidateReady } from '../game/spatial-rules.mjs';
 import { isGaolao, observeGaolao } from '../game/gaolao-world.mjs';
 import { initializeGaolao,updateGaolaoPresence,advanceGaolaoFollow,checkGaolaoFallback } from '../game/gaolao-rules.mjs';
 import {gaolaoNavigationDependencies,gaolaoNavigationRejection} from '../game/gaolao-navigation.mjs';
 import {revalidateScenePolicy} from './scene-policy.mjs';
+import { directionCapability, timedTrailCapability } from './spatial-direction-config.mjs';
+import { executedSelfTrail, applySelfTrail } from './spatial-motion-trail.mjs';
 const digest = value => createHash('sha256').update(canonicalize(value)).digest('hex');
 const hasAppearance = capabilities => capabilities.includes('spatial-appearance-v1');
 const hasObjectVisual = capabilities => capabilities.includes('spatial-object-visual-v1');
-/** 旧 nonce 保留原结果；仅为未协商的新连接移除它不能读取的扩展字段。 */
-function compatibleControlResponse(response, capabilities) {
+const hasSceneOverview = capabilities => capabilities.includes('spatial-scene-overview-v1');
+const hasDirection = capabilities => capabilities.includes(directionCapability);
+/** 旧 nonce 保留原结果；历史计数按原 snapshot 的绑定安全重表达，再按当前 reader 裁剪。 */
+async function compatibleControlResponse(runtime, tx, actorId, response, capabilities) {
     const copy = structuredClone(response), projection = copy.snapshot.projection;
-    if (!hasAppearance(capabilities)) for (const entity of [projection.self, ...projection.entities]) delete entity.appearanceId;
-    if (!hasObjectVisual(capabilities)) for (const object of [...projection.items, ...projection.targets]) delete object.visualKey;
-    return copy;
+    const source = await runtime.stateAt(tx, copy.snapshot.snapshotSeq), view = source.views[actorId];
+    if (view?.viewId !== copy.snapshot.viewId) throw new RuntimeError('RESYNC_REQUIRED', '原控制结果的历史视图不可用。');
+    const actors = new Map(Object.values(source.characters).map(actor => [entityRef(view, actor.characterId), actor]));
+    for (const person of [projection.self, ...projection.entities, ...(projection.sceneOverview?.entities ?? [])]) {
+        const actor = actors.get(person.entityRef);
+        if (!actor) throw new RuntimeError('RESYNC_REQUIRED', '原控制结果的历史人物绑定不可用。');
+        person.appearanceEpoch = publicAppearanceEpoch(source, actorId, view, actor);
+        if (person.resourceRevision !== undefined) person.resourceRevision = publicResourceRevision(source, actorId, view, actor);
+    }
+    if (!hasSceneOverview(capabilities)) { delete projection.sceneOverview; delete projection.mapCatalog; }
+    if (!hasAppearance(capabilities)) for (const entity of [projection.self, ...projection.entities, ...(projection.sceneOverview?.entities ?? [])]) delete entity.appearanceId;
+    if (!hasObjectVisual(capabilities)) for (const object of [...projection.items, ...projection.targets, ...(projection.sceneOverview?.items ?? []), ...(projection.sceneOverview?.targets ?? [])]) { delete object.visualKey; if (Object.hasOwn(object, 'visualState')) object.visualState = 'default'; }
+    projection.self.capabilities = projection.self.capabilities.filter(capability => capability !== 'move_direction');
+    if (hasDirection(capabilities)) projection.self.capabilities.push('move_direction');
+    return validateSpatial('ControlResponseV2', copy);
 }
 export const requiredSpatialCapabilities = value => ['spatial-v2', ...(value && gaolaoPersonalProfile(value) ? ['gaolao-personal-consent-v1'] : [])];
 export function requireSpatialCapability(capabilities, value) {
@@ -34,9 +50,11 @@ export async function advanceSpatialTime(tx) {
     if (!isSpatial(tx.state) || ['Finished', 'Aborted'].includes(tx.state.phase))
         return;
     const wall = Date.parse(tx.time), actors = Object.values(tx.state.characters).filter(a => a.kind === 'human' && a.mode === 'HumanControlled');
+    const rows = actors.length ? (await tx.client.query('SELECT connection_id,active,lease_until FROM connections WHERE connection_id=ANY($1::text[])', [actors.map(a => a.activeConnectionId)])).rows : [];
+    const byConnection = new Map(rows.map(row => [row.connection_id, row]));
     const leases = [];
     for (const a of actors) {
-        const row = (await tx.client.query('SELECT active,lease_until FROM connections WHERE connection_id=$1', [a.activeConnectionId])).rows[0];
+        const row = byConnection.get(a.activeConnectionId);
         if (row)
             leases.push({ actorId: a.characterId, active: row.active, until: Date.parse(row.lease_until) });
     }
@@ -77,7 +95,7 @@ export function refreshSpatialViews(tx) {
 }
 export async function snapshotSpatial(tx, actorId, { connectionId = null, rotate = false, viewId, principalKind = 'human', binding = null, capabilities = [] } = {}) {
     const view = binding ?? ensureView(tx, actorId, { rotate, ...(viewId ? { viewId } : {}) });
-    return validateSpatial('SnapshotV2', { schemaVersion: 2, type: 'world.snapshot', sessionId: tx.row.session_id, viewId: view.viewId, snapshotSeq: tx.state.sessionSeq, projection: spatialProjection(tx.state, tx.content, actorId, { connectionId, principalKind, view, includeAppearance: hasAppearance(capabilities), includeObjectVisual: hasObjectVisual(capabilities), highWater: await highWater(tx, tx.state.characters[actorId]) }) });
+    return validateSpatial('SnapshotV2', { schemaVersion: 2, type: 'world.snapshot', sessionId: tx.row.session_id, viewId: view.viewId, snapshotSeq: tx.state.sessionSeq, projection: spatialProjection(tx.state, tx.content, actorId, { connectionId, principalKind, view, includeDirection: hasDirection(capabilities), includeAppearance: hasAppearance(capabilities), includeObjectVisual: hasObjectVisual(capabilities), includeSceneOverview: hasSceneOverview(capabilities), highWater: await highWater(tx, tx.state.characters[actorId]) }) });
 }
 export async function recoverSpatial(runtime) {
     const rows = (await runtime.pool.query("SELECT session_id FROM sessions WHERE state->>'protocolCapability'='spatial-v2' AND state->>'phase' IN ('Lobby','Running')")).rows;
@@ -105,7 +123,7 @@ export async function controlSpatial(runtime, handle, request) {
             // 只恢复本连接待安装的原结果；重放历史 nonce 不重新选择或绑定旧会话。
             const recovery = connection.recoverableView;
             if (recovery?.view.viewId === prior.snapshot.viewId && recovery.view.sessionId === request.sessionId) runtime.stageSpatialView(tx, handle, recovery.view, recovery.scope, { recovery: true });
-            return compatibleControlResponse(prior, connection.capabilities);
+            return compatibleControlResponse(runtime, tx, user.actorId, prior, connection.capabilities);
         }
         await advanceSpatialTime(tx);
         if (['Finished', 'Aborted'].includes(tx.state.phase))
@@ -130,7 +148,8 @@ export async function controlSpatial(runtime, handle, request) {
 export async function executeSpatial(runtime, tx, request, principal, authorized, options = {}) {
     tx.cause = { principalId: principal.principalId, actionId: request.clientActionId, actorId: principal.actorId };
     const personal = !!gaolaoPersonalProfile(tx.state);
-    if (!personal) await advanceSpatialTime(tx);
+    const direction = request.action.kind === 'move_direction';
+    if (!personal && !direction) await advanceSpatialTime(tx);
     const semanticDigest = digest(request), key = [request.sessionId, principal.principalId, request.clientActionId];
     tx.requestDigest = semanticDigest;
     const prior = (await tx.client.query('SELECT receipt,semantic_digest,actor_id FROM action_receipts WHERE session_id=$1 AND principal_id=$2 AND client_action_id=$3', key)).rows[0];
@@ -143,17 +162,23 @@ export async function executeSpatial(runtime, tx, request, principal, authorized
     }
     // 新版本先收束原结果；只有首次请求才推进当前时间及授权围栏。
     // 当前新记录损坏、控制变更或终态不能吞掉已有合法历史 Receipt。
-    if (personal) await advanceSpatialTime(tx);
+    if (personal || direction) await advanceSpatialTime(tx);
     let code = 'OK', status = 'Accepted', result = {}, before = tx.state, eventCount = tx.events.length;
     try {
         const actor = tx.state.characters[principal.actorId];
         if (actor.controlEpoch !== request.controlEpoch || !await authorized(actor))
             throw new RuleError('STALE_CONTROL');
-        if (['move_to', 'stop_move'].includes(request.action.kind)) {
-            const current = await highWater(tx, actor);
-            if (BigInt(request.action.movementCommandSeq) <= BigInt(current))
-                throw new RuleError('STALE_MOVEMENT_COMMAND');
-            await tx.client.query('INSERT INTO spatial_command_sources(session_id,actor_id,control_epoch,handled_seq) VALUES($1,$2,$3,$4) ON CONFLICT(session_id,actor_id,control_epoch) DO UPDATE SET handled_seq=EXCLUDED.handled_seq', [request.sessionId, actor.characterId, actor.controlEpoch, request.action.movementCommandSeq]);
+        if (['move_to', 'move_direction', 'stop_move'].includes(request.action.kind)) {
+            // 仅已验证公开方向合并水位读写；内部调用及其他移动动作保留原路径。
+            if (direction && options.publicDirectionWatermark === true) {
+                const claimed = await tx.client.query('INSERT INTO spatial_command_sources(session_id,actor_id,control_epoch,handled_seq) VALUES($1,$2,$3,$4) ON CONFLICT(session_id,actor_id,control_epoch) DO UPDATE SET handled_seq=EXCLUDED.handled_seq WHERE spatial_command_sources.handled_seq < EXCLUDED.handled_seq RETURNING handled_seq', [request.sessionId, actor.characterId, actor.controlEpoch, request.action.movementCommandSeq]);
+                if (claimed.rows.length === 0) throw new RuleError('STALE_MOVEMENT_COMMAND');
+            } else {
+                const current = await highWater(tx, actor);
+                if (BigInt(request.action.movementCommandSeq) <= BigInt(current))
+                    throw new RuleError('STALE_MOVEMENT_COMMAND');
+                await tx.client.query('INSERT INTO spatial_command_sources(session_id,actor_id,control_epoch,handled_seq) VALUES($1,$2,$3,$4) ON CONFLICT(session_id,actor_id,control_epoch) DO UPDATE SET handled_seq=EXCLUDED.handled_seq', [request.sessionId, actor.characterId, actor.controlEpoch, request.action.movementCommandSeq]);
+            }
         }
         if (tx.state.phase !== 'Running')
             throw new RuleError('SESSION_NOT_RUNNING');
@@ -195,13 +220,16 @@ export async function submitSpatial(runtime, handle, raw) {
     const request = parseSpatial('PublicEnvelope', raw), connection = runtime.connection(handle);
     requireSpatialCapability(connection.capabilities);
     await runtime.authenticate(connection.token);
+    if (request.action.kind === 'move_direction' && (!runtime.spatialDirection || !hasDirection(connection.capabilities))) throw new RuntimeError('INVALID_MESSAGE', '方向短段必须先由本次连接协商。');
+    const lockedDirectionAccess = !!runtime.spatialDirection && ['move_direction', 'stop_move'].includes(request.action.kind)
+        && ['spatial-v2', directionCapability, timedTrailCapability].every(capability => connection.capabilities.includes(capability));
     try {
         return await runtime.locked(request.sessionId, { kind: 'spatial-action' }, async (tx) => {
-            const user = await runtime.access(tx.client, tx.row, connection.token);
+            const user = await runtime.access(tx.client, tx.row, connection.token, lockedDirectionAccess ? { sessionLock: 'update' } : undefined);
             if (!isSpatial(tx.state))
                 throw new RuntimeError('INVALID_MESSAGE');
             requireSpatialCapability(connection.capabilities, tx.state);
-            return executeSpatial(runtime, tx, request, { ...user, principalKind: 'human' }, async (actor) => actor.mode === 'HumanControlled' && actor.activeConnectionId === handle.connectionId && await runtime.liveConnection(tx, handle));
+            return executeSpatial(runtime, tx, request, { ...user, principalKind: 'human' }, async (actor) => actor.mode === 'HumanControlled' && actor.activeConnectionId === handle.connectionId && await runtime.liveConnection(tx, handle), request.action.kind === 'move_direction' ? { publicDirectionWatermark: true } : {});
         });
     }
     catch (error) {
@@ -218,11 +246,13 @@ export async function submitSpatial(runtime, handle, raw) {
         });
     }
 }
-export async function syncSpatial(runtime, handle, request) {
+export async function syncSpatial(runtime, handle, request, { throughSeqCeiling, sentPrefixStart } = {}) {
     const connection = runtime.connection(handle);
     requireSpatialCapability(connection.capabilities);
-    return runtime.locked(request.sessionId, { kind: 'spatial-sync' }, async (tx) => {
-        const user = await runtime.access(tx.client, tx.row, connection.token), view = runtime.connectionView(handle), ended = ['Finished', 'Aborted'].includes(tx.state.phase), binding = view?.terminalBinding ?? tx.state.views[user.actorId], actor = tx.state.characters[user.actorId];
+    const readView = runtime.connectionView(handle);
+    const sharedRead = readView?.schemaVersion === 2 && runtime.spatialSupply.enabled(handle);
+    return runtime.locked(request.sessionId, { kind: 'spatial-sync', ...(sharedRead ? { sessionLock: 'share' } : {}) }, async (tx) => {
+        const user = await runtime.access(tx.client, tx.row, connection.token, sharedRead ? { sessionLock: 'share' } : undefined), view = runtime.connectionView(handle), ended = ['Finished', 'Aborted'].includes(tx.state.phase), binding = view?.terminalBinding ?? tx.state.views[user.actorId], actor = tx.state.characters[user.actorId];
         requireSpatialCapability(connection.capabilities, tx.state);
         if (ended && !await runtime.liveConnection(tx, handle)) throw new RuntimeError('UNAUTHENTICATED');
         if (view?.terminalBinding && (!ended || view.cursor !== tx.state.sessionSeq)) throw new RuntimeError('RESYNC_REQUIRED');
@@ -230,18 +260,37 @@ export async function syncSpatial(runtime, handle, request) {
             throw new RuntimeError('RESYNC_REQUIRED');
         if (view.ownedEpoch !== null && !['Finished', 'Aborted'].includes(tx.state.phase) && (actor.activeConnectionId !== handle.connectionId || actor.controlEpoch !== view.ownedEpoch))
             throw new RuntimeError('RESYNC_REQUIRED');
+        // 先核原R的全部授权和安装下界，再接受同一V的服务器内部连续起点；不可洗白原请求。
+        if (sentPrefixStart !== undefined && (throughSeqCeiling !== undefined || !sharedRead || !runtime.spatialSupply.enabled(handle)
+            || view !== readView || !runtime.spatialSupply.current(handle, view) || typeof sentPrefixStart !== 'string'
+            || sentPrefixStart !== runtime.spatialSupply.cursor(view) || BigInt(sentPrefixStart) < BigInt(request.cursor)
+            || BigInt(sentPrefixStart) > BigInt(tx.state.sessionSeq))) throw new RuntimeError('RESYNC_REQUIRED');
+        const fromExclusive = sentPrefixStart ?? request.cursor;
+        const trailRequest = fromExclusive === request.cursor ? request : { ...request, cursor: fromExclusive };
         // 公开投影停在已提交事务末尾，不能把空间检查点/合作效果拆在分页两侧。
-        const limit = String(BigInt(request.cursor) + 256n < BigInt(tx.state.sessionSeq) ? BigInt(request.cursor) + 256n : BigInt(tx.state.sessionSeq));
-        const boundary = (await tx.client.query('SELECT through_seq FROM outbox WHERE session_id=$1 AND through_seq>$2 AND through_seq<=$3 ORDER BY through_seq DESC LIMIT 1', [request.sessionId, request.cursor, limit])).rows[0]
-            ?? (await tx.client.query('SELECT through_seq FROM outbox WHERE session_id=$1 AND through_seq>$2 AND through_seq<=$3 ORDER BY through_seq LIMIT 1', [request.sessionId, request.cursor, tx.state.sessionSeq])).rows[0];
-        const throughSeq = boundary?.through_seq ?? request.cursor;
+        // 上界只能由同连接已入队前缀提供；DTO无此字段，仍在本事务重新核授权与完整提交。
+        const frontier = throughSeqCeiling ?? tx.state.sessionSeq;
+        if (throughSeqCeiling !== undefined && (!runtime.spatialSupply.enabled(handle) || BigInt(frontier) < BigInt(request.cursor) || BigInt(frontier) > BigInt(tx.state.sessionSeq))) throw new RuntimeError('RESYNC_REQUIRED');
+        const limit = String(BigInt(fromExclusive) + 256n < BigInt(frontier) ? BigInt(fromExclusive) + 256n : BigInt(frontier));
+        const boundary = fromExclusive === frontier ? undefined
+            : sharedRead && throughSeqCeiling === undefined && limit === frontier ? { through_seq: frontier }
+            : (await tx.client.query('SELECT through_seq FROM outbox WHERE session_id=$1 AND through_seq>$2 AND through_seq<=$3 ORDER BY through_seq DESC LIMIT 1', [request.sessionId, fromExclusive, limit])).rows[0]
+            ?? (await tx.client.query('SELECT through_seq FROM outbox WHERE session_id=$1 AND through_seq>$2 AND through_seq<=$3 ORDER BY through_seq LIMIT 1', [request.sessionId, fromExclusive, frontier])).rows[0];
+        const throughSeq = boundary?.through_seq ?? fromExclusive;
         const state = await runtime.stateAt(tx, throughSeq);
-        const events = throughSeq === request.cursor ? [] : [{ sessionSeq: throughSeq, eventId: `${request.sessionId}:E${throughSeq}`, kind: 'projection.replace', payload: { projection: spatialProjection(state, tx.content, user.actorId, { connectionId: handle.connectionId, includeAppearance: hasAppearance(connection.capabilities), includeObjectVisual: hasObjectVisual(connection.capabilities), ...(view.terminalBinding ? { view: view.terminalBinding } : {}), highWater: await highWater(tx, actor) }) } }];
-        return validateSpatial('BatchV2', { schemaVersion: 2, type: 'world.batch', sessionId: request.sessionId, viewId: request.viewId, fromExclusive: request.cursor, throughSeq, events });
+        const events = [];
+        const direction = !!runtime.spatialDirection && hasDirection(connection.capabilities);
+        if (throughSeq !== fromExclusive) {
+            const projection = spatialProjection(state, tx.content, user.actorId, { connectionId: handle.connectionId, includeDirection: direction, includeAppearance: hasAppearance(connection.capabilities), includeObjectVisual: hasObjectVisual(connection.capabilities), includeSceneOverview: hasSceneOverview(connection.capabilities), ...(view.terminalBinding ? { view: view.terminalBinding } : {}), highWater: await highWater(tx, actor) });
+            if (direction) applySelfTrail(projection, await executedSelfTrail(runtime, tx, user.actorId, trailRequest, throughSeq, state, { timed: connection.capabilities.includes(timedTrailCapability) }));
+            events.push({ sessionSeq: throughSeq, eventId: `${request.sessionId}:E${throughSeq}`, kind: 'projection.replace', payload: { projection } });
+        }
+        return validateSpatial('BatchV2', { schemaVersion: 2, type: 'world.batch', sessionId: request.sessionId, viewId: request.viewId, fromExclusive, throughSeq, ...(direction ? { syncFrontierSeq: tx.state.sessionSeq } : {}), events });
     });
 }
 /** 内部导航在意图创建时预留序号；后续提交/降级均使用原持久请求。 */
 export async function reserveSpatialIntent(runtime, handle, intentId, action, executionContext={mode:'intent'}) {
+    if (action?.kind === 'move_direction') throw new RuntimeError('INVALID_MESSAGE', '方向短段仅接受本人当前控制连接。');
     if(!executionContext||Object.keys(executionContext).some(k=>!['mode','reason'].includes(k))||!(executionContext.mode==='intent'&&executionContext.reason===undefined||executionContext.mode==='fallback'&&['model_timeout','invalid_output','ineffective_twice'].includes(executionContext.reason)))throw new RuntimeError('INVALID_MESSAGE');
     const principal = runtime.internal(handle);
     validateSpatial('Id', intentId);

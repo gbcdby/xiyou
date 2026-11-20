@@ -2,11 +2,13 @@ import assert from 'node:assert/strict';
 import { loadContent } from '../../content/index.mjs';
 import { validateSpatial } from '../../protocol/spatial.mjs';
 import { until, sleep } from './network-support.mjs';
+import { canvasFrame, worldPixel } from './canvas-browser-support.mjs';
+import { beginSelectionClick, endSelectionClick } from './cuilan-click-observation.mjs';
 
 export const snapshot = page => page.evaluate(async () => (await import('/src/state/spatial-store.ts')).spatialState.value.snapshot);
 export const clientState = page => page.evaluate(async () => {
   const s = (await import('/src/state/spatial-store.ts')).spatialState.value;
-  return { connection: s.connection, inputReady: s.inputReady, message: s.message, queuedAction: s.queuedAction, actions: s.actions };
+  return { connection: s.connection, inputReady: s.inputReady, directionInput: s.directionInput, message: s.message, queuedAction: s.queuedAction, navigation: s.navigation, actions: s.actions };
 });
 const escapeRegex = text => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const samePosition = (a, b) => a?.x === b?.x && a?.y === b?.y;
@@ -27,7 +29,8 @@ export async function closeReading(page) {
 }
 export async function openReading(page, label) {
   await closeReading(page);
-  await page.getByRole('button', { name: label, exact: true }).click();
+  const visibleLabel = label==='进展' && await page.getByRole('button',{name:'队伍',exact:true}).count() ? '队伍' : label;
+  await page.getByRole('button', { name: visibleLabel, exact: true }).click();
   const restore = page.locator('.spatial-sidebar.hud-card-collapsed').getByRole('button', { name: '取消选择并展开', exact: true });
   const restored = await restore.isVisible();
   if (restored) await restore.click();
@@ -35,32 +38,56 @@ export async function openReading(page, label) {
   return restored;
 }
 
-/** HUD 将附近列表折叠；先走可见入口，再沿原对象/锚点按钮操作。 */
-async function openObjects(page) {
-  const entry = page.getByRole('button', { name: '附近对象与出口', exact: true });
-  if (await entry.count()) await entry.click();
+/** 固定HUD按需打开对象列表；不通过隐藏实体DOM选择。 */
+export async function openObjects(page, reference) {
+  // 已展开的对象详情会覆盖 Canvas 底部的“场景对象”入口。
+  // 必须先由用户可见的正常关闭按钮收起面板，不能 force click 穿透。
+  const close = page.getByRole('button', { name: '关闭对象区', exact: true });
+  if (await close.isVisible()) {
+    const observed = beginSelectionClick(page, { ...(reference === undefined ? {} : { reference }), branch: 'close-objects' });
+    try { await close.click(); endSelectionClick(observed, 'returned'); }
+    catch (error) { endSelectionClick(observed, 'threw', error); throw error; }
+  }
+  const entry = page.getByRole('button', { name: '场景对象', exact: true });
+  if (await entry.count()) {
+    const observed = beginSelectionClick(page, { branch: 'objects-entry' });
+    try { await entry.click(); endSelectionClick(observed, 'returned'); }
+    catch (error) { endSelectionClick(observed, 'threw', error); throw error; }
+  }
   const restore = page.locator('.spatial-sidebar.hud-card-collapsed').getByRole('button', { name: '取消选择并展开', exact: true });
   if (await restore.isVisible()) await restore.click();
 }
 
 /** 读取当前授权对象以找到玩家可见的文字入口；不解析真实角色ID或跨观察者引用。 */
 export async function selectObject(page, reference) {
+  // 原阅读面板的收尾仍属于调用方；公共对象入口只处理对象详情遮挡。
   await closeReading(page);
-  await openObjects(page);
-  const p = (await snapshot(page)).projection;
+  await openObjects(page, reference);
+  const p = await page.evaluate(async()=>{const s=(await import('/src/state/spatial-store.ts')).spatialState.value.snapshot;return (await import('/src/domain/spatial-display.ts')).sceneDisplayProjection(s.projection);});
   const target = [...p.targets, ...p.items, ...p.entities].find(entity => entity.entityRef === reference);
   assert.ok(target, '目标必须出现在当前玩家授权投影中');
   const buttons = page.locator('.spatial-object-list').getByRole('button');
   const texts = await buttons.allTextContents();
   const candidates = texts.map((text, index) => ({ text: text.trim(), index })).filter(entry => entry.text === target.name || new RegExp('^\\d+号 · ' + escapeRegex(target.name) + '$').test(entry.text));
   if (candidates.length === 1) {
-    await buttons.nth(candidates[0].index).click();
+    const observed = beginSelectionClick(page, { reference, branch: 'object-button' });
+    try { await buttons.nth(candidates[0].index).click(); endSelectionClick(observed, 'returned'); }
+    catch (error) { endSelectionClick(observed, 'threw', error); throw error; }
   } else {
-    // 同名时通过实际地图位置选中，再读取可见编号；不凭真身帮助玩家挑选。
+    // 同名/同脚点时点实际绘出的编号标签；不凭真身、插入顺序或隐藏DOM挑选。
     assert.ok(target.position && target.sceneId === p.self.sceneId, '同名目标须在当前地图可见');
     const map = page.getByTestId('spatial-map'); await map.scrollIntoViewIfNeeded();
-    const pixel = await map.evaluate((svg, position) => { const point = new DOMPoint(position.x, position.y).matrixTransform(svg.getScreenCTM()); return { x: Math.round(point.x), y: Math.round(point.y) }; }, target.position);
-    await page.mouse.click(pixel.x, pixel.y);
+    const label=(await canvasFrame(page)).labels.find(value=>value.key===reference&&value.selectable);
+    if(label) {
+      const observed = beginSelectionClick(page, { reference, branch: 'map-label' });
+      try { await map.click({position:{x:label.x+label.width/2,y:label.y+label.height/2}}); endSelectionClick(observed, 'returned'); }
+      catch (error) { endSelectionClick(observed, 'threw', error); throw error; }
+    } else {
+      const {pixel}=await worldPixel(page,target.position);
+      const observed = beginSelectionClick(page, { reference, branch: 'map-position' });
+      try { await page.mouse.click(pixel.x,pixel.y); endSelectionClick(observed, 'returned'); }
+      catch (error) { endSelectionClick(observed, 'threw', error); throw error; }
+    }
   }
   const label = (await page.locator('#spatial-selection-heading').innerText()).trim();
   assert.ok(label === target.name || label.endsWith(' · ' + target.name), '选中卡必须显示目标的当前授权称呼');
@@ -97,6 +124,8 @@ export async function waitHumanReceipt(page, previousIds, expected, report, play
     if (expected[field] !== undefined) assert.deepEqual(request.action[field], expected[field], label + '使用原授权字段 ' + field);
   }
   if (expected.parameters !== undefined) assert.deepEqual(request.action.parameters, expected.parameters, label + '有限操作参数保持');
+  // 内容解码器的 Position 可为 null-prototype；仍逐值严格比较同一 {x,y}，不把原型当坐标语义。
+  if (expected.destination !== undefined) assert.deepEqual(request.action.destination, { x: expected.destination.x, y: expected.destination.y }, label + '实际屏幕点选目标保持');
   if (expected.recipientRefs !== undefined) assert.deepEqual(request.action.recipientRefs, expected.recipientRefs, label + '收件引用保持');
   return settled;
 }
@@ -117,16 +146,25 @@ async function revealObjectAction(page, reference, control, report, player) {
 /** 把公共人类意图映射为真正可见的页面操作。这里绝不调用 spatialClient.send/move。 */
 export async function humanAction(page, action, report, player) {
   const previousIds = (await clientState(page)).actions.map(draft => draft.id);
-  let label = action.kind;
+  let label = action.kind, expectedAction=action;
   if (action.kind === 'move_to') {
     await closeReading(page);
     await openObjects(page);
     const p = (await snapshot(page)).projection;
     assert.equal(p.self.sceneId, action.sceneId, '跨场景移动须先经过实际出口按钮');
-    const anchor = p.scene.anchors.find(anchor => samePosition(anchor.position, action.destination));
-    assert.ok(anchor, '当前测试导航只使用真实公开锚点，不改目标补绿');
-    label = '前往' + anchor.label;
-    await page.locator('.spatial-object-list').getByRole('button', { name: label, exact: true }).click();
+    const anchor=(p.mapCatalog?.find(scene=>scene.sceneId===p.scene.sceneId)?.anchors||[]).find(anchor=>samePosition(anchor.position,action.destination));
+    const anchorButton=anchor?page.locator('.spatial-object-list').getByRole('button',{name:'前往'+anchor.label,exact:true}):null;
+    if(anchorButton&&await anchorButton.count()){label='前往'+anchor.label;await anchorButton.click();}
+    else {
+      // 内部剧情/样例锚点不再是公开按钮；真实用户仍能在当前地图点同一位置。
+      // 记录屏幕离散误差，实际到达继续严格核对该次发送目标，不换一个更方便的位置。
+      const close=page.getByRole('button',{name:'关闭对象区',exact:true});if(await close.isVisible())await close.click();
+      const map=page.locator('.gaolao-map-navigator'),expand=map.getByRole('button',{name:'展开地图',exact:true});if(await expand.isVisible())await expand.click();
+      await map.getByRole('button',{name:'当前',exact:true}).click();const canvas=page.getByTestId('gaolao-minimap');await canvas.waitFor();
+      const location=await canvas.evaluate((canvas,{scene,position})=>{const b=canvas.getBoundingClientRect(),scale=Math.min((b.width-16)/scene.width,(b.height-16)/scene.height),x=(b.width-scene.width*scale)/2,y=(b.height-scene.height*scale)/2;const pixel={x:Math.round(b.left+x+position.x*scale),y:Math.round(b.top+y+position.y*scale)};return {pixel,scale,mappedWorld:{x:Math.round((pixel.x-b.left-x)/scale),y:Math.round((pixel.y-b.top-y)/scale)}};},{scene:p.scene,position:action.destination});
+      const tolerance=.5/location.scale+.5;assert.ok(Math.abs(location.mappedWorld.x-action.destination.x)<=tolerance&&Math.abs(location.mappedWorld.y-action.destination.y)<=tolerance);
+      (report.pointerChecks??=[]).push({player,requested:action.destination,...location,tolerance});expectedAction={...action,destination:location.mappedWorld};label='当前地图点击原位置';await page.mouse.click(location.pixel.x,location.pixel.y);
+    }
   } else if (action.kind === 'take_item') {
     await selectObject(page, action.itemRef); label = '走近并拿取';
     const take = page.getByRole('button', { name: label, exact: true });
@@ -201,10 +239,10 @@ export async function humanAction(page, action, report, player) {
   } else if (action.kind === 'inspect') {
     await selectObject(page, action.targetRef); label = '在当前位置查看'; await page.getByRole('button', { name: label, exact: true }).click();
   } else throw new Error('未映射为真实UI的人类动作：' + action.kind);
-  return waitHumanReceipt(page, previousIds, action, report, player, label);
+  return waitHumanReceipt(page, previousIds, expectedAction, report, player, label);
 }
 
-export async function browserRoom({ server, browser, baseURL, count, contentVersion, profile = 'legacy-controlled-v1', report, observe = (target, event, listener) => target.on(event, listener) }) {
+export async function browserRoom({ server, browser, baseURL, count, contentVersion, profile = 'legacy-controlled-v1', report, beforeSession = async () => {}, observe = (target, event, listener) => target.on(event, listener) }) {
   assert.ok(['legacy-controlled-v1', 'production-cuilan-v1'].includes(profile), '未知高老庄浏览器 profile，不得静默降级为受控本人');
   const production = profile === 'production-cuilan-v1';
   assert.ok(!production || typeof contentVersion === 'string', '生产 profile 必须显式固定内容版本，不得沿用旧回归默认值');
@@ -224,6 +262,8 @@ export async function browserRoom({ server, browser, baseURL, count, contentVers
       } catch (error) { report.pageErrors.push({ count, player: index, message: '复盘响应无法验证：' + error.message }); }
     });
     await page.goto(baseURL); await page.getByLabel('你的称呼', { exact: true }).fill(`章节${count}人旅伴${index + 1}`); await page.getByRole('button', { name: '以此名同行' }).click();
+    // 测试观察器在真实页面已登录、尚未挂载 SpatialMap 时安装；原调用缺省无副作用。
+    await beforeSession(page, index);
     if (index === 0) {
       // 内容变体须由 VITE_GAOLAO_CONTENT_VERSION 选择，页面只有真实的高老庄入口。
       await page.getByLabel('选择行程', { exact: true }).selectOption('gaolao');
@@ -281,6 +321,7 @@ export async function browserRoom({ server, browser, baseURL, count, contentVers
   const move = async (key, sceneId, position) => {
     const receipt = await send(key, { kind: 'move_to', sceneId, destination: position });
     assert.equal(receipt.status, 'Accepted', '本次路线受理：' + receipt.code);
+    const expectedPosition=actorFor(key).internal?position:report.humanActions.findLast(value=>value.receipt.clientActionId===receipt.clientActionId).request.action.destination;
     return until(async () => {
       const current = await read(key), p = current.projection;
       // 控制恢复后 commandSeq 可从 1 重新开始；本次 Receipt 的路线身份不跨 epoch 混用。
@@ -288,8 +329,8 @@ export async function browserRoom({ server, browser, baseURL, count, contentVers
         || p.movement?.movementId !== receipt.result.movementId
         || p.movement?.planVersion !== receipt.result.planVersion) return false;
       if (['blocked', 'cancelled'].includes(p.movement?.status)) throw new Error(`实际导航中止 ${key}: ${p.movement.reason}`);
-      return p.movement?.status === 'arrived' && p.self.sceneId === sceneId && samePosition(p.self.position, position) ? p : false;
-    }, '真实路线到达原精确目标');
+      return p.movement?.status === 'arrived' && p.self.sceneId === sceneId && samePosition(p.self.position, expectedPosition) ? p : false;
+    }, '真实路线精确到达本次UI发送目标');
   };
   const go = async (key, where) => {
     let s = await read(key);
@@ -303,7 +344,8 @@ export async function browserRoom({ server, browser, baseURL, count, contentVers
         const visibleScene = (await snapshot(page)).projection.scene;
         const exitIndex = visibleScene.exits.findIndex(visibleExit => visibleExit.exitId === exit.exitId);
         assert.ok(exitIndex >= 0, '实际出口必须出现在当前授权场景');
-        const exitLabel = visibleScene.anchors.find(anchor => anchor.anchorId === exit.anchorId)?.label || '出口 ' + (exitIndex + 1);
+        const visibleCatalog=(await snapshot(page)).projection.mapCatalog?.find(scene=>scene.sceneId===visibleScene.sceneId);
+        const exitLabel = visibleCatalog?.anchors.find(anchor => anchor.anchorId === exit.anchorId)?.label || '场景出口 ' + (exitIndex + 1);
         await page.getByRole('button', { name: '走向出口 · ' + exitLabel, exact: true }).click();
         await waitHumanReceipt(page, beforeIds, { kind: 'move_to' }, report, key, '实际走向场景出口');
         await until(async () => (await read(key)).projection.self.sceneId === where.sceneId, '浏览器实际跨过出口');

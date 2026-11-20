@@ -1,0 +1,5635 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-19",
+  "note": "原始状态与执行身份未改写；译注候选未重跑。有限活性原 scope.kind=safety 的元数据误标在本索引另按实际时序性质归类。",
+  "counts": {
+    "safety_positive": 8,
+    "conditional_liveness_positive": 1,
+    "negative_control": 11,
+    "reachability_witness": 2,
+    "environment_boundary_counterexample": 2
+  },
+  "model_identity": {
+    "wave": {
+      "module": "model/wave/WaveAdmission.tla",
+      "executed_sha256": "859e047d291f70215222caf2885a94ce89cdfb83800fd767216d7eb3318eb897",
+      "executed_bytes": 19519,
+      "published_sha256": "6be8cfc3fc83ffeb561ed1125830c0fed06f8f0dd87ce4e81de6715aaac48e96",
+      "published_bytes": 19506,
+      "comment_stripped_code_sha256": "4fba38d766cdfd3e97c0c5b5f89346440ae76f38ebbfe2f2ea31b8266c5b2e81",
+      "transfer": "COMMENT_ONLY_IDENTICAL_CODE_NOT_RERUN",
+      "configs": [
+        {
+          "path": "model/wave/negative-early-miss-settle.cfg",
+          "sha256": "8e3c6cf154d357c10c2d7e03549940a76ba2a155e38128a01354443d2ae32a4d",
+          "bytes": 239
+        },
+        {
+          "path": "model/wave/negative-miss-publishes.cfg",
+          "sha256": "5efec9893c7b73f4a630fdfd3db5fc84ef43c3d4cadc4a69d0b3829b48d6119f",
+          "bytes": 235
+        },
+        {
+          "path": "model/wave/negative-reuse-dirty-client.cfg",
+          "sha256": "ab525444eef1722a91bc1b28a9a229c36769f0b00c066d3d8b2998c52192305a",
+          "bytes": 248
+        },
+        {
+          "path": "model/wave/negative-unknown-as-miss.cfg",
+          "sha256": "f3f9375e5d3c6bae5492f729a292327ebd418754b1f6caa95573843897fc0c5c",
+          "bytes": 239
+        },
+        {
+          "path": "model/wave/positive-try-one-record.cfg",
+          "sha256": "5270ba6959164181a99158d96a3ddde7d414a23fd179144840183e02bc6c3cae",
+          "bytes": 605
+        },
+        {
+          "path": "model/wave/try-one-record-close.cfg",
+          "sha256": "dc7e89474a7dcacaccabffd15acfc858ccd54fbe896794781a6422de02dd821c",
+          "bytes": 606
+        },
+        {
+          "path": "model/wave/try-two-record-failure.cfg",
+          "sha256": "268ef87d0dd8ae86da5e5945b67656f6b4870cd1b096e516d9dd78de93857e1e",
+          "bytes": 648
+        },
+        {
+          "path": "model/wave/witness-closed-drained.cfg",
+          "sha256": "f0edc7d27478fdf3c89a5dbc58c3ee9e8641b4ca5e16518a445f95dcd9922c0b",
+          "bytes": 228
+        },
+        {
+          "path": "model/wave/witness-miss-while-wave.cfg",
+          "sha256": "083b4d93fccbc4808095b796e86c3e63d43aa623cc0d5dee6e34fc8764a9459e",
+          "bytes": 227
+        }
+      ]
+    },
+    "sticky": {
+      "module": "model/sticky/StickyAdmission.tla",
+      "executed_sha256": "ddb8eb90a9495e32cf6e34d44e10eceee6a04c1e39b2b6faa3d978fe5b4b35b0",
+      "executed_bytes": 13145,
+      "published_sha256": "c0e5f7084490b7d983a1ffa5392466a4007125a60669d5a801cd845b44920725",
+      "published_bytes": 13159,
+      "comment_stripped_code_sha256": "59dc492d91d48777a085f45aff8c3a8e4a639055bf0e27d8730f8c1f6460c870",
+      "transfer": "COMMENT_ONLY_IDENTICAL_CODE_NOT_RERUN",
+      "configs": [
+        {
+          "path": "model/sticky/finite-wait-service.cfg",
+          "sha256": "2e752ee8749636b533bb0ca8afd535d8bfd76afd8d2a89a9f70836f10165e0ea",
+          "bytes": 360
+        },
+        {
+          "path": "model/sticky/negative-busy-consumes-wait.cfg",
+          "sha256": "648dd3aff297a78786f681ae2820dd8c59e5c78a42f7b653e3c71c9f4746f03c",
+          "bytes": 184
+        },
+        {
+          "path": "model/sticky/negative-busy-spin.cfg",
+          "sha256": "e66634f96b3eadc9f497b8a92a43d29569041d5c227493a9a1c897afc7f2445d",
+          "bytes": 177
+        },
+        {
+          "path": "model/sticky/negative-drop-wait-continuation.cfg",
+          "sha256": "48045c28ebef78e977d3369a5a49c31b846c941957bf0ec28592da885cd83799",
+          "bytes": 190
+        },
+        {
+          "path": "model/sticky/negative-error-spin.cfg",
+          "sha256": "1a0e125daae813f3f48285dd1c5940fd44a2a6741002847ed8b1849a28a17c3e",
+          "bytes": 179
+        },
+        {
+          "path": "model/sticky/negative-finish-clears-wait.cfg",
+          "sha256": "e38ffae4bfaed5780f37e5ffa2b6cdc8b9974a933fcdef8a398ef588ddc5e193",
+          "bytes": 189
+        },
+        {
+          "path": "model/sticky/negative-inherit-before-repeat.cfg",
+          "sha256": "8c9cea5ea8229962f0f186c373976d67207de349ce3e808cef6766648f34a6df",
+          "bytes": 189
+        },
+        {
+          "path": "model/sticky/negative-try-clears-wait.cfg",
+          "sha256": "f76ba1749647cee04422d213bfe1f2f23d7823426103bab9dd43702a0224c4b6",
+          "bytes": 182
+        },
+        {
+          "path": "model/sticky/overlap-all-try-starvation.cfg",
+          "sha256": "ebc95904abf2def2536fdc33f0df11187675a42759ec67b5ff4b0e7e5f377f5c",
+          "bytes": 244
+        },
+        {
+          "path": "model/sticky/overlap-wait-starvation.cfg",
+          "sha256": "3dadc57db496dbc03fe645e53fe736a57dfb108aa6098def54a5df6c49d542a6",
+          "bytes": 242
+        },
+        {
+          "path": "model/sticky/sticky-busy.cfg",
+          "sha256": "320d251b1131f0a51c8eb8763a4ff34abb7c99308295a05761cd77761dc32727",
+          "bytes": 424
+        },
+        {
+          "path": "model/sticky/sticky-carry.cfg",
+          "sha256": "53f1596c2f71e25cd0805d1e4be6a6f49fa1d8c4749a930fd3a640505a2257f3",
+          "bytes": 429
+        },
+        {
+          "path": "model/sticky/sticky-core.cfg",
+          "sha256": "4627cc27ad86f8235622d5c249e2ffdfb6868251338832600595849d35702762",
+          "bytes": 425
+        },
+        {
+          "path": "model/sticky/sticky-error.cfg",
+          "sha256": "c920cad795b7d4ab0a84793dc86bbf64a80bdf25c3e783a817665ab648b9c282",
+          "bytes": 425
+        },
+        {
+          "path": "model/sticky/sticky-zero.cfg",
+          "sha256": "788b005e72c9659848490e9f40dc7b9ada37f755fedd76c585b4fedf9f88a4c2",
+          "bytes": 424
+        }
+      ]
+    }
+  },
+  "manifest_identity": {
+    "wave": {
+      "executed_latest_sha256": "184c8fb8e720e89f3dd162c93c79c8645713f0cbc9e10ce70112573f0a618c41",
+      "published_sha256": "b93559f76ffeea67e42323a9ddf7cd0ec92c6361baaa690e6ba42d5e9dee18fb",
+      "description_translation_only": true,
+      "changed_paths": [
+        [
+          "feature"
+        ],
+        [
+          "requirements",
+          0,
+          "statement"
+        ],
+        [
+          "profiles",
+          "try-one-record",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "try-one-record",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "try-one-record",
+          "scope",
+          "covered_interleavings_and_faults",
+          0
+        ],
+        [
+          "profiles",
+          "try-one-record",
+          "scope",
+          "covered_interleavings_and_faults",
+          1
+        ],
+        [
+          "profiles",
+          "try-one-record",
+          "scope",
+          "covered_interleavings_and_faults",
+          2
+        ],
+        [
+          "profiles",
+          "try-one-record",
+          "scope",
+          "covered_interleavings_and_faults",
+          3
+        ],
+        [
+          "profiles",
+          "try-one-record",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "try-one-record",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "try-one-record",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "try-one-record",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "try-one-record",
+          "scope",
+          "excluded_behaviors",
+          4
+        ],
+        [
+          "profiles",
+          "try-one-record",
+          "scope",
+          "excluded_behaviors",
+          5
+        ],
+        [
+          "profiles",
+          "try-one-record",
+          "scope",
+          "excluded_behaviors",
+          6
+        ],
+        [
+          "profiles",
+          "try-one-record",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "try-one-record",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "try-one-record",
+          "assumptions",
+          2
+        ],
+        [
+          "profiles",
+          "negative-early-miss-settle",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "negative-early-miss-settle",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "negative-early-miss-settle",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "negative-early-miss-settle",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "negative-early-miss-settle",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "negative-early-miss-settle",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "negative-early-miss-settle",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "negative-miss-publishes",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "negative-miss-publishes",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "negative-miss-publishes",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "negative-miss-publishes",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "negative-miss-publishes",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "negative-miss-publishes",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "negative-miss-publishes",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "witness-miss-while-wave",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "witness-miss-while-wave",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "witness-miss-while-wave",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "witness-miss-while-wave",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "witness-miss-while-wave",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "witness-miss-while-wave",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "witness-miss-while-wave",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "try-two-record-failure",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "try-two-record-failure",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "try-two-record-failure",
+          "scope",
+          "covered_interleavings_and_faults",
+          2
+        ],
+        [
+          "profiles",
+          "try-two-record-failure",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "try-two-record-failure",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "try-two-record-failure",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "try-two-record-failure",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "try-two-record-failure",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "try-two-record-failure",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "negative-reuse-dirty-client",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "negative-reuse-dirty-client",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "negative-reuse-dirty-client",
+          "scope",
+          "covered_interleavings_and_faults",
+          2
+        ],
+        [
+          "profiles",
+          "negative-reuse-dirty-client",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "negative-reuse-dirty-client",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "negative-reuse-dirty-client",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "negative-reuse-dirty-client",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "negative-reuse-dirty-client",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "negative-reuse-dirty-client",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "negative-unknown-as-miss",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "negative-unknown-as-miss",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "negative-unknown-as-miss",
+          "scope",
+          "covered_interleavings_and_faults",
+          2
+        ],
+        [
+          "profiles",
+          "negative-unknown-as-miss",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "negative-unknown-as-miss",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "negative-unknown-as-miss",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "negative-unknown-as-miss",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "negative-unknown-as-miss",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "negative-unknown-as-miss",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "try-one-record-close",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "try-one-record-close",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "try-one-record-close",
+          "scope",
+          "covered_interleavings_and_faults",
+          2
+        ],
+        [
+          "profiles",
+          "try-one-record-close",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "try-one-record-close",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "try-one-record-close",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "try-one-record-close",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "try-one-record-close",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "try-one-record-close",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "witness-closed-drained",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "witness-closed-drained",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "witness-closed-drained",
+          "scope",
+          "covered_interleavings_and_faults",
+          2
+        ],
+        [
+          "profiles",
+          "witness-closed-drained",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "witness-closed-drained",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "witness-closed-drained",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "witness-closed-drained",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "witness-closed-drained",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "witness-closed-drained",
+          "assumptions",
+          1
+        ]
+      ],
+      "execution_note": "早期 Wave 执行使用当时较小的 profile 清单；逐次实际 manifest SHA 在 results 中保留。"
+    },
+    "sticky": {
+      "executed_latest_sha256": "151b5203045814065fad847a695ff04134307ce69bd0e661ca7c9fd9d6fc15c0",
+      "published_sha256": "41d41e59ba45f0277ba060564acc3e22edbb52c48248e949f28dc7568d113d16",
+      "description_translation_only": true,
+      "changed_paths": [
+        [
+          "feature"
+        ],
+        [
+          "requirements",
+          0,
+          "statement"
+        ],
+        [
+          "profiles",
+          "sticky-core",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "sticky-core",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "sticky-core",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "sticky-core",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "sticky-core",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "sticky-core",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "sticky-core",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "sticky-core",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "sticky-core",
+          "assumptions",
+          2
+        ],
+        [
+          "profiles",
+          "sticky-carry",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "sticky-carry",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "sticky-carry",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "sticky-carry",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "sticky-carry",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "sticky-carry",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "sticky-carry",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "sticky-carry",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "sticky-carry",
+          "assumptions",
+          2
+        ],
+        [
+          "profiles",
+          "negative-drop-wait-continuation",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "negative-drop-wait-continuation",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "negative-drop-wait-continuation",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "negative-drop-wait-continuation",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "negative-drop-wait-continuation",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "negative-drop-wait-continuation",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "negative-drop-wait-continuation",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "negative-drop-wait-continuation",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "negative-drop-wait-continuation",
+          "assumptions",
+          2
+        ],
+        [
+          "profiles",
+          "sticky-busy",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "sticky-busy",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "sticky-busy",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "sticky-busy",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "sticky-busy",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "sticky-busy",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "sticky-busy",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "sticky-busy",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "sticky-busy",
+          "assumptions",
+          2
+        ],
+        [
+          "profiles",
+          "sticky-error",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "sticky-error",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "sticky-error",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "sticky-error",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "sticky-error",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "sticky-error",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "sticky-error",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "sticky-error",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "sticky-error",
+          "assumptions",
+          2
+        ],
+        [
+          "profiles",
+          "sticky-zero",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "sticky-zero",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "sticky-zero",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "sticky-zero",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "sticky-zero",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "sticky-zero",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "sticky-zero",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "sticky-zero",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "sticky-zero",
+          "assumptions",
+          2
+        ],
+        [
+          "profiles",
+          "negative-try-clears-wait",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "negative-try-clears-wait",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "negative-try-clears-wait",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "negative-try-clears-wait",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "negative-try-clears-wait",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "negative-try-clears-wait",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "negative-try-clears-wait",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "negative-try-clears-wait",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "negative-try-clears-wait",
+          "assumptions",
+          2
+        ],
+        [
+          "profiles",
+          "negative-finish-clears-wait",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "negative-finish-clears-wait",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "negative-finish-clears-wait",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "negative-finish-clears-wait",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "negative-finish-clears-wait",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "negative-finish-clears-wait",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "negative-finish-clears-wait",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "negative-finish-clears-wait",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "negative-finish-clears-wait",
+          "assumptions",
+          2
+        ],
+        [
+          "profiles",
+          "negative-busy-consumes-wait",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "negative-busy-consumes-wait",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "negative-busy-consumes-wait",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "negative-busy-consumes-wait",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "negative-busy-consumes-wait",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "negative-busy-consumes-wait",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "negative-busy-consumes-wait",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "negative-busy-consumes-wait",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "negative-busy-consumes-wait",
+          "assumptions",
+          2
+        ],
+        [
+          "profiles",
+          "negative-busy-spin",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "negative-busy-spin",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "negative-busy-spin",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "negative-busy-spin",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "negative-busy-spin",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "negative-busy-spin",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "negative-busy-spin",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "negative-busy-spin",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "negative-busy-spin",
+          "assumptions",
+          2
+        ],
+        [
+          "profiles",
+          "negative-error-spin",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "negative-error-spin",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "negative-error-spin",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "negative-error-spin",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "negative-error-spin",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "negative-error-spin",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "negative-error-spin",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "negative-error-spin",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "negative-error-spin",
+          "assumptions",
+          2
+        ],
+        [
+          "profiles",
+          "negative-inherit-before-repeat",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "negative-inherit-before-repeat",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "negative-inherit-before-repeat",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "negative-inherit-before-repeat",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "negative-inherit-before-repeat",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "negative-inherit-before-repeat",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "negative-inherit-before-repeat",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "negative-inherit-before-repeat",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "negative-inherit-before-repeat",
+          "assumptions",
+          2
+        ],
+        [
+          "profiles",
+          "finite-wait-service",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "finite-wait-service",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "finite-wait-service",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "finite-wait-service",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "finite-wait-service",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "finite-wait-service",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "finite-wait-service",
+          "scope",
+          "environment"
+        ],
+        [
+          "profiles",
+          "finite-wait-service",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "finite-wait-service",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "finite-wait-service",
+          "assumptions",
+          2
+        ],
+        [
+          "profiles",
+          "overlap-wait-starvation",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "overlap-wait-starvation",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "overlap-wait-starvation",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "overlap-wait-starvation",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "overlap-wait-starvation",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "overlap-wait-starvation",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "overlap-wait-starvation",
+          "scope",
+          "environment"
+        ],
+        [
+          "profiles",
+          "overlap-wait-starvation",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "overlap-wait-starvation",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "overlap-wait-starvation",
+          "assumptions",
+          2
+        ],
+        [
+          "profiles",
+          "overlap-all-try-starvation",
+          "deadlock_reason"
+        ],
+        [
+          "profiles",
+          "overlap-all-try-starvation",
+          "scope",
+          "minimum_basis"
+        ],
+        [
+          "profiles",
+          "overlap-all-try-starvation",
+          "scope",
+          "excluded_behaviors",
+          0
+        ],
+        [
+          "profiles",
+          "overlap-all-try-starvation",
+          "scope",
+          "excluded_behaviors",
+          1
+        ],
+        [
+          "profiles",
+          "overlap-all-try-starvation",
+          "scope",
+          "excluded_behaviors",
+          2
+        ],
+        [
+          "profiles",
+          "overlap-all-try-starvation",
+          "scope",
+          "excluded_behaviors",
+          3
+        ],
+        [
+          "profiles",
+          "overlap-all-try-starvation",
+          "scope",
+          "environment"
+        ],
+        [
+          "profiles",
+          "overlap-all-try-starvation",
+          "assumptions",
+          0
+        ],
+        [
+          "profiles",
+          "overlap-all-try-starvation",
+          "assumptions",
+          1
+        ],
+        [
+          "profiles",
+          "overlap-all-try-starvation",
+          "assumptions",
+          2
+        ]
+      ],
+      "execution_note": "早期 Wave 执行使用当时较小的 profile 清单；逐次实际 manifest SHA 在 results 中保留。"
+    }
+  },
+  "results": [
+    {
+      "model": "sticky",
+      "profile": "finite-wait-service",
+      "status": "PASS_WITHIN_SCOPE",
+      "classification": "CONDITIONAL_LIVENESS",
+      "declared_scope_kind": "safety",
+      "expected_violation": null,
+      "actual_invariant_violation": [],
+      "temporal_violation": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "OwnerUnique",
+          "LockExclusion",
+          "PendingWaitRetained",
+          "ClaimedWaitMode",
+          "NoRestoreDrivenRepeat",
+          "ActualCommitOnly",
+          "CleanupOwnsSlot",
+          "DrainedOwner"
+        ],
+        "expected_properties": [
+          "WaitGetsOpportunity",
+          "EventuallyPublished"
+        ],
+        "configured_invariants": [
+          "TypeOK",
+          "OwnerUnique",
+          "LockExclusion",
+          "PendingWaitRetained",
+          "ClaimedWaitMode",
+          "NoRestoreDrivenRepeat",
+          "ActualCommitOnly",
+          "CleanupOwnsSlot",
+          "DrainedOwner"
+        ],
+        "configured_properties": [
+          "WaitGetsOpportunity",
+          "EventuallyPublished"
+        ],
+        "checks_deadlock": false,
+        "deadlock_reason": "Finite input completion or external indefinite wait is allowed; any declared temporal properties use only the stated fairness conditions.",
+        "behavior": {
+          "SPECIFICATION": "FairSpec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "fair-finite",
+          "InitialMode": "wait",
+          "InitialRows": 1
+        },
+        "expected_outcome": "PASS_WITHIN_SCOPE",
+        "kind": "safety",
+        "minimum_distinct_states": 100,
+        "minimum_basis": "Separate request/start/owner/supply/SQL/cleanup/final-probe transitions; scenario-specific finite lower bound supplied before execution.",
+        "covered_interleavings_and_faults": [
+          "fair-finite",
+          "none"
+        ],
+        "excluded_behaviors": [
+          "full detailed G/W composition",
+          "actual PostgreSQL or JavaScript refinement",
+          "unbounded peer counts",
+          "latency"
+        ],
+        "liveness": "CONDITIONAL",
+        "environment": "two readers at most once each and one other writer; fixed eligibility; all admitted holders eventually release; declared weak fairness only"
+      },
+      "statistics": {
+        "generated_states": 6321,
+        "distinct_states": 1928,
+        "remaining_states": 0
+      },
+      "process": {
+        "exit_code": 0,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "started_at": "2026-11-19T02:44:24.867783+00:00",
+      "finished_at": "2026-11-19T02:44:27.414181+00:00",
+      "duration_seconds": 2.546439,
+      "implementation_status": "NOT_ASSESSED",
+      "executed_manifest_sha256": "151b5203045814065fad847a695ff04134307ce69bd0e661ca7c9fd9d6fc15c0",
+      "executed_input_files": [
+        {
+          "path": "StickyAdmission.tla",
+          "sha256": "ddb8eb90a9495e32cf6e34d44e10eceee6a04c1e39b2b6faa3d978fe5b4b35b0",
+          "bytes": 13145
+        },
+        {
+          "path": "finite-wait-service.cfg",
+          "sha256": "2e752ee8749636b533bb0ca8afd535d8bfd76afd8d2a89a9f70836f10165e0ea",
+          "bytes": 360
+        },
+        {
+          "path": "negative-busy-consumes-wait.cfg",
+          "sha256": "648dd3aff297a78786f681ae2820dd8c59e5c78a42f7b653e3c71c9f4746f03c",
+          "bytes": 184
+        },
+        {
+          "path": "negative-busy-spin.cfg",
+          "sha256": "e66634f96b3eadc9f497b8a92a43d29569041d5c227493a9a1c897afc7f2445d",
+          "bytes": 177
+        },
+        {
+          "path": "negative-drop-wait-continuation.cfg",
+          "sha256": "48045c28ebef78e977d3369a5a49c31b846c941957bf0ec28592da885cd83799",
+          "bytes": 190
+        },
+        {
+          "path": "negative-error-spin.cfg",
+          "sha256": "1a0e125daae813f3f48285dd1c5940fd44a2a6741002847ed8b1849a28a17c3e",
+          "bytes": 179
+        },
+        {
+          "path": "negative-finish-clears-wait.cfg",
+          "sha256": "e38ffae4bfaed5780f37e5ffa2b6cdc8b9974a933fcdef8a398ef588ddc5e193",
+          "bytes": 189
+        },
+        {
+          "path": "negative-inherit-before-repeat.cfg",
+          "sha256": "8c9cea5ea8229962f0f186c373976d67207de349ce3e808cef6766648f34a6df",
+          "bytes": 189
+        },
+        {
+          "path": "negative-try-clears-wait.cfg",
+          "sha256": "f76ba1749647cee04422d213bfe1f2f23d7823426103bab9dd43702a0224c4b6",
+          "bytes": 182
+        },
+        {
+          "path": "overlap-all-try-starvation.cfg",
+          "sha256": "ebc95904abf2def2536fdc33f0df11187675a42759ec67b5ff4b0e7e5f377f5c",
+          "bytes": 244
+        },
+        {
+          "path": "overlap-wait-starvation.cfg",
+          "sha256": "3dadc57db496dbc03fe645e53fe736a57dfb108aa6098def54a5df6c49d542a6",
+          "bytes": 242
+        },
+        {
+          "path": "sticky-busy.cfg",
+          "sha256": "320d251b1131f0a51c8eb8763a4ff34abb7c99308295a05761cd77761dc32727",
+          "bytes": 424
+        },
+        {
+          "path": "sticky-carry.cfg",
+          "sha256": "53f1596c2f71e25cd0805d1e4be6a6f49fa1d8c4749a930fd3a640505a2257f3",
+          "bytes": 429
+        },
+        {
+          "path": "sticky-core.cfg",
+          "sha256": "4627cc27ad86f8235622d5c249e2ffdfb6868251338832600595849d35702762",
+          "bytes": 425
+        },
+        {
+          "path": "sticky-error.cfg",
+          "sha256": "c920cad795b7d4ab0a84793dc86bbf64a80bdf25c3e783a817665ab648b9c282",
+          "bytes": 425
+        },
+        {
+          "path": "sticky-zero.cfg",
+          "sha256": "788b005e72c9659848490e9f40dc7b9ada37f755fedd76c585b4fedf9f88a4c2",
+          "bytes": 424
+        }
+      ],
+      "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool_sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+      "archive_directory": "tlc/finite-wait-service-r1",
+      "evidence": {
+        "result.json": {
+          "bytes": 8401,
+          "sha256": "e4ad93c726c1c4f7eec69d03d54ccb023ccfbcaeac08666979b4c28c0fad67a7"
+        },
+        "manifest.json": {
+          "bytes": 27169,
+          "sha256": "151b5203045814065fad847a695ff04134307ce69bd0e661ca7c9fd9d6fc15c0"
+        },
+        "tlc.log": {
+          "bytes": 3099,
+          "sha256": "ef65c756ed254eba81f3ca368cf3931c02ef9a07a4da3464bdebb04a0e07a910"
+        },
+        "messages.json": {
+          "bytes": 2525,
+          "sha256": "f2267954665f0e7a189e91a6ab40d74569a1e693ced7ee795bee11f2c1769aa5"
+        }
+      }
+    },
+    {
+      "model": "sticky",
+      "profile": "negative-busy-consumes-wait",
+      "status": "COUNTEREXAMPLE",
+      "classification": "negative_control",
+      "declared_scope_kind": "negative_control",
+      "expected_violation": "PendingWaitRetained",
+      "actual_invariant_violation": [
+        "PendingWaitRetained"
+      ],
+      "temporal_violation": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "PendingWaitRetained"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "PendingWaitRetained"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": false,
+        "deadlock_reason": "Finite input completion or external indefinite wait is allowed; any declared temporal properties use only the stated fairness conditions.",
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "busy-consumes-wait",
+          "Scenario": "busy",
+          "InitialMode": "wait",
+          "InitialRows": 1
+        },
+        "expected_outcome": "COUNTEREXAMPLE",
+        "kind": "negative_control",
+        "minimum_distinct_states": 4,
+        "minimum_basis": "Separate request/start/owner/supply/SQL/cleanup/final-probe transitions; scenario-specific finite lower bound supplied before execution.",
+        "covered_interleavings_and_faults": [
+          "busy",
+          "busy-consumes-wait"
+        ],
+        "excluded_behaviors": [
+          "full detailed G/W composition",
+          "actual PostgreSQL or JavaScript refinement",
+          "unbounded peer counts",
+          "latency"
+        ],
+        "liveness": "NOT_CHECKED",
+        "expected_violation": "PendingWaitRetained"
+      },
+      "statistics": {
+        "generated_states": 48,
+        "distinct_states": 26,
+        "remaining_states": 17
+      },
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "started_at": "2026-11-19T02:42:23.153153+00:00",
+      "finished_at": "2026-11-19T02:42:24.960225+00:00",
+      "duration_seconds": 1.807121,
+      "implementation_status": "NOT_ASSESSED",
+      "executed_manifest_sha256": "151b5203045814065fad847a695ff04134307ce69bd0e661ca7c9fd9d6fc15c0",
+      "executed_input_files": [
+        {
+          "path": "StickyAdmission.tla",
+          "sha256": "ddb8eb90a9495e32cf6e34d44e10eceee6a04c1e39b2b6faa3d978fe5b4b35b0",
+          "bytes": 13145
+        },
+        {
+          "path": "finite-wait-service.cfg",
+          "sha256": "2e752ee8749636b533bb0ca8afd535d8bfd76afd8d2a89a9f70836f10165e0ea",
+          "bytes": 360
+        },
+        {
+          "path": "negative-busy-consumes-wait.cfg",
+          "sha256": "648dd3aff297a78786f681ae2820dd8c59e5c78a42f7b653e3c71c9f4746f03c",
+          "bytes": 184
+        },
+        {
+          "path": "negative-busy-spin.cfg",
+          "sha256": "e66634f96b3eadc9f497b8a92a43d29569041d5c227493a9a1c897afc7f2445d",
+          "bytes": 177
+        },
+        {
+          "path": "negative-drop-wait-continuation.cfg",
+          "sha256": "48045c28ebef78e977d3369a5a49c31b846c941957bf0ec28592da885cd83799",
+          "bytes": 190
+        },
+        {
+          "path": "negative-error-spin.cfg",
+          "sha256": "1a0e125daae813f3f48285dd1c5940fd44a2a6741002847ed8b1849a28a17c3e",
+          "bytes": 179
+        },
+        {
+          "path": "negative-finish-clears-wait.cfg",
+          "sha256": "e38ffae4bfaed5780f37e5ffa2b6cdc8b9974a933fcdef8a398ef588ddc5e193",
+          "bytes": 189
+        },
+        {
+          "path": "negative-inherit-before-repeat.cfg",
+          "sha256": "8c9cea5ea8229962f0f186c373976d67207de349ce3e808cef6766648f34a6df",
+          "bytes": 189
+        },
+        {
+          "path": "negative-try-clears-wait.cfg",
+          "sha256": "f76ba1749647cee04422d213bfe1f2f23d7823426103bab9dd43702a0224c4b6",
+          "bytes": 182
+        },
+        {
+          "path": "overlap-all-try-starvation.cfg",
+          "sha256": "ebc95904abf2def2536fdc33f0df11187675a42759ec67b5ff4b0e7e5f377f5c",
+          "bytes": 244
+        },
+        {
+          "path": "overlap-wait-starvation.cfg",
+          "sha256": "3dadc57db496dbc03fe645e53fe736a57dfb108aa6098def54a5df6c49d542a6",
+          "bytes": 242
+        },
+        {
+          "path": "sticky-busy.cfg",
+          "sha256": "320d251b1131f0a51c8eb8763a4ff34abb7c99308295a05761cd77761dc32727",
+          "bytes": 424
+        },
+        {
+          "path": "sticky-carry.cfg",
+          "sha256": "53f1596c2f71e25cd0805d1e4be6a6f49fa1d8c4749a930fd3a640505a2257f3",
+          "bytes": 429
+        },
+        {
+          "path": "sticky-core.cfg",
+          "sha256": "4627cc27ad86f8235622d5c249e2ffdfb6868251338832600595849d35702762",
+          "bytes": 425
+        },
+        {
+          "path": "sticky-error.cfg",
+          "sha256": "c920cad795b7d4ab0a84793dc86bbf64a80bdf25c3e783a817665ab648b9c282",
+          "bytes": 425
+        },
+        {
+          "path": "sticky-zero.cfg",
+          "sha256": "788b005e72c9659848490e9f40dc7b9ada37f755fedd76c585b4fedf9f88a4c2",
+          "bytes": 424
+        }
+      ],
+      "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool_sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+      "archive_directory": "tlc/negative-busy-consumes-wait-r1",
+      "evidence": {
+        "result.json": {
+          "bytes": 7830,
+          "sha256": "3bc59864d62e937e3dd9468e4620ca71ba8c8835321753cbb2cd5394287ef6c1"
+        },
+        "manifest.json": {
+          "bytes": 27169,
+          "sha256": "151b5203045814065fad847a695ff04134307ce69bd0e661ca7c9fd9d6fc15c0"
+        },
+        "tlc.log": {
+          "bytes": 7787,
+          "sha256": "1cf992292d9841dbeb7ea1e50e35a9f3068de9dfda1297ec2b12557a3b6a109c"
+        },
+        "messages.json": {
+          "bytes": 7287,
+          "sha256": "47a474dca7f47175f8b3ba5ac059f7587a5707fcdc363155b5a71bd633d0ffc1"
+        }
+      }
+    },
+    {
+      "model": "sticky",
+      "profile": "negative-busy-spin",
+      "status": "COUNTEREXAMPLE",
+      "classification": "negative_control",
+      "declared_scope_kind": "negative_control",
+      "expected_violation": "NoRestoreDrivenRepeat",
+      "actual_invariant_violation": [
+        "NoRestoreDrivenRepeat"
+      ],
+      "temporal_violation": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "NoRestoreDrivenRepeat"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "NoRestoreDrivenRepeat"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": false,
+        "deadlock_reason": "Finite input completion or external indefinite wait is allowed; any declared temporal properties use only the stated fairness conditions.",
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "busy-spin",
+          "Scenario": "busy",
+          "InitialMode": "wait",
+          "InitialRows": 1
+        },
+        "expected_outcome": "COUNTEREXAMPLE",
+        "kind": "negative_control",
+        "minimum_distinct_states": 4,
+        "minimum_basis": "Separate request/start/owner/supply/SQL/cleanup/final-probe transitions; scenario-specific finite lower bound supplied before execution.",
+        "covered_interleavings_and_faults": [
+          "busy",
+          "busy-spin"
+        ],
+        "excluded_behaviors": [
+          "full detailed G/W composition",
+          "actual PostgreSQL or JavaScript refinement",
+          "unbounded peer counts",
+          "latency"
+        ],
+        "liveness": "NOT_CHECKED",
+        "expected_violation": "NoRestoreDrivenRepeat"
+      },
+      "statistics": {
+        "generated_states": 48,
+        "distinct_states": 26,
+        "remaining_states": 17
+      },
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "started_at": "2026-11-19T02:42:23.121348+00:00",
+      "finished_at": "2026-11-19T02:42:24.647966+00:00",
+      "duration_seconds": 1.526664,
+      "implementation_status": "NOT_ASSESSED",
+      "executed_manifest_sha256": "151b5203045814065fad847a695ff04134307ce69bd0e661ca7c9fd9d6fc15c0",
+      "executed_input_files": [
+        {
+          "path": "StickyAdmission.tla",
+          "sha256": "ddb8eb90a9495e32cf6e34d44e10eceee6a04c1e39b2b6faa3d978fe5b4b35b0",
+          "bytes": 13145
+        },
+        {
+          "path": "finite-wait-service.cfg",
+          "sha256": "2e752ee8749636b533bb0ca8afd535d8bfd76afd8d2a89a9f70836f10165e0ea",
+          "bytes": 360
+        },
+        {
+          "path": "negative-busy-consumes-wait.cfg",
+          "sha256": "648dd3aff297a78786f681ae2820dd8c59e5c78a42f7b653e3c71c9f4746f03c",
+          "bytes": 184
+        },
+        {
+          "path": "negative-busy-spin.cfg",
+          "sha256": "e66634f96b3eadc9f497b8a92a43d29569041d5c227493a9a1c897afc7f2445d",
+          "bytes": 177
+        },
+        {
+          "path": "negative-drop-wait-continuation.cfg",
+          "sha256": "48045c28ebef78e977d3369a5a49c31b846c941957bf0ec28592da885cd83799",
+          "bytes": 190
+        },
+        {
+          "path": "negative-error-spin.cfg",
+          "sha256": "1a0e125daae813f3f48285dd1c5940fd44a2a6741002847ed8b1849a28a17c3e",
+          "bytes": 179
+        },
+        {
+          "path": "negative-finish-clears-wait.cfg",
+          "sha256": "e38ffae4bfaed5780f37e5ffa2b6cdc8b9974a933fcdef8a398ef588ddc5e193",
+          "bytes": 189
+        },
+        {
+          "path": "negative-inherit-before-repeat.cfg",
+          "sha256": "8c9cea5ea8229962f0f186c373976d67207de349ce3e808cef6766648f34a6df",
+          "bytes": 189
+        },
+        {
+          "path": "negative-try-clears-wait.cfg",
+          "sha256": "f76ba1749647cee04422d213bfe1f2f23d7823426103bab9dd43702a0224c4b6",
+          "bytes": 182
+        },
+        {
+          "path": "overlap-all-try-starvation.cfg",
+          "sha256": "ebc95904abf2def2536fdc33f0df11187675a42759ec67b5ff4b0e7e5f377f5c",
+          "bytes": 244
+        },
+        {
+          "path": "overlap-wait-starvation.cfg",
+          "sha256": "3dadc57db496dbc03fe645e53fe736a57dfb108aa6098def54a5df6c49d542a6",
+          "bytes": 242
+        },
+        {
+          "path": "sticky-busy.cfg",
+          "sha256": "320d251b1131f0a51c8eb8763a4ff34abb7c99308295a05761cd77761dc32727",
+          "bytes": 424
+        },
+        {
+          "path": "sticky-carry.cfg",
+          "sha256": "53f1596c2f71e25cd0805d1e4be6a6f49fa1d8c4749a930fd3a640505a2257f3",
+          "bytes": 429
+        },
+        {
+          "path": "sticky-core.cfg",
+          "sha256": "4627cc27ad86f8235622d5c249e2ffdfb6868251338832600595849d35702762",
+          "bytes": 425
+        },
+        {
+          "path": "sticky-error.cfg",
+          "sha256": "c920cad795b7d4ab0a84793dc86bbf64a80bdf25c3e783a817665ab648b9c282",
+          "bytes": 425
+        },
+        {
+          "path": "sticky-zero.cfg",
+          "sha256": "788b005e72c9659848490e9f40dc7b9ada37f755fedd76c585b4fedf9f88a4c2",
+          "bytes": 424
+        }
+      ],
+      "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool_sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+      "archive_directory": "tlc/negative-busy-spin-r1",
+      "evidence": {
+        "result.json": {
+          "bytes": 7701,
+          "sha256": "26ee5664613ce34bb575dbd1c97cc348033529d2af8de03280f32fa2463e93a3"
+        },
+        "manifest.json": {
+          "bytes": 27169,
+          "sha256": "151b5203045814065fad847a695ff04134307ce69bd0e661ca7c9fd9d6fc15c0"
+        },
+        "tlc.log": {
+          "bytes": 7624,
+          "sha256": "350cfd3ce5ee46b24dfbe8541da435400d3be872d51b322a1b04e3e5a8ef0639"
+        },
+        "messages.json": {
+          "bytes": 7285,
+          "sha256": "e6d2e46309cf15b0693e0b8918b5eb7425ac45c71a502fd99be6ce0b296d16fb"
+        }
+      }
+    },
+    {
+      "model": "sticky",
+      "profile": "negative-drop-wait-continuation",
+      "status": "COUNTEREXAMPLE",
+      "classification": "negative_control",
+      "declared_scope_kind": "negative_control",
+      "expected_violation": "WaitContinuation",
+      "actual_invariant_violation": [
+        "WaitContinuation"
+      ],
+      "temporal_violation": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "WaitContinuation"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "WaitContinuation"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": false,
+        "deadlock_reason": "Finite input completion or external indefinite wait is allowed; any declared temporal properties use only the stated fairness conditions.",
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "drop-wait-continuation",
+          "Scenario": "carry-gap",
+          "InitialMode": "wait",
+          "InitialRows": 2
+        },
+        "expected_outcome": "COUNTEREXAMPLE",
+        "kind": "negative_control",
+        "minimum_distinct_states": 12,
+        "minimum_basis": "Separate request/start/owner/supply/SQL/cleanup/final-probe transitions; scenario-specific finite lower bound supplied before execution.",
+        "covered_interleavings_and_faults": [
+          "carry-gap",
+          "drop-wait-continuation"
+        ],
+        "excluded_behaviors": [
+          "full detailed G/W composition",
+          "actual PostgreSQL or JavaScript refinement",
+          "unbounded peer counts",
+          "latency"
+        ],
+        "liveness": "NOT_CHECKED",
+        "expected_violation": "WaitContinuation"
+      },
+      "statistics": {
+        "generated_states": 1395,
+        "distinct_states": 414,
+        "remaining_states": 44
+      },
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "started_at": "2026-11-19T02:41:11.216916+00:00",
+      "finished_at": "2026-11-19T02:41:13.377969+00:00",
+      "duration_seconds": 2.161092,
+      "implementation_status": "NOT_ASSESSED",
+      "executed_manifest_sha256": "151b5203045814065fad847a695ff04134307ce69bd0e661ca7c9fd9d6fc15c0",
+      "executed_input_files": [
+        {
+          "path": "StickyAdmission.tla",
+          "sha256": "ddb8eb90a9495e32cf6e34d44e10eceee6a04c1e39b2b6faa3d978fe5b4b35b0",
+          "bytes": 13145
+        },
+        {
+          "path": "finite-wait-service.cfg",
+          "sha256": "2e752ee8749636b533bb0ca8afd535d8bfd76afd8d2a89a9f70836f10165e0ea",
+          "bytes": 360
+        },
+        {
+          "path": "negative-busy-consumes-wait.cfg",
+          "sha256": "648dd3aff297a78786f681ae2820dd8c59e5c78a42f7b653e3c71c9f4746f03c",
+          "bytes": 184
+        },
+        {
+          "path": "negative-busy-spin.cfg",
+          "sha256": "e66634f96b3eadc9f497b8a92a43d29569041d5c227493a9a1c897afc7f2445d",
+          "bytes": 177
+        },
+        {
+          "path": "negative-drop-wait-continuation.cfg",
+          "sha256": "48045c28ebef78e977d3369a5a49c31b846c941957bf0ec28592da885cd83799",
+          "bytes": 190
+        },
+        {
+          "path": "negative-error-spin.cfg",
+          "sha256": "1a0e125daae813f3f48285dd1c5940fd44a2a6741002847ed8b1849a28a17c3e",
+          "bytes": 179
+        },
+        {
+          "path": "negative-finish-clears-wait.cfg",
+          "sha256": "e38ffae4bfaed5780f37e5ffa2b6cdc8b9974a933fcdef8a398ef588ddc5e193",
+          "bytes": 189
+        },
+        {
+          "path": "negative-inherit-before-repeat.cfg",
+          "sha256": "8c9cea5ea8229962f0f186c373976d67207de349ce3e808cef6766648f34a6df",
+          "bytes": 189
+        },
+        {
+          "path": "negative-try-clears-wait.cfg",
+          "sha256": "f76ba1749647cee04422d213bfe1f2f23d7823426103bab9dd43702a0224c4b6",
+          "bytes": 182
+        },
+        {
+          "path": "overlap-all-try-starvation.cfg",
+          "sha256": "ebc95904abf2def2536fdc33f0df11187675a42759ec67b5ff4b0e7e5f377f5c",
+          "bytes": 244
+        },
+        {
+          "path": "overlap-wait-starvation.cfg",
+          "sha256": "3dadc57db496dbc03fe645e53fe736a57dfb108aa6098def54a5df6c49d542a6",
+          "bytes": 242
+        },
+        {
+          "path": "sticky-busy.cfg",
+          "sha256": "320d251b1131f0a51c8eb8763a4ff34abb7c99308295a05761cd77761dc32727",
+          "bytes": 424
+        },
+        {
+          "path": "sticky-carry.cfg",
+          "sha256": "53f1596c2f71e25cd0805d1e4be6a6f49fa1d8c4749a930fd3a640505a2257f3",
+          "bytes": 429
+        },
+        {
+          "path": "sticky-core.cfg",
+          "sha256": "4627cc27ad86f8235622d5c249e2ffdfb6868251338832600595849d35702762",
+          "bytes": 425
+        },
+        {
+          "path": "sticky-error.cfg",
+          "sha256": "c920cad795b7d4ab0a84793dc86bbf64a80bdf25c3e783a817665ab648b9c282",
+          "bytes": 425
+        },
+        {
+          "path": "sticky-zero.cfg",
+          "sha256": "788b005e72c9659848490e9f40dc7b9ada37f755fedd76c585b4fedf9f88a4c2",
+          "bytes": 424
+        }
+      ],
+      "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool_sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+      "archive_directory": "tlc/negative-drop-wait-continuation-r1",
+      "evidence": {
+        "result.json": {
+          "bytes": 8020,
+          "sha256": "4ed03e979a6557120ce1644ceb88331a77b80cc4c20d5172db706457849db367"
+        },
+        "manifest.json": {
+          "bytes": 27169,
+          "sha256": "151b5203045814065fad847a695ff04134307ce69bd0e661ca7c9fd9d6fc15c0"
+        },
+        "tlc.log": {
+          "bytes": 18370,
+          "sha256": "c28c0ad8fc96b2674f9a7f63549859a98fff56c4c6e520f1b2561d54511a4b18"
+        },
+        "messages.json": {
+          "bytes": 18382,
+          "sha256": "4b04cfb528d8aeaa33dfdc9d84d1bbf6b40cf791df2c892fd9e67b9a806c39c7"
+        }
+      }
+    },
+    {
+      "model": "sticky",
+      "profile": "negative-error-spin",
+      "status": "COUNTEREXAMPLE",
+      "classification": "negative_control",
+      "declared_scope_kind": "negative_control",
+      "expected_violation": "NoRestoreDrivenRepeat",
+      "actual_invariant_violation": [
+        "NoRestoreDrivenRepeat"
+      ],
+      "temporal_violation": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "NoRestoreDrivenRepeat"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "NoRestoreDrivenRepeat"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": false,
+        "deadlock_reason": "Finite input completion or external indefinite wait is allowed; any declared temporal properties use only the stated fairness conditions.",
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "error-spin",
+          "Scenario": "error",
+          "InitialMode": "wait",
+          "InitialRows": 1
+        },
+        "expected_outcome": "COUNTEREXAMPLE",
+        "kind": "negative_control",
+        "minimum_distinct_states": 13,
+        "minimum_basis": "Separate request/start/owner/supply/SQL/cleanup/final-probe transitions; scenario-specific finite lower bound supplied before execution.",
+        "covered_interleavings_and_faults": [
+          "error",
+          "error-spin"
+        ],
+        "excluded_behaviors": [
+          "full detailed G/W composition",
+          "actual PostgreSQL or JavaScript refinement",
+          "unbounded peer counts",
+          "latency"
+        ],
+        "liveness": "NOT_CHECKED",
+        "expected_violation": "NoRestoreDrivenRepeat"
+      },
+      "statistics": {
+        "generated_states": 1557,
+        "distinct_states": 472,
+        "remaining_states": 55
+      },
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "started_at": "2026-11-19T02:44:24.880261+00:00",
+      "finished_at": "2026-11-19T02:44:26.764127+00:00",
+      "duration_seconds": 1.884216,
+      "implementation_status": "NOT_ASSESSED",
+      "executed_manifest_sha256": "151b5203045814065fad847a695ff04134307ce69bd0e661ca7c9fd9d6fc15c0",
+      "executed_input_files": [
+        {
+          "path": "StickyAdmission.tla",
+          "sha256": "ddb8eb90a9495e32cf6e34d44e10eceee6a04c1e39b2b6faa3d978fe5b4b35b0",
+          "bytes": 13145
+        },
+        {
+          "path": "finite-wait-service.cfg",
+          "sha256": "2e752ee8749636b533bb0ca8afd535d8bfd76afd8d2a89a9f70836f10165e0ea",
+          "bytes": 360
+        },
+        {
+          "path": "negative-busy-consumes-wait.cfg",
+          "sha256": "648dd3aff297a78786f681ae2820dd8c59e5c78a42f7b653e3c71c9f4746f03c",
+          "bytes": 184
+        },
+        {
+          "path": "negative-busy-spin.cfg",
+          "sha256": "e66634f96b3eadc9f497b8a92a43d29569041d5c227493a9a1c897afc7f2445d",
+          "bytes": 177
+        },
+        {
+          "path": "negative-drop-wait-continuation.cfg",
+          "sha256": "48045c28ebef78e977d3369a5a49c31b846c941957bf0ec28592da885cd83799",
+          "bytes": 190
+        },
+        {
+          "path": "negative-error-spin.cfg",
+          "sha256": "1a0e125daae813f3f48285dd1c5940fd44a2a6741002847ed8b1849a28a17c3e",
+          "bytes": 179
+        },
+        {
+          "path": "negative-finish-clears-wait.cfg",
+          "sha256": "e38ffae4bfaed5780f37e5ffa2b6cdc8b9974a933fcdef8a398ef588ddc5e193",
+          "bytes": 189
+        },
+        {
+          "path": "negative-inherit-before-repeat.cfg",
+          "sha256": "8c9cea5ea8229962f0f186c373976d67207de349ce3e808cef6766648f34a6df",
+          "bytes": 189
+        },
+        {
+          "path": "negative-try-clears-wait.cfg",
+          "sha256": "f76ba1749647cee04422d213bfe1f2f23d7823426103bab9dd43702a0224c4b6",
+          "bytes": 182
+        },
+        {
+          "path": "overlap-all-try-starvation.cfg",
+          "sha256": "ebc95904abf2def2536fdc33f0df11187675a42759ec67b5ff4b0e7e5f377f5c",
+          "bytes": 244
+        },
+        {
+          "path": "overlap-wait-starvation.cfg",
+          "sha256": "3dadc57db496dbc03fe645e53fe736a57dfb108aa6098def54a5df6c49d542a6",
+          "bytes": 242
+        },
+        {
+          "path": "sticky-busy.cfg",
+          "sha256": "320d251b1131f0a51c8eb8763a4ff34abb7c99308295a05761cd77761dc32727",
+          "bytes": 424
+        },
+        {
+          "path": "sticky-carry.cfg",
+          "sha256": "53f1596c2f71e25cd0805d1e4be6a6f49fa1d8c4749a930fd3a640505a2257f3",
+          "bytes": 429
+        },
+        {
+          "path": "sticky-core.cfg",
+          "sha256": "4627cc27ad86f8235622d5c249e2ffdfb6868251338832600595849d35702762",
+          "bytes": 425
+        },
+        {
+          "path": "sticky-error.cfg",
+          "sha256": "c920cad795b7d4ab0a84793dc86bbf64a80bdf25c3e783a817665ab648b9c282",
+          "bytes": 425
+        },
+        {
+          "path": "sticky-zero.cfg",
+          "sha256": "788b005e72c9659848490e9f40dc7b9ada37f755fedd76c585b4fedf9f88a4c2",
+          "bytes": 424
+        }
+      ],
+      "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool_sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+      "archive_directory": "tlc/negative-error-spin-r1",
+      "evidence": {
+        "result.json": {
+          "bytes": 7847,
+          "sha256": "957b42bfbcbf03cf1b9cfaf7957756f1444f0e38ed1f7fb36510ac4ba13f144c"
+        },
+        "manifest.json": {
+          "bytes": 27169,
+          "sha256": "151b5203045814065fad847a695ff04134307ce69bd0e661ca7c9fd9d6fc15c0"
+        },
+        "tlc.log": {
+          "bytes": 19642,
+          "sha256": "7266e7a24964b7ff08527560b53a4cdc660e6cebeb6c4899d2af10687153bf5e"
+        },
+        "messages.json": {
+          "bytes": 19768,
+          "sha256": "2182db424a2001b7ea77dd46927ac0e40da1934abab0985034b9aa0e75ac94f3"
+        }
+      }
+    },
+    {
+      "model": "sticky",
+      "profile": "negative-finish-clears-wait",
+      "status": "COUNTEREXAMPLE",
+      "classification": "negative_control",
+      "declared_scope_kind": "negative_control",
+      "expected_violation": "PendingWaitRetained",
+      "actual_invariant_violation": [
+        "PendingWaitRetained"
+      ],
+      "temporal_violation": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "PendingWaitRetained"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "PendingWaitRetained"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": false,
+        "deadlock_reason": "Finite input completion or external indefinite wait is allowed; any declared temporal properties use only the stated fairness conditions.",
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "finish-clears-new-wait",
+          "Scenario": "normal",
+          "InitialMode": "try",
+          "InitialRows": 1
+        },
+        "expected_outcome": "COUNTEREXAMPLE",
+        "kind": "negative_control",
+        "minimum_distinct_states": 12,
+        "minimum_basis": "Separate request/start/owner/supply/SQL/cleanup/final-probe transitions; scenario-specific finite lower bound supplied before execution.",
+        "covered_interleavings_and_faults": [
+          "normal",
+          "finish-clears-new-wait"
+        ],
+        "excluded_behaviors": [
+          "full detailed G/W composition",
+          "actual PostgreSQL or JavaScript refinement",
+          "unbounded peer counts",
+          "latency"
+        ],
+        "liveness": "NOT_CHECKED",
+        "expected_violation": "PendingWaitRetained"
+      },
+      "statistics": {
+        "generated_states": 4208,
+        "distinct_states": 1183,
+        "remaining_states": 220
+      },
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "started_at": "2026-11-19T02:42:23.161701+00:00",
+      "finished_at": "2026-11-19T02:42:25.028889+00:00",
+      "duration_seconds": 1.867232,
+      "implementation_status": "NOT_ASSESSED",
+      "executed_manifest_sha256": "151b5203045814065fad847a695ff04134307ce69bd0e661ca7c9fd9d6fc15c0",
+      "executed_input_files": [
+        {
+          "path": "StickyAdmission.tla",
+          "sha256": "ddb8eb90a9495e32cf6e34d44e10eceee6a04c1e39b2b6faa3d978fe5b4b35b0",
+          "bytes": 13145
+        },
+        {
+          "path": "finite-wait-service.cfg",
+          "sha256": "2e752ee8749636b533bb0ca8afd535d8bfd76afd8d2a89a9f70836f10165e0ea",
+          "bytes": 360
+        },
+        {
+          "path": "negative-busy-consumes-wait.cfg",
+          "sha256": "648dd3aff297a78786f681ae2820dd8c59e5c78a42f7b653e3c71c9f4746f03c",
+          "bytes": 184
+        },
+        {
+          "path": "negative-busy-spin.cfg",
+          "sha256": "e66634f96b3eadc9f497b8a92a43d29569041d5c227493a9a1c897afc7f2445d",
+          "bytes": 177
+        },
+        {
+          "path": "negative-drop-wait-continuation.cfg",
+          "sha256": "48045c28ebef78e977d3369a5a49c31b846c941957bf0ec28592da885cd83799",
+          "bytes": 190
+        },
+        {
+          "path": "negative-error-spin.cfg",
+          "sha256": "1a0e125daae813f3f48285dd1c5940fd44a2a6741002847ed8b1849a28a17c3e",
+          "bytes": 179
+        },
+        {
+          "path": "negative-finish-clears-wait.cfg",
+          "sha256": "e38ffae4bfaed5780f37e5ffa2b6cdc8b9974a933fcdef8a398ef588ddc5e193",
+          "bytes": 189
+        },
+        {
+          "path": "negative-inherit-before-repeat.cfg",
+          "sha256": "8c9cea5ea8229962f0f186c373976d67207de349ce3e808cef6766648f34a6df",
+          "bytes": 189
+        },
+        {
+          "path": "negative-try-clears-wait.cfg",
+          "sha256": "f76ba1749647cee04422d213bfe1f2f23d7823426103bab9dd43702a0224c4b6",
+          "bytes": 182
+        },
+        {
+          "path": "overlap-all-try-starvation.cfg",
+          "sha256": "ebc95904abf2def2536fdc33f0df11187675a42759ec67b5ff4b0e7e5f377f5c",
+          "bytes": 244
+        },
+        {
+          "path": "overlap-wait-starvation.cfg",
+          "sha256": "3dadc57db496dbc03fe645e53fe736a57dfb108aa6098def54a5df6c49d542a6",
+          "bytes": 242
+        },
+        {
+          "path": "sticky-busy.cfg",
+          "sha256": "320d251b1131f0a51c8eb8763a4ff34abb7c99308295a05761cd77761dc32727",
+          "bytes": 424
+        },
+        {
+          "path": "sticky-carry.cfg",
+          "sha256": "53f1596c2f71e25cd0805d1e4be6a6f49fa1d8c4749a930fd3a640505a2257f3",
+          "bytes": 429
+        },
+        {
+          "path": "sticky-core.cfg",
+          "sha256": "4627cc27ad86f8235622d5c249e2ffdfb6868251338832600595849d35702762",
+          "bytes": 425
+        },
+        {
+          "path": "sticky-error.cfg",
+          "sha256": "c920cad795b7d4ab0a84793dc86bbf64a80bdf25c3e783a817665ab648b9c282",
+          "bytes": 425
+        },
+        {
+          "path": "sticky-zero.cfg",
+          "sha256": "788b005e72c9659848490e9f40dc7b9ada37f755fedd76c585b4fedf9f88a4c2",
+          "bytes": 424
+        }
+      ],
+      "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool_sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+      "archive_directory": "tlc/negative-finish-clears-wait-r1",
+      "evidence": {
+        "result.json": {
+          "bytes": 7972,
+          "sha256": "48808bee52a32c752144636893469d3b028feebe9039bc70736aea7c75267b61"
+        },
+        "manifest.json": {
+          "bytes": 27169,
+          "sha256": "151b5203045814065fad847a695ff04134307ce69bd0e661ca7c9fd9d6fc15c0"
+        },
+        "tlc.log": {
+          "bytes": 18365,
+          "sha256": "e3493495407d7e95d6b19071eeade2fdbb777b310f351d47c04f3ccd918315f4"
+        },
+        "messages.json": {
+          "bytes": 18397,
+          "sha256": "c8bd773878a2b792ddc64fd9d8a12b0f77814f6c4c1f1b2bd6c7028832990d41"
+        }
+      }
+    },
+    {
+      "model": "sticky",
+      "profile": "negative-inherit-before-repeat",
+      "status": "COUNTEREXAMPLE",
+      "classification": "negative_control",
+      "declared_scope_kind": "negative_control",
+      "expected_violation": "NoRestoreDrivenRepeat",
+      "actual_invariant_violation": [
+        "NoRestoreDrivenRepeat"
+      ],
+      "temporal_violation": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "NoRestoreDrivenRepeat"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "NoRestoreDrivenRepeat"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": false,
+        "deadlock_reason": "Finite input completion or external indefinite wait is allowed; any declared temporal properties use only the stated fairness conditions.",
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "inherit-before-repeat",
+          "Scenario": "zero",
+          "InitialMode": "wait",
+          "InitialRows": 1
+        },
+        "expected_outcome": "COUNTEREXAMPLE",
+        "kind": "negative_control",
+        "minimum_distinct_states": 6,
+        "minimum_basis": "Separate request/start/owner/supply/SQL/cleanup/final-probe transitions; scenario-specific finite lower bound supplied before execution.",
+        "covered_interleavings_and_faults": [
+          "zero",
+          "inherit-before-repeat"
+        ],
+        "excluded_behaviors": [
+          "full detailed G/W composition",
+          "actual PostgreSQL or JavaScript refinement",
+          "unbounded peer counts",
+          "latency"
+        ],
+        "liveness": "NOT_CHECKED",
+        "expected_violation": "NoRestoreDrivenRepeat"
+      },
+      "statistics": {
+        "generated_states": 110,
+        "distinct_states": 46,
+        "remaining_states": 17
+      },
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "started_at": "2026-11-19T02:44:24.872766+00:00",
+      "finished_at": "2026-11-19T02:44:26.456876+00:00",
+      "duration_seconds": 1.584193,
+      "implementation_status": "NOT_ASSESSED",
+      "executed_manifest_sha256": "151b5203045814065fad847a695ff04134307ce69bd0e661ca7c9fd9d6fc15c0",
+      "executed_input_files": [
+        {
+          "path": "StickyAdmission.tla",
+          "sha256": "ddb8eb90a9495e32cf6e34d44e10eceee6a04c1e39b2b6faa3d978fe5b4b35b0",
+          "bytes": 13145
+        },
+        {
+          "path": "finite-wait-service.cfg",
+          "sha256": "2e752ee8749636b533bb0ca8afd535d8bfd76afd8d2a89a9f70836f10165e0ea",
+          "bytes": 360
+        },
+        {
+          "path": "negative-busy-consumes-wait.cfg",
+          "sha256": "648dd3aff297a78786f681ae2820dd8c59e5c78a42f7b653e3c71c9f4746f03c",
+          "bytes": 184
+        },
+        {
+          "path": "negative-busy-spin.cfg",
+          "sha256": "e66634f96b3eadc9f497b8a92a43d29569041d5c227493a9a1c897afc7f2445d",
+          "bytes": 177
+        },
+        {
+          "path": "negative-drop-wait-continuation.cfg",
+          "sha256": "48045c28ebef78e977d3369a5a49c31b846c941957bf0ec28592da885cd83799",
+          "bytes": 190
+        },
+        {
+          "path": "negative-error-spin.cfg",
+          "sha256": "1a0e125daae813f3f48285dd1c5940fd44a2a6741002847ed8b1849a28a17c3e",
+          "bytes": 179
+        },
+        {
+          "path": "negative-finish-clears-wait.cfg",
+          "sha256": "e38ffae4bfaed5780f37e5ffa2b6cdc8b9974a933fcdef8a398ef588ddc5e193",
+          "bytes": 189
+        },
+        {
+          "path": "negative-inherit-before-repeat.cfg",
+          "sha256": "8c9cea5ea8229962f0f186c373976d67207de349ce3e808cef6766648f34a6df",
+          "bytes": 189
+        },
+        {
+          "path": "negative-try-clears-wait.cfg",
+          "sha256": "f76ba1749647cee04422d213bfe1f2f23d7823426103bab9dd43702a0224c4b6",
+          "bytes": 182
+        },
+        {
+          "path": "overlap-all-try-starvation.cfg",
+          "sha256": "ebc95904abf2def2536fdc33f0df11187675a42759ec67b5ff4b0e7e5f377f5c",
+          "bytes": 244
+        },
+        {
+          "path": "overlap-wait-starvation.cfg",
+          "sha256": "3dadc57db496dbc03fe645e53fe736a57dfb108aa6098def54a5df6c49d542a6",
+          "bytes": 242
+        },
+        {
+          "path": "sticky-busy.cfg",
+          "sha256": "320d251b1131f0a51c8eb8763a4ff34abb7c99308295a05761cd77761dc32727",
+          "bytes": 424
+        },
+        {
+          "path": "sticky-carry.cfg",
+          "sha256": "53f1596c2f71e25cd0805d1e4be6a6f49fa1d8c4749a930fd3a640505a2257f3",
+          "bytes": 429
+        },
+        {
+          "path": "sticky-core.cfg",
+          "sha256": "4627cc27ad86f8235622d5c249e2ffdfb6868251338832600595849d35702762",
+          "bytes": 425
+        },
+        {
+          "path": "sticky-error.cfg",
+          "sha256": "c920cad795b7d4ab0a84793dc86bbf64a80bdf25c3e783a817665ab648b9c282",
+          "bytes": 425
+        },
+        {
+          "path": "sticky-zero.cfg",
+          "sha256": "788b005e72c9659848490e9f40dc7b9ada37f755fedd76c585b4fedf9f88a4c2",
+          "bytes": 424
+        }
+      ],
+      "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool_sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+      "archive_directory": "tlc/negative-inherit-before-repeat-r1",
+      "evidence": {
+        "result.json": {
+          "bytes": 7882,
+          "sha256": "127089695e98241e23e8a1a4d690635496fdedc03a127e380ae8af84c6c29f2e"
+        },
+        "manifest.json": {
+          "bytes": 27169,
+          "sha256": "151b5203045814065fad847a695ff04134307ce69bd0e661ca7c9fd9d6fc15c0"
+        },
+        "tlc.log": {
+          "bytes": 10464,
+          "sha256": "c38b2deec2b98be3023a4b96212d6008337ed3e44280fb26c752b1b7a4f4e169"
+        },
+        "messages.json": {
+          "bytes": 10084,
+          "sha256": "efc3413f394b9985869f69570e88001048f29fc66618eb355cdf7b6aa58d4df7"
+        }
+      }
+    },
+    {
+      "model": "wave",
+      "profile": "negative-reuse-dirty-client",
+      "status": "COUNTEREXAMPLE",
+      "classification": "negative_control",
+      "declared_scope_kind": "negative_control",
+      "expected_violation": "MissFailureDiscarded",
+      "actual_invariant_violation": [
+        "MissFailureDiscarded"
+      ],
+      "temporal_violation": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "MissFailureDiscarded"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "MissFailureDiscarded"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": false,
+        "deadlock_reason": "Finite inputs may finish and external operations may stall; this profile makes no termination or liveness claim.",
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "reuse-dirty-client",
+          "Scenario": "failure",
+          "Budget": 1,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2,
+          "ProgressLock": "try"
+        },
+        "expected_outcome": "COUNTEREXAMPLE",
+        "kind": "negative_control",
+        "minimum_distinct_states": 9,
+        "minimum_basis": "Scenario-specific split G/W/SQL and cleanup paths; declared before execution.",
+        "covered_interleavings_and_faults": [
+          "failure",
+          "reuse-dirty-client",
+          "fixed finite records"
+        ],
+        "excluded_behaviors": [
+          "outer publisher",
+          "JavaScript refinement",
+          "PG fairness or writer preference",
+          "real time"
+        ],
+        "liveness": "NOT_CHECKED",
+        "expected_violation": "MissFailureDiscarded"
+      },
+      "statistics": {
+        "generated_states": 189,
+        "distinct_states": 126,
+        "remaining_states": 41
+      },
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "started_at": "2026-11-19T02:49:33.757020+00:00",
+      "finished_at": "2026-11-19T02:49:35.582104+00:00",
+      "duration_seconds": 1.825128,
+      "implementation_status": "NOT_ASSESSED",
+      "executed_manifest_sha256": "184c8fb8e720e89f3dd162c93c79c8645713f0cbc9e10ce70112573f0a618c41",
+      "executed_input_files": [
+        {
+          "path": "WaveAdmission.tla",
+          "sha256": "859e047d291f70215222caf2885a94ce89cdfb83800fd767216d7eb3318eb897",
+          "bytes": 19519
+        },
+        {
+          "path": "negative-early-miss-settle.cfg",
+          "sha256": "8e3c6cf154d357c10c2d7e03549940a76ba2a155e38128a01354443d2ae32a4d",
+          "bytes": 239
+        },
+        {
+          "path": "negative-miss-publishes.cfg",
+          "sha256": "5efec9893c7b73f4a630fdfd3db5fc84ef43c3d4cadc4a69d0b3829b48d6119f",
+          "bytes": 235
+        },
+        {
+          "path": "negative-reuse-dirty-client.cfg",
+          "sha256": "ab525444eef1722a91bc1b28a9a229c36769f0b00c066d3d8b2998c52192305a",
+          "bytes": 248
+        },
+        {
+          "path": "negative-unknown-as-miss.cfg",
+          "sha256": "f3f9375e5d3c6bae5492f729a292327ebd418754b1f6caa95573843897fc0c5c",
+          "bytes": 239
+        },
+        {
+          "path": "positive-try-one-record.cfg",
+          "sha256": "5270ba6959164181a99158d96a3ddde7d414a23fd179144840183e02bc6c3cae",
+          "bytes": 605
+        },
+        {
+          "path": "try-one-record-close.cfg",
+          "sha256": "dc7e89474a7dcacaccabffd15acfc858ccd54fbe896794781a6422de02dd821c",
+          "bytes": 606
+        },
+        {
+          "path": "try-two-record-failure.cfg",
+          "sha256": "268ef87d0dd8ae86da5e5945b67656f6b4870cd1b096e516d9dd78de93857e1e",
+          "bytes": 648
+        },
+        {
+          "path": "witness-closed-drained.cfg",
+          "sha256": "f0edc7d27478fdf3c89a5dbc58c3ee9e8641b4ca5e16518a445f95dcd9922c0b",
+          "bytes": 228
+        },
+        {
+          "path": "witness-miss-while-wave.cfg",
+          "sha256": "083b4d93fccbc4808095b796e86c3e63d43aa623cc0d5dee6e34fc8764a9459e",
+          "bytes": 227
+        }
+      ],
+      "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool_sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+      "archive_directory": "tlc/negative-reuse-dirty-client-r1",
+      "evidence": {
+        "result.json": {
+          "bytes": 6761,
+          "sha256": "056d7a0512dda128509be61aec7b23e090238386359a93ee17c713cfa5354951"
+        },
+        "manifest.json": {
+          "bytes": 16256,
+          "sha256": "184c8fb8e720e89f3dd162c93c79c8645713f0cbc9e10ce70112573f0a618c41"
+        },
+        "tlc.log": {
+          "bytes": 23360,
+          "sha256": "688b4e557aa8f036a38a3ad4474f2c9a430e9a2489d07fb6e0e7d2e41e267b48"
+        },
+        "messages.json": {
+          "bytes": 23549,
+          "sha256": "cd1e1765d7f917ebd0c973808204553cd0da2e6cf03eff4cbf7ac81b7a291c48"
+        }
+      }
+    },
+    {
+      "model": "sticky",
+      "profile": "negative-try-clears-wait",
+      "status": "COUNTEREXAMPLE",
+      "classification": "negative_control",
+      "declared_scope_kind": "negative_control",
+      "expected_violation": "PendingWaitRetained",
+      "actual_invariant_violation": [
+        "PendingWaitRetained"
+      ],
+      "temporal_violation": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "PendingWaitRetained"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "PendingWaitRetained"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": false,
+        "deadlock_reason": "Finite input completion or external indefinite wait is allowed; any declared temporal properties use only the stated fairness conditions.",
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "try-clears-wait",
+          "Scenario": "normal",
+          "InitialMode": "try",
+          "InitialRows": 1
+        },
+        "expected_outcome": "COUNTEREXAMPLE",
+        "kind": "negative_control",
+        "minimum_distinct_states": 3,
+        "minimum_basis": "Separate request/start/owner/supply/SQL/cleanup/final-probe transitions; scenario-specific finite lower bound supplied before execution.",
+        "covered_interleavings_and_faults": [
+          "normal",
+          "try-clears-wait"
+        ],
+        "excluded_behaviors": [
+          "full detailed G/W composition",
+          "actual PostgreSQL or JavaScript refinement",
+          "unbounded peer counts",
+          "latency"
+        ],
+        "liveness": "NOT_CHECKED",
+        "expected_violation": "PendingWaitRetained"
+      },
+      "statistics": {
+        "generated_states": 19,
+        "distinct_states": 15,
+        "remaining_states": 11
+      },
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "started_at": "2026-11-19T02:41:11.215119+00:00",
+      "finished_at": "2026-11-19T02:41:13.037317+00:00",
+      "duration_seconds": 1.822246,
+      "implementation_status": "NOT_ASSESSED",
+      "executed_manifest_sha256": "151b5203045814065fad847a695ff04134307ce69bd0e661ca7c9fd9d6fc15c0",
+      "executed_input_files": [
+        {
+          "path": "StickyAdmission.tla",
+          "sha256": "ddb8eb90a9495e32cf6e34d44e10eceee6a04c1e39b2b6faa3d978fe5b4b35b0",
+          "bytes": 13145
+        },
+        {
+          "path": "finite-wait-service.cfg",
+          "sha256": "2e752ee8749636b533bb0ca8afd535d8bfd76afd8d2a89a9f70836f10165e0ea",
+          "bytes": 360
+        },
+        {
+          "path": "negative-busy-consumes-wait.cfg",
+          "sha256": "648dd3aff297a78786f681ae2820dd8c59e5c78a42f7b653e3c71c9f4746f03c",
+          "bytes": 184
+        },
+        {
+          "path": "negative-busy-spin.cfg",
+          "sha256": "e66634f96b3eadc9f497b8a92a43d29569041d5c227493a9a1c897afc7f2445d",
+          "bytes": 177
+        },
+        {
+          "path": "negative-drop-wait-continuation.cfg",
+          "sha256": "48045c28ebef78e977d3369a5a49c31b846c941957bf0ec28592da885cd83799",
+          "bytes": 190
+        },
+        {
+          "path": "negative-error-spin.cfg",
+          "sha256": "1a0e125daae813f3f48285dd1c5940fd44a2a6741002847ed8b1849a28a17c3e",
+          "bytes": 179
+        },
+        {
+          "path": "negative-finish-clears-wait.cfg",
+          "sha256": "e38ffae4bfaed5780f37e5ffa2b6cdc8b9974a933fcdef8a398ef588ddc5e193",
+          "bytes": 189
+        },
+        {
+          "path": "negative-inherit-before-repeat.cfg",
+          "sha256": "8c9cea5ea8229962f0f186c373976d67207de349ce3e808cef6766648f34a6df",
+          "bytes": 189
+        },
+        {
+          "path": "negative-try-clears-wait.cfg",
+          "sha256": "f76ba1749647cee04422d213bfe1f2f23d7823426103bab9dd43702a0224c4b6",
+          "bytes": 182
+        },
+        {
+          "path": "overlap-all-try-starvation.cfg",
+          "sha256": "ebc95904abf2def2536fdc33f0df11187675a42759ec67b5ff4b0e7e5f377f5c",
+          "bytes": 244
+        },
+        {
+          "path": "overlap-wait-starvation.cfg",
+          "sha256": "3dadc57db496dbc03fe645e53fe736a57dfb108aa6098def54a5df6c49d542a6",
+          "bytes": 242
+        },
+        {
+          "path": "sticky-busy.cfg",
+          "sha256": "320d251b1131f0a51c8eb8763a4ff34abb7c99308295a05761cd77761dc32727",
+          "bytes": 424
+        },
+        {
+          "path": "sticky-carry.cfg",
+          "sha256": "53f1596c2f71e25cd0805d1e4be6a6f49fa1d8c4749a930fd3a640505a2257f3",
+          "bytes": 429
+        },
+        {
+          "path": "sticky-core.cfg",
+          "sha256": "4627cc27ad86f8235622d5c249e2ffdfb6868251338832600595849d35702762",
+          "bytes": 425
+        },
+        {
+          "path": "sticky-error.cfg",
+          "sha256": "c920cad795b7d4ab0a84793dc86bbf64a80bdf25c3e783a817665ab648b9c282",
+          "bytes": 425
+        },
+        {
+          "path": "sticky-zero.cfg",
+          "sha256": "788b005e72c9659848490e9f40dc7b9ada37f755fedd76c585b4fedf9f88a4c2",
+          "bytes": 424
+        }
+      ],
+      "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool_sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+      "archive_directory": "tlc/negative-try-clears-wait-r1",
+      "evidence": {
+        "result.json": {
+          "bytes": 7788,
+          "sha256": "611b999f0d7b2c95b9828b1b8ae8cbd4bf36c2c9490762fbd171d340fdf4a3c3"
+        },
+        "manifest.json": {
+          "bytes": 27169,
+          "sha256": "151b5203045814065fad847a695ff04134307ce69bd0e661ca7c9fd9d6fc15c0"
+        },
+        "tlc.log": {
+          "bytes": 6350,
+          "sha256": "00090548e1682325c5135ff42af9dd6de5887723b2b4a05a67c190baee27af4c"
+        },
+        "messages.json": {
+          "bytes": 5927,
+          "sha256": "7aabf3decaa7154c2f8548859e5bcf20c29b6b6405231018e616fa12190053d3"
+        }
+      }
+    },
+    {
+      "model": "wave",
+      "profile": "negative-unknown-as-miss",
+      "status": "COUNTEREXAMPLE",
+      "classification": "negative_control",
+      "declared_scope_kind": "negative_control",
+      "expected_violation": "UnknownNotMiss",
+      "actual_invariant_violation": [
+        "UnknownNotMiss"
+      ],
+      "temporal_violation": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "UnknownNotMiss"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "UnknownNotMiss"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": false,
+        "deadlock_reason": "Finite inputs may finish and external operations may stall; this profile makes no termination or liveness claim.",
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "unknown-as-miss",
+          "Scenario": "failure",
+          "Budget": 1,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2,
+          "ProgressLock": "try"
+        },
+        "expected_outcome": "COUNTEREXAMPLE",
+        "kind": "negative_control",
+        "minimum_distinct_states": 7,
+        "minimum_basis": "Scenario-specific split G/W/SQL and cleanup paths; declared before execution.",
+        "covered_interleavings_and_faults": [
+          "failure",
+          "unknown-as-miss",
+          "fixed finite records"
+        ],
+        "excluded_behaviors": [
+          "outer publisher",
+          "JavaScript refinement",
+          "PG fairness or writer preference",
+          "real time"
+        ],
+        "liveness": "NOT_CHECKED",
+        "expected_violation": "UnknownNotMiss"
+      },
+      "statistics": {
+        "generated_states": 117,
+        "distinct_states": 78,
+        "remaining_states": 26
+      },
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "started_at": "2026-11-19T02:49:33.783722+00:00",
+      "finished_at": "2026-11-19T02:49:35.932514+00:00",
+      "duration_seconds": 2.148838,
+      "implementation_status": "NOT_ASSESSED",
+      "executed_manifest_sha256": "184c8fb8e720e89f3dd162c93c79c8645713f0cbc9e10ce70112573f0a618c41",
+      "executed_input_files": [
+        {
+          "path": "WaveAdmission.tla",
+          "sha256": "859e047d291f70215222caf2885a94ce89cdfb83800fd767216d7eb3318eb897",
+          "bytes": 19519
+        },
+        {
+          "path": "negative-early-miss-settle.cfg",
+          "sha256": "8e3c6cf154d357c10c2d7e03549940a76ba2a155e38128a01354443d2ae32a4d",
+          "bytes": 239
+        },
+        {
+          "path": "negative-miss-publishes.cfg",
+          "sha256": "5efec9893c7b73f4a630fdfd3db5fc84ef43c3d4cadc4a69d0b3829b48d6119f",
+          "bytes": 235
+        },
+        {
+          "path": "negative-reuse-dirty-client.cfg",
+          "sha256": "ab525444eef1722a91bc1b28a9a229c36769f0b00c066d3d8b2998c52192305a",
+          "bytes": 248
+        },
+        {
+          "path": "negative-unknown-as-miss.cfg",
+          "sha256": "f3f9375e5d3c6bae5492f729a292327ebd418754b1f6caa95573843897fc0c5c",
+          "bytes": 239
+        },
+        {
+          "path": "positive-try-one-record.cfg",
+          "sha256": "5270ba6959164181a99158d96a3ddde7d414a23fd179144840183e02bc6c3cae",
+          "bytes": 605
+        },
+        {
+          "path": "try-one-record-close.cfg",
+          "sha256": "dc7e89474a7dcacaccabffd15acfc858ccd54fbe896794781a6422de02dd821c",
+          "bytes": 606
+        },
+        {
+          "path": "try-two-record-failure.cfg",
+          "sha256": "268ef87d0dd8ae86da5e5945b67656f6b4870cd1b096e516d9dd78de93857e1e",
+          "bytes": 648
+        },
+        {
+          "path": "witness-closed-drained.cfg",
+          "sha256": "f0edc7d27478fdf3c89a5dbc58c3ee9e8641b4ca5e16518a445f95dcd9922c0b",
+          "bytes": 228
+        },
+        {
+          "path": "witness-miss-while-wave.cfg",
+          "sha256": "083b4d93fccbc4808095b796e86c3e63d43aa623cc0d5dee6e34fc8764a9459e",
+          "bytes": 227
+        }
+      ],
+      "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool_sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+      "archive_directory": "tlc/negative-unknown-as-miss-r1",
+      "evidence": {
+        "result.json": {
+          "bytes": 6822,
+          "sha256": "224a00cd66a76a69ec2381cd11ecbb9a8d7f155f841cc8a3f8f192b16b96d48c"
+        },
+        "manifest.json": {
+          "bytes": 16256,
+          "sha256": "184c8fb8e720e89f3dd162c93c79c8645713f0cbc9e10ce70112573f0a618c41"
+        },
+        "tlc.log": {
+          "bytes": 18254,
+          "sha256": "813c66d7ffbff57e1bc6ba08df20d3d0ff2a7b085013184684fcb201f6571269"
+        },
+        "messages.json": {
+          "bytes": 18078,
+          "sha256": "aab6b2926914ad710964306aaf79842cc5a44c17e54270137b9931c933b9acf4"
+        }
+      }
+    },
+    {
+      "model": "sticky",
+      "profile": "overlap-all-try-starvation",
+      "status": "COUNTEREXAMPLE",
+      "classification": "environment_boundary_counterexample",
+      "declared_scope_kind": "environment_boundary_counterexample",
+      "expected_violation": "EventuallyPublished",
+      "actual_invariant_violation": [],
+      "temporal_violation": true,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "OwnerUnique",
+          "LockExclusion",
+          "ActualCommitOnly"
+        ],
+        "expected_properties": [
+          "EventuallyPublished"
+        ],
+        "configured_invariants": [
+          "TypeOK",
+          "OwnerUnique",
+          "LockExclusion",
+          "ActualCommitOnly"
+        ],
+        "configured_properties": [
+          "EventuallyPublished"
+        ],
+        "checks_deadlock": false,
+        "deadlock_reason": "Finite input completion or external indefinite wait is allowed; any declared temporal properties use only the stated fairness conditions.",
+        "behavior": {
+          "SPECIFICATION": "FairSpec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "all-try",
+          "Scenario": "fair-overlap",
+          "InitialMode": "try",
+          "InitialRows": 1
+        },
+        "expected_outcome": "COUNTEREXAMPLE",
+        "kind": "environment_boundary_counterexample",
+        "minimum_distinct_states": 25,
+        "minimum_basis": "Separate request/start/owner/supply/SQL/cleanup/final-probe transitions; scenario-specific finite lower bound supplied before execution.",
+        "covered_interleavings_and_faults": [
+          "fair-overlap",
+          "all-try"
+        ],
+        "excluded_behaviors": [
+          "full detailed G/W composition",
+          "actual PostgreSQL or JavaScript refinement",
+          "unbounded peer counts",
+          "latency"
+        ],
+        "liveness": "CONDITIONAL",
+        "expected_violation": "EventuallyPublished",
+        "environment": "two readers may repeatedly reenter while a writer waits; each held reader must eventually release; no FIFO or writer preference"
+      },
+      "statistics": {
+        "generated_states": 21457,
+        "distinct_states": 4973,
+        "remaining_states": 0
+      },
+      "process": {
+        "exit_code": 13,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "started_at": "2026-11-19T02:49:15.580664+00:00",
+      "finished_at": "2026-11-19T02:49:18.727089+00:00",
+      "duration_seconds": 3.146468,
+      "implementation_status": "NOT_ASSESSED",
+      "executed_manifest_sha256": "151b5203045814065fad847a695ff04134307ce69bd0e661ca7c9fd9d6fc15c0",
+      "executed_input_files": [
+        {
+          "path": "StickyAdmission.tla",
+          "sha256": "ddb8eb90a9495e32cf6e34d44e10eceee6a04c1e39b2b6faa3d978fe5b4b35b0",
+          "bytes": 13145
+        },
+        {
+          "path": "finite-wait-service.cfg",
+          "sha256": "2e752ee8749636b533bb0ca8afd535d8bfd76afd8d2a89a9f70836f10165e0ea",
+          "bytes": 360
+        },
+        {
+          "path": "negative-busy-consumes-wait.cfg",
+          "sha256": "648dd3aff297a78786f681ae2820dd8c59e5c78a42f7b653e3c71c9f4746f03c",
+          "bytes": 184
+        },
+        {
+          "path": "negative-busy-spin.cfg",
+          "sha256": "e66634f96b3eadc9f497b8a92a43d29569041d5c227493a9a1c897afc7f2445d",
+          "bytes": 177
+        },
+        {
+          "path": "negative-drop-wait-continuation.cfg",
+          "sha256": "48045c28ebef78e977d3369a5a49c31b846c941957bf0ec28592da885cd83799",
+          "bytes": 190
+        },
+        {
+          "path": "negative-error-spin.cfg",
+          "sha256": "1a0e125daae813f3f48285dd1c5940fd44a2a6741002847ed8b1849a28a17c3e",
+          "bytes": 179
+        },
+        {
+          "path": "negative-finish-clears-wait.cfg",
+          "sha256": "e38ffae4bfaed5780f37e5ffa2b6cdc8b9974a933fcdef8a398ef588ddc5e193",
+          "bytes": 189
+        },
+        {
+          "path": "negative-inherit-before-repeat.cfg",
+          "sha256": "8c9cea5ea8229962f0f186c373976d67207de349ce3e808cef6766648f34a6df",
+          "bytes": 189
+        },
+        {
+          "path": "negative-try-clears-wait.cfg",
+          "sha256": "f76ba1749647cee04422d213bfe1f2f23d7823426103bab9dd43702a0224c4b6",
+          "bytes": 182
+        },
+        {
+          "path": "overlap-all-try-starvation.cfg",
+          "sha256": "ebc95904abf2def2536fdc33f0df11187675a42759ec67b5ff4b0e7e5f377f5c",
+          "bytes": 244
+        },
+        {
+          "path": "overlap-wait-starvation.cfg",
+          "sha256": "3dadc57db496dbc03fe645e53fe736a57dfb108aa6098def54a5df6c49d542a6",
+          "bytes": 242
+        },
+        {
+          "path": "sticky-busy.cfg",
+          "sha256": "320d251b1131f0a51c8eb8763a4ff34abb7c99308295a05761cd77761dc32727",
+          "bytes": 424
+        },
+        {
+          "path": "sticky-carry.cfg",
+          "sha256": "53f1596c2f71e25cd0805d1e4be6a6f49fa1d8c4749a930fd3a640505a2257f3",
+          "bytes": 429
+        },
+        {
+          "path": "sticky-core.cfg",
+          "sha256": "4627cc27ad86f8235622d5c249e2ffdfb6868251338832600595849d35702762",
+          "bytes": 425
+        },
+        {
+          "path": "sticky-error.cfg",
+          "sha256": "c920cad795b7d4ab0a84793dc86bbf64a80bdf25c3e783a817665ab648b9c282",
+          "bytes": 425
+        },
+        {
+          "path": "sticky-zero.cfg",
+          "sha256": "788b005e72c9659848490e9f40dc7b9ada37f755fedd76c585b4fedf9f88a4c2",
+          "bytes": 424
+        }
+      ],
+      "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool_sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+      "archive_directory": "tlc/overlap-all-try-starvation-r1",
+      "evidence": {
+        "result.json": {
+          "bytes": 8281,
+          "sha256": "55fbb544522c869e6d01310d5a7662dcfd9ba71f3915306fcc0cfbeff3ef219d"
+        },
+        "manifest.json": {
+          "bytes": 27169,
+          "sha256": "151b5203045814065fad847a695ff04134307ce69bd0e661ca7c9fd9d6fc15c0"
+        },
+        "tlc.log": {
+          "bytes": 37393,
+          "sha256": "06231f7f011ec942cf0e26a3a94b2cf1c757255840c8c16bf6df44eec8678c1a"
+        },
+        "messages.json": {
+          "bytes": 38422,
+          "sha256": "4f8937169b2da4da6819aa5eeb3c9d28e4c38e5757287f8bdbfd9507a43a186e"
+        }
+      }
+    },
+    {
+      "model": "sticky",
+      "profile": "overlap-wait-starvation",
+      "status": "COUNTEREXAMPLE",
+      "classification": "environment_boundary_counterexample",
+      "declared_scope_kind": "environment_boundary_counterexample",
+      "expected_violation": "EventuallyPublished",
+      "actual_invariant_violation": [],
+      "temporal_violation": true,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "OwnerUnique",
+          "LockExclusion",
+          "ActualCommitOnly"
+        ],
+        "expected_properties": [
+          "EventuallyPublished"
+        ],
+        "configured_invariants": [
+          "TypeOK",
+          "OwnerUnique",
+          "LockExclusion",
+          "ActualCommitOnly"
+        ],
+        "configured_properties": [
+          "EventuallyPublished"
+        ],
+        "checks_deadlock": false,
+        "deadlock_reason": "Finite input completion or external indefinite wait is allowed; any declared temporal properties use only the stated fairness conditions.",
+        "behavior": {
+          "SPECIFICATION": "FairSpec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "fair-overlap",
+          "InitialMode": "wait",
+          "InitialRows": 1
+        },
+        "expected_outcome": "COUNTEREXAMPLE",
+        "kind": "environment_boundary_counterexample",
+        "minimum_distinct_states": 25,
+        "minimum_basis": "Separate request/start/owner/supply/SQL/cleanup/final-probe transitions; scenario-specific finite lower bound supplied before execution.",
+        "covered_interleavings_and_faults": [
+          "fair-overlap",
+          "none"
+        ],
+        "excluded_behaviors": [
+          "full detailed G/W composition",
+          "actual PostgreSQL or JavaScript refinement",
+          "unbounded peer counts",
+          "latency"
+        ],
+        "liveness": "CONDITIONAL",
+        "expected_violation": "EventuallyPublished",
+        "environment": "two readers may repeatedly reenter while a writer waits; each held reader must eventually release; no FIFO or writer preference"
+      },
+      "statistics": {
+        "generated_states": 8337,
+        "distinct_states": 1928,
+        "remaining_states": 0
+      },
+      "process": {
+        "exit_code": 13,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "started_at": "2026-11-19T02:49:15.575939+00:00",
+      "finished_at": "2026-11-19T02:49:18.247275+00:00",
+      "duration_seconds": 2.671377,
+      "implementation_status": "NOT_ASSESSED",
+      "executed_manifest_sha256": "151b5203045814065fad847a695ff04134307ce69bd0e661ca7c9fd9d6fc15c0",
+      "executed_input_files": [
+        {
+          "path": "StickyAdmission.tla",
+          "sha256": "ddb8eb90a9495e32cf6e34d44e10eceee6a04c1e39b2b6faa3d978fe5b4b35b0",
+          "bytes": 13145
+        },
+        {
+          "path": "finite-wait-service.cfg",
+          "sha256": "2e752ee8749636b533bb0ca8afd535d8bfd76afd8d2a89a9f70836f10165e0ea",
+          "bytes": 360
+        },
+        {
+          "path": "negative-busy-consumes-wait.cfg",
+          "sha256": "648dd3aff297a78786f681ae2820dd8c59e5c78a42f7b653e3c71c9f4746f03c",
+          "bytes": 184
+        },
+        {
+          "path": "negative-busy-spin.cfg",
+          "sha256": "e66634f96b3eadc9f497b8a92a43d29569041d5c227493a9a1c897afc7f2445d",
+          "bytes": 177
+        },
+        {
+          "path": "negative-drop-wait-continuation.cfg",
+          "sha256": "48045c28ebef78e977d3369a5a49c31b846c941957bf0ec28592da885cd83799",
+          "bytes": 190
+        },
+        {
+          "path": "negative-error-spin.cfg",
+          "sha256": "1a0e125daae813f3f48285dd1c5940fd44a2a6741002847ed8b1849a28a17c3e",
+          "bytes": 179
+        },
+        {
+          "path": "negative-finish-clears-wait.cfg",
+          "sha256": "e38ffae4bfaed5780f37e5ffa2b6cdc8b9974a933fcdef8a398ef588ddc5e193",
+          "bytes": 189
+        },
+        {
+          "path": "negative-inherit-before-repeat.cfg",
+          "sha256": "8c9cea5ea8229962f0f186c373976d67207de349ce3e808cef6766648f34a6df",
+          "bytes": 189
+        },
+        {
+          "path": "negative-try-clears-wait.cfg",
+          "sha256": "f76ba1749647cee04422d213bfe1f2f23d7823426103bab9dd43702a0224c4b6",
+          "bytes": 182
+        },
+        {
+          "path": "overlap-all-try-starvation.cfg",
+          "sha256": "ebc95904abf2def2536fdc33f0df11187675a42759ec67b5ff4b0e7e5f377f5c",
+          "bytes": 244
+        },
+        {
+          "path": "overlap-wait-starvation.cfg",
+          "sha256": "3dadc57db496dbc03fe645e53fe736a57dfb108aa6098def54a5df6c49d542a6",
+          "bytes": 242
+        },
+        {
+          "path": "sticky-busy.cfg",
+          "sha256": "320d251b1131f0a51c8eb8763a4ff34abb7c99308295a05761cd77761dc32727",
+          "bytes": 424
+        },
+        {
+          "path": "sticky-carry.cfg",
+          "sha256": "53f1596c2f71e25cd0805d1e4be6a6f49fa1d8c4749a930fd3a640505a2257f3",
+          "bytes": 429
+        },
+        {
+          "path": "sticky-core.cfg",
+          "sha256": "4627cc27ad86f8235622d5c249e2ffdfb6868251338832600595849d35702762",
+          "bytes": 425
+        },
+        {
+          "path": "sticky-error.cfg",
+          "sha256": "c920cad795b7d4ab0a84793dc86bbf64a80bdf25c3e783a817665ab648b9c282",
+          "bytes": 425
+        },
+        {
+          "path": "sticky-zero.cfg",
+          "sha256": "788b005e72c9659848490e9f40dc7b9ada37f755fedd76c585b4fedf9f88a4c2",
+          "bytes": 424
+        }
+      ],
+      "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool_sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+      "archive_directory": "tlc/overlap-wait-starvation-r1",
+      "evidence": {
+        "result.json": {
+          "bytes": 8236,
+          "sha256": "2a9420d98bdcbdcc744e29ce50044a68a4249408715d43ccefb1623c39c84f7d"
+        },
+        "manifest.json": {
+          "bytes": 27169,
+          "sha256": "151b5203045814065fad847a695ff04134307ce69bd0e661ca7c9fd9d6fc15c0"
+        },
+        "tlc.log": {
+          "bytes": 24126,
+          "sha256": "448edb3d941cc9b03b8692098f3af1bb7b592b2314ba5cf4318b405ca79fe74b"
+        },
+        "messages.json": {
+          "bytes": 24487,
+          "sha256": "9459ad0b20f5f2597740edfa723407f343107133afbdb8fe62b6975689f4d13b"
+        }
+      }
+    },
+    {
+      "model": "sticky",
+      "profile": "sticky-busy",
+      "status": "PASS_WITHIN_SCOPE",
+      "classification": "safety",
+      "declared_scope_kind": "safety",
+      "expected_violation": null,
+      "actual_invariant_violation": [],
+      "temporal_violation": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "OwnerUnique",
+          "LockExclusion",
+          "FrozenMode",
+          "PendingWaitRetained",
+          "ClaimedWaitMode",
+          "CapabilityRetained",
+          "ClaimedCapability",
+          "WaitContinuation",
+          "NoRestoreDrivenRepeat",
+          "CurrentCoverage",
+          "ActualCommitOnly",
+          "MissEffectFree",
+          "CleanupOwnsSlot",
+          "DrainedOwner",
+          "StoppedOwnerDrained"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "OwnerUnique",
+          "LockExclusion",
+          "FrozenMode",
+          "PendingWaitRetained",
+          "ClaimedWaitMode",
+          "CapabilityRetained",
+          "ClaimedCapability",
+          "WaitContinuation",
+          "NoRestoreDrivenRepeat",
+          "CurrentCoverage",
+          "ActualCommitOnly",
+          "MissEffectFree",
+          "CleanupOwnsSlot",
+          "DrainedOwner",
+          "StoppedOwnerDrained"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": false,
+        "deadlock_reason": "Finite input completion or external indefinite wait is allowed; any declared temporal properties use only the stated fairness conditions.",
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "busy",
+          "InitialMode": "wait",
+          "InitialRows": 1
+        },
+        "expected_outcome": "PASS_WITHIN_SCOPE",
+        "kind": "safety",
+        "minimum_distinct_states": 100,
+        "minimum_basis": "Separate request/start/owner/supply/SQL/cleanup/final-probe transitions; scenario-specific finite lower bound supplied before execution.",
+        "covered_interleavings_and_faults": [
+          "busy",
+          "none"
+        ],
+        "excluded_behaviors": [
+          "full detailed G/W composition",
+          "actual PostgreSQL or JavaScript refinement",
+          "unbounded peer counts",
+          "latency"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "statistics": {
+        "generated_states": 5803,
+        "distinct_states": 1582,
+        "remaining_states": 0
+      },
+      "process": {
+        "exit_code": 0,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "started_at": "2026-11-19T02:39:32.928144+00:00",
+      "finished_at": "2026-11-19T02:39:35.033684+00:00",
+      "duration_seconds": 2.105638,
+      "implementation_status": "NOT_ASSESSED",
+      "executed_manifest_sha256": "151b5203045814065fad847a695ff04134307ce69bd0e661ca7c9fd9d6fc15c0",
+      "executed_input_files": [
+        {
+          "path": "StickyAdmission.tla",
+          "sha256": "ddb8eb90a9495e32cf6e34d44e10eceee6a04c1e39b2b6faa3d978fe5b4b35b0",
+          "bytes": 13145
+        },
+        {
+          "path": "finite-wait-service.cfg",
+          "sha256": "2e752ee8749636b533bb0ca8afd535d8bfd76afd8d2a89a9f70836f10165e0ea",
+          "bytes": 360
+        },
+        {
+          "path": "negative-busy-consumes-wait.cfg",
+          "sha256": "648dd3aff297a78786f681ae2820dd8c59e5c78a42f7b653e3c71c9f4746f03c",
+          "bytes": 184
+        },
+        {
+          "path": "negative-busy-spin.cfg",
+          "sha256": "e66634f96b3eadc9f497b8a92a43d29569041d5c227493a9a1c897afc7f2445d",
+          "bytes": 177
+        },
+        {
+          "path": "negative-drop-wait-continuation.cfg",
+          "sha256": "48045c28ebef78e977d3369a5a49c31b846c941957bf0ec28592da885cd83799",
+          "bytes": 190
+        },
+        {
+          "path": "negative-error-spin.cfg",
+          "sha256": "1a0e125daae813f3f48285dd1c5940fd44a2a6741002847ed8b1849a28a17c3e",
+          "bytes": 179
+        },
+        {
+          "path": "negative-finish-clears-wait.cfg",
+          "sha256": "e38ffae4bfaed5780f37e5ffa2b6cdc8b9974a933fcdef8a398ef588ddc5e193",
+          "bytes": 189
+        },
+        {
+          "path": "negative-inherit-before-repeat.cfg",
+          "sha256": "8c9cea5ea8229962f0f186c373976d67207de349ce3e808cef6766648f34a6df",
+          "bytes": 189
+        },
+        {
+          "path": "negative-try-clears-wait.cfg",
+          "sha256": "f76ba1749647cee04422d213bfe1f2f23d7823426103bab9dd43702a0224c4b6",
+          "bytes": 182
+        },
+        {
+          "path": "overlap-all-try-starvation.cfg",
+          "sha256": "ebc95904abf2def2536fdc33f0df11187675a42759ec67b5ff4b0e7e5f377f5c",
+          "bytes": 244
+        },
+        {
+          "path": "overlap-wait-starvation.cfg",
+          "sha256": "3dadc57db496dbc03fe645e53fe736a57dfb108aa6098def54a5df6c49d542a6",
+          "bytes": 242
+        },
+        {
+          "path": "sticky-busy.cfg",
+          "sha256": "320d251b1131f0a51c8eb8763a4ff34abb7c99308295a05761cd77761dc32727",
+          "bytes": 424
+        },
+        {
+          "path": "sticky-carry.cfg",
+          "sha256": "53f1596c2f71e25cd0805d1e4be6a6f49fa1d8c4749a930fd3a640505a2257f3",
+          "bytes": 429
+        },
+        {
+          "path": "sticky-core.cfg",
+          "sha256": "4627cc27ad86f8235622d5c249e2ffdfb6868251338832600595849d35702762",
+          "bytes": 425
+        },
+        {
+          "path": "sticky-error.cfg",
+          "sha256": "c920cad795b7d4ab0a84793dc86bbf64a80bdf25c3e783a817665ab648b9c282",
+          "bytes": 425
+        },
+        {
+          "path": "sticky-zero.cfg",
+          "sha256": "788b005e72c9659848490e9f40dc7b9ada37f755fedd76c585b4fedf9f88a4c2",
+          "bytes": 424
+        }
+      ],
+      "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool_sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+      "archive_directory": "tlc/sticky-busy-r1",
+      "evidence": {
+        "result.json": {
+          "bytes": 8196,
+          "sha256": "3c853818c372b67cdb2e89fb3ef386f8e1325169f1765a21f5b4a9f0af076dc3"
+        },
+        "manifest.json": {
+          "bytes": 27169,
+          "sha256": "151b5203045814065fad847a695ff04134307ce69bd0e661ca7c9fd9d6fc15c0"
+        },
+        "tlc.log": {
+          "bytes": 2490,
+          "sha256": "78e6a36f2710ad676bdf5009965a5c9f47f067604387da5d68639a5227fb1adf"
+        },
+        "messages.json": {
+          "bytes": 1908,
+          "sha256": "58381b987ededec102078524d37b4ad39fa69d246371d1798e122fb447c59eb3"
+        }
+      }
+    },
+    {
+      "model": "sticky",
+      "profile": "sticky-carry",
+      "status": "PASS_WITHIN_SCOPE",
+      "classification": "safety",
+      "declared_scope_kind": "safety",
+      "expected_violation": null,
+      "actual_invariant_violation": [],
+      "temporal_violation": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "OwnerUnique",
+          "LockExclusion",
+          "FrozenMode",
+          "PendingWaitRetained",
+          "ClaimedWaitMode",
+          "CapabilityRetained",
+          "ClaimedCapability",
+          "WaitContinuation",
+          "NoRestoreDrivenRepeat",
+          "CurrentCoverage",
+          "ActualCommitOnly",
+          "MissEffectFree",
+          "CleanupOwnsSlot",
+          "DrainedOwner",
+          "StoppedOwnerDrained"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "OwnerUnique",
+          "LockExclusion",
+          "FrozenMode",
+          "PendingWaitRetained",
+          "ClaimedWaitMode",
+          "CapabilityRetained",
+          "ClaimedCapability",
+          "WaitContinuation",
+          "NoRestoreDrivenRepeat",
+          "CurrentCoverage",
+          "ActualCommitOnly",
+          "MissEffectFree",
+          "CleanupOwnsSlot",
+          "DrainedOwner",
+          "StoppedOwnerDrained"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": false,
+        "deadlock_reason": "Finite input completion or external indefinite wait is allowed; any declared temporal properties use only the stated fairness conditions.",
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "carry-gap",
+          "InitialMode": "wait",
+          "InitialRows": 2
+        },
+        "expected_outcome": "PASS_WITHIN_SCOPE",
+        "kind": "safety",
+        "minimum_distinct_states": 100,
+        "minimum_basis": "Separate request/start/owner/supply/SQL/cleanup/final-probe transitions; scenario-specific finite lower bound supplied before execution.",
+        "covered_interleavings_and_faults": [
+          "carry-gap",
+          "none"
+        ],
+        "excluded_behaviors": [
+          "full detailed G/W composition",
+          "actual PostgreSQL or JavaScript refinement",
+          "unbounded peer counts",
+          "latency"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "statistics": {
+        "generated_states": 7827,
+        "distinct_states": 2252,
+        "remaining_states": 0
+      },
+      "process": {
+        "exit_code": 0,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "started_at": "2026-11-19T02:39:32.950668+00:00",
+      "finished_at": "2026-11-19T02:39:34.842005+00:00",
+      "duration_seconds": 1.891377,
+      "implementation_status": "NOT_ASSESSED",
+      "executed_manifest_sha256": "151b5203045814065fad847a695ff04134307ce69bd0e661ca7c9fd9d6fc15c0",
+      "executed_input_files": [
+        {
+          "path": "StickyAdmission.tla",
+          "sha256": "ddb8eb90a9495e32cf6e34d44e10eceee6a04c1e39b2b6faa3d978fe5b4b35b0",
+          "bytes": 13145
+        },
+        {
+          "path": "finite-wait-service.cfg",
+          "sha256": "2e752ee8749636b533bb0ca8afd535d8bfd76afd8d2a89a9f70836f10165e0ea",
+          "bytes": 360
+        },
+        {
+          "path": "negative-busy-consumes-wait.cfg",
+          "sha256": "648dd3aff297a78786f681ae2820dd8c59e5c78a42f7b653e3c71c9f4746f03c",
+          "bytes": 184
+        },
+        {
+          "path": "negative-busy-spin.cfg",
+          "sha256": "e66634f96b3eadc9f497b8a92a43d29569041d5c227493a9a1c897afc7f2445d",
+          "bytes": 177
+        },
+        {
+          "path": "negative-drop-wait-continuation.cfg",
+          "sha256": "48045c28ebef78e977d3369a5a49c31b846c941957bf0ec28592da885cd83799",
+          "bytes": 190
+        },
+        {
+          "path": "negative-error-spin.cfg",
+          "sha256": "1a0e125daae813f3f48285dd1c5940fd44a2a6741002847ed8b1849a28a17c3e",
+          "bytes": 179
+        },
+        {
+          "path": "negative-finish-clears-wait.cfg",
+          "sha256": "e38ffae4bfaed5780f37e5ffa2b6cdc8b9974a933fcdef8a398ef588ddc5e193",
+          "bytes": 189
+        },
+        {
+          "path": "negative-inherit-before-repeat.cfg",
+          "sha256": "8c9cea5ea8229962f0f186c373976d67207de349ce3e808cef6766648f34a6df",
+          "bytes": 189
+        },
+        {
+          "path": "negative-try-clears-wait.cfg",
+          "sha256": "f76ba1749647cee04422d213bfe1f2f23d7823426103bab9dd43702a0224c4b6",
+          "bytes": 182
+        },
+        {
+          "path": "overlap-all-try-starvation.cfg",
+          "sha256": "ebc95904abf2def2536fdc33f0df11187675a42759ec67b5ff4b0e7e5f377f5c",
+          "bytes": 244
+        },
+        {
+          "path": "overlap-wait-starvation.cfg",
+          "sha256": "3dadc57db496dbc03fe645e53fe736a57dfb108aa6098def54a5df6c49d542a6",
+          "bytes": 242
+        },
+        {
+          "path": "sticky-busy.cfg",
+          "sha256": "320d251b1131f0a51c8eb8763a4ff34abb7c99308295a05761cd77761dc32727",
+          "bytes": 424
+        },
+        {
+          "path": "sticky-carry.cfg",
+          "sha256": "53f1596c2f71e25cd0805d1e4be6a6f49fa1d8c4749a930fd3a640505a2257f3",
+          "bytes": 429
+        },
+        {
+          "path": "sticky-core.cfg",
+          "sha256": "4627cc27ad86f8235622d5c249e2ffdfb6868251338832600595849d35702762",
+          "bytes": 425
+        },
+        {
+          "path": "sticky-error.cfg",
+          "sha256": "c920cad795b7d4ab0a84793dc86bbf64a80bdf25c3e783a817665ab648b9c282",
+          "bytes": 425
+        },
+        {
+          "path": "sticky-zero.cfg",
+          "sha256": "788b005e72c9659848490e9f40dc7b9ada37f755fedd76c585b4fedf9f88a4c2",
+          "bytes": 424
+        }
+      ],
+      "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool_sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+      "archive_directory": "tlc/sticky-carry-r1",
+      "evidence": {
+        "result.json": {
+          "bytes": 8344,
+          "sha256": "43a03e82eb9ef8e36cb83b81658ef6bc2ae0c3c798915a1ddb5b64b3838eed00"
+        },
+        "manifest.json": {
+          "bytes": 27169,
+          "sha256": "151b5203045814065fad847a695ff04134307ce69bd0e661ca7c9fd9d6fc15c0"
+        },
+        "tlc.log": {
+          "bytes": 2619,
+          "sha256": "2e63cdcde51129d9cccc91d84fa574168fbe6f7d8318513af599efd05b9676c0"
+        },
+        "messages.json": {
+          "bytes": 1908,
+          "sha256": "7bc482aa9e1ca95bbaa7bb00a0f5e0a5d99f5b839833084c2214c84b35bf09bd"
+        }
+      }
+    },
+    {
+      "model": "sticky",
+      "profile": "sticky-core",
+      "status": "PASS_WITHIN_SCOPE",
+      "classification": "safety",
+      "declared_scope_kind": "safety",
+      "expected_violation": null,
+      "actual_invariant_violation": [],
+      "temporal_violation": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "OwnerUnique",
+          "LockExclusion",
+          "FrozenMode",
+          "PendingWaitRetained",
+          "ClaimedWaitMode",
+          "CapabilityRetained",
+          "ClaimedCapability",
+          "WaitContinuation",
+          "NoRestoreDrivenRepeat",
+          "CurrentCoverage",
+          "ActualCommitOnly",
+          "MissEffectFree",
+          "CleanupOwnsSlot",
+          "DrainedOwner",
+          "StoppedOwnerDrained"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "OwnerUnique",
+          "LockExclusion",
+          "FrozenMode",
+          "PendingWaitRetained",
+          "ClaimedWaitMode",
+          "CapabilityRetained",
+          "ClaimedCapability",
+          "WaitContinuation",
+          "NoRestoreDrivenRepeat",
+          "CurrentCoverage",
+          "ActualCommitOnly",
+          "MissEffectFree",
+          "CleanupOwnsSlot",
+          "DrainedOwner",
+          "StoppedOwnerDrained"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": false,
+        "deadlock_reason": "Finite input completion or external indefinite wait is allowed; any declared temporal properties use only the stated fairness conditions.",
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "normal",
+          "InitialMode": "try",
+          "InitialRows": 1
+        },
+        "expected_outcome": "PASS_WITHIN_SCOPE",
+        "kind": "safety",
+        "minimum_distinct_states": 100,
+        "minimum_basis": "Separate request/start/owner/supply/SQL/cleanup/final-probe transitions; scenario-specific finite lower bound supplied before execution.",
+        "covered_interleavings_and_faults": [
+          "normal",
+          "none"
+        ],
+        "excluded_behaviors": [
+          "full detailed G/W composition",
+          "actual PostgreSQL or JavaScript refinement",
+          "unbounded peer counts",
+          "latency"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "statistics": {
+        "generated_states": 32708,
+        "distinct_states": 8937,
+        "remaining_states": 0
+      },
+      "process": {
+        "exit_code": 0,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "started_at": "2026-11-19T02:38:19.159246+00:00",
+      "finished_at": "2026-11-19T02:38:21.037778+00:00",
+      "duration_seconds": 1.87862,
+      "implementation_status": "NOT_ASSESSED",
+      "executed_manifest_sha256": "151b5203045814065fad847a695ff04134307ce69bd0e661ca7c9fd9d6fc15c0",
+      "executed_input_files": [
+        {
+          "path": "StickyAdmission.tla",
+          "sha256": "ddb8eb90a9495e32cf6e34d44e10eceee6a04c1e39b2b6faa3d978fe5b4b35b0",
+          "bytes": 13145
+        },
+        {
+          "path": "finite-wait-service.cfg",
+          "sha256": "2e752ee8749636b533bb0ca8afd535d8bfd76afd8d2a89a9f70836f10165e0ea",
+          "bytes": 360
+        },
+        {
+          "path": "negative-busy-consumes-wait.cfg",
+          "sha256": "648dd3aff297a78786f681ae2820dd8c59e5c78a42f7b653e3c71c9f4746f03c",
+          "bytes": 184
+        },
+        {
+          "path": "negative-busy-spin.cfg",
+          "sha256": "e66634f96b3eadc9f497b8a92a43d29569041d5c227493a9a1c897afc7f2445d",
+          "bytes": 177
+        },
+        {
+          "path": "negative-drop-wait-continuation.cfg",
+          "sha256": "48045c28ebef78e977d3369a5a49c31b846c941957bf0ec28592da885cd83799",
+          "bytes": 190
+        },
+        {
+          "path": "negative-error-spin.cfg",
+          "sha256": "1a0e125daae813f3f48285dd1c5940fd44a2a6741002847ed8b1849a28a17c3e",
+          "bytes": 179
+        },
+        {
+          "path": "negative-finish-clears-wait.cfg",
+          "sha256": "e38ffae4bfaed5780f37e5ffa2b6cdc8b9974a933fcdef8a398ef588ddc5e193",
+          "bytes": 189
+        },
+        {
+          "path": "negative-inherit-before-repeat.cfg",
+          "sha256": "8c9cea5ea8229962f0f186c373976d67207de349ce3e808cef6766648f34a6df",
+          "bytes": 189
+        },
+        {
+          "path": "negative-try-clears-wait.cfg",
+          "sha256": "f76ba1749647cee04422d213bfe1f2f23d7823426103bab9dd43702a0224c4b6",
+          "bytes": 182
+        },
+        {
+          "path": "overlap-all-try-starvation.cfg",
+          "sha256": "ebc95904abf2def2536fdc33f0df11187675a42759ec67b5ff4b0e7e5f377f5c",
+          "bytes": 244
+        },
+        {
+          "path": "overlap-wait-starvation.cfg",
+          "sha256": "3dadc57db496dbc03fe645e53fe736a57dfb108aa6098def54a5df6c49d542a6",
+          "bytes": 242
+        },
+        {
+          "path": "sticky-busy.cfg",
+          "sha256": "320d251b1131f0a51c8eb8763a4ff34abb7c99308295a05761cd77761dc32727",
+          "bytes": 424
+        },
+        {
+          "path": "sticky-carry.cfg",
+          "sha256": "53f1596c2f71e25cd0805d1e4be6a6f49fa1d8c4749a930fd3a640505a2257f3",
+          "bytes": 429
+        },
+        {
+          "path": "sticky-core.cfg",
+          "sha256": "4627cc27ad86f8235622d5c249e2ffdfb6868251338832600595849d35702762",
+          "bytes": 425
+        },
+        {
+          "path": "sticky-error.cfg",
+          "sha256": "c920cad795b7d4ab0a84793dc86bbf64a80bdf25c3e783a817665ab648b9c282",
+          "bytes": 425
+        },
+        {
+          "path": "sticky-zero.cfg",
+          "sha256": "788b005e72c9659848490e9f40dc7b9ada37f755fedd76c585b4fedf9f88a4c2",
+          "bytes": 424
+        }
+      ],
+      "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool_sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+      "archive_directory": "tlc/sticky-core-r1",
+      "evidence": {
+        "result.json": {
+          "bytes": 8199,
+          "sha256": "0ad8b5e50092e6101e9c2c2269ac8f3484c0db8e7fe16c246841fa9c5c789935"
+        },
+        "manifest.json": {
+          "bytes": 27169,
+          "sha256": "151b5203045814065fad847a695ff04134307ce69bd0e661ca7c9fd9d6fc15c0"
+        },
+        "tlc.log": {
+          "bytes": 2495,
+          "sha256": "68677f6dd4823e14f2469d05a69ebb1bbbd2be35d67cbbc4b4d4ecb5b584c7b5"
+        },
+        "messages.json": {
+          "bytes": 1913,
+          "sha256": "7c57e7350505913c352de4815a4ef24fdb687df499c5b26e957fb7e85e0e29fe"
+        }
+      }
+    },
+    {
+      "model": "sticky",
+      "profile": "sticky-error",
+      "status": "PASS_WITHIN_SCOPE",
+      "classification": "safety",
+      "declared_scope_kind": "safety",
+      "expected_violation": null,
+      "actual_invariant_violation": [],
+      "temporal_violation": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "OwnerUnique",
+          "LockExclusion",
+          "FrozenMode",
+          "PendingWaitRetained",
+          "ClaimedWaitMode",
+          "CapabilityRetained",
+          "ClaimedCapability",
+          "WaitContinuation",
+          "NoRestoreDrivenRepeat",
+          "CurrentCoverage",
+          "ActualCommitOnly",
+          "MissEffectFree",
+          "CleanupOwnsSlot",
+          "DrainedOwner",
+          "StoppedOwnerDrained"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "OwnerUnique",
+          "LockExclusion",
+          "FrozenMode",
+          "PendingWaitRetained",
+          "ClaimedWaitMode",
+          "CapabilityRetained",
+          "ClaimedCapability",
+          "WaitContinuation",
+          "NoRestoreDrivenRepeat",
+          "CurrentCoverage",
+          "ActualCommitOnly",
+          "MissEffectFree",
+          "CleanupOwnsSlot",
+          "DrainedOwner",
+          "StoppedOwnerDrained"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": false,
+        "deadlock_reason": "Finite input completion or external indefinite wait is allowed; any declared temporal properties use only the stated fairness conditions.",
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "error",
+          "InitialMode": "wait",
+          "InitialRows": 1
+        },
+        "expected_outcome": "PASS_WITHIN_SCOPE",
+        "kind": "safety",
+        "minimum_distinct_states": 100,
+        "minimum_basis": "Separate request/start/owner/supply/SQL/cleanup/final-probe transitions; scenario-specific finite lower bound supplied before execution.",
+        "covered_interleavings_and_faults": [
+          "error",
+          "none"
+        ],
+        "excluded_behaviors": [
+          "full detailed G/W composition",
+          "actual PostgreSQL or JavaScript refinement",
+          "unbounded peer counts",
+          "latency"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "statistics": {
+        "generated_states": 4043,
+        "distinct_states": 1126,
+        "remaining_states": 0
+      },
+      "process": {
+        "exit_code": 0,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "started_at": "2026-11-19T02:39:32.953295+00:00",
+      "finished_at": "2026-11-19T02:39:35.056109+00:00",
+      "duration_seconds": 2.10285,
+      "implementation_status": "NOT_ASSESSED",
+      "executed_manifest_sha256": "151b5203045814065fad847a695ff04134307ce69bd0e661ca7c9fd9d6fc15c0",
+      "executed_input_files": [
+        {
+          "path": "StickyAdmission.tla",
+          "sha256": "ddb8eb90a9495e32cf6e34d44e10eceee6a04c1e39b2b6faa3d978fe5b4b35b0",
+          "bytes": 13145
+        },
+        {
+          "path": "finite-wait-service.cfg",
+          "sha256": "2e752ee8749636b533bb0ca8afd535d8bfd76afd8d2a89a9f70836f10165e0ea",
+          "bytes": 360
+        },
+        {
+          "path": "negative-busy-consumes-wait.cfg",
+          "sha256": "648dd3aff297a78786f681ae2820dd8c59e5c78a42f7b653e3c71c9f4746f03c",
+          "bytes": 184
+        },
+        {
+          "path": "negative-busy-spin.cfg",
+          "sha256": "e66634f96b3eadc9f497b8a92a43d29569041d5c227493a9a1c897afc7f2445d",
+          "bytes": 177
+        },
+        {
+          "path": "negative-drop-wait-continuation.cfg",
+          "sha256": "48045c28ebef78e977d3369a5a49c31b846c941957bf0ec28592da885cd83799",
+          "bytes": 190
+        },
+        {
+          "path": "negative-error-spin.cfg",
+          "sha256": "1a0e125daae813f3f48285dd1c5940fd44a2a6741002847ed8b1849a28a17c3e",
+          "bytes": 179
+        },
+        {
+          "path": "negative-finish-clears-wait.cfg",
+          "sha256": "e38ffae4bfaed5780f37e5ffa2b6cdc8b9974a933fcdef8a398ef588ddc5e193",
+          "bytes": 189
+        },
+        {
+          "path": "negative-inherit-before-repeat.cfg",
+          "sha256": "8c9cea5ea8229962f0f186c373976d67207de349ce3e808cef6766648f34a6df",
+          "bytes": 189
+        },
+        {
+          "path": "negative-try-clears-wait.cfg",
+          "sha256": "f76ba1749647cee04422d213bfe1f2f23d7823426103bab9dd43702a0224c4b6",
+          "bytes": 182
+        },
+        {
+          "path": "overlap-all-try-starvation.cfg",
+          "sha256": "ebc95904abf2def2536fdc33f0df11187675a42759ec67b5ff4b0e7e5f377f5c",
+          "bytes": 244
+        },
+        {
+          "path": "overlap-wait-starvation.cfg",
+          "sha256": "3dadc57db496dbc03fe645e53fe736a57dfb108aa6098def54a5df6c49d542a6",
+          "bytes": 242
+        },
+        {
+          "path": "sticky-busy.cfg",
+          "sha256": "320d251b1131f0a51c8eb8763a4ff34abb7c99308295a05761cd77761dc32727",
+          "bytes": 424
+        },
+        {
+          "path": "sticky-carry.cfg",
+          "sha256": "53f1596c2f71e25cd0805d1e4be6a6f49fa1d8c4749a930fd3a640505a2257f3",
+          "bytes": 429
+        },
+        {
+          "path": "sticky-core.cfg",
+          "sha256": "4627cc27ad86f8235622d5c249e2ffdfb6868251338832600595849d35702762",
+          "bytes": 425
+        },
+        {
+          "path": "sticky-error.cfg",
+          "sha256": "c920cad795b7d4ab0a84793dc86bbf64a80bdf25c3e783a817665ab648b9c282",
+          "bytes": 425
+        },
+        {
+          "path": "sticky-zero.cfg",
+          "sha256": "788b005e72c9659848490e9f40dc7b9ada37f755fedd76c585b4fedf9f88a4c2",
+          "bytes": 424
+        }
+      ],
+      "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool_sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+      "archive_directory": "tlc/sticky-error-r1",
+      "evidence": {
+        "result.json": {
+          "bytes": 8335,
+          "sha256": "0f8e51df54256a83ebd544f52e961888290ab06f3fee748f2f0492b59fcef6e2"
+        },
+        "manifest.json": {
+          "bytes": 27169,
+          "sha256": "151b5203045814065fad847a695ff04134307ce69bd0e661ca7c9fd9d6fc15c0"
+        },
+        "tlc.log": {
+          "bytes": 2619,
+          "sha256": "3d35afe0818d1f071145e53cb85a8dcafc9a442a5ef4f7cb17d0bf69c6f38dd3"
+        },
+        "messages.json": {
+          "bytes": 1908,
+          "sha256": "2e0774d811f2f251ed5017016412f7b2097cfa59e36ade93533da8261e8e401f"
+        }
+      }
+    },
+    {
+      "model": "sticky",
+      "profile": "sticky-zero",
+      "status": "PASS_WITHIN_SCOPE",
+      "classification": "safety",
+      "declared_scope_kind": "safety",
+      "expected_violation": null,
+      "actual_invariant_violation": [],
+      "temporal_violation": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "OwnerUnique",
+          "LockExclusion",
+          "FrozenMode",
+          "PendingWaitRetained",
+          "ClaimedWaitMode",
+          "CapabilityRetained",
+          "ClaimedCapability",
+          "WaitContinuation",
+          "NoRestoreDrivenRepeat",
+          "CurrentCoverage",
+          "ActualCommitOnly",
+          "MissEffectFree",
+          "CleanupOwnsSlot",
+          "DrainedOwner",
+          "StoppedOwnerDrained"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "OwnerUnique",
+          "LockExclusion",
+          "FrozenMode",
+          "PendingWaitRetained",
+          "ClaimedWaitMode",
+          "CapabilityRetained",
+          "ClaimedCapability",
+          "WaitContinuation",
+          "NoRestoreDrivenRepeat",
+          "CurrentCoverage",
+          "ActualCommitOnly",
+          "MissEffectFree",
+          "CleanupOwnsSlot",
+          "DrainedOwner",
+          "StoppedOwnerDrained"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": false,
+        "deadlock_reason": "Finite input completion or external indefinite wait is allowed; any declared temporal properties use only the stated fairness conditions.",
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "zero",
+          "InitialMode": "wait",
+          "InitialRows": 1
+        },
+        "expected_outcome": "PASS_WITHIN_SCOPE",
+        "kind": "safety",
+        "minimum_distinct_states": 20,
+        "minimum_basis": "Separate request/start/owner/supply/SQL/cleanup/final-probe transitions; scenario-specific finite lower bound supplied before execution.",
+        "covered_interleavings_and_faults": [
+          "zero",
+          "none"
+        ],
+        "excluded_behaviors": [
+          "full detailed G/W composition",
+          "actual PostgreSQL or JavaScript refinement",
+          "unbounded peer counts",
+          "latency"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "statistics": {
+        "generated_states": 447,
+        "distinct_states": 132,
+        "remaining_states": 0
+      },
+      "process": {
+        "exit_code": 0,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "started_at": "2026-11-19T02:41:11.228555+00:00",
+      "finished_at": "2026-11-19T02:41:13.243455+00:00",
+      "duration_seconds": 2.014948,
+      "implementation_status": "NOT_ASSESSED",
+      "executed_manifest_sha256": "151b5203045814065fad847a695ff04134307ce69bd0e661ca7c9fd9d6fc15c0",
+      "executed_input_files": [
+        {
+          "path": "StickyAdmission.tla",
+          "sha256": "ddb8eb90a9495e32cf6e34d44e10eceee6a04c1e39b2b6faa3d978fe5b4b35b0",
+          "bytes": 13145
+        },
+        {
+          "path": "finite-wait-service.cfg",
+          "sha256": "2e752ee8749636b533bb0ca8afd535d8bfd76afd8d2a89a9f70836f10165e0ea",
+          "bytes": 360
+        },
+        {
+          "path": "negative-busy-consumes-wait.cfg",
+          "sha256": "648dd3aff297a78786f681ae2820dd8c59e5c78a42f7b653e3c71c9f4746f03c",
+          "bytes": 184
+        },
+        {
+          "path": "negative-busy-spin.cfg",
+          "sha256": "e66634f96b3eadc9f497b8a92a43d29569041d5c227493a9a1c897afc7f2445d",
+          "bytes": 177
+        },
+        {
+          "path": "negative-drop-wait-continuation.cfg",
+          "sha256": "48045c28ebef78e977d3369a5a49c31b846c941957bf0ec28592da885cd83799",
+          "bytes": 190
+        },
+        {
+          "path": "negative-error-spin.cfg",
+          "sha256": "1a0e125daae813f3f48285dd1c5940fd44a2a6741002847ed8b1849a28a17c3e",
+          "bytes": 179
+        },
+        {
+          "path": "negative-finish-clears-wait.cfg",
+          "sha256": "e38ffae4bfaed5780f37e5ffa2b6cdc8b9974a933fcdef8a398ef588ddc5e193",
+          "bytes": 189
+        },
+        {
+          "path": "negative-inherit-before-repeat.cfg",
+          "sha256": "8c9cea5ea8229962f0f186c373976d67207de349ce3e808cef6766648f34a6df",
+          "bytes": 189
+        },
+        {
+          "path": "negative-try-clears-wait.cfg",
+          "sha256": "f76ba1749647cee04422d213bfe1f2f23d7823426103bab9dd43702a0224c4b6",
+          "bytes": 182
+        },
+        {
+          "path": "overlap-all-try-starvation.cfg",
+          "sha256": "ebc95904abf2def2536fdc33f0df11187675a42759ec67b5ff4b0e7e5f377f5c",
+          "bytes": 244
+        },
+        {
+          "path": "overlap-wait-starvation.cfg",
+          "sha256": "3dadc57db496dbc03fe645e53fe736a57dfb108aa6098def54a5df6c49d542a6",
+          "bytes": 242
+        },
+        {
+          "path": "sticky-busy.cfg",
+          "sha256": "320d251b1131f0a51c8eb8763a4ff34abb7c99308295a05761cd77761dc32727",
+          "bytes": 424
+        },
+        {
+          "path": "sticky-carry.cfg",
+          "sha256": "53f1596c2f71e25cd0805d1e4be6a6f49fa1d8c4749a930fd3a640505a2257f3",
+          "bytes": 429
+        },
+        {
+          "path": "sticky-core.cfg",
+          "sha256": "4627cc27ad86f8235622d5c249e2ffdfb6868251338832600595849d35702762",
+          "bytes": 425
+        },
+        {
+          "path": "sticky-error.cfg",
+          "sha256": "c920cad795b7d4ab0a84793dc86bbf64a80bdf25c3e783a817665ab648b9c282",
+          "bytes": 425
+        },
+        {
+          "path": "sticky-zero.cfg",
+          "sha256": "788b005e72c9659848490e9f40dc7b9ada37f755fedd76c585b4fedf9f88a4c2",
+          "bytes": 424
+        }
+      ],
+      "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool_sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+      "archive_directory": "tlc/sticky-zero-r1",
+      "evidence": {
+        "result.json": {
+          "bytes": 8318,
+          "sha256": "0441dd0948f319c3b2a7ed9df661bb584615f6e6911a25a01ae3a6f682f7cc05"
+        },
+        "manifest.json": {
+          "bytes": 27169,
+          "sha256": "151b5203045814065fad847a695ff04134307ce69bd0e661ca7c9fd9d6fc15c0"
+        },
+        "tlc.log": {
+          "bytes": 2609,
+          "sha256": "c9f45719521993ef9c3824ebafafb6ecaafbb44d9a1c43564618ab464c4128d5"
+        },
+        "messages.json": {
+          "bytes": 1902,
+          "sha256": "111eba428ebe8d7cffcce65cffe5c515e86f427b966c4297d430c25662a7d15f"
+        }
+      }
+    },
+    {
+      "model": "wave",
+      "profile": "try-one-record-close",
+      "status": "PASS_WITHIN_SCOPE",
+      "classification": "safety",
+      "declared_scope_kind": "safety",
+      "expected_violation": null,
+      "actual_invariant_violation": [],
+      "temporal_violation": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "SingleSlots",
+          "PeerBudget",
+          "FiniteWave",
+          "LockExclusion",
+          "AdmissionSettled",
+          "DrainedOwner",
+          "NoSQLCancellation",
+          "NoNewAfterStop",
+          "OrderedAttempts",
+          "ExactRowCommit",
+          "ActualCommitOnly",
+          "PendingBlocks",
+          "CurrentCoverage",
+          "SentProof",
+          "FailureDoesNotAdvance",
+          "SuccessfulSentRetained",
+          "NoStaleSend",
+          "FixedAuthorizedHead",
+          "RPCBoundary",
+          "NoBusyRetry",
+          "ProgressOpportunity",
+          "MissCleanupHeld",
+          "MissEffectFree"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "SingleSlots",
+          "PeerBudget",
+          "FiniteWave",
+          "LockExclusion",
+          "AdmissionSettled",
+          "DrainedOwner",
+          "NoSQLCancellation",
+          "NoNewAfterStop",
+          "OrderedAttempts",
+          "ExactRowCommit",
+          "ActualCommitOnly",
+          "PendingBlocks",
+          "CurrentCoverage",
+          "SentProof",
+          "FailureDoesNotAdvance",
+          "SuccessfulSentRetained",
+          "NoStaleSend",
+          "FixedAuthorizedHead",
+          "RPCBoundary",
+          "NoBusyRetry",
+          "ProgressOpportunity",
+          "MissCleanupHeld",
+          "MissEffectFree"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": false,
+        "deadlock_reason": "Finite inputs may finish and external operations may stall; this profile makes no termination or liveness claim.",
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "close",
+          "Budget": 1,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 1,
+          "ProgressLock": "try"
+        },
+        "expected_outcome": "PASS_WITHIN_SCOPE",
+        "kind": "safety",
+        "minimum_distinct_states": 100,
+        "minimum_basis": "Scenario-specific split G/W/SQL and cleanup paths; declared before execution.",
+        "covered_interleavings_and_faults": [
+          "close",
+          "none",
+          "fixed finite records"
+        ],
+        "excluded_behaviors": [
+          "outer publisher",
+          "JavaScript refinement",
+          "PG fairness or writer preference",
+          "real time"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "statistics": {
+        "generated_states": 3798,
+        "distinct_states": 2012,
+        "remaining_states": 0
+      },
+      "process": {
+        "exit_code": 0,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "started_at": "2026-11-19T02:49:33.780324+00:00",
+      "finished_at": "2026-11-19T02:49:36.034757+00:00",
+      "duration_seconds": 2.25447,
+      "implementation_status": "NOT_ASSESSED",
+      "executed_manifest_sha256": "184c8fb8e720e89f3dd162c93c79c8645713f0cbc9e10ce70112573f0a618c41",
+      "executed_input_files": [
+        {
+          "path": "WaveAdmission.tla",
+          "sha256": "859e047d291f70215222caf2885a94ce89cdfb83800fd767216d7eb3318eb897",
+          "bytes": 19519
+        },
+        {
+          "path": "negative-early-miss-settle.cfg",
+          "sha256": "8e3c6cf154d357c10c2d7e03549940a76ba2a155e38128a01354443d2ae32a4d",
+          "bytes": 239
+        },
+        {
+          "path": "negative-miss-publishes.cfg",
+          "sha256": "5efec9893c7b73f4a630fdfd3db5fc84ef43c3d4cadc4a69d0b3829b48d6119f",
+          "bytes": 235
+        },
+        {
+          "path": "negative-reuse-dirty-client.cfg",
+          "sha256": "ab525444eef1722a91bc1b28a9a229c36769f0b00c066d3d8b2998c52192305a",
+          "bytes": 248
+        },
+        {
+          "path": "negative-unknown-as-miss.cfg",
+          "sha256": "f3f9375e5d3c6bae5492f729a292327ebd418754b1f6caa95573843897fc0c5c",
+          "bytes": 239
+        },
+        {
+          "path": "positive-try-one-record.cfg",
+          "sha256": "5270ba6959164181a99158d96a3ddde7d414a23fd179144840183e02bc6c3cae",
+          "bytes": 605
+        },
+        {
+          "path": "try-one-record-close.cfg",
+          "sha256": "dc7e89474a7dcacaccabffd15acfc858ccd54fbe896794781a6422de02dd821c",
+          "bytes": 606
+        },
+        {
+          "path": "try-two-record-failure.cfg",
+          "sha256": "268ef87d0dd8ae86da5e5945b67656f6b4870cd1b096e516d9dd78de93857e1e",
+          "bytes": 648
+        },
+        {
+          "path": "witness-closed-drained.cfg",
+          "sha256": "f0edc7d27478fdf3c89a5dbc58c3ee9e8641b4ca5e16518a445f95dcd9922c0b",
+          "bytes": 228
+        },
+        {
+          "path": "witness-miss-while-wave.cfg",
+          "sha256": "083b4d93fccbc4808095b796e86c3e63d43aa623cc0d5dee6e34fc8764a9459e",
+          "bytes": 227
+        }
+      ],
+      "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool_sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+      "archive_directory": "tlc/try-one-record-close-r1",
+      "evidence": {
+        "result.json": {
+          "bytes": 7713,
+          "sha256": "75e1641bd62d88d8c7b278436748c6b55ba56bb2b0bdf887aba0c96270caa1f0"
+        },
+        "manifest.json": {
+          "bytes": 16256,
+          "sha256": "184c8fb8e720e89f3dd162c93c79c8645713f0cbc9e10ce70112573f0a618c41"
+        },
+        "tlc.log": {
+          "bytes": 2831,
+          "sha256": "31e758626004e897e762c046ba781512e3857c67ed14650b67d1aa8cea72911a"
+        },
+        "messages.json": {
+          "bytes": 1909,
+          "sha256": "5434fab475b5c8c902f099c5cc5c596980c39a413207c1b808e6b8a50232f09e"
+        }
+      }
+    },
+    {
+      "model": "wave",
+      "profile": "try-two-record-failure",
+      "status": "PASS_WITHIN_SCOPE",
+      "classification": "safety",
+      "declared_scope_kind": "safety",
+      "expected_violation": null,
+      "actual_invariant_violation": [],
+      "temporal_violation": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "SingleSlots",
+          "PeerBudget",
+          "FiniteWave",
+          "LockExclusion",
+          "AdmissionSettled",
+          "DrainedOwner",
+          "NoSQLCancellation",
+          "NoNewAfterStop",
+          "OrderedAttempts",
+          "ExactRowCommit",
+          "ActualCommitOnly",
+          "PendingBlocks",
+          "CurrentCoverage",
+          "SentProof",
+          "FailureDoesNotAdvance",
+          "SuccessfulSentRetained",
+          "NoStaleSend",
+          "FixedAuthorizedHead",
+          "RPCBoundary",
+          "NoBusyRetry",
+          "ProgressOpportunity",
+          "MissCleanupHeld",
+          "MissEffectFree",
+          "MissFailureDiscarded",
+          "UnknownNotMiss"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "SingleSlots",
+          "PeerBudget",
+          "FiniteWave",
+          "LockExclusion",
+          "AdmissionSettled",
+          "DrainedOwner",
+          "NoSQLCancellation",
+          "NoNewAfterStop",
+          "OrderedAttempts",
+          "ExactRowCommit",
+          "ActualCommitOnly",
+          "PendingBlocks",
+          "CurrentCoverage",
+          "SentProof",
+          "FailureDoesNotAdvance",
+          "SuccessfulSentRetained",
+          "NoStaleSend",
+          "FixedAuthorizedHead",
+          "RPCBoundary",
+          "NoBusyRetry",
+          "ProgressOpportunity",
+          "MissCleanupHeld",
+          "MissEffectFree",
+          "MissFailureDiscarded",
+          "UnknownNotMiss"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": false,
+        "deadlock_reason": "Finite inputs may finish and external operations may stall; this profile makes no termination or liveness claim.",
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "failure",
+          "Budget": 1,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 2,
+          "ProgressLock": "try"
+        },
+        "expected_outcome": "PASS_WITHIN_SCOPE",
+        "kind": "safety",
+        "minimum_distinct_states": 100,
+        "minimum_basis": "Scenario-specific split G/W/SQL and cleanup paths; declared before execution.",
+        "covered_interleavings_and_faults": [
+          "failure",
+          "none",
+          "fixed finite records"
+        ],
+        "excluded_behaviors": [
+          "outer publisher",
+          "JavaScript refinement",
+          "PG fairness or writer preference",
+          "real time"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "statistics": {
+        "generated_states": 5131,
+        "distinct_states": 2828,
+        "remaining_states": 0
+      },
+      "process": {
+        "exit_code": 0,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "started_at": "2026-11-19T02:49:15.556621+00:00",
+      "finished_at": "2026-11-19T02:49:18.299590+00:00",
+      "duration_seconds": 2.743006,
+      "implementation_status": "NOT_ASSESSED",
+      "executed_manifest_sha256": "184c8fb8e720e89f3dd162c93c79c8645713f0cbc9e10ce70112573f0a618c41",
+      "executed_input_files": [
+        {
+          "path": "WaveAdmission.tla",
+          "sha256": "859e047d291f70215222caf2885a94ce89cdfb83800fd767216d7eb3318eb897",
+          "bytes": 19519
+        },
+        {
+          "path": "negative-early-miss-settle.cfg",
+          "sha256": "8e3c6cf154d357c10c2d7e03549940a76ba2a155e38128a01354443d2ae32a4d",
+          "bytes": 239
+        },
+        {
+          "path": "negative-miss-publishes.cfg",
+          "sha256": "5efec9893c7b73f4a630fdfd3db5fc84ef43c3d4cadc4a69d0b3829b48d6119f",
+          "bytes": 235
+        },
+        {
+          "path": "negative-reuse-dirty-client.cfg",
+          "sha256": "ab525444eef1722a91bc1b28a9a229c36769f0b00c066d3d8b2998c52192305a",
+          "bytes": 248
+        },
+        {
+          "path": "negative-unknown-as-miss.cfg",
+          "sha256": "f3f9375e5d3c6bae5492f729a292327ebd418754b1f6caa95573843897fc0c5c",
+          "bytes": 239
+        },
+        {
+          "path": "positive-try-one-record.cfg",
+          "sha256": "5270ba6959164181a99158d96a3ddde7d414a23fd179144840183e02bc6c3cae",
+          "bytes": 605
+        },
+        {
+          "path": "try-one-record-close.cfg",
+          "sha256": "dc7e89474a7dcacaccabffd15acfc858ccd54fbe896794781a6422de02dd821c",
+          "bytes": 606
+        },
+        {
+          "path": "try-two-record-failure.cfg",
+          "sha256": "268ef87d0dd8ae86da5e5945b67656f6b4870cd1b096e516d9dd78de93857e1e",
+          "bytes": 648
+        },
+        {
+          "path": "witness-closed-drained.cfg",
+          "sha256": "f0edc7d27478fdf3c89a5dbc58c3ee9e8641b4ca5e16518a445f95dcd9922c0b",
+          "bytes": 228
+        },
+        {
+          "path": "witness-miss-while-wave.cfg",
+          "sha256": "083b4d93fccbc4808095b796e86c3e63d43aa623cc0d5dee6e34fc8764a9459e",
+          "bytes": 227
+        }
+      ],
+      "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool_sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+      "archive_directory": "tlc/try-two-record-failure-r1",
+      "evidence": {
+        "result.json": {
+          "bytes": 7727,
+          "sha256": "99f0aacad9db2a357e0daeea3da9b66a3de649c1501b5836e0d337adf14f5393"
+        },
+        "manifest.json": {
+          "bytes": 16256,
+          "sha256": "184c8fb8e720e89f3dd162c93c79c8645713f0cbc9e10ce70112573f0a618c41"
+        },
+        "tlc.log": {
+          "bytes": 2716,
+          "sha256": "df7f59cb3448ff956aaea4fef7bf1a0f10597871481739c6d33a5b3706f396ad"
+        },
+        "messages.json": {
+          "bytes": 1909,
+          "sha256": "a627336dcae226cafcc3599d4e1f78f505e747d55e7af66df811c53d98605881"
+        }
+      }
+    },
+    {
+      "model": "wave",
+      "profile": "negative-early-miss-settle",
+      "status": "COUNTEREXAMPLE",
+      "classification": "negative_control",
+      "declared_scope_kind": "negative_control",
+      "expected_violation": "MissCleanupHeld",
+      "actual_invariant_violation": [
+        "MissCleanupHeld"
+      ],
+      "temporal_violation": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "MissCleanupHeld"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "MissCleanupHeld"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": false,
+        "deadlock_reason": "Finite inputs may finish and external operations may stall; this profile makes no termination or liveness claim.",
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "early-miss-settle",
+          "Scenario": "core",
+          "Budget": 1,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 1,
+          "ProgressLock": "try"
+        },
+        "expected_outcome": "COUNTEREXAMPLE",
+        "expected_violation": "MissCleanupHeld",
+        "kind": "negative_control",
+        "minimum_distinct_states": 9,
+        "minimum_basis": "Explicit path from admission through world commit, wave/lane/SQL/read and try miss; early release adds one transition.",
+        "covered_interleavings_and_faults": [
+          "negative-early-miss-settle"
+        ],
+        "excluded_behaviors": [
+          "full safety proof",
+          "liveness",
+          "JavaScript implementation refinement"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "statistics": {
+        "generated_states": 94,
+        "distinct_states": 63,
+        "remaining_states": 16
+      },
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "started_at": "2026-11-19T02:32:29.509696+00:00",
+      "finished_at": "2026-11-19T02:32:31.592875+00:00",
+      "duration_seconds": 2.083218,
+      "implementation_status": "NOT_ASSESSED",
+      "executed_manifest_sha256": "797bebff6551dfe0d380e1c0d61c54f86c5bcf7b8fbf851da8d41db7b63e5267",
+      "executed_input_files": [
+        {
+          "path": "WaveAdmission.tla",
+          "sha256": "859e047d291f70215222caf2885a94ce89cdfb83800fd767216d7eb3318eb897",
+          "bytes": 19519
+        },
+        {
+          "path": "negative-early-miss-settle.cfg",
+          "sha256": "8e3c6cf154d357c10c2d7e03549940a76ba2a155e38128a01354443d2ae32a4d",
+          "bytes": 239
+        },
+        {
+          "path": "negative-miss-publishes.cfg",
+          "sha256": "5efec9893c7b73f4a630fdfd3db5fc84ef43c3d4cadc4a69d0b3829b48d6119f",
+          "bytes": 235
+        },
+        {
+          "path": "positive-try-one-record.cfg",
+          "sha256": "5270ba6959164181a99158d96a3ddde7d414a23fd179144840183e02bc6c3cae",
+          "bytes": 605
+        },
+        {
+          "path": "witness-miss-while-wave.cfg",
+          "sha256": "083b4d93fccbc4808095b796e86c3e63d43aa623cc0d5dee6e34fc8764a9459e",
+          "bytes": 227
+        }
+      ],
+      "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool_sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+      "archive_directory": "tlc/wave-negative-early-miss-settle-r1",
+      "evidence": {
+        "result.json": {
+          "bytes": 6028,
+          "sha256": "8851f2918026ba8c1583ef92c5e39f6282e32e977a074d1f1ee5b0154cdee054"
+        },
+        "manifest.json": {
+          "bytes": 7585,
+          "sha256": "797bebff6551dfe0d380e1c0d61c54f86c5bcf7b8fbf851da8d41db7b63e5267"
+        },
+        "tlc.log": {
+          "bytes": 23414,
+          "sha256": "633f6a75f17a26aa3a2af09e2516bdd5d32ef67270f37dd12f450722bccef94e"
+        },
+        "messages.json": {
+          "bytes": 23456,
+          "sha256": "df4a396763151b6aa9099036d9d1fe6656d55f2f98947352f915c6fdf35ebba4"
+        }
+      }
+    },
+    {
+      "model": "wave",
+      "profile": "negative-miss-publishes",
+      "status": "COUNTEREXAMPLE",
+      "classification": "negative_control",
+      "declared_scope_kind": "negative_control",
+      "expected_violation": "MissEffectFree",
+      "actual_invariant_violation": [
+        "MissEffectFree"
+      ],
+      "temporal_violation": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "MissEffectFree"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "MissEffectFree"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": false,
+        "deadlock_reason": "Finite inputs may finish and external operations may stall; this profile makes no termination or liveness claim.",
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "miss-publishes",
+          "Scenario": "core",
+          "Budget": 1,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 1,
+          "ProgressLock": "try"
+        },
+        "expected_outcome": "COUNTEREXAMPLE",
+        "expected_violation": "MissEffectFree",
+        "kind": "negative_control",
+        "minimum_distinct_states": 8,
+        "minimum_basis": "Explicit path from admission through world commit, wave/lane/SQL/read and try miss; early release adds one transition.",
+        "covered_interleavings_and_faults": [
+          "negative-miss-publishes"
+        ],
+        "excluded_behaviors": [
+          "full safety proof",
+          "liveness",
+          "JavaScript implementation refinement"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "statistics": {
+        "generated_states": 68,
+        "distinct_states": 46,
+        "remaining_states": 12
+      },
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "started_at": "2026-11-19T02:32:29.488936+00:00",
+      "finished_at": "2026-11-19T02:32:31.413360+00:00",
+      "duration_seconds": 1.924463,
+      "implementation_status": "NOT_ASSESSED",
+      "executed_manifest_sha256": "797bebff6551dfe0d380e1c0d61c54f86c5bcf7b8fbf851da8d41db7b63e5267",
+      "executed_input_files": [
+        {
+          "path": "WaveAdmission.tla",
+          "sha256": "859e047d291f70215222caf2885a94ce89cdfb83800fd767216d7eb3318eb897",
+          "bytes": 19519
+        },
+        {
+          "path": "negative-early-miss-settle.cfg",
+          "sha256": "8e3c6cf154d357c10c2d7e03549940a76ba2a155e38128a01354443d2ae32a4d",
+          "bytes": 239
+        },
+        {
+          "path": "negative-miss-publishes.cfg",
+          "sha256": "5efec9893c7b73f4a630fdfd3db5fc84ef43c3d4cadc4a69d0b3829b48d6119f",
+          "bytes": 235
+        },
+        {
+          "path": "positive-try-one-record.cfg",
+          "sha256": "5270ba6959164181a99158d96a3ddde7d414a23fd179144840183e02bc6c3cae",
+          "bytes": 605
+        },
+        {
+          "path": "witness-miss-while-wave.cfg",
+          "sha256": "083b4d93fccbc4808095b796e86c3e63d43aa623cc0d5dee6e34fc8764a9459e",
+          "bytes": 227
+        }
+      ],
+      "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool_sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+      "archive_directory": "tlc/wave-negative-miss-publishes-r1",
+      "evidence": {
+        "result.json": {
+          "bytes": 5855,
+          "sha256": "2375a97f8184466eb9d3b91d4cf1e78d5b6e461bd2444f26bafa3d05d0f63476"
+        },
+        "manifest.json": {
+          "bytes": 7585,
+          "sha256": "797bebff6551dfe0d380e1c0d61c54f86c5bcf7b8fbf851da8d41db7b63e5267"
+        },
+        "tlc.log": {
+          "bytes": 21020,
+          "sha256": "e14b7d16157ed1bd23b47c5273ec604d5fb31f248028ce24a43d261b38a72c66"
+        },
+        "messages.json": {
+          "bytes": 20962,
+          "sha256": "0633a3aa71c752d0c210e22238879fda7286ddf80505c17325592adc6507d014"
+        }
+      }
+    },
+    {
+      "model": "wave",
+      "profile": "try-one-record",
+      "status": "PASS_WITHIN_SCOPE",
+      "classification": "safety",
+      "declared_scope_kind": null,
+      "expected_violation": null,
+      "actual_invariant_violation": [],
+      "temporal_violation": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "SingleSlots",
+          "PeerBudget",
+          "FiniteWave",
+          "LockExclusion",
+          "AdmissionSettled",
+          "DrainedOwner",
+          "NoSQLCancellation",
+          "NoNewAfterStop",
+          "OrderedAttempts",
+          "ExactRowCommit",
+          "ActualCommitOnly",
+          "PendingBlocks",
+          "CurrentCoverage",
+          "SentProof",
+          "FailureDoesNotAdvance",
+          "SuccessfulSentRetained",
+          "NoStaleSend",
+          "FixedAuthorizedHead",
+          "RPCBoundary",
+          "NoBusyRetry",
+          "ProgressOpportunity",
+          "MissCleanupHeld",
+          "MissEffectFree"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "SingleSlots",
+          "PeerBudget",
+          "FiniteWave",
+          "LockExclusion",
+          "AdmissionSettled",
+          "DrainedOwner",
+          "NoSQLCancellation",
+          "NoNewAfterStop",
+          "OrderedAttempts",
+          "ExactRowCommit",
+          "ActualCommitOnly",
+          "PendingBlocks",
+          "CurrentCoverage",
+          "SentProof",
+          "FailureDoesNotAdvance",
+          "SuccessfulSentRetained",
+          "NoStaleSend",
+          "FixedAuthorizedHead",
+          "RPCBoundary",
+          "NoBusyRetry",
+          "ProgressOpportunity",
+          "MissCleanupHeld",
+          "MissEffectFree"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": false,
+        "deadlock_reason": "Finite inputs may finish and external operations may stall; this profile makes no termination or liveness claim.",
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "core",
+          "Budget": 1,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 1,
+          "ProgressLock": "try"
+        },
+        "expected_outcome": "PASS_WITHIN_SCOPE",
+        "minimum_distinct_states": 50,
+        "minimum_basis": "two peers, one old row, one new head, split G/W/SQL/send and four miss-cleanup phases; below 50 distinct states requires scope investigation",
+        "covered_interleavings_and_faults": [
+          "single owner and one G/W",
+          "G pending while new finite W enters SHARE",
+          "nonfatal try rejection with real rollback/release before G settle",
+          "last-G draining with remaining frozen W groups"
+        ],
+        "excluded_behaviors": [
+          "outer sticky scheduler",
+          "JavaScript implementation refinement",
+          "TLC fairness",
+          "actual PostgreSQL lock queue",
+          "close/mixed/error/install/RPC scenarios",
+          "rollback failure or COMMIT unknown",
+          "arbitrary peer counts or latency"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "statistics": {
+        "generated_states": 622,
+        "distinct_states": 384,
+        "remaining_states": 0
+      },
+      "process": {
+        "exit_code": 0,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "started_at": "2026-11-19T02:29:19.865455+00:00",
+      "finished_at": "2026-11-19T02:29:22.042965+00:00",
+      "duration_seconds": 2.177553,
+      "implementation_status": "NOT_ASSESSED",
+      "executed_manifest_sha256": "8080caed5a10249a9747db77b63e7ba302cd74de2266dddfec4edd602a8e8625",
+      "executed_input_files": [
+        {
+          "path": "WaveAdmission.tla",
+          "sha256": "859e047d291f70215222caf2885a94ce89cdfb83800fd767216d7eb3318eb897",
+          "bytes": 19519
+        },
+        {
+          "path": "positive-try-one-record.cfg",
+          "sha256": "5270ba6959164181a99158d96a3ddde7d414a23fd179144840183e02bc6c3cae",
+          "bytes": 605
+        }
+      ],
+      "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool_sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+      "archive_directory": "tlc/wave-try-one-record-r1",
+      "evidence": {
+        "result.json": {
+          "bytes": 6648,
+          "sha256": "904fd36fb1bbda465f0ff78d06bbaea015a5963893ae103cd9810c0d3f8791cd"
+        },
+        "manifest.json": {
+          "bytes": 3127,
+          "sha256": "8080caed5a10249a9747db77b63e7ba302cd74de2266dddfec4edd602a8e8625"
+        },
+        "tlc.log": {
+          "bytes": 2693,
+          "sha256": "3fc87b19c93f77b913fff95bab74074f1f0d7252ec4de992635c71c3369ce5f1"
+        },
+        "messages.json": {
+          "bytes": 1901,
+          "sha256": "088e49bc4537cb970335a0150195818509b4181b7de53e11354ca35d8b36d3e3"
+        }
+      }
+    },
+    {
+      "model": "wave",
+      "profile": "witness-miss-while-wave",
+      "status": "COUNTEREXAMPLE",
+      "classification": "reachability_witness",
+      "declared_scope_kind": "reachability_witness",
+      "expected_violation": "NotMissWhileWave",
+      "actual_invariant_violation": [
+        "NotMissWhileWave"
+      ],
+      "temporal_violation": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "NotMissWhileWave"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "NotMissWhileWave"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": false,
+        "deadlock_reason": "Finite inputs may finish and external operations may stall; this profile makes no termination or liveness claim.",
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "core",
+          "Budget": 1,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 1,
+          "ProgressLock": "try"
+        },
+        "expected_outcome": "COUNTEREXAMPLE",
+        "expected_violation": "NotMissWhileWave",
+        "kind": "reachability_witness",
+        "minimum_distinct_states": 8,
+        "minimum_basis": "Explicit path from admission through world commit, wave/lane/SQL/read and try miss; early release adds one transition.",
+        "covered_interleavings_and_faults": [
+          "witness-miss-while-wave"
+        ],
+        "excluded_behaviors": [
+          "full safety proof",
+          "liveness",
+          "JavaScript implementation refinement"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "statistics": {
+        "generated_states": 68,
+        "distinct_states": 46,
+        "remaining_states": 12
+      },
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "started_at": "2026-11-19T02:32:29.470378+00:00",
+      "finished_at": "2026-11-19T02:32:31.647285+00:00",
+      "duration_seconds": 2.176951,
+      "implementation_status": "NOT_ASSESSED",
+      "executed_manifest_sha256": "797bebff6551dfe0d380e1c0d61c54f86c5bcf7b8fbf851da8d41db7b63e5267",
+      "executed_input_files": [
+        {
+          "path": "WaveAdmission.tla",
+          "sha256": "859e047d291f70215222caf2885a94ce89cdfb83800fd767216d7eb3318eb897",
+          "bytes": 19519
+        },
+        {
+          "path": "negative-early-miss-settle.cfg",
+          "sha256": "8e3c6cf154d357c10c2d7e03549940a76ba2a155e38128a01354443d2ae32a4d",
+          "bytes": 239
+        },
+        {
+          "path": "negative-miss-publishes.cfg",
+          "sha256": "5efec9893c7b73f4a630fdfd3db5fc84ef43c3d4cadc4a69d0b3829b48d6119f",
+          "bytes": 235
+        },
+        {
+          "path": "positive-try-one-record.cfg",
+          "sha256": "5270ba6959164181a99158d96a3ddde7d414a23fd179144840183e02bc6c3cae",
+          "bytes": 605
+        },
+        {
+          "path": "witness-miss-while-wave.cfg",
+          "sha256": "083b4d93fccbc4808095b796e86c3e63d43aa623cc0d5dee6e34fc8764a9459e",
+          "bytes": 227
+        }
+      ],
+      "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool_sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+      "archive_directory": "tlc/wave-witness-miss-while-wave-r1",
+      "evidence": {
+        "result.json": {
+          "bytes": 5980,
+          "sha256": "dfd13f2cd21b29f7a3a6bb28b9f7ffafc8b5b2fcb08a35a625571128d84a1ede"
+        },
+        "manifest.json": {
+          "bytes": 7585,
+          "sha256": "797bebff6551dfe0d380e1c0d61c54f86c5bcf7b8fbf851da8d41db7b63e5267"
+        },
+        "tlc.log": {
+          "bytes": 20895,
+          "sha256": "69a7ad57eeeca65422cda49a9031df139bd8263654f76df05154d2da9e175c6f"
+        },
+        "messages.json": {
+          "bytes": 20962,
+          "sha256": "755aa60bdb747910b0a9cd4a1c991ef10338e2eaf1527d65f0bb9015202d880f"
+        }
+      }
+    },
+    {
+      "model": "wave",
+      "profile": "witness-closed-drained",
+      "status": "COUNTEREXAMPLE",
+      "classification": "reachability_witness",
+      "declared_scope_kind": "reachability_witness",
+      "expected_violation": "NotClosedDrained",
+      "actual_invariant_violation": [
+        "NotClosedDrained"
+      ],
+      "temporal_violation": false,
+      "checks": {
+        "expected_invariants": [
+          "TypeOK",
+          "NotClosedDrained"
+        ],
+        "expected_properties": [],
+        "configured_invariants": [
+          "TypeOK",
+          "NotClosedDrained"
+        ],
+        "configured_properties": [],
+        "checks_deadlock": false,
+        "deadlock_reason": "Finite inputs may finish and external operations may stall; this profile makes no termination or liveness claim.",
+        "behavior": {
+          "SPECIFICATION": "Spec"
+        }
+      },
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "close",
+          "Budget": 1,
+          "MaxHead": 3,
+          "InitialSent": 2,
+          "PageSize": 4,
+          "RecordCount": 1,
+          "ProgressLock": "try"
+        },
+        "expected_outcome": "COUNTEREXAMPLE",
+        "kind": "reachability_witness",
+        "minimum_distinct_states": 12,
+        "minimum_basis": "Scenario-specific split G/W/SQL and cleanup paths; declared before execution.",
+        "covered_interleavings_and_faults": [
+          "close",
+          "none",
+          "fixed finite records"
+        ],
+        "excluded_behaviors": [
+          "outer publisher",
+          "JavaScript refinement",
+          "PG fairness or writer preference",
+          "real time"
+        ],
+        "liveness": "NOT_CHECKED",
+        "expected_violation": "NotClosedDrained"
+      },
+      "statistics": {
+        "generated_states": 2595,
+        "distinct_states": 1361,
+        "remaining_states": 129
+      },
+      "process": {
+        "exit_code": 12,
+        "timed_out": false,
+        "interrupted": false
+      },
+      "started_at": "2026-11-19T02:50:15.888279+00:00",
+      "finished_at": "2026-11-19T02:50:17.635381+00:00",
+      "duration_seconds": 1.7472,
+      "implementation_status": "NOT_ASSESSED",
+      "executed_manifest_sha256": "184c8fb8e720e89f3dd162c93c79c8645713f0cbc9e10ce70112573f0a618c41",
+      "executed_input_files": [
+        {
+          "path": "WaveAdmission.tla",
+          "sha256": "859e047d291f70215222caf2885a94ce89cdfb83800fd767216d7eb3318eb897",
+          "bytes": 19519
+        },
+        {
+          "path": "negative-early-miss-settle.cfg",
+          "sha256": "8e3c6cf154d357c10c2d7e03549940a76ba2a155e38128a01354443d2ae32a4d",
+          "bytes": 239
+        },
+        {
+          "path": "negative-miss-publishes.cfg",
+          "sha256": "5efec9893c7b73f4a630fdfd3db5fc84ef43c3d4cadc4a69d0b3829b48d6119f",
+          "bytes": 235
+        },
+        {
+          "path": "negative-reuse-dirty-client.cfg",
+          "sha256": "ab525444eef1722a91bc1b28a9a229c36769f0b00c066d3d8b2998c52192305a",
+          "bytes": 248
+        },
+        {
+          "path": "negative-unknown-as-miss.cfg",
+          "sha256": "f3f9375e5d3c6bae5492f729a292327ebd418754b1f6caa95573843897fc0c5c",
+          "bytes": 239
+        },
+        {
+          "path": "positive-try-one-record.cfg",
+          "sha256": "5270ba6959164181a99158d96a3ddde7d414a23fd179144840183e02bc6c3cae",
+          "bytes": 605
+        },
+        {
+          "path": "try-one-record-close.cfg",
+          "sha256": "dc7e89474a7dcacaccabffd15acfc858ccd54fbe896794781a6422de02dd821c",
+          "bytes": 606
+        },
+        {
+          "path": "try-two-record-failure.cfg",
+          "sha256": "268ef87d0dd8ae86da5e5945b67656f6b4870cd1b096e516d9dd78de93857e1e",
+          "bytes": 648
+        },
+        {
+          "path": "witness-closed-drained.cfg",
+          "sha256": "f0edc7d27478fdf3c89a5dbc58c3ee9e8641b4ca5e16518a445f95dcd9922c0b",
+          "bytes": 228
+        },
+        {
+          "path": "witness-miss-while-wave.cfg",
+          "sha256": "083b4d93fccbc4808095b796e86c3e63d43aa623cc0d5dee6e34fc8764a9459e",
+          "bytes": 227
+        }
+      ],
+      "runner_sha256": "ca5811a8cae5d31961185b0ba53868f3ea885a1ee614150d873d61044ff18f5a",
+      "tool_sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+      "archive_directory": "tlc/witness-closed-drained-r1",
+      "evidence": {
+        "result.json": {
+          "bytes": 6658,
+          "sha256": "a0053505e54a76d10ae6a36085c1ee42b1ebdc2383bf11889102eee042d1a2de"
+        },
+        "manifest.json": {
+          "bytes": 16256,
+          "sha256": "184c8fb8e720e89f3dd162c93c79c8645713f0cbc9e10ce70112573f0a618c41"
+        },
+        "tlc.log": {
+          "bytes": 44718,
+          "sha256": "22ed467a896e03d435a88dbc4315854852a5a9d458b3a1082c43c48ff23294a2"
+        },
+        "messages.json": {
+          "bytes": 45965,
+          "sha256": "2e8432bbeec2aed399d667caa70790773d66d60229c858c1b78022ee08405d47"
+        }
+      }
+    }
+  ]
+}

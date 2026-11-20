@@ -6,6 +6,7 @@ export const gaolaoPersonalProfiles: readonly GaolaoPersonalProfile[];
 export function gaolaoPersonalProfile(value: unknown): GaolaoPersonalProfile | null;
 export function parseSpatial<K extends keyof SpatialContracts>(name: K, raw: string): SpatialContracts[K];
 export function validateSpatial<K extends keyof SpatialContracts>(name: K, value: unknown): SpatialContracts[K];
+export function checkSpatialSnapshotShellAndRelations(value: T.SnapshotV2): void;
 export function gaolaoInteraction<A extends T.GaolaoInteractionV2>(value: A): A;
 export function isGaolaoInteraction(value: T.ActionV2): value is T.GaolaoInteractionV2;
 export interface SpatialContracts {
@@ -55,10 +56,16 @@ export interface SpatialContracts {
   ControlRequestV2: T.ControlRequestV2;
   ReceiptResultV2: T.ReceiptResultV2;
   ReceiptV2: T.ReceiptV2;
+  MotionTimelineSpanV1: T.MotionTimelineSpanV1;
   EntityViewV2: T.EntityViewV2;
   SelfViewV2: T.SelfViewV2;
   ItemViewV2: T.ItemViewV2;
   TargetViewV2: T.TargetViewV2;
+  SceneEntityViewV1: T.SceneEntityViewV1;
+  SceneItemViewV1: T.SceneItemViewV1;
+  SceneTargetViewV1: T.SceneTargetViewV1;
+  SceneOverviewV1: T.SceneOverviewV1;
+  PublicMapScene: T.PublicMapScene;
   PlanViewV2: T.PlanViewV2;
   EvidenceSourceViewV2: T.EvidenceSourceViewV2;
   ObservationViewV2: T.ObservationViewV2;
@@ -71,4 +78,4 @@ export interface SpatialContracts {
   ControlResponseV2: T.ControlResponseV2;
   ErrorV2: T.ErrorV2;
 }
-export class MovementCommandSource { readonly controlEpoch: string; constructor(controlEpoch: string); move(sceneId: string, destination: T.Position, options?: { targetRef?: string; anchorId?: string }): T.ActionV2; stop(): T.ActionV2; }
+export class MovementCommandSource { readonly controlEpoch: string; constructor(controlEpoch: string); move(sceneId: string, destination: T.Position, options?: { targetRef?: string; anchorId?: string }): T.ActionV2; direction(sceneId: string, mapVersion: string, direction: T.Facing): Extract<T.ActionV2, { kind: 'move_direction' }>; stop(): T.ActionV2; }

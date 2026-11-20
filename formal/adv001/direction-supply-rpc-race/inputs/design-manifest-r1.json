@@ -1,0 +1,17 @@
+{
+  "head": "bb66dac423a7a306752a7474eabc95d7d4d9edb7",
+  "tree": "deccc2600f3703f4b158f9b7ef5505680c557f0e",
+  "status": "",
+  "design_status": "DRAFT_FOR_INDEPENDENT_REVIEW",
+  "frozen_at": "2026-11-17T13:48:48.651305+00:00",
+  "files": {
+    "design-r1.md": {
+      "sha256": "f9fee487ebcc60a601a29dfc8c9e5ff8ce8f3a5681cc95173608fb0235bbd98d",
+      "bytes": 25646
+    },
+    "identity-and-impact.json": {
+      "sha256": "20e80ac38d22edf4bda2d879a526169e75f3af9500f9c859f245b40547ce791c",
+      "bytes": 10098
+    }
+  }
+}

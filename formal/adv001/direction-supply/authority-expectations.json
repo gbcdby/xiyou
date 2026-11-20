@@ -1,0 +1,203 @@
+{
+  "positive-authority": {
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_tlc_exit": 0,
+    "target": null,
+    "minimum_distinct_states": 100,
+    "gate": false
+  },
+  "positive-budget": {
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_tlc_exit": 0,
+    "target": null,
+    "minimum_distinct_states": 20
+  },
+  "negative-type": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "TypeOK",
+    "minimum_distinct_states": 2
+  },
+  "negative-domain-water": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "CommandWatermark",
+    "minimum_distinct_states": 2
+  },
+  "negative-late": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "AppliedOrder",
+    "minimum_distinct_states": 2
+  },
+  "negative-replay": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "ReceiptStable",
+    "minimum_distinct_states": 2
+  },
+  "negative-rebase": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "ReceiptStable",
+    "minimum_distinct_states": 2
+  },
+  "negative-stop": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "StopFence",
+    "minimum_distinct_states": 2
+  },
+  "negative-epoch": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "EpochFence",
+    "minimum_distinct_states": 2
+  },
+  "negative-refusal": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "RejectedRoutePreserved",
+    "minimum_distinct_states": 2
+  },
+  "negative-binding-budget": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "OutstandingBudget",
+    "minimum_distinct_states": 2
+  },
+  "negative-stop-budget": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "OutstandingBudget",
+    "minimum_distinct_states": 2
+  },
+  "negative-origin": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "DirectionOriginCurrent",
+    "minimum_distinct_states": 2
+  },
+  "negative-identity": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "OriginalRequestIdentity",
+    "minimum_distinct_states": 2
+  },
+  "witness-issue": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "NoIssueWitness",
+    "minimum_distinct_states": 2
+  },
+  "witness-domain-water": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "NoRejectedWaterWitness",
+    "minimum_distinct_states": 2
+  },
+  "witness-late": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "NoLateRejectedWitness",
+    "minimum_distinct_states": 2
+  },
+  "witness-replay": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "NoReplayWitness",
+    "minimum_distinct_states": 2
+  },
+  "witness-moved-replay": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "NoMovedRetryWitness",
+    "minimum_distinct_states": 2
+  },
+  "witness-stop": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "NoStopFenceWitness",
+    "minimum_distinct_states": 2
+  },
+  "witness-epoch": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "NoEpochRejectedWitness",
+    "minimum_distinct_states": 2
+  },
+  "witness-refusal": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "NoRefusalWitness",
+    "minimum_distinct_states": 2
+  },
+  "witness-budget": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "NoFullBudgetWitness",
+    "minimum_distinct_states": 2
+  },
+  "witness-origin": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "NoFreshOriginWitness",
+    "minimum_distinct_states": 2
+  },
+  "positive-order": {
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_tlc_exit": 0,
+    "target": null,
+    "minimum_distinct_states": 100,
+    "gate": true
+  },
+  "positive-epoch": {
+    "expected_status": "PASS_WITHIN_SCOPE",
+    "expected_tlc_exit": 0,
+    "target": null,
+    "minimum_distinct_states": 100,
+    "gate": true
+  },
+  "negative-replay-route": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "ReplayPreservesCurrent",
+    "minimum_distinct_states": 2,
+    "gate": true
+  },
+  "witness-replay-newer": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "NoReplayAfterNewerWitness",
+    "minimum_distinct_states": 2,
+    "gate": true
+  },
+  "witness-replay-refusal": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "NoReplayAfterRefusalWitness",
+    "minimum_distinct_states": 2,
+    "gate": true
+  },
+  "witness-replay-new-binding": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "NoReplayAfterNewBindingWitness",
+    "minimum_distinct_states": 2,
+    "gate": true
+  },
+  "witness-old-ack-new-binding": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "NoOldAckNewBindingWitness",
+    "minimum_distinct_states": 2,
+    "gate": true
+  },
+  "witness-replay-new-moving-route": {
+    "expected_status": "COUNTEREXAMPLE",
+    "expected_tlc_exit": 12,
+    "target": "NoReplayWithNewMovingRouteWitness",
+    "minimum_distinct_states": 2,
+    "gate": true
+  }
+}

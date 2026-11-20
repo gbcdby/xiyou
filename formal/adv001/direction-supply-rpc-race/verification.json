@@ -1,0 +1,2059 @@
+{
+  "schema_version": 1,
+  "feature": "RRS RPC/publisher竞态及W/G组合有限增量",
+  "tool": {
+    "version": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "model": {
+    "root": "model",
+    "entry": "RpcRace.tla"
+  },
+  "profiles": {
+    "positive-race": {
+      "config": "positive-race.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "LaneDiscipline",
+        "OriginalAuthority",
+        "RaceEligibility",
+        "RaceOrigin",
+        "ReadBoundary",
+        "SentPrefix",
+        "InstalledSeparate",
+        "NoStaleSend",
+        "FixedAuthorizedHead",
+        "ConsumerSafety",
+        "SynchronousConsumption",
+        "LockExclusion",
+        "ProgressCut",
+        "OwnerSettled",
+        "NoCancellation",
+        "NoNewAfterStop",
+        "NoTimeoutSelfWake"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "normal",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "positive-history": {
+      "config": "positive-history.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "LaneDiscipline",
+        "OriginalAuthority",
+        "RaceEligibility",
+        "RaceOrigin",
+        "ReadBoundary",
+        "SentPrefix",
+        "InstalledSeparate",
+        "NoStaleSend",
+        "FixedAuthorizedHead",
+        "ConsumerSafety",
+        "SynchronousConsumption",
+        "LockExclusion",
+        "ProgressCut",
+        "OwnerSettled",
+        "NoCancellation",
+        "NoNewAfterStop",
+        "NoTimeoutSelfWake"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "normal",
+          "PredKind": "push",
+          "InitialSent": 2,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "positive-predecessor-rpc": {
+      "config": "positive-predecessor-rpc.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "LaneDiscipline",
+        "OriginalAuthority",
+        "RaceEligibility",
+        "RaceOrigin",
+        "ReadBoundary",
+        "SentPrefix",
+        "InstalledSeparate",
+        "NoStaleSend",
+        "FixedAuthorizedHead",
+        "ConsumerSafety",
+        "SynchronousConsumption",
+        "LockExclusion",
+        "ProgressCut",
+        "OwnerSettled",
+        "NoCancellation",
+        "NoNewAfterStop",
+        "NoTimeoutSelfWake"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "timeout",
+          "PredKind": "rpc",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": false
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "positive-consumer-rejection": {
+      "config": "positive-consumer-rejection.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "LaneDiscipline",
+        "OriginalAuthority",
+        "RaceEligibility",
+        "RaceOrigin",
+        "ReadBoundary",
+        "SentPrefix",
+        "InstalledSeparate",
+        "NoStaleSend",
+        "FixedAuthorizedHead",
+        "ConsumerSafety",
+        "SynchronousConsumption",
+        "LockExclusion",
+        "ProgressCut",
+        "OwnerSettled",
+        "NoCancellation",
+        "NoNewAfterStop",
+        "NoTimeoutSelfWake"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "reject",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 2
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "positive-identity": {
+      "config": "positive-identity.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "LaneDiscipline",
+        "OriginalAuthority",
+        "RaceEligibility",
+        "RaceOrigin",
+        "ReadBoundary",
+        "SentPrefix",
+        "InstalledSeparate",
+        "NoStaleSend",
+        "FixedAuthorizedHead",
+        "ConsumerSafety",
+        "SynchronousConsumption",
+        "LockExclusion",
+        "ProgressCut",
+        "OwnerSettled",
+        "NoCancellation",
+        "NoNewAfterStop",
+        "NoTimeoutSelfWake"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "identity",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "positive-failure": {
+      "config": "positive-failure.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "LaneDiscipline",
+        "OriginalAuthority",
+        "RaceEligibility",
+        "RaceOrigin",
+        "ReadBoundary",
+        "SentPrefix",
+        "InstalledSeparate",
+        "NoStaleSend",
+        "FixedAuthorizedHead",
+        "ConsumerSafety",
+        "SynchronousConsumption",
+        "LockExclusion",
+        "ProgressCut",
+        "OwnerSettled",
+        "NoCancellation",
+        "NoNewAfterStop",
+        "NoTimeoutSelfWake"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "failure",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "positive-ineligible": {
+      "config": "positive-ineligible.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "LaneDiscipline",
+        "OriginalAuthority",
+        "RaceEligibility",
+        "RaceOrigin",
+        "ReadBoundary",
+        "SentPrefix",
+        "InstalledSeparate",
+        "NoStaleSend",
+        "FixedAuthorizedHead",
+        "ConsumerSafety",
+        "SynchronousConsumption",
+        "LockExclusion",
+        "ProgressCut",
+        "OwnerSettled",
+        "NoCancellation",
+        "NoNewAfterStop",
+        "NoTimeoutSelfWake"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "normal",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": false,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "positive-future-request": {
+      "config": "positive-future-request.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "LaneDiscipline",
+        "OriginalAuthority",
+        "RaceEligibility",
+        "RaceOrigin",
+        "ReadBoundary",
+        "SentPrefix",
+        "InstalledSeparate",
+        "NoStaleSend",
+        "FixedAuthorizedHead",
+        "ConsumerSafety",
+        "SynchronousConsumption",
+        "LockExclusion",
+        "ProgressCut",
+        "OwnerSettled",
+        "NoCancellation",
+        "NoNewAfterStop",
+        "NoTimeoutSelfWake"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "normal",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 2,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "positive-page-two": {
+      "config": "positive-page-two.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "LaneDiscipline",
+        "OriginalAuthority",
+        "RaceEligibility",
+        "RaceOrigin",
+        "ReadBoundary",
+        "SentPrefix",
+        "InstalledSeparate",
+        "NoStaleSend",
+        "FixedAuthorizedHead",
+        "ConsumerSafety",
+        "SynchronousConsumption",
+        "LockExclusion",
+        "ProgressCut",
+        "OwnerSettled",
+        "NoCancellation",
+        "NoNewAfterStop",
+        "NoTimeoutSelfWake"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "normal",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 4,
+          "PageSize": 2
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "negative-type-TypeOK": {
+      "config": "negative-type-TypeOK.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "type",
+          "Scenario": "normal",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "negative-parallel-lane-LaneDiscipline": {
+      "config": "negative-parallel-lane-LaneDiscipline.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "LaneDiscipline"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "parallel-lane",
+          "Scenario": "normal",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "negative-bypass-rpc-LaneDiscipline": {
+      "config": "negative-bypass-rpc-LaneDiscipline.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "LaneDiscipline"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "bypass-rpc",
+          "Scenario": "normal",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "negative-skip-original-OriginalAuthority": {
+      "config": "negative-skip-original-OriginalAuthority.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "OriginalAuthority"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "skip-original",
+          "Scenario": "lower",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 0,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "negative-upgrade-old-RaceEligibility": {
+      "config": "negative-upgrade-old-RaceEligibility.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "RaceEligibility"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "upgrade-old",
+          "Scenario": "normal",
+          "PredKind": "push",
+          "InitialSent": 2,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "negative-upgrade-rpc-RaceEligibility": {
+      "config": "negative-upgrade-rpc-RaceEligibility.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "RaceEligibility"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "upgrade-rpc",
+          "Scenario": "normal",
+          "PredKind": "rpc",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": false
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "negative-force-full-RaceEligibility": {
+      "config": "negative-force-full-RaceEligibility.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "RaceEligibility"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "force-full",
+          "Scenario": "normal",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": false,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "negative-fake-proof-RaceOrigin": {
+      "config": "negative-fake-proof-RaceOrigin.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "RaceOrigin"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "fake-proof",
+          "Scenario": "normal",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "negative-head-start-ReadBoundary": {
+      "config": "negative-head-start-ReadBoundary.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "ReadBoundary"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "head-start",
+          "Scenario": "normal",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "negative-partial-overlap-ReadBoundary": {
+      "config": "negative-partial-overlap-ReadBoundary.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "ReadBoundary"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "partial-overlap",
+          "Scenario": "normal",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "negative-fake-proof-SentPrefix": {
+      "config": "negative-fake-proof-SentPrefix.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "SentPrefix"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "fake-proof",
+          "Scenario": "normal",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "negative-overwrite-installed-InstalledSeparate": {
+      "config": "negative-overwrite-installed-InstalledSeparate.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "InstalledSeparate"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "overwrite-installed",
+          "Scenario": "normal",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "negative-stale-send-NoStaleSend": {
+      "config": "negative-stale-send-NoStaleSend.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoStaleSend"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "stale-send",
+          "Scenario": "identity",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "negative-head-after-read-FixedAuthorizedHead": {
+      "config": "negative-head-after-read-FixedAuthorizedHead.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "FixedAuthorizedHead"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "head-after-read",
+          "Scenario": "normal",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "negative-double-apply-ConsumerSafety": {
+      "config": "negative-double-apply-ConsumerSafety.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "ConsumerSafety"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "double-apply",
+          "Scenario": "normal",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "negative-skip-gap-ConsumerSafety": {
+      "config": "negative-skip-gap-ConsumerSafety.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "ConsumerSafety"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "skip-gap",
+          "Scenario": "reject",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "negative-defer-consumer-SynchronousConsumption": {
+      "config": "negative-defer-consumer-SynchronousConsumption.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "SynchronousConsumption"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "defer-consumer",
+          "Scenario": "normal",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "negative-read-through-writer-LockExclusion": {
+      "config": "negative-read-through-writer-LockExclusion.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "LockExclusion"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "read-through-writer",
+          "Scenario": "normal",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "negative-early-g-ProgressCut": {
+      "config": "negative-early-g-ProgressCut.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "ProgressCut"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "early-g",
+          "Scenario": "normal",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "negative-early-owner-OwnerSettled": {
+      "config": "negative-early-owner-OwnerSettled.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "OwnerSettled"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "early-owner",
+          "Scenario": "failure",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "negative-cancel-sql-NoCancellation": {
+      "config": "negative-cancel-sql-NoCancellation.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoCancellation"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "cancel-sql",
+          "Scenario": "failure",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "negative-start-after-stop-NoNewAfterStop": {
+      "config": "negative-start-after-stop-NoNewAfterStop.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoNewAfterStop"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "start-after-stop",
+          "Scenario": "failure",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "witness-race-applied": {
+      "config": "witness-race-applied.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotRaceApplied"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "normal",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "witness-history-applied": {
+      "config": "witness-history-applied.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotHistoryApplied"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "normal",
+          "PredKind": "push",
+          "InitialSent": 2,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "witness-rpc-predecessor": {
+      "config": "witness-rpc-predecessor.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotRPCPredecessor"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "normal",
+          "PredKind": "rpc",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": false
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "witness-rejected-push-recovered": {
+      "config": "witness-rejected-push-recovered.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotRejectRecovered"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "reject",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 2
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "witness-timeout-recovered": {
+      "config": "witness-timeout-recovered.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotTimeoutRecovered"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "timeout",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 2
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "witness-old-view-discard": {
+      "config": "witness-old-view-discard.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotOldDiscard"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "identity",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "witness-late-old-link": {
+      "config": "witness-late-old-link.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotLateOld"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "identity",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "witness-race-wave-covered-g-settled": {
+      "config": "witness-race-wave-covered-g-settled.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotWaveCoveredGSettled"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "normal",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "witness-commit-before-settle": {
+      "config": "witness-commit-before-settle.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotCommitBeforeSettle"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "normal",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "witness-stop-drained": {
+      "config": "witness-stop-drained.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotStopDrained"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "failure",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "negative-timeout-self-demand-NoTimeoutSelfWake": {
+      "config": "negative-timeout-self-demand-NoTimeoutSelfWake.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoTimeoutSelfWake"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "timeout-self-demand",
+          "Scenario": "timeout",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "negative-unchecked-g-ProgressCut": {
+      "config": "negative-unchecked-g-ProgressCut.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "ProgressCut"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "unchecked-g",
+          "Scenario": "identity",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    },
+    "witness-timeout-without-fresh": {
+      "config": "witness-timeout-without-fresh.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NotTimeoutWaiting"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "deadlock_reason": "有限输入或无fresh需求时允许停滞；本次只检查安全和存在性，不声明公平调度或最终恢复。",
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "Scenario": "timeout",
+          "PredKind": "push",
+          "InitialSent": 1,
+          "Requested": 1,
+          "FullCap": true,
+          "MaxHead": 3,
+          "PageSize": 1
+        },
+        "initial_prefix": "固定P={1,2}已提交；先行任务1、原RPC2、至多一次W3/fresh恢复4/新link供给5",
+        "max_jobs": 5,
+        "minimum_distinct_states": 2,
+        "liveness": "NOT_CHECKED",
+        "excluded": [
+          "任意队列/无限请求",
+          "SQL物理实现与隔离完整证明",
+          "256原子边界的实际数据",
+          "网络时延和性能",
+          "任意多peer/原wave全部状态",
+          "代码refinement"
+        ],
+        "wave_owner_enabled": true
+      },
+      "assumptions": [
+        "真实入队账本由原适配器一次证明提供，模型只检验水位使用。",
+        "共享读捕获授权Q，读事务COMMIT后释放；写/进度/绑定持久变化使用排他切点。",
+        "一次成功新view/link安装抽象为已授权快照与发送基线，不证明安装子协议。",
+        "单link FIFO交付；客户端拒收和ACK超时单独建模，不推定已发送即已应用。"
+      ]
+    }
+  }
+}

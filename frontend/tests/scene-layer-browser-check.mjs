@@ -67,7 +67,7 @@ try {
   const actionIds = async () => (await clientState(page)).actions.map(action => action.id);
   const beforeRetry = await actionIds();
   rejectBase = false;
-  await page.locator('.spatial-map-note').getByRole('button', { name: '重新载入图像', exact: true }).click();
+  await page.locator('.spatial-map-note').getByRole('button', { name: '重新载入场景', exact: true }).click();
   await until(async () => await page.getByTestId('spatial-map').getAttribute('data-scene-layer-status') === 'ready', '重试完整静态组');
   assert.equal(await page.locator('.spatial-scene-base').count(), 1); assert.equal(await page.locator('.spatial-scene-art').count(), 0);
   assert.deepEqual(await actionIds(), beforeRetry, '图像重试不提交世界动作');

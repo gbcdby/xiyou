@@ -1,5 +1,5 @@
 import { gaolaoObjectVisual } from '../content/gaolao-object-visuals.mjs';
-import { randomBytes } from 'node:crypto';
+import { createHmac, randomBytes } from 'node:crypto';
 import { validateSpatial, gaolaoPersonalProfile } from '../protocol/spatial.mjs';
 import { distance, clearSegment } from './spatial-geometry.mjs';
 import { isGaolao, emptyGaolaoChapter, setupGaolaoState, observerName, projectGaolao, gaolaoOperations } from './gaolao-world.mjs';
@@ -133,6 +133,55 @@ export function locationOf(state, entity) {
 export function inRange(state, content, a, b, radius) { return !!(a?.position && b?.position && a.sceneId === b.sceneId && distance(a.position, b.position) <= radius); }
 export function unoccluded(state, content, a, b) { const scene = sceneOf(content, a?.sceneId); return !!(scene && a?.position && b?.position && a.sceneId === b.sceneId && clearSegment(scene, a.position, b.position, obstacleEnabled(state))); }
 export function canSee(state, content, observerId, entity) { const a = state.characters[observerId], b = locationOf(state, entity); return state.phase === 'Lobby' && entity.kind === 'human' || entity.characterId === observerId || entity.location?.characterId === observerId || inRange(state, content, a, b, content.movement.sightRadius) && unoccluded(state, content, a, b); }
+/** 真人的物理显示范围独立于事件感知；他人的持有物从不进入场景地物。 */
+export function publicPhysical(state, observerId, entity) {
+    const observer = state.characters[observerId], at = locationOf(state, entity);
+    return Boolean(observer?.sceneId && at?.sceneId === observer.sceneId && at.position && (!entity.itemId || entity.location.kind === 'ground'));
+}
+/** 只记录已发生的同场轨迹；与 NPC 的视距/遮挡轨迹分开保存和输出。 */
+export function publicMotionViews(state, actor, segments, from, through) {
+    return Object.fromEntries(Object.values(state.characters).filter(observer => observer.kind === 'human' && observer.sceneId === actor.sceneId && state.views[observer.characterId]).map(observer => [observer.characterId, {
+        viewId: state.views[observer.characterId].viewId, sceneId: actor.sceneId, appearanceEpoch: actor.appearanceEpoch,
+        motionTrail: segments, motionFromSceneTimeMs: from, motionThroughSceneTimeMs: through,
+    }]));
+}
+function sceneOverview(state, content, actorId, view, includeAppearance, includeObjectVisual) {
+    const motionFor = actor => {
+        const motion = actor.publicMotionViews?.[actorId];
+        return motion?.viewId === view.viewId && motion.sceneId === actor.sceneId && motion.appearanceEpoch === actor.appearanceEpoch && JSON.stringify(motion.motionTrail.at(-1)) === JSON.stringify(actor.position)
+            ? { motionTrail: motion.motionTrail, motionFromSceneTimeMs: motion.motionFromSceneTimeMs, motionThroughSceneTimeMs: motion.motionThroughSceneTimeMs } : {};
+    };
+    const visualFor = (object, id) => {
+        const visual = includeObjectVisual ? gaolaoObjectVisual(state, id) : {};
+        let visualState = 'default';
+        if (visual.visualKey === 'timber-door') {
+            const value = object.fields.find(field => field.key === 'open')?.value;
+            if (typeof value === 'boolean') visualState = value ? 'open' : 'closed';
+        } else if (object.itemId && visual.visualKey) visualState = object.fields.find(field => field.key === 'fixed')?.value === true ? 'fixed' : 'loose';
+        return { ...visual, visualState };
+    };
+    return {
+        entities: Object.values(state.characters).filter(c => publicPhysical(state, actorId, c)).map(c => ({ entityRef: entityRef(view, c.characterId), name: observerName(state, actorId, c), appearanceEpoch: publicAppearanceEpoch(state,actorId,view,c), resourceRevision: publicResourceRevision(state,actorId,view,c), moving: ['accepted', 'moving'].includes(c.movement?.status) || state.chapter?.follows?.[c.characterId]?.status === 'following', ...(includeAppearance ? { appearanceId: visibleAppearance(state, content, c) } : {}), sceneId: c.sceneId, position: c.position, facing: c.facing, ...motionFor(c) })).sort((x, y) => x.entityRef.localeCompare(y.entityRef)),
+        items: Object.values(state.items).filter(i => publicPhysical(state, actorId, i)).map(i => ({ entityRef: entityRef(view, i.itemId), name: i.name, resourceRevision: i.resourceRevision, location: i.location, ...visualFor(i, i.itemId) })).sort((x, y) => x.entityRef.localeCompare(y.entityRef)),
+        targets: Object.values(state.targets).filter(t => publicPhysical(state, actorId, t)).map(t => ({ entityRef: entityRef(view, t.targetId), name: t.name, resourceRevision: t.resourceRevision, sceneId: t.sceneId, position: t.position, ...visualFor(t, t.targetId) })).sort((x, y) => x.entityRef.localeCompare(y.entityRef)),
+    };
+}
+// 原世界锚点还服务剧情、私物与测试站位；公开地图只发布已确认的导航地标，不复制内部标签。
+const gaolaoMapLabels = {
+    'gaolao-courtyard': { C01: '铜封门', C02: '门撑左侧', C03: '门撑右侧', C04: '侧窗', C11: '客房门口', C14: '公用工具架', C15: '旧饭账', C16: '待客座席', C17: '前厅', C18: '前庭', C19: '庄口', C20: '去庄外短路' },
+    'gaolao-village-road': { R01: '回高家院落', R03: '茶棚', R04: '茶棚后间门口', R08: '云栈洞口', R10: '庄外会面处', R11: '离庄路口', R13: '茶棚座席', R15: '道路岔口' },
+};
+function publicMapCatalog(content) {
+    return content.scenes.map(({ sceneId, name, width, height, unitsPerPixel, walkableAreas, anchors, exits }) => {
+        const labels = isGaolao(content) ? gaolaoMapLabels[sceneId] ?? {} : {};
+        const publicAnchors = anchors.flatMap(({ anchorId, position }) => {
+            const exit = exits.find(exit => exit.anchorId === anchorId);
+            const label = labels[anchorId] ?? (exit ? `前往${content.scenes.find(scene => scene.sceneId === exit.destinationSceneId)?.name ?? '下一处场景'}` : undefined);
+            return label ? [{ anchorId, label, position }] : [];
+        });
+        return { sceneId, name, width, height, unitsPerPixel, walkableAreas, anchors: publicAnchors, exits: exits.map(({ exitId, anchorId, destinationSceneId, destination }) => ({ exitId, anchorId, destinationSceneId, destination })) };
+    });
+}
 export function ensureView(tx, actorId, { rotate = false, viewId = opaqueRef() } = {}) {
     const old = tx.state.views[actorId], readOnly = ['Finished', 'Aborted'].includes(tx.state.phase);
     if (old && !rotate && Object.values({ ...tx.state.characters, ...tx.state.items, ...tx.state.targets }).every(e => old.bindings[e.characterId ?? e.itemId ?? e.targetId]?.appearanceEpoch === (e.appearanceEpoch ?? '0')))
@@ -146,6 +195,16 @@ export function ensureView(tx, actorId, { rotate = false, viewId = opaqueRef() }
     return view;
 }
 export const entityRef = (view, id) => view.bindings[id]?.ref;
+/** wire 版本只作相等比较；私有随机 seed 使公开 ref + 小计数不能被穷举还原。 */
+function publicCharacterVersion(state, observerId, view, character, field) {
+    if (typeof state.seed !== 'string' || !state.seed || !view?.bindings[character.characterId])
+        throw new Error('空间公开版本缺少已持久会话或观察者绑定。');
+    const message = JSON.stringify(['spatial-character-version-v1', state.sessionId, observerId, view.viewId, entityRef(view, character.characterId), field, character[field]]);
+    return BigInt('0x' + createHmac('sha256', state.seed).update(message).digest('hex')).toString(10);
+}
+export const publicAppearanceEpoch = (state, observerId, view, character) => publicCharacterVersion(state, observerId, view, character, 'appearanceEpoch');
+// 人物资源版本也随变貌变化，不能成为另一条身份计数信道；静态物件原合同保持。
+export const publicResourceRevision = (state, observerId, view, entity) => entity.characterId ? publicCharacterVersion(state, observerId, view, entity, 'resourceRevision') : entity.resourceRevision;
 export function resolveRef(tx, actorId, ref, viewId, { visible = true } = {}) {
     const view = tx.state.views[actorId];
     if (!view || view.viewId !== viewId)
@@ -158,9 +217,9 @@ export function resolveRef(tx, actorId, ref, viewId, { visible = true } = {}) {
         throw new RuleError('STALE_REFERENCE');
     return entity;
 }
-export function spatialProjection(state, content, actorId, { connectionId = null, highWater = '0', view = state.views[actorId], principalKind = 'human', includeAppearance = false, includeObjectVisual = false } = {}) {
+export function spatialProjection(state, content, actorId, { connectionId = null, highWater = '0', view = state.views[actorId], principalKind = 'human', includeAppearance = false, includeObjectVisual = false, includeSceneOverview = false, includeDirection = false } = {}) {
     const a = state.characters[actorId];
-    const publicActor = c => ({ entityRef: entityRef(view, c.characterId), name: observerName(state,actorId,c), ...(includeAppearance ? { appearanceId: visibleAppearance(state, content, c) } : {}), ...(isGaolao(state)&&state.chapter?{resourceRevision:c.resourceRevision,availableOperations:gaolaoOperations(state,content,actorId,c)}:{}), appearanceEpoch: c.appearanceEpoch, sceneId: c.sceneId, position: c.position, facing: c.facing });
+    const publicActor = c => ({ entityRef: entityRef(view, c.characterId), name: observerName(state,actorId,c), ...(includeAppearance ? { appearanceId: visibleAppearance(state, content, c) } : {}), ...(isGaolao(state)&&state.chapter?{resourceRevision:publicResourceRevision(state,actorId,view,c),availableOperations:gaolaoOperations(state,content,actorId,c)}:{}), appearanceEpoch: publicAppearanceEpoch(state,actorId,view,c), sceneId: c.sceneId, position: c.position, facing: c.facing });
     const visible = Object.values(state.characters).filter(c => canSee(state, content, actorId, c));
     const entities = visible.map(c => { const motion = c.motionViews?.[actorId]; return { ...publicActor(c), ...(motion?.viewId === view.viewId ? { motionTrail: motion.motionTrail, motionFromSceneTimeMs: motion.motionFromSceneTimeMs, motionThroughSceneTimeMs: motion.motionThroughSceneTimeMs } : {}) }; }).sort((x, y) => x.entityRef.localeCompare(y.entityRef));
     const items = Object.values(state.items).filter(i => i.location.kind !== 'consumed' && canSee(state, content, actorId, i) && (i.location.kind === 'ground' || i.location.characterId === actorId || i.publicBorrowable)).map(i => ({ ...(includeObjectVisual ? gaolaoObjectVisual(state, i.itemId) : {}), entityRef: entityRef(view, i.itemId), name: i.name, location: i.location.kind === 'ground' ? i.location : { kind: 'held', ownerRef: entityRef(view, i.location.characterId) }, resourceRevision: i.resourceRevision, transferable: i.transferable, publicBorrowable: i.publicBorrowable, fields: i.fields, ...(i.publicBorrowable && i.location.kind === 'character' && state.characters[i.location.characterId]?.mode === 'AIProxyControlled' ? { reclaimHolderEpoch: state.characters[i.location.characterId].controlEpoch } : {}) }));
@@ -168,5 +227,5 @@ export function spatialProjection(state, content, actorId, { connectionId = null
     const currentScene = sceneOf(content, a.sceneId);
     const scene = currentScene ? { sceneId: currentScene.sceneId, name: currentScene.name, width: currentScene.width, height: currentScene.height, unitsPerPixel: currentScene.unitsPerPixel, walkableAreas: currentScene.walkableAreas, obstacles: currentScene.obstacles.filter(obstacleEnabled(state)).map(({ obstacleId, polygon, exceptAreas }) => ({ obstacleId, polygon, exceptAreas })), anchors: currentScene.anchors, exits: currentScene.exits.map(({ exitId, anchorId, destinationSceneId, destination, requirement }) => ({ exitId, anchorId, destinationSceneId, destination, open: conditionMet(state, requirement) })) } : null;
     const movement = a.movement ? Object.fromEntries(['movementId', 'planVersion', 'movementCommandSeq', 'sceneId', 'mapVersion', 'goal', 'path', 'acceptedAtSceneTime', 'status', 'reason'].filter(k => a.movement[k] !== undefined).map(k => [k, a.movement[k]])) : null;
-    return safeProjection({ protocolCapability: 'spatial-v2', chapterVersion: state.chapterVersion, mapVersion: state.mapVersion, variantId: state.variantId, contentVersion: state.contentVersion, reducerVersion: state.reducerVersion, phase: state.phase, sceneTimeMs: state.sceneTimeMs, paused: state.paused, self: { ...publicActor(a), controlEpoch: a.controlEpoch, canControl: principalKind === 'human' && a.mode === 'HumanControlled' && connectionId === a.activeConnectionId, capabilities: a.capabilities, movementCommandHighWater: highWater }, entities, items, targets, scene, movement, observations: (state.observations[actorId] ?? []).filter(o => principalKind !== 'proxy' || o.shareable).slice(-256), claims: (state.claims[actorId] ?? []).filter(c => principalKind === 'human' || c.channel !== 'team').slice(-256), cooperations: content.operations.filter(def => def.kind === 'cooperation' && state.targets[def.targetId] && canSee(state, content, actorId, state.targets[def.targetId])).map(def => { const record = state.cooperations[def.operationId]; return { operationId: def.operationId, operationVersion: record?.version ?? '0', phase: record?.phase ?? 'preparing', readyCount: Object.keys(record?.ready ?? {}).length, requiredCount: def.requiredCount, anchors: def.anchorIds.map(id => currentScene.anchors.find(anchor => anchor.anchorId === id).position) }; }), objectives: content.objectives, ending: state.ending,...(isGaolao(state)&&state.chapter?{chapter:projectGaolao(state,content,actorId,view)}:{}) });
+    return safeProjection({ protocolCapability: 'spatial-v2', chapterVersion: state.chapterVersion, mapVersion: state.mapVersion, variantId: state.variantId, contentVersion: state.contentVersion, reducerVersion: state.reducerVersion, phase: state.phase, sceneTimeMs: state.sceneTimeMs, paused: state.paused, self: { ...publicActor(a), controlEpoch: a.controlEpoch, canControl: principalKind === 'human' && a.mode === 'HumanControlled' && connectionId === a.activeConnectionId, capabilities: [...a.capabilities, ...(includeDirection && principalKind === 'human' ? ['move_direction'] : [])], movementCommandHighWater: highWater }, entities, items, targets, scene, movement, ...(includeSceneOverview && principalKind === 'human' ? { sceneOverview: sceneOverview(state, content, actorId, view, includeAppearance, includeObjectVisual), mapCatalog: publicMapCatalog(content) } : {}), observations: (state.observations[actorId] ?? []).filter(o => principalKind !== 'proxy' || o.shareable).slice(-256), claims: (state.claims[actorId] ?? []).filter(c => principalKind === 'human' || c.channel !== 'team').slice(-256), cooperations: content.operations.filter(def => def.kind === 'cooperation' && state.targets[def.targetId] && canSee(state, content, actorId, state.targets[def.targetId])).map(def => { const record = state.cooperations[def.operationId]; return { operationId: def.operationId, operationVersion: record?.version ?? '0', phase: record?.phase ?? 'preparing', readyCount: Object.keys(record?.ready ?? {}).length, requiredCount: def.requiredCount, anchors: def.anchorIds.map(id => currentScene.anchors.find(anchor => anchor.anchorId === id).position) }; }), objectives: content.objectives, ending: state.ending,...(isGaolao(state)&&state.chapter?{chapter:projectGaolao(state,content,actorId,view)}:{}) });
 }

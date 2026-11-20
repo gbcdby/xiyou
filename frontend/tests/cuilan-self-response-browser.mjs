@@ -10,7 +10,11 @@ import { accepted, take, share, cleanupPublic } from '../../backend/test-support
 import { sampleSharedPersonalEffects, assertBothActiveEffects, assertSharedStoppedEffects, assertSharedStopTransaction, assertOriginalReceiptRead, tracePersonalTransactions } from '../../backend/test-support/personal-shared-effects.mjs';
 import { repository, sourceIdentity, saveJSON, sha256, until, sleep } from './network-support.mjs';
 import { browserRoom, snapshot, clientState, openReading } from './gaolao-real-support.mjs';
-import { productionProfile, caseIds, assertCompleteReport, clickAction, askAppearance, describeItems, askItems, personalState, cancelPersonal, returnItem, holdSubmissions, holdCommittedReceipt, deferLeaseMaintenance, authoritativeState, sceneDecision, assertRoomIdentity, createCuilanReportCollector, finalizeCuilanReport } from './cuilan-self-response-support.mjs';
+import { observeDirectionConnections } from './direction-browser-support.mjs';
+import { createCuilanClickObservation } from './cuilan-click-observation.mjs';
+import { createCuilanNodeProfile } from './cuilan-node-profile.mjs';
+import { createCuilanResponseObservation } from './cuilan-self-response-observation.mjs';
+import { productionProfile, caseIds, assertCompleteReport, clickAction, askAppearance, describeItems, askItems, personalState, cancelPersonal, returnItem, holdSubmissions, captureAppearanceCompetition, holdCommittedReceipt, deferLeaseMaintenance, authoritativeState, sceneDecision, assertRoomIdentity, createCuilanReportCollector, finalizeCuilanReport } from './cuilan-self-response-support.mjs';
 import { nextRecoveryAction } from './cuilan-self-response-recovery.mjs';
 
 const output = resolve(process.env.FRONTEND_EVIDENCE_DIR || resolve(repository, '.agent-output/cuilan-production-browser'));
@@ -21,13 +25,19 @@ const report = {
   source: await sourceIdentity(), startedAt: new Date().toISOString(), nodeVersion: process.version,
   cases: caseIds.map(id => ({ id, status: 'NOT_RUN', evidence: [] })),
   rooms: [], humanActions: [], npcActions: [], recapResponses: [], pageErrors: [], externalRequests: [],
-  creationRequests: [], wireActions: [], httpReceipts: [], authority: [], screenshots: [], cleanup: [],
+  creationRequests: [], wireActions: [], httpReceipts: [], authority: [], competitions: [], screenshots: [], cleanup: [],
   leaseFault: { status: 'NOT_RUN' }, realProviderCalls: 0, faults: [], resources: [],
   notCovered: ['真实provider的自然语言因果质量', '真人四局', '真实设备与艺术品质', '五客户端连续900秒', '3/4/5人数完整分支矩阵', '新环境部署'],
 };
-let database, server, browser, activeRoom, serverPort, activeCase;
+let database, server, browser, activeRoom, serverPort, activeCase, directionConnections;
 const vites = [], rooms = [], restorers = new Set();
 const collector = createCuilanReportCollector(error => report.pageErrors.push({ message: '证据采集失败：' + error.message }));
+const responseObservation = createCuilanResponseObservation({ collector, report, currentCase: () => activeCase, readSnapshot: snapshot });
+report.responseObservation = responseObservation.data;
+const clickObservation = createCuilanClickObservation({ currentCase: () => activeCase });
+report.clickObservation = clickObservation.report; restorers.add(clickObservation);
+const nodeProfile = createCuilanNodeProfile({ repository, output, sourcePaths: Object.keys(report.source.sourceHashes) });
+report.clickObservation.nodeProfile = nodeProfile.report; restorers.add(nodeProfile);
 const workflow = resolve(repository, '.github/workflows/cuilan-self-response.yml');
 report.workflowSha256 = sha256(await readFile(workflow));
 await saveJSON(resolve(output, 'startup.json'), { source: report.source, startedAt: report.startedAt, command: 'node frontend/tests/cuilan-self-response-browser.mjs', workflowSha256: report.workflowSha256 });
@@ -44,30 +54,67 @@ async function picture(room, label, player = 0) {
   const file = `${report.screenshots.length}-${label}.png`; await room.pages[player].screenshot({ path: resolve(output, file), fullPage: true });
   report.screenshots.push({ sessionId: room.sessionId, player, file, sha256: sha256(await readFile(resolve(output, file))) });
 }
-function instrumentPage(page) {
+async function instrumentPage(page, context) {
   const pageId = crypto.randomUUID();
+  // 只观测真实收据查询突发与完成量，不读令牌/收据/SQL，不影响页面发包。
+  const receiptRequests = new Set();
+  const receiptQueryStats = { pageId, sent: 0, finished: 0, failed: 0, pending: 0, peakPending: 0, lastSentAt: null, lastSettledAt: null };
+  (report.receiptQueryStats ??= []).push(receiptQueryStats);
+  const receiptRead = request => request.method() === 'GET' && new URL(request.url()).pathname.includes('/actions/');
   collector.observe(page, 'request', request => {
+    if (receiptRead(request)) {
+      receiptRequests.add(request); receiptQueryStats.sent++; receiptQueryStats.pending = receiptRequests.size;
+      receiptQueryStats.peakPending = Math.max(receiptQueryStats.peakPending, receiptRequests.size);
+      receiptQueryStats.lastSentAt = new Date().toISOString();
+    }
     const url = new URL(request.url());
     if (['http:', 'https:'].includes(url.protocol) && !['127.0.0.1', 'localhost'].includes(url.hostname)) report.externalRequests.push({ pageId, origin: url.origin, path: url.pathname });
     if (url.pathname === '/api/sessions' && request.method() === 'POST') report.creationRequests.push({ pageId, request: request.postDataJSON() });
   });
-  collector.observe(page, 'websocket', socket => collector.observe(socket, 'framesent', frame => {
-    const text = String(frame.payload); if (!/^42\d*\[/.test(text)) return;
-    try {
-      const [event, value] = JSON.parse(text.replace(/^42\d*/, ''));
-      if (event === 'player.action.request') report.wireActions.push({ pageId, request: JSON.parse(value) });
-    } catch (error) { report.pageErrors.push({ message: '实际动作帧无法读取：' + error.message }); }
-  }));
-  collector.observe(page, 'response', async response => {
-    if (!/\/actions\//.test(new URL(response.url()).pathname) || !response.ok()) return;
-    try { report.httpReceipts.push({ pageId, receivedAt: new Date().toISOString(), receipt: await response.json(), viewId: (await snapshot(page))?.viewId }); } catch (error) { report.pageErrors.push({ message: '实际收据响应无法读取：' + error.message }); }
+  for (const [event, field] of [['requestfinished', 'finished'], ['requestfailed', 'failed']]) {
+    collector.observe(page, event, request => {
+      if (!receiptRequests.delete(request)) return;
+      receiptQueryStats[field]++; receiptQueryStats.pending = receiptRequests.size;
+      receiptQueryStats.lastSettledAt = new Date().toISOString();
+    });
+  }
+  collector.observe(page, 'websocket', socket => {
+    // 只读捕获普通Socket.IO ACK身份：不注入、替换或重发控制请求；
+    // 重启后区分真正的CONTROL_HELD、其他错误、未决超时与客户端提示丢码。
+    const controlAwaitingAck = new Map();
+    collector.observe(socket, 'framesent', frame => {
+      const text = String(frame.payload); if (!/^42\d*\[/.test(text)) return;
+      try {
+        const [event, value] = JSON.parse(text.replace(/^42\d*/, ''));
+        if (event === 'player.action.request') report.wireActions.push({ pageId, request: JSON.parse(value) });
+        if (event === 'control.resume' || event === 'control.take') {
+          const packetId = /^42(\d+)\[/.exec(text)?.[1];
+          if (packetId !== undefined) controlAwaitingAck.set(packetId, event);
+          (report.controlFrames ??= []).push({ pageId, event, packetId: packetId ?? null, stage: 'sent', at: new Date().toISOString() });
+        }
+      } catch (error) { report.pageErrors.push({ message: '实际动作帧无法读取：' + error.message }); }
+    });
+    collector.observe(socket, 'framereceived', frame => {
+      const text = String(frame.payload), match = /^43(\d+)\[/.exec(text);
+      if (!match || !controlAwaitingAck.has(match[1])) return;
+      const event = controlAwaitingAck.get(match[1]); controlAwaitingAck.delete(match[1]);
+      let code = 'ACK_UNREADABLE', responseType = null;
+      try {
+        const reply = JSON.parse(text.slice(text.indexOf('[')))[0];
+        code = typeof reply?.code === 'string' ? reply.code : 'ACK_SUCCESS_SHAPE';
+        responseType = typeof reply?.type === 'string' ? reply.type : null;
+      } catch { /* ACK仍保留不可读证据，不改变原消费者。 */ }
+      (report.controlFrames ??= []).push({ pageId, event, packetId: match[1], stage: 'ack', code, responseType, at: new Date().toISOString() });
+    });
   });
+  responseObservation.attach(page, pageId, context);
+  await clickObservation.attach(page, pageId);
   return page;
 }
 const instrumentedBrowser = {
   async newContext(options) {
     const context = await browser.newContext(options), original = context.newPage.bind(context);
-    context.newPage = async () => instrumentPage(await original());
+    context.newPage = async () => instrumentPage(await original(), context);
     return context;
   },
 };
@@ -86,6 +133,8 @@ async function newRoom(baseURL, contentVersion, { count = 2, defaultEntry = fals
   const facade = { get runtime() { return server.runtime; } };
   const room = await browserRoom({ server: facade, browser: instrumentedBrowser, baseURL, contentVersion, count, profile: productionProfile, report, observe: collector.observe });
   room.report = report; room.baseURL = baseURL; rooms.push(room); activeRoom = room;
+  report.directionQualification ??= [];
+  for (let player = 0; player < room.count; player++) report.directionQualification.push(await directionConnections.qualify(room.pages[player], room.users[player].userId, 'initial-' + player));
   report.rooms.push(await assertRoomIdentity(room, database.pool, { defaultEntry }));
   assert.ok(report.creationRequests.some(row => row.request.contentVersion === contentVersion && row.request.capabilities.includes('gaolao-personal-consent-v1')));
   return room;
@@ -225,9 +274,21 @@ async function competition(room) {
   try {
     const pending = Promise.all([askAppearance(room, a, 'front-meeting', 'single_use'), askAppearance(room, b, 'front-meeting', 'single_use')]);
     await until(() => gate.held.length === 2, '两个正常页面请求都到达提交屏障', 15000);
-    assert.equal(gate.held[0].request.action.expectedTargetRevision, gate.held[1].request.action.expectedTargetRevision, '实际捕获同公开revision竞争');
+    const captured = await authoritativeState(database.pool, room.sessionId);
+    const basis = captureAppearanceCompetition(captured.state, captured.content_snapshot, gate.held.map(row => row.request), [room.users[a].userId, room.users[b].userId]);
+    report.competitions.push(basis);
     gate.release(); const results = await pending;
     assert.deepEqual(results.map(row => row.receipt.status).sort(), ['Accepted', 'Rejected']);
+    const rejected = results.find(row => row.receipt.status === 'Rejected');
+    assert.equal(rejected.receipt.code, 'STALE_PRECONDITION'); assert.equal(rejected.receipt.actionEventRange, null);
+    basis.receipts = (await database.pool.query('SELECT actor_id,client_action_id,receipt FROM action_receipts WHERE session_id=$1 AND client_action_id=ANY($2::text[])', [room.sessionId, basis.contenders.map(row => row.clientActionId)])).rows;
+    assert.equal(basis.receipts.length, 2);
+    for (const result of results) {
+      assert.deepEqual(result.request, gate.held.find(row => row.request.clientActionId === result.request.clientActionId).request, '页面完成的仍是屏障内原请求');
+      const contender = basis.contenders.find(row => row.clientActionId === result.request.clientActionId);
+      const stored = basis.receipts.find(row => row.client_action_id === contender.clientActionId);
+      assert.equal(stored.actor_id, contender.observerId); assert.deepEqual(stored.receipt.publicReceipt, result.receipt, '竞争结果必须是各自原动作的真实 PG 收据');
+    }
     const winner = results[0].receipt.status === 'Accepted' ? a : b;
     const old = await awaitDecision(room, winner, 'appearance', 'accepted');
     accepted((await askAppearance(room, winner, 'road-meeting', 'single_use', { replace: true })).receipt);
@@ -235,7 +296,7 @@ async function competition(room) {
     let current = await state(room); assert.equal(current.chapter.personalRequests[old.consent.consentId].lifecycle, 'superseded'); assert.equal(current.chapter.consents[old.consent.consentId].status, 'accepted');
     await cancelPersonal(room, winner, 'appearance'); current = await state(room);
     assert.equal(current.chapter.personalRequests[newer.consent.consentId].lifecycle, 'cancelled'); assert.equal(current.chapter.consents[newer.consent.consentId].status, 'accepted');
-    evidence('P-04', '同revision竞争、明确替换与请求者取消分轴', { sessionId: room.sessionId, actionIds: results.map(row => row.request.clientActionId), statuses: results.map(row => row.receipt.status), oldId: old.consent.consentId, newerId: newer.consent.consentId, faultProfile: 'two-real-ui-submissions-barrier' });
+    evidence('P-04', '同底层revision与各自公开别名竞争、明确替换与请求者取消分轴', { sessionId: room.sessionId, actionIds: results.map(row => row.request.clientActionId), statuses: results.map(row => row.receipt.status), capturedSeq: basis.snapshotSeq, staleCode: rejected.receipt.code, oldId: old.consent.consentId, newerId: newer.consent.consentId, faultProfile: 'two-real-ui-submissions-barrier' });
   } finally { gate.close(); restorers.delete(gate); }
 }
 async function bindingInterruption(room, player, purpose, consentId) {
@@ -243,7 +304,9 @@ async function bindingInterruption(room, player, purpose, consentId) {
   const before = await state(room), member = before.members.find(row => row.userId === room.users[player].userId);
   assert.ok(member); const originalActor = before.characters[member.characterId], oldView = (await snapshot(room.pages[player])).viewId;
   // 普通刷新真实关闭旧Socket；新页面由本人点击恢复，不直接操作控制状态。
-  await room.pages[player].reload();
+  const reloadObservation = responseObservation.beginOperation('binding-interruption-reload', [room.pages[player]]);
+  try { await room.pages[player].reload(); responseObservation.endOperation(reloadObservation); }
+  catch (error) { responseObservation.failOperation(reloadObservation); throw error; }
   await until(async () => (await state(room)).paused, '两人中一人刷新后实际暂停', 20000);
   const stopped = await state(room), record = stopped.chapter.personalRequests[consentId];
   assert.ok(!['ready', 'active'].includes(record.execution.state));
@@ -270,7 +333,12 @@ async function interruptAppearance(room) {
 async function recoverPlayer(room, player, { reload = true, trace = null, allowExplicitTake = false } = {}) {
   const record = (step, detail = {}) => { if (trace) trace.push({ player, step, at: new Date().toISOString(), ...detail }); };
   const page = room.pages[player]; record('start');
-  if (reload) { await page.reload(); record('reloaded'); }
+  if (reload) {
+    const reloadObservation = responseObservation.beginOperation('recover-player-reload', [page]);
+    try { await page.reload(); responseObservation.endOperation(reloadObservation); }
+    catch (error) { responseObservation.failOperation(reloadObservation); throw error; }
+    record('reloaded');
+  }
   await until(async () => (await clientState(page)).connection === 'online', '真实页面网络恢复', 20000);
   record('online');
   const beforeEpoch = (await snapshot(page))?.projection.self.controlEpoch;
@@ -306,10 +374,13 @@ async function recoverPlayer(room, player, { reload = true, trace = null, allowE
     record('explicit-take-confirmed', { beforeEpoch, afterEpoch });
   }
   record('input-ready');
+  report.directionQualification.push(await directionConnections.qualify(page, room.users[player].userId, 'recovery-' + player));
 }
 async function restartServer(room) {
   const before = (await snapshot(room.pages[0])).viewId;
-  await server.close(); server = await createAuthorityServer({ pool: database.pool }); await server.listen(serverPort);
+  directionConnections.close(); restorers.delete(directionConnections);
+  await server.close(); server = await createAuthorityServer({ pool: database.pool, spatialDirection: { checkpointMs: 50 } });
+  directionConnections = observeDirectionConnections(server.runtime); restorers.add(directionConnections); await server.listen(serverPort);
   // 两人房间暂停时，先并行建立真实连接；复原入口可能比online晚一拍出现。
   // 记录各人到达可见控件和inputReady的实际次序，失败原样传播并保留完整门槛。
   const trace = { sessionId: room.sessionId, beforeView: before, events: [] };
@@ -318,6 +389,32 @@ async function restartServer(room) {
     await Promise.all(Array.from({ length: room.count }, (_, player) => recoverPlayer(room, player, { trace: trace.events, allowExplicitTake: true })));
   } catch (error) {
     trace.failure = { message: error.message, at: new Date().toISOString() };
+    try {
+      const response = await fetch(`http://127.0.0.1:${serverPort}/health`, { signal: AbortSignal.timeout(2000) });
+      trace.backendHealthOnFailure = { status: response.status, ok: response.ok };
+    } catch (probeError) {
+      trace.backendHealthOnFailure = { error: probeError.code ?? probeError.name };
+    }
+    // 只读、失败后诊断：核对后台仍在线时收据查询是否占满数据库连接；
+    // 不延长原20秒验收、不修改session、不让诊断失败覆盖原错误。
+    trace.databasePoolOnFailure = { total: database.pool.totalCount, idle: database.pool.idleCount, waiting: database.pool.waitingCount };
+    trace.receiptQueriesOnFailure = (report.receiptQueryStats ?? []).map(({ pageId, sent, finished, failed, pending, peakPending, lastSentAt, lastSettledAt }) =>
+      ({ pageId, sent, finished, failed, pending, peakPending, lastSentAt, lastSettledAt }));
+    if (database.pool.idleCount > 0) {
+      try {
+        const activity = await database.pool.query(`SELECT state, wait_event_type AS "waitType", wait_event AS "waitEvent", count(*)::int AS count
+          FROM pg_stat_activity WHERE datname=current_database() AND pid<>pg_backend_pid()
+          GROUP BY state, wait_event_type, wait_event ORDER BY count DESC LIMIT 12`);
+        trace.postgresWaitsOnFailure = activity.rows;
+        // 只读追加阻塞链：定位是哪个持锁事务让 control.resume 的 ACK 一直未回。
+        const blockers = await database.pool.query(`SELECT pid, application_name AS "applicationName", state,
+          wait_event_type AS "waitType", wait_event AS "waitEvent", pg_blocking_pids(pid) AS "blockingPids",
+          now() - xact_start AS "xactAge", now() - state_change AS "stateAge", left(query, 600) AS query
+          FROM pg_stat_activity WHERE datname=current_database() AND pid<>pg_backend_pid()
+          ORDER BY (pg_blocking_pids(pid))[1] NULLS LAST, pid LIMIT 20`);
+        trace.postgresBlockersOnFailure = blockers.rows.map(row => ({ ...row, xactAge: String(row.xactAge), stateAge: String(row.stateAge) }));
+      } catch (probeError) { trace.postgresWaitsOnFailure = { error: probeError.code ?? probeError.name }; }
+    } else trace.postgresWaitsOnFailure = { skipped: 'no-idle-pool-connection' };
     throw error;
   }
   await assertRoomIdentity(room, database.pool, { defaultEntry: report.rooms.find(row => row.sessionId === room.sessionId).defaultEntry });
@@ -365,11 +462,16 @@ async function oldPossessions(room) {
   } finally { gate.close(); restorers.delete(gate); }
   // 必须真实挤出旧许可历史；聊天不会增长 consent 历史，因此不拿聊天替代。
   await nearOwner(room, a); let generated = 0;
-  while ((await snapshot(room.pages[a])).projection.chapter.consents.some(row => row.consentId === granted.consent.consentId) && generated < 262) {
-    accepted((await askAppearance(room, a, 'front-meeting', 'reusable')).receipt);
-    await awaitDecision(room, a, 'appearance', 'declined'); generated++;
-    if (generated % 32 === 0) console.log(JSON.stringify({ stage: '真实许可历史落窗', generated }));
-  }
+  let historyCompleted = false;
+  nodeProfile.start();
+  try {
+    while ((await snapshot(room.pages[a])).projection.chapter.consents.some(row => row.consentId === granted.consent.consentId) && generated < 262) {
+      accepted((await askAppearance(room, a, 'front-meeting', 'reusable')).receipt);
+      await awaitDecision(room, a, 'appearance', 'declined'); generated++;
+      if (generated % 32 === 0) console.log(JSON.stringify({ stage: '真实许可历史落窗', generated }));
+    }
+    historyCompleted = true;
+  } finally { nodeProfile.end(historyCompleted ? 'history-returned' : 'history-threw'); }
   assert.ok(generated > 0 && generated <= 262);
   assert.ok(!(await snapshot(room.pages[a])).projection.chapter.consents.some(row => row.consentId === granted.consent.consentId), '旧consent须已实际退出近期许可历史');
   assert.equal((await snapshot(room.pages[a])).projection.chapter.privateReturns.length, 2);
@@ -506,7 +608,10 @@ async function leaseFault(baseURL) {
   report.leaseFault.sharedEffects.reconnected = { oldView, newView: newView.viewId, remaining, returned, acquisition: returnedState.chapter.privateAcquisitions[context.acquisitionId], c2, oldApplyRejected: refusedAgain };
   evidence('P-04', '三真实页面租约故障：双实际ACTIVE同事务停权、原Receipt零效果、新view窄归还与真实C2', { sessionId: room.sessionId, faultProfile: report.leaseFault.profile, originalConsentIds: [context.appearance, context.private_items] });
   report.leaseFault.status = 'PASS'; report.leaseFault.finishedAt = new Date().toISOString();
-  await auditRoom(room); await room.close();
+  await auditRoom(room);
+  const closeObservation = responseObservation.beginOperation('room-close', room.pages);
+  try { await room.close(); responseObservation.endOperation(closeObservation); }
+  catch (error) { responseObservation.failOperation(closeObservation); throw error; }
 }
 
 try {
@@ -521,18 +626,28 @@ try {
   assert.equal(report.resources.length, 65); assert.equal(report.resources.reduce((sum, row) => sum + row.bytes, 0), 29038902);
   database = await startTestPostgres('cuilan-e2', { outputSubdirectory: 'cuilan-production-postgres' });
   report.postgresVersion = (await database.pool.query('SHOW server_version')).rows[0].server_version;
-  server = await createAuthorityServer({ pool: database.pool }); serverPort = (await server.listen(0)).port;
+  server = await createAuthorityServer({ pool: database.pool, spatialDirection: { checkpointMs: 50 } });
+  directionConnections = observeDirectionConnections(server.runtime); restorers.add(directionConnections); serverPort = (await server.listen(0)).port;
   browser = await chromium.launch({ headless: true, ...(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {}), args: process.env.CHROMIUM_ARGS ? JSON.parse(process.env.CHROMIUM_ARGS) : [] }); report.chromiumVersion = browser.version();
   const defaultURL = await startFrontend();
   const primary = await newRoom(defaultURL, 'gaolaozhuang-scene-v3', { defaultEntry: true });
   await rescue(primary, 'front-guest-room', { beforeSafe: true });
   const appearance = await permissionTerms(primary, 'appearance'); await appearancePlaces(primary, appearance.granted);
-  await deliverBoth(primary); await competition(primary); await interruptAppearance(primary); await finishChapter(primary); await auditRoom(primary); await primary.close();
+  await deliverBoth(primary); await competition(primary); await interruptAppearance(primary); await finishChapter(primary); await auditRoom(primary);
+  const primaryCloseObservation = responseObservation.beginOperation('room-close', primary.pages);
+  try { await primary.close(); responseObservation.endOperation(primaryCloseObservation); }
+  catch (error) { responseObservation.failOperation(primaryCloseObservation); throw error; }
   const eastURL = await startFrontend('gaolaozhuang-tools-east-scene-v3');
   const east = await newRoom(eastURL, 'gaolaozhuang-tools-east-scene-v3');
-  await rescue(east, 'tea-back-room', { beforeSafe: true }); await permissionTerms(east, 'appearance'); await cancelPersonal(east, east.role('B'), 'appearance'); await deliverBoth(east); await finishChapter(east); await auditRoom(east); await east.close();
+  await rescue(east, 'tea-back-room', { beforeSafe: true }); await permissionTerms(east, 'appearance'); await cancelPersonal(east, east.role('B'), 'appearance'); await deliverBoth(east); await finishChapter(east); await auditRoom(east);
+  const eastCloseObservation = responseObservation.beginOperation('room-close', east.pages);
+  try { await east.close(); responseObservation.endOperation(eastCloseObservation); }
+  catch (error) { responseObservation.failOperation(eastCloseObservation); throw error; }
   const recovery = await newRoom(defaultURL, 'gaolaozhuang-scene-v3');
-  await rescue(recovery, 'front-guest-room'); await oldPossessions(recovery); await auditRoom(recovery); await recovery.close();
+  await rescue(recovery, 'front-guest-room'); await oldPossessions(recovery); await auditRoom(recovery);
+  const recoveryCloseObservation = responseObservation.beginOperation('room-close', recovery.pages);
+  try { await recovery.close(); responseObservation.endOperation(recoveryCloseObservation); }
+  catch (error) { responseObservation.failOperation(recoveryCloseObservation); throw error; }
   for (const row of report.cases) { assert.ok(row.evidence.length); row.status = 'PASS'; }
   await leaseFault(defaultURL);
   report.assessment = 'CHECKS_COMPLETE';
@@ -546,11 +661,14 @@ try {
     report.failureTail ??= []; report.failureTail.push({ player, snapshot: await snapshot(page).catch(() => null), client: await clientState(page).catch(() => null), visibleText: await page.locator('body').innerText().catch(() => '') });
   }
 } finally {
-  await finalizeCuilanReport({ report, output, restorers, stopCollecting: collector.stop,
+  await finalizeCuilanReport({ report, output, restorers, stopCollecting: async () => {
+    responseObservation.beginCutoff();
+    const cutoff = await collector.stop(); responseObservation.seal(cutoff); return cutoff;
+  },
     resources: [['browser', Boolean(browser), () => browser.close()], ...vites.map((vite, index) => ['vite-' + index, true, () => vite.close()]), ['server', Boolean(server), () => server.close()], ['postgres', Boolean(database), () => database.stop()]],
     readSource: sourceIdentity, audit: async () => {
       assert.equal(sha256(await readFile(workflow)), report.workflowSha256);
-      if (report.assessment === 'CHECKS_COMPLETE') { assertCompleteReport(report); report.assessment = 'PASS'; }
+      if (report.assessment === 'CHECKS_COMPLETE') { assertCompleteReport(report); responseObservation.assertComplete(); report.assessment = 'PASS'; }
     } });
   restorers.clear();
   console.log(JSON.stringify({ assessment: report.assessment, cases: report.cases.map(row => ({ id: row.id, status: row.status })), output }));

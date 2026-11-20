@@ -1,0 +1,946 @@
+{
+  "schema_version": 1,
+  "feature": "D66 方向受理与跨绑定原账本有限模型",
+  "tool": {
+    "version": "v1.7.4 / TLC 2.19",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "model": {
+    "root": "authority",
+    "entry": "DirectionAuthority.tla"
+  },
+  "profiles": {
+    "positive-authority": {
+      "config": "positive-authority.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "CommandWatermark",
+        "AppliedOrder",
+        "ReceiptStable",
+        "StopFence",
+        "EpochFence",
+        "RejectedRoutePreserved",
+        "OutstandingBudget",
+        "DirectionOriginCurrent",
+        "OriginalRequestIdentity"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxCommands": 2,
+          "Mode": "authority"
+        },
+        "covered_interleavings_and_faults": [
+          "原请求首次处理、领域拒绝、原 Receipt 重放、ACK 丢失、Unknown/原样重试、一次绑定/epoch 变化"
+        ],
+        "excluded_behaviors": [
+          "连续物理/寻路/真实 PostgreSQL、跨进程 Crash、精确 400ms、输入活性、任意命令数量、所有模型组合"
+        ],
+        "liveness": "NOT_CHECKED",
+        "completion_boundary": "完整组合探索配置；本轮门槛不运行，不算有限分解通过。"
+      },
+      "assumptions": [
+        "单角色原有权威事务原子提交；原 Receipt 已持久化且身份唯一；有限整数不代表实际时钟。"
+      ]
+    },
+    "positive-budget": {
+      "config": "positive-budget.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "OutstandingBudget",
+        "OriginalRequestIdentity"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxCommands": 3,
+          "Mode": "budget"
+        },
+        "covered_interleavings_and_faults": [
+          "同一连接两方向和一 stop 的待定账本、绑定变化、Unknown/原样重试；本配置不安排服务端回复"
+        ],
+        "excluded_behaviors": [
+          "连续物理/寻路/真实 PostgreSQL、跨进程 Crash、精确 400ms、输入活性、任意命令数量、所有模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单角色原有权威事务原子提交；原 Receipt 已持久化且身份唯一；有限整数不代表实际时钟。"
+      ],
+      "deadlock_reason": "budget 仅检查客户端准入安全；刻意不安排服务端响应，满槽等待不应被解释为实现死锁。"
+    },
+    "negative-type": {
+      "config": "negative-type.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "type",
+          "MaxCommands": 1,
+          "Mode": "authority"
+        },
+        "covered_interleavings_and_faults": [
+          "原请求首次处理、领域拒绝、原 Receipt 重放、ACK 丢失、Unknown/原样重试、一次绑定/epoch 变化"
+        ],
+        "excluded_behaviors": [
+          "连续物理/寻路/真实 PostgreSQL、跨进程 Crash、精确 400ms、输入活性、任意命令数量、所有模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单角色原有权威事务原子提交；原 Receipt 已持久化且身份唯一；有限整数不代表实际时钟。"
+      ]
+    },
+    "negative-domain-water": {
+      "config": "negative-domain-water.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "CommandWatermark"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "domain-water",
+          "MaxCommands": 1,
+          "Mode": "authority"
+        },
+        "covered_interleavings_and_faults": [
+          "原请求首次处理、领域拒绝、原 Receipt 重放、ACK 丢失、Unknown/原样重试、一次绑定/epoch 变化"
+        ],
+        "excluded_behaviors": [
+          "连续物理/寻路/真实 PostgreSQL、跨进程 Crash、精确 400ms、输入活性、任意命令数量、所有模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单角色原有权威事务原子提交；原 Receipt 已持久化且身份唯一；有限整数不代表实际时钟。"
+      ]
+    },
+    "negative-late": {
+      "config": "negative-late.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "AppliedOrder"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "late",
+          "MaxCommands": 2,
+          "Mode": "authority"
+        },
+        "covered_interleavings_and_faults": [
+          "原请求首次处理、领域拒绝、原 Receipt 重放、ACK 丢失、Unknown/原样重试、一次绑定/epoch 变化"
+        ],
+        "excluded_behaviors": [
+          "连续物理/寻路/真实 PostgreSQL、跨进程 Crash、精确 400ms、输入活性、任意命令数量、所有模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单角色原有权威事务原子提交；原 Receipt 已持久化且身份唯一；有限整数不代表实际时钟。"
+      ]
+    },
+    "negative-replay": {
+      "config": "negative-replay.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "ReceiptStable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "replay-effect",
+          "MaxCommands": 1,
+          "Mode": "authority"
+        },
+        "covered_interleavings_and_faults": [
+          "原请求首次处理、领域拒绝、原 Receipt 重放、ACK 丢失、Unknown/原样重试、一次绑定/epoch 变化"
+        ],
+        "excluded_behaviors": [
+          "连续物理/寻路/真实 PostgreSQL、跨进程 Crash、精确 400ms、输入活性、任意命令数量、所有模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单角色原有权威事务原子提交；原 Receipt 已持久化且身份唯一；有限整数不代表实际时钟。"
+      ]
+    },
+    "negative-rebase": {
+      "config": "negative-rebase.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "ReceiptStable"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "retry-rebase",
+          "MaxCommands": 1,
+          "Mode": "authority"
+        },
+        "covered_interleavings_and_faults": [
+          "原请求首次处理、领域拒绝、原 Receipt 重放、ACK 丢失、Unknown/原样重试、一次绑定/epoch 变化"
+        ],
+        "excluded_behaviors": [
+          "连续物理/寻路/真实 PostgreSQL、跨进程 Crash、精确 400ms、输入活性、任意命令数量、所有模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单角色原有权威事务原子提交；原 Receipt 已持久化且身份唯一；有限整数不代表实际时钟。"
+      ]
+    },
+    "negative-stop": {
+      "config": "negative-stop.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "StopFence"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "stop-fence",
+          "MaxCommands": 2,
+          "Mode": "authority"
+        },
+        "covered_interleavings_and_faults": [
+          "原请求首次处理、领域拒绝、原 Receipt 重放、ACK 丢失、Unknown/原样重试、一次绑定/epoch 变化"
+        ],
+        "excluded_behaviors": [
+          "连续物理/寻路/真实 PostgreSQL、跨进程 Crash、精确 400ms、输入活性、任意命令数量、所有模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单角色原有权威事务原子提交；原 Receipt 已持久化且身份唯一；有限整数不代表实际时钟。"
+      ]
+    },
+    "negative-epoch": {
+      "config": "negative-epoch.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "EpochFence"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "epoch",
+          "MaxCommands": 1,
+          "Mode": "authority"
+        },
+        "covered_interleavings_and_faults": [
+          "原请求首次处理、领域拒绝、原 Receipt 重放、ACK 丢失、Unknown/原样重试、一次绑定/epoch 变化"
+        ],
+        "excluded_behaviors": [
+          "连续物理/寻路/真实 PostgreSQL、跨进程 Crash、精确 400ms、输入活性、任意命令数量、所有模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单角色原有权威事务原子提交；原 Receipt 已持久化且身份唯一；有限整数不代表实际时钟。"
+      ]
+    },
+    "negative-refusal": {
+      "config": "negative-refusal.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "RejectedRoutePreserved"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "reject-route",
+          "MaxCommands": 2,
+          "Mode": "authority"
+        },
+        "covered_interleavings_and_faults": [
+          "原请求首次处理、领域拒绝、原 Receipt 重放、ACK 丢失、Unknown/原样重试、一次绑定/epoch 变化"
+        ],
+        "excluded_behaviors": [
+          "连续物理/寻路/真实 PostgreSQL、跨进程 Crash、精确 400ms、输入活性、任意命令数量、所有模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单角色原有权威事务原子提交；原 Receipt 已持久化且身份唯一；有限整数不代表实际时钟。"
+      ]
+    },
+    "negative-binding-budget": {
+      "config": "negative-binding-budget.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "OutstandingBudget"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "scope": {
+        "parameters": {
+          "Fault": "binding-budget",
+          "MaxCommands": 3,
+          "Mode": "budget"
+        },
+        "covered_interleavings_and_faults": [
+          "同一连接两方向和一 stop 的待定账本、绑定变化、Unknown/原样重试；本配置不安排服务端回复"
+        ],
+        "excluded_behaviors": [
+          "连续物理/寻路/真实 PostgreSQL、跨进程 Crash、精确 400ms、输入活性、任意命令数量、所有模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单角色原有权威事务原子提交；原 Receipt 已持久化且身份唯一；有限整数不代表实际时钟。"
+      ],
+      "deadlock_reason": "budget 仅检查客户端准入安全；刻意不安排服务端响应，满槽等待不应被解释为实现死锁。"
+    },
+    "negative-stop-budget": {
+      "config": "negative-stop-budget.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "OutstandingBudget"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "scope": {
+        "parameters": {
+          "Fault": "stop-budget",
+          "MaxCommands": 2,
+          "Mode": "budget"
+        },
+        "covered_interleavings_and_faults": [
+          "同一连接两方向和一 stop 的待定账本、绑定变化、Unknown/原样重试；本配置不安排服务端回复"
+        ],
+        "excluded_behaviors": [
+          "连续物理/寻路/真实 PostgreSQL、跨进程 Crash、精确 400ms、输入活性、任意命令数量、所有模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单角色原有权威事务原子提交；原 Receipt 已持久化且身份唯一；有限整数不代表实际时钟。"
+      ],
+      "deadlock_reason": "budget 仅检查客户端准入安全；刻意不安排服务端响应，满槽等待不应被解释为实现死锁。"
+    },
+    "negative-origin": {
+      "config": "negative-origin.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "DirectionOriginCurrent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "stale-origin",
+          "MaxCommands": 2,
+          "Mode": "authority"
+        },
+        "covered_interleavings_and_faults": [
+          "原请求首次处理、领域拒绝、原 Receipt 重放、ACK 丢失、Unknown/原样重试、一次绑定/epoch 变化"
+        ],
+        "excluded_behaviors": [
+          "连续物理/寻路/真实 PostgreSQL、跨进程 Crash、精确 400ms、输入活性、任意命令数量、所有模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单角色原有权威事务原子提交；原 Receipt 已持久化且身份唯一；有限整数不代表实际时钟。"
+      ]
+    },
+    "negative-identity": {
+      "config": "negative-identity.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "OriginalRequestIdentity"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "retry-payload",
+          "MaxCommands": 1,
+          "Mode": "authority"
+        },
+        "covered_interleavings_and_faults": [
+          "原请求首次处理、领域拒绝、原 Receipt 重放、ACK 丢失、Unknown/原样重试、一次绑定/epoch 变化"
+        ],
+        "excluded_behaviors": [
+          "连续物理/寻路/真实 PostgreSQL、跨进程 Crash、精确 400ms、输入活性、任意命令数量、所有模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单角色原有权威事务原子提交；原 Receipt 已持久化且身份唯一；有限整数不代表实际时钟。"
+      ]
+    },
+    "witness-issue": {
+      "config": "witness-issue.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoIssueWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxCommands": 1,
+          "Mode": "authority"
+        },
+        "covered_interleavings_and_faults": [
+          "原请求首次处理、领域拒绝、原 Receipt 重放、ACK 丢失、Unknown/原样重试、一次绑定/epoch 变化"
+        ],
+        "excluded_behaviors": [
+          "连续物理/寻路/真实 PostgreSQL、跨进程 Crash、精确 400ms、输入活性、任意命令数量、所有模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单角色原有权威事务原子提交；原 Receipt 已持久化且身份唯一；有限整数不代表实际时钟。"
+      ]
+    },
+    "witness-domain-water": {
+      "config": "witness-domain-water.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoRejectedWaterWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxCommands": 1,
+          "Mode": "authority"
+        },
+        "covered_interleavings_and_faults": [
+          "原请求首次处理、领域拒绝、原 Receipt 重放、ACK 丢失、Unknown/原样重试、一次绑定/epoch 变化"
+        ],
+        "excluded_behaviors": [
+          "连续物理/寻路/真实 PostgreSQL、跨进程 Crash、精确 400ms、输入活性、任意命令数量、所有模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单角色原有权威事务原子提交；原 Receipt 已持久化且身份唯一；有限整数不代表实际时钟。"
+      ]
+    },
+    "witness-late": {
+      "config": "witness-late.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoLateRejectedWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxCommands": 2,
+          "Mode": "authority"
+        },
+        "covered_interleavings_and_faults": [
+          "原请求首次处理、领域拒绝、原 Receipt 重放、ACK 丢失、Unknown/原样重试、一次绑定/epoch 变化"
+        ],
+        "excluded_behaviors": [
+          "连续物理/寻路/真实 PostgreSQL、跨进程 Crash、精确 400ms、输入活性、任意命令数量、所有模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单角色原有权威事务原子提交；原 Receipt 已持久化且身份唯一；有限整数不代表实际时钟。"
+      ]
+    },
+    "witness-replay": {
+      "config": "witness-replay.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoReplayWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxCommands": 1,
+          "Mode": "authority"
+        },
+        "covered_interleavings_and_faults": [
+          "原请求首次处理、领域拒绝、原 Receipt 重放、ACK 丢失、Unknown/原样重试、一次绑定/epoch 变化"
+        ],
+        "excluded_behaviors": [
+          "连续物理/寻路/真实 PostgreSQL、跨进程 Crash、精确 400ms、输入活性、任意命令数量、所有模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单角色原有权威事务原子提交；原 Receipt 已持久化且身份唯一；有限整数不代表实际时钟。"
+      ]
+    },
+    "witness-moved-replay": {
+      "config": "witness-moved-replay.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoMovedRetryWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxCommands": 1,
+          "Mode": "authority"
+        },
+        "covered_interleavings_and_faults": [
+          "原请求首次处理、领域拒绝、原 Receipt 重放、ACK 丢失、Unknown/原样重试、一次绑定/epoch 变化"
+        ],
+        "excluded_behaviors": [
+          "连续物理/寻路/真实 PostgreSQL、跨进程 Crash、精确 400ms、输入活性、任意命令数量、所有模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单角色原有权威事务原子提交；原 Receipt 已持久化且身份唯一；有限整数不代表实际时钟。"
+      ]
+    },
+    "witness-stop": {
+      "config": "witness-stop.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoStopFenceWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxCommands": 2,
+          "Mode": "authority"
+        },
+        "covered_interleavings_and_faults": [
+          "原请求首次处理、领域拒绝、原 Receipt 重放、ACK 丢失、Unknown/原样重试、一次绑定/epoch 变化"
+        ],
+        "excluded_behaviors": [
+          "连续物理/寻路/真实 PostgreSQL、跨进程 Crash、精确 400ms、输入活性、任意命令数量、所有模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单角色原有权威事务原子提交；原 Receipt 已持久化且身份唯一；有限整数不代表实际时钟。"
+      ]
+    },
+    "witness-epoch": {
+      "config": "witness-epoch.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoEpochRejectedWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxCommands": 1,
+          "Mode": "authority"
+        },
+        "covered_interleavings_and_faults": [
+          "原请求首次处理、领域拒绝、原 Receipt 重放、ACK 丢失、Unknown/原样重试、一次绑定/epoch 变化"
+        ],
+        "excluded_behaviors": [
+          "连续物理/寻路/真实 PostgreSQL、跨进程 Crash、精确 400ms、输入活性、任意命令数量、所有模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单角色原有权威事务原子提交；原 Receipt 已持久化且身份唯一；有限整数不代表实际时钟。"
+      ]
+    },
+    "witness-refusal": {
+      "config": "witness-refusal.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoRefusalWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxCommands": 2,
+          "Mode": "authority"
+        },
+        "covered_interleavings_and_faults": [
+          "原请求首次处理、领域拒绝、原 Receipt 重放、ACK 丢失、Unknown/原样重试、一次绑定/epoch 变化"
+        ],
+        "excluded_behaviors": [
+          "连续物理/寻路/真实 PostgreSQL、跨进程 Crash、精确 400ms、输入活性、任意命令数量、所有模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单角色原有权威事务原子提交；原 Receipt 已持久化且身份唯一；有限整数不代表实际时钟。"
+      ]
+    },
+    "witness-budget": {
+      "config": "witness-budget.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoFullBudgetWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": false,
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxCommands": 3,
+          "Mode": "budget"
+        },
+        "covered_interleavings_and_faults": [
+          "同一连接两方向和一 stop 的待定账本、绑定变化、Unknown/原样重试；本配置不安排服务端回复"
+        ],
+        "excluded_behaviors": [
+          "连续物理/寻路/真实 PostgreSQL、跨进程 Crash、精确 400ms、输入活性、任意命令数量、所有模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单角色原有权威事务原子提交；原 Receipt 已持久化且身份唯一；有限整数不代表实际时钟。"
+      ],
+      "deadlock_reason": "budget 仅检查客户端准入安全；刻意不安排服务端响应，满槽等待不应被解释为实现死锁。"
+    },
+    "witness-origin": {
+      "config": "witness-origin.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoFreshOriginWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxCommands": 2,
+          "Mode": "authority"
+        },
+        "covered_interleavings_and_faults": [
+          "原请求首次处理、领域拒绝、原 Receipt 重放、ACK 丢失、Unknown/原样重试、一次绑定/epoch 变化"
+        ],
+        "excluded_behaviors": [
+          "连续物理/寻路/真实 PostgreSQL、跨进程 Crash、精确 400ms、输入活性、任意命令数量、所有模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单角色原有权威事务原子提交；原 Receipt 已持久化且身份唯一；有限整数不代表实际时钟。"
+      ]
+    },
+    "positive-order": {
+      "config": "positive-order.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "CommandWatermark",
+        "AppliedOrder",
+        "ReceiptStable",
+        "StopFence",
+        "EpochFence",
+        "RejectedRoutePreserved",
+        "OutstandingBudget",
+        "DirectionOriginCurrent",
+        "OriginalRequestIdentity",
+        "ReplayPreservesCurrent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxCommands": 2,
+          "Mode": "order"
+        },
+        "covered_interleavings_and_faults": [
+          "顺序2包含同连接新binding/旧ACK/原Receipt重复处理/更高Accepted或领域拒绝水位；epoch固定"
+        ],
+        "excluded_behaviors": [
+          "连续物理/寻路/真实 PostgreSQL、跨进程 Crash、精确 400ms、输入活性、任意命令数量、所有模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单角色原有权威事务原子提交；原 Receipt 已持久化且身份唯一；有限整数不代表实际时钟。"
+      ]
+    },
+    "positive-epoch": {
+      "config": "positive-epoch.cfg",
+      "timeout_seconds": 120,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "TypeOK",
+        "CommandWatermark",
+        "AppliedOrder",
+        "ReceiptStable",
+        "StopFence",
+        "EpochFence",
+        "RejectedRoutePreserved",
+        "OutstandingBudget",
+        "DirectionOriginCurrent",
+        "OriginalRequestIdentity",
+        "ReplayPreservesCurrent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxCommands": 1,
+          "Mode": "authority"
+        },
+        "covered_interleavings_and_faults": [
+          "单命令原Receipt/Unknown/实际重试跨epoch；不声称新epoch另一个新动作组合"
+        ],
+        "excluded_behaviors": [
+          "连续物理/寻路/真实 PostgreSQL、跨进程 Crash、精确 400ms、输入活性、任意命令数量、所有模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单角色原有权威事务原子提交；原 Receipt 已持久化且身份唯一；有限整数不代表实际时钟。"
+      ]
+    },
+    "negative-replay-route": {
+      "config": "negative-replay-route.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "ReplayPreservesCurrent"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "replay-route",
+          "MaxCommands": 2,
+          "Mode": "order"
+        },
+        "covered_interleavings_and_faults": [
+          "顺序2包含同连接新binding/旧ACK/原Receipt重复处理/更高Accepted或领域拒绝水位；epoch固定"
+        ],
+        "excluded_behaviors": [
+          "连续物理/寻路/真实 PostgreSQL、跨进程 Crash、精确 400ms、输入活性、任意命令数量、所有模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单角色原有权威事务原子提交；原 Receipt 已持久化且身份唯一；有限整数不代表实际时钟。"
+      ]
+    },
+    "witness-replay-newer": {
+      "config": "witness-replay-newer.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoReplayAfterNewerWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxCommands": 2,
+          "Mode": "order"
+        },
+        "covered_interleavings_and_faults": [
+          "顺序2包含同连接新binding/旧ACK/原Receipt重复处理/更高Accepted或领域拒绝水位；epoch固定"
+        ],
+        "excluded_behaviors": [
+          "连续物理/寻路/真实 PostgreSQL、跨进程 Crash、精确 400ms、输入活性、任意命令数量、所有模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单角色原有权威事务原子提交；原 Receipt 已持久化且身份唯一；有限整数不代表实际时钟。"
+      ]
+    },
+    "witness-replay-refusal": {
+      "config": "witness-replay-refusal.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoReplayAfterRefusalWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxCommands": 2,
+          "Mode": "order"
+        },
+        "covered_interleavings_and_faults": [
+          "顺序2包含同连接新binding/旧ACK/原Receipt重复处理/更高Accepted或领域拒绝水位；epoch固定"
+        ],
+        "excluded_behaviors": [
+          "连续物理/寻路/真实 PostgreSQL、跨进程 Crash、精确 400ms、输入活性、任意命令数量、所有模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单角色原有权威事务原子提交；原 Receipt 已持久化且身份唯一；有限整数不代表实际时钟。"
+      ]
+    },
+    "witness-replay-new-binding": {
+      "config": "witness-replay-new-binding.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoReplayAfterNewBindingWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxCommands": 2,
+          "Mode": "order"
+        },
+        "covered_interleavings_and_faults": [
+          "顺序2包含同连接新binding/旧ACK/原Receipt重复处理/更高Accepted或领域拒绝水位；epoch固定"
+        ],
+        "excluded_behaviors": [
+          "连续物理/寻路/真实 PostgreSQL、跨进程 Crash、精确 400ms、输入活性、任意命令数量、所有模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单角色原有权威事务原子提交；原 Receipt 已持久化且身份唯一；有限整数不代表实际时钟。"
+      ]
+    },
+    "witness-old-ack-new-binding": {
+      "config": "witness-old-ack-new-binding.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoOldAckNewBindingWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxCommands": 2,
+          "Mode": "order"
+        },
+        "covered_interleavings_and_faults": [
+          "顺序2包含同连接新binding/旧ACK/原Receipt重复处理/更高Accepted或领域拒绝水位；epoch固定"
+        ],
+        "excluded_behaviors": [
+          "连续物理/寻路/真实 PostgreSQL、跨进程 Crash、精确 400ms、输入活性、任意命令数量、所有模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单角色原有权威事务原子提交；原 Receipt 已持久化且身份唯一；有限整数不代表实际时钟。"
+      ]
+    },
+    "witness-replay-new-moving-route": {
+      "config": "witness-replay-new-moving-route.cfg",
+      "timeout_seconds": 60,
+      "workers": 1,
+      "heap_mb": 768,
+      "expected_invariants": [
+        "NoReplayWithNewMovingRouteWitness"
+      ],
+      "expected_properties": [],
+      "checks_deadlock": true,
+      "scope": {
+        "parameters": {
+          "Fault": "none",
+          "MaxCommands": 2,
+          "Mode": "order"
+        },
+        "covered_interleavings_and_faults": [
+          "顺序2包含同连接新binding/旧ACK/原Receipt重复处理/更高Accepted或领域拒绝水位；epoch固定"
+        ],
+        "excluded_behaviors": [
+          "连续物理/寻路/真实 PostgreSQL、跨进程 Crash、精确 400ms、输入活性、任意命令数量、所有模型组合"
+        ],
+        "liveness": "NOT_CHECKED"
+      },
+      "assumptions": [
+        "单角色原有权威事务原子提交；原 Receipt 已持久化且身份唯一；有限整数不代表实际时钟。"
+      ]
+    }
+  }
+}

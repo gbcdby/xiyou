@@ -1,0 +1,64 @@
+import assert from 'node:assert/strict';
+
+/** 比较每次真实 paint 的位置和它实际使用的插值时钟，不把稍后的画面读取时刻配给旧帧。 */
+export function assertPaintContinuity(capture) {
+  const paints = capture.paints;
+  assert.ok(Array.isArray(paints) && paints.length >= 2, '必须捕获实际绘制，不能仅用重复读取重建动画');
+  capture.continuity = []; capture.motionBoundaries = [];
+  const scope = ['rendererId', 'instance', 'sceneId', 'viewId', 'controlEpoch', 'appearanceEpoch'];
+  for (const paint of paints) {
+    assert.ok(scope.every(key => paint[key] !== undefined) && paint.self?.ref, '每个实际绘制都须记录身份与实例边界');
+    assert.ok([paint.motionAt, paint.self.position.x, paint.self.position.y, paint.self.distance].every(Number.isFinite));
+  }
+  for (let i = 1; i < paints.length; i++) {
+    const from = paints[i - 1], to = paints[i];
+    const changed = scope.filter(key => from[key] !== to[key]); if (from.self.ref !== to.self.ref) changed.push('entityRef');
+    if (changed.length) { capture.motionBoundaries.push({ from, to, changed }); continue; }
+    assert.equal(to.serial, from.serial + 1, '连续实例不能遗漏实际绘制或把同一serial的重复读取当新帧');
+    const interval = { from, to, delta: Math.hypot(to.self.position.x - from.self.position.x, to.self.position.y - from.self.position.y), dt: to.motionAt - from.motionAt };
+    interval.limit = 180 * interval.dt / 1000 + 4; capture.continuity.push(interval);
+    if (interval.dt < 0 || interval.delta > interval.limit || to.self.distance < from.self.distance) capture.failedInterval = interval;
+    assert.ok(interval.dt >= 0, '真实绘制插值时钟不能倒退');
+    assert.ok(to.self.distance >= from.self.distance, '连续短计划步态相位不重置');
+    assert.ok(interval.delta <= interval.limit, '确认段不发生超速跳点');
+  }
+  return capture.continuity;
+}
+
+/** 读取生产渲染器刚完成的真实Canvas帧；不创建隐藏SVG或按测试需要重画场景。 */
+export async function canvasFrame(page) {
+  const frame = await page.getByTestId('spatial-map').evaluate(async canvas => {
+    if (!(canvas instanceof HTMLCanvasElement)) throw new Error('主场景必须是真实Canvas');
+    return (await import('/src/rendering/spatial-canvas.ts')).readCanvasFrame(canvas);
+  });
+  assert.ok(frame, '实际画布已完成至少一次合成');
+  return frame;
+}
+
+export async function worldPixel(page, position, { round = false } = {}) {
+  return page.getByTestId('spatial-map').evaluate(async (canvas, { position, round }) => {
+    const frame = (await import('/src/rendering/spatial-canvas.ts')).readCanvasFrame(canvas);
+    if (!frame || !(canvas instanceof HTMLCanvasElement)) throw new Error('场景画布尚未完成绘制');
+    const box=canvas.getBoundingClientRect(),fit=frame.fit;
+    const x=box.left+fit.x+position.x*fit.scale,y=box.top+fit.y+position.y*fit.scale;
+    const pixel={x:round?Math.round(x):x,y:round?Math.round(y):y};
+    const hit=document.elementFromPoint(pixel.x,pixel.y);
+    return {pixel,click:{x:pixel.x-box.left,y:pixel.y-box.top},mappedWorld:{x:Math.round((pixel.x-box.left-fit.x)/fit.scale),y:Math.round((pixel.y-box.top-fit.y)/fit.scale)},scale:fit.scale,hit:{tag:hit?.tagName,class:hit?.getAttribute('class'),label:hit?.closest('button')?.getAttribute('aria-label')||null}};
+  }, { position, round });
+}
+
+/** 独立检查真实像素与DPR尺寸；帧清单本身不充当像素或动效验收。 */
+export async function canvasPixels(page) {
+  const result=await page.getByTestId('spatial-map').evaluate(canvas=>{
+    const box=canvas.getBoundingClientRect(),data=canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height).data,colors=new Set();
+    let opaque=0,samples=0,hash=2166136261;
+    const stride=Math.max(1,Math.floor(Math.sqrt(canvas.width*canvas.height/10000)));
+    for(let y=0;y<canvas.height;y+=stride)for(let x=0;x<canvas.width;x+=stride){const i=(y*canvas.width+x)*4;samples++;if(data[i+3])opaque++;const color=((data[i]<<24)|(data[i+1]<<16)|(data[i+2]<<8)|data[i+3])>>>0;colors.add(color);hash=Math.imul(hash^color,16777619)>>>0;}
+    return {width:canvas.width,height:canvas.height,css:{width:box.width,height:box.height},dpr:devicePixelRatio,colors:colors.size,opaque,samples,hash,entityDOM:document.querySelectorAll('.spatial-map svg,.spatial-map .spatial-person,.spatial-map .spatial-item,.spatial-map .spatial-target,.spatial-map image').length};
+  });
+  assert.ok(result.width>0&&result.height>0&&result.css.width>0&&result.css.height>0);
+  assert.ok(Math.abs(result.width-result.css.width*result.dpr)<=1&&Math.abs(result.height-result.css.height*result.dpr)<=1,'CSS尺寸与DPR backing尺寸一致');
+  assert.ok(result.opaque/result.samples>.95&&result.colors>8,'实际合成像素非空且具有场景层次');
+  assert.equal(result.entityDOM,0,'主场景没有逐实体DOM/SVG绘图');
+  return result;
+}

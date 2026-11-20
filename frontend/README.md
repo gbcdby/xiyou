@@ -22,6 +22,8 @@ npm run dev
 
 开发服务器默认仅监听本机。`/api` 和 `/socket.io` 代理到本机 `3000` 端口；已有权威服务的 `DATABASE_URL` 用法见[后端启动说明](../backend/README.md#技术选择与启动)。运行本轮双 NPC 模拟切片时在根目录使用 `npm run start:mock`，策略和预算见[模拟策略说明](../backend/ai/mock.md)；`npm start` 只启动权威服务。部署入口及正式代理尚未配置。`npm run build` 先执行 `vue-tsc --noEmit`，再生成静态产物，不发布或部署。
 
+空间页面的同一 store 在 `dev`、`build` 和 `preview` 中明确请求 `spatial-direction-v1` 与 `spatial-timed-trail-v1`。只有本次握手实际接受两项能力才接入分段显示；首次握手被旧服务端以 `INVALID_MESSAGE` 拒绝时，在发送世界动作前仅回退一次。认证失败不降级，重连重新确认能力。普通后端命令入口已选择 50 毫秒检查点；自行调用服务工厂时须显式传入对应配置。显示仅消费已授权、已实际执行的轨迹，呈现信用只来自真实成功的可见绘制。
+
 默认入口 `/` 请求真实 HTTP 服务。`/sessions/:sessionId` 通过真实 Socket.IO 订阅当前账号的授权视图。没有服务、身份失效或尚未取得合法快照时，页面明确显示未连接或不可访问，不生成房间、动作成功或世界变化。
 
 `/demo` 是独立的静态界面演示：只使用手写且通过公开契约校验的授权 DTO，醒目标注“无真实联机”，所有世界动作停用。演示数据的 `contentVersion` 是 `ui-demo-v1`，不作为实际内容或玩法验收材料。

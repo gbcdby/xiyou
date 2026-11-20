@@ -1,0 +1,39 @@
+{
+  "source_revision": "aacbf377e3cb94cb2c9ec77c3609eac9e773b1e5",
+  "source_tree": "e760d4cfa13e99146177651db3029ba6794f6191",
+  "design_inputs": [
+    {
+      "name": "design-r1.md",
+      "sha256": "3a7c05867eb2532163c5f43c933660bf0023f2b919adba622c14df96b4121037",
+      "bytes": 14498,
+      "author": "原稿内未署名；由 /root 提供冻结输入",
+      "status": "未采纳的冻结提案"
+    },
+    {
+      "name": "model-delta-r1.md",
+      "sha256": "81e3db7a8534de3a7a6f818dc9b247cf0fc5766a8a83cfd4cf53eb42de76e1a8",
+      "bytes": 7929,
+      "author": "原稿内未署名；由 /root 提供冻结输入",
+      "status": "未采纳的冻结提案"
+    },
+    {
+      "name": "candidate-comparison-r1.md",
+      "sha256": "c1130781a469fcde4feb23cb01fe5e821bdf5ee9a94fa7218d5b480b9cfffedf",
+      "bytes": 5404,
+      "author": "原稿内未署名；由 /root 提供冻结输入",
+      "status": "未采纳的冻结提案"
+    },
+    {
+      "name": "termination-addendum-r1a.md",
+      "sha256": "42859bd836e7bbb89f752f284a607b9d0f657e24725d25ef92e913817774e0b7",
+      "bytes": 2707,
+      "author": "/root",
+      "status": "未采纳的冻结提案"
+    }
+  ],
+  "archive": {
+    "path": "evidence/design-inputs-r1a.tar.gz",
+    "sha256": "6f5714fdb71a1dcd07f37dcdf60163d50191cc0d97f336ff37f51fdd5b43511b",
+    "bytes": 14943
+  }
+}

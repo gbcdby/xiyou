@@ -92,7 +92,7 @@ try {
   report.animationFrames = await page.evaluate(() => window.__a3ArtFrames);
   for (const direction of ['s', 'se', 'e', 'ne', 'n']) assert.ok(report.animationFrames.some(frame => frame.file?.includes(`/walk/${direction}/`)), '真实移动消费原生方向 ' + direction);
   assert.ok(report.animationFrames.some(frame => frame.mirror === 'scale(-1 1)'), '真实移动消费镜像方向');
-  assert.equal(await page.getByRole('button', { name: '重新载入图像', exact: true }).count(), 0, '本次所用素材没有加载失败');
+  assert.equal(await page.getByRole('button', { name: '重新载入场景', exact: true }).count(), 0, '本次所用素材没有加载失败');
   check('八向真实点地、转向、镜像与到达站姿，连续录像已捕获');
   await point(page, { x: 1200, y: 800 }, false); await sleep(250);
   await page.getByRole('button', { name: '停步 / 取消后续操作', exact: true }).click();
@@ -113,8 +113,8 @@ try {
   await room.go(0, room.R('R02')); await capture(page, 'road-desktop.png'); check('通过真实出口进入庄外，原始概念背景仅作本阶段场景输入');
   await page.route('**/assets/gaolaozhuang/gaocai/**', route => route.abort()); await page.reload();
   await until(async () => (await snapshot(page))?.projection.self.appearanceId === 'gaocai', '重连恢复授权外观');
-  await page.getByRole('button', { name: '重新载入图像', exact: true }).waitFor(); assert.equal(await page.locator('[data-spatial-self] [data-art-fallback]').count(), 1);
-  await page.unroute('**/assets/gaolaozhuang/gaocai/**'); await page.getByRole('button', { name: '重新载入图像', exact: true }).click();
+  await page.getByRole('button', { name: '重新载入场景', exact: true }).waitFor(); assert.equal(await page.locator('[data-spatial-self] [data-art-fallback]').count(), 1);
+  await page.unroute('**/assets/gaolaozhuang/gaocai/**'); await page.getByRole('button', { name: '重新载入场景', exact: true }).click();
   await until(() => page.locator('[data-spatial-self] [data-art-frame]').count(), '资源重试恢复原站姿');
   check('图像失败保持中性可选回退，显式重试恢复');
   assert.ok(report.capabilityRequests.length >= 2); for (const request of report.capabilityRequests) { assert.equal(request.header, 'spatial-v2,spatial-appearance-v1'); assert.deepEqual(request.capabilities, ['spatial-v2', 'spatial-appearance-v1']); }

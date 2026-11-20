@@ -20,6 +20,9 @@ import { isSpatial, ensureView } from '../game/spatial-world.mjs';
 import * as spatial from './spatial-runtime.mjs';
 import * as scenePolicy from './scene-policy.mjs';
 import { encodeJsonbText, decodeJsonbText } from './jsonb-text.mjs';
+import { spatialDirectionConfig, checkDirectionCapability, directionCapability } from './spatial-direction-config.mjs';
+import { createSpatialSupply } from './spatial-supply.mjs';
+import { PrefixStateCache } from './prefix-state-cache.mjs';
 
 const digest = value => createHash('sha256').update(typeof value === 'string' ? value : canonicalize(value)).digest('hex');
 const id = prefix => `${prefix}-${randomUUID()}`;
@@ -27,6 +30,8 @@ const validId = value => typeof value === 'string' && /^[A-Za-z0-9][A-Za-z0-9_.:
 const requireId = value => { if (!validId(value)) throw new RuntimeError('INVALID_MESSAGE', '标识格式无效。'); };
 // 普通事务最多让位这么久；到点后不再被后来到达的控制请求续期。
 export const CONTROL_PRIORITY_WAIT_MS = 250;
+// 每批四参数一行，保留完整事件序列；同一事务内按块串行写入。
+const SPATIAL_EVENT_BATCH_SIZE = 256;
 export function clientReceipt(receipt) {
   if (receipt.schemaVersion === 2) return validateSpatial('ReceiptV2', receipt.publicReceipt);
   const { key, ...fields } = receipt;
@@ -46,9 +51,13 @@ export class AuthorityRuntime extends EventEmitter {
   #internals = new WeakMap();
   #views = new Map();
   #publishing = false;
+  #prefixStates;
   #controlPriority = new Map();
-  constructor({ pool, now = Date.now, hooks = {} }) {
+  constructor({ pool, now = Date.now, hooks = {}, spatialDirection = false }) {
     super(); this.pool = pool; this.now = now; this.hooks = hooks;
+    this.#prefixStates = new PrefixStateCache(pool);
+    this.spatialDirection = spatialDirectionConfig(spatialDirection);
+    this.spatialSupply = createSpatialSupply(this);
   }
   async migrate() {
     const client = await this.pool.connect();
@@ -78,6 +87,7 @@ export class AuthorityRuntime extends EventEmitter {
     if (notify && wasActive) this.emit('view-revoked', { connectionId, sessionId: view.sessionId });
   }
   async close() {
+    this.#prefixStates.close();
     for (const gate of this.#controlPriority.values()) for (const entry of gate.pending.values()) entry.resolve();
     this.#controlPriority.clear();
     for (const view of this.#views.values()) this.retireView(view);
@@ -90,13 +100,23 @@ export class AuthorityRuntime extends EventEmitter {
     await this.pool.query('INSERT INTO runtime_users(user_id,name,token_hash) VALUES($1,$2,$3)', [userId, name.trim(), digest(token)]);
     return { token, userId, name: name.trim() };
   }
-  async authenticate(token, client = this.pool) {
+  /** 内部Session参数只由持锁access传入；普通认证不关联ACL。 */
+  async authenticate(token, client = this.pool, sessionId) {
     if (typeof token !== 'string' || token.length > 256) throw new RuntimeError('UNAUTHENTICATED', '请重新登录。');
-    const user = (await client.query('SELECT user_id, name FROM runtime_users WHERE token_hash=$1 AND active', [digest(token)])).rows[0];
+    const user = (await client.query(sessionId === undefined
+      ? 'SELECT user_id, name FROM runtime_users WHERE token_hash=$1 AND active'
+      : 'SELECT u.user_id,u.name,a.actor_id FROM runtime_users u LEFT JOIN session_access a ON a.session_id=$2 AND a.user_id=u.user_id AND a.active WHERE u.token_hash=$1 AND u.active',
+    sessionId === undefined ? [digest(token)] : [digest(token), sessionId])).rows[0];
     if (!user) throw new RuntimeError('UNAUTHENTICATED', '请重新登录。');
-    return { userId: user.user_id, name: user.name, principalId: `human:${user.user_id}` };
+    return { userId: user.user_id, name: user.name, principalId: `human:${user.user_id}`, ...(sessionId === undefined ? {} : { actorId: user.actor_id }) };
   }
-  async access(client, row, token) {
+  async access(client, row, token, { sessionLock } = {}) {
+    // 仅指定同步/方向提交在原同Session行锁内传入；不建立锁或缓存授权，仍在这里新读账号与读权。
+    if (sessionLock === 'share' || sessionLock === 'update') {
+      const user = await this.authenticate(token, client, row.session_id);
+      if (user.actorId === null) throw new RuntimeError('FORBIDDEN', '当前账号无权访问本局。');
+      return user;
+    }
     const user = await this.authenticate(token, client);
     const access = (await client.query('SELECT actor_id FROM session_access WHERE session_id=$1 AND user_id=$2 AND active', [row.session_id, user.userId])).rows[0];
     if (!access) throw new RuntimeError('FORBIDDEN', '当前账号无权访问本局。');
@@ -129,9 +149,21 @@ export class AuthorityRuntime extends EventEmitter {
   }
   async persist(tx) {
     if (tx.events.length) {
-      for (const event of tx.events) {
-        const stored = isSpatial(tx.state) ? encodeJsonbText(event) : { value: event, encoding: null };
-        await tx.client.query('INSERT INTO world_events(session_id,session_seq,event,event_text_encoding) VALUES($1,$2,$3,$4)', [tx.row.session_id, event.sessionSeq, stored.value, stored.encoding]);
+      if (isSpatial(tx.state) && tx.events.length > 1) {
+        for (let start = 0; start < tx.events.length; start += SPATIAL_EVENT_BATCH_SIZE) {
+          const values = [], rows = [];
+          for (const event of tx.events.slice(start, start + SPATIAL_EVENT_BATCH_SIZE)) {
+            const stored = encodeJsonbText(event), offset = values.length;
+            values.push(tx.row.session_id, event.sessionSeq, stored.value, stored.encoding);
+            rows.push(`($${offset + 1},$${offset + 2},$${offset + 3},$${offset + 4})`);
+          }
+          await tx.client.query('INSERT INTO world_events(session_id,session_seq,event,event_text_encoding) VALUES' + rows.join(','), values);
+        }
+      } else {
+        for (const event of tx.events) {
+          const stored = isSpatial(tx.state) ? encodeJsonbText(event) : { value: event, encoding: null };
+          await tx.client.query('INSERT INTO world_events(session_id,session_seq,event,event_text_encoding) VALUES($1,$2,$3,$4)', [tx.row.session_id, event.sessionSeq, stored.value, stored.encoding]);
+        }
       }
       await tx.client.query('INSERT INTO outbox(session_id,from_exclusive,through_seq) VALUES($1,$2,$3)', [tx.row.session_id, tx.row.state.sessionSeq, tx.state.sessionSeq]);
     }
@@ -142,6 +174,7 @@ export class AuthorityRuntime extends EventEmitter {
   }
   async #lockedBody(sessionId, command, operation) {
     const readOnly = command?.readOnly === true;
+    const sharedRead = command?.kind === 'spatial-sync' && command.sessionLock === 'share';
     requireId(sessionId);
     const client = await this.pool.connect();
     let committed = false;
@@ -153,9 +186,10 @@ export class AuthorityRuntime extends EventEmitter {
       await client.query(readOnly ? 'BEGIN READ ONLY' : 'BEGIN');
       // 收据只读不取会话行锁，避免重连回放把 control.resume 堵在同一行的锁队列后。
       const row = (await client.query(readOnly ? 'SELECT * FROM sessions WHERE session_id=$1'
-        : 'SELECT * FROM sessions WHERE session_id=$1 FOR UPDATE', [sessionId])).rows[0];
+        : sharedRead ? 'SELECT * FROM sessions WHERE session_id=$1 FOR SHARE' : 'SELECT * FROM sessions WHERE session_id=$1 FOR UPDATE', [sessionId])).rows[0];
       if (!row) throw new RuntimeError('SESSION_GONE', '本局不可访问。');
       tx = this.buildTransaction(client, row, command.cause);
+      if (!readOnly) this.#prefixStates.capture(tx, this.pool);
       result = await operation(tx);
       if (result instanceof RuntimeError) { deferredError = result; result = null; }
       if (!readOnly) await this.persist(tx);
@@ -211,6 +245,49 @@ export class AuthorityRuntime extends EventEmitter {
       }
     }
   }
+  #outboxRecordCovered(record) {
+    if ([...this.#handles.values()].some(handle => this.pendingViewInstallation(handle, record.session_id))) return false;
+    for (const view of this.#views.values()) {
+      if (!view.active || view.sessionId !== record.session_id) continue;
+      if (view.schemaVersion !== 2 || !this.spatialSupply.enabled(view.handle) || !this.spatialSupply.current(view.handle, view)) return false;
+      const through = this.spatialSupply.cursor(view);
+      if (through === null || BigInt(through) < BigInt(record.through_seq)) return false;
+    }
+    return true;
+  }
+  async #publishOutboxProgress(record, progressLock = 'wait') {
+    const sessionId = record.session_id, command = 'outbox-progress', events = [];
+    return this.#withControlPriority(sessionId, { kind: command }, async () => {
+      const client = await this.pool.connect(); let committed = false, committing = false, releaseError;
+      try {
+        await client.query('BEGIN');
+        let row;
+        try {
+          row = (await client.query('SELECT session_id FROM sessions WHERE session_id=$1 FOR UPDATE' + (progressLock === 'try' ? ' NOWAIT' : ''), [sessionId])).rows[0];
+        } catch (error) {
+          if (progressLock !== 'try' || error.code !== '55P03') throw error;
+          // 只有这次锁申请碰忙可延期；真实回滚完成前不能释放G或复用client。
+          try { await client.query('ROLLBACK'); }
+          catch (rollbackError) { releaseError = rollbackError; throw rollbackError; }
+          return false;
+        }
+        if (!row) throw new RuntimeError('SESSION_GONE', '本局不可访问。');
+        // 同一排他切点重枚举当前读者与非单调的安装资格；旧枚举或旧binding不授予进度。
+        const covered = this.#outboxRecordCovered(record);
+        if (covered) {
+          await client.query("UPDATE outbox SET status='Published',attempts=attempts+1 WHERE session_id=$1 AND through_seq=$2", [sessionId, record.through_seq]);
+          await this.hooks.beforeCommit?.({ command, sessionId, events });
+        }
+        committing = true; await client.query('COMMIT'); committed = true;
+        if (covered) await this.hooks.afterCommit?.({ command, sessionId, events });
+        return covered;
+      } catch (error) {
+        if (!committed && !releaseError) await client.query('ROLLBACK').catch(() => {});
+        if (committed || committing) throw new RuntimeError('OUTCOME_UNKNOWN', '提交结果尚未确认，请查询原动作身份。');
+        throw error;
+      } finally { client.release(releaseError); }
+    }).catch(error => { if (error.code === 'SESSION_GONE') return true; throw error; });
+  }
   async applyControlEffects(tx) {
     const actorIds = new Set(tx.events.filter(event => event.kind === 'control.changed').map(event => event.payload.actorId));
     if (!actorIds.size) return;
@@ -263,6 +340,7 @@ export class AuthorityRuntime extends EventEmitter {
     return response;
   }
   async create(token, { nonce, contentVersion, capabilities = [] }) {
+    checkDirectionCapability(this.spatialDirection, capabilities);
     requireId(nonce);
     await this.authenticate(token);
     let content;
@@ -302,6 +380,7 @@ export class AuthorityRuntime extends EventEmitter {
     return rows.map(row => ({ sessionId: row.session_id, name: row.name, playerCount: row.player_count, phase: row.phase, ...(row.capability === 'spatial-v2' ? { protocolCapability: 'spatial-v2', contentVersion: row.content_version, requiredCapabilities: spatial.requiredSpatialCapabilities(row.profile) } : {}) }));
   }
   async join(token, sessionId, { nonce, capabilities = [] }) {
+    checkDirectionCapability(this.spatialDirection, capabilities);
     await this.authenticate(token);
     return this.locked(sessionId, { kind: 'join' }, async tx => {
       if (isSpatial(tx.state)) spatial.requireSpatialCapability(capabilities, tx.state);
@@ -364,6 +443,7 @@ export class AuthorityRuntime extends EventEmitter {
     });
   }
   async snapshot(token, sessionId, capabilities = []) {
+    checkDirectionCapability(this.spatialDirection, capabilities);
     await this.authenticate(token);
     return this.locked(sessionId, { kind: 'snapshot' }, async tx => {
       const user = await this.access(tx.client, tx.row, token);
@@ -390,10 +470,12 @@ export class AuthorityRuntime extends EventEmitter {
   }
   canInstallConnectionView(handle, view, scope) {
     const connection = this.connection(handle), current = this.#views.get(handle.connectionId);
+    const sent = this.spatialSupply.cursor(current);
+    const currentWater = sent !== null && BigInt(sent) > BigInt(current.cursor) ? sent : current?.cursor;
     return !connection.closing && this.#handles.get(handle.connectionId) === handle
       && scope.generation >= connection.installedViewScopeGeneration
       && (view.terminalGeneration === undefined || view.terminalGeneration === connection.terminalViewGeneration)
-      && !(current?.sessionId === view.sessionId && current.scope.generation === scope.generation && BigInt(current.cursor) > BigInt(view.cursor));
+      && !(current?.sessionId === view.sessionId && current.scope.generation === scope.generation && BigInt(currentWater) > BigInt(view.cursor));
   }
   setConnectionView(handle, view, scope) {
     if (!this.canInstallConnectionView(handle, view, scope)) return false;
@@ -486,14 +568,19 @@ export class AuthorityRuntime extends EventEmitter {
   }
   async stateAt(tx, throughSeq) {
     if (throughSeq === tx.state.sessionSeq) return tx.state;
-    const events = (await tx.client.query('SELECT event,event_text_encoding FROM world_events WHERE session_id=$1 AND session_seq<=$2 ORDER BY session_seq', [tx.row.session_id, throughSeq])).rows;
-    let state = tx.row.initial_state;
+    const read = this.#prefixStates.begin(tx, throughSeq, this.pool);
+    if (read?.sequence === throughSeq) return read.state;
+    const events = read?.sequence !== null && read?.sequence !== undefined
+      ? (await tx.client.query('SELECT event,event_text_encoding FROM world_events WHERE session_id=$1 AND session_seq>$2 AND session_seq<=$3 ORDER BY session_seq', [tx.row.session_id, read.sequence, throughSeq])).rows
+      : (await tx.client.query('SELECT event,event_text_encoding FROM world_events WHERE session_id=$1 AND session_seq<=$2 ORDER BY session_seq', [tx.row.session_id, throughSeq])).rows;
+    let state = read?.state ?? tx.row.initial_state;
     for (const { event, event_text_encoding } of events) state = reduceWorld(state, decodeJsonbText(event, event_text_encoding), tx.content);
     if (state.sessionSeq !== throughSeq) throw new RuntimeError('RESYNC_REQUIRED', '所需事件前缀当前不可用。');
+    this.#prefixStates.complete(read, tx, state, this.pool);
     return state;
   }
-  async sync(handle, raw) {
-    if (parseStrictJSON(raw)?.schemaVersion === 2) return spatial.syncSpatial(this, handle, parseSpatial('SyncRequestV2', raw));
+  async sync(handle, raw, internal = {}) {
+    if (parseStrictJSON(raw)?.schemaVersion === 2) return spatial.syncSpatial(this, handle, parseSpatial('SyncRequestV2', raw), internal);
     const request = parseContract('SyncRequest', raw);
     const connection = this.connection(handle);
     await this.authenticate(connection.token);
@@ -517,20 +604,141 @@ export class AuthorityRuntime extends EventEmitter {
       return validateContract('WorldBatch', { schemaVersion: 1, type: 'world.batch', sessionId: request.sessionId, viewId: view.viewId, fromExclusive: request.cursor, throughSeq, events });
     });
   }
-  /** 发布器只读取已提交前缀；发送失败保留 Pending，客户端游标始终由客户端确认。 */
-  async publishPending(deliver = async () => {}, { capability = null } = {}) {
-    if (this.#publishing) return;
+  /** 原owner内只协调一个session；有限P逐行进度G与有限发送波次W各至多一个。 */
+  async #publishSessionWaves(records, deliver, isStopped, progressLock) {
+    const sessionId = records[0].session_id;
+    let head = records.at(-1).through_seq, generation = 0, attempted = -1, retryPage = false;
+    let index = 0, published = 0, wave = null, progress = null, owedProgress = false;
+    let draining = false, closed = false, mixed = false, firstError = null;
+    let wake = Promise.withResolvers();
+    const signal = () => { const previous = wake; wake = Promise.withResolvers(); previous.resolve(); };
+    const views = () => [...this.#views.values()].filter(view => view.active && view.sessionId === sessionId);
+    const halted = () => {
+      mixed ||= views().some(view => view.schemaVersion !== 2 || !this.spatialSupply.enabled(view.handle));
+      return isStopped() || mixed || firstError !== null;
+    };
+    const demand = through => {
+      if (closed || draining) return;
+      if (through !== null && through !== undefined && BigInt(through) > BigInt(head)) head = through;
+      generation++; signal();
+    };
+    const onCommit = ({ sessionId: committedSession, events }) => {
+      if (committedSession === sessionId && events.length) demand(events.at(-1).sessionSeq);
+    };
+    const onReady = ({ connectionId }) => { if (this.#views.get(connectionId)?.sessionId === sessionId) demand(null); };
+    const fail = error => { firstError ??= error; signal(); };
+    const covered = through => this.#outboxRecordCovered({ session_id: sessionId, through_seq: through });
+
+    const startWave = () => {
+      // H与候选集合在波次开始冻结；H不进入DTO，也不是读权或可信sent。
+      const target = head, selected = views();
+      attempted = generation; retryPage = false;
+      wave = (async () => {
+        let advanced = false;
+        for (let offset = 0; offset < selected.length; offset += 5) {
+          // 普通draining仍完成已冻结的后续组；stop/error/mixed则不再开始任何peer。
+          if (halted()) break;
+          const settled = await Promise.allSettled(selected.slice(offset, offset + 5).map(async view => {
+            if (halted() || !view.active || this.pendingViewInstallation(view.handle)) return;
+            try {
+              const result = await this.spatialSupply.publish(view, target,
+                (batch, binding) => deliver(binding.handle.connectionId, batch, binding));
+              advanced ||= result.progressed === true;
+            } catch (error) {
+              if (error.keepSpatialPending) { fail(error); throw error; }
+              if (error.code === 'RESYNC_REQUIRED' && this.pendingViewInstallation(view.handle)) return;
+              if (['FORBIDDEN', 'UNAUTHENTICATED', 'RESYNC_REQUIRED', 'SESSION_GONE'].includes(error.code)) this.retireView(view, true);
+              else { fail(error); throw error; }
+            }
+          }));
+          const failed = settled.find(result => result.status === 'rejected');
+          if (failed) fail(failed.reason);
+        }
+        // 每handle只有一次原lane调用；真实分页前进才允许同需求再获一个波次。
+        retryPage = advanced && !covered(target);
+      })().then(() => { wave = null; owedProgress = true; signal(); }, error => { wave = null; fail(error); });
+    };
+    const startProgress = record => {
+      index++; owedProgress = false;
+      progress = (async () => {
+        await this.hooks.duringPublish?.({ sessionId, throughSeq: record.through_seq });
+        // G已接纳后沿原helper自然收束；后来的W失败不能假取消它或撤销真实COMMIT。
+        if (await this.#publishOutboxProgress(record, progressLock)) published++;
+      })().then(() => {
+        progress = null;
+        // 游标到尾不是终止：最后G实际settle后才禁新W，既有W仍须完成有限分组。
+        if (index === records.length) draining = true;
+        signal();
+      }, error => { progress = null; if (index === records.length) draining = true; fail(error); });
+    };
+
+    // 先接线，再查询权威已提交提示；查询窗口内的通知与查询结果取最大值，不丢唤醒。
+    this.on('commit', onCommit); this.on('spatial-supply-ready', onReady);
+    try {
+      const initial = (await this.pool.query('SELECT max(through_seq) AS through_seq FROM outbox WHERE session_id=$1', [sessionId])).rows[0]?.through_seq;
+      if (initial !== null && initial !== undefined && BigInt(initial) > BigInt(head)) head = initial;
+      for (;;) {
+        const notified = wake.promise;
+        if (halted()) break;
+        if (!progress && index === records.length) draining = true;
+        if (draining && !wave && !progress) break;
+        if (!wave) {
+          const record = records[index], ready = record && covered(record.through_seq);
+          // 一个有限W结束后，可完成旧行保有下一次G机会，新hint不能擦掉它。
+          if (!progress && ready && owedProgress) startProgress(record);
+          else if (!draining && (generation !== attempted || retryPage) && !covered(head)) startWave();
+          else if (!progress && record) {
+            if (ready) startProgress(record);
+            else { index++; owedProgress = false; continue; }
+          }
+        }
+        if (!wave && !progress) continue;
+        // 只等轻量通知，不以首个失败/停止冒充已排入lane、SQL或G的实际结束。
+        await notified;
+      }
+    } finally {
+      await Promise.allSettled([wave, progress].filter(Boolean));
+      closed = true; this.off('commit', onCommit); this.off('spatial-supply-ready', onReady);
+    }
+    if (firstError) throw firstError;
+    return published;
+  }
+  /** 发布器只读取已提交前缀；新计时模式须有可信入队证据，失败保留Pending。 */
+  async publishPending(deliver = async () => {}, { capability = null, isStopped = () => false, progressLock = 'wait' } = {}) {
+    if (this.#publishing) return { busy: true, examined: 0, published: 0 };
     this.#publishing = true;
+    let examined = 0, published = 0;
     try {
       const pending = (await this.pool.query("SELECT o.session_id,o.through_seq FROM outbox o JOIN sessions s ON s.session_id=o.session_id WHERE o.status='Pending' AND ($1::text IS NULL OR s.state->>'protocolCapability'=$1) ORDER BY o.session_id,o.through_seq", [capability])).rows;
-      for (const record of pending) {
+      examined = pending.length;
+      for (let recordIndex = 0; recordIndex < pending.length; recordIndex++) {
+        const record = pending[recordIndex];
+        if (isStopped()) break;
         let installationPending = [...this.#handles.values()].some(handle => this.pendingViewInstallation(handle, record.session_id));
-        for (const view of this.#views.values()) {
-          if (!view.active || view.sessionId !== record.session_id) continue;
+        const views = [...this.#views.values()].filter(view => view.active && view.sessionId === record.session_id);
+        const parallel = views.length > 0 && views.every(view => view.schemaVersion === 2 && this.spatialSupply.enabled(view.handle));
+        if (parallel) {
+          let end = recordIndex + 1;
+          while (end < pending.length && pending[end].session_id === record.session_id) end++;
+          published += await this.#publishSessionWaves(pending.slice(recordIndex, end), deliver, isStopped, progressLock);
+          recordIndex = end - 1;
+          continue;
+        }
+        const publishView = async view => {
           try {
             for (;;) {
               if (!view.active) break;
               if (this.pendingViewInstallation(view.handle)) { installationPending = true; break; }
+              if (view.schemaVersion === 2 && this.spatialSupply.enabled(view.handle)) {
+                const result = await this.spatialSupply.publish(view, record.through_seq, (batch, binding) => deliver(binding.handle.connectionId, batch, binding));
+                if (result.blocked) installationPending = true;
+                if (result.blocked || result.ignored || result.covered) break;
+                continue;
+              }
+              // 仅复用当前已安装视图自身的覆盖水位；旧通知不再次锁读动态新前缀。
+              if (this.spatialDirection && view.schemaVersion === 2 && this.connectionView(view.handle) === view
+                && this.connection(view.handle).capabilities.includes(directionCapability)
+                && BigInt(view.cursor) >= BigInt(record.through_seq)) break;
               const batch = await this.sync(view.handle, JSON.stringify({ schemaVersion: view.schemaVersion ?? 1, type: 'sync.request', sessionId: view.sessionId, viewId: view.viewId, cursor: view.cursor }));
               if (batch.throughSeq === view.cursor) break;
               if (!view.active) break;
@@ -539,26 +747,35 @@ export class AuthorityRuntime extends EventEmitter {
               if (BigInt(batch.throughSeq) >= BigInt(record.through_seq)) break;
             }
           } catch (error) {
+            if (error.keepSpatialPending) throw error;
             if (error.code === 'RESYNC_REQUIRED' && this.pendingViewInstallation(view.handle)) installationPending = true;
             else if (['FORBIDDEN', 'UNAUTHENTICATED', 'RESYNC_REQUIRED', 'SESSION_GONE'].includes(error.code)) this.retireView(view, true);
             else throw error;
           }
+        };
+        for (const view of this.#views.values()) {
+          if (view.active && view.sessionId === record.session_id) await publishView(view);
         }
         // 安装等待不阻塞其他读者，也不能把等待中的新视图尚未收到的事件标为已发布。
         if (installationPending) continue;
+        if (isStopped()) break;
         await this.hooks.duringPublish?.({ sessionId: record.session_id, throughSeq: record.through_seq });
+        if (isStopped()) break;
         await this.locked(record.session_id, { kind: 'outbox-progress' }, async tx => {
           await tx.client.query("UPDATE outbox SET status='Published',attempts=attempts+1 WHERE session_id=$1 AND through_seq=$2", [record.session_id, record.through_seq]);
         }).catch(error => { if (error.code !== 'SESSION_GONE') throw error; });
+        published++;
       }
+      return { busy: false, examined, published };
     } finally { this.#publishing = false; }
   }
   /** 仅由可信传输适配器在真实连接建立后调用；请求正文不能创建此句柄。 */
   async openConnection(token, capabilities = []) {
     const user = await this.authenticate(token);
+    checkDirectionCapability(this.spatialDirection, capabilities);
     const handle = Object.freeze({ connectionId: id('connection') });
     await this.pool.query('INSERT INTO connections(connection_id,user_id,lease_until) VALUES($1,$2,$3)', [handle.connectionId, user.userId, new Date(this.now() + 60_000).toISOString()]);
-    this.#connections.set(handle, { ...user, token, capabilities, grants: new Map(), viewScopeGeneration: 0, viewScopeFence: 0, installedViewScopeGeneration: 0, terminalViewGeneration: 0, requestedViewScope: null, pendingViews: new Set(), recoverableView: null, closing: false });
+    this.#connections.set(handle, { ...user, token, capabilities: Object.freeze([...capabilities]), grants: new Map(), viewScopeGeneration: 0, viewScopeFence: 0, installedViewScopeGeneration: 0, terminalViewGeneration: 0, requestedViewScope: null, pendingViews: new Set(), recoverableView: null, closing: false });
     this.#handles.set(handle.connectionId, handle);
     return handle;
   }
@@ -642,6 +859,16 @@ export class AuthorityRuntime extends EventEmitter {
       await tx.client.query("UPDATE decisions SET record=jsonb_set(record,'{status}','\"Expired\"') WHERE session_id=$1 AND record->>'status'='Pending' AND (record->>'deadlineAt')::timestamptz<=$2", [sessionId, tx.time]);
     });
   }
+  /** 高频切片只推进原共享空间时钟，不提前执行代理接管或决定过期维护。 */
+  async spatialCheckpoint(sessionId) {
+    if (!this.spatialDirection) return false;
+    return this.locked(sessionId, { kind: 'spatial-checkpoint', cause: { principalId: 'system', actionId: 'spatial-checkpoint' } }, async tx => {
+      const activeHuman = () => isSpatial(tx.state) && tx.state.phase === 'Running' && !tx.state.paused && Object.values(tx.state.characters).some(actor => actor.kind === 'human' && actor.mode === 'HumanControlled' && ['accepted', 'moving'].includes(actor.movement?.status));
+      if (!activeHuman()) return false;
+      await spatial.advanceSpatialTime(tx);
+      return activeHuman();
+    });
+  }
   prepareDecision(handle, options) { return decisions.prepareDecision(this, handle, options); }
   prepareDecisionContext(handle) { return decisions.prepareDecisionContext(this, handle); }
   recoverDecisions(handle) { return decisions.recoverDecisions(this, handle); }
@@ -653,6 +880,7 @@ export class AuthorityRuntime extends EventEmitter {
   async receipt(token, sessionId, actionId) {
     requireId(actionId);
     await this.authenticate(token);
+    // 收据读取不写世界状态，也不取会话行锁；仍复用原事务采样与返回校验。
     return this.locked(sessionId, { kind: 'receipt', readOnly: true }, async tx => {
       const user = await this.access(tx.client, tx.row, token);
       const row = (await tx.client.query('SELECT receipt,actor_id FROM action_receipts WHERE session_id=$1 AND principal_id=$2 AND client_action_id=$3', [sessionId, user.principalId, actionId])).rows[0];
@@ -823,6 +1051,7 @@ export class AuthorityRuntime extends EventEmitter {
       await this.deadline(tx);
       if (!terminal(tx.row.state)) return new RuntimeError('FORBIDDEN', '只有已经结束的 Session 可以删除。');
       await tx.client.query('DELETE FROM sessions WHERE session_id=$1', [sessionId]);
+      tx.afterCommit.push(() => this.#prefixStates.clearSession(sessionId));
     });
     for (const view of this.#views.values()) if (view.sessionId === sessionId) this.retireView(view, true);
     return result;
