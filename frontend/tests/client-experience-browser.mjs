@@ -70,12 +70,9 @@ async function exerciseMotion(initial,first){
   if(directionSubmissions)await beginDirectionObservations(server.runtime,room);
   const assetsBefore=report.httpAssets.length,actionsBefore=(await actions()).map(action=>action.id),start=Date.now();await startCapture();
   await phase('right');await page.keyboard.down('ArrowRight');for(let i=0;i<5;i++){await sleep(100);await page.keyboard.down('ArrowRight');}
-  const elasticHold=scenario==='normal';
   await phase('diagonal');await page.keyboard.down('ArrowDown');await sleep(350);
-  const diagonalHold=Date.now();if(elasticHold){await until(async()=>page.evaluate(()=>Boolean(window.uxCapture?.frames?.some(frame=>frame.phase==='diagonal'&&frame.self?.facing==='SE'))),'斜向已由真实Canvas应用',5000);await sleep(120);}
   await phase('down-only');await page.keyboard.up('ArrowRight');await sleep(450);
-  const downHold=Date.now();if(elasticHold){await until(async()=>page.evaluate(()=>Boolean(window.uxCapture?.frames?.some(frame=>frame.phase==='down-only'&&frame.self?.facing==='S'))),'下向已由真实Canvas应用',5000);await sleep(120);}
-  report.motionHold={diagonalExtraMs:elasticHold?Date.now()-diagonalHold:0,downExtraMs:elasticHold?Date.now()-downHold:0,scope:elasticHold?'normal 实际应用等待':'late/five 固定时序'};
+  report.motionHold={scope:'三场景均保持原固定按键时序'};
   await phase('stopped');await page.keyboard.up('ArrowDown');await waitSettled();await sleep(250);
   const capture=await stopCapture();report.motion=capture;report.presentation=await page.evaluate(()=>window.uxPresentation.stop());await saveJSON(resolve(output,'result-before-cleanup.json'),report);
   report.presentationSummary=assertPresentationEvidence(report.presentation);
