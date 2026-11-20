@@ -41,7 +41,7 @@ export class SpatialSessionClient {
   #source: MovementCommandSource | null = null; #queued: QueuedAction | null = null; #controlBusy = false;
   #pendingControl: { request: ControlRequestV2; raw: string; serial: number } | null = null;
   #heartbeat: ReturnType<typeof setInterval> | null = null; #retryTimer: ReturnType<typeof setTimeout> | null = null;
-  #syncKey = ''; #syncRevision = 0;
+  #syncKey = ''; #syncRevision = 0; #refetchRevision = 0;
   #displayedArrival = '';
   #replayQueue: string[] = []; #replaying = false; #replaySerial = 0;
   #controlIdleWaiters: (() => void)[] = [];
@@ -128,7 +128,7 @@ export class SpatialSessionClient {
     const result = this.#view.applyBatch(value, generation);
     if (result === 'applied') { this.#publish(); this.#drainQueued(); }
     else if (result === 'resync') this.#openConnection();
-    else if (result === 'refetch') void this.sync();
+    else if (result === 'refetch') { this.#refetchRevision++; void this.sync(); }
     return result;
   }
   async sync() {
@@ -137,17 +137,24 @@ export class SpatialSessionClient {
     // 控制事务会替换服务端视图；结果未决时，不用旧视图补发打断同一连接上的原 nonce。
     if (!snapshot || !link?.connected || this.#pendingControl || this.#syncKey === key) return;
     this.#syncKey = key;
+    const ownsSync = () => serial === this.#serial && generation === this.#view.generation
+      && revision === this.#syncRevision && this.#link === link && link.connected && !this.#pendingControl;
     try {
       for (let page = 0; page < 8; page++) {
-        if (revision !== this.#syncRevision || this.#pendingControl) break;
+        if (!ownsSync()) break;
         const request = this.#view.syncRequest(); if (!request) break;
+        const refetchRevision = this.#refetchRevision;
         const value = await link.request('sync.request', canonicalize(request));
         if (serial !== this.#serial) return;
         // 访问失效不属于可丢弃的旧视图结果，必须继续立即撤销本连接的授权。
         const error = asError(value);
         if (error && ['UNAUTHENTICATED', 'FORBIDDEN', 'SESSION_GONE', 'UPGRADE_REQUIRED'].includes(error.code)) { this.#handleError(value); return; }
-        if (generation !== this.#view.generation || revision !== this.#syncRevision) return;
-        if (this.#batch(value, generation) !== 'applied') break;
+        if (!ownsSync()) return;
+        const result = this.#batch(value, generation);
+        if (!ownsSync()) break;
+        // 同一轮承接被去重的补取意图，所有续页仍共用八次请求上限。
+        if (result !== 'applied' && result !== 'refetch'
+          && !(result === 'duplicate' && refetchRevision !== this.#refetchRevision)) break;
       }
     } catch { if (serial === this.#serial && generation === this.#view.generation && revision === this.#syncRevision) { this.#message = '状态同步暂未完成，当前位置仍以上次服务器确认为准。'; this.#publish(); } }
     finally { if (this.#syncKey === key) this.#syncKey = ''; }
