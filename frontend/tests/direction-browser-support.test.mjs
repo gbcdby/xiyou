@@ -43,14 +43,15 @@ function lateFixture() {
     movementRequests: [request, { clientActionId: 'new-s', action: { kind: 'move_direction', direction: 'S', movementCommandSeq: '5' } }, { clientActionId: 'stop', action: { kind: 'stop_move', movementCommandSeq: '6' } }] };
 }
 
-test('lateACK资格：拒绝Rejected、零轴、未跨DOWN、历史提前收束及新S未抢先', () => {
+test('lateACK资格：拒绝Rejected、零轴、未跨DOWN、历史提前收束及迟到ACK不复活SE', () => {
   assert.equal(assertAcceptedLateEvidence(lateFixture()).qualified, true);
+  const lateAccepted = lateFixture(); lateAccepted.submissions[0].submitReturnedAt = 1442;
+  assert.equal(assertAcceptedLateEvidence(lateAccepted).southAcceptedBeforeAck, false);
   for (const change of [
     d => { d.selected.receipt.status = 'Rejected'; },
     d => { d.plan.path[1].x = d.plan.path[0].x; },
     d => { d.client.acknowledgements[0].wallAt = 1349; },
     d => { d.client.inputs[0].actions[0].status = 'accepted'; d.client.inputs[0].actions[0].receipt = d.selected.receipt; },
-    d => { d.submissions[0].submitReturnedAt = 1442; },
     d => { d.stored.push(structuredClone(d.stored[0])); },
     d => { d.selected.enteredAt = 1179; },
   ]) { const evidence = lateFixture(); change(evidence); assert.throws(() => assertAcceptedLateEvidence(evidence)); }

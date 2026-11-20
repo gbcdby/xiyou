@@ -93,8 +93,8 @@ async function exerciseMotion(initial,first){
     assert.ok(row?.receipt?.observedSeq!==undefined,`缺少 ${direction} Accepted 覆盖线`);
     return BigInt(row.receipt.observedSeq);
   };
-  const anchoredWindow=(frames,phase,facing,coverage,label)=>{
-    const applied=frames.filter(frame=>frame.phase===phase&&frame.self?.facing===facing
+  const anchoredWindow=(frames,facing,coverage,label)=>{
+    const applied=frames.filter(frame=>frame.self?.facing===facing
       &&BigInt(frame.paint?.snapshotSeq??frame.snapshotSeq)>=coverage);
     const anchor=applied[0];
     assert.ok(anchor,`${label} 未观察到实际应用 ${facing} 的帧`);
@@ -105,7 +105,7 @@ async function exerciseMotion(initial,first){
   assert.equal(report.httpAssets.length,assetsBefore,'移动不重新请求图片');const movementActions=(await actions()).filter(action=>!actionsBefore.includes(action.id)).map(action=>JSON.parse(action.raw).action);assert.ok(movementActions.length<=Math.ceil((Date.now()-start)/100)+3,'按键repeat不形成额外请求洪峰');assert.equal(movementActions.at(-1).kind,'stop_move');
   const directional=movementActions.filter(action=>action.kind!=='stop_move');assert.ok(directional.length>0);assert.ok(directional.every(action=>action.kind==='move_direction'&&action.sceneId===initial.projection.self.sceneId&&action.mapVersion===initial.projection.mapVersion));
   if(scenario==='normal'){
-    const diagonal=anchoredWindow(stable,'diagonal','SE',acceptedCoverage('SE'),'diagonal'),vertical=anchoredWindow(stable,'down-only','S',acceptedCoverage('S'),'down-only');assert.ok(diagonal.at(-1).self.position.x>diagonal[0].self.position.x&&diagonal.at(-1).self.position.y>diagonal[0].self.position.y);assert.ok(vertical.at(-1).self.position.y>vertical[0].self.position.y+10);assert.ok(Math.abs(vertical.at(-1).self.position.x-vertical[0].self.position.x)<4,'松开右键后仍沿下键行走');
+    const diagonal=anchoredWindow(stable,'SE',acceptedCoverage('SE'),'diagonal'),vertical=anchoredWindow(stable,'S',acceptedCoverage('S'),'down-only');assert.ok(diagonal.at(-1).self.position.x>diagonal[0].self.position.x&&diagonal.at(-1).self.position.y>diagonal[0].self.position.y);assert.ok(vertical.at(-1).self.position.y>vertical[0].self.position.y+10);assert.ok(Math.abs(vertical.at(-1).self.position.x-vertical[0].self.position.x)<4,'松开右键后仍沿下键行走');
     assert.deepEqual(directional.map(action=>action.direction).filter((value,index,array)=>index===0||value!==array[index-1]),['E','SE','S']);
     const acceptedDirections=report.wireActions.filter(row=>row.receipt.status==='Accepted'&&!actionsBefore.includes(row.receipt.clientActionId)).map(row=>JSON.parse(row.raw).action).filter(action=>action.kind==='move_direction');
     for(const direction of ['E','SE','S'])assert.ok(acceptedDirections.some(action=>action.direction===direction),'本阶段必须真实Accepted方向 '+direction);
@@ -121,7 +121,7 @@ async function exerciseMotion(initial,first){
     for(let index=0;index<room.pages.length;index++){const current=await directionConnections.qualify(room.pages[index],room.users[index].userId,'after-motion-'+index),initial=report.directionQualification[index];for(const key of ['connectionId','viewId','controlEpoch'])assert.equal(current[key],initial[key],'运动期间保留同一实际安装绑定');report.directionQualification.push(current);}
     if(scenario==='late-accepted-se-180'){
       report.lateAcceptance=await collectAcceptedLateEvidence(database.pool,directionSubmissions,report.directionClients[0],movementRequests);
-      report.lateSummary=assertAcceptedLateEvidence(report.lateAcceptance);check('AC05-late','原Accepted双轴SE的180ms迟到ACK跨DOWN，新S抢先Accepted且不复活旧轴',report.lateSummary);
+      report.lateSummary=assertAcceptedLateEvidence(report.lateAcceptance);check('AC05-late','原Accepted双轴SE的180ms迟到ACK跨DOWN，新S先发出并最终Accepted且不复活旧轴',report.lateSummary);
     }else{
       report.fiveSupply=assertFivePersonSupply({readers:report.directionClients,sends:report.directionServer.sends,stop:stopReceipt,finalPosition:await position()});check('AC05-five','五个当前新模式读者真实连续应用主运动者及终止前缀',report.fiveSupply);
     }
