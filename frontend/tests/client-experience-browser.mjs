@@ -104,13 +104,13 @@ async function exerciseMotion(initial,first){
   };
   assert.equal(report.httpAssets.length,assetsBefore,'移动不重新请求图片');const movementActions=(await actions()).filter(action=>!actionsBefore.includes(action.id)).map(action=>JSON.parse(action.raw).action);assert.ok(movementActions.length<=Math.ceil((Date.now()-start)/100)+3,'按键repeat不形成额外请求洪峰');assert.equal(movementActions.at(-1).kind,'stop_move');
   const directional=movementActions.filter(action=>action.kind!=='stop_move');assert.ok(directional.length>0);assert.ok(directional.every(action=>action.kind==='move_direction'&&action.sceneId===initial.projection.self.sceneId&&action.mapVersion===initial.projection.mapVersion));
-  if(scenario!=='five-person'){
+  if(scenario==='normal'){
     const diagonal=anchoredWindow(stable,'diagonal','SE',acceptedCoverage('SE'),'diagonal'),vertical=anchoredWindow(stable,'down-only','S',acceptedCoverage('S'),'down-only');assert.ok(diagonal.at(-1).self.position.x>diagonal[0].self.position.x&&diagonal.at(-1).self.position.y>diagonal[0].self.position.y);assert.ok(vertical.at(-1).self.position.y>vertical[0].self.position.y+10);assert.ok(Math.abs(vertical.at(-1).self.position.x-vertical[0].self.position.x)<4,'松开右键后仍沿下键行走');
     assert.deepEqual(directional.map(action=>action.direction).filter((value,index,array)=>index===0||value!==array[index-1]),['E','SE','S']);
     const acceptedDirections=report.wireActions.filter(row=>row.receipt.status==='Accepted'&&!actionsBefore.includes(row.receipt.clientActionId)).map(row=>JSON.parse(row.raw).action).filter(action=>action.kind==='move_direction');
     for(const direction of ['E','SE','S'])assert.ok(acceptedDirections.some(action=>action.direction===direction),'本阶段必须真实Accepted方向 '+direction);
   }else{
-    report.axisScope='five-person 只验证五读者连续应用与终止前缀；方向轴切换由 normal/late 覆盖';
+    report.axisScope='late 验证迟到 ACK 证据，five-person 验证五读者连续应用与终止前缀；方向轴切换仅由 normal 覆盖';
   }
   const stopped=await position();await sleep(300);assert.deepEqual(await position(),stopped);check('AC02','真实Canvas每帧完整合成、固定fit、实体不因走动消失且图片缓存复用',{frames:capture.frames.length});
   await sleep(120);const shortStart=await position(),shortIds=(await actions()).map(action=>action.id);
