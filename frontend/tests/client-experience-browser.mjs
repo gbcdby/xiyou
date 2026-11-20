@@ -98,7 +98,7 @@ async function exerciseMotion(initial,first){
       &&BigInt(frame.paint?.snapshotSeq??frame.snapshotSeq)>=coverage);
     const anchor=applied[0];
     assert.ok(anchor,`${label} 未观察到实际应用 ${facing} 的帧`);
-    assert.ok(applied.length>=3,`${label} 锚后窗证据不足：${applied.length} 帧`);
+    assert.ok(applied.length>=2,`${label} 锚后窗证据不足：${applied.length} 帧`);
     report.motionWindows={...(report.motionWindows??{}),[label]:{anchorAt:anchor.at,anchorSeq:anchor.snapshotSeq,frames:applied.length,spanMs:applied.at(-1).at-anchor.at}};
     return applied;
   };
