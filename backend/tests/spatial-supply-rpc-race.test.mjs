@@ -68,7 +68,7 @@ test('RRS-T01/T02：真实运动push之后RPC续读S，轨迹从S开始且已排
   }
 });
 
-test('RRS-T03：先行push校验拒收后新ACK不能跳前缀，fresh需求仍走真实历史补读', { timeout: 15000 }, async t => {
+test('RRS-T03：push拒收后本轮refetch补历史，独立fresh只追加一次空重复', { timeout: 15000 }, async t => {
   const r = await rpcRaceRoom(t, database.pool), peer = r.clients[0], R = peer.client.state.snapshot.snapshotSeq;
   const gate = r.holdRead(peer), wireStart = peer.wire.length, requestStart = peer.requests.length, rpcCount = r.rpc.length;
   let round, corrupted = 0;
@@ -80,16 +80,32 @@ test('RRS-T03：先行push校验拒收后新ACK不能跳前缀，fresh需求仍�
     };
     round = peer.client.sync(); round.catch(() => {});
     await until(() => r.rpc.length > rpcCount, '真实RPC须先入队', 5000);
-    const B = await r.append(); gate.release(); await round; await r.settle();
+    const B = await r.append(); gate.release(); await round;
+    await until(() => peer.wire.slice(wireStart).filter(item => item.kind === 'ack' && Object.hasOwn(item, 'after')).length >= 3,
+      '原consumer须完成本轮补取与独立fresh的三次ACK', 5000);
+    await r.settle();
     const wire = peer.wire.slice(wireStart), push = wire.find(item => item.kind === 'push' && item.value.throughSeq === S);
     const race = wire.find(item => item.kind === 'ack' && item.value.fromExclusive === S);
     const history = wire.find(item => item.kind === 'ack' && item.value.fromExclusive === R && item.value.throughSeq === B);
+    const requests = peer.requests.slice(requestStart).filter(item => item.event === 'sync.request').map(item => item.request);
+    const acks = wire.filter(item => item.kind === 'ack');
+    t.diagnostic(JSON.stringify({ case: 'RRS-T03', R, S, B, requestCursors: requests.map(request => request.cursor),
+      acks: acks.map(item => ({ type: item.value.type, fromExclusive: item.value.fromExclusive, throughSeq: item.value.throughSeq,
+        syncFrontierSeq: item.value.syncFrontierSeq, eventCount: Array.isArray(item.value.events) ? item.value.events.length : null,
+        before: item.before, after: item.after })), installedB: peer.snapshots.filter(value => value.snapshotSeq === B).length, sent: r.sent(peer) }));
     assert.equal(corrupted, 1); assert(push && race && history);
     assert.equal(push.before, R); assert.equal(push.after, R);
     assert.equal(race.before, R); assert.equal(race.after, R, '不连续的新ACK不能跳过拒收前缀');
     assert.equal(history.before, R); assert.equal(history.after, B);
     assert(wire.indexOf(race) < wire.indexOf(history));
-    assert.equal(peer.requests.slice(requestStart).filter(item => item.event === 'sync.request').length, 2, 'push的fresh需求只追加一次，不由ACK递归制造需求');
+    // 回复自身的refetch从R续本轮；push已登记的独立fresh仍须从B服务一次，不能被历史补取吞掉。
+    assert.deepEqual(requests.map(request => request.cursor), [R, R, B], '本轮历史补取与独立fresh各一次，ACK不能制造第四次请求');
+    assert(requests.every(request => request.sessionId === r.sessionId && request.viewId === peer.client.state.snapshot.viewId));
+    assert.deepEqual(acks.map(item => [item.value.type, item.value.fromExclusive, item.value.throughSeq, item.before, item.after]), [
+      ['world.batch', S, B, R, R], ['world.batch', R, B, R, B], ['world.batch', B, B, B, B],
+    ]);
+    assert.deepEqual(acks[2].value.events, [], '独立fresh回复必须是合法空重复，不能再次重放历史');
+    assert.equal(acks[2].value.syncFrontierSeq, B);
     assert.equal(peer.snapshots.filter(value => value.snapshotSeq === B).length, 1);
     assert.equal(r.sent(peer), B);
   } finally { gate.release(); delete peer.transformPush; await round?.catch(() => {}); }
