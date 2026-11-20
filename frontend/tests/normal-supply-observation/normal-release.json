@@ -1,0 +1,45 @@
+{
+  "format": "NSO_RELEASE_V1",
+  "state": "ROOT_RELEASE_NSO_NORMAL_ONCE",
+  "allocationId": "NSO_NORMAL_V1_ONCE",
+  "stage": "normal",
+  "scenario": "normal",
+  "productHead": "16099e191fdc80c52849aa1d67cd075ccca4e01e",
+  "productTree": "31f82d6478e2ced1d27875c75160eef626ffe0bf",
+  "diagnosticBranch": "diagnostic/d66-normal-supply-16099-v1",
+  "methodSHA256": "3a48159459952d40dece2857a443b2ddd6134787e37916035ed77feba983549a",
+  "inputSHA256": null,
+  "candidateTree": null,
+  "attempts": 1,
+  "retries": 0,
+  "previousAttemptsRefunded": false,
+  "budget": {
+    "wallSeconds": 120,
+    "termSeconds": 10,
+    "killSeconds": 2
+  },
+  "setupBudget": {
+    "wallSeconds": 720,
+    "termSeconds": 10,
+    "killSeconds": 2
+  },
+  "reviews": {
+    "requirements": {
+      "scope": "STATIC_NSO_COMPLETE_METHOD_REQUIREMENTS",
+      "sha256": "5b049bc3b07fe5781472f236c02697c8b006e28d4ddc2c3b26cdaecc986eb935",
+      "conclusion": "PASS"
+    },
+    "standards": {
+      "scope": "STATIC_NSO_COMPLETE_METHOD_STANDARDS",
+      "sha256": "d2760f6c1fad8a7948b808cfe0af52605f704e3b1b1dfe688c7b40dd9a2b2acc",
+      "conclusion": "PASS"
+    }
+  },
+  "finiteEvidence": {
+    "executionSHA256": "be068a4ec7b5306944eeec7bdb7290eb258e23bae57c174d54df350e19e36ae2",
+    "independentReviewSHA256": "de64b8b62d57395e11e28916c2eea6b9a814e59bb0a9da95039b362b8b7deb03",
+    "scope": "NSO_FINITE_32_EXECUTION_EVIDENCE",
+    "conclusion": "PASS"
+  },
+  "firstMethodPushOnly": true
+}

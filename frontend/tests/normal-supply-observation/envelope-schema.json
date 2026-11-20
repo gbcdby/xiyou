@@ -1,0 +1,505 @@
+{
+  "format": "NSO_ENVELOPE_V1",
+  "rawHeader": {
+    "type": "object",
+    "fields": {
+      "format": {
+        "const": "NSO_RAW_V1"
+      },
+      "realm": {
+        "type": "string",
+        "maxCodeUnits": 4
+      },
+      "naturalQualified": {
+        "const": false
+      },
+      "productHead": {
+        "type": "string",
+        "maxCodeUnits": 40
+      },
+      "productTree": {
+        "type": "string",
+        "maxCodeUnits": 40
+      },
+      "methodSHA256": {
+        "type": "string",
+        "maxCodeUnits": 64
+      },
+      "inputSHA256": {
+        "type": "string",
+        "maxCodeUnits": 64
+      },
+      "schemaSHA256": {
+        "type": "string",
+        "maxCodeUnits": 64
+      },
+      "kinds": {
+        "type": "array",
+        "maxItems": 3,
+        "items": {
+          "type": "string",
+          "maxCodeUnits": 32
+        }
+      },
+      "limits": {
+        "type": "object",
+        "fields": {
+          "maxRows": {
+            "type": "number",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "bytes": 32
+          },
+          "maxReceivers": {
+            "type": "number",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "bytes": 32
+          },
+          "maxObjects": {
+            "type": "number",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "bytes": 32
+          },
+          "maxStringCodeUnits": {
+            "type": "number",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "bytes": 32
+          },
+          "maxModuleCodeUnits": {
+            "type": "number",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "bytes": 32
+          },
+          "maxModules": {
+            "type": "number",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "bytes": 32
+          },
+          "maxColdImports": {
+            "type": "number",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "bytes": 32
+          },
+          "maxErrorCodes": {
+            "type": "number",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "bytes": 32
+          },
+          "maxErrorCodeUnits": {
+            "type": "number",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "bytes": 32
+          },
+          "maxCounter": {
+            "type": "number",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "bytes": 32
+          },
+          "maxRestorers": {
+            "type": "number",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "bytes": 32
+          },
+          "rawMaxBytes": {
+            "type": "number",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "bytes": 32
+          },
+          "coldMaxBytes": {
+            "type": "number",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "bytes": 32
+          },
+          "headerReserveBytes": {
+            "type": "number",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "bytes": 32
+          }
+        }
+      },
+      "setup": {
+        "type": "object",
+        "fields": {
+          "installed": {
+            "type": "boolean"
+          },
+          "installedAt": {
+            "type": "number-or-null",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "bytes": 32
+          },
+          "hookCount": {
+            "type": "number",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "bytes": 32
+          },
+          "listenerCount": {
+            "type": "number",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "bytes": 32
+          },
+          "modules": {
+            "type": "array",
+            "maxItems": 2,
+            "items": {
+              "type": "string",
+              "maxCodeUnits": 1024
+            }
+          },
+          "candidates": {
+            "type": "array",
+            "maxItems": 2,
+            "items": {
+              "type": "number",
+              "maximum": 9007199254740991,
+              "minimum": 0,
+              "bytes": 32
+            }
+          },
+          "coldImports": {
+            "type": "array",
+            "maxItems": 2,
+            "items": {
+              "type": "string",
+              "maxCodeUnits": 128
+            }
+          }
+        }
+      },
+      "rows": {
+        "type": "array",
+        "maxItems": 0,
+        "items": {
+          "type": "number",
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "bytes": 32
+        }
+      },
+      "terminal": {
+        "type": "object",
+        "fields": {
+          "stoppedAt": {
+            "type": "number-or-null",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "bytes": 32
+          },
+          "admissionClosed": {
+            "type": "string-or-null",
+            "maxCodeUnits": 64
+          },
+          "seen": {
+            "type": "number",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "bytes": 32
+          },
+          "recorded": {
+            "type": "number",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "bytes": 32
+          },
+          "dropped": {
+            "type": "number",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "bytes": 32
+          },
+          "returned": {
+            "type": "number",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "bytes": 32
+          },
+          "threw": {
+            "type": "number",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "bytes": 32
+          },
+          "notifications": {
+            "type": "number",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "bytes": 32
+          },
+          "seenByKind": {
+            "type": "array",
+            "maxItems": 3,
+            "items": {
+              "type": "number",
+              "maximum": 9007199254740991,
+              "minimum": 0,
+              "bytes": 32
+            }
+          },
+          "recordedByKind": {
+            "type": "array",
+            "maxItems": 3,
+            "items": {
+              "type": "number",
+              "maximum": 9007199254740991,
+              "minimum": 0,
+              "bytes": 32
+            }
+          },
+          "droppedByKind": {
+            "type": "array",
+            "maxItems": 3,
+            "items": {
+              "type": "number",
+              "maximum": 9007199254740991,
+              "minimum": 0,
+              "bytes": 32
+            }
+          },
+          "objects": {
+            "type": "number",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "bytes": 32
+          },
+          "receivers": {
+            "type": "number",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "bytes": 32
+          },
+          "errors": {
+            "type": "array",
+            "maxItems": 32,
+            "items": {
+              "type": "string",
+              "maxCodeUnits": 64
+            }
+          },
+          "errorCount": {
+            "type": "number",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "bytes": 32
+          },
+          "unfinished": {
+            "type": "number",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "bytes": 32
+          },
+          "activeOnStop": {
+            "type": "number",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "bytes": 32
+          },
+          "restored": {
+            "type": "number",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "bytes": 32
+          },
+          "restoreConflicts": {
+            "type": "number",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "bytes": 32
+          },
+          "reservedBytes": {
+            "type": "number",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "bytes": 32
+          },
+          "serializedBytes": {
+            "type": "number",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "bytes": 32
+          },
+          "valid": {
+            "type": "boolean"
+          },
+          "boundCallbacksMayRemain": {
+            "const": true
+          },
+          "stoppedWrappersPureDelegate": {
+            "const": true
+          }
+        }
+      }
+    }
+  },
+  "cold": {
+    "type": "object",
+    "fields": {
+      "format": {
+        "const": "NSO_COLD_V1"
+      },
+      "naturalQualified": {
+        "const": false
+      },
+      "productHead": {
+        "type": "string",
+        "maxCodeUnits": 40
+      },
+      "productTree": {
+        "type": "string",
+        "maxCodeUnits": 40
+      },
+      "methodSHA256": {
+        "type": "string",
+        "maxCodeUnits": 64
+      },
+      "inputSHA256": {
+        "type": "string",
+        "maxCodeUnits": 64
+      },
+      "schemaSHA256": {
+        "type": "string",
+        "maxCodeUnits": 64
+      },
+      "harnessLoaded": {
+        "type": "boolean"
+      },
+      "enqueueLoaded": {
+        "type": "boolean"
+      },
+      "loaderRemoved": {
+        "type": "boolean"
+      },
+      "temporaryBridgeRemoved": {
+        "type": "boolean"
+      },
+      "transformedModules": {
+        "type": "array",
+        "maxItems": 2,
+        "items": {
+          "type": "object",
+          "fields": {
+            "path": {
+              "type": "string",
+              "maxCodeUnits": 128
+            },
+            "beforeSHA256": {
+              "type": "string",
+              "maxCodeUnits": 64
+            },
+            "afterSHA256": {
+              "type": "string",
+              "maxCodeUnits": 64
+            }
+          }
+        }
+      },
+      "ownerHookCalls": {
+        "type": "number",
+        "maximum": 9007199254740991,
+        "minimum": 0,
+        "bytes": 32
+      },
+      "originalOwnerHookCalls": {
+        "type": "number",
+        "maximum": 9007199254740991,
+        "minimum": 0,
+        "bytes": 32
+      },
+      "installationOrder": {
+        "const": "NODE_AT_ROOM_PAGE_BEFORE_PRESENTATION"
+      },
+      "nodeInstalled": {
+        "type": "boolean"
+      },
+      "pageInstalled": {
+        "type": "boolean"
+      },
+      "collectionRequested": {
+        "type": "boolean"
+      },
+      "collectionReason": {
+        "type": "string-or-null",
+        "maxCodeUnits": 64
+      },
+      "ownedApiCaptured": {
+        "type": "boolean"
+      },
+      "ownedApiDisposed": {
+        "type": "boolean"
+      },
+      "pageCollected": {
+        "type": "boolean"
+      },
+      "pageWritten": {
+        "type": "boolean"
+      },
+      "pageBytes": {
+        "type": "number",
+        "maximum": 9007199254740991,
+        "minimum": 0,
+        "bytes": 32
+      },
+      "pageSHA256": {
+        "type": "string-or-null",
+        "maxCodeUnits": 64
+      },
+      "nodeCollected": {
+        "type": "boolean"
+      },
+      "nodeWritten": {
+        "type": "boolean"
+      },
+      "nodeBytes": {
+        "type": "number",
+        "maximum": 9007199254740991,
+        "minimum": 0,
+        "bytes": 32
+      },
+      "nodeSHA256": {
+        "type": "string-or-null",
+        "maxCodeUnits": 64
+      },
+      "harnessRestored": {
+        "type": "boolean"
+      },
+      "contextRestored": {
+        "type": "boolean"
+      },
+      "browserRestored": {
+        "type": "boolean"
+      },
+      "reloadRestored": {
+        "type": "boolean"
+      },
+      "exitFallback": {
+        "type": "boolean"
+      },
+      "errors": {
+        "type": "array",
+        "maxItems": 16,
+        "items": {
+          "type": "string",
+          "maxCodeUnits": 64
+        }
+      },
+      "valid": {
+        "type": "boolean"
+      }
+    }
+  }
+}

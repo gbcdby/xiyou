@@ -1,0 +1,82 @@
+name: NSO 有界供给观察
+
+# 独立诊断分支从16099基线更新的首个具名方法push；没有PR或手动入口。
+on:
+  push:
+    branches:
+      - diagnostic/d66-normal-supply-16099-v1
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nso-normal-supply-16099-v1
+  cancel-in-progress: false
+
+jobs:
+  observe:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/diagnostic/d66-normal-supply-16099-v1' && github.run_attempt == '1'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: 固定外层起点
+        run: |
+          set -eu
+          test ! -e "$RUNNER_TEMP/xiyou-nso-job-start"
+          date +%s > "$RUNNER_TEMP/xiyou-nso-job-start"
+
+      - name: 回读精确诊断提交及唯一父
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        timeout-minutes: 2
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+
+      - name: 固定Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        timeout-minutes: 2
+        with:
+          node-version: '24.22.3'
+
+      - name: 固定Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        timeout-minutes: 2
+        with:
+          python-version: '3.12.16'
+
+      - name: 一次准备、冻结、受监督normal及冷封口
+        id: bounded
+        timeout-minutes: 22
+        run: python -I frontend/tests/normal-supply-observation/run-bounded.py ci
+
+      - name: 保存已清理后的完整原件
+        if: always() && steps.bounded.outputs.evidence_safe == 'true'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        timeout-minutes: 2
+        with:
+          name: nso-normal-16099-${{ github.run_id }}-attempt1
+          if-no-files-found: error
+          retention-days: 14
+          include-hidden-files: true
+          path: |
+            ${{ runner.temp }}/xiyou-nso-16099-v1/*.json
+            ${{ runner.temp }}/xiyou-nso-16099-v1/*.log
+            ${{ runner.temp }}/xiyou-nso-16099-v1/setup-steps/**
+            ${{ runner.temp }}/xiyou-nso-16099-v1/npm-config/*
+            ${{ runner.temp }}/xiyou-nso-16099-v1/diagnostic/**
+            ${{ runner.temp }}/xiyou-nso-16099-v1/product/**
+            ${{ runner.temp }}/xiyou-nso-16099-v1/postgres-logs/**
+
+      - name: 清理未知时仅保存监督状态
+        if: always() && steps.bounded.outputs.evidence_safe != 'true'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        timeout-minutes: 2
+        with:
+          name: nso-normal-16099-${{ github.run_id }}-attempt1-status-only
+          if-no-files-found: warn
+          retention-days: 14
+          path: |
+            ${{ runner.temp }}/xiyou-nso-16099-v1/execution.json
+            ${{ runner.temp }}/xiyou-nso-16099-v1/attempt.json
+            ${{ runner.temp }}/xiyou-nso-16099-v1/normal-attempt.json
+            ${{ runner.temp }}/xiyou-nso-16099-v1/*-owned-processes.json

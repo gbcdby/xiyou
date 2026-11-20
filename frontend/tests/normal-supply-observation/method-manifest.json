@@ -1,0 +1,288 @@
+{
+  "format": "NSO_METHOD_V1",
+  "state": "COMPLETE_CANDIDATE_NOT_RUN_NOT_RELEASED",
+  "productHead": "16099e191fdc80c52849aa1d67cd075ccca4e01e",
+  "productTree": "31f82d6478e2ced1d27875c75160eef626ffe0bf",
+  "diagnosticBranch": "diagnostic/d66-normal-supply-16099-v1",
+  "budgets": {
+    "finite": {
+      "wallSeconds": 10,
+      "termSeconds": 2,
+      "killSeconds": 1
+    },
+    "normal": {
+      "wallSeconds": 120,
+      "termSeconds": 10,
+      "killSeconds": 2
+    }
+  },
+  "setupBudget": {
+    "wallSeconds": 720,
+    "termSeconds": 10,
+    "killSeconds": 2
+  },
+  "runtimePolicy": {
+    "node": "24.22.3",
+    "finitePython": "3.12.14",
+    "ciPython": "3.12.16",
+    "playwright": "1.57.0",
+    "headlessRevision": "1200",
+    "chromium": "143.0.7499.4",
+    "ffmpegRevision": "1011",
+    "embeddedPostgres": "18.6.0-beta.19",
+    "os": "ubuntu-24.04"
+  },
+  "files": [
+    {
+      "path": ".github/workflows/normal-supply-observation.yml",
+      "bytes": 2998,
+      "sha256": "b65dcb8839ae600b5682e4da81b3668da89718443d726e97bad40966c1294d28",
+      "mode": 420
+    },
+    {
+      "path": "frontend/tests/normal-supply-observation/binding.py",
+      "bytes": 23860,
+      "sha256": "d6e6bab8676aebd1540596ed0a35c61ead4f7453d9ab1c236ca8944ae4691da0",
+      "mode": 420
+    },
+    {
+      "path": "frontend/tests/normal-supply-observation/capacity-proof.json",
+      "bytes": 1970,
+      "sha256": "a9fa708c12473839ff8aab082bea7b51f9530f11bde2580b45d23476a3d70361",
+      "mode": 420
+    },
+    {
+      "path": "frontend/tests/normal-supply-observation/cold-hooks.mjs",
+      "bytes": 9364,
+      "sha256": "ca37ded4aa13ef3563a5194c74fb132f20b6213794413d9ffd36886931c964ef",
+      "mode": 420
+    },
+    {
+      "path": "frontend/tests/normal-supply-observation/collector.mjs",
+      "bytes": 10973,
+      "sha256": "6deae1f00d24f4e1bd06fab0fdb14edb0f932f2226786aa38c0feabfe3cce3f1",
+      "mode": 420
+    },
+    {
+      "path": "frontend/tests/normal-supply-observation/envelope-schema.json",
+      "bytes": 12079,
+      "sha256": "fb412586062009f2702c69c7166173e469582841fc732552db8e8463f9c6bdde",
+      "mode": 420
+    },
+    {
+      "path": "frontend/tests/normal-supply-observation/envelope-schema.mjs",
+      "bytes": 6471,
+      "sha256": "975d6a9323bd80ae15389c53d24c4726b8a40413ce31b39ee8f28f5321250d46",
+      "mode": 420
+    },
+    {
+      "path": "frontend/tests/normal-supply-observation/envelope.mjs",
+      "bytes": 3464,
+      "sha256": "85758cd66a04ab65cc0638243a5d13242bf214f9683fe3e7994943534f40b702",
+      "mode": 420
+    },
+    {
+      "path": "frontend/tests/normal-supply-observation/finite-check.mjs",
+      "bytes": 30503,
+      "sha256": "3dd834116336e5b255639d788d82b1177cda48234706eeae350ab1ed8ce07854",
+      "mode": 420
+    },
+    {
+      "path": "frontend/tests/normal-supply-observation/finite-release-template.json",
+      "bytes": 1114,
+      "sha256": "1383a692d62347800fb9f993fbb3505ec5d1a427bf36c7b1345e30e7569ed617",
+      "mode": 420
+    },
+    {
+      "path": "frontend/tests/normal-supply-observation/freeze-input.py",
+      "bytes": 1484,
+      "sha256": "86f3b95172a0e249af1b7aca35de74b6ba4fced7e6595269168a1b138b29d86c",
+      "mode": 420
+    },
+    {
+      "path": "frontend/tests/normal-supply-observation/guard.mjs",
+      "bytes": 5552,
+      "sha256": "da21e12094a7a63dcd1abc438a2a2b32430c0c085e1244f1c208aba67e7c8e31",
+      "mode": 420
+    },
+    {
+      "path": "frontend/tests/normal-supply-observation/loader-hooks.mjs",
+      "bytes": 2332,
+      "sha256": "b6963e65278c91ee8c5098a7e5656a061739eda03e7fd3cb8e9038ff6bce75f0",
+      "mode": 420
+    },
+    {
+      "path": "frontend/tests/normal-supply-observation/method.md",
+      "bytes": 18335,
+      "sha256": "fdbf36e7ef6ab25da11f750b237dab1696b2f4d88275101f59f6864feb546e56",
+      "mode": 420
+    },
+    {
+      "path": "frontend/tests/normal-supply-observation/node-probe.mjs",
+      "bytes": 3051,
+      "sha256": "6f19e3c4ac91dc7046f6e1c540ae6befef8a74e826f75a1acbb1ee3b4d8d6a01",
+      "mode": 420
+    },
+    {
+      "path": "frontend/tests/normal-supply-observation/normal-release-template.json",
+      "bytes": 1325,
+      "sha256": "966fe30f6c5bd529edc166831f206b39c7dac8f448e1f569aa139b1fa5520ea5",
+      "mode": 420
+    },
+    {
+      "path": "frontend/tests/normal-supply-observation/owned_processes.py",
+      "bytes": 22190,
+      "sha256": "9aa8daf4a171a65c2d18acb2391d599f426842431108622f82c379c79a7eda07",
+      "mode": 420
+    },
+    {
+      "path": "frontend/tests/normal-supply-observation/page-probe.mjs",
+      "bytes": 4233,
+      "sha256": "f81b6edc05fc88937f96fec0985e188b158c758a46758672fae07c2129de295a",
+      "mode": 420
+    },
+    {
+      "path": "frontend/tests/normal-supply-observation/preload.mjs",
+      "bytes": 2707,
+      "sha256": "5d0b91c63044ebaa0a0b4aaf16416853063ac29ad96f0c8fdf5e0057101c9735",
+      "mode": 420
+    },
+    {
+      "path": "frontend/tests/normal-supply-observation/product-manifest.json",
+      "bytes": 607637,
+      "sha256": "f592a97c773d4b596f9c6245623ef4a8bc02442b99392c4af8fd05c4802a9f92",
+      "mode": 420
+    },
+    {
+      "path": "frontend/tests/normal-supply-observation/run-bounded.py",
+      "bytes": 26743,
+      "sha256": "d6bfdd784fa209fc6d240e1c78517f85bcabc03a39b3fa593818445cd564f040",
+      "mode": 420
+    },
+    {
+      "path": "frontend/tests/normal-supply-observation/schema.json",
+      "bytes": 2819,
+      "sha256": "fbf636faccd0c851326bd3d39f24339255b0d311049bbb51e96e8d243d2c9144",
+      "mode": 420
+    },
+    {
+      "path": "frontend/tests/normal-supply-observation/schema.mjs",
+      "bytes": 2014,
+      "sha256": "59b036cdc7a4926b69ea35f758f200621721358a9411494f294f0cc3f73bd61f",
+      "mode": 420
+    },
+    {
+      "path": "frontend/tests/normal-supply-observation/setup-driver.py",
+      "bytes": 3993,
+      "sha256": "3ddbff4603ef50e326b0c964e5b2b9b0692d751ea946380ce1800fcd9e3c0c83",
+      "mode": 420
+    }
+  ],
+  "transforms": [
+    {
+      "path": "backend/socket-enqueue.mjs",
+      "beforeSHA256": "9735ad439af8a68bba421208fa5065a194912748a8cb42e61deb69beb63d368b",
+      "afterSHA256": "5b9452f70c9912226f6042d7e989adf9318e152f1b57af5ba181af1c0d3a231c"
+    },
+    {
+      "path": "frontend/tests/gaolao-real-support.mjs",
+      "beforeSHA256": "2794aab06abdcc9cd8e018347df5dfcd3dacd68524a3c751d89cf0ec78d7ffa8",
+      "afterSHA256": "3b826f2bcfa7c2962f76c802f643b6d34ec44044c848a01d88b661862f0287e6"
+    }
+  ],
+  "finiteCaseIds": [
+    "NSO-F01",
+    "NSO-F02",
+    "NSO-F03",
+    "NSO-F04",
+    "NSO-F05",
+    "NSO-F06",
+    "NSO-F07",
+    "NSO-F08",
+    "NSO-F09",
+    "NSO-F10",
+    "NSO-F11",
+    "NSO-F12",
+    "NSO-F13",
+    "NSO-F14",
+    "NSO-F15",
+    "NSO-F16",
+    "NSO-F17",
+    "NSO-F18",
+    "NSO-F19",
+    "NSO-F20",
+    "NSO-F21",
+    "NSO-F22",
+    "NSO-F23",
+    "NSO-F24",
+    "NSO-F25",
+    "NSO-F26",
+    "NSO-F27",
+    "NSO-F28",
+    "NSO-F29",
+    "NSO-F30",
+    "NSO-F31",
+    "NSO-F32"
+  ],
+  "componentV1": {
+    "manifestSHA256": "6ed7f8e05331d059d93f281237a1355c00537678293a891c7eb5d619a2ddd8df",
+    "requirementsReviewSHA256": "c95ff9f082e80fb5d0461bc0a96dff77750611b859a3052bc1ad475c1dfbcbd6",
+    "standardsReviewSHA256": "6a31377990d8fb5a9b4a42c6e664f233199c38d94b2e6001dc3c2feda92af9d1",
+    "conclusion": "FAIL_PRESERVED_NOT_RUN"
+  },
+  "componentV2": {
+    "manifestSHA256": "333d91d31a2a8fbb039b034a5de7d6255c69fd27248b327f619b3cb994082d03",
+    "requirementsReviewSHA256": "85c502e441d182c1b5b6f7a3dfd70bbf63cd2efccaac197156811644ef8dcb72",
+    "standardsReviewSHA256": "cad6fef8525f609cbd8430f7b9edc592fdbd2b9b1f0db011c9d7ff9b932f947d",
+    "conclusion": "STATIC_COMPONENTS_ONLY_PASS_NOT_RUN"
+  },
+  "adoption": {
+    "issue": 66,
+    "comment": 7034316344,
+    "rootDesignAdoptionSHA256": "bd9922a1d285f1c67dd36e8b2192049c1668d6abe3e9b61a059cc25dc9b84957"
+  },
+  "exclusions": {
+    "self": "method-manifest.json",
+    "actualRelease": "normal-release.json",
+    "reason": "避免自引用；实际release是唯一固定字段数据，仍纳入全Git树/input/来源前后"
+  },
+  "naturalQualified": false,
+  "allocatedBudgets": [],
+  "executedStages": [],
+  "reviewedPredecessor": {
+    "candidateManifestSHA256": "7ac24c4007691bbf522978055cefea0b309273c93f621fb01df85abe1ecbfded",
+    "methodSHA256": "c363bd3f164f8f162a014a9d510a835c30bad2f28bc32053a041b198d134673d",
+    "conclusion": "FAIL_PRESERVED_NOT_RUN",
+    "reviews": {
+      "requirements": {
+        "bytes": 8281,
+        "sha256": "94544f93b1dbbb7534a5b93d67f85623a7a41446813a622c623fbe5edb897b21"
+      },
+      "standards": {
+        "bytes": 11968,
+        "sha256": "0a21b19a7d1053ee5839e2cee7a0eb9aaac2e56dbc6b4588d4dcf7076a26ad26"
+      },
+      "rootPublication": {
+        "bytes": 2603,
+        "sha256": "ed6905131b382c7f06f29375df99e9d6fce9a42b84dd1069649b69813f3415bb"
+      },
+      "rootNpm": {
+        "bytes": 1906,
+        "sha256": "dedcc8122a6a8f420a2a9ece47b8e15f327ce030d6d9d146fb2414f79dcda1f3"
+      },
+      "publicationC3": {
+        "bytes": 787,
+        "sha256": "317af11f834a0f8e07bd4acfd3d6204d07a1a86e2d5566b3fd3a3db866f4e212"
+      }
+    },
+    "findings": [
+      "R-NSO-FULL-REQ-001",
+      "R-NSO-FULL-REQ-002",
+      "R-NSO-FULL-REQ-003",
+      "R-NSO-FULL-S-001",
+      "R-NSO-FULL-S-002",
+      "R-NSO-FULL-ROOT-001",
+      "R-NSO-FULL-ROOT-002"
+    ]
+  }
+}

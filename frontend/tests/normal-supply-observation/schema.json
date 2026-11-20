@@ -1,0 +1,150 @@
+{
+  "format": "NSO_FIXED_SCALARS_V1",
+  "common": [
+    "id",
+    "kind",
+    "parent",
+    "receiver",
+    "entryAt",
+    "callAt",
+    "returnAt",
+    "exitAt",
+    "argumentCount",
+    "outcome",
+    "result",
+    "returnObject",
+    "thrownObject"
+  ],
+  "kinds": {
+    "node": [
+      "commit.notification",
+      "socket.enqueue"
+    ],
+    "page": [
+      "manager.ondecoded",
+      "socket.onpacket",
+      "view.applyBatch"
+    ]
+  },
+  "tails": {
+    "commit.notification": [
+      "sessionId",
+      "firstSeq",
+      "lastSeq",
+      "eventCount"
+    ],
+    "socket.enqueue": [
+      "argument",
+      "handle",
+      "binding",
+      "payload",
+      "send",
+      "current",
+      "connectionId",
+      "packetKind",
+      "payloadType",
+      "sessionId",
+      "viewId",
+      "fromExclusive",
+      "throughSeq"
+    ],
+    "manager.ondecoded": [
+      "manager",
+      "packet",
+      "data",
+      "payload",
+      "packetType",
+      "namespace",
+      "socketNamespace",
+      "ackId",
+      "event",
+      "sessionId",
+      "viewId",
+      "fromExclusive",
+      "throughSeq"
+    ],
+    "socket.onpacket": [
+      "manager",
+      "packet",
+      "data",
+      "payload",
+      "packetType",
+      "namespace",
+      "socketNamespace",
+      "ackId",
+      "event",
+      "sessionId",
+      "viewId",
+      "fromExclusive",
+      "throughSeq"
+    ],
+    "view.applyBatch": [
+      "payload",
+      "generation",
+      "metadata",
+      "sessionId",
+      "viewId",
+      "fromExclusive",
+      "throughSeq"
+    ]
+  },
+  "enums": {
+    "outcome": [
+      "unfinished",
+      "returned",
+      "threw",
+      "notification"
+    ],
+    "result": [
+      "unknown",
+      "applied",
+      "duplicate",
+      "refetch",
+      "stale",
+      "resync"
+    ],
+    "packetKind": [
+      "unknown",
+      "ack",
+      "push"
+    ],
+    "payloadType": [
+      "unknown",
+      "world.batch",
+      "world.snapshot"
+    ],
+    "event": [
+      "other",
+      "world.batch"
+    ]
+  },
+  "limits": {
+    "maxRows": 16384,
+    "maxReceivers": 128,
+    "maxObjects": 16384,
+    "maxStringCodeUnits": 128,
+    "maxModuleCodeUnits": 1024,
+    "maxModules": 2,
+    "maxColdImports": 2,
+    "maxErrorCodes": 32,
+    "maxErrorCodeUnits": 64,
+    "maxCounter": 2147483647,
+    "maxRestorers": 8,
+    "rawMaxBytes": 16777216,
+    "coldMaxBytes": 32768,
+    "headerReserveBytes": 65536
+  },
+  "reservation": {
+    "rowPunctuationBytes": 3,
+    "scalarSlotBytes": 32,
+    "stringSlot": "max(32, 6*UTF16_code_units+3)",
+    "headerReserveBytes": 65536,
+    "rawEnvelope": "headerReserveBytes + sum(admitted row reservations)",
+    "identityTables": "bounded WeakMap IDs only; no serialized strong table",
+    "notGuaranteed": [
+      "heap bound",
+      "zero observation cost",
+      "one-way network latency"
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "format": "NSO_RELEASE_V1",
+  "state": "NOT_RELEASED",
+  "allocationId": "NSO_FINITE_V1_ONCE",
+  "stage": "finite",
+  "scenario": "finite-32",
+  "productHead": "16099e191fdc80c52849aa1d67cd075ccca4e01e",
+  "productTree": "31f82d6478e2ced1d27875c75160eef626ffe0bf",
+  "diagnosticBranch": "diagnostic/d66-normal-supply-16099-v1",
+  "methodSHA256": "待独审的精确method-manifest摘要",
+  "inputSHA256": "待只读冻结的精确finite-input摘要",
+  "candidateTree": "待精确index树",
+  "attempts": 1,
+  "retries": 0,
+  "previousAttemptsRefunded": false,
+  "budget": {
+    "wallSeconds": 10,
+    "termSeconds": 2,
+    "killSeconds": 1
+  },
+  "setupBudget": null,
+  "reviews": {
+    "requirements": {
+      "scope": "STATIC_NSO_COMPLETE_METHOD_REQUIREMENTS",
+      "sha256": "待该精确方法的非作者报告摘要",
+      "conclusion": "NOT_REVIEWED"
+    },
+    "standards": {
+      "scope": "STATIC_NSO_COMPLETE_METHOD_STANDARDS",
+      "sha256": "待该精确方法的非作者报告摘要",
+      "conclusion": "NOT_REVIEWED"
+    }
+  },
+  "finiteEvidence": null,
+  "firstMethodPushOnly": false
+}
