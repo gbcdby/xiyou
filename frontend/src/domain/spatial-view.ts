@@ -21,7 +21,11 @@ export class SpatialView {
     try {
       const snapshot = validateSpatial('SnapshotV2', input);
       if (snapshot.sessionId !== this.#sessionId) return 'stale';
-      this.#snapshot = freeze(structuredClone(snapshot)); return 'applied';
+      // 原图反射可能改动已扫描字段；只安装这份实际通过完整校验的自有副本。
+      const owned = validateSpatial('SnapshotV2', structuredClone(snapshot));
+      const frozen = freeze(owned);
+      if (generation !== this.#generation || this.#snapshot || frozen.sessionId !== this.#sessionId) return 'stale';
+      this.#snapshot = frozen; return 'applied';
     } catch { return 'invalid'; }
   }
   syncRequest(): SyncRequestV2 | null {
