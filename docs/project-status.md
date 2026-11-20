@@ -2,7 +2,9 @@
 
 ## 当前基线
 
-核对日期：**2026-11-13（UTC）**。本次已合入代码的观察基线为 [`main@818ae314`](https://github.com/gbcdby/xiyou/tree/818ae314bf77ee3c4881ef39ceca7b601c4aeda1)。仓库已包含 Node.js / PostgreSQL 权威服务、Vue 空间客户端、连续行走与距离/遮挡规则、高老庄同意/借貌/随行与授权复盘、三名自主 NPC 运行链及独立场景本人策略。代码入口见[仓库说明](../README.md)、[空间自主角色运行链](../backend/ai/spatial-runtime.md)和[本人场景策略运行链](../backend/scene-policy-runtime.md)。本页固定已观察的基线，不复制活动任务清单；后续候选、审查、合并与验收读取 [#23](https://github.com/gbcdby/xiyou/issues/23) 及关联 PR。
+核对日期：**2026-11-20（北京时间）**。当前已合入代码的观察基线为 [`main@fcbde293`](https://github.com/gbcdby/xiyou/tree/fcbde29304fffe17d5ad2474e7277f9cf716b1d3)（[PR #68](https://github.com/gbcdby/xiyou/pull/68) 合并提交）。本轮纳入 scene-v3 Canvas/HUD/连续输入改版、方案 A 的 no-idle 断言口径修正，以及 `npm run ci:local` 本地 CI runner；云端两条工作流改为仅 main push 与手动触发。合并后 [main 自动检查 44752132724](https://github.com/gbcdby/xiyou/actions/runs/44752132724) 的 normal 仍在 DOWN 轴向失败、late/five 因此跳过，故 [#66](https://github.com/gbcdby/xiyou/issues/66) 六项 UX 尚未完整背书，[#29](https://github.com/gbcdby/xiyou/issues/29) 首章整体验收未关闭；[翠兰流程 44752132635](https://github.com/gbcdby/xiyou/actions/runs/44752132635) 在本次核对时仍运行。后续工作以 #66/#29 及关联 PR 为准；本地 five-person diagonal 预存失败由本轮 auto 继续定位。
+
+历史核对日期：**2026-11-13（UTC）**。当时的已合入基线为 [`main@818ae314`](https://github.com/gbcdby/xiyou/tree/818ae314bf77ee3c4881ef39ceca7b601c4aeda1)。仓库已包含 Node.js / PostgreSQL 权威服务、Vue 空间客户端、连续行走与距离/遮挡规则、高老庄同意/借貌/随行与授权复盘、三名自主 NPC 运行链及独立场景本人策略。代码入口见[仓库说明](../README.md)、[空间自主角色运行链](../backend/ai/spatial-runtime.md)和[本人场景策略运行链](../backend/scene-policy-runtime.md)。本节保留已观察的历史基线，不复制活动任务清单；后续候选、审查、合并与验收读取 [#23](https://github.com/gbcdby/xiyou/issues/23) 及关联 PR。
 
 历史 VS-001 的[模拟验收修订](specs/vertical-slice-mock.md)及 [PR #22](https://github.com/gbcdby/xiyou/pull/22) 保留原候选和范围，不能替代 ADV-001 验收。代码已合入、受控输入验证、有限模型检查、正式运行视觉、真实供应商质量、真人体验和真实设备分别取证，首章阶段释放以 [#29](https://github.com/gbcdby/xiyou/issues/29) 为准；本页不声明整章完成或已部署。
 
