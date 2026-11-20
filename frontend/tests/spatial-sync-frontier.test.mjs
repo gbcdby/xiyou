@@ -79,8 +79,8 @@ test('D66 v0.3：空但推进的Batch按大整数游标完整应用后结束', a
 test('D66 v0.3：存在但非法的前缀拒绝整批，不能降格成缺字段旧回复', async t => {
   for (const frontier of ['10', '01', null, 11]) await t.test(String(frontier), async t => {
     const h = await room(t); h.setRead(q => ({ ...h.page(q, '11'), syncFrontierSeq: frontier })); await h.client.sync();
-    assert.equal(h.requests.length, 1); assert.equal(h.client.state.snapshot.snapshotSeq, '10');
-    h.setRead(q => h.page(q, '11')); await h.client.sync(); assert.equal(h.requests.length, 2); assert.equal(h.client.state.snapshot.snapshotSeq, '11');
+    assert.equal(h.requests.length, 8); assert.equal(h.client.state.snapshot.snapshotSeq, '10');
+    h.setRead(q => h.page(q, '11')); await h.client.sync(); assert.equal(h.requests.length, 9); assert.equal(h.client.state.snapshot.snapshotSeq, '11');
   });
 });
 
@@ -88,9 +88,10 @@ test('D66 v0.3：推送和部分重叠回复不安装分页目标', async t => {
   const h = await room(t), gate = deferred(); let first;
   h.setRead(q => { first = q; return gate.promise; }); const active = h.client.sync(); await flush();
   h.handlers.batch(h.page(first, '11', '1000')); void h.client.sync();
-  h.setRead(q => h.page(q, '12', '12')); gate.resolve(h.page(first, '12', '1000'));
+  // 新组合会真实到达cursor12；该后继页必须是合法空重复，不能构造零区间内的非空事件。
+  h.setRead(q => q.cursor === '12' ? empty(q) : h.page(q, '12', '12')); gate.resolve(h.page(first, '12', '1000'));
   await active; await flush(); await flush();
-  assert.deepEqual(h.requests.map(r => r.q.cursor), ['10', '11']); assert.equal(h.client.state.snapshot.snapshotSeq, '12'); assert.equal(h.maximum.get(1), 1);
+  assert.deepEqual(h.requests.map(r => r.q.cursor), ['10', '11', '12']); assert.equal(h.client.state.snapshot.snapshotSeq, '12'); assert.equal(h.maximum.get(1), 1);
 });
 
 test('D66 v0.3：新view或新link使旧分页目标失效，旧回复不安装', async t => {
@@ -142,6 +143,6 @@ test('SC02-04：实际Session拒绝隐藏前沿而不执行其getter，不推进
       return value;
     });
     await h.client.sync();
-    assert.equal(h.requests.length, 1); assert.equal(h.client.state.snapshot.snapshotSeq, '10'); assert.equal(reads, 0);
+    assert.equal(h.requests.length, 8); assert.equal(h.client.state.snapshot.snapshotSeq, '10'); assert.equal(reads, 0);
   });
 });

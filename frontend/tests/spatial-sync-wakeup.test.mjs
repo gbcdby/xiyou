@@ -39,11 +39,14 @@ test('D66-CLIENT-03：每轮最多8页，仅有新需求时追加一轮，无需
   assert.equal(h.maximum, 1);
 });
 
-test('D66-CLIENT-03：sync自身无法应用的回复不制造递归refetch需求', async t => {
+test('D66-CLIENT-03：sync自身refetch只续本轮剩余页，不制造递归需求', async t => {
   const h = await room(t), count = h.requests.length; h.setMode('hold'); const first = h.client.sync();
   await flush(); h.setMode('advance'); h.reply(spatialBatch({ ...h.initial, snapshotSeq: '9' }, '12'));
   await first; await flush(); await flush();
-  assert.equal(h.requests.length - count, 1); assert.equal(h.client.state.snapshot.snapshotSeq, '10');
+  assert.equal(h.requests.length - count, 8);
+  assert.deepEqual(h.requests.slice(count).map(q => q.cursor), ['10', '10', '11', '12', '13', '14', '15', '16']);
+  assert.equal(h.client.state.snapshot.snapshotSeq, '17', '原非法页未应用，后续合法页从实际cursor推进');
+  assert.equal(h.maximum, 1);
 });
 
 test('D66-CLIENT-03：断线或Forbidden使旧同步和排队需求失效', async t => {

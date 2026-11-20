@@ -256,10 +256,12 @@ export class SpatialSessionClient {
     // 同一物理link的旧请求直到settle仍占槽；控制安装新view只替换最新待读需求。
     if (this.#syncActive.has(link)) { this.#syncDemand = key; return; }
     this.#syncActive.add(link); this.#syncDemand = '';
+    const ownsSync = () => link.connected && this.#link === link && serial === this.#serial
+      && generation === this.#view.generation && revision === this.#syncRevision && !this.#pendingControl;
     let frontier: string | undefined;
     try {
       for (let page = 0; page < 8; page++) {
-        if (revision !== this.#syncRevision || this.#pendingControl) break;
+        if (!ownsSync()) break;
         const request = this.#view.syncRequest(); if (!request) break;
         const outcome: { result: BatchResult; frontier?: string } = { result: 'stale' };
         await this.#reply(link, 'sync.request', canonicalize(request), value => {
@@ -267,12 +269,13 @@ export class SpatialSessionClient {
           // 同连接真实撤权仍优先于旧view/revision；旧link不能影响新连接。
           const error = asError(value);
           if (error && ['UNAUTHENTICATED', 'FORBIDDEN', 'SESSION_GONE', 'UPGRADE_REQUIRED'].includes(error.code)) { this.#handleError(value); return; }
-          if (generation !== this.#view.generation || revision !== this.#syncRevision) return;
+          if (!ownsSync()) return;
           this.#batch(value, generation, false, (result, metadata) => { outcome.result = result; if (result === 'applied') outcome.frontier = metadata.syncFrontierSeq; });
         });
-        // 本次回复自身无法应用，不算外部fresh需求，避免无限refetch自循环。
+        if (!ownsSync()) return;
+        // 本次refetch只消耗当前轮剩余页，不登记外部fresh或自行重开后继轮。
+        if (outcome.result === 'refetch') continue;
         if (outcome.result !== 'applied') break;
-        if (serial !== this.#serial || generation !== this.#view.generation || revision !== this.#syncRevision) return;
         if (link.acceptedCapabilities?.includes(DIRECTION_CAPABILITY)) {
           // 整批已严格校验且连续应用；目标只取首个有效回复，不裁轨迹或追逐后页新提交。
           frontier ??= outcome.frontier;

@@ -8,7 +8,7 @@ function freeze<T>(value: T): T {
   return value;
 }
 
-/** 只由本次调用持有；非applied结果不能携带旧分页目标。 */
+/** 只由本次调用持有；仅applied结果可消费目标。普通自有sink会清旧值，反射sink不承诺跨对象回滚。 */
 export interface BatchApplicationMetadata { syncFrontierSeq?: string }
 
 function frontierData(input: unknown): PropertyDescriptor | undefined {
@@ -53,12 +53,21 @@ export class SpatialView {
     try {
       const snapshot = validateSpatial('SnapshotV2', input);
       if (snapshot.sessionId !== this.#sessionId) return 'stale';
-      this.#snapshot = freeze(structuredClone(snapshot)); return 'applied';
+      // 原图反射可能改动已扫描字段；只安装这份实际通过完整校验的自有副本。
+      const owned = validateSpatial('SnapshotV2', structuredClone(snapshot));
+      const frozen = freeze(owned);
+      if (generation !== this.#generation || this.#snapshot || frozen.sessionId !== this.#sessionId) return 'stale';
+      this.#snapshot = frozen; return 'applied';
     } catch { return 'invalid'; }
   }
   syncRequest(): SyncRequestV2 | null {
     const current = this.#snapshot;
     return current ? { schemaVersion: 2, type: 'sync.request', sessionId: current.sessionId, viewId: current.viewId, cursor: current.snapshotSeq } : null;
+  }
+  #batchInstallationResult(previous: SnapshotV2, preparedSeq: string, generation: number): 'stale' | 'duplicate' | 'refetch' | undefined {
+    const current = this.#snapshot;
+    if (generation !== this.#generation || !current) return 'stale';
+    if (current !== previous) return compareDecimal(preparedSeq, current.snapshotSeq) <= 0 ? 'duplicate' : 'refetch';
   }
   applyBatch(input: unknown, generation: number, metadata?: BatchApplicationMetadata): BatchResult {
     try { if (metadata) delete metadata.syncFrontierSeq; } catch { return 'refetch'; }
@@ -96,8 +105,13 @@ export class SpatialView {
         frontier = validateSpatial('DecimalString', suppliedFrontier.value);
         if (compareDecimal(frontier, snapshot.snapshotSeq) < 0) return 'refetch';
       }
-      // 包括局部元数据写入在内的所有可失败工作先完成，再一次安装授权快照。
+      // 输入反射已失去安装资格时，不再向普通sink发布候选分页目标。
+      const prepared = this.#batchInstallationResult(previous, snapshot.snapshotSeq, generation);
+      if (prepared) return prepared;
+      // metadata写失败必须先于世界安装；其setter/Proxy也可能同步重入。
       if (metadata && frontier !== undefined) metadata.syncFrontierSeq = frontier;
+      const installation = this.#batchInstallationResult(previous, snapshot.snapshotSeq, generation);
+      if (installation) return installation;
       this.#snapshot = snapshot;
       return 'applied';
     } catch { return 'refetch'; }
