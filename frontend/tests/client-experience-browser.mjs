@@ -88,7 +88,7 @@ async function exerciseMotion(initial,first){
       if(value.receipt?.status!=='Accepted'||actionsBefore.includes(value.receipt.clientActionId))return false;
       const action=JSON.parse(value.raw).action;
       return action.kind==='move_direction'&&action.direction===direction;
-    }).at(-1);
+    }).at(0);
     assert.ok(row?.receipt?.observedSeq!==undefined,`缺少 ${direction} Accepted 覆盖线`);
     return BigInt(row.receipt.observedSeq);
   };
