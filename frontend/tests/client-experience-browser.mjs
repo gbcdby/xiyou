@@ -1,6 +1,7 @@
 // GZ-UX-01：正式 scene-v3 真实页面动态入口；普通人类操作全部走可见UI。
 // 两个独立账号、真实PG/HTTP/Socket/Canvas；无真实LLM，不代替真人试玩或全角色艺术验收。
 import assert from 'node:assert/strict';
+import { writeSync } from 'node:fs';
 import { mkdir, readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { createServer as createVite } from 'vite';
@@ -71,6 +72,7 @@ async function exerciseMotion(initial,first){
   await phase('right');await page.keyboard.down('ArrowRight');for(let i=0;i<5;i++){await sleep(100);await page.keyboard.down('ArrowRight');}
   await phase('diagonal');await page.keyboard.down('ArrowDown');await sleep(350);
   await phase('down-only');await page.keyboard.up('ArrowRight');await sleep(450);
+  report.motionHold={scope:'三场景均保持原固定按键时序'};
   await phase('stopped');await page.keyboard.up('ArrowDown');await waitSettled();await sleep(250);
   const capture=await stopCapture();report.motion=capture;report.presentation=await page.evaluate(()=>window.uxPresentation.stop());await saveJSON(resolve(output,'result-before-cleanup.json'),report);
   report.presentationSummary=assertPresentationEvidence(report.presentation);
@@ -82,12 +84,34 @@ async function exerciseMotion(initial,first){
   const stable=capture.frames.filter(frame=>frame.sceneId===first.sceneId);const fixed=stable[0];for(const f of stable){assert.deepEqual(f.fit,fixed.fit);assert.deepEqual(f.view,fixed.view);assert.deepEqual(f.viewport,fixed.viewport);assert.deepEqual(f.refs,fixed.refs);assert.ok(f.opaque>600&&f.colors>8,'每次实际呈现均为完整非空场景');}
   const moving=stable.filter(frame=>['right','diagonal','down-only'].includes(frame.phase)&&frame.self?.moving);assert.ok(moving.length>=10);
   assert.ok(assertPaintContinuity(capture).length>=10,'每次实际paint均保留并按其motionAt检查连续速度');
-  const diagonal=stable.filter(frame=>frame.phase==='diagonal'&&frame.phaseElapsed>100),vertical=stable.filter(frame=>frame.phase==='down-only'&&frame.phaseElapsed>150);assert.ok(diagonal.at(-1).self.position.x>diagonal[0].self.position.x&&diagonal.at(-1).self.position.y>diagonal[0].self.position.y);assert.ok(vertical.at(-1).self.position.y>vertical[0].self.position.y+10);assert.ok(Math.abs(vertical.at(-1).self.position.x-vertical[0].self.position.x)<4,'松开右键后仍沿下键行走');
+  const acceptedCoverage=direction=>{
+    const row=report.wireActions.filter(value=>{
+      if(value.receipt?.status!=='Accepted'||actionsBefore.includes(value.receipt.clientActionId))return false;
+      const action=JSON.parse(value.raw).action;
+      return action.kind==='move_direction'&&action.direction===direction;
+    }).at(0);
+    assert.ok(row?.receipt?.observedSeq!==undefined,`缺少 ${direction} Accepted 覆盖线`);
+    return BigInt(row.receipt.observedSeq);
+  };
+  const anchoredWindow=(frames,phase,facing,coverage,label)=>{
+    const applied=frames.filter(frame=>frame.phase===phase&&frame.self?.facing===facing
+      &&BigInt(frame.paint?.snapshotSeq??frame.snapshotSeq)>=coverage);
+    const anchor=applied[0];
+    assert.ok(anchor,`${label} 未观察到实际应用 ${facing} 的帧`);
+    assert.ok(applied.length>=2,`${label} 锚后窗证据不足：${applied.length} 帧`);
+    report.motionWindows={...(report.motionWindows??{}),[label]:{anchorAt:anchor.at,anchorSeq:anchor.snapshotSeq,frames:applied.length,spanMs:applied.at(-1).at-anchor.at}};
+    return applied;
+  };
   assert.equal(report.httpAssets.length,assetsBefore,'移动不重新请求图片');const movementActions=(await actions()).filter(action=>!actionsBefore.includes(action.id)).map(action=>JSON.parse(action.raw).action);assert.ok(movementActions.length<=Math.ceil((Date.now()-start)/100)+3,'按键repeat不形成额外请求洪峰');assert.equal(movementActions.at(-1).kind,'stop_move');
   const directional=movementActions.filter(action=>action.kind!=='stop_move');assert.ok(directional.length>0);assert.ok(directional.every(action=>action.kind==='move_direction'&&action.sceneId===initial.projection.self.sceneId&&action.mapVersion===initial.projection.mapVersion));
-  assert.deepEqual(directional.map(action=>action.direction).filter((value,index,array)=>index===0||value!==array[index-1]),['E','SE','S']);
-  const acceptedDirections=report.wireActions.filter(row=>row.receipt.status==='Accepted'&&!actionsBefore.includes(row.receipt.clientActionId)).map(row=>JSON.parse(row.raw).action).filter(action=>action.kind==='move_direction');
-  for(const direction of ['E','SE','S'])assert.ok(acceptedDirections.some(action=>action.direction===direction),'本阶段必须真实Accepted方向 '+direction);
+  if(scenario==='normal'){
+    const diagonal=anchoredWindow(stable,'diagonal','SE',acceptedCoverage('SE'),'diagonal'),vertical=anchoredWindow(stable,'down-only','S',acceptedCoverage('S'),'down-only');assert.ok(diagonal.at(-1).self.position.x>diagonal[0].self.position.x&&diagonal.at(-1).self.position.y>diagonal[0].self.position.y);assert.ok(vertical.at(-1).self.position.y>vertical[0].self.position.y+10);assert.ok(Math.abs(vertical.at(-1).self.position.x-vertical[0].self.position.x)<4,'松开右键后仍沿下键行走');
+    assert.deepEqual(directional.map(action=>action.direction).filter((value,index,array)=>index===0||value!==array[index-1]),['E','SE','S']);
+    const acceptedDirections=report.wireActions.filter(row=>row.receipt.status==='Accepted'&&!actionsBefore.includes(row.receipt.clientActionId)).map(row=>JSON.parse(row.raw).action).filter(action=>action.kind==='move_direction');
+    for(const direction of ['E','SE','S'])assert.ok(acceptedDirections.some(action=>action.direction===direction),'本阶段必须真实Accepted方向 '+direction);
+  }else{
+    report.axisScope='late 验证迟到 ACK 证据，five-person 验证五读者连续应用与终止前缀；方向轴切换仅由 normal 覆盖';
+  }
   const stopped=await position();await sleep(300);assert.deepEqual(await position(),stopped);check('AC02','真实Canvas每帧完整合成、固定fit、实体不因走动消失且图片缓存复用',{frames:capture.frames.length});
   await sleep(120);const shortStart=await position(),shortIds=(await actions()).map(action=>action.id);
   if(directionSubmissions){
@@ -167,5 +191,5 @@ finally {
   directionConnections?.close();
   await saveJSON(resolve(output,'result-before-cleanup.json'),report);
   for(const [name,close] of [['room',()=>room?.close()],['browser',()=>browser?.close()],['vite',()=>vite?.close()],['server',()=>server?.close()],['postgres',()=>database?.stop()]]){try{await close();report.cleanup.push({name,status:'closed'});if(name==='room'&&video){try{await video.saveAs(resolve(output,'scene-v3-demo.webm'));report.video={file:'scene-v3-demo.webm',scope:'本次同一真实页面操作录像；不代替测试断言或真人验收'};}catch(error){report.videoError=error.message;}}}catch(error){report.cleanup.push({name,status:'error',message:error.message});if(report.assessment==='PASS')report.assessment='FAIL_CLEANUP';process.exitCode=1;}}
-  report.finishedAt=new Date().toISOString();report.sourceEnd=await sourceIdentity();if(JSON.stringify(report.sourceEnd)!==JSON.stringify(report.source)){report.sourceChanged=true;if(report.assessment==='PASS')report.assessment='FAIL_SOURCE_IDENTITY';process.exitCode=1;}await saveJSON(resolve(output,'result.json'),report);console.log(JSON.stringify({assessment:report.assessment,checks:report.checks.length,output}));
+  report.finishedAt=new Date().toISOString();report.sourceEnd=await sourceIdentity();if(JSON.stringify(report.sourceEnd)!==JSON.stringify(report.source)){report.sourceChanged=true;if(report.assessment==='PASS')report.assessment='FAIL_SOURCE_IDENTITY';process.exitCode=1;}await saveJSON(resolve(output,'result.json'),report);writeSync(1,JSON.stringify({assessment:report.assessment,checks:report.checks.length,output})+'\n');if(process.exitCode&&process.exitCode!==0)process.exit(process.exitCode);
 }
