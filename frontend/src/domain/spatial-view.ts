@@ -50,7 +50,12 @@ export class SpatialView {
         if (next.self.entityRef !== previous.projection.self.entityRef || next.contentVersion !== previous.projection.contentVersion || next.reducerVersion !== previous.projection.reducerVersion || compareDecimal(next.self.controlEpoch, projection.self.controlEpoch) < 0) return 'resync';
         projection = next;
       }
-      this.#snapshot = freeze(structuredClone(validateSpatial('SnapshotV2', { ...previous, snapshotSeq: batch.throughSeq, projection })));
+      const snapshot = freeze(structuredClone(validateSpatial('SnapshotV2', { ...previous, snapshotSeq: batch.throughSeq, projection })));
+      // 完整校验与副本准备可能重入；只按最终归属和当前区间决定是否安装。
+      const current = this.#snapshot;
+      if (generation !== this.#generation || !current) return 'stale';
+      if (current !== previous) return compareDecimal(snapshot.snapshotSeq, current.snapshotSeq) <= 0 ? 'duplicate' : 'refetch';
+      this.#snapshot = snapshot;
       return 'applied';
     } catch { return 'refetch'; }
   }
