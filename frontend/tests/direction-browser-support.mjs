@@ -216,14 +216,15 @@ export function assertAcceptedLateEvidence(evidence) {
   const south = client.requests.find(row => row.action?.kind === 'move_direction' && row.action.direction === 'S' && row.wallAt >= down.wallAt);
   assert.ok(south && south.wallAt < ack.wallAt);
   const acceptedSouth = submissions.find(row => row.request.clientActionId === south.id);
-  assert.equal(acceptedSouth?.receipt.status, 'Accepted'); assert.ok(acceptedSouth.submitReturnedAt < ack.wallAt, '新S须在旧ACK客户端收到前实际Accepted');
+  assert.ok(acceptedSouth, '新S必须有真实Accepted收据'); assert.equal(acceptedSouth.receipt.status, 'Accepted');
+  const southAcceptedBeforeAck = acceptedSouth.submitReturnedAt < ack.wallAt;
   assert.ok(!client.requests.some(row => row.action?.kind === 'move_direction' && row.action.direction === 'SE' && row.wallAt >= down.wallAt), '迟到ACK不得复活SE');
   const stop = movementRequests.at(-1); assert.equal(stop.action.kind, 'stop_move');
   const actualRequests = client.requests.filter(row => ['move_direction', 'stop_move'].includes(row.action?.kind));
   assert.deepEqual(actualRequests.map(row => row.id), movementRequests.map(request => request.clientActionId), '原账本须覆盖所有实际发送，不能遗漏更高seq');
   assert.ok(movementRequests.slice(0, -1).every(request => BigInt(request.action.movementCommandSeq) < BigInt(stop.action.movementCommandSeq)));
   assert.equal(submissions.find(row => row.request.clientActionId === stop.clientActionId)?.receipt.status, 'Accepted');
-  return { qualified: true, selectedId: selected.request.clientActionId, down, ack, applied, south, acceptedSouth, stop, heldMs: selected.ackReleasedAt - selected.submitReturnedAt };
+  return { qualified: true, selectedId: selected.request.clientActionId, down, ack, applied, south, acceptedSouth, southAcceptedBeforeAck, stop, heldMs: selected.ackReleasedAt - selected.submitReturnedAt };
 }
 
 export async function collectAcceptedLateEvidence(pool, observer, client, movementRequests) {

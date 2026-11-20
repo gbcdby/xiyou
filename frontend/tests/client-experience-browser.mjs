@@ -121,7 +121,7 @@ async function exerciseMotion(initial,first){
     for(let index=0;index<room.pages.length;index++){const current=await directionConnections.qualify(room.pages[index],room.users[index].userId,'after-motion-'+index),initial=report.directionQualification[index];for(const key of ['connectionId','viewId','controlEpoch'])assert.equal(current[key],initial[key],'运动期间保留同一实际安装绑定');report.directionQualification.push(current);}
     if(scenario==='late-accepted-se-180'){
       report.lateAcceptance=await collectAcceptedLateEvidence(database.pool,directionSubmissions,report.directionClients[0],movementRequests);
-      report.lateSummary=assertAcceptedLateEvidence(report.lateAcceptance);check('AC05-late','原Accepted双轴SE的180ms迟到ACK跨DOWN，新S抢先Accepted且不复活旧轴',report.lateSummary);
+      report.lateSummary=assertAcceptedLateEvidence(report.lateAcceptance);check('AC05-late','原Accepted双轴SE的180ms迟到ACK跨DOWN，新S先发出并最终Accepted且不复活旧轴',report.lateSummary);
     }else{
       report.fiveSupply=assertFivePersonSupply({readers:report.directionClients,sends:report.directionServer.sends,stop:stopReceipt,finalPosition:await position()});check('AC05-five','五个当前新模式读者真实连续应用主运动者及终止前缀',report.fiveSupply);
     }
