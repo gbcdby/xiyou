@@ -10,7 +10,8 @@
     "test:ai": "node --test backend/tests/ai-*.test.mjs",
     "verify:mock": "node backend/scripts/verify-mock-ai.mjs",
     "test:protocol": "node --test protocol/tests/*.test.mjs",
-    "test:content": "node --test content/tests/*.test.mjs"
+    "test:content": "node --test content/tests/*.test.mjs",
+    "ci:local": "node scripts/ci-local.mjs"
   },
   "engines": {
     "node": ">=22.12.0"

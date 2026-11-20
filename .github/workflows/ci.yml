@@ -1,9 +1,10 @@
 name: 自动检查
 
 on:
+  # 日常验证走本地 `npm run ci:local`（scripts/ci-local.mjs），避免每个 PR 提交都触发云端全量套件。
+  # 云端保留：main 合并后背书 + 手动按需执行；最终证据仍以对应提交的 Actions run 为准。
   push:
     branches: [main]
-  pull_request:
   workflow_dispatch:
 
 permissions:
