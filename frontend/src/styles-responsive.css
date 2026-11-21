@@ -46,16 +46,17 @@
   #app .demo-banner { align-items: flex-start; flex-wrap: wrap; padding: 12px; font-size: 11px; gap: 7px; }
   #app .demo-banner > span { flex: 1; min-width: 210px; }
   #app .demo-banner a { margin-left: 25px; }
-  #app .session-heading { margin-top: 23px; gap: 15px; align-items: flex-start; }
-  #app .session-heading h1 { font-size: 26px; gap: 10px; }
-  #app .session-time { padding: 7px 10px; gap: 7px; margin-top: 21px; }
+  #app .session-heading { margin-top: 23px; gap: 15px; align-items: flex-start; flex-wrap: wrap; }
+  #app .session-heading > div:first-child { flex: 1 1 16em; min-width: 0; }
+  #app .session-heading h1 { font-size: 26px; gap: 10px; flex-wrap: wrap; }
+  #app .session-time { flex: none; max-width: 100%; padding: 7px 10px; gap: 7px; margin-top: 0; }
   #app .session-time > svg { display: none; }
   #app .session-time strong { font-size: 11px; white-space: nowrap; }
-  #app .session-subtitle { display: block; font-size: 10px; max-width: 240px; }
+  #app .session-subtitle { display: block; font-size: 10px; overflow-wrap: anywhere; }
   #app .session-subtitle .text-button { padding-left: 0; display: flex; }
   #app .game-layout { display: flex; flex-direction: column; gap: 18px; }
   #app .left-column, #app .center-column, #app .right-column { width: 100%; gap: 18px; }
-  #app .left-column { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  #app .left-column { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12em), 1fr)); gap: 14px; }
   #app .identity-card { padding: 18px; grid-column: 1 / -1; }
   #app .self-title { margin-top: 10px; }
   #app .identity-card .role-help { margin: 10px 0 13px; font-size: 12px; }
@@ -88,11 +89,12 @@
   #app .inventory-row strong { font-size: 14px; }
   #app .inventory-row .tiny { font-size: 11px; }
   #app .inventory-row .text-button { font-size: 13px; }
-  #app .dialogue-composer > .field-label { font-size: 12px; }
-  #app .dialogue-composer select { font-size: 12px; min-height: 44px; }
+  #app .dialogue-composer > .field-label { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; font-size: 12px; }
+  #app .dialogue-composer select { width: 100%; min-width: 0; font-size: 12px; min-height: 44px; }
   #app .dialogue-composer textarea { font-size: 13px; min-height: 105px; }
-  #app .composer-footer .tiny { font-size: 10px; }
-  #app .composer-footer .primary-button { min-height: 44px; font-size: 12px; }
+  #app .composer-footer { flex-wrap: wrap; }
+  #app .composer-footer .tiny { flex: 1 1 12em; font-size: 10px; }
+  #app .composer-footer .primary-button { flex: none; min-height: 44px; font-size: 12px; white-space: nowrap; margin-left: auto; }
   #app .claim-meta strong { font-size: 12px; }
   #app .claim-meta { font-size: 10px; }
   #app .claim-tag { font-size: 9px; }

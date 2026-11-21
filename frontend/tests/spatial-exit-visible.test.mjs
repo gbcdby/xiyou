@@ -49,8 +49,9 @@ function fixture({ canvasPresent = true, connected = true, request = Promise.res
   const run = new Function('bindings', `
     const { reading, receiptsOpen, objectsOpen, selectedRef, recipient, sceneMap, spatialClient, spatialNotice, nextTick } = bindings;
     let readingTrigger = { focus(){ throw Error('不得恢复旧焦点'); }, isConnected: true };
+    let objectsTrigger = readingTrigger, receiptsTrigger = readingTrigger;
     ${performCode}\n${pageCode}
-    return { click(exit) { ${clickExpression}; }, stop, trigger: () => readingTrigger };
+    return { click(exit) { ${clickExpression}; }, stop, trigger: () => readingTrigger, panelTriggers: () => [objectsTrigger, receiptsTrigger] };
   `)({ ...panels, sceneMap, spatialClient, spatialNotice, nextTick: () => calls.push(['forbidden-defer']) });
   const frame = { viewport: { width: 700, height: 400, dpr: 1 }, fit: { x: 0, y: 0, scale: 1 }, view: { x: 0, y: 0, width: 700, height: 400 }, actors: [{ ref: '本人', position: { x: 560, y: 80 } }] };
   return { ...run, calls, panels, canvas, sceneMap, spatialNotice, visible: () => visibleSelf(element, frame, '本人') };
@@ -67,6 +68,7 @@ test('原出口点击同步恢复场景并只发送一次原请求；滚动不�
     reading: null, receiptsOpen: false, objectsOpen: false, selectedRef: '', recipient: '',
   });
   assert.equal(f.trigger(), null);
+  assert.deepEqual(f.panelTriggers(), [null, null]);
 });
 
 test('原请求未回时新停步及换组件不会被迟到续体重新发起或再次滚动', async () => {
