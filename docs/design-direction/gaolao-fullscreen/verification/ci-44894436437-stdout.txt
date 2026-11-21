@@ -1,0 +1,41 @@
+{"id":"GZ-FS-01","name":"Canvas 覆盖整个视口且文档无滚动","viewport":"desktop-1440","status":"PASS"}
+{"id":"GZ-FS-02/03","name":"同帧本人插值跟随；拖动不移动/选取，自由镜头在人物行走后保持","viewport":"desktop-1440","status":"PASS"}
+{"id":"GZ-FS-01/05","name":"五个工具、对象、回执与地图可达，打开/关闭与 Esc 回焦不移动画布","viewport":"desktop-1440","status":"PASS"}
+{"id":"GZ-FS-04/05","name":"拖动后点地逆变换、人物脚底命中和键盘方向/停步保持正确","viewport":"desktop-1440","status":"PASS"}
+{"id":"GZ-FS-02","name":"指针取消、画布失焦与触屏多指中断后无黏住拖动","viewport":"desktop-1440","status":"PASS"}
+{"id":"GZ-FS-03/04","name":"连续拖动边界无空白，画外标签不贴边；回中连续过渡并恢复跟随","viewport":"desktop-1440","status":"PASS"}
+{"id":"GZ-FS-03","name":"减少动态偏好立即回中","viewport":"desktop-1440","status":"PASS"}
+{"id":"GZ-FS-05","name":"停步与未知回执查询保持可达且保留原请求","viewport":"desktop-1440","status":"PASS"}
+{"id":"GZ-FS-03","name":"resize 保留合法自由视角，换景复位跟随","viewport":"desktop-1440","status":"PASS"}
+{"id":"GZ-FS-05","name":"终态回看通过受控 HTTP 读取，面板留在视口内并可关闭","viewport":"desktop-1440","status":"PASS"}
+{"id":"GZ-FS-01","name":"Canvas 覆盖整个视口且文档无滚动","viewport":"desktop-1366","status":"PASS"}
+{"id":"GZ-FS-02/03","name":"同帧本人插值跟随；拖动不移动/选取，自由镜头在人物行走后保持","viewport":"desktop-1366","status":"PASS"}
+{"id":"GZ-FS-01/05","name":"五个工具、对象、回执与地图可达，打开/关闭与 Esc 回焦不移动画布","viewport":"desktop-1366","status":"PASS"}
+{"id":"GZ-FS-04/05","name":"拖动后点地逆变换、人物脚底命中和键盘方向/停步保持正确","viewport":"desktop-1366","status":"PASS"}
+{"id":"GZ-FS-02","name":"指针取消、画布失焦与触屏多指中断后无黏住拖动","viewport":"desktop-1366","status":"PASS"}
+{"id":"GZ-FS-03/04","name":"连续拖动边界无空白，画外标签不贴边；回中连续过渡并恢复跟随","viewport":"desktop-1366","status":"PASS"}
+{"id":"GZ-FS-03","name":"减少动态偏好立即回中","viewport":"desktop-1366","status":"PASS"}
+{"id":"GZ-FS-05","name":"停步与未知回执查询保持可达且保留原请求","viewport":"desktop-1366","status":"PASS"}
+{"id":"GZ-FS-03","name":"resize 保留合法自由视角，换景复位跟随","viewport":"desktop-1366","status":"PASS"}
+{"id":"GZ-FS-05","name":"终态回看通过受控 HTTP 读取，面板留在视口内并可关闭","viewport":"desktop-1366","status":"PASS"}
+{"id":"GZ-FS-01","name":"Canvas 覆盖整个视口且文档无滚动","viewport":"phone","status":"PASS"}
+{"id":"GZ-FS-02/03","name":"同帧本人插值跟随；拖动不移动/选取，自由镜头在人物行走后保持","viewport":"phone","status":"PASS"}
+{"id":"GZ-FS-01/05","name":"五个工具、对象、回执与地图可达，打开/关闭与 Esc 回焦不移动画布","viewport":"phone","status":"PASS"}
+{"id":"GZ-FS-04/05","name":"拖动后点地逆变换、人物脚底命中和键盘方向/停步保持正确","viewport":"phone","status":"PASS"}
+{"id":"GZ-FS-02","name":"指针取消、画布失焦与触屏多指中断后无黏住拖动","viewport":"phone","status":"PASS"}
+{"id":"GZ-FS-03/04","name":"连续拖动边界无空白，画外标签不贴边；回中连续过渡并恢复跟随","viewport":"phone","status":"PASS"}
+{"id":"GZ-FS-03","name":"减少动态偏好立即回中","viewport":"phone","status":"PASS"}
+{"id":"GZ-FS-05","name":"停步与未知回执查询保持可达且保留原请求","viewport":"phone","status":"PASS"}
+{"id":"GZ-FS-03","name":"resize 保留合法自由视角，换景复位跟随","viewport":"phone","status":"PASS"}
+{"id":"GZ-FS-05","name":"终态回看通过受控 HTTP 读取，面板留在视口内并可关闭","viewport":"phone","status":"PASS"}
+{"id":"GZ-FS-01","name":"Canvas 覆盖整个视口且文档无滚动","viewport":"landscape","status":"PASS"}
+{"id":"GZ-FS-02/03","name":"同帧本人插值跟随；拖动不移动/选取，自由镜头在人物行走后保持","viewport":"landscape","status":"PASS"}
+{"id":"GZ-FS-01/05","name":"五个工具、对象、回执与地图可达，打开/关闭与 Esc 回焦不移动画布","viewport":"landscape","status":"PASS"}
+{"id":"GZ-FS-04/05","name":"拖动后点地逆变换、人物脚底命中和键盘方向/停步保持正确","viewport":"landscape","status":"PASS"}
+{"id":"GZ-FS-02","name":"指针取消、画布失焦与触屏多指中断后无黏住拖动","viewport":"landscape","status":"PASS"}
+{"id":"GZ-FS-03/04","name":"连续拖动边界无空白，画外标签不贴边；回中连续过渡并恢复跟随","viewport":"landscape","status":"PASS"}
+{"id":"GZ-FS-03","name":"减少动态偏好立即回中","viewport":"landscape","status":"PASS"}
+{"id":"GZ-FS-05","name":"停步与未知回执查询保持可达且保留原请求","viewport":"landscape","status":"PASS"}
+{"id":"GZ-FS-03","name":"resize 保留合法自由视角，换景复位跟随","viewport":"landscape","status":"PASS"}
+{"id":"GZ-FS-05","name":"终态回看通过受控 HTTP 读取，面板留在视口内并可关闭","viewport":"landscape","status":"PASS"}
+{"assessment":"PASS","output":"/home/runner/work/xiyou/xiyou/.agent-output/ci/browser-fullscreen"}

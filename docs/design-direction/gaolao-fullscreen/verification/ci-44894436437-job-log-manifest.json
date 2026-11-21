@@ -1,0 +1,35 @@
+{
+  "runId": 44894436437,
+  "sourceCommit": "0c18631a94ee288ca13247bec6ec1588f7bc6dab",
+  "encoding": "原始UTF-8日志的无损gzip；保留原始空格和换行",
+  "logs": [
+    {
+      "file": "ci-44894436437-job.txt.gz",
+      "bytes": 47663,
+      "sha256": "d88acaf35fdced203c334549deba1bc5d174dc22aace653fbba4ab4f6511f568",
+      "rawBytes": 154573,
+      "rawSha256": "ec5da5a913a759cff0300bcd899fd60e86d7a75f34a2319a9664c897a9e03396"
+    },
+    {
+      "file": "ci-44894436437-direction-job.txt.gz",
+      "bytes": 11675,
+      "sha256": "d608a5226a6c01871f384bb0ae9adb7cf57f45d2b91a530c70370d9cb152fba9",
+      "rawBytes": 54512,
+      "rawSha256": "fcb635e1ab7af05a755c53a7e3df98584183b28aaeff93138486c606139c6fa4"
+    },
+    {
+      "file": "ci-44894436437-legacy-job.txt.gz",
+      "bytes": 10172,
+      "sha256": "e0805fa90c942229fd486c93576011058631b000f8897621a88c17f4f7e5a959",
+      "rawBytes": 47661,
+      "rawSha256": "de7068d0767c7d988b612eb850343f9e5aef7a4b769264a78a80ffebddae2cd8"
+    },
+    {
+      "file": "ci-44894436437-spatial-job.txt.gz",
+      "bytes": 10912,
+      "sha256": "078fe51a684a5ba332fa15256ae4a4798fd73de5f76dd65e3cd10be50710fbdd",
+      "rawBytes": 49762,
+      "rawSha256": "bc6e709d43ff62fabd5ee7e24904c23baa344dd62e034a0e02675a340bd1049b"
+    }
+  ]
+}

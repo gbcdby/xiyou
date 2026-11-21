@@ -1,0 +1,70 @@
+{
+  "source_commit": "0c18631a94ee288ca13247bec6ec1588f7bc6dab",
+  "source_tree": "5eed97d4c74c99f1dc55ba983aadb272ed692f6e",
+  "run_url": "https://github.com/gbcdby/xiyou/actions/runs/44894436437",
+  "artifact_id": 14703059436,
+  "scope": "生产 Vue 路由、Canvas、Socket 客户端与真实 Chromium；受控公开 DTO，原图资源；不执行真实规则、PG、AI或全角色素材验收",
+  "kind": "真实Chromium截图与连续录制；受控公开DTO；未对图像或录像做后期修改",
+  "files": [
+    {
+      "file": "desktop-1440-follow.png",
+      "bytes": 2071310,
+      "sha256": "483bcacb6f0cac9c062bcd50d6bff96d073ace62786679f324e036c7d261eccb"
+    },
+    {
+      "file": "desktop-1440-free.png",
+      "bytes": 2102294,
+      "sha256": "3971bf6c927d743eb45262364d98b637356306983dcb1633ed33a7bcf76c7bd8"
+    },
+    {
+      "file": "desktop-1366-follow.png",
+      "bytes": 1643979,
+      "sha256": "bdb866a94bd022339cd1dbc39bc4a2405e28727f170a8bda84a056b79ff56257"
+    },
+    {
+      "file": "phone-follow.png",
+      "bytes": 493607,
+      "sha256": "b7692e43323af41e462926e3777947dd64156d20c5c8bac5aca4a738fb9d08e4"
+    },
+    {
+      "file": "phone-free.png",
+      "bytes": 492050,
+      "sha256": "ce07619eae4e7d4c419a80ce7f6f4ebc27505a02c28ddcbf8c3bb64dfa47a177"
+    },
+    {
+      "file": "landscape-follow.png",
+      "bytes": 548654,
+      "sha256": "3de0d70331b5e7aab439feaa19ed093a1df89217fbed74e2088f2dd481c4b6e2"
+    },
+    {
+      "file": "phone-notebook.png",
+      "bytes": 303401,
+      "sha256": "d088994109562dff834a4d10e40317d73dee9b94d26abc2f802ee7efec4873c5"
+    },
+    {
+      "file": "desktop-1440-camera.webm",
+      "bytes": 1841132,
+      "sha256": "f7feda8b80a4c66d2e475e3afc8a8b41efaa992137c3adaf42f047e45b8b93e1"
+    },
+    {
+      "file": "desktop-1366-camera.webm",
+      "bytes": 1395779,
+      "sha256": "026e5d4d616be5f402e09823d30fc18717bd0620772397c4de43d99282bcccc6"
+    },
+    {
+      "file": "phone-camera.webm",
+      "bytes": 1072732,
+      "sha256": "d4db1db8b61149b12c9012354f8f37da185ef5d7c5b610a646e14ec21d3dfce8"
+    },
+    {
+      "file": "landscape-camera.webm",
+      "bytes": 1088397,
+      "sha256": "9c63f12b0ed645da9539df0a087e7f3ee90fb6890f20f8744e2007bcf2521d2d"
+    }
+  ],
+  "full_ci_artifact": {
+    "screenshots": 24,
+    "videos": 4,
+    "note": "本目录保留七张代表截图与全部四份录像；其余截图在该次GitHub Actions完整artifact中。"
+  }
+}

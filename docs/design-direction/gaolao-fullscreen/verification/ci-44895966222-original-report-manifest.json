@@ -1,0 +1,55 @@
+{
+  "runId": 44895966222,
+  "sourceCommit": "41a68f6a223c6d9670aee98e37782ac28da613ef",
+  "sourceTree": "7a924861ebe3451818eed0faf069eda7e5126b3a",
+  "reports": [
+    {
+      "file": "ci-44895966222-spatial-result.json.gz",
+      "bytes": 303691,
+      "sha256": "439a85e57e470560a2e741e5187db55c687803d70d2a3f09a1ddfd21c5fb998b",
+      "rawBytes": 11376399,
+      "rawSha256": "72eaf80378d270a3321b4f78fdf0e6974fcf810b08833970d8e7d9d0d5c50806",
+      "sourceArtifactPath": "original-gates/spatial/result.json"
+    },
+    {
+      "file": "ci-44895966222-object-geometry-result.json.gz",
+      "bytes": 1262,
+      "sha256": "7b83a7b15d7b0e0352e46d28d9e321ed02090aa62d10f6eb1aa10f2d1163ae43",
+      "rawBytes": 3945,
+      "rawSha256": "05f48883d48b2f1971818fe909511395cfeeaf7c6aa32ae670c446e3deaea400",
+      "sourceArtifactPath": "original-gates/spatial/object-geometry-result.json"
+    },
+    {
+      "file": "ci-44895966222-direction-result.json.gz",
+      "bytes": 73132,
+      "sha256": "b88ee851adfc8c2f93304f785c559c16eab7e2a3d835c25af1871defb4576de1",
+      "rawBytes": 801626,
+      "rawSha256": "eed51c003e47be8189a7210d8096067292665286f742b7608aabac6c16b65bea",
+      "sourceArtifactPath": "original-gates/direction/browser-client-experience/result.json"
+    },
+    {
+      "file": "ci-44895966222-static-result.json.gz",
+      "bytes": 383432,
+      "sha256": "ed6e3272acfdfdabd7bb13f3a3497e7703e429ff79396dcb4ad60705f4188e22",
+      "rawBytes": 2051627,
+      "rawSha256": "dcf3c164b945c45e970e1137449beba8b3927166b3c294dfcc95f327503bf645",
+      "sourceArtifactPath": "original-gates/static/run/result.json"
+    },
+    {
+      "file": "ci-44895966222-retention-result.json.gz",
+      "bytes": 230,
+      "sha256": "f9a5991eac70305c6ef9390e7a1b01888e6b283016808b8d4c15c24a1dd947f2",
+      "rawBytes": 244,
+      "rawSha256": "84f231ac2ab2cad8d8a4ed90811a066674edd11768264d9ebc85626e630872c4",
+      "sourceArtifactPath": "original-gates/retention/report.json"
+    },
+    {
+      "file": "ci-44895966222-legacy-result.json.gz",
+      "bytes": 122679,
+      "sha256": "445b5cd431568626bdda7191de7a0f7c9448894a656e8f6da866f7e8bfdffce6",
+      "rawBytes": 1257648,
+      "rawSha256": "fa16836e38e8e56c1c58ae3e51df292102ddb9496ef0769aafe6d41e7fbeebf1",
+      "sourceArtifactPath": "original-gates/legacy/result.json"
+    }
+  ]
+}
