@@ -17,6 +17,8 @@ const state = () => page.evaluate(async () => structuredClone((await import('/sr
 const closeTo = (actual, expected, message, tolerance = 1) => assert.ok(Math.abs(actual - expected) <= tolerance, `${message}：${actual} / ${expected}`);
 const map = () => page.getByTestId('spatial-map');
 const returnButton = () => page.getByRole('button', { name: '回到角色', exact: true });
+// 未决计数属于按钮的可访问名称；同时覆盖“回执”和带数字徽标的真实入口。
+const receiptsButton = () => page.locator('.gaolao-scene-utilities').getByRole('button', { name: /^回执(?:\s*\d+)?$/ });
 const positionOf = frame => frame.actors.find(actor => actor.ref === fullscreenRefs.self)?.position;
 const entryPlugin = {
   name: 'gaolao-fullscreen-test-entry',
@@ -157,7 +159,7 @@ async function panelsKeepCamera(before) {
   }
   await page.getByRole('button', { name: '停步 / 取消后续操作', exact: true }).click();
   await until(async () => (await state()).actions.some(action => action.status === 'accepted'), '先产生一条可读的受控停步收据');
-  await page.getByRole('button', { name: '回执', exact: true }).click();
+  await receiptsButton().click();
   await page.locator('#spatial-receipts').waitFor(); assertSameView(await canvasFrame(page), before, '回执打开'); await assertFullscreen();
   await page.keyboard.press('Escape'); assertSameView(await canvasFrame(page), before, '回执关闭回焦');
   await page.getByRole('button', { name: '场景对象', exact: true }).click();
@@ -292,7 +294,8 @@ async function unknownReceipt() {
   await page.getByRole('button', { name: '停步 / 取消后续操作', exact: true }).click();
   await until(async () => (await state()).actions.some(action => action.status === 'unknown'), '受控停步结果未知');
   const wire = fixture.wires[before]; assert.equal(wire.request.action.kind, 'stop_move');
-  await page.getByRole('button', { name: '回执', exact: true }).click();
+  assert.equal(await receiptsButton().locator('.gaolao-pending-count').innerText(), '1', '未决回执入口显示真实计数');
+  await receiptsButton().click();
   const row = page.locator(`[data-action-id="${wire.request.clientActionId}"]`);
   await row.getByRole('button', { name: '查询结果', exact: true }).click();
   await until(async () => (await state()).actions.find(action => action.id === wire.request.clientActionId)?.status === 'accepted', '原身份查询取得受控收据');
