@@ -100,8 +100,9 @@ async function compactPreferences() {
 
 async function contextualLabels() {
   const frame = await stableFrame(), self = await worldPixel(page, positionOf(frame), { round: true }), wires = fixture.wires.length;
-  assert.equal(self.hit.tag, 'CANVAS', '本人身体可用于真实指针命中');
-  await page.mouse.move(self.pixel.x, self.pixel.y - 10);
+  assert.equal(self.hit.tag, 'CANVAS', '本人脚底可用于真实指针命中');
+  // 使用实际完成帧的脚底位置，固定屏幕偏移在缩小视口时会落入角色透明间隙。
+  await page.mouse.move(self.pixel.x, self.pixel.y);
   await until(async () => (await canvasFrame(page)).labels.some(label => label.key === fullscreenRefs.self), '停止动画后悬停唤醒名称');
   const hovering = await canvasFrame(page), label = hovering.labels.find(label => label.key === fullscreenRefs.self);
   assert.equal(hovering.labels.length, 1, '悬停仅显示一个相关名称');

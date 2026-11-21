@@ -121,7 +121,7 @@
 }
 @media (max-width: 700px) {
   /* 两个展开面板共用网格行，按任务实际高度避让；不改变本地开合偏好。 */
-  #app .gaolao-scene-page { display: grid; grid-template-columns: minmax(0, 1fr) 108px; grid-template-rows: auto minmax(0, 1fr); gap: 8px 12px; padding: var(--hud-top) var(--hud-right) calc(var(--hud-bottom) + var(--hud-dock-clearance) + 12px) var(--hud-left); }
+  #app .spatial-page.gaolao-scene-page { display: grid; grid-template-columns: minmax(0, 1fr) 108px; grid-template-rows: auto minmax(0, 1fr); gap: 8px 12px; padding: var(--hud-top) var(--hud-right) calc(var(--hud-bottom) + var(--hud-dock-clearance) + 12px) var(--hud-left); }
   #app .gaolao-scene-page:has(.gaolao-map-navigator.is-expanded) { grid-template-rows: minmax(0, auto) minmax(152px, 1fr); }
   .gaolao-heading { position: static; grid-area: 1 / 1; width: min(330px, 100%); min-height: 0; max-height: 100%; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
   .gaolao-map-tools { position: static; grid-area: 1 / 2; align-self: start; }
