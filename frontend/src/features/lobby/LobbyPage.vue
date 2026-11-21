@@ -100,7 +100,7 @@ onMounted(refresh);
           </div>
           <button class="primary-button wide-button lr-primary" :disabled="busy" @click="create"><AppIcon name="group" :size="18" />{{ busy ? '请求处理中…' : '创建同行房间' }}</button>
           <div class="lr-form-divider"><span>已有房间号</span></div>
-          <form class="lr-join-form" @submit.prevent="join(roomId)">
+          <form class="join-form lr-join-form" @submit.prevent="join(roomId)">
             <label class="field-label" for="room-id">房间号</label>
             <div class="lr-input-row"><input id="room-id" v-model="roomId" maxlength="128" placeholder="输入伙伴发来的房间号" :disabled="busy" required /><button class="secondary-button" :disabled="busy || !roomId.trim()">加入</button></div>
           </form>
@@ -125,7 +125,7 @@ onMounted(refresh);
       </div>
       <ul v-else-if="rooms.length" class="lr-room-list">
         <li v-for="room in rooms" :key="room.sessionId" class="lr-room-row">
-          <img v-if="room.contentVersion?.startsWith('gaolaozhuang')" class="lr-room-art" src="/assets/gaolaozhuang/scenes/village-road.png" alt="" loading="lazy" />
+          <img v-if="room.contentVersion?.startsWith('gaolaozhuang')" class="lr-room-art" src="/assets/gaolaozhuang/scenes/courtyard.png" alt="" loading="lazy" />
           <span v-else class="lr-room-art lr-room-symbol" aria-hidden="true"><AppIcon name="compass" :size="26" /></span>
           <div class="lr-room-identity"><h3>{{ room.name }}</h3><p>{{ room.protocolCapability === 'spatial-v2' ? '行走场景' : '山间通路' }}</p><code>{{ room.sessionId }}</code></div>
           <div class="lr-room-seats"><span class="lr-seat-marks" aria-hidden="true"><i v-for="seat in 5" :key="seat" :class="{ occupied: seat <= room.playerCount }" /></span><span><strong>{{ room.playerCount }}</strong><span class="lr-seat-total"> / 5</span> 位旅伴</span></div>
