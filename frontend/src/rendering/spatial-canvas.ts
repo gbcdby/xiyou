@@ -24,6 +24,7 @@ export interface CanvasSceneFrame {
 }
 interface CanvasPaintOptions {
   selected?: string; personLabels?: Record<string, string>; reducedMotion: boolean;
+  labelMode?: 'all' | 'contextual'; hovered?: string;
   cameraCenter?: Position; beforeFrontWrite?: () => void;
 }
 const frames = new WeakMap<HTMLCanvasElement, CanvasSceneFrame>();
@@ -231,6 +232,7 @@ export class SpatialCanvas {
     context.strokeStyle = '#963f2f'; context.lineWidth = 2;
     for (const object of frame.objects.filter(object => object.ref === options.selected)) { context.beginPath(); context.arc(object.position.x, object.position.y, 18, 0, Math.PI * 2); context.stroke(); }
     context.restore();
+    const contextual = options.labelMode === 'contextual';
     const points = new Map<string, Position>(), inputs: SpatialLabelInput[] = [];
     const addLabel = (key: string, label: string, position: Position, bounds: SceneRect, priority: number, selectable = true, visibleBounds = bounds) => {
       const point = screenPoint(position, fit);
@@ -240,12 +242,17 @@ export class SpatialCanvas {
     };
     for (const person of people) {
       const bounds = person.art?.bounds ?? fallbackBody, visibleBounds = person.art?.mirrorX ? { ...bounds, x: -bounds.x - bounds.width } : bounds;
-      addLabel(person.entityRef, options.personLabels?.[person.entityRef] || person.name, person.position, fallbackBody, protectedRefs.has(person.entityRef) ? 0 : 1, true, visibleBounds);
+      addLabel(person.entityRef, contextual ? person.name : options.personLabels?.[person.entityRef] || person.name, person.position, fallbackBody, protectedRefs.has(person.entityRef) ? 0 : 1, true, visibleBounds);
     }
     for (const object of frame.objects) addLabel(object.ref, object.name, object.position, object.bounds, object.ref === options.selected ? 0 : 2);
     for (const anchor of scene.anchors.filter(anchor => scene.exits.some(exit => exit.anchorId === anchor.anchorId))) addLabel(`anchor:${anchor.anchorId}`, anchor.label, anchor.position, { x: -10, y: -10, width: 20, height: 20 }, 3, false);
-    const labelKey = JSON.stringify([this.#scope, this.#width, this.#height, options.cameraCenter ? fit : null, options.selected, inputs.map(input => [input.key, input.label]), frame.objects.map(object => [object.ref, object.file, object.bounds])]);
-    if (labelKey !== this.#labelKey) { this.#labelKey = labelKey; this.#labelLayout = layoutSpatialLabels(inputs, { width: this.#width, height: this.#height }); }
+    const visibleInputs = contextual ? inputs.filter(input => input.key === options.selected || input.key === options.hovered) : inputs;
+    // 名称收起不删除身体避让区；局部名称随隐藏身体的实际绘制位置重新避让。
+    const reserved = contextual ? inputs.filter(input => input.key !== options.selected && input.key !== options.hovered).map(input => input.footprint) : [];
+    const labelKey = JSON.stringify([this.#scope, this.#width, this.#height, options.cameraCenter ? fit : null, options.selected, contextual, options.hovered,
+      inputs.map(input => [input.key, input.label]), frame.objects.map(object => [object.ref, object.file, object.bounds]),
+      contextual ? inputs.map(input => [input.key, input.footprint]) : null]);
+    if (labelKey !== this.#labelKey) { this.#labelKey = labelKey; this.#labelLayout = layoutSpatialLabels(visibleInputs, { width: this.#width, height: this.#height }, reserved); }
     frame.labels = this.#labelLayout.labels.flatMap(label => {
       const point = points.get(label.key); if (!point) return [];
       const x = clamp(point.x + label.x - label.point.x, 8, this.#width - label.width - 8), y = clamp(point.y + label.y - label.point.y, 8, this.#height - label.height - 8);

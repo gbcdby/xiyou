@@ -2,6 +2,10 @@
 defineProps<{ name: string; size?: number }>();
 const paths: Record<string, string> = {
   arrow: 'M5 12h14m-5-5 5 5-5 5',
+  'chevron-down': 'm6 9 6 6 6-6',
+  'chevron-up': 'm6 15 6-6 6 6',
+  more: 'M5 12h.01M12 12h.01M19 12h.01',
+  pause: 'M9 8v8m6-8v8M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
   bag: 'M6 7h12l2 13H4L6 7Zm3 0V5a3 3 0 0 1 6 0v2',
   book: 'M4 4h6a3 3 0 0 1 2 1 3 3 0 0 1 2-1h6v15h-6a3 3 0 0 0-2 1 3 3 0 0 0-2-1H4V4Zm8 1v15',
   chat: 'M4 4h16v12H9l-5 4V4Z',

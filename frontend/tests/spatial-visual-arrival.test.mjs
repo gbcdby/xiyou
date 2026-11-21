@@ -15,7 +15,7 @@ const drawNode = parsed.statements.find(node => ts.isFunctionDeclaration(node) &
 const drawCode = ts.transpileModule(drawNode.getText(parsed), { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext } }).outputText;
 function drawCallback(bindings) {
   return new Function('bindings', `const { props, motion, failed, performance, reducedMotion, emit, schedule, displayInput, presentation, presentationAllowed, visibleSelf, canvas } = bindings;
-    let painter=bindings.painter, frame=1, settledKey='', stopped=false; const renderingError={value:''};
+    let painter=bindings.painter, frame=1, settledKey='', stopped=false, renderedFrame=null; const renderingError={value:''}, hovered=undefined, hoverPoint=null;
     const displayFailed=error=>{ throw error; }; ${drawCode}; return { draw, replacePainter(value){painter=value;}, stop(){stopped=true;} };`)(bindings);
 }
 function baseline() {

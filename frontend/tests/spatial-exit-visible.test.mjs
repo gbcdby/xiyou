@@ -48,6 +48,7 @@ function fixture({ canvasPresent = true, connected = true, request = Promise.res
   };
   const run = new Function('bindings', `
     const { reading, receiptsOpen, objectsOpen, selectedRef, recipient, sceneMap, spatialClient, spatialNotice, nextTick } = bindings;
+    const toolDock = { value: null };
     let readingTrigger = { focus(){ throw Error('不得恢复旧焦点'); }, isConnected: true };
     let objectsTrigger = readingTrigger, receiptsTrigger = readingTrigger;
     ${performCode}\n${pageCode}

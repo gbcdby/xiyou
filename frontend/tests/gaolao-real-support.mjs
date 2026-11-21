@@ -27,10 +27,32 @@ export async function closeReading(page) {
     else await pane.getByRole('button', { name: /^关闭/ }).click();
   }
 }
+
+/** 只通过可见按钮恢复工具入口；旧入口已可见时不查找或切换更多菜单。 */
+export async function revealTool(page, label) {
+  const entry = page.getByRole('button', { name: label, exact: true });
+  if (await entry.isVisible()) return entry;
+  const expand = page.getByRole('button', { name: '展开工具栏', exact: true });
+  if (await expand.isVisible()) await expand.click();
+  if (await entry.isVisible()) return entry;
+  const more = page.getByRole('button', { name: '更多', exact: true });
+  if (await more.isVisible() && await more.getAttribute('aria-expanded') !== 'true') await more.click();
+  return entry;
+}
+
+/** 地图可能保留玩家的展开偏好；仅在收起时点击真实入口。 */
+export async function openMapNavigator(page) {
+  const map = page.locator('.gaolao-map-navigator');
+  const expand = map.getByRole('button', { name: '展开地图', exact: true });
+  if (await expand.isVisible()) await expand.click();
+  await page.getByTestId('gaolao-minimap').waitFor();
+  return map;
+}
+
 export async function openReading(page, label) {
   await closeReading(page);
-  const visibleLabel = label==='进展' && await page.getByRole('button',{name:'队伍',exact:true}).count() ? '队伍' : label;
-  await page.getByRole('button', { name: visibleLabel, exact: true }).click();
+  const visibleLabel = label === '进展' && !await page.getByRole('button', { name: '进展', exact: true }).isVisible() ? '队伍' : label;
+  await (await revealTool(page, visibleLabel)).click();
   const restore = page.locator('.spatial-sidebar.hud-card-collapsed').getByRole('button', { name: '取消选择并展开', exact: true });
   const restored = await restore.isVisible();
   if (restored) await restore.click();
@@ -48,7 +70,7 @@ export async function openObjects(page, reference) {
     try { await close.click(); endSelectionClick(observed, 'returned'); }
     catch (error) { endSelectionClick(observed, 'threw', error); throw error; }
   }
-  const entry = page.getByRole('button', { name: '场景对象', exact: true });
+  const entry = await revealTool(page, '场景对象');
   if (await entry.count()) {
     const observed = beginSelectionClick(page, { branch: 'objects-entry' });
     try { await entry.click(); endSelectionClick(observed, 'returned'); }
@@ -159,7 +181,7 @@ export async function humanAction(page, action, report, player) {
       // 内部剧情/样例锚点不再是公开按钮；真实用户仍能在当前地图点同一位置。
       // 记录屏幕离散误差，实际到达继续严格核对该次发送目标，不换一个更方便的位置。
       const close=page.getByRole('button',{name:'关闭对象区',exact:true});if(await close.isVisible())await close.click();
-      const map=page.locator('.gaolao-map-navigator'),expand=map.getByRole('button',{name:'展开地图',exact:true});if(await expand.isVisible())await expand.click();
+      const map=await openMapNavigator(page);
       await map.getByRole('button',{name:'当前',exact:true}).click();const canvas=page.getByTestId('gaolao-minimap');await canvas.waitFor();
       const location=await canvas.evaluate((canvas,{scene,position})=>{const b=canvas.getBoundingClientRect(),scale=Math.min((b.width-16)/scene.width,(b.height-16)/scene.height),x=(b.width-scene.width*scale)/2,y=(b.height-scene.height*scale)/2;const pixel={x:Math.round(b.left+x+position.x*scale),y:Math.round(b.top+y+position.y*scale)};return {pixel,scale,mappedWorld:{x:Math.round((pixel.x-b.left-x)/scale),y:Math.round((pixel.y-b.top-y)/scale)}};},{scene:p.scene,position:action.destination});
       const tolerance=.5/location.scale+.5;assert.ok(Math.abs(location.mappedWorld.x-action.destination.x)<=tolerance&&Math.abs(location.mappedWorld.y-action.destination.y)<=tolerance);
