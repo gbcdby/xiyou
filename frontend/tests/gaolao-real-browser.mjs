@@ -24,10 +24,15 @@ const latestConsent = async (r, actor, purpose) => (await r.snapshot(actor)).pro
 async function stageSummary(page, label) {
   const p = (await snapshot(page)).projection;
   const progress = p.chapter.progress.filter(value=>value.value===true).at(-1)?.label;
+  const details = page.locator('.gaolao-guidance-toggle');
+  const expandedForCheck = !p.ending && Boolean(progress) && await details.getAttribute('aria-expanded') === 'false';
+  // 正式 HUD 默认折叠详情；仍通过真实入口核对授权进展，随后恢复原开合状态。
+  if (expandedForCheck) await details.click();
   if(p.ending)await until(async()=>(await page.getByTestId('gaolao-goal').innerText())===p.ending.title,label+'显示当前真实终态');
   else if(progress)await until(async()=>(await page.locator('.gaolao-known-progress').innerText())===progress,label+'显示当前已授权的真实进展');
   assert.ok((await page.getByTestId('gaolao-goal').innerText()).trim());assert.ok((await page.getByTestId('gaolao-next-step').innerText()).trim());
   if (p.ending || progress) assert.doesNotMatch(await page.locator('.gaolao-guidance').innerText(), /先联系受困者，再准备安全开门/);
+  if (expandedForCheck) { await details.click(); assert.equal(await details.getAttribute('aria-expanded'), 'false'); }
 }
 
 async function narrowReady(page) {
