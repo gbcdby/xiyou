@@ -70,6 +70,28 @@
 
 真实界面验收使用当前 Vue 页面、可复现的受控 HTTP 数据及原始浏览器截图；示例身份和房间不计作在线多人联机证据。项目锁定浏览器的 CI 证据与本地兼容浏览器检查分开记录，不能互相冒用。实际检查结果、候选、截图来源、剩余差异与 PR 状态继续记入 #66；本页不维护第二份任务进度表。
 
+## 一屏实现截图归档（PR #87）
+
+以下为 2026-11-21 17:53（北京时间）的实际 Vue 页面，浏览器直接输出完整页面 JPEG（quality 88），像素倍率 1，没有裁切、拼图或重绘。环境为 Playwright 1.57 + Chromium 143.0.7499.0；图内「青禾（样本）」与十间标为「样本」的房间来自受控 HTTP，供复现布局，不能代表线上房间或真实多人联机。
+
+截图时本地候选 `bda9e6dc36a26d1c251e15d5eae387beea7d7ffc`、tree `fe89e4a79751f246f8a83bff7461b5ec1ae36c6a`，源码首尾一致且工作树干净；对应远端[等树候选 3fe3a41](https://github.com/gbcdby/xiyou/commit/3fe3a415e2498fad58e551abaedc64705c519a31)。本次归档只追加图片与出处，没有修改截图对应的运行代码。验收与合并状态见 [PR #87](https://github.com/gbcdby/xiyou/pull/87)。
+
+![桌面一屏大厅](lobby-one-screen/implementation-desktop.jpg)
+
+| 文件 | 实际尺寸／字节 | SHA-256 |
+| --- | --- | --- |
+| [implementation-desktop.jpg](lobby-one-screen/implementation-desktop.jpg) | 1366×768，121,350 字节 | `89a7078b964b28c38c553a76cb7051b5efe282ddcc5fe0128d3ac9f7c94c50cb` |
+| [implementation-mobile-start.jpg](lobby-one-screen/implementation-mobile-start.jpg) | 390×844，45,852 字节 | `f132a996eb963e91f990c17d7c3ddfed523f2d4ee05df094e3c9bc5f1210d6ce` |
+| [implementation-mobile-rooms.jpg](lobby-one-screen/implementation-mobile-rooms.jpg) | 390×844，55,612 字节 | `5711ef29564e09bf11149343ae1e29988d8089d0acd47654bb06ffd5c48aae2d` |
+
+截图对应的产品文件：
+
+| 文件 | SHA-256 |
+| --- | --- |
+| `frontend/src/App.vue` | `423d4fc77eafdc726fd68ba05c05dd73672eaef7cb3a893f86ded408081f3009` |
+| `frontend/src/features/lobby/LobbyPage.vue` | `09655cf7cbfbb9465c08634c11fe33a07d96e6f7450c44379f04c34b28babbeb` |
+| `frontend/src/features/lobby/lobby.css` | `120973eb98e08960145506f222ce69fb62f78dc9b72b63709396fe564e89f0e0` |
+
 ## 历史实现截图归档（PR #84）
 
 以下为 2026-11-21 实际 Vue 页面截图，使用 Playwright 1.57 与 Chromium 143.0.7499.0。本轮本地渲染环境不是项目锁定的 rev1200，不能替代 main 上的 CI 运行结论。桌面视口为 1440×1050，手机视口为 390×844，像素倍率均为 1；文件是浏览器直接输出的完整页面 JPEG（质量 88），未裁切或重绘。
