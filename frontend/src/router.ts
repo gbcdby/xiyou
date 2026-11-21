@@ -9,7 +9,6 @@ export const router = createRouter({
     { path: '/', name: 'lobby', component: LobbyPage },
     { path: '/sessions/:sessionId', name: 'session', component: SessionPage },
     { path: '/spatial/:sessionId', name: 'spatial-session', component: SpatialSessionPage },
-    { path: '/demo', name: 'demo', component: SessionPage, props: { demo: true } },
     { path: '/:pathMatch(.*)*', redirect: '/' },
   ],
   scrollBehavior: () => ({ top: 0 }),

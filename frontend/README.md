@@ -26,7 +26,7 @@ npm run dev
 
 默认入口 `/` 请求真实 HTTP 服务。`/sessions/:sessionId` 通过真实 Socket.IO 订阅当前账号的授权视图。没有服务、身份失效或尚未取得合法快照时，页面明确显示未连接或不可访问，不生成房间、动作成功或世界变化。
 
-`/demo` 是独立的静态界面演示：只使用手写且通过公开契约校验的授权 DTO，醒目标注“无真实联机”，所有世界动作停用。演示数据的 `contentVersion` 是 `ui-demo-v1`，不作为实际内容或玩法验收材料。
+按用户 2026-11-21 的明确决定，界面演示入口、页面和生产静态快照已移除。旧 `/demo` 地址按未知路由统一返回大厅，不再挂载会话页面。组件验证所需的授权 DTO 仅保留在 `tests/fixtures/authorized-snapshot.ts`，不进入生产依赖。
 
 未设置 `VITE_GAOLAO_CONTENT_VERSION` 时，大厅默认创建 `gaolaozhuang-scene-v2` 高老庄章；显式配置仍按原值选择同类已发布内容，包括回归或兼容所需的旧版。工具东侧的新场景可显式配置为 `gaolaozhuang-tools-east-scene-v2`；页面仍只有一个高老庄选项。加入或恢复已有房间沿用其存储的内容版本，不随新默认值迁移。明确选择行走灰盒时使用 `spatial-graybox-v2`，由 `VITE_SPATIAL_CONTENT_VERSION` 替换；选择“山间通路·旧版玩法”仍使用 `trust-repair-fixture-v1`，由 `VITE_CONTENT_VERSION` 替换。前端不导入完整 `content` 配置、服务端状态、内部受众或 NPC 信念。
 
@@ -34,7 +34,7 @@ npm run dev
 
 `npm run test:browser` 使用安装环境中的 Playwright。可用 `PLAYWRIGHT_MODULE` 指定该模块的绝对入口，用 `CHROMIUM_PATH` 指定既有 Chromium，用 `CHROMIUM_ARGS` 提供该二进制所需的启动参数（字符串数组的 JSON），用 `FRONTEND_URL` 指定已运行的开发服务器。默认目标是本机 `5176` 端口，开发服务器可用 `npm run dev -- --port 5176 --strictPort` 启动。
 
-该脚本包括桌面 / 390 像素窄屏截图、横向溢出检查、断网后的诚实失败反馈、静态演示动作停用，以及组件夹具中的接收者选择、物品交付和移动事件。另用受控 HTTP 响应验证明确身份失效后清凭据、恢复真实登录表单、由用户显式创建新访客；此响应替身不是运行服务。浏览器输出遵循项目的临时产物规则。`tests/browser-fixture.html` 仅是开发期验证入口，生产构建只包含 `index.html`。
+该脚本包括桌面 / 390 像素窄屏截图、横向溢出检查、断网后的诚实失败反馈、演示入口缺席与旧地址返回大厅、正式房间的未登录保护，以及组件夹具中的接收者选择、物品交付和移动事件。另用受控 HTTP 响应验证明确身份失效后清凭据、恢复真实登录表单、由用户显式创建新访客；此响应替身不是运行服务。浏览器输出遵循项目的临时产物规则。`tests/browser-fixture.html` 仅是开发期验证入口，生产构建只包含 `index.html`。
 
 历史完整浏览器脚本的 10 条限定检查通过，具体候选与范围见[修正自查](evidence/review-fix-self-check.md)和[浏览器结果摘要](evidence/browser-check-summary.json)。原环境阻塞保留在[历史阶段自查](evidence/stage-self-check.md)，不改写为本次执行。
 

@@ -13,8 +13,8 @@ const connected = computed(() => (sessionState.value.connection === 'online' && 
   <header v-if="route.name !== 'spatial-session'" class="app-header" :class="{ 'lobby-header': route.name === 'lobby' }">
     <div class="header-inner">
       <RouterLink to="/" class="brand" aria-label="西游同行，返回房间大厅"><span class="brand-seal">西</span><span>西游<span class="brand-dot">·</span>同行<small>一程山水，一同求证</small></span></RouterLink>
-      <nav class="main-nav" aria-label="主要导航"><RouterLink to="/" :class="{ active: route.name === 'lobby' }">房间大厅</RouterLink><RouterLink to="/demo" :class="{ active: route.name === 'demo' }">界面演示</RouterLink></nav>
-      <div class="header-status"><span v-if="route.name !== 'lobby'" class="connection-dot" :class="{ connected }" /><span>{{ route.name === 'lobby' ? identity ? '已登录' : '尚未登录' : route.name === 'demo' ? '静态演示' : connected ? '房间已连接' : '房间未连接' }}</span><span v-if="identity" class="user-chip"><AppIcon name="leaf" :size="15" />{{ identity.name }}</span></div>
+      <nav class="main-nav" aria-label="主要导航"><RouterLink to="/" :class="{ active: route.name === 'lobby' }">房间大厅</RouterLink></nav>
+      <div class="header-status"><span v-if="route.name !== 'lobby'" class="connection-dot" :class="{ connected }" /><span>{{ route.name === 'lobby' ? identity ? '已登录' : '尚未登录' : connected ? '房间已连接' : '房间未连接' }}</span><span v-if="identity" class="user-chip"><AppIcon name="leaf" :size="15" />{{ identity.name }}</span></div>
     </div>
   </header>
   <main id="main"><RouterView /></main>

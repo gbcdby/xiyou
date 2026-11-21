@@ -119,8 +119,6 @@ legend { font-weight: 500; font-size: 13px; margin-bottom: 8px; }
 .input-button-row { display: flex; gap: 8px; margin-top: 7px; }
 .input-button-row input { min-width: 0; }
 .input-button-row button { white-space: nowrap; }
-.demo-link { display: flex; gap: 9px; align-items: center; justify-content: center; flex-wrap: wrap; font-size: 12px; color: #65795a; border-top: 1px solid var(--line); margin-top: 28px; padding-top: 20px; }
-.demo-link small { flex-basis: 100%; text-align: center; font-size: 10px; color: #8a9481; margin-top: -4px; }
 .room-empty { min-height: 238px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 10px; padding: 18px 25px; }
 .empty-icon { width: 62px; height: 62px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #eef2e7; color: #819471; margin-bottom: 4px; }
 .room-empty h3 { font-family: var(--serif); font-size: 18px; font-weight: 500; }
@@ -136,9 +134,6 @@ legend { font-weight: 500; font-size: 13px; margin-bottom: 8px; }
 .room-list p, .room-list code { font-size: 10px; color: var(--muted); }
 .room-list p span { margin: 0 9px; }
 .session-page { padding-top: 25px; }
-.demo-banner { display: flex; align-items: center; gap: 10px; border: 1px solid #d5dfca; border-radius: 8px; padding: 11px 16px; color: #6b7a56; background: #edf1e2; font-size: 11px; }
-.demo-banner a { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; min-height: 24px; white-space: nowrap; }
-.demo-banner strong { font-weight: 500; }
 .session-heading { display: flex; align-items: center; justify-content: space-between; margin: 26px 0 24px; gap: 20px; }
 .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 10px; color: #849078; margin-bottom: 6px; }
 .session-heading h1 { display: flex; align-items: center; gap: 16px; font-size: 30px; font-weight: 500; letter-spacing: 2px; }

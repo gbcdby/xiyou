@@ -43,9 +43,6 @@
   #app .entry-panel .section-heading h2 { font-size: 17px; }
   #app .room-empty { min-height: 245px; padding: 18px 5px; }
   #app .room-list li { gap: 12px; }
-  #app .demo-banner { align-items: flex-start; flex-wrap: wrap; padding: 12px; font-size: 11px; gap: 7px; }
-  #app .demo-banner > span { flex: 1; min-width: 210px; }
-  #app .demo-banner a { margin-left: 25px; }
   #app .session-heading { margin-top: 23px; gap: 15px; align-items: flex-start; flex-wrap: wrap; }
   #app .session-heading > div:first-child { flex: 1 1 16em; min-width: 0; }
   #app .session-heading h1 { font-size: 26px; gap: 10px; flex-wrap: wrap; }

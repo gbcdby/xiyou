@@ -107,7 +107,6 @@ onMounted(refresh);
         </template>
         <p v-if="notice" class="notice warning" role="alert"><AppIcon name="warn" :size="18" />{{ notice }}</p>
         <p v-if="storageNotice" class="notice warning" role="status">{{ storageNotice }}</p>
-        <RouterLink to="/demo" class="lr-demo-link"><span>先看看同行界面<AppIcon name="arrow" :size="16" /></span><small>静态示例 · 无真实联机</small></RouterLink>
       </section>
     </div>
 
