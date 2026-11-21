@@ -48,6 +48,8 @@ type ReadingPanel = 'inventory' | 'notebook' | 'dialogue' | 'chapter' | 'recap';
 const reading = ref<ReadingPanel | null>(null);
 const objectsOpen = ref(false); const receiptsOpen = ref(false);
 let readingTrigger: HTMLElement | null = null;
+let objectsTrigger: HTMLElement | null = null;
+let receiptsTrigger: HTMLElement | null = null;
 const readingNames = { inventory: '行囊', notebook: '手记', dialogue: '交谈', chapter: '进展', recap: '回看' };
 const readingTitles = { inventory: '行囊与交接', notebook: '已获知的记录', dialogue: '与身边人交谈', chapter: '本局进展与安排', recap: '这一程的结果' };
 const recapClient = new SpatialRecapClient(api, state => { recapState.value = state; });
@@ -101,6 +103,7 @@ const { narrow } = useGaolaoHud(hudRoot);
 
 function clearAuthorizedInput() {
   selectedRef.value = ''; recipient.value = ''; message.value = ''; channel.value = 'public'; reading.value = null; readingTrigger = null;
+  objectsTrigger = null; receiptsTrigger = null;
   objectsOpen.value = false; receiptsOpen.value = false;
   personLabeler.clear(); personLabels.value = {};
   recapClient.close();
@@ -142,18 +145,27 @@ function closeReading() {
 function escape(event: KeyboardEvent) {
   if (event.key !== 'Escape' || event.isComposing || event.repeat) return;
   if (reading.value) { event.preventDefault(); event.stopPropagation(); closeReading(); }
-  else if (receiptsOpen.value || objectsOpen.value) { event.preventDefault(); event.stopPropagation(); receiptsOpen.value = false; objectsOpen.value = false; }
+  else if (receiptsOpen.value) { event.preventDefault(); event.stopPropagation(); closeReceipts(); }
+  else if (objectsOpen.value || selectedRef.value) { event.preventDefault(); event.stopPropagation(); closeObjects(); }
   else if (canStop.value) { event.preventDefault(); event.stopPropagation(); stop(); }
 }
 function stop() { void performSpatial(() => spatialClient.stop()); }
+function restorePanelFocus(trigger: HTMLElement | null) {
+  void nextTick(() => {
+    if (trigger?.isConnected && trigger.getClientRects().length) trigger.focus({ preventScroll: true });
+    else sceneMap.value?.returnToSelf();
+  });
+}
 async function showReceipts() {
+  receiptsTrigger = document.activeElement instanceof HTMLElement ? document.activeElement : null;
   closeReading(); objectsOpen.value = false; receiptsOpen.value = true; await nextTick();
   document.getElementById('spatial-receipts')?.scrollIntoView({ block: 'start' });
   document.getElementById('spatial-receipts-heading')?.focus({ preventScroll: true });
 }
-async function showObjects() { closeReading(); receiptsOpen.value = false; objectsOpen.value = true; await nextTick(); document.getElementById('spatial-selection-heading')?.focus({ preventScroll: true }); }
-function closeObjects() { objectsOpen.value = false; selectedRef.value = ''; recipient.value = ''; }
-function openMap() { reading.value = null; readingTrigger = null; receiptsOpen.value = false; closeObjects(); }
+function closeReceipts() { receiptsOpen.value = false; const trigger = receiptsTrigger; receiptsTrigger = null; restorePanelFocus(trigger); }
+async function showObjects() { objectsTrigger = document.activeElement instanceof HTMLElement ? document.activeElement : null; closeReading(); receiptsOpen.value = false; objectsOpen.value = true; await nextTick(); document.getElementById('spatial-selection-heading')?.focus({ preventScroll: true }); }
+function closeObjects(restoreFocus = true) { objectsOpen.value = false; selectedRef.value = ''; recipient.value = ''; const trigger = objectsTrigger; objectsTrigger = null; if (restoreFocus) restorePanelFocus(trigger); }
+function openMap() { reading.value = null; readingTrigger = null; receiptsOpen.value = false; receiptsTrigger = null; closeObjects(false); }
 function traverseExit(exitId: string) {
   // 只在明确出口操作时回到行走视图；原请求不留到后续布局或回执续体重发。
   openMap();
@@ -182,7 +194,12 @@ function actOnGuidance(action: GuidanceAction) {
   if (action.kind === 'receipts') { void showReceipts(); return; }
   void openReading(action.kind);
 }
-function select(reference: string) { if (selectedRef.value !== reference) { recipient.value = ''; spatialClient.cancelQueued(); } selectedRef.value = reference; objectsOpen.value = false; receiptsOpen.value = false; if (reading.value) closeReading(); }
+function select(reference: string) {
+  const trigger = document.activeElement;
+  if (trigger instanceof HTMLElement && !trigger.closest('.spatial-sidebar, .spatial-receipts')) objectsTrigger = trigger;
+  if (selectedRef.value !== reference) { recipient.value = ''; spatialClient.cancelQueued(); }
+  selectedRef.value = reference; objectsOpen.value = false; receiptsOpen.value = false; if (reading.value) closeReading();
+}
 function displayName(object: { entityRef: string; name: string }) { return personLabels.value[object.entityRef] || object.name; }
 function send(action: ActionV2) { void performSpatial(() => spatialClient.send(action)); }
 function requestEnding(scope: 'chapter' | 'recruitment') {
@@ -220,11 +237,11 @@ function ownerName(reference: string) { const p = projection.value; return p?.se
   <div ref="hudRoot" class="spatial-page page-shell" :class="{ 'gaolao-scene-page': hud, 'hud-panel-open': hud && narrow && Boolean(hudPanelKind) }">
     <header v-if="hud" class="gaolao-heading">
       <div class="gaolao-chapter-name"><span class="gaolao-chapter-seal" aria-hidden="true">一</span><h1>高老庄</h1><span>{{ projection?.scene?.name || '同行记' }}</span></div>
-      <section v-if="guidance" class="gaolao-guidance" aria-label="目标与下一步">
+      <section v-if="guidance" class="gaolao-guidance" aria-label="目标与下一步" tabindex="0" data-keyboard-scope="panel">
         <div class="gaolao-shared-goal"><p class="eyebrow">共同目标</p><h2 data-testid="gaolao-goal">{{ guidance.goal }}</h2><p v-if="guidance.knownProgress" class="gaolao-known-progress">{{ guidance.knownProgress }}</p></div>
         <div class="gaolao-next-step"><p class="eyebrow">我的下一步</p><h2 data-testid="gaolao-next-step">{{ guidance.next.title }}</h2><p>{{ guidance.next.description }}</p><button v-if="guidance.next.action" class="text-button gaolao-guide-action" :disabled="guidance.next.action.kind === 'navigate' && !canAct" @click="actOnGuidance(guidance.next.action)">{{ guidance.next.action.label }}<AppIcon name="arrow" :size="15" /></button></div>
-        <p v-if="currentStatus" class="gaolao-current-status" :data-tone="currentStatus.tone" data-testid="movement-status" role="status">{{ currentStatus.text }}</p>
       </section>
+      <p v-if="currentStatus" class="gaolao-current-status" :data-tone="currentStatus.tone" data-testid="movement-status" role="status" tabindex="0" data-keyboard-scope="panel">{{ currentStatus.text }}</p>
     </header>
     <header v-else class="spatial-heading">
       <div><RouterLink to="/" class="back-link">返回房间大厅</RouterLink><h1>{{ isGaolao ? '高老庄 · 同行记' : '高老庄 · 行走灰盒' }}</h1><p>房间 <code>{{ sessionId }}</code><button class="text-button" @click="copy">{{ copied ? '已复制' : '复制房间号' }}</button></p></div>
@@ -240,6 +257,7 @@ function ownerName(reference: string) { const p = projection.value; return p?.se
           <div class="spatial-main">
             <section v-if="!hud && (currentSummary || recentPreparations.length)" class="spatial-current-objective" :aria-label="currentSummary?.caption || '眼下事项'"><div><p class="eyebrow">{{ currentSummary?.caption || '眼下事项' }}</p><h2>{{ currentSummary?.title || '已知准备已留下' }}</h2></div><div class="spatial-known-preparations"><SpatialStatus v-for="objective in recentPreparations" :key="objective.objectiveId" :label="objective.label" tone="confirmed" /></div></section>
             <SpatialMap ref="sceneMap" :snapshot="spatialState.snapshot!" :snapshot-source="spatialState.timedTrail ? spatialSnapshots : undefined" :disabled="!canAct" :selected="selectedRef" :person-labels="personLabels" :immersive="hud" @move="move" @direction="direction" @select="select" @stop="stop" @objects="showObjects" @settled="spatialClient.confirmDisplayedArrival($event)" />
+            <div class="spatial-hud-controls">
             <p class="spatial-input-hint">点地行走 · 场景内方向键移动 · Esc 关闭详情 / 停步</p>
             <div class="spatial-hud-footer">
               <div class="spatial-action-bar"><div><strong>{{ projection.self.name }}</strong><span v-if="hud" class="gaolao-own-duties">{{ ownDuties }}</span><span v-if="!hud" data-testid="movement-status">{{ projection.movement ? movementLabels[projection.movement.status] : '点地选择路线' }}</span><span v-if="!hud && spatialState.queuedAction">{{ spatialState.queuedAction }}</span></div><button class="secondary-button" aria-label="停步 / 取消后续操作" :disabled="!canStop" @click="stop"><AppIcon name="x" :size="16" />停步</button></div>
@@ -251,6 +269,7 @@ function ownerName(reference: string) { const p = projection.value; return p?.se
                 <button v-if="isGaolao || projection.ending" aria-controls="spatial-reading-pane" :aria-expanded="reading === 'recap'" :disabled="!projection.ending" :title="projection.ending ? '查看这一程的过程与结果' : '这一程结束后可回看'" @click="openReading('recap', $event)"><AppIcon name="clock" :size="22" /><span>回看</span></button>
                 <button v-if="hud" aria-controls="spatial-receipts" :aria-expanded="receiptsOpen" :disabled="!spatialState.actions.length" @click="showReceipts"><AppIcon name="check" :size="22" /><span>回执<span v-if="unknownCount" class="gaolao-pending-count">{{ unknownCount }}</span></span></button>
               </nav>
+            </div>
             </div>
             <button v-if="!hud && unknownCount" class="spatial-pending-link" @click="showReceipts"><SpatialStatus :label="'待确认动作 ' + unknownCount + ' 条'" tone="uncertain" /><span>查询 / 原样重试</span><AppIcon name="arrow" :size="18" /></button>
           </div>
@@ -268,12 +287,12 @@ function ownerName(reference: string) { const p = projection.value; return p?.se
               <template v-else-if="reading === 'recap' && projection.ending"><h3>{{ projection.ending.title }}</h3><p class="spatial-record-statement">{{ projection.ending.summary }}</p><SpatialFieldList :fields="projection.ending.facts || []" /></template>
             </SpatialReadingPane>
             <template v-else>
-              <section class="panel spatial-selection"><button v-if="hud" class="icon-button gaolao-close-actions" aria-label="关闭对象区" @click="closeObjects"><AppIcon name="x" /></button><p class="eyebrow">本场景对象</p><h2 id="spatial-selection-heading" tabindex="-1">{{ objectsOpen && hud ? '场景中的人与物' : selected ? (selected.entityRef === projection.self.entityRef ? '你的位置' : displayName(selected)) : '选择人物或物件' }}</h2><p v-if="!selected" class="muted">在场景中点选，或从下方找到本场景的人与物。</p><div v-if="selected && selected.entityRef !== projection.self.entityRef" class="button-row"><button class="secondary-button" :disabled="!canAct" @click="approach(selected.entityRef, { kind: 'inspect', targetRef: selected.entityRef })">走近并查看</button><button class="text-button" :disabled="!canAct" @click="send({ kind: 'inspect', targetRef: selected.entityRef })">在当前位置查看</button></div><p v-if="selected && !target && !item && !others.some(person => person.entityRef === selectedRef) && selected.entityRef !== projection.self.entityRef" class="muted">可先走近。到达后再查看详情和可用操作。</p><template v-if="target"><SpatialFieldList :fields="objectDisplayFields(target)" /><button v-for="operation in isGaolao ? [] : target.availableOperations" :key="operation" class="secondary-button" :disabled="!canAct" @click="targetOperation(operation)">{{ operation === 'lock-support' ? '走近合作固定支架' : '走近后执行操作' }}</button></template><template v-if="item"><p class="spatial-item-location">{{ item.location.kind === 'ground' ? '放在地面' : '由' + ownerName(item.location.ownerRef) + '持有' }}</p><SpatialFieldList :fields="item.fields" /><button v-if="item.location.kind === 'ground'" class="primary-button" :disabled="!canAct" @click="approach(item.entityRef, { kind: 'take_item', itemRef: item.entityRef, expectedItemRevision: item.resourceRevision })">走近并拿取</button><button v-if="item.publicBorrowable && item.reclaimHolderEpoch" class="secondary-button" :disabled="!canAct" @click="reclaim(item)">领回公用物</button></template><GaolaoInteractionPanel v-if="isGaolao && projection.chapter" :projection="projection" :selected-ref="selectedRef" :person-labels="personLabels" :can-act="canAct" :view-key="spatialState.snapshot!.viewId" @action="send" /><ul v-if="!hud || objectsOpen" class="spatial-object-list"><li v-for="object in displayedObjects" :key="object.entityRef"><button class="text-button" :aria-pressed="selectedRef === object.entityRef" @click="select(object.entityRef)">{{ displayName(object) }}</button></li><li v-for="anchor in navigationAnchors" :key="'anchor:' + anchor.anchorId"><button class="text-button" :disabled="!canAct" @click="performSpatial(() => spatialClient.move(anchor.position, { anchorId: anchor.anchorId }))">前往{{ anchor.label }}</button></li></ul></section>
+              <section class="panel spatial-selection"><button v-if="hud" class="icon-button gaolao-close-actions" aria-label="关闭对象区" @click="closeObjects()"><AppIcon name="x" /></button><p class="eyebrow">本场景对象</p><h2 id="spatial-selection-heading" tabindex="-1">{{ objectsOpen && hud ? '场景中的人与物' : selected ? (selected.entityRef === projection.self.entityRef ? '你的位置' : displayName(selected)) : '选择人物或物件' }}</h2><p v-if="!selected" class="muted">在场景中点选，或从下方找到本场景的人与物。</p><div v-if="selected && selected.entityRef !== projection.self.entityRef" class="button-row"><button class="secondary-button" :disabled="!canAct" @click="approach(selected.entityRef, { kind: 'inspect', targetRef: selected.entityRef })">走近并查看</button><button class="text-button" :disabled="!canAct" @click="send({ kind: 'inspect', targetRef: selected.entityRef })">在当前位置查看</button></div><p v-if="selected && !target && !item && !others.some(person => person.entityRef === selectedRef) && selected.entityRef !== projection.self.entityRef" class="muted">可先走近。到达后再查看详情和可用操作。</p><template v-if="target"><SpatialFieldList :fields="objectDisplayFields(target)" /><button v-for="operation in isGaolao ? [] : target.availableOperations" :key="operation" class="secondary-button" :disabled="!canAct" @click="targetOperation(operation)">{{ operation === 'lock-support' ? '走近合作固定支架' : '走近后执行操作' }}</button></template><template v-if="item"><p class="spatial-item-location">{{ item.location.kind === 'ground' ? '放在地面' : '由' + ownerName(item.location.ownerRef) + '持有' }}</p><SpatialFieldList :fields="item.fields" /><button v-if="item.location.kind === 'ground'" class="primary-button" :disabled="!canAct" @click="approach(item.entityRef, { kind: 'take_item', itemRef: item.entityRef, expectedItemRevision: item.resourceRevision })">走近并拿取</button><button v-if="item.publicBorrowable && item.reclaimHolderEpoch" class="secondary-button" :disabled="!canAct" @click="reclaim(item)">领回公用物</button></template><GaolaoInteractionPanel v-if="isGaolao && projection.chapter" :projection="projection" :selected-ref="selectedRef" :person-labels="personLabels" :can-act="canAct" :view-key="spatialState.snapshot!.viewId" @action="send" /><ul v-if="!hud || objectsOpen" class="spatial-object-list"><li v-for="object in displayedObjects" :key="object.entityRef"><button class="text-button" :aria-pressed="selectedRef === object.entityRef" @click="select(object.entityRef)">{{ displayName(object) }}</button></li><li v-for="anchor in navigationAnchors" :key="'anchor:' + anchor.anchorId"><button class="text-button" :disabled="!canAct" @click="performSpatial(() => spatialClient.move(anchor.position, { anchorId: anchor.anchorId }))">前往{{ anchor.label }}</button></li></ul></section>
               <section v-if="projection.cooperations.length && (!hud || objectsOpen)" class="panel"><h2>协作准备</h2><article v-for="operation in projection.cooperations" :key="operation.operationId" class="spatial-cooperation"><SpatialStatus :label="operation.phase === 'locked' ? '协作已提交' : operation.readyCount + '/' + operation.requiredCount + ' 人就位'" :tone="operation.phase === 'locked' ? 'confirmed' : 'pending'" /><div class="button-row"><button v-for="(anchor, index) in operation.anchors" :key="index" class="text-button" :disabled="!canAct || operation.phase === 'locked'" @click="performSpatial(() => spatialClient.move(anchor))">前往位置{{ index + 1 }}</button></div><div class="button-row"><button class="secondary-button" :disabled="!canAct || operation.phase === 'locked'" @click="send({ kind: 'cooperate', operationId: operation.operationId, operationVersion: operation.operationVersion, phase: 'prepare' })">参与准备</button><button class="primary-button" :disabled="!canAct || operation.phase === 'locked'" @click="send({ kind: 'cooperate', operationId: operation.operationId, operationVersion: operation.operationVersion, phase: 'ready' })">我已就位</button><button class="text-button" :disabled="!canStop || operation.phase === 'locked'" @click="send({ kind: 'cooperate', operationId: operation.operationId, operationVersion: operation.operationVersion, phase: 'cancel' })">取消准备</button></div></article></section>
               <section v-if="projection.scene?.exits.length && (!hud || objectsOpen)" class="panel"><h2>场景出口</h2><button v-for="(exit, exitIndex) in projection.scene.exits" :key="exit.exitId" class="secondary-button" :disabled="!canAct || !exit.open" @click="traverseExit(exit.exitId)">{{ exit.open ? '走向出口' : '出口暂未开放' }} · {{ navigationAnchors.find(anchor => anchor.anchorId === exit.anchorId)?.label || '出口 ' + (exitIndex + 1) }}</button></section>
             </template>
             </aside>
-            <SpatialReceipts v-if="!hud || receiptsOpen" :closable="hud" @close="receiptsOpen = false" :actions="spatialState.actions" :online="online" data-keyboard-scope="panel" @query="spatialClient.query($event)" @retry="spatialClient.retry($event)" />
+            <SpatialReceipts v-if="!hud || receiptsOpen" :closable="hud" @close="closeReceipts" :actions="spatialState.actions" :online="online" data-keyboard-scope="panel" @query="spatialClient.query($event)" @retry="spatialClient.retry($event)" />
           </div>
         </div>
       </template>

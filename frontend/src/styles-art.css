@@ -19,14 +19,14 @@
 .gaolao-scene-page .spatial-label-guides line { stroke: #665c4b77; }
 
 /* GZ-UX-01：固定场景区、轻侧栏与单一工具入口；开合详情不改变世界viewport。 */
-#app .gaolao-scene-page { --hud-paper: #f8f2e5; --hud-ink: #332c23; --hud-muted: #665c4b; --hud-line: #c9b996; --hud-rail: 312px; --hud-top: 210px; position: fixed; inset: 0; width: 100%; height: 100dvh; max-width: none; margin: 0; padding: 0; overflow: hidden; color: var(--hud-ink); background: #eee5d1; }
+#app .gaolao-scene-page { --hud-paper: #f8f2e5; --hud-ink: #332c23; --hud-muted: #665c4b; --hud-line: #c9b996; --hud-rail: 312px; --hud-top: max(226px, 15em); --hud-bottom: max(104px, 7em); position: relative; inset: 0; width: 100%; height: max(100dvh, calc(var(--hud-top) + var(--hud-bottom) + 220px)); max-width: none; margin: 0; padding: 0; overflow: hidden; color: var(--hud-ink); background: #eee5d1; }
 .gaolao-scene-page .spatial-layout, .gaolao-scene-page .spatial-main { display: contents; }
-.gaolao-heading { position: absolute; z-index: 4; top: 14px; left: 20px; right: calc(var(--hud-rail) + 40px); height: calc(var(--hud-top) - 26px); overflow: auto; scrollbar-width: thin; }
-.gaolao-chapter-name { display: flex; align-items: center; gap: 10px; min-height: 30px; margin-bottom: 10px; }
+.gaolao-heading { position: absolute; z-index: 4; top: 14px; left: 20px; right: calc(var(--hud-rail) + 40px); height: calc(var(--hud-top) - 26px); display: flex; flex-direction: column; overflow: hidden; }
+.gaolao-chapter-name { display: flex; flex: none; align-items: center; gap: 10px; min-height: 30px; margin-bottom: 10px; }
 .gaolao-chapter-seal { display: grid; place-items: center; width: 27px; height: 30px; flex: none; background: #963f2f; color: #fff5df; font: 18px var(--serif); outline: 1px solid #fff5dfb3; outline-offset: -3px; }
 .gaolao-chapter-name h1 { margin: 0; color: #383529; font: 600 23px/1.25 var(--serif); letter-spacing: 2px; white-space: nowrap; }
 .gaolao-chapter-name > span:last-child { color: var(--hud-muted); font-size: 14px; }
-.gaolao-guidance { display: grid; grid-template-columns: minmax(170px, .7fr) minmax(0, 1.3fr); column-gap: 20px; align-items: start; }
+.gaolao-guidance { display: grid; grid-template-columns: minmax(170px, .7fr) minmax(0, 1.3fr); column-gap: 20px; align-items: start; min-height: 0; overflow: auto; scrollbar-width: thin; }
 .gaolao-guidance .eyebrow { margin: 0 0 4px; color: #766b54; font-size: 12px; letter-spacing: .12em; }
 .gaolao-guidance h2 { margin: 0; font: 600 18px/1.45 var(--serif); color: #383529; }
 .gaolao-next-step { border-left: 1px solid #c8b995; padding-left: 20px; }
@@ -34,10 +34,10 @@
 .gaolao-next-step > p:not(.eyebrow) { margin: 4px 0 0; font-size: 14px; line-height: 1.5; color: var(--hud-muted); }
 .gaolao-guide-action { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; margin: 3px 0 0; padding: 4px 0; font-size: 14px; font-weight: 600; color: #315c49; }
 .gaolao-known-progress { margin: 7px 0 0; font-size: 13px; line-height: 1.5; color: #617052; }
-.gaolao-current-status { grid-column: 1 / -1; margin: 6px 0 0; min-height: 20px; font-size: 13px; line-height: 1.5; color: #6d634f; overflow-wrap: anywhere; }
+.gaolao-current-status { flex: none; margin: 6px 0 0; min-height: 20px; max-height: 35%; overflow: auto; font-size: 13px; line-height: 1.5; color: #6d634f; overflow-wrap: anywhere; }
 .gaolao-current-status[data-tone="uncertain"], .gaolao-current-status[data-tone="paused"] { color: #904635; font-weight: 600; }
 .gaolao-current-status[data-tone="pending"] { color: #44624f; }
-.gaolao-scene-page .spatial-map-card { position: absolute; top: var(--hud-top); left: 20px; right: calc(var(--hud-rail) + 40px); bottom: 104px; min-height: 0; border: 1px solid #c5b795; border-radius: 7px; background: #e7dec9; box-shadow: 0 2px 14px #5543230c; }
+.gaolao-scene-page .spatial-map-card { position: absolute; top: var(--hud-top); left: 20px; right: calc(var(--hud-rail) + 40px); bottom: var(--hud-bottom); min-height: 0; border: 1px solid #c5b795; border-radius: 7px; background: #e7dec9; box-shadow: 0 2px 14px #5543230c; }
 .gaolao-scene-page .spatial-map-viewport { width: 100%; height: 100%; min-height: 0; }
 .gaolao-scene-page .spatial-map { background: #e7dec9; }
 .gaolao-scene-page .spatial-map-toolbar { position: absolute; z-index: 3; left: 10px; bottom: 10px; display: flex; margin: 0; transform: none; background: #f8f2e5f2; border: 1px solid #c9b996; border-radius: 5px; }
@@ -63,22 +63,23 @@
 .gaolao-scene-page .spatial-selection > h2 { padding-right: 25px; }
 .gaolao-scene-page .spatial-object-list { gap: 4px; padding-top: 10px; }
 .gaolao-scene-page .spatial-object-list button { min-height: 40px; text-align: left; }
-.gaolao-scene-page .spatial-receipts { display: block; flex: 1; min-height: 180px; margin: 0; padding: 16px; overflow: auto; border: 1px solid var(--hud-line); border-radius: 7px; background: var(--hud-paper); }
+.gaolao-scene-page .spatial-receipts { display: block; flex: 1; min-height: 180px; margin: 0; padding: 16px; overflow: auto; scroll-padding-block: 8px; border: 1px solid var(--hud-line); border-radius: 7px; background: var(--hud-paper); }
 .gaolao-scene-page .spatial-receipts ol { display: grid; grid-template-columns: 1fr; }
 .gaolao-scene-page .gaolao-close-receipts { float: right; font-size: 13px; min-height: 32px; padding: 2px 0; }
 .gaolao-scene-page .control-banner { flex: none; display: block; padding: 12px; margin: 0; border-color: #c6ac83; background: #f7ebd4; }
 .gaolao-scene-page .control-banner p { margin: 5px 0 8px; font-size: 14px; line-height: 1.5; }
 .gaolao-scene-page .control-banner .button-row { gap: 6px; flex-wrap: wrap; }
 .gaolao-scene-page .control-banner button { min-height: 40px; padding: 6px 10px; font-size: 14px; }
-.gaolao-scene-page .spatial-input-hint { position: absolute; left: 20px; right: calc(var(--hud-rail) + 40px); bottom: 78px; margin: 0; color: #7a705b; text-align: center; font-size: 12px; line-height: 18px; }
-.gaolao-scene-page .spatial-hud-footer { position: absolute; left: 20px; right: calc(var(--hud-rail) + 40px); bottom: 12px; height: 58px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-.gaolao-scene-page .spatial-action-bar { display: flex; flex: 1; flex-direction: row; align-items: center; justify-content: flex-start; min-width: 0; padding: 0; gap: 12px; }
+.gaolao-scene-page .spatial-hud-controls { position: absolute; left: 20px; right: calc(var(--hud-rail) + 40px); bottom: 12px; display: grid; gap: 8px; }
+.gaolao-scene-page .spatial-input-hint { margin: 0; color: #7a705b; text-align: center; font-size: 12px; line-height: 1.5; }
+.gaolao-scene-page .spatial-hud-footer { min-height: 58px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+.gaolao-scene-page .spatial-action-bar { display: flex; flex: 1 1 14em; flex-direction: row; align-items: center; justify-content: flex-start; min-width: 0; padding: 0; gap: 12px; }
 .gaolao-scene-page .spatial-action-bar > div { min-width: 0; max-width: 190px; }
 .gaolao-scene-page .spatial-action-bar strong { display: block; font: 600 18px/1.3 var(--serif); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .gaolao-scene-page .spatial-action-bar .gaolao-own-duties { display: block; margin: 3px 0 0; color: var(--hud-muted); font-size: 12px; line-height: 1.4; }
 .gaolao-scene-page .spatial-action-bar > button { display: inline-flex; align-items: center; justify-content: center; gap: 4px; flex: none; min-height: 44px; padding: 7px 10px; border-color: #b4a57e; color: #665338; background: #f8f2e5; }
-.gaolao-scene-page .spatial-tool-dock { display: flex; flex-wrap: nowrap; gap: 6px; justify-content: end; }
-.gaolao-scene-page .spatial-tool-dock button { position: relative; width: 52px; min-height: 56px; padding: 5px 3px; gap: 3px; border: 1px solid #c8b995; border-radius: 6px; color: #49604b; background: #f8f2e5; font-size: 13px; }
+.gaolao-scene-page .spatial-tool-dock { display: flex; flex-wrap: nowrap; gap: 6px; justify-content: end; margin-left: auto; }
+.gaolao-scene-page .spatial-tool-dock button { position: relative; width: auto; min-width: max(52px, 3em); min-height: 56px; padding: 5px 3px; gap: 3px; border: 1px solid #c8b995; border-radius: 6px; color: #49604b; background: #f8f2e5; font-size: 13px; white-space: nowrap; }
 .gaolao-scene-page .spatial-tool-dock button[aria-expanded="true"] { border-color: #56745a; background: #e8eddc; box-shadow: inset 0 2px #56745a; }
 .gaolao-scene-page button:disabled { cursor: not-allowed; }
 .gaolao-pending-count { position: absolute; top: -5px; right: -4px; display: grid; place-items: center; min-width: 19px; height: 19px; padding: 1px 4px; border-radius: 10px; background: #964d36; color: #fff7e8; font-size: 11px; }
@@ -87,16 +88,16 @@
 .gaolao-room-details > .text-button { margin-right: 10px; }
 .gaolao-ending-choices { margin-top: 18px; padding-top: 14px; border-top: 1px solid #d4c7a9; }
 @media (min-width: 901px) and (max-width: 1120px) {
-  #app .gaolao-scene-page { --hud-rail: 280px; --hud-top: 242px; }
+  #app .gaolao-scene-page { --hud-rail: 280px; --hud-top: max(242px, 16em); --hud-bottom: max(150px, 10em); }
   .gaolao-guidance { grid-template-columns: minmax(150px, .65fr) minmax(0, 1.35fr); column-gap: 12px; }
   .gaolao-next-step { padding-left: 12px; }
   .gaolao-scene-page .spatial-tool-dock { gap: 4px; }
-  .gaolao-scene-page .spatial-tool-dock button { width: 44px; }
+  .gaolao-scene-page .spatial-tool-dock button { min-width: max(44px, 3em); }
   .gaolao-scene-page .spatial-action-bar { gap: 7px; }
-  .gaolao-scene-page .spatial-action-bar > div { max-width: 125px; }
+  .gaolao-scene-page .spatial-action-bar > div { max-width: calc(100% - 110px); }
 }
 @media (max-width: 900px) {
-  #app .gaolao-scene-page { --hud-top: 270px; }
+  #app .gaolao-scene-page { --hud-top: max(310px, 20.5em); --hud-bottom: max(176px, 14em); overflow: visible; }
   .gaolao-heading { top: 10px; left: 12px; right: 12px; height: calc(var(--hud-top) - 20px); }
   .gaolao-chapter-name { margin-right: 180px; flex-wrap: wrap; gap: 5px 8px; min-height: 52px; margin-bottom: 8px; }
   .gaolao-chapter-name > span:last-child { width: 100%; font-size: 13px; }
@@ -111,21 +112,21 @@
   .gaolao-next-step h2 { font-size: 19px; }
   .gaolao-next-step > p:not(.eyebrow) { font-size: 14px; }
   .gaolao-current-status { margin-top: 3px; }
-  .gaolao-scene-page .spatial-map-card { top: var(--hud-top); left: 12px; right: 12px; bottom: 176px; }
+  .gaolao-scene-page .spatial-map-card { top: var(--hud-top); left: 12px; right: 12px; }
   .gaolao-scene-page .spatial-rail { display: contents; }
   .gaolao-scene-page .gaolao-map-navigator { position: absolute; z-index: 12; top: 10px; right: 12px; width: 174px; max-height: calc(100dvh - 180px); }
   .gaolao-scene-page .gaolao-map-navigator.is-expanded { width: min(360px, calc(100% - 24px)); box-shadow: 0 8px 28px #332c2326; }
-  .gaolao-scene-page .spatial-sidebar, .gaolao-scene-page .spatial-receipts { position: absolute; z-index: 10; left: 12px; right: 12px; bottom: 176px; width: auto; min-height: 160px; max-height: min(52dvh, calc(100dvh - 250px)); box-shadow: 0 6px 26px #332c2326; }
+  .gaolao-scene-page .spatial-sidebar, .gaolao-scene-page .spatial-receipts { position: absolute; z-index: 10; left: 12px; right: 12px; bottom: var(--hud-bottom); width: auto; min-height: 160px; max-height: min(52dvh, calc(100dvh - 250px)); box-shadow: 0 6px 26px #332c2326; }
   .gaolao-scene-page .spatial-sidebar:has(.spatial-reading-pane) { display: flex; height: min(52dvh, calc(100dvh - 250px)); }
-  .gaolao-scene-page .control-banner { position: absolute; z-index: 13; left: 12px; right: 12px; bottom: 176px; max-height: 180px; overflow: auto; }
-  .gaolao-scene-page .spatial-hud-footer { left: 12px; right: 12px; bottom: 10px; height: 126px; flex-direction: column; align-items: stretch; gap: 9px; }
-  .gaolao-scene-page .spatial-action-bar { flex: none; justify-content: space-between; height: 50px; padding: 0 3px; }
+  .gaolao-scene-page .control-banner { position: absolute; z-index: 13; left: 12px; right: 12px; bottom: var(--hud-bottom); max-height: 180px; overflow: auto; }
+  .gaolao-scene-page .spatial-hud-controls { left: 12px; right: 12px; bottom: 10px; gap: 10px; }
+  .gaolao-scene-page .spatial-hud-footer { display: grid; grid-template-columns: minmax(0, 1fr); min-height: 126px; align-items: stretch; gap: 9px; }
+  .gaolao-scene-page .spatial-action-bar { flex: none; justify-content: space-between; min-height: 50px; padding: 0 3px; }
   .gaolao-scene-page .spatial-action-bar > div { max-width: calc(100% - 85px); }
   .gaolao-scene-page .spatial-action-bar .gaolao-own-duties { font-size: 13px; }
-  .gaolao-scene-page .spatial-tool-dock { justify-content: space-between; gap: 5px; }
-  .gaolao-scene-page .spatial-tool-dock button { flex: 1; width: auto; min-width: 44px; min-height: 60px; font-size: 14px; }
-  .gaolao-scene-page .spatial-input-hint { left: 12px; right: 12px; bottom: 146px; font-size: 12px; }
+  .gaolao-scene-page .spatial-tool-dock { display: grid; grid-template-columns: repeat(auto-fit, minmax(max(44px, 2.8em), 1fr)); gap: 5px; margin-left: 0; }
+  .gaolao-scene-page .spatial-tool-dock button { width: auto; min-width: 44px; min-height: 60px; font-size: 14px; }
 }
 @media (max-height: 620px) {
-  #app .gaolao-scene-page { position: relative; height: 700px; min-height: 100dvh; overflow: visible; }
+  #app .gaolao-scene-page { position: relative; height: max(700px, 100dvh, calc(var(--hud-top) + var(--hud-bottom) + 220px)); overflow: visible; }
 }

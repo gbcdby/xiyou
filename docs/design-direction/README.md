@@ -10,7 +10,8 @@
 - [色光与材质](guidelines/color-and-light.md)：色彩职责、明度彩度与材料表现。
 - [人物](guidelines/characters.md) · [环境](guidelines/environments.md) · [动效倾向](guidelines/motion.md) · [一致性](guidelines/consistency.md)。
 - [UI/UX 共性](guidelines/ui-and-ux.md)：界面与场景融合、图标系统与通用 UX 约束。
-- [大厅重设计：高老庄 · 同行画卷](lobby-redesign.md)：本轮大厅视觉提案、局部组件与状态边界；尚待浏览器视觉/交互验收。
+- [大厅重设计：高老庄 · 同行画卷](lobby-redesign.md)：大厅视觉提案、局部组件与状态边界；桌面与手机运行截图已归档，验收与合并记录见 [PR #84](https://github.com/gbcdby/xiyou/pull/84)。
+- [会话界面运行截图](ui-closure/README.md)：桌面、手机与文字放大回归的真实截图，保留受控样本和验收边界。
 - [出图简报](guidelines/art-brief.md)：生成美术素材时的通用模板。
 - [高老庄视觉基准 v1](gaolaozhuang-v1/README.md)：本轮场景、主视图、关键状态、资产用途、交付边界与采用范围；页面合同另见 [GZ-VIS-01](../specs/gaolaozhuang-visual.md)。
 - [参考目录](references/catalog.md)、[来源说明](references/provenance.md)：当前入库情况、继承的参考编号与证据边界。
