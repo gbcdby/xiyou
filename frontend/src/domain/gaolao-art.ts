@@ -1,4 +1,12 @@
 import gaocai from '../assets/gaocai-manifest.json' with { type: 'json' };
+import courtyardHelper from '../assets/courtyard-helper-manifest.json' with { type: 'json' };
+import carpenter from '../assets/carpenter-manifest.json' with { type: 'json' };
+import kitchenHelper from '../assets/kitchen-helper-manifest.json' with { type: 'json' };
+import woodcutter from '../assets/woodcutter-manifest.json' with { type: 'json' };
+import wukong from '../assets/wukong-manifest.json' with { type: 'json' };
+import bajie from '../assets/bajie-manifest.json' with { type: 'json' };
+import gao from '../assets/gao-manifest.json' with { type: 'json' };
+import witness from '../assets/witness-manifest.json' with { type: 'json' };
 import type { Facing } from '../../../game/spatial-types.ts';
 
 export interface SpriteFrame {
@@ -21,12 +29,17 @@ export type SpriteCatalog = Readonly<Record<string, { basePath: string; manifest
 /** 只注册已验资源；角色扩展只改目录，不改变 Canvas 的通用消费接口。 */
 export const appearanceSpriteCatalog: SpriteCatalog = Object.freeze({
   gaocai: { basePath: '/assets/gaolaozhuang/gaocai', manifest: gaocai },
+  'courtyard-helper': { basePath: '/assets/gaolaozhuang/courtyard-helper', manifest: courtyardHelper },
+  carpenter: { basePath: '/assets/gaolaozhuang/carpenter', manifest: carpenter },
+  'kitchen-helper': { basePath: '/assets/gaolaozhuang/kitchen-helper', manifest: kitchenHelper },
+  woodcutter: { basePath: '/assets/gaolaozhuang/woodcutter', manifest: woodcutter },
+  wukong: { basePath: '/assets/gaolaozhuang/wukong', manifest: wukong },
+  bajie: { basePath: '/assets/gaolaozhuang/bajie', manifest: bajie },
+  gao: { basePath: '/assets/gaolaozhuang/gao', manifest: gao },
+  witness: { basePath: '/assets/gaolaozhuang/witness', manifest: witness },
 });
-const previewAllAsGaocai = import.meta.env?.VITE_PREVIEW_ALL_AS_GAOCAI === '1';
 function entryFor(appearanceId: string | undefined, catalog: SpriteCatalog) {
-  if (appearanceId && Object.hasOwn(catalog, appearanceId)) return catalog[appearanceId];
-  if (previewAllAsGaocai && appearanceId && appearanceId !== 'neutral' && Object.hasOwn(catalog, 'gaocai')) return catalog.gaocai;
-  return null;
+  return appearanceId && Object.hasOwn(catalog, appearanceId) ? catalog[appearanceId] : null;
 }
 export function spriteResourcePaths(appearanceId: string | undefined, catalog: SpriteCatalog = appearanceSpriteCatalog): string[] {
   const entry = entryFor(appearanceId, catalog);
