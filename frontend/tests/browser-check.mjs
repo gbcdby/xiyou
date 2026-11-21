@@ -14,6 +14,12 @@ async function noOverflow(page, name) {
   const widths = await page.evaluate(() => ({ viewport: document.documentElement.clientWidth, content: document.documentElement.scrollWidth }));
   assert.ok(widths.content <= widths.viewport, `${name} 横向溢出：${JSON.stringify(widths)}`); checks.push({ name, widths });
 }
+async function noDemoEntry(page, name) {
+  assert.equal(await page.locator('a[href="/demo"]').count(), 0);
+  assert.equal(await page.getByRole('link', { name: '界面演示' }).count(), 0);
+  assert.equal(await page.getByRole('link', { name: '先看看同行界面' }).count(), 0);
+  checks.push({ name, passed: true });
+}
 try {
   const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1 });
   page.on('pageerror', error => errors.push(error.message));
@@ -26,22 +32,29 @@ try {
   await page.getByRole('button', { name: '以此名同行' }).click();
   await page.getByRole('alert').filter({ hasText: '尚未连接到服务' }).waitFor();
   assert.equal(await page.getByRole('button', { name: '创建同行房间' }).count(), 0);
+  await noDemoEntry(page, '桌面大厅没有界面演示入口');
   await noOverflow(page, 'desktop-lobby');
   await page.screenshot({ path: `${output}/lobby-desktop.png`, fullPage: true });
   checks.push({ name: '不可达服务没有生成访客身份或房间', passed: true });
-  await page.getByRole('navigation', { name: '主要导航' }).getByRole('link', { name: '界面演示' }).click();
-  await page.getByRole('heading', { name: '山间通路' }).waitFor();
-  await page.getByRole('note').filter({ hasText: '静态授权投影，无真实联机' }).waitFor();
-  assert.equal(await page.getByRole('button', { name: '发送', exact: true }).isDisabled(), true);
-  assert.equal(await page.getByRole('button', { name: '修复通路', exact: true }).isDisabled(), true);
-  await noOverflow(page, 'desktop-session');
-  await page.screenshot({ path: `${output}/session-desktop.png`, fullPage: true });
-  checks.push({ name: '演示明确标识且无法提交动作', passed: true });
-  await page.setViewportSize({ width: 390, height: 844 });
-  await noOverflow(page, 'mobile-session');
-  await page.screenshot({ path: `${output}/session-mobile.png`, fullPage: true });
-  await page.goto(baseURL);
+  await page.goto(`${baseURL}/demo`);
+  await page.waitForURL(url => url.pathname === '/');
   await page.getByRole('heading', { name: '暂未连上服务' }).waitFor();
+  assert.equal(await page.getByRole('heading', { name: '山间通路' }).count(), 0);
+  checks.push({ name: '旧演示地址按未知路由返回大厅，不挂载会话页面', passed: true });
+  await page.goto(`${baseURL}/sessions/browser-guard`);
+  await page.getByRole('heading', { name: '先留下称呼，再与伙伴相见' }).waitFor();
+  assert.equal(await page.getByRole('region', { name: '同行对话' }).count(), 0);
+  await noOverflow(page, 'desktop-session-guard');
+  await page.screenshot({ path: `${output}/session-guard-desktop.png`, fullPage: true });
+  checks.push({ name: '正式房间保留登录保护，未获授权时不生成静态世界', passed: true });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await noOverflow(page, 'mobile-session-guard');
+  await page.screenshot({ path: `${output}/session-guard-mobile.png`, fullPage: true });
+  await page.goto(`${baseURL}/demo`);
+  await page.waitForURL(url => url.pathname === '/');
+  await page.getByRole('heading', { name: '暂未连上服务' }).waitFor();
+  assert.equal(await page.getByRole('heading', { name: '山间通路' }).count(), 0);
+  await noDemoEntry(page, '手机端旧演示地址返回大厅且没有演示入口');
   await noOverflow(page, 'mobile-lobby');
   await page.screenshot({ path: `${output}/lobby-mobile.png`, fullPage: true });
   await page.setViewportSize({ width: 1440, height: 1000 });
@@ -54,7 +67,7 @@ try {
   await dialogue.getByLabel('照水', { exact: true }).check();
   await dialogue.getByRole('button', { name: '发送', exact: true }).click();
   let actions = JSON.parse(await page.getByTestId('actions').textContent());
-  assert.deepEqual(actions[0], { kind: 'speak', text: '请核对当前通路。', channel: 'directed', recipientIds: ['demo-C'] });
+  assert.deepEqual(actions[0], { kind: 'speak', text: '请核对当前通路。', channel: 'directed', recipientIds: ['fixture-C'] });
   assert.equal(await dialogue.getByText('请核对当前通路。', { exact: true }).count(), 0);
   await dialogue.getByLabel('这句话说给谁').selectOption('private');
   assert.equal(await dialogue.getByLabel('唐僧', { exact: true }).count(), 0);
@@ -62,10 +75,10 @@ try {
   const inventory = page.getByRole('region', { name: '我的持物' });
   await inventory.getByRole('button', { name: '转交', exact: true }).click();
   assert.equal(await inventory.getByRole('button', { name: '确认转交' }).isDisabled(), true);
-  await inventory.getByLabel('交给同处的哪位伙伴').selectOption('demo-C');
+  await inventory.getByLabel('交给同处的哪位伙伴').selectOption('fixture-C');
   await inventory.getByRole('button', { name: '确认转交' }).click();
   actions = JSON.parse(await page.getByTestId('actions').textContent());
-  assert.equal(actions[1].kind, 'transfer_item'); assert.equal(actions[1].targetId, 'demo-C');
+  assert.equal(actions[1].kind, 'transfer_item'); assert.equal(actions[1].targetId, 'fixture-C');
   assert.equal(await inventory.getByText('丈量绳', { exact: true }).count(), 1);
   const world = page.getByRole('region', { name: '通路口' });
   await world.getByRole('button', { name: '材料间' }).click();
@@ -96,6 +109,7 @@ try {
   await authPage.getByRole('button', { name: '以此名同行' }).click();
   await authPage.getByRole('button', { name: '创建同行房间' }).waitFor();
   await authPage.getByRole('heading', { name: '等一位发起同行的人' }).waitFor();
+  await noDemoEntry(authPage, '登录后的大厅没有界面演示入口');
   assert.equal(authRequests.find(request => request.path === '/api/auth/guest').authorization, undefined);
   assert.equal(authRequests.at(-1).authorization, 'Bearer new-browser-fixture');
   assert.equal(JSON.parse(await authPage.evaluate(() => sessionStorage.getItem('xiyou.guest.v1'))).userId, 'new-browser-user');

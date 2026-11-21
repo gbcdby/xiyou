@@ -44,9 +44,6 @@
 .lobby-redesign .lr-input-row { display: flex; gap: 8px; margin-top: 6px; }
 .lobby-redesign .lr-input-row input { min-width: 0; }
 .lobby-redesign .lr-input-row .secondary-button { flex: 0 0 auto; min-width: 58px; padding-inline: 12px; font-size: 14px; white-space: nowrap; }
-.lobby-redesign .lr-demo-link { margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--lobby-line); display: flex; flex-direction: column; align-items: center; gap: 2px; min-height: 44px; color: #49684e; font-size: 13px; }
-.lobby-redesign .lr-demo-link > span { display: inline-flex; align-items: center; gap: 9px; }
-.lobby-redesign .lr-demo-link small { color: #6c7664; font-size: 12px; }
 .lobby-redesign .notice { font-size: 13px; overflow-wrap: anywhere; padding: 12px; }
 .lobby-redesign .lr-rooms { margin-top: 36px; }
 .lobby-redesign .lr-rooms-heading { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 0 0 18px; border-bottom: 1px solid #cbd1bf; }
@@ -91,7 +88,7 @@
 .lobby-redesign .lr-room-footnote > svg { margin-top: 3px; }
 .lobby-redesign .lr-room-footnote p span { margin-left: 12px; }
 
-/* 页面壳的局部变体；演示和正式房间保留原外观、连接语义。 */
+/* 页面壳的局部变体；正式房间保留原外观、连接语义。 */
 #app .app-header.lobby-header { background: #fbfaf5; border-bottom-color: #dde1d3; }
 #app .lobby-header .header-inner { padding: 0 56px; min-height: 84px; gap: 0 64px; flex-wrap: wrap; }
 #app .lobby-header .brand-seal { background: #a85a48; border-radius: 3px 4px 3px 2px; }
