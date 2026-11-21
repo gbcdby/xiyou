@@ -361,7 +361,12 @@ async function resizeAndScene() {
   }
   await page.getByRole('button', { name: '收起工具栏', exact: true }).click();
   fixture.changeScene();
-  await until(async () => (await canvasFrame(page)).sceneId === 'gaolao-village-road', '公开 DTO 切换场景');
+  await until(() => page.getByTestId('spatial-map').evaluate(async canvas => {
+    if (!(canvas instanceof HTMLCanvasElement)) throw new Error('主场景必须是真实 Canvas');
+    // 换景先清除旧帧，再于下一绘制帧合成；等待期间允许尚无完成帧。
+    const frame = (await import('/src/rendering/spatial-canvas.ts')).readCanvasFrame(canvas);
+    return frame?.sceneId === 'gaolao-village-road';
+  }), '公开 DTO 切换场景');
   await until(() => returnButton().count().then(count => count === 0), '换景重置为跟随');
   assertFollow(await stableFrame()); await assertFullscreen();
   assert.equal(await page.getByRole('button', { name: '展开工具栏', exact: true }).isVisible(), true, '换景保留工具栏收起偏好');
