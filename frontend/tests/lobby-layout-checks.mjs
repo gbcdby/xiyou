@@ -141,6 +141,28 @@ export async function checkLobbyLayout(context, baseURL, output) {
     assert.equal(await page.getByRole('button', { name: '查看请求未完成详情' }).evaluate(element => element === document.activeElement), true);
     checks.push({ name: '手机页签保留称呼、模式、房号和错误，箭头与Home可用，完整错误可阅读并回焦', passed: true });
   } finally { await joinedFixture.page.close(); }
+  const largeTextFixture = await openPage({ width: 390, height: 844 });
+  try {
+    const { page } = largeTextFixture;
+    // 仅放大文字，不改变视口；先统一取原字号，避免父子字号重复乘算。
+    await page.evaluate(() => {
+      const sizes = [...document.querySelectorAll('body *')].filter(element => element instanceof HTMLElement).map(element => [element, parseFloat(getComputedStyle(element).fontSize)]);
+      for (const [element, size] of sizes) element.style.setProperty('font-size', `${size * 2}px`, 'important');
+    });
+    await settled(page);
+    await page.getByRole('tab', { name: /寻找房间/ }).click();
+    assert.equal(await page.getByRole('tab', { name: /寻找房间/ }).getAttribute('aria-selected'), 'true', '大字章节不能覆盖任务页签');
+    await page.getByRole('tab', { name: /开始同行/ }).click();
+    await page.getByRole('button', { name: '创建同行房间', exact: true }).focus();
+    const focus = await page.getByRole('button', { name: '创建同行房间', exact: true }).evaluate(element => {
+      const r = element.getBoundingClientRect(); const panel = element.closest('section'); const p = panel.getBoundingClientRect();
+      const hit = document.elementFromPoint((r.left + r.right) / 2, (r.top + r.bottom) / 2);
+      return { visible: r.top >= p.top + panel.clientTop && r.bottom <= p.top + panel.clientTop + panel.clientHeight, hit: hit === element || element.contains(hit), documentWidth: document.documentElement.scrollWidth, viewportWidth: document.documentElement.clientWidth };
+    });
+    assert.ok(focus.visible && focus.hit, '大字滚动后焦点操作应完整可见且能命中');
+    assert.ok(focus.documentWidth <= focus.viewportWidth, '大字回退不横向溢出');
+    checks.push({ name: '手机200%文字下页签没有被章节覆盖，滚动后焦点操作完整可达', focus });
+  } finally { await largeTextFixture.page.close(); }
   assert.deepEqual(errors, [], '大厅验收不得产生页面异常');
   return checks;
 }
