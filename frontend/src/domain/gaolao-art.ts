@@ -22,8 +22,11 @@ export type SpriteCatalog = Readonly<Record<string, { basePath: string; manifest
 export const appearanceSpriteCatalog: SpriteCatalog = Object.freeze({
   gaocai: { basePath: '/assets/gaolaozhuang/gaocai', manifest: gaocai },
 });
+const previewAllAsGaocai = import.meta.env?.VITE_PREVIEW_ALL_AS_GAOCAI === '1';
 function entryFor(appearanceId: string | undefined, catalog: SpriteCatalog) {
-  return appearanceId && Object.hasOwn(catalog, appearanceId) ? catalog[appearanceId] : null;
+  if (appearanceId && Object.hasOwn(catalog, appearanceId)) return catalog[appearanceId];
+  if (previewAllAsGaocai && appearanceId && appearanceId !== 'neutral' && Object.hasOwn(catalog, 'gaocai')) return catalog.gaocai;
+  return null;
 }
 export function spriteResourcePaths(appearanceId: string | undefined, catalog: SpriteCatalog = appearanceSpriteCatalog): string[] {
   const entry = entryFor(appearanceId, catalog);
