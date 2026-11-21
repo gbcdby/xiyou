@@ -1,0 +1,114 @@
+{
+  "scope": "原录像格式核对、全片解码与每4秒抽帧查看；不声称人工逐帧观看所有画面。",
+  "videos": [
+    {
+      "case": "desktop-1440",
+      "video": "desktop-1440-camera.webm",
+      "sha256": "f7feda8b80a4c66d2e475e3afc8a8b41efaa992137c3adaf42f047e45b8b93e1",
+      "probeExitCode": 0,
+      "metadata": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 1440,
+            "height": 900,
+            "r_frame_rate": "25/1"
+          }
+        ],
+        "format": {
+          "duration": "11.680000",
+          "size": "1841132"
+        }
+      },
+      "probeStderr": "",
+      "fullDecodeExitCode": 0,
+      "fullDecodeStderr": "",
+      "sampleIntervalSeconds": 4,
+      "sampleCount": 3
+    },
+    {
+      "case": "desktop-1366",
+      "video": "desktop-1366-camera.webm",
+      "sha256": "026e5d4d616be5f402e09823d30fc18717bd0620772397c4de43d99282bcccc6",
+      "probeExitCode": 0,
+      "metadata": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 1366,
+            "height": 768,
+            "r_frame_rate": "25/1"
+          }
+        ],
+        "format": {
+          "duration": "9.720000",
+          "size": "1395779"
+        }
+      },
+      "probeStderr": "",
+      "fullDecodeExitCode": 0,
+      "fullDecodeStderr": "",
+      "sampleIntervalSeconds": 4,
+      "sampleCount": 2
+    },
+    {
+      "case": "phone",
+      "video": "phone-camera.webm",
+      "sha256": "d4db1db8b61149b12c9012354f8f37da185ef5d7c5b610a646e14ec21d3dfce8",
+      "probeExitCode": 0,
+      "metadata": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 390,
+            "height": 844,
+            "r_frame_rate": "25/1"
+          }
+        ],
+        "format": {
+          "duration": "8.280000",
+          "size": "1072732"
+        }
+      },
+      "probeStderr": "",
+      "fullDecodeExitCode": 0,
+      "fullDecodeStderr": "",
+      "sampleIntervalSeconds": 4,
+      "sampleCount": 2
+    },
+    {
+      "case": "landscape",
+      "video": "landscape-camera.webm",
+      "sha256": "9c63f12b0ed645da9539df0a087e7f3ee90fb6890f20f8744e2007bcf2521d2d",
+      "probeExitCode": 0,
+      "metadata": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 844,
+            "height": 390,
+            "r_frame_rate": "25/1"
+          }
+        ],
+        "format": {
+          "duration": "8.280000",
+          "size": "1088397"
+        }
+      },
+      "probeStderr": "",
+      "fullDecodeExitCode": 0,
+      "fullDecodeStderr": "",
+      "sampleIntervalSeconds": 4,
+      "sampleCount": 2
+    }
+  ],
+  "resizeNote": "录像画幅固定；末段resize使实际页面宽高各缩小20px，外侧灰边属于录制余量。实际页面覆盖按当时真实viewport核对。"
+}

@@ -1,0 +1,15 @@
+{"id":"GZ-FS-01","name":"Canvas 覆盖整个视口且文档无滚动","viewport":"desktop-1440","status":"PASS"}
+{"id":"GZ-FS-02/03","name":"同帧本人插值跟随；拖动不移动/选取，自由镜头在人物行走后保持","viewport":"desktop-1440","status":"PASS"}
+{"id":"GZ-FS-01/05","name":"五个工具、对象、回执与地图可达，打开/关闭与 Esc 回焦不移动画布","viewport":"desktop-1440","status":"PASS"}
+{"id":"GZ-FS-04/05","name":"拖动后点地逆变换、人物脚底命中和键盘方向/停步保持正确","viewport":"desktop-1440","status":"PASS"}
+{"id":"GZ-FS-02","name":"指针取消、画布失焦与触屏多指中断后无黏住拖动","viewport":"desktop-1440","status":"PASS"}
+{"id":"GZ-FS-03/04","name":"连续拖动边界无空白，画外标签不贴边；回中连续过渡并恢复跟随","viewport":"desktop-1440","status":"PASS"}
+{"id":"GZ-FS-03","name":"减少动态偏好立即回中","viewport":"desktop-1440","status":"PASS"}
+locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: '回执', exact: true })
+
+    at unknownReceipt (/home/runner/work/xiyou/xiyou/frontend/tests/gaolao-fullscreen-browser.mjs:295:63)
+    at async runCase (/home/runner/work/xiyou/xiyou/frontend/tests/gaolao-fullscreen-browser.mjs:357:78)
+    at async file:///home/runner/work/xiyou/xiyou/frontend/tests/gaolao-fullscreen-browser.mjs:374:11
+{"assessment":"FAIL","output":"/home/runner/work/xiyou/xiyou/.agent-output/ci/browser-fullscreen"}

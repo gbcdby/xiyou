@@ -1,0 +1,226 @@
+{
+  "schemaVersion": 1,
+  "workId": "GZ-UX-01/FS-01",
+  "recordType": "direction_asset_baseline_comparison",
+  "recordedAtUtc": "2026-11-21T10:48:46.706005+00:00",
+  "scope": "只读比较 PR #88 exact base 与已执行 CI 候选的素材配置、Git 树和候选浏览器报告；仅本 JSON 为新增临时证据。",
+  "identities": {
+    "base": {
+      "commit": "36750bf83a6f75d60a86cfb18fa40c0ad7e24a12",
+      "tree": "77b001d4e4e2f9ca2eaba4006deb60a91cc9af81",
+      "draftSourceMapTracked": false
+    },
+    "candidate": {
+      "commit": "0c18631a94ee288ca13247bec6ec1588f7bc6dab",
+      "tree": "5eed97d4c74c99f1dc55ba983aadb272ed692f6e",
+      "draftSourceMapTracked": false
+    }
+  },
+  "executionBoundary": {
+    "baseBrowserExecutedForThisComparison": false,
+    "candidateBrowserEvidenceRunId": "44894436437",
+    "candidateBrowserEvidenceJobId": "136818734644",
+    "newBrowserExecutionPerformedForThisComparison": false,
+    "productOrGateModified": false,
+    "note": "base 结论来自 Git 字节和发布集合比较，不表示执行过 base 浏览器。"
+  },
+  "fileComparison": [
+    {
+      "path": "frontend/src/domain/gaolao-art.ts",
+      "baseSha256": "b3dbf91f46f7973b6a91dd0343d2d0af65f429caba4e4f48b2ff735e6554cee4",
+      "candidateSha256": "b3dbf91f46f7973b6a91dd0343d2d0af65f429caba4e4f48b2ff735e6554cee4",
+      "identical": true
+    },
+    {
+      "path": "frontend/runtime-assets.json",
+      "baseSha256": "013dddd664cacd8c181ada9af84013ea31ff503c3022a164be5f53690ee7d793",
+      "candidateSha256": "013dddd664cacd8c181ada9af84013ea31ff503c3022a164be5f53690ee7d793",
+      "identical": true
+    },
+    {
+      "path": "frontend/src/rendering/canvas-assets.ts",
+      "baseSha256": "4f7bf276ea563a105b80476134c227f455dd1e657c48fd8f3657ec723c91e23a",
+      "candidateSha256": "4f7bf276ea563a105b80476134c227f455dd1e657c48fd8f3657ec723c91e23a",
+      "identical": true
+    },
+    {
+      "path": "frontend/src/assets/carpenter-manifest.json",
+      "baseSha256": "e79984d8a95ac95029a6a8899d18ef6e777abc9a1a24233ccc23a84c0a9844e9",
+      "candidateSha256": "e79984d8a95ac95029a6a8899d18ef6e777abc9a1a24233ccc23a84c0a9844e9",
+      "identical": true
+    },
+    {
+      "path": "frontend/src/assets/gao-manifest.json",
+      "baseSha256": "8335e03a831442c5d314d7443d9a63e100e3a5e8d3c4192a5e69149e31d77366",
+      "candidateSha256": "8335e03a831442c5d314d7443d9a63e100e3a5e8d3c4192a5e69149e31d77366",
+      "identical": true
+    },
+    {
+      "path": "frontend/src/assets/wukong-manifest.json",
+      "baseSha256": "515e32270b2a593bd187b7e26aead418d60e4bea467422f4394b5b7b5cbfbf32",
+      "candidateSha256": "515e32270b2a593bd187b7e26aead418d60e4bea467422f4394b5b7b5cbfbf32",
+      "identical": true
+    }
+  ],
+  "pngTree": {
+    "path": "frontend/public/assets/gaolaozhuang",
+    "listingSha256Algorithm": "git ls-tree -r <commit> -- <path> 的输出保留以 .png 结尾的行，按原顺序用 LF 连接并保留末尾 LF，再按 UTF-8 计算 SHA-256。",
+    "comparison": {
+      "base": {
+        "subtreeGitId": "cd9f85fd7d68c0f3d6fd90f9ed48594ff792762c",
+        "pngCount": 65,
+        "pngGroupCounts": {
+          "gaocai": 45,
+          "scenes": 2,
+          "static-v1": 18
+        },
+        "pngLsTreeSha256": "5ba10e32a682d214ffdd4e2fd6231eed85ae88abca208bceac5733e65703a329"
+      },
+      "candidate": {
+        "subtreeGitId": "cd9f85fd7d68c0f3d6fd90f9ed48594ff792762c",
+        "pngCount": 65,
+        "pngGroupCounts": {
+          "gaocai": 45,
+          "scenes": 2,
+          "static-v1": 18
+        },
+        "pngLsTreeSha256": "5ba10e32a682d214ffdd4e2fd6231eed85ae88abca208bceac5733e65703a329"
+      }
+    },
+    "identical": true
+  },
+  "missingRequestedUrls": {
+    "source": "候选 CI 报告 httpAssets 的唯一 URL 集合，分别减去两端 runtime-assets.json 注册 URL。",
+    "digestAlgorithm": "缺失 URL 去重、按字符串升序排列，以 LF 连接并保留末尾 LF，再按 UTF-8 计算 SHA-256。",
+    "comparison": {
+      "base": {
+        "count": 216,
+        "urlListSha256": "3e0b04eeb0289b423bced7f61b5ec69ce85c3b62948ece2b2ffed4d008ea1108",
+        "exactlyEqualsThreeRegisteredRoleFrameSets": true,
+        "firstUrl": "/assets/gaolaozhuang/carpenter/idle/e.png",
+        "lastUrl": "/assets/gaolaozhuang/wukong/walk/w/07.png"
+      },
+      "candidate": {
+        "count": 216,
+        "urlListSha256": "3e0b04eeb0289b423bced7f61b5ec69ce85c3b62948ece2b2ffed4d008ea1108",
+        "exactlyEqualsThreeRegisteredRoleFrameSets": true,
+        "firstUrl": "/assets/gaolaozhuang/carpenter/idle/e.png",
+        "lastUrl": "/assets/gaolaozhuang/wukong/walk/w/07.png"
+      }
+    },
+    "identical": true
+  },
+  "roles": {
+    "identicalBetweenBaseAndCandidate": true,
+    "countsApplyToBothCommits": true,
+    "candidateRequestCountsReferOnlyToExecutedCandidateReport": true,
+    "entries": [
+      {
+        "role": "carpenter",
+        "manifestFrameCount": 72,
+        "uniqueFrameUrlCount": 72,
+        "candidateCiRequestedCount": 72,
+        "runtimeManifestCount": 0,
+        "trackedPngCount": 0,
+        "draftStatus": "仅来源与消费参数装配草稿；未复制PNG、未注册产品、连续艺术/实际Canvas未通过",
+        "assembly": {
+          "metadataOnly": true,
+          "sourceMap": "../source-map.json",
+          "payloadCopied": false,
+          "continuousArt": "NOT_RUN",
+          "actualProductCanvas": "NOT_RUN",
+          "independentAssemblyReview": "NOT_RUN"
+        }
+      },
+      {
+        "role": "gao",
+        "manifestFrameCount": 72,
+        "uniqueFrameUrlCount": 72,
+        "candidateCiRequestedCount": 72,
+        "runtimeManifestCount": 0,
+        "trackedPngCount": 0,
+        "draftStatus": "仅来源与消费参数装配草稿；未复制PNG、未注册产品、连续艺术/实际Canvas未通过",
+        "assembly": {
+          "metadataOnly": true,
+          "sourceMap": "../source-map.json",
+          "payloadCopied": false,
+          "continuousArt": "NOT_RUN",
+          "actualProductCanvas": "NOT_RUN",
+          "independentAssemblyReview": "NOT_RUN"
+        }
+      },
+      {
+        "role": "wukong",
+        "manifestFrameCount": 72,
+        "uniqueFrameUrlCount": 72,
+        "candidateCiRequestedCount": 72,
+        "runtimeManifestCount": 0,
+        "trackedPngCount": 0,
+        "draftStatus": "仅来源与消费参数装配草稿；未复制PNG、未注册产品、连续艺术/实际Canvas未通过",
+        "assembly": {
+          "metadataOnly": true,
+          "sourceMap": "../source-map.json",
+          "payloadCopied": false,
+          "continuousArt": "NOT_RUN",
+          "actualProductCanvas": "NOT_RUN",
+          "independentAssemblyReview": "NOT_RUN"
+        }
+      }
+    ]
+  },
+  "draftQualification": {
+    "description": "三套外观已被渲染注册引用，但 manifest 自述仍是仅元数据装配草稿；不能据此认定已通过正式艺术验收或已获发布批准。",
+    "productionAdoptionEstablishedByThisEvidence": false,
+    "approvedRecoverablePayloadEstablishedByThisEvidence": false
+  },
+  "sourceMapSearch": {
+    "declaredRelativePath": "../source-map.json",
+    "resolvedRepositoryPath": "frontend/src/source-map.json",
+    "existsInBaseTree": false,
+    "existsInCandidateTree": false,
+    "existsInCurrentWorktree": false,
+    "otherExistingSourceMap": "prototypes/gaolaozhuang/source-map.json",
+    "otherSourceMapScope": "只登记院落与高才 45 帧；不包含 carpenter、gao、wukong 三套缺失帧。",
+    "knownArchiveReferenceFiles": [
+      "prototypes/gaolaozhuang/assets.json",
+      "prototypes/gaolaozhuang/source-map.json",
+      "docs/design-direction/gaolaozhuang-v1/assets-manifest.json",
+      "frontend/public/assets/gaolaozhuang/README.md"
+    ],
+    "archiveSearchResult": "在本次已检查的项目素材路径、既有归档引用、两个 Git 树及本地已有项目文件中，未找到对应 216 帧 PNG、对应素材压缩包或有效恢复入口。院落/高才已有恢复登记；五人静态造型登记明确不是动画包。",
+    "searchLimit": "没有生成、替换或下载素材，也未对项目引用之外的外部存储做全局搜索。"
+  },
+  "candidateBrowserReport": {
+    "assessment": "FAIL",
+    "sourceCommit": "0c18631a94ee288ca13247bec6ec1588f7bc6dab",
+    "sourceTree": "5eed97d4c74c99f1dc55ba983aadb272ed692f6e",
+    "checksCount": 0,
+    "pageErrorsCount": 0,
+    "httpAssetRequestCount": 274,
+    "uniqueHttpAssetUrlCount": 273,
+    "presentationCallCount": 866,
+    "canvasPaintCount": 112,
+    "ownerPaintedCallCount": 112,
+    "ownerPaintedReturnedTrueCount": 87,
+    "presentationDropped": 0,
+    "presentationErrorsCount": 0,
+    "firstPaintSampledAtMs": 3633.2000000000116,
+    "lastPaintSampledAtMs": 20677,
+    "error": "Error: 等待超时：正式场景和当前人物资源预解码完成（15000 ms）\n    at until (file:///home/runner/work/xiyou/xiyou/frontend/tests/network-support.mjs:19:9)\n    at async run (file:///home/runner/work/xiyou/xiyou/frontend/tests/client-experience-browser.mjs:159:3)\n    at async file:///home/runner/work/xiyou/xiyou/frontend/tests/client-experience-browser.mjs:192:5",
+    "resourceSnapshotSaved": false,
+    "httpResponseStatusesSaved": false,
+    "evidenceLimit": "报告保存请求 URL 和摘要帧，没有逐资源 ready/failed 快照或 HTTP 响应状态；不得写成已观测 216 个 failed/404，也不足以解释截图中高才降级的全部细节。",
+    "originalArtifactPath": "original-gates/direction/browser-client-experience/result.json",
+    "rawSha256": "2cd074c1f887b125c46fe54fb3b5df84509d078ad6a07ba323e1f6722d3ce61e",
+    "pathRelativeToThisFile": "ci-44894436437-direction-result.json.gz",
+    "gzipSha256": "5e863d241ca70af4523393a5dc1df203e539215476dbb7189e8bd5145c42e969",
+    "archiveEncoding": "gzip，解压后的完整JSON字节与原artifact一致"
+  },
+  "conclusion": {
+    "assetGapAlreadyPresentAtExactBase": true,
+    "knownGapIsSufficientToBlockAllResourcesReadyGate": true,
+    "statement": "exact base 与候选的六文件、65 PNG 素材子树及 216 个缺失 URL 集合完全相同。已注册草稿人物帧与发布素材集合不一致，是既有且足以阻断所有资源 ready 条件的缺口。候选等待期间仍有 112 次 paint、87 次 owner.painted 返回 true、0 个 pageErrors，不能将本次失败归因为镜头整体停绘。",
+    "limits": "这不是 base 浏览器执行结果，也不宣称原方向门槛通过或排除了所有次要问题。",
+    "gatePreservation": "未删除预解码断言、未延长门槛等待、未更换素材、未修改资产注册或运行发布清单。"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "runId": 44894436437,
+  "sourceCommit": "0c18631a94ee288ca13247bec6ec1588f7bc6dab",
+  "sourceTree": "5eed97d4c74c99f1dc55ba983aadb272ed692f6e",
+  "notes": "保留旧门槛实际失败原件，按字节无损gzip；不把后续修正的结果回写到旧运行。",
+  "reports": [
+    {
+      "file": "ci-44894436437-direction-result.json.gz",
+      "bytes": 71385,
+      "sha256": "5e863d241ca70af4523393a5dc1df203e539215476dbb7189e8bd5145c42e969",
+      "rawBytes": 751436,
+      "rawSha256": "2cd074c1f887b125c46fe54fb3b5df84509d078ad6a07ba323e1f6722d3ce61e",
+      "sourceArtifactPath": "original-gates/direction/browser-client-experience/result.json"
+    },
+    {
+      "file": "ci-44894436437-legacy-result.json.gz",
+      "bytes": 103245,
+      "sha256": "0300f77deab64fa31a4c09ae4ecf5ff6511341724128e324983383e1b677c150",
+      "rawBytes": 581649,
+      "rawSha256": "963a5b6a0d14cdd18e48de3897cdc6953f1b8e79733c576bce490dfc70be10d6",
+      "sourceArtifactPath": "original-gates/legacy/result.json"
+    },
+    {
+      "file": "ci-44894436437-spatial-result.json.gz",
+      "bytes": 304923,
+      "sha256": "42196cac07860cfc9551bc55bac0a4279b989d97e532b41e97bfbb4459543e4f",
+      "rawBytes": 11416708,
+      "rawSha256": "caeb0415a095e43b19d1406686deafabdd1da6f68832f8d7deb7e469d7215503",
+      "sourceArtifactPath": "original-gates/spatial/result.json"
+    },
+    {
+      "file": "ci-44894436437-object-geometry-result.json.gz",
+      "bytes": 1153,
+      "sha256": "758d9eeddf4dce7203531a279ab0b7b8b6cf50b9169093bda812479bd50b6d07",
+      "rawBytes": 2791,
+      "rawSha256": "6bd6edfdb4cd26bf437a2a714adf651e4022a4e8f3b264f68d59f24d77b2df2f",
+      "sourceArtifactPath": "original-gates/spatial/object-geometry-result.json"
+    }
+  ]
+}

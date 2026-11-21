@@ -1,0 +1,71 @@
+{
+  "runId": 44895966222,
+  "sourceCommit": "41a68f6a223c6d9670aee98e37782ac28da613ef",
+  "encoding": "原始UTF-8日志的无损gzip",
+  "logs": [
+    {
+      "jobId": 136821567493,
+      "file": "ci-44895966222-job-136821567493.txt.gz",
+      "bytes": 47612,
+      "sha256": "5e6bc8dc59ecb795c3d8cb315e66a11897de2e7dae0bd9380cd7b20c891281ae",
+      "rawBytes": 154452,
+      "rawSha256": "113cdfd238949e8609c3df10dd8822cb1d78b33b7f6f5fefae3660713574c603"
+    },
+    {
+      "jobId": 136821567731,
+      "file": "ci-44895966222-job-136821567731.txt.gz",
+      "bytes": 75916,
+      "sha256": "d7ceb5cb629834b2738833426fa4194afe994f74ade11043945df28510ec7857",
+      "rawBytes": 223662,
+      "rawSha256": "d7d574d90841b70355ca9857de5eb9e4986651256ca5862074a348ca6d8700b6"
+    },
+    {
+      "jobId": 136822762529,
+      "file": "ci-44895966222-job-136822762529.txt.gz",
+      "bytes": 10421,
+      "sha256": "ab6466aea8c9c11f260776ac4178a9d1db06f0df31f38f1f5ff8f37f98a6e520",
+      "rawBytes": 48397,
+      "rawSha256": "c627e71e29fee7008d3057f6a721bc38366450c95bdb0aa9f53cd3d29616d7c7"
+    },
+    {
+      "jobId": 136822762539,
+      "file": "ci-44895966222-job-136822762539.txt.gz",
+      "bytes": 11617,
+      "sha256": "e34626f875394c5f648b8b9fc608733d9e4df9c0654e6c64a101c85e606bacf7",
+      "rawBytes": 54132,
+      "rawSha256": "32d6562dbcfd3d4e1805d0cfdb5487787cf13294d8fc3f747533eed8f778c7da"
+    },
+    {
+      "jobId": 136822762546,
+      "file": "ci-44895966222-job-136822762546.txt.gz",
+      "bytes": 10278,
+      "sha256": "ed9d786dcf57bdd45f66475ad2737aaa4878bee469f62548e18dbfa306dd11b8",
+      "rawBytes": 47504,
+      "rawSha256": "4bb38e79ee28f57a4d328f15e36e0cd7a800f1de144ba072a22cba660aea7ba8"
+    },
+    {
+      "jobId": 136822762592,
+      "file": "ci-44895966222-job-136822762592.txt.gz",
+      "bytes": 9931,
+      "sha256": "df502a15e8e6f34940fbff750f709aa760dcdc8a781bed7318874eede8f38a80",
+      "rawBytes": 47212,
+      "rawSha256": "d7364fc19bf5b10e058d5e769ce879aa4a08242bab89214820072bea4fe823ed"
+    },
+    {
+      "jobId": 136822762603,
+      "file": "ci-44895966222-job-136822762603.txt.gz",
+      "bytes": 10820,
+      "sha256": "102e5aba7743b99822ad335e0743b0474b1d3625134496432970e24206617c29",
+      "rawBytes": 48449,
+      "rawSha256": "0ef5ac5680aac838112d5c8eb690bd594423ff3e8bf03b28c4f1da3f3703dd16"
+    },
+    {
+      "jobId": 136823983745,
+      "file": "ci-44895966222-job-136823983745.txt.gz",
+      "bytes": 1254,
+      "sha256": "0ee3a680bdb8866d53651c48991f7cc7f48e0c81046daf23af9997c24fc50604",
+      "rawBytes": 3405,
+      "rawSha256": "918efc8d5a76064a4274bbf0066ee9a733d469accf52254fbe8845722f7f6331"
+    }
+  ]
+}

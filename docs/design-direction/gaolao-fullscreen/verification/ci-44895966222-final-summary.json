@@ -1,0 +1,603 @@
+{
+  "work_id": "GZ-UX-01/FS-V",
+  "observedAt": "2026-11-21T11:00:42.385719+00:00",
+  "verificationRole": "FS-V script author self-check and read-only hosted CI evidence collection; independent code/UI review belongs to the separately assigned reviewer",
+  "subject": {
+    "runId": 44895966222,
+    "commit": "41a68f6a223c6d9670aee98e37782ac28da613ef",
+    "tree": "7a924861ebe3451818eed0faf069eda7e5126b3a",
+    "url": "https://github.com/gbcdby/xiyou/actions/runs/44895966222"
+  },
+  "overallAssessment": "FAIL",
+  "overallScope": "Final original workflow gate aggregation fails because direction resource predecode fails. Fullscreen, spatial and legacy keep separately scoped PASS results.",
+  "finalJobs": [
+    {
+      "id": 136821567493,
+      "name": "高老庄全屏与拖动镜头专项",
+      "status": "completed",
+      "conclusion": "success",
+      "failedSteps": [],
+      "skippedSteps": [],
+      "rawLog": "ci-44895966222-job-136821567493.txt.gz",
+      "originalLogName": "job-136821567493.log"
+    },
+    {
+      "id": 136821567731,
+      "name": "协议、规则、联机与前端构建",
+      "status": "completed",
+      "conclusion": "success",
+      "failedSteps": [],
+      "skippedSteps": [],
+      "rawLog": "ci-44895966222-job-136821567731.txt.gz",
+      "originalLogName": "job-136821567731.log"
+    },
+    {
+      "id": 136822762529,
+      "name": "多人空间与对象几何浏览器",
+      "status": "completed",
+      "conclusion": "success",
+      "failedSteps": [],
+      "skippedSteps": [],
+      "rawLog": "ci-44895966222-job-136822762529.txt.gz",
+      "originalLogName": "job-136822762529.log"
+    },
+    {
+      "id": 136822762539,
+      "name": "连续输入与新模式多人浏览器",
+      "status": "completed",
+      "conclusion": "failure",
+      "failedSteps": [
+        "scene-v3 Canvas、连续输入、地图与目标动态验收"
+      ],
+      "skippedSteps": [
+        "同配置已接受斜向180ms迟到确认与真实Canvas",
+        "同配置五个真实新模式客户端供给与Canvas",
+        "Post 准备 Node.js 24"
+      ],
+      "rawLog": "ci-44895966222-job-136822762539.txt.gz",
+      "originalLogName": "job-136822762539.log"
+    },
+    {
+      "id": 136822762546,
+      "name": "旧版 A2 章节浏览器",
+      "status": "completed",
+      "conclusion": "success",
+      "failedSteps": [],
+      "skippedSteps": [],
+      "rawLog": "ci-44895966222-job-136822762546.txt.gz",
+      "originalLogName": "job-136822762546.log"
+    },
+    {
+      "id": 136822762592,
+      "name": "未决请求与恢复浏览器",
+      "status": "completed",
+      "conclusion": "success",
+      "failedSteps": [],
+      "skippedSteps": [],
+      "rawLog": "ci-44895966222-job-136822762592.txt.gz",
+      "originalLogName": "job-136822762592.log"
+    },
+    {
+      "id": 136822762603,
+      "name": "首章静态资源浏览器",
+      "status": "completed",
+      "conclusion": "success",
+      "failedSteps": [],
+      "skippedSteps": [],
+      "rawLog": "ci-44895966222-job-136822762603.txt.gz",
+      "originalLogName": "job-136822762603.log"
+    },
+    {
+      "id": 136823983745,
+      "name": "协议、规则、联机与浏览器",
+      "status": "completed",
+      "conclusion": "failure",
+      "failedSteps": [
+        "确认全部原门槛通过"
+      ],
+      "skippedSteps": [],
+      "rawLog": "ci-44895966222-job-136823983745.txt.gz",
+      "originalLogName": "job-136823983745.log"
+    }
+  ],
+  "core": {
+    "jobId": 136821567731,
+    "conclusion": "success",
+    "suites": [
+      {
+        "scope": "protocol",
+        "tests": 66,
+        "pass": 66,
+        "fail": 0,
+        "cancelled": 0
+      },
+      {
+        "scope": "content",
+        "tests": 13,
+        "pass": 13,
+        "fail": 0,
+        "cancelled": 0
+      },
+      {
+        "scope": "backend",
+        "tests": 571,
+        "pass": 571,
+        "fail": 0,
+        "cancelled": 0
+      },
+      {
+        "scope": "frontend",
+        "tests": 796,
+        "pass": 796,
+        "fail": 0,
+        "cancelled": 0
+      }
+    ],
+    "productionBuild": "success"
+  },
+  "fullscreen": {
+    "assessment": "PASS",
+    "source": {
+      "commit": "41a68f6a223c6d9670aee98e37782ac28da613ef",
+      "tree": "7a924861ebe3451818eed0faf069eda7e5126b3a",
+      "status": ""
+    },
+    "sourceBeforeEqualsAfter": true,
+    "sourceComparison": {
+      "before": "b759caad5e8c6ad14f7d7eebfe603e3aba42725db7eba08dfe82e862bb8b7e40",
+      "after": "b759caad5e8c6ad14f7d7eebfe603e3aba42725db7eba08dfe82e862bb8b7e40"
+    },
+    "environment": {
+      "node": "v24.22.3",
+      "chromium": "143.0.7499.4",
+      "playwright": "1.57.0"
+    },
+    "startedAt": "2026-11-21T10:47:58.959Z",
+    "finishedAt": "2026-11-21T10:48:37.046Z",
+    "checkCount": 40,
+    "checksPerViewport": {
+      "desktop-1440": 10,
+      "desktop-1366": 10,
+      "phone": 10,
+      "landscape": 10
+    },
+    "allChecksPass": true,
+    "pageErrors": [],
+    "cleanup": [
+      {
+        "name": "context",
+        "status": "closed"
+      },
+      {
+        "name": "browser",
+        "status": "closed"
+      },
+      {
+        "name": "vite",
+        "status": "closed"
+      },
+      {
+        "name": "fixture",
+        "status": "closed"
+      }
+    ],
+    "screenshotCount": 24,
+    "allScreenshotHashesMatch": true,
+    "zipBytes": 33971299,
+    "zipSHA256": "e37c36b462051fa38bc15c4adb7875477550764de65280ffb7d3a6c6a0ef2558",
+    "cases": [
+      {
+        "name": "desktop-1440",
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "assessment": "PASS",
+        "paintCount": 218,
+        "wireCount": 6,
+        "queries": 1,
+        "video": {
+          "file": "desktop-1440-camera.webm",
+          "scope": "本次同一生产页面的真实浏览器连续录制；受控DTO，非真人操作"
+        }
+      },
+      {
+        "name": "desktop-1366",
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "assessment": "PASS",
+        "paintCount": 220,
+        "wireCount": 6,
+        "queries": 1,
+        "video": {
+          "file": "desktop-1366-camera.webm",
+          "scope": "本次同一生产页面的真实浏览器连续录制；受控DTO，非真人操作"
+        }
+      },
+      {
+        "name": "phone",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "assessment": "PASS",
+        "paintCount": 236,
+        "wireCount": 6,
+        "queries": 1,
+        "video": {
+          "file": "phone-camera.webm",
+          "scope": "本次同一生产页面的真实浏览器连续录制；受控DTO，非真人操作"
+        }
+      },
+      {
+        "name": "landscape",
+        "viewport": {
+          "width": 844,
+          "height": 390
+        },
+        "assessment": "PASS",
+        "paintCount": 234,
+        "wireCount": 6,
+        "queries": 1,
+        "video": {
+          "file": "landscape-camera.webm",
+          "scope": "本次同一生产页面的真实浏览器连续录制；受控DTO，非真人操作"
+        }
+      }
+    ],
+    "sourceEvidence": {
+      "sourceRecorded": true,
+      "commit": "41a68f6a223c6d9670aee98e37782ac28da613ef",
+      "tree": "7a924861ebe3451818eed0faf069eda7e5126b3a",
+      "status": "",
+      "sourceEndRecorded": true,
+      "sourceBeforeEqualsAfter": true
+    },
+    "videoDecode": {
+      "allSuccessful": true,
+      "records": [
+        {
+          "name": "desktop-1440",
+          "file": "artifact/desktop-1440-camera.webm",
+          "sha256": "0bf1ff06391ecf184f1afebae381b0ad60886c2df62894b4adfa9e8faf714659",
+          "probeExitCode": 0,
+          "metadata": {
+            "programs": [],
+            "stream_groups": [],
+            "streams": [
+              {
+                "codec_name": "vp8",
+                "width": 1440,
+                "height": 900,
+                "r_frame_rate": "25/1"
+              }
+            ],
+            "format": {
+              "duration": "11.320000",
+              "size": "1849745"
+            }
+          },
+          "probeStderr": "",
+          "fullDecodeExitCode": 0,
+          "fullDecodeStderr": "",
+          "sampleIntervalSeconds": 4,
+          "samples": [
+            "video-frames/desktop-1440/sample-001.png",
+            "video-frames/desktop-1440/sample-002.png",
+            "video-frames/desktop-1440/sample-003.png"
+          ]
+        },
+        {
+          "name": "desktop-1366",
+          "file": "artifact/desktop-1366-camera.webm",
+          "sha256": "7ac0a9259ea196e3d0af8e2f830736c8a6921d314a08d4ecdbe8d59fa2d440c2",
+          "probeExitCode": 0,
+          "metadata": {
+            "programs": [],
+            "stream_groups": [],
+            "streams": [
+              {
+                "codec_name": "vp8",
+                "width": 1366,
+                "height": 768,
+                "r_frame_rate": "25/1"
+              }
+            ],
+            "format": {
+              "duration": "9.680000",
+              "size": "1416766"
+            }
+          },
+          "probeStderr": "",
+          "fullDecodeExitCode": 0,
+          "fullDecodeStderr": "",
+          "sampleIntervalSeconds": 4,
+          "samples": [
+            "video-frames/desktop-1366/sample-001.png",
+            "video-frames/desktop-1366/sample-002.png"
+          ]
+        },
+        {
+          "name": "phone",
+          "file": "artifact/phone-camera.webm",
+          "sha256": "160dbd32a3ed26671f1b2efa301a2a9ee2db7b9ae1e0f1fef621c05703170ae2",
+          "probeExitCode": 0,
+          "metadata": {
+            "programs": [],
+            "stream_groups": [],
+            "streams": [
+              {
+                "codec_name": "vp8",
+                "width": 390,
+                "height": 844,
+                "r_frame_rate": "25/1"
+              }
+            ],
+            "format": {
+              "duration": "8.560000",
+              "size": "1139055"
+            }
+          },
+          "probeStderr": "",
+          "fullDecodeExitCode": 0,
+          "fullDecodeStderr": "",
+          "sampleIntervalSeconds": 4,
+          "samples": [
+            "video-frames/phone/sample-001.png",
+            "video-frames/phone/sample-002.png"
+          ]
+        },
+        {
+          "name": "landscape",
+          "file": "artifact/landscape-camera.webm",
+          "sha256": "4b52b4c5bbc55a7945f7d1bef27523cf997d0c7f6e4580a484210eea4e1bfd86",
+          "probeExitCode": 0,
+          "metadata": {
+            "programs": [],
+            "stream_groups": [],
+            "streams": [
+              {
+                "codec_name": "vp8",
+                "width": 844,
+                "height": 390,
+                "r_frame_rate": "25/1"
+              }
+            ],
+            "format": {
+              "duration": "8.320000",
+              "size": "1063140"
+            }
+          },
+          "probeStderr": "",
+          "fullDecodeExitCode": 0,
+          "fullDecodeStderr": "",
+          "sampleIntervalSeconds": 4,
+          "samples": [
+            "video-frames/landscape/sample-001.png",
+            "video-frames/landscape/sample-002.png"
+          ]
+        }
+      ]
+    },
+    "visualObservation": {
+      "filesViewed": [
+        "artifact/phone-free.png",
+        "artifact/landscape-notebook.png"
+      ],
+      "finding": "Observed expected floating HUD and return button in phone free-camera state, and an in-viewport landscape notebook panel. Does not claim manual viewing of every video frame.",
+      "recordingResizeNote": "Fixed recording dimensions can show padding after test reduces actual viewport by 20px; full-screen assertions use actual viewport."
+    },
+    "report": "ci-44895966222-result.json.gz",
+    "originalArtifactReport": "artifact/result.json"
+  },
+  "spatial": {
+    "assessment": "PASS",
+    "recordCount": 25,
+    "passAssertions": 22,
+    "nonAssertionRecords": 3,
+    "nonAssertionRecordKind": "three screenshots/hash records",
+    "sourceEvidence": {
+      "sourceRecorded": true,
+      "commit": "41a68f6a223c6d9670aee98e37782ac28da613ef",
+      "tree": "7a924861ebe3451818eed0faf069eda7e5126b3a",
+      "status": "",
+      "sourceEndRecorded": false,
+      "sourceBeforeEqualsAfter": null
+    },
+    "resourcesClosed": true,
+    "pageErrors": [],
+    "report": "ci-44895966222-spatial-result.json.gz",
+    "geometry": {
+      "assessment": "PASS",
+      "recordCount": 4,
+      "passAssertions": 4,
+      "nonAssertionRecords": 0,
+      "contained": {
+        "fit": {
+          "scale": 0.46,
+          "x": 207,
+          "y": 0
+        },
+        "view": {
+          "x": 0,
+          "y": 0,
+          "width": 1600,
+          "height": 1000
+        },
+        "viewport": {
+          "width": 1150,
+          "height": 460,
+          "dpr": 1
+        }
+      },
+      "cover": {
+        "fit": {
+          "scale": 1.1,
+          "x": 0,
+          "y": 0
+        },
+        "expectedFit": {
+          "scale": 1.1,
+          "x": 0,
+          "y": 0
+        },
+        "view": {
+          "x": 0,
+          "y": 0,
+          "width": 1600,
+          "height": 1000
+        },
+        "viewport": {
+          "width": 1600,
+          "height": 1000,
+          "dpr": 1
+        }
+      },
+      "requests": [
+        {
+          "mode": "hold",
+          "url": "/tests/geometry-book.svg"
+        },
+        {
+          "mode": "failed",
+          "url": "/tests/geometry-book-error.svg"
+        },
+        {
+          "mode": "hold",
+          "url": "/tests/geometry-book-error.svg?retry=1"
+        },
+        {
+          "mode": "failed",
+          "url": "/tests/geometry-book-retry.svg"
+        },
+        {
+          "mode": "good",
+          "url": "/tests/geometry-book-retry.svg?retry=1"
+        }
+      ],
+      "resourcesClosed": true,
+      "report": "ci-44895966222-object-geometry-result.json.gz",
+      "originalArtifactReport": "original-gates/spatial/object-geometry-result.json"
+    },
+    "originalArtifactReport": "original-gates/spatial/result.json"
+  },
+  "legacy": {
+    "assessment": "PASS",
+    "recordCount": 12,
+    "passAssertions": 12,
+    "nonAssertionRecords": 0,
+    "sourceEvidence": {
+      "sourceRecorded": true,
+      "commit": "41a68f6a223c6d9670aee98e37782ac28da613ef",
+      "tree": "7a924861ebe3451818eed0faf069eda7e5126b3a",
+      "status": "",
+      "sourceEndRecorded": true,
+      "sourceBeforeEqualsAfter": true
+    },
+    "checkNames": [
+      "2人：当前私物请求、本人许可/撤回与实际持有，私有观察不传播",
+      "2人：真实救援、本人回应与实际安置",
+      "2人：刷新、断线暂停与真实提交后丢ACK，原nonce/原串恢复且效果一次",
+      "2人：GZ-E01真实终态与逐人授权分页复盘",
+      "5人：真实救援、本人回应与实际安置",
+      "5人：借貌本人许可、双同貌可见选择/实际物权、合法揭示与撤回，历史称呼保持",
+      "5人：GZ-E02真实终态与逐人授权分页复盘",
+      "2人：GZ-E03真实终态与逐人授权分页复盘",
+      "2人：主动暂告一段、超过64KiB授权分页与明确撤权清除",
+      "2人真实持久终态",
+      "5人真实持久终态",
+      "2人真实持久终态"
+    ],
+    "recapResponseCount": 11,
+    "pageErrors": [],
+    "cleanup": [
+      "browser",
+      "vite",
+      "server",
+      "postgres"
+    ],
+    "pngCount": 11,
+    "report": "ci-44895966222-legacy-result.json.gz",
+    "originalArtifactReport": "original-gates/legacy/result.json"
+  },
+  "static": {
+    "assessment": "PASS",
+    "recordCount": 9,
+    "passAssertions": 9,
+    "nonAssertionRecords": 0,
+    "sourceEvidence": {
+      "sourceRecorded": true,
+      "commit": "41a68f6a223c6d9670aee98e37782ac28da613ef",
+      "tree": "7a924861ebe3451818eed0faf069eda7e5126b3a",
+      "status": "",
+      "sourceEndRecorded": true,
+      "sourceBeforeEqualsAfter": true
+    },
+    "report": "ci-44895966222-static-result.json.gz",
+    "originalArtifactReport": "original-gates/static/run/result.json"
+  },
+  "retention": {
+    "passed": true,
+    "browserVersion": "143.0.7499.4",
+    "pageErrors": [],
+    "sourceEvidence": {
+      "sourceRecorded": false,
+      "binding": "matching GitHub artifact workflow head and completed job"
+    },
+    "report": "ci-44895966222-retention-result.json.gz",
+    "originalArtifactReport": "original-gates/retention/report.json"
+  },
+  "direction": {
+    "assessment": "FAIL",
+    "recordCount": 0,
+    "passAssertions": 0,
+    "nonAssertionRecords": 0,
+    "sourceEvidence": {
+      "sourceRecorded": true,
+      "commit": "41a68f6a223c6d9670aee98e37782ac28da613ef",
+      "tree": "7a924861ebe3451818eed0faf069eda7e5126b3a",
+      "status": "",
+      "sourceEndRecorded": true,
+      "sourceBeforeEqualsAfter": true
+    },
+    "environment": {
+      "node": "v24.22.3",
+      "chromium": "143.0.7499.4",
+      "dpr": 1
+    },
+    "error": "Error: 等待超时：正式场景和当前人物资源预解码完成（15000 ms）\n    at until (file:///home/runner/work/xiyou/xiyou/frontend/tests/network-support.mjs:19:9)\n    at async run (file:///home/runner/work/xiyou/xiyou/frontend/tests/client-experience-browser.mjs:159:3)\n    at async file:///home/runner/work/xiyou/xiyou/frontend/tests/client-experience-browser.mjs:192:5",
+    "report": "ci-44895966222-direction-result.json.gz",
+    "classification": "Observed original resource-predecode timeout before first behavior assertion. Exact missing-asset attribution is maintained separately and is not inferred solely from timeout.",
+    "originalArtifactReport": "original-gates/direction/browser-client-experience/result.json"
+  },
+  "artifactIntegrity": {
+    "artifactCount": 6,
+    "allDownloadedZIPDigestsMatchGitHub": true,
+    "originalCollectionManifests": {
+      "fullscreen": "artifact-manifest.json",
+      "originalGates": "original-gates/artifact-manifest.json"
+    },
+    "archivedPlatformMetadata": "ci-44895966222-artifacts.json"
+  },
+  "scopeLimits": [
+    "Actual Chromium 143.0.7499.4 and Playwright 1.57.0; fullscreen touch is Chromium/CDP emulation, not a physical mobile device.",
+    "Fullscreen uses actual production Vue/Canvas/Socket paths with controlled public DTO/HTTP inputs and does not replace real legacy/multiplayer/PostgreSQL checks.",
+    "Existing spatial report has initial source only, no sourceEnd; no final stability claim is invented for that absent field.",
+    "No reruns, cancellations, browser launches, workflow dispatches or business/test/docs edits were performed during evidence collection."
+  ],
+  "rawEvidence": [
+    "ci-44895966222-jobs.json",
+    "ci-44895966222-artifacts.json",
+    "ci-44895966222-original-report-manifest.json",
+    "ci-44895966222-job-log-manifest.json"
+  ],
+  "originalCollectionFiles": [
+    "jobs-final-all.json",
+    "artifacts-final-all.json",
+    "verification-input.json"
+  ],
+  "archiveNote": "本摘要来自FS-V收集记录，仅将报告/日志引用映射到本目录无损归档；录像、抽帧和所查看图片名称仍是本次artifact内部成员或原收集目录名。runtime代表媒体绑定上一轮0c，不能与本轮41a混用。",
+  "originalCollectionSummarySHA256": "60ae5284056919cfd790e7b6fe722ce74a7f6596208060ccd4801ef8557eaee1"
+}

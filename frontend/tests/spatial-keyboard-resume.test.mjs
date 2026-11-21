@@ -4,6 +4,7 @@ import { readFile } from 'node:fs/promises';
 import ts from 'typescript';
 import { SpatialSessionClient } from '../src/network/spatial-session.ts';
 import { directionClock, directionFromKeys, directionKeys } from '../src/domain/spatial-direction.ts';
+import { ScenePointerGesture } from '../src/domain/spatial-camera-gesture.ts';
 import { spatialBatch, spatialSnapshot } from './spatial-fixture.mjs';
 
 const flush = () => new Promise(resolve => setImmediate(resolve));
@@ -11,8 +12,8 @@ const flush = () => new Promise(resolve => setImmediate(resolve));
 const source = await readFile(new URL('../src/features/world/SpatialMap.vue', import.meta.url), 'utf8');
 const script = source.match(/<script setup lang="ts">([\s\S]*?)<\/script>/)?.[1]; assert.ok(script);
 const parsed = ts.createSourceFile('SpatialMap.ts', script, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
-const functions = parsed.statements.filter(node => ts.isFunctionDeclaration(node) && ['displayInput', 'releaseKeys', 'blockedTarget', 'keydown', 'keyup', 'hidden', 'blur'].includes(node.name?.text));
-assert.equal(functions.length, 7);
+const functions = parsed.statements.filter(node => ts.isFunctionDeclaration(node) && ['displayInput', 'releaseKeys', 'blockedTarget', 'keydown', 'keyup', 'hidden', 'blur', 'cancelGesture', 'releaseCapture'].includes(node.name?.text));
+assert.equal(functions.length, 9);
 const keyboardCode = ts.transpileModule(functions.map(node => node.getText(parsed)).join('\n'), { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext } }).outputText;
 
 async function keyboardRoom(t, { holdFirstMove = false } = {}) {
@@ -47,11 +48,11 @@ async function keyboardRoom(t, { holdFirstMove = false } = {}) {
   const client = new SpatialSessionClient({ receipt: async () => queriedStop }, (_token, callbacks) => { handlers = callbacks; return link; }, { heartbeatMs: 0, reconnectDelayMs: 0 });
   t.after(() => { client.close(); Object.assign(directionClock, originalClock); });
   client.open('spatial-room', 'token'); handlers.connected(); await flush(); await client.control('resume');
-  class Element { closest() { return null; } }
+  class Element { style = {}; closest() { return null; } }
   const world = new Element(), document = { hidden: false }, props = { disabled: false };
   // 本组网络仍是无新能力的legacy连接；显示输入来自成功安装的当前快照。
-  const keyboard = new Function('bindings', `const {props, canvas, displaySnapshot, emit, directionFromKeys, directionKeys, Element, document}=bindings; const snapshotSubscription=null, presentation=null, held=new Set(); const schedule=()=>{}; ${keyboardCode}; return {keydown,keyup,blur,hidden,held};`)({
-    props, canvas: { value: world }, displaySnapshot: { get value() { return client.state.snapshot; } }, Element, document, directionFromKeys, directionKeys,
+  const keyboard = new Function('bindings', `const {props, canvas, displaySnapshot, emit, directionFromKeys, directionKeys, Element, document, ScenePointerGesture}=bindings; const snapshotSubscription=null, presentation=null, held=new Set(), gesture=new ScenePointerGesture(), dragging={value:false}; let capturedPointer=null; const schedule=()=>{}; ${keyboardCode}; return {keydown,keyup,blur,hidden,held,gesture};`)({
+    props, canvas: { value: world }, displaySnapshot: { get value() { return client.state.snapshot; } }, Element, document, directionFromKeys, directionKeys, ScenePointerGesture,
     emit(kind, value) { if (kind === 'direction') client.setDirection(value); else if (kind === 'stop') void client.stop(); },
   });
   return {
@@ -113,8 +114,11 @@ test('R66-INPUT-001：松开全部、失焦、隐藏、接管或控制失效后�
   for (const change of ['全部松开', '失焦', '隐藏', '明确取消', '控制周期变化', '控制丢失', '断线']) await t.test(change, async t => {
     const h = await keyboardRoom(t); await waitWithRightHeld(h);
     if (change === '全部松开') h.up('ArrowRight');
-    else if (change === '失焦') h.keyboard.blur();
-    else if (change === '隐藏') { h.document.hidden = true; h.keyboard.hidden(); }
+    else if (change === '失焦' || change === '隐藏') {
+      h.keyboard.gesture.begin({ id: 1, point: { x: 10, y: 10 }, button: 0, primary: true });
+      if (change === '失焦') h.keyboard.blur(); else { h.document.hidden = true; h.keyboard.hidden(); }
+      assert.equal(h.keyboard.gesture.pointerId, null, '停止持键的同时收束当前场景手势');
+    }
     else if (change === '明确取消') h.client.cancelQueued();
     else if (change === '断线') h.handlers.disconnected();
     else {

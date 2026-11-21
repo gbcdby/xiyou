@@ -18,11 +18,11 @@ function functions(source, names) {
 const clickExpression = pageSource.match(/<h2>场景出口<\/h2>[\s\S]*?@click="([^"]+)"/)?.[1];
 assert.ok(clickExpression, '执行实际出口模板绑定，不能手写替代调用');
 const pageCode = functions(pageSource, ['closeObjects', 'openMap', 'traverseExit', 'stop']);
-const mapCode = functions(mapSource, ['revealScene']);
+const mapCode = functions(mapSource, ['revealScene', 'focusScene']);
 const performCode = functions(storeSource, ['performSpatial']);
 
 // 真实 SFC 入口和方法，DOM滚动几何是受控替身；不伪造 paint、到达或呈现信用。
-function fixture({ canvasPresent = true, connected = true, request = Promise.resolve() } = {}) {
+function fixture({ canvasPresent = true, connected = true, request = Promise.resolve(), immersive = false } = {}) {
   const calls = [], panels = {
     reading: { value: 'inventory' }, receiptsOpen: { value: true }, objectsOpen: { value: true },
     selectedRef: { value: '已选对象' }, recipient: { value: '原接收人' },
@@ -35,10 +35,10 @@ function fixture({ canvasPresent = true, connected = true, request = Promise.res
     ownerDocument: { hidden: false, visibilityState: 'visible', defaultView: { innerWidth: 1280, innerHeight: 900, getComputedStyle: () => style } },
     getBoundingClientRect: rect, getClientRects: () => [rect()],
     scrollIntoView(options) { calls.push(['scroll', options]); top = 250; },
-    focus() { calls.push(['focus']); },
+    focus(options) { calls.push(['focus', options]); },
   };
   const canvas = { value: canvasPresent ? element : null };
-  const revealScene = new Function('canvas', 'schedule', `${mapCode}; return typeof revealScene === 'function' ? revealScene : undefined;`)(canvas, () => calls.push(['schedule']));
+  const revealScene = new Function('canvas', 'schedule', 'props', `${mapCode}; return typeof revealScene === 'function' ? revealScene : undefined;`)(canvas, () => calls.push(['schedule']), { immersive });
   const sceneMap = { value: { revealScene } };
   const spatialNotice = { value: '' };
   const spatialClient = {
@@ -69,6 +69,12 @@ test('原出口点击同步恢复场景并只发送一次原请求；滚动不�
   });
   assert.equal(f.trigger(), null);
   assert.deepEqual(f.panelTriggers(), [null, null]);
+});
+
+test('GZ-FS-05：全屏出口恢复只聚焦，不滚动页面或借焦点伪造视觉到达', () => {
+  const f = fixture({ immersive: true }); f.click({ exitId: 'to-road' });
+  assert.deepEqual(f.calls, [['traverseExit', 'to-road'], ['focus', { preventScroll: true }], ['schedule']]);
+  assert.equal(f.visible(), false, '聚焦不能代替实际视口几何和绘制');
 });
 
 test('原请求未回时新停步及换组件不会被迟到续体重新发起或再次滚动', async () => {

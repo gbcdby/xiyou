@@ -1,0 +1,123 @@
+{
+  "assessment": "PASS",
+  "source": {
+    "commit": "41a68f6a223c6d9670aee98e37782ac28da613ef",
+    "tree": "7a924861ebe3451818eed0faf069eda7e5126b3a",
+    "status": ""
+  },
+  "sourceBeforeEqualsAfter": true,
+  "sourceComparison": {
+    "before": "b759caad5e8c6ad14f7d7eebfe603e3aba42725db7eba08dfe82e862bb8b7e40",
+    "after": "b759caad5e8c6ad14f7d7eebfe603e3aba42725db7eba08dfe82e862bb8b7e40"
+  },
+  "environment": {
+    "node": "v24.22.3",
+    "chromium": "143.0.7499.4",
+    "playwright": "1.57.0"
+  },
+  "startedAt": "2026-11-21T10:47:58.959Z",
+  "finishedAt": "2026-11-21T10:48:37.046Z",
+  "checkCount": 40,
+  "checksPerViewport": {
+    "desktop-1440": 10,
+    "desktop-1366": 10,
+    "phone": 10,
+    "landscape": 10
+  },
+  "allChecksPass": true,
+  "pageErrors": [],
+  "cleanup": [
+    {
+      "name": "context",
+      "status": "closed"
+    },
+    {
+      "name": "browser",
+      "status": "closed"
+    },
+    {
+      "name": "vite",
+      "status": "closed"
+    },
+    {
+      "name": "fixture",
+      "status": "closed"
+    }
+  ],
+  "screenshotCount": 24,
+  "allScreenshotHashesMatch": true,
+  "zipBytes": 33971299,
+  "zipSHA256": "e37c36b462051fa38bc15c4adb7875477550764de65280ffb7d3a6c6a0ef2558",
+  "cases": [
+    {
+      "name": "desktop-1440",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "assessment": "PASS",
+      "paintCount": 218,
+      "wireCount": 6,
+      "queries": 1,
+      "video": {
+        "file": "desktop-1440-camera.webm",
+        "scope": "本次同一生产页面的真实浏览器连续录制；受控DTO，非真人操作"
+      }
+    },
+    {
+      "name": "desktop-1366",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "assessment": "PASS",
+      "paintCount": 220,
+      "wireCount": 6,
+      "queries": 1,
+      "video": {
+        "file": "desktop-1366-camera.webm",
+        "scope": "本次同一生产页面的真实浏览器连续录制；受控DTO，非真人操作"
+      }
+    },
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "assessment": "PASS",
+      "paintCount": 236,
+      "wireCount": 6,
+      "queries": 1,
+      "video": {
+        "file": "phone-camera.webm",
+        "scope": "本次同一生产页面的真实浏览器连续录制；受控DTO，非真人操作"
+      }
+    },
+    {
+      "name": "landscape",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "assessment": "PASS",
+      "paintCount": 234,
+      "wireCount": 6,
+      "queries": 1,
+      "video": {
+        "file": "landscape-camera.webm",
+        "scope": "本次同一生产页面的真实浏览器连续录制；受控DTO，非真人操作"
+      }
+    }
+  ],
+  "runUrl": "https://github.com/gbcdby/xiyou/actions/runs/44895966222",
+  "jobId": 136821567493,
+  "artifactId": 14704560457,
+  "scope": "四视口生产Vue/Canvas受控公开DTO；不替代真实PG/AI整章或全角色资产验收。",
+  "rawReport": {
+    "file": "ci-44895966222-result.json.gz",
+    "sha256": "99c0b2b8021456109e624a2ce5c4cf2ad8a6d525f998b64f1ad394c59ddd9336",
+    "rawSha256": "f65a6465434a84118cb226ad3e1da93dd5efa705372cd9ae083ef2f73f1c3ff6"
+  },
+  "representativeMedia": "runtime目录截图和录像绑定上一轮0c18631，产品源码未改变；本轮完整24PNG/4WebM在对应Actions artifact，不将旧媒体改标为本轮。"
+}

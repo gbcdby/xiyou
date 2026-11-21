@@ -47,6 +47,9 @@ const copied = ref(false); const starting = ref(false); const startNotice = ref(
 type ReadingPanel = 'inventory' | 'notebook' | 'dialogue' | 'chapter' | 'recap';
 const reading = ref<ReadingPanel | null>(null);
 const objectsOpen = ref(false); const receiptsOpen = ref(false);
+const guidanceExpanded = ref(false);
+const guidanceToggle = ref<HTMLButtonElement | null>(null);
+const cameraState = ref<{ mode: 'follow' | 'free'; canReturn: boolean }>({ mode: 'follow', canReturn: false });
 let readingTrigger: HTMLElement | null = null;
 let objectsTrigger: HTMLElement | null = null;
 let receiptsTrigger: HTMLElement | null = null;
@@ -105,6 +108,8 @@ function clearAuthorizedInput() {
   selectedRef.value = ''; recipient.value = ''; message.value = ''; channel.value = 'public'; reading.value = null; readingTrigger = null;
   objectsTrigger = null; receiptsTrigger = null;
   objectsOpen.value = false; receiptsOpen.value = false;
+  guidanceExpanded.value = false;
+  cameraState.value = { mode: 'follow', canReturn: false };
   personLabeler.clear(); personLabels.value = {};
   recapClient.close();
 }
@@ -140,26 +145,28 @@ async function openReading(panel: ReadingPanel, event?: MouseEvent) {
 function closeReading() {
   reading.value = null;
   const trigger = readingTrigger; readingTrigger = null;
-  void nextTick(() => { if (trigger?.isConnected) trigger.focus({ preventScroll: true }); });
+  restorePanelFocus(trigger);
 }
 function escape(event: KeyboardEvent) {
   if (event.key !== 'Escape' || event.isComposing || event.repeat) return;
+  if (event.target instanceof HTMLElement && event.target.closest('.gaolao-map-navigator')) return;
   if (reading.value) { event.preventDefault(); event.stopPropagation(); closeReading(); }
   else if (receiptsOpen.value) { event.preventDefault(); event.stopPropagation(); closeReceipts(); }
   else if (objectsOpen.value || selectedRef.value) { event.preventDefault(); event.stopPropagation(); closeObjects(); }
+  else if (guidanceExpanded.value) { event.preventDefault(); event.stopPropagation(); guidanceExpanded.value = false; void nextTick(() => guidanceToggle.value?.focus({ preventScroll: true })); }
   else if (canStop.value) { event.preventDefault(); event.stopPropagation(); stop(); }
 }
 function stop() { void performSpatial(() => spatialClient.stop()); }
 function restorePanelFocus(trigger: HTMLElement | null) {
   void nextTick(() => {
     if (trigger?.isConnected && trigger.getClientRects().length) trigger.focus({ preventScroll: true });
-    else sceneMap.value?.returnToSelf();
+    else sceneMap.value?.focusScene();
   });
 }
 async function showReceipts() {
   receiptsTrigger = document.activeElement instanceof HTMLElement ? document.activeElement : null;
   closeReading(); objectsOpen.value = false; receiptsOpen.value = true; await nextTick();
-  document.getElementById('spatial-receipts')?.scrollIntoView({ block: 'start' });
+  if (!hud.value) document.getElementById('spatial-receipts')?.scrollIntoView({ block: 'start' });
   document.getElementById('spatial-receipts-heading')?.focus({ preventScroll: true });
 }
 function closeReceipts() { receiptsOpen.value = false; const trigger = receiptsTrigger; receiptsTrigger = null; restorePanelFocus(trigger); }
@@ -237,9 +244,14 @@ function ownerName(reference: string) { const p = projection.value; return p?.se
   <div ref="hudRoot" class="spatial-page page-shell" :class="{ 'gaolao-scene-page': hud, 'hud-panel-open': hud && narrow && Boolean(hudPanelKind) }">
     <header v-if="hud" class="gaolao-heading">
       <div class="gaolao-chapter-name"><span class="gaolao-chapter-seal" aria-hidden="true">一</span><h1>高老庄</h1><span>{{ projection?.scene?.name || '同行记' }}</span></div>
-      <section v-if="guidance" class="gaolao-guidance" aria-label="目标与下一步" tabindex="0" data-keyboard-scope="panel">
-        <div class="gaolao-shared-goal"><p class="eyebrow">共同目标</p><h2 data-testid="gaolao-goal">{{ guidance.goal }}</h2><p v-if="guidance.knownProgress" class="gaolao-known-progress">{{ guidance.knownProgress }}</p></div>
-        <div class="gaolao-next-step"><p class="eyebrow">我的下一步</p><h2 data-testid="gaolao-next-step">{{ guidance.next.title }}</h2><p>{{ guidance.next.description }}</p><button v-if="guidance.next.action" class="text-button gaolao-guide-action" :disabled="guidance.next.action.kind === 'navigate' && !canAct" @click="actOnGuidance(guidance.next.action)">{{ guidance.next.action.label }}<AppIcon name="arrow" :size="15" /></button></div>
+      <section v-if="guidance" class="gaolao-guidance" :class="{ 'is-expanded': guidanceExpanded }" aria-label="目标与下一步" data-keyboard-scope="panel">
+        <div class="gaolao-shared-goal"><p class="eyebrow">共同目标</p><h2 data-testid="gaolao-goal">{{ guidance.goal }}</h2></div>
+        <div class="gaolao-next-step"><p class="eyebrow">我的下一步</p><h2 data-testid="gaolao-next-step">{{ guidance.next.title }}</h2></div>
+        <button ref="guidanceToggle" class="text-button gaolao-guidance-toggle" :aria-expanded="guidanceExpanded" aria-controls="gaolao-guidance-details" @click="guidanceExpanded = !guidanceExpanded">{{ guidanceExpanded ? '收起详情' : '任务详情' }}<AppIcon :name="guidanceExpanded ? 'x' : 'arrow'" :size="14" /></button>
+        <div v-if="guidanceExpanded" id="gaolao-guidance-details" class="gaolao-guidance-details">
+          <p>{{ guidance.next.description }}</p><p v-if="guidance.knownProgress" class="gaolao-known-progress">{{ guidance.knownProgress }}</p>
+          <button v-if="guidance.next.action" class="text-button gaolao-guide-action" :disabled="guidance.next.action.kind === 'navigate' && !canAct" @click="actOnGuidance(guidance.next.action)">{{ guidance.next.action.label }}<AppIcon name="arrow" :size="15" /></button>
+        </div>
       </section>
       <p v-if="currentStatus" class="gaolao-current-status" :data-tone="currentStatus.tone" data-testid="movement-status" role="status" tabindex="0" data-keyboard-scope="panel">{{ currentStatus.text }}</p>
     </header>
@@ -256,9 +268,9 @@ function ownerName(reference: string) { const p = projection.value; return p?.se
         <div class="spatial-layout" :class="{ 'reading-open': Boolean(reading) && (!hud || narrow) }">
           <div class="spatial-main">
             <section v-if="!hud && (currentSummary || recentPreparations.length)" class="spatial-current-objective" :aria-label="currentSummary?.caption || '眼下事项'"><div><p class="eyebrow">{{ currentSummary?.caption || '眼下事项' }}</p><h2>{{ currentSummary?.title || '已知准备已留下' }}</h2></div><div class="spatial-known-preparations"><SpatialStatus v-for="objective in recentPreparations" :key="objective.objectiveId" :label="objective.label" tone="confirmed" /></div></section>
-            <SpatialMap ref="sceneMap" :snapshot="spatialState.snapshot!" :snapshot-source="spatialState.timedTrail ? spatialSnapshots : undefined" :disabled="!canAct" :selected="selectedRef" :person-labels="personLabels" :immersive="hud" @move="move" @direction="direction" @select="select" @stop="stop" @objects="showObjects" @settled="spatialClient.confirmDisplayedArrival($event)" />
+            <SpatialMap ref="sceneMap" :snapshot="spatialState.snapshot!" :snapshot-source="spatialState.timedTrail ? spatialSnapshots : undefined" :disabled="!canAct" :selected="selectedRef" :person-labels="personLabels" :immersive="hud" @camera-change="cameraState = $event" @move="move" @direction="direction" @select="select" @stop="stop" @objects="showObjects" @settled="spatialClient.confirmDisplayedArrival($event)" />
             <div class="spatial-hud-controls">
-            <p class="spatial-input-hint">点地行走 · 场景内方向键移动 · Esc 关闭详情 / 停步</p>
+            <p class="spatial-input-hint">{{ hud ? '点地行走 · 拖动画面查看远处' : '点地行走 · 场景内方向键移动 · Esc 关闭详情 / 停步' }}</p>
             <div class="spatial-hud-footer">
               <div class="spatial-action-bar"><div><strong>{{ projection.self.name }}</strong><span v-if="hud" class="gaolao-own-duties">{{ ownDuties }}</span><span v-if="!hud" data-testid="movement-status">{{ projection.movement ? movementLabels[projection.movement.status] : '点地选择路线' }}</span><span v-if="!hud && spatialState.queuedAction">{{ spatialState.queuedAction }}</span></div><button class="secondary-button" aria-label="停步 / 取消后续操作" :disabled="!canStop" @click="stop"><AppIcon name="x" :size="16" />停步</button></div>
               <nav class="spatial-tool-dock" aria-label="随身功能">
@@ -267,15 +279,21 @@ function ownerName(reference: string) { const p = projection.value; return p?.se
                 <button aria-controls="spatial-reading-pane" :aria-expanded="reading === 'dialogue'" @click="openReading('dialogue', $event)"><AppIcon name="chat" :size="22" /><span>交谈</span></button>
                 <button v-if="isGaolao" aria-controls="spatial-reading-pane" :aria-expanded="reading === 'chapter'" @click="openReading('chapter', $event)"><AppIcon name="group" :size="22" /><span>{{ hud ? '队伍' : '进展' }}</span></button>
                 <button v-if="isGaolao || projection.ending" aria-controls="spatial-reading-pane" :aria-expanded="reading === 'recap'" :disabled="!projection.ending" :title="projection.ending ? '查看这一程的过程与结果' : '这一程结束后可回看'" @click="openReading('recap', $event)"><AppIcon name="clock" :size="22" /><span>回看</span></button>
-                <button v-if="hud" aria-controls="spatial-receipts" :aria-expanded="receiptsOpen" :disabled="!spatialState.actions.length" @click="showReceipts"><AppIcon name="check" :size="22" /><span>回执<span v-if="unknownCount" class="gaolao-pending-count">{{ unknownCount }}</span></span></button>
               </nav>
+              <div v-if="hud" class="gaolao-scene-utilities" aria-label="场景操作">
+                <button class="gaolao-objects-button" :aria-expanded="objectsOpen" @click="showObjects"><AppIcon name="eye" :size="18" /><span>场景对象</span></button>
+                <button class="gaolao-receipts-button" aria-controls="spatial-receipts" :aria-expanded="receiptsOpen" :disabled="!spatialState.actions.length" @click="showReceipts"><AppIcon name="check" :size="18" /><span>回执</span><span v-if="unknownCount" class="gaolao-pending-count">{{ unknownCount }}</span></button>
+              </div>
             </div>
             </div>
             <button v-if="!hud && unknownCount" class="spatial-pending-link" @click="showReceipts"><SpatialStatus :label="'待确认动作 ' + unknownCount + ' 条'" tone="uncertain" /><span>查询 / 原样重试</span><AppIcon name="arrow" :size="18" /></button>
           </div>
           <div class="spatial-rail">
             <section v-if="projection.phase === 'Running' && !spatialState.inputReady" class="control-banner" data-keyboard-scope="panel"><div><strong>当前为只读视角</strong><p>恢复本人控制后继续行走；另一处连接正在控制时，可选择接管。</p></div><div class="button-row"><button class="primary-button" :disabled="!online || spatialState.controlBusy" @click="performSpatial(() => spatialClient.control('resume'))">恢复本人控制</button><button class="secondary-button" :disabled="!online || spatialState.controlBusy" @click="performSpatial(() => spatialClient.control('take'))">明确接管此角色</button></div></section>
-            <GaolaoMapNavigator v-if="hud && displayProjection" :scene="projection.scene" :catalog="projection.mapCatalog || []" :self="displayProjection.self" :people="displayedPeople" :disabled="!canAct" :compact="narrow" :panel-open="Boolean(hudPanelKind)" @move="move" @navigate="navigate" @open="openMap" />
+            <div v-if="hud && displayProjection" class="gaolao-map-tools">
+              <GaolaoMapNavigator :scene="projection.scene" :catalog="projection.mapCatalog || []" :self="displayProjection.self" :people="displayedPeople" :disabled="!canAct" :compact="narrow" :panel-open="Boolean(hudPanelKind)" @move="move" @navigate="navigate" @open="openMap" />
+              <button v-if="cameraState.canReturn" class="gaolao-return-to-self" @click="sceneMap?.returnToSelf()"><AppIcon name="location" :size="18" />回到角色</button>
+            </div>
             <aside v-if="!receiptsOpen && (!hud || reading || selected || objectsOpen)" class="spatial-sidebar" :data-reading-kind="reading || (objectsOpen ? 'objects' : 'action')" data-keyboard-scope="panel">
             <SpatialReadingPane v-if="reading" :title="readingTitles[reading]" :close-label="'关闭' + readingNames[reading]" @close="closeReading">
               <p v-if="hasPersonMarkers" class="spatial-panel-intro">人物编号与场景标记一致。</p><p v-if="selected && personLabels[selected.entityRef]" class="spatial-panel-intro">地图选中：<strong>{{ displayName(selected) }}</strong></p>

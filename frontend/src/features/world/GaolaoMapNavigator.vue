@@ -13,6 +13,7 @@ const selectedAnchorId = ref('');
 const destination = ref<Position | null>(null);
 const notice = ref('');
 const canvas = ref<HTMLCanvasElement | null>(null);
+const mapRoot = ref<HTMLElement | null>(null);
 const size = ref({ width: 256, height: 176 });
 let resize: ResizeObserver | null = null;
 let frame = 0;
@@ -20,8 +21,14 @@ const scenes = computed(() => navigationScenes(props.scene, props.catalog));
 const selectedScene = computed(() => mode.value === 'current' ? navigationScene(props.scene, props.catalog) : scenes.value.find(scene => scene.sceneId === selectedSceneId.value) || null);
 const showingOverview = computed(() => mode.value === 'all' && !selectedScene.value);
 const canvasVisible = computed(() => !props.compact || expanded.value);
+const destinationControlsVisible = computed(() => expanded.value || mode.value === 'all');
 function toggleMap() { expanded.value = !expanded.value; if (expanded.value) emit('open'); }
-function changeMode(next: 'current' | 'all') { mode.value = next; selectedSceneId.value = ''; selectedAnchorId.value = ''; destination.value = null; notice.value = ''; }
+function closeMap() {
+  expanded.value = false;
+  if (!props.compact) changeMode('current');
+  mapRoot.value?.querySelector<HTMLButtonElement>('header button')?.focus({ preventScroll: true });
+}
+function changeMode(next: 'current' | 'all') { mode.value = next; selectedSceneId.value = ''; selectedAnchorId.value = ''; destination.value = null; notice.value = ''; if (next === 'all') emit('open'); }
 function selectScene(id: string) { selectedSceneId.value = id; selectedAnchorId.value = ''; destination.value = null; notice.value = ''; }
 function selectAnchor(event: Event) {
   selectedAnchorId.value = (event.target as HTMLSelectElement).value;
@@ -117,14 +124,15 @@ onBeforeUnmount(() => { resize?.disconnect(); window.removeEventListener('resize
 </script>
 
 <template>
-  <section class="gaolao-map-navigator" :class="{ 'is-expanded': compact && expanded }" aria-label="场景地图" data-keyboard-scope="map">
+  <section ref="mapRoot" class="gaolao-map-navigator" :class="{ 'is-expanded': compact ? expanded : destinationControlsVisible }" aria-label="场景地图" data-keyboard-scope="map" @keydown.esc.stop="closeMap">
     <header><h2><AppIcon name="compass" :size="18" />地图</h2><button v-if="compact" class="text-button" :aria-expanded="expanded" aria-controls="gaolao-map-content" @click="toggleMap">{{ expanded ? '收起地图' : '展开地图' }}</button><div v-else class="map-mode" role="group" aria-label="地图范围"><button :aria-pressed="mode === 'current'" @click="changeMode('current')">当前</button><button :aria-pressed="mode === 'all'" @click="changeMode('all')">全部</button></div></header>
     <div v-if="canvasVisible" id="gaolao-map-content" class="map-content">
       <div v-if="compact" class="map-mode" role="group" aria-label="地图范围"><button :aria-pressed="mode === 'current'" @click="changeMode('current')">当前</button><button :aria-pressed="mode === 'all'" @click="changeMode('all')">全部</button></div>
       <p class="map-place">{{ showingOverview ? '本章全部场景' : selectedScene?.name || '等待场景同步' }}</p>
       <canvas ref="canvas" data-testid="gaolao-minimap" :data-map-mode="mode" :data-scene-id="selectedScene?.sceneId || ''" role="img" :aria-label="showingOverview ? '全部公开场景与出口连接，可用下方选择框查看' : '地点示意图，可点击选点，也可用下方地点选择框'" @click="clickMap" />
       <label v-if="mode === 'all'" class="map-select"><span>查看场景</span><select aria-label="查看地图场景" :value="selectedSceneId" @change="selectScene(($event.target as HTMLSelectElement).value)"><option value="">全部场景概览</option><option v-for="scene in scenes" :key="scene.sceneId" :value="scene.sceneId">{{ scene.name }}</option></select></label>
-      <label v-if="selectedScene" class="map-select"><span>{{ mode === 'current' ? '或选择地点' : '选择目的地' }}</span><select aria-label="地图目的地" :value="selectedAnchorId" @change="selectAnchor"><option value="">{{ destination ? '地图上的位置' : '选择公开地点' }}</option><option v-for="anchor in selectedScene.anchors" :key="anchor.anchorId" :value="anchor.anchorId">{{ anchor.label }}</option></select></label>
+      <button v-if="!compact && mode === 'current'" class="text-button map-destinations-toggle" :aria-expanded="expanded" aria-controls="gaolao-map-destination" @click="toggleMap">{{ expanded ? '收起地点' : '选择地点' }}<AppIcon :name="expanded ? 'x' : 'arrow'" :size="14" /></button>
+      <label v-if="selectedScene && destinationControlsVisible" id="gaolao-map-destination" class="map-select"><span>{{ mode === 'current' ? '或选择地点' : '选择目的地' }}</span><select aria-label="地图目的地" :value="selectedAnchorId" @change="selectAnchor"><option value="">{{ destination ? '地图上的位置' : '选择公开地点' }}</option><option v-for="anchor in selectedScene.anchors" :key="anchor.anchorId" :value="anchor.anchorId">{{ anchor.label }}</option></select></label>
       <button v-if="destination && selectedScene" class="secondary-button map-travel" :disabled="disabled" @click="travel">{{ mode === 'all' && selectedScene.sceneId !== self.sceneId ? '沿出口前往' : '前往所选地点' }}</button>
       <p class="map-hint" role="status">{{ notice || (mode === 'current' ? '点地图行走 · 绿点是你' : '先查看场景与地点，再确认前往') }}</p>
     </div>
@@ -132,15 +140,17 @@ onBeforeUnmount(() => { resize?.disconnect(); window.removeEventListener('resize
 </template>
 
 <style scoped>
-.gaolao-map-navigator { color: var(--hud-ink, #332c23); background: var(--hud-paper, #f8f2e5); border: 1px solid var(--hud-line, #c9b996); border-radius: 7px; overflow: hidden; }
-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 12px; border-bottom: 1px solid #ded4bd; }
+.gaolao-map-navigator { display: flex; flex-direction: column; color: var(--hud-ink, #332c23); background: var(--hud-paper, #f8f2e5); border: 1px solid var(--hud-line, #c9b996); border-radius: 8px; overflow: hidden; box-shadow: 0 3px 18px #3e32191a; }
+header { flex: none; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px; padding: 3px 9px; border-bottom: 1px solid #ded4bd; }
 h2 { display: flex; align-items: center; gap: 6px; margin: 0; font: 600 17px var(--serif); white-space: nowrap; }
 .map-mode { display: flex; gap: 3px; }
-.map-mode button { flex: none; min-height: 40px; min-width: 45px; padding: 5px 9px; background: transparent; border: 1px solid transparent; border-radius: 4px; font-size: 14px; color: #665c4b; white-space: nowrap; }
+.map-mode button { flex: none; min-height: 44px; min-width: 44px; padding: 5px 6px; background: transparent; border: 1px solid transparent; border-radius: 4px; font-size: 13px; color: #665c4b; white-space: nowrap; }
 .map-mode button[aria-pressed="true"] { color: #315f4e; border-color: #a7b39a; background: #e9eddf; }
-.map-content { padding: 0 10px 8px; }
+.map-content { min-height: 0; padding: 0 10px 8px; overflow: auto; overscroll-behavior: contain; scrollbar-width: thin; }
 .map-place { margin: 8px 0 5px; color: #665c4b; font-size: 13px; }
-canvas { display: block; width: 100%; height: 160px; border-radius: 3px; cursor: crosshair; touch-action: manipulation; }
+canvas { display: block; width: 100%; height: 112px; border-radius: 3px; cursor: crosshair; touch-action: manipulation; }
+.is-expanded canvas { height: 160px; }
+.map-destinations-toggle { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 44px; padding: 4px 0; color: #456550; font-size: 13px; }
 .map-select { display: grid; gap: 4px; margin-top: 7px; font-size: 13px; color: #665c4b; }
 .map-select select { width: 100%; min-height: 44px; padding: 6px 8px; font-size: 14px; background: #fffaf0; border: 1px solid #c9b996; border-radius: 4px; color: #383a2d; }
 .map-travel { width: 100%; min-height: 44px; margin-top: 7px; font-size: 14px; }
@@ -150,8 +160,8 @@ canvas { display: block; width: 100%; height: 160px; border-radius: 3px; cursor:
   header { flex: none; border-bottom: 0; padding: 4px 10px; min-height: 40px; }
   .gaolao-map-navigator:not(.is-expanded) header h2 { display: none; }
   .gaolao-map-navigator:not(.is-expanded) header > button { width: 100%; min-height: 44px; white-space: nowrap; }
-  .map-content { min-height: 0; border-top: 1px solid #ded4bd; max-height: min(65dvh, 500px); overflow: auto; scroll-padding-block: 8px; }
+  .map-content { min-height: 0; border-top: 1px solid #ded4bd; max-height: calc(100dvh - 230px); overflow: auto; scroll-padding-block: 8px; }
   canvas { height: 176px; }
-  .map-mode button { min-height: 40px; }
+  .map-mode button { min-height: 44px; }
 }
 </style>

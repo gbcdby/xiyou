@@ -6,7 +6,7 @@ import { sceneArtwork, spriteResourcePaths, type SpriteFrame } from '../domain/g
 import { objectArtContext, objectInstanceKey, selectObjectArt, type ObjectArtFrame } from '../domain/gaolao-object-art.ts';
 import { foregroundOpacity, orderSceneEntries, sceneGroupAssets, sceneLayerPresentation, selectSceneDoor, type SceneAsset, type SceneForeground, type SceneRect } from '../domain/gaolao-scene-layers.ts';
 import { layoutSpatialLabels, type SpatialLabel, type SpatialLabelInput } from '../domain/spatial-labels.ts';
-import { sceneFit, screenPoint, worldPoint, type CanvasFit } from '../domain/spatial-canvas-geometry.ts';
+import { sceneCoverFit, sceneFit, screenPoint, worldPoint, type CanvasFit } from '../domain/spatial-canvas-geometry.ts';
 import { CanvasAssets, sharedCanvasAssets } from './canvas-assets.ts';
 import { ObjectRasterCache } from './object-raster-cache.ts';
 
@@ -16,10 +16,15 @@ interface Hit { ref: string | null; position: Position; bounds: SceneRect; file?
 type Entry = { key: string; depthY: number } & ({ kind: 'person'; person: DrawPerson } | { kind: 'item' | 'target'; object: ItemViewV2 | TargetViewV2; position: Position } | { kind: 'foreground'; asset: SceneForeground } | { kind: 'door' });
 export interface CanvasSceneFrame {
   sceneId: string; view: SceneRect; viewport: { width: number; height: number; dpr: number }; fit: CanvasFit; serial: number; instance: string;
+  cameraView?: SceneRect;
   layerStatus: 'legacy' | 'ready' | 'pending' | 'failed'; artwork: boolean; geometricFallback: boolean; neutralDoor: SceneRect | null;
   sceneImages: { file: string; bounds: SceneRect; kind: string; depthY?: number; opacity: number }[];
   objects: DrawObject[]; actors: { ref: string; appearanceId?: string; position: Position; facing: Facing; moving: boolean; distance: number; art: SpriteFrame | null }[];
   labels: SpatialLabel[]; labelFont: string; omittedLabels: number; resources: ReturnType<CanvasAssets['resources']>; failed: string[];
+}
+interface CanvasPaintOptions {
+  selected?: string; personLabels?: Record<string, string>; reducedMotion: boolean;
+  cameraCenter?: Position; beforeFrontWrite?: () => void;
 }
 const frames = new WeakMap<HTMLCanvasElement, CanvasSceneFrame>();
 /** 只读已实际完成合成的帧，供几何验收和诊断；不生成额外DOM或世界事实。 */
@@ -73,7 +78,11 @@ export class SpatialCanvas {
     frames.delete(this.#canvas); this.#hits = []; this.#labelKey = ''; this.#paths = new Set();
     delete this.#canvas.dataset.sceneId; delete this.#canvas.dataset.sceneView; delete this.#canvas.dataset.sceneLayerStatus; this.#canvas.dataset.renderedEntities = '0';
   }
-  point(point: Position): Position | null { const frame = frames.get(this.#canvas); return frame ? worldPoint(point, frame.fit, frame.view) : null; }
+  point(point: Position): Position | null {
+    const frame = frames.get(this.#canvas);
+    return frame && point.x >= 0 && point.y >= 0 && point.x <= frame.viewport.width && point.y <= frame.viewport.height
+      ? worldPoint(point, frame.fit, frame.view) : null;
+  }
   hit(point: Position): string | null {
     const frame = frames.get(this.#canvas); if (!frame) return null;
     for (const label of [...frame.labels].reverse()) if (label.selectable && point.x >= label.x && point.y >= label.y && point.x <= label.x + label.width && point.y <= label.y + label.height) return label.key;
@@ -95,28 +104,34 @@ export class SpatialCanvas {
     }
     return null;
   }
-  paint(snapshot: SnapshotV2, motion: ConfirmedMotion, now: number, options: { selected?: string; personLabels?: Record<string, string>; reducedMotion: boolean; beforeFrontWrite?: () => void }): CanvasSceneFrame | null {
-    let complete = false;
+  paint(snapshot: SnapshotV2, motion: ConfirmedMotion, now: number, options: CanvasPaintOptions): CanvasSceneFrame | null {
+    let complete = false; const previousHits = this.#hits;
     try { const frame = this.#paint(snapshot, motion, now, options); complete = true; return frame; }
-    finally { this.#backgroundRaster.finish(complete); }
+    finally { if (!complete) this.#hits = previousHits; this.#backgroundRaster.finish(complete); }
   }
-  #paint(snapshot: SnapshotV2, motion: ConfirmedMotion, now: number, options: { selected?: string; personLabels?: Record<string, string>; reducedMotion: boolean; beforeFrontWrite?: () => void }): CanvasSceneFrame | null {
+  #paint(snapshot: SnapshotV2, motion: ConfirmedMotion, now: number, options: CanvasPaintOptions): CanvasSceneFrame | null {
     const p = sceneDisplayProjection(snapshot.projection), scene = p.scene; if (!scene) { this.clear(); return null; }
     const context = this.#context, artContext = objectArtContext(snapshot), presentation = sceneLayerPresentation(artContext), group = presentation.resources;
     const groupAssets = group ? sceneGroupAssets(group) : [], dimensionsValid = groupAssets.every(asset => { const image = this.#assets.image(asset.file); return !image || image.naturalWidth === asset.pixelSize.width && image.naturalHeight === asset.pixelSize.height; });
     const groupReady = Boolean(group && dimensionsValid && this.#assets.ready(groupAssets.map(asset => asset.file)));
     const groupFailed = Boolean(presentation.registered && (!group || !dimensionsValid || this.#assets.failed(groupAssets.map(asset => asset.file)).length));
     const background = !presentation.registered ? sceneArtwork(scene.sceneId) : null, backgroundImage = background ? this.#assets.image(background) : null;
-    const fit = sceneFit(scene, { width: this.#width, height: this.#height }), frame: CanvasSceneFrame = {
+    const viewport = { width: this.#width, height: this.#height };
+    const fit = options.cameraCenter ? sceneCoverFit(scene, viewport, options.cameraCenter) : sceneFit(scene, viewport), frame: CanvasSceneFrame = {
       sceneId: scene.sceneId, view: { x: 0, y: 0, width: scene.width, height: scene.height }, viewport: { width: this.#width, height: this.#height, dpr: this.#dpr }, fit, serial: ++this.#serial,
+      ...(options.cameraCenter ? { cameraView: { x: -fit.x / fit.scale, y: -fit.y / fit.scale, width: this.#width / fit.scale, height: this.#height / fit.scale } } : {}),
       instance: `${this.#scope}:${this.#scopeGeneration}`, layerStatus: !presentation.registered ? 'legacy' : groupReady ? 'ready' : groupFailed ? 'failed' : 'pending', artwork: groupReady || Boolean(backgroundImage), geometricFallback: !groupReady && !backgroundImage, neutralDoor: null,
       sceneImages: [], objects: [], actors: [], labels: [], labelFont: '', omittedLabels: 0, resources: this.#assets.resources(this.#paths), failed: this.#assets.failed(this.#paths),
     };
     if (groupFailed && !frame.failed.length) frame.failed.push('scene-metadata');
     this.#hits = [];
+    const previousFit = frames.get(this.#canvas)?.fit;
+    // 镜头持续平移时直接使用已解码图像，避免为每一帧重新分配整屏派生像素。
+    const cachePixels = !options.cameraCenter || Boolean(previousFit && previousFit.x === fit.x && previousFit.y === fit.y && previousFit.scale === fit.scale);
+    if (!cachePixels) this.#objectRaster.clear();
     context.setTransform(this.#dpr, 0, 0, this.#dpr, 0, 0); context.globalAlpha = 1; context.fillStyle = '#eee3cb';
     const baseImage = group && groupReady ? this.#assets.image(group.base.file) : null;
-    const backgroundRestored = group && baseImage
+    const backgroundRestored = cachePixels && group && baseImage
       ? this.#backgroundRaster.begin(context, baseImage, group.base.worldRect, { viewport: frame.viewport, fit }, scene)
       : (this.#backgroundRaster.clear(), false);
     if (!backgroundRestored) context.fillRect(0, 0, this.#width, this.#height);
@@ -171,7 +186,7 @@ export class SpatialCanvas {
     const drawObject = (object: ItemViewV2 | TargetViewV2, position: Position, kind: DrawObject['kind'], depthY: number, selectedFrame: ObjectArtFrame | null = selectObjectArt(object, artContext, 'map')) => {
       const image = selectedFrame && this.#assets.image(selectedFrame.file), bounds = image ? selectedFrame!.bounds : { x: -13, y: -13, width: 26, height: 26 };
       context.save(); context.translate(position.x, position.y);
-      if (image && selectedFrame) { if (!this.#objectRaster.draw(context, image, bounds, { dpr: this.#dpr, fit, position })) context.drawImage(image, bounds.x, bounds.y, bounds.width, bounds.height); }
+      if (image && selectedFrame) { if (!cachePixels || !this.#objectRaster.draw(context, image, bounds, { dpr: this.#dpr, fit, position })) context.drawImage(image, bounds.x, bounds.y, bounds.width, bounds.height); }
       else { context.fillStyle = kind === 'item' ? '#f8e3ac' : '#e8d6b3'; context.strokeStyle = '#76572e'; context.lineWidth = 2; context.beginPath(); if (kind === 'item') { context.moveTo(0, -10); context.lineTo(12, 0); context.lineTo(0, 10); context.lineTo(-12, 0); context.closePath(); } else context.roundRect(-13, -13, 26, 26, 4); context.fill(); context.stroke(); }
       context.restore();
       frame.objects.push({ ref: object.entityRef, key: objectInstanceKey(artContext, object), kind, name: object.name, position, depthY, visualKey: object.visualKey, bounds, ...(image && selectedFrame ? { file: selectedFrame.file, variant: selectedFrame.variant } : {}) });
@@ -217,11 +232,19 @@ export class SpatialCanvas {
     for (const object of frame.objects.filter(object => object.ref === options.selected)) { context.beginPath(); context.arc(object.position.x, object.position.y, 18, 0, Math.PI * 2); context.stroke(); }
     context.restore();
     const points = new Map<string, Position>(), inputs: SpatialLabelInput[] = [];
-    const addLabel = (key: string, label: string, position: Position, bounds: SceneRect, priority: number, selectable = true) => { const point = screenPoint(position, fit); points.set(key, point); inputs.push({ key, label, point, footprint: { x: point.x + bounds.x * fit.scale, y: point.y + bounds.y * fit.scale, width: bounds.width * fit.scale, height: bounds.height * fit.scale }, selectable, priority }); };
-    for (const person of people) addLabel(person.entityRef, options.personLabels?.[person.entityRef] || person.name, person.position, fallbackBody, protectedRefs.has(person.entityRef) ? 0 : 1);
+    const addLabel = (key: string, label: string, position: Position, bounds: SceneRect, priority: number, selectable = true, visibleBounds = bounds) => {
+      const point = screenPoint(position, fit);
+      if (options.cameraCenter && (point.x + (visibleBounds.x + visibleBounds.width) * fit.scale < 0 || point.x + visibleBounds.x * fit.scale > this.#width
+        || point.y + (visibleBounds.y + visibleBounds.height) * fit.scale < 0 || point.y + visibleBounds.y * fit.scale > this.#height)) return;
+      points.set(key, point); inputs.push({ key, label, point, footprint: { x: point.x + bounds.x * fit.scale, y: point.y + bounds.y * fit.scale, width: bounds.width * fit.scale, height: bounds.height * fit.scale }, selectable, priority });
+    };
+    for (const person of people) {
+      const bounds = person.art?.bounds ?? fallbackBody, visibleBounds = person.art?.mirrorX ? { ...bounds, x: -bounds.x - bounds.width } : bounds;
+      addLabel(person.entityRef, options.personLabels?.[person.entityRef] || person.name, person.position, fallbackBody, protectedRefs.has(person.entityRef) ? 0 : 1, true, visibleBounds);
+    }
     for (const object of frame.objects) addLabel(object.ref, object.name, object.position, object.bounds, object.ref === options.selected ? 0 : 2);
     for (const anchor of scene.anchors.filter(anchor => scene.exits.some(exit => exit.anchorId === anchor.anchorId))) addLabel(`anchor:${anchor.anchorId}`, anchor.label, anchor.position, { x: -10, y: -10, width: 20, height: 20 }, 3, false);
-    const labelKey = JSON.stringify([this.#scope, this.#width, this.#height, options.selected, inputs.map(input => [input.key, input.label]), frame.objects.map(object => [object.ref, object.file, object.bounds])]);
+    const labelKey = JSON.stringify([this.#scope, this.#width, this.#height, options.cameraCenter ? fit : null, options.selected, inputs.map(input => [input.key, input.label]), frame.objects.map(object => [object.ref, object.file, object.bounds])]);
     if (labelKey !== this.#labelKey) { this.#labelKey = labelKey; this.#labelLayout = layoutSpatialLabels(inputs, { width: this.#width, height: this.#height }); }
     frame.labels = this.#labelLayout.labels.flatMap(label => {
       const point = points.get(label.key); if (!point) return [];

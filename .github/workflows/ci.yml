@@ -289,6 +289,68 @@ jobs:
           if-no-files-found: warn
           retention-days: 7
 
+  browser_fullscreen:
+    name: 高老庄全屏与拖动镜头专项
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      CI: 'true'
+      CHROMIUM_ARGS: '[]'
+      FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-fullscreen
+    steps:
+      - name: 读取本次手动运行的确定候选
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: 准备 Node.js 24
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            frontend/package-lock.json
+      - name: 安装已锁定依赖
+        run: |
+          npm ci
+          npm ci --prefix frontend
+      - name: 前端行为、类型与完整生产构建
+        shell: bash
+        run: |
+          mkdir -p "$FRONTEND_EVIDENCE_DIR"
+          set -o pipefail
+          npm test --prefix frontend 2>&1 | tee "$FRONTEND_EVIDENCE_DIR/frontend-tests.log"
+          npm run build --prefix frontend 2>&1 | tee "$FRONTEND_EVIDENCE_DIR/frontend-build.log"
+      - name: 安装已锁定 Playwright 对应的 Chromium
+        working-directory: frontend
+        run: npx --no-install playwright install --with-deps chromium
+      - name: 四种视口的全屏、拖动、回中与面板验收
+        timeout-minutes: 8
+        shell: bash
+        # 生产页面、真实 Chromium 与受控公开 DTO；保留全部资源、源码身份及失败退出守卫。
+        # 本手动取证任务独立于 core；原门槛仍执行，专项通过不代表整个 workflow 通过。
+        run: |
+          set -o pipefail
+          unset CHROMIUM_PATH PLAYWRIGHT_MODULE
+          node frontend/tests/gaolao-fullscreen-browser.mjs 2>&1 | tee "$FRONTEND_EVIDENCE_DIR/stdout.log"
+      - name: 保留专项报告、截图与连续录像
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: browser-fullscreen-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            .agent-output/ci/browser-fullscreen/result.json
+            .agent-output/ci/browser-fullscreen/stdout.log
+            .agent-output/ci/browser-fullscreen/frontend-tests.log
+            .agent-output/ci/browser-fullscreen/frontend-build.log
+            .agent-output/ci/browser-fullscreen/*.png
+            .agent-output/ci/browser-fullscreen/*-camera.webm
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 7
+
   browser_legacy:
     name: 旧版 A2 章节浏览器
     needs: core

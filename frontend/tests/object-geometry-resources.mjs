@@ -17,7 +17,7 @@ export async function checkObjectGeometry({ browser, output, report }) {
   const asset={file:'/tests/geometry-book.svg',width:1254,height:1254,pivot:{x:624,y:645},scale:26/1126,offset:{x:32,y:-100},layer:'object'};
   const entry=file=>({contentVersion:p.contentVersion,mapVersion:p.mapVersion,sceneId:p.scene.sceneId,variants:{default:{...asset,file}}});
   const catalog={...layers.objectCatalog,'ledger-book':entry(asset.file),'ledger-error':entry('/tests/geometry-book-error.svg'),'ledger-retry':entry('/tests/geometry-book-retry.svg')};
-  const evidence={scope:'GZ-OBJ-VIS-001/GZ-UX-01：真实Canvas固定取景、偏移图像/标签/命中、像素反馈、HTTP失败与迟到资源；隔离受控快照，不是正式美术或世界动作证明',checks:[],requests:[]};
+  const evidence={scope:'GZ-OBJ-VIS-001/GZ-UX-01：真实Canvas非immersive整图fit与immersive跟随cover、偏移图像/标签/命中、像素反馈、HTTP失败与迟到资源；隔离受控快照，不是正式美术或世界动作证明',checks:[],requests:[]};
   const check=name=>{evidence.checks.push({name,status:'PASS'});report.checks.push({name,status:'PASS',scope:'controlled-object-geometry'});};
   let vite,context,page,mode='hold';const pending=[];
   const body='<svg xmlns="http://www.w3.org/2000/svg" width="1254" height="1254"><rect x="60" y="129" width="1126" height="1004" fill="#49687c"/></svg>';
@@ -30,7 +30,8 @@ export async function checkObjectGeometry({ browser, output, report }) {
     await page.route('**/tests/geometry-book*.svg*',async route=>{evidence.requests.push({mode,url:new URL(route.request().url()).pathname+new URL(route.request().url()).search});if(mode==='hold')pending.push(route);else if(mode==='failed')await route.fulfill({status:404,body:'受控缺图'});else await fulfill(route);});
     await page.goto(vite.resolvedUrls.local[0]+'tests/object-visual-fixture.html');await page.waitForFunction(()=>Boolean(window.objectVisualFixture));
     const set=value=>page.evaluate(value=>window.objectVisualFixture.setSnapshot(value),value);
-    await page.evaluate(self=>window.objectVisualFixture.configureMap({immersive:true,personLabels:{[self]:'1号 · 高才'}}),p.self.entityRef);
+    const configure=immersive=>page.evaluate(({immersive,self})=>window.objectVisualFixture.configureMap({immersive,personLabels:{[self]:'1号 · 高才'}}),{immersive,self:p.self.entityRef});
+    await configure(false);
     const settle=()=>page.evaluate(async()=>{await document.fonts.ready;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));});
     const frame=async()=>{await settle();return canvasFrame(page);};
     const object=async()=>(await frame()).objects.find(value=>value.ref===target.entityRef);
@@ -38,16 +39,31 @@ export async function checkObjectGeometry({ browser, output, report }) {
     const fallback=async()=>{const value=await object();assert.ok(value);assert.equal(value.file,undefined);assert.deepEqual(value.position,target.position);return value;};
     const overlaps=(a,b)=>a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;
     const geometry=async()=>{const f=await frame(),o=f.objects.find(value=>value.ref===target.entityRef),b=o.bounds;return {fit:f.fit,view:f.view,viewport:f.viewport,image:o.file?{x:f.fit.x+(o.position.x+b.x)*f.fit.scale,y:f.fit.y+(o.position.y+b.y)*f.fit.scale,width:b.width*f.fit.scale,height:b.height*f.fit.scale}:null,labels:f.labels,pixels:await canvasPixels(page)};};
-    await set(snapshot);await select();await until(()=>pending.length===1,'物件图像仍在途');await fallback();const pendingFit=(await frame()).fit;
+    await set(snapshot);await select();await until(()=>pending.length===1,'物件图像仍在途');await fallback();
+    // 原整图fit及安全留白仍在非immersive消费者实际执行，不能随正式镜头改版删除。
+    const contained=await frame();assert.deepEqual(contained.view,{x:0,y:0,width:1600,height:1000});
+    assert.ok(contained.fit.x>=0&&contained.fit.y>=0&&contained.fit.x+1600*contained.fit.scale<=contained.viewport.width+.01&&contained.fit.y+1000*contained.fit.scale<=contained.viewport.height+.01);
+    const blank=contained.fit.x>2?{x:1,y:contained.viewport.height/2}:{x:contained.viewport.width/2,y:1};assert.ok(contained.fit.x>2||contained.fit.y>2,'非immersive样本有世界外安全留白');
+    await page.getByTestId('spatial-map').click({position:blank});assert.deepEqual(await page.evaluate(()=>window.objectVisualFixture.actions()),[],'世界外留白不发移动');
+    evidence.contained={fit:contained.fit,view:contained.view,viewport:contained.viewport};check('非immersive完整世界fit与世界外留白零移动保持');
+    // 资源保持在途，切换正式cover后才记录pendingFit，继续检验ready不改变本模式镜头。
+    await configure(true);
+    await until(async()=>{const value=await frame();return value.viewport.width===1600&&value.viewport.height===1000;},'immersive实际视口完成ResizeObserver与Canvas绘制');
+    await select();await fallback();const pendingFit=(await frame()).fit;
     mode='good';await fulfill(pending.shift());await until(async()=>Boolean((await object())?.file),'偏移图像实际画入Canvas');
     const ready=await geometry();evidence.ready=ready;assert.deepEqual(ready.fit,pendingFit,'资源ready不移动镜头');assert.ok(ready.labels.every(label=>!overlaps(label,ready.image)),'姓名避开当前偏移图像');
     const imagePixel=await worldPixel(page,{x:target.position.x+asset.offset.x,y:target.position.y+asset.offset.y});await page.mouse.click(imagePixel.pixel.x,imagePixel.pixel.y);assert.equal((await page.evaluate(()=>window.objectVisualFixture.selections())).at(-1),target.entityRef,'偏移图像实际不透明区可选同一ref');
     check('偏移物件ready后实际像素、标签与alpha命中一致，加载不改变固定fit');
     const f=await frame();assert.deepEqual(f.view,{x:0,y:0,width:1600,height:1000});
-    assert.ok(f.fit.x>=0&&f.fit.y>=0&&f.fit.x+1600*f.fit.scale<=f.viewport.width+.01&&f.fit.y+1000*f.fit.scale<=f.viewport.height+.01);
-    const blank=f.fit.x>2?{x:1,y:f.viewport.height/2}:{x:f.viewport.width/2,y:1};assert.ok(f.fit.x>2||f.fit.y>2,'样本有世界外安全留白');await page.getByTestId('spatial-map').click({position:blank});assert.deepEqual(await page.evaluate(()=>window.objectVisualFixture.actions()),[],'世界外留白不发移动');
+    assert.ok(f.fit.x<=.01&&f.fit.y<=.01&&f.fit.x+1600*f.fit.scale>=f.viewport.width-.01&&f.fit.y+1000*f.fit.scale>=f.viewport.height-.01,'immersive场景覆盖完整视口且不露世界外空白');
+    const self=f.actors.find(actor=>actor.ref===p.self.entityRef);assert.ok(self,'本帧包含本人');
+    const expectedFit={scale:Math.max(f.viewport.width/1600,f.viewport.height/1000)*1.1};
+    expectedFit.x=Math.max(f.viewport.width-1600*expectedFit.scale,Math.min(0,f.viewport.width/2-self.position.x*expectedFit.scale));
+    expectedFit.y=Math.max(f.viewport.height-1000*expectedFit.scale,Math.min(0,f.viewport.height/2-self.position.y*expectedFit.scale));
+    for(const key of ['scale','x','y'])assert.ok(Math.abs(f.fit[key]-expectedFit[key])<.01,'immersive按同帧本人位置和世界边界合法跟随：'+key);
+    evidence.cover={fit:f.fit,expectedFit,view:f.view,viewport:f.viewport};
     const feedback=async()=>page.getByTestId('spatial-map').evaluate(async(canvas,position)=>{const f=(await import('/src/rendering/spatial-canvas.ts')).readCanvasFrame(canvas),cx=f.fit.x+position.x*f.fit.scale,cy=f.fit.y+(position.y-1)*f.fit.scale;const x=Math.floor((cx-27*f.fit.scale)*devicePixelRatio),y=Math.floor((cy-12*f.fit.scale)*devicePixelRatio),w=Math.ceil(54*f.fit.scale*devicePixelRatio),h=Math.ceil(24*f.fit.scale*devicePixelRatio),data=canvas.getContext('2d').getImageData(x,y,w,h).data;let green=0,red=0,black=0;for(let i=0;i<data.length;i+=4){if(Math.abs(data[i]-54)<16&&Math.abs(data[i+1]-94)<16&&Math.abs(data[i+2]-82)<16)green++;if(Math.abs(data[i]-150)<16&&Math.abs(data[i+1]-63)<16&&Math.abs(data[i+2]-47)<16)red++;if(data[i]<10&&data[i+1]<10&&data[i+2]<10)black++;}return {green,red,black,pixels:data.length/4};},p.self.position);
-    const normal=await feedback();assert.ok(normal.green>0);await page.getByTestId('spatial-map').focus();await page.keyboard.press('Enter');await settle();const selected=await feedback();assert.ok(selected.red>normal.red);assert.ok(selected.black/selected.pixels<.1,'半透明选择反馈不绘成实心黑环');assert.deepEqual((await frame()).fit,ready.fit);evidence.feedback={normal,selected};check('完整世界固定fit、留白零移动；Enter选本人有真实强调像素且不驱动镜头');
+    const normal=await feedback();assert.ok(normal.green>0);await page.getByTestId('spatial-map').focus();await page.keyboard.press('Enter');await settle();const selected=await feedback();assert.ok(selected.red>normal.red);assert.ok(selected.black/selected.pixels<.1,'半透明选择反馈不绘成实心黑环');assert.deepEqual((await frame()).fit,ready.fit);evidence.feedback={normal,selected};check('immersive合法跟随cover；Enter选本人有真实强调像素且不驱动镜头');
     mode='failed';const failed=structuredClone(snapshot);failed.projection.targets[0].visualKey='ledger-error';await set(failed);await until(()=>page.getByRole('button',{name:'重新载入场景',exact:true}).isVisible(),'真实HTTP404进入回退');await fallback();
     mode='hold';await page.getByRole('button',{name:'重新载入场景',exact:true}).click();await until(()=>pending.length===1,'失败重试在途');await fallback();
     const hidden=structuredClone(failed);hidden.viewId='new-object-view';hidden.projection.targets[0].visualKey='constructor';await set(hidden);await select();await fallback();await fulfill(pending.shift());await page.waitForLoadState('networkidle');await fallback();
