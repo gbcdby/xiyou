@@ -17,6 +17,6 @@ const connected = computed(() => (sessionState.value.connection === 'online' && 
       <div class="header-status"><span v-if="route.name !== 'lobby'" class="connection-dot" :class="{ connected }" /><span>{{ route.name === 'lobby' ? identity ? '已登录' : '尚未登录' : connected ? '房间已连接' : '房间未连接' }}</span><span v-if="identity" class="user-chip"><AppIcon name="leaf" :size="15" />{{ identity.name }}</span></div>
     </div>
   </header>
-  <main id="main"><RouterView /></main>
+  <main id="main" :class="{ 'lobby-main': route.name === 'lobby' }"><RouterView /></main>
   <footer v-if="route.name !== 'spatial-session'" class="app-footer" :class="{ 'lobby-footer': route.name === 'lobby' }"><span>西游 · 同行</span><span>有所闻，也有所证。</span></footer>
 </template>

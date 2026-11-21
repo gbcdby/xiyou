@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
 import { resolve } from 'node:path';
+import { checkLobbyLayout } from './lobby-layout-checks.mjs';
 const { chromium } = await import(process.env.PLAYWRIGHT_MODULE ? pathToFileURL(process.env.PLAYWRIGHT_MODULE).href : 'playwright');
 const baseURL = process.env.FRONTEND_URL || 'http://127.0.0.1:5176';
 const output = resolve(process.env.FRONTEND_EVIDENCE_DIR || '../.agent-output/frontend/browser');
@@ -21,7 +22,8 @@ async function noDemoEntry(page, name) {
   checks.push({ name, passed: true });
 }
 try {
-  const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1 });
+  const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1 });
+  const page = await context.newPage();
   page.on('pageerror', error => errors.push(error.message));
   // 网络不可达是明确注入的前端故障场景，不冒充真实后端集成。
   await page.route('**/api/**', route => route.abort('connectionrefused'));
@@ -52,6 +54,7 @@ try {
   await page.screenshot({ path: `${output}/session-guard-mobile.png`, fullPage: true });
   await page.goto(`${baseURL}/demo`);
   await page.waitForURL(url => url.pathname === '/');
+  await page.getByRole('tab', { name: /寻找房间/ }).click();
   await page.getByRole('heading', { name: '暂未连上服务' }).waitFor();
   assert.equal(await page.getByRole('heading', { name: '山间通路' }).count(), 0);
   await noDemoEntry(page, '手机端旧演示地址返回大厅且没有演示入口');
@@ -86,7 +89,8 @@ try {
   assert.deepEqual(actions[2], { kind: 'move', regionId: 'store' });
   assert.equal(await world.getByRole('heading', { name: '通路口', exact: true }).count(), 1);
   checks.push({ name: '转交与移动只发出动作，未取得授权事件前不改持物或位置', passed: true });
-  const authPage = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+  checks.push(...await checkLobbyLayout(page.context(), baseURL, output));
+  const authPage = await context.newPage();
   authPage.on('pageerror', error => errors.push(error.message));
   await authPage.addInitScript(() => sessionStorage.setItem('xiyou.guest.v1', JSON.stringify({ token: 'expired-browser-fixture', userId: 'old-browser-user', name: '原旅伴' })));
   const authRequests = []; let roomReads = 0;
