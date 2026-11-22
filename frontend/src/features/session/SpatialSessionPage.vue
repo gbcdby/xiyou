@@ -151,11 +151,11 @@ function closeReading() {
 }
 function escape(event: KeyboardEvent) {
   if (event.key !== 'Escape' || event.isComposing || event.repeat) return;
-  if (event.target instanceof HTMLElement && event.target.closest('.gaolao-map-navigator')) return;
   if (toolDock.value?.closeMore()) { event.preventDefault(); event.stopPropagation(); }
   else if (reading.value) { event.preventDefault(); event.stopPropagation(); closeReading(); }
   else if (receiptsOpen.value) { event.preventDefault(); event.stopPropagation(); closeReceipts(); }
   else if (objectsOpen.value || selectedRef.value) { event.preventDefault(); event.stopPropagation(); closeObjects(); }
+  else if (event.target instanceof HTMLElement && event.target.closest('.gaolao-map-navigator')) return;
   else if (hud.value && dockExpanded.value && event.target instanceof HTMLElement && event.target.closest('.gaolao-dock-anchor')) { event.preventDefault(); event.stopPropagation(); dockExpanded.value = false; void nextTick(() => toolDock.value?.focusFallback()); }
   else if (hud.value && guidanceExpanded.value) { event.preventDefault(); event.stopPropagation(); guidanceExpanded.value = false; void nextTick(() => guidanceToggle.value?.focus({ preventScroll: true })); }
   else if (canStop.value) { event.preventDefault(); event.stopPropagation(); stop(); }

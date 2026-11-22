@@ -244,7 +244,23 @@ async function panelsKeepCamera(before) {
   await dock.getByRole('button', { name: '手记', exact: true }).click();
   assert.equal(await page.getByTestId('gaolao-minimap').count(), 0, '阅读时暂时收起地图');
   assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem('xiyou.gaolao-hud.v1')).mapExpanded), true, '临时收起不覆盖玩家地图偏好');
+  const mapToggle = navigator.getByRole('button', { name: '展开地图', exact: true });
+  if (await mapToggle.isVisible()) {
+    const more = page.getByRole('button', { name: '更多', exact: true });
+    await more.click();
+    await page.keyboard.press('Tab'); await page.keyboard.press('Tab');
+    assert.equal(await mapToggle.evaluate(button => button === document.activeElement), true, '真实 Tab 从更多经折叠按钮到达地图');
+    await page.keyboard.press('Escape');
+    assert.equal(await page.locator('#gaolao-more-tools').count(), 0, '地图内焦点先关闭上层更多');
+    assert.equal(await page.locator('#spatial-reading-pane').isVisible(), true, '一次 Esc 只关闭最上层');
+    assert.equal(await more.evaluate(button => button === document.activeElement), true, '关闭更多后回到原入口');
+    assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem('xiyou.gaolao-hud.v1')).mapExpanded), true, '关闭更多不覆盖暂存地图偏好');
+    await page.keyboard.press('Tab'); await page.keyboard.press('Tab');
+    assert.equal(await mapToggle.evaluate(button => button === document.activeElement), true, '再次 Tab 到地图以检查阅读层');
+  }
   await page.keyboard.press('Escape'); await page.getByTestId('gaolao-minimap').waitFor();
+  assert.equal(await page.locator('#spatial-reading-pane').count(), 0, '关闭阅读后地图按原偏好恢复');
+  assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem('xiyou.gaolao-hud.v1')).mapExpanded), true);
   const wires = fixture.wires.length;
   await navigator.getByRole('button', { name: '全部', exact: true }).click();
   await page.getByLabel('查看地图场景', { exact: true }).selectOption('gaolao-village-road');
@@ -384,6 +400,15 @@ async function unknownReceipt() {
   const urgent = page.locator('.gaolao-urgent-receipts');
   assert.equal(await urgent.isVisible(), true, '工具栏收起时未知回执仍可见');
   assert.match(await urgent.innerText(), /1 条动作待确认/, '未知回执使用真实计数');
+  fixture.publish(p => { p.self.canControl = false; });
+  await until(async () => !(await state()).inputReady, '受控公开投影撤回控制后显示恢复入口');
+  await page.getByRole('button', { name: '恢复本人控制', exact: true }).waitFor();
+  activeCase.pendingRecoveryLayout = await urgent.evaluate(button => {
+    const box = button.getBoundingClientRect(), banner = document.querySelector('.control-banner').getBoundingClientRect();
+    const hit = document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2);
+    return { urgent: box.toJSON(), banner: banner.toJSON(), hitTag: hit?.tagName, hitClass: hit?.className, reachable: button.contains(hit) };
+  });
+  assert.equal(activeCase.pendingRecoveryLayout.reachable, true, '恢复控制提示不能遮住未知动作查询入口');
   await page.getByRole('button', { name: '查看高才的角色信息', exact: true }).click();
   await page.locator('#spatial-reading-pane').waitFor();
   assert.equal(await urgent.evaluate(button => { const box = button.getBoundingClientRect(); return button.contains(document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2)); }), true, '阅读面板不能遮住未确认动作的直接恢复入口');
@@ -394,6 +419,8 @@ async function unknownReceipt() {
   assert.ok(fixture.queries.includes(wire.request.clientActionId));
   assert.equal((await state()).actions.find(action => action.id === wire.request.clientActionId).raw, wire.raw, '查询保留原请求身份与字节');
   await assertFullscreen(); await page.keyboard.press('Escape');
+  await page.getByRole('button', { name: '恢复本人控制', exact: true }).click();
+  await until(async () => (await state()).inputReady, '未知动作查询后仍可恢复本人控制');
   await page.getByRole('button', { name: '展开工具栏', exact: true }).click();
   check('GZ-FS-05、GZ-HC-03', '收起底栏后停步与未知回执查询保持可达且保留原请求', { scope: '受控收据；不宣称真实后端幂等验证' });
 }

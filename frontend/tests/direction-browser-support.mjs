@@ -177,7 +177,8 @@ export async function installDirectionObservation(page) {
     const { SpatialView } = await import('/src/domain/spatial-view.ts');
     const { spatialState } = await import('/src/state/spatial-store.ts');
     const { observeDirectionClient } = await import('/tests/direction-observer.mjs');
-    window.uxDirection = observeDirectionClient({ SpatialView, spatialState }, { phase: () => window.uxCapture?.phase ?? null });
+    // 挂载地图前先在 window capture 记输入，避免生产 keyup 同步发送先于 document 观察。
+    window.uxDirection = observeDirectionClient({ SpatialView, spatialState, inputTarget: window }, { phase: () => window.uxCapture?.phase ?? null });
   });
 }
 
