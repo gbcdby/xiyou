@@ -15,7 +15,8 @@ import { validateSpatial } from '../../protocol/spatial.mjs';
 import { observeDirectionConnections, installPresentationObservation, assertPresentationEvidence, assertShortDirectionPlan, observeDirectionSubmissions, installDirectionObservation, beginDirectionObservations, collectAcceptedLateEvidence, assertAcceptedLateEvidence, assertFivePersonSupply } from './direction-browser-support.mjs';
 
 const scenario=process.argv[2]??'normal';
-assert.ok(['normal','late-accepted-se-180','five-person'].includes(scenario),'未知方向验收场景');
+assert.ok(['normal','late-free-slot-180','late-full-slots-180','five-person'].includes(scenario),'未知方向验收场景');
+const lateMode=scenario==='late-free-slot-180'?'free-slot':scenario==='late-full-slots-180'?'full-slots':false;
 const count=scenario==='five-person'?5:2;
 const output=resolve(process.env.FRONTEND_EVIDENCE_DIR||resolve(repository,'.agent-output/ci/browser-client-experience'+(scenario==='normal'?'':'-'+scenario)));
 await mkdir(output,{recursive:true});
@@ -65,14 +66,32 @@ async function currentMapPoint(destination){
   const before=(await actions()).map(action=>action.id);await page.mouse.click(point.pixel.x,point.pixel.y);
   const draft=await until(async()=>(await actions()).find(action=>!before.includes(action.id)&&JSON.parse(action.raw).action.kind==='move_to'),'当前地图点击发出真实move');assert.deepEqual(JSON.parse(draft.raw).action.destination,point.destination);return {draft,destination:point.destination};
 }
+async function exerciseLateInput(initial){
+  const state=await clientState(page);
+  assert.equal(state.directionInput.ready,true,'受控前置开始时原方向准入已就绪');
+  assert.ok(!state.actions.some(action=>['waiting','unknown'].includes(action.status)),'受控前置不能继承未决动作');
+  directionSubmissions.armLate({sessionId:initial.sessionId,viewId:initial.viewId,controlEpoch:initial.projection.self.controlEpoch});
+  report.motionHold={scope:'D66-MW r2：late采用预先固定的受控前置，不代表normal自然输入性能',mode:lateMode,preludeRightMs:20,preludeStopAckMs:200,selectedAckMs:180,downOnlyMs:450};
+  // 原stop在途时只暂存最新组合键；其真实确认后首发SE，原token预算自然恢复。
+  await phase('prelude-right');await page.keyboard.down('ArrowRight');await sleep(20);
+  await phase('prelude-stop');await page.keyboard.up('ArrowRight');
+  await until(()=>directionSubmissions.read().preludeStop,'预定前置stop实际入站',1000);
+  await phase('diagonal');await page.keyboard.down('ArrowRight');await page.keyboard.down('ArrowDown');
+  const trigger=await until(()=>{const timing=directionSubmissions.read();return lateMode==='free-slot'?timing.selected:timing.second;},'预定'+(lateMode==='free-slot'?'首条A':'第二条B')+'实际入站，不按结果换样',1000);
+  report.lateInput={mode:lateMode,triggerId:trigger.request.clientActionId,triggerEnteredAt:trigger.enteredAt,triggerObservedAt:Date.now(),scope:'由预定入站触发DOWN；不等待Accepted或理想槽位再输入'};
+  await phase('down-only');await page.keyboard.up('ArrowRight');await sleep(450);
+}
 async function exerciseMotion(initial,first){
   await picture('scene-v3-desktop.png');await page.bringToFront();await page.getByTestId('spatial-map').focus();
   if(directionSubmissions)await beginDirectionObservations(server.runtime,room);
   const assetsBefore=report.httpAssets.length,actionsBefore=(await actions()).map(action=>action.id),start=Date.now();await startCapture();
-  await phase('right');await page.keyboard.down('ArrowRight');for(let i=0;i<5;i++){await sleep(100);await page.keyboard.down('ArrowRight');}
-  await phase('diagonal');await page.keyboard.down('ArrowDown');await sleep(350);
-  await phase('down-only');await page.keyboard.up('ArrowRight');await sleep(450);
-  report.motionHold={scope:'三场景均保持原固定按键时序'};
+  if(lateMode)await exerciseLateInput(initial);
+  else{
+    await phase('right');await page.keyboard.down('ArrowRight');for(let i=0;i<5;i++){await sleep(100);await page.keyboard.down('ArrowRight');}
+    await phase('diagonal');await page.keyboard.down('ArrowDown');await sleep(350);
+    await phase('down-only');await page.keyboard.up('ArrowRight');await sleep(450);
+    report.motionHold={scope:'normal/five-person保持原固定按键时序'};
+  }
   await phase('stopped');await page.keyboard.up('ArrowDown');await waitSettled();await sleep(250);
   const capture=await stopCapture();report.motion=capture;report.presentation=await page.evaluate(()=>window.uxPresentation.stop());await saveJSON(resolve(output,'result-before-cleanup.json'),report);
   report.presentationSummary=assertPresentationEvidence(report.presentation);
@@ -124,10 +143,11 @@ async function exerciseMotion(initial,first){
     if(scenario==='five-person')await until(async()=>{const readers=await Promise.all(room.pages.map(p=>p.evaluate(()=>window.uxDirection.read())));return readers.every(reader=>reader.applications.some(row=>row.result==='applied'&&BigInt(row.after)>=BigInt(stopReceipt.observedSeq)&&row.person?.moving===false));},'五个真实页面实际应用终止前缀');
     report.directionClients=await Promise.all(room.pages.map(p=>p.evaluate(()=>window.uxDirection.read())));report.directionServer=directionSubmissions.read();assert.deepEqual(report.directionServer.errors,[],'只读供给观察不得丢失证据');
     for(let index=0;index<room.pages.length;index++){const current=await directionConnections.qualify(room.pages[index],room.users[index].userId,'after-motion-'+index),initial=report.directionQualification[index];for(const key of ['connectionId','viewId','controlEpoch'])assert.equal(current[key],initial[key],'运动期间保留同一实际安装绑定');report.directionQualification.push(current);}
-    if(scenario==='late-accepted-se-180'){
+    if(lateMode){
       report.lateAcceptance=await collectAcceptedLateEvidence(database.pool,directionSubmissions,report.directionClients[0],movementRequests);
-      report.lateSummary=assertAcceptedLateEvidence(report.lateAcceptance);check('AC05-late','原Accepted双轴SE的180ms迟到ACK跨DOWN，新S先发出并最终Accepted且不复活旧轴',report.lateSummary);
+      report.lateSummary=assertAcceptedLateEvidence(report.lateAcceptance);check('AC05-late-'+lateMode,lateMode==='free-slot'?'空槽：原SE的180ms迟到ACK跨DOWN，新S先发出并最终Accepted':'满槽：两条原SE占满方向槽，真实释放后首发最新S且不复活旧轴',report.lateSummary);
     }else{
+      assert.equal(scenario,'five-person','非late方向场景必须明确为five-person');
       report.fiveSupply=assertFivePersonSupply({readers:report.directionClients,sends:report.directionServer.sends,stop:stopReceipt,finalPosition:await position()});check('AC05-five','五个当前新模式读者真实连续应用主运动者及终止前缀',report.fiveSupply);
     }
   }
@@ -146,7 +166,7 @@ async function run(){
   directionConnections=observeDirectionConnections(server.runtime);
   const submit=server.runtime.submit.bind(server.runtime);
   server.runtime.submit=async function(...args){const raw=args[1],request=JSON.parse(raw),receipt=await Reflect.apply(submit,this,args);report.wireActions.push({receivedAt:Date.now(),raw,receipt});if(fault&&!fault.request&&request.action.kind==='stop_move'){fault.request=request;fault.raw=raw;fault.receipt=receipt;return {schemaVersion:2,code:'OUTCOME_UNKNOWN',message:'受控传输故障：停步已提交，确认未送达。'};}return receipt;};
-  if(scenario!=='normal')directionSubmissions=observeDirectionSubmissions(server.runtime,{late:scenario==='late-accepted-se-180'});
+  if(scenario!=='normal')directionSubmissions=observeDirectionSubmissions(server.runtime,{late:lateMode});
   const origin=`http://127.0.0.1:${(await server.listen(0)).port}`;
   vite=await createVite({root:resolve(repository,'frontend'),configFile:resolve(repository,'frontend/vite.config.mjs'),configLoader:'native',cacheDir:resolve(output,'vite-cache'),define:{'import.meta.env.VITE_GAOLAO_CONTENT_VERSION':JSON.stringify(report.contentVersion)},server:{host:'127.0.0.1',port:0,fs:{allow:[repository]},proxy:{'/api':{target:origin},'/socket.io':{target:origin,ws:true}}}});await vite.listen();
   browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH,args:process.env.CHROMIUM_ARGS?JSON.parse(process.env.CHROMIUM_ARGS):[]});report.environment={node:process.version,chromium:browser.version(),dpr:1};

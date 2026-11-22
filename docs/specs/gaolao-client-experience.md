@@ -4,7 +4,7 @@
 
 | 项目 | 本修订 |
 |---|---|
-| spec_ref | GZ-UX-01 v0.9；本文件是六项 UX 改版、全屏镜头与按需展开 HUD 的共同合同 |
+| spec_ref | GZ-UX-01 v0.10；本文件是六项 UX 改版、全屏镜头、按需展开 HUD 与迟到确认验收的共同合同 |
 | 来源 | 2026-11-15 用户实际使用反馈与后续“所有的更改都需要记到这个ticket中”要求 |
 | 唯一活动总票 | [#66：首章场景交互与全角色动画改版](https://github.com/gbcdby/xiyou/issues/66)；工作单元、owner、依赖、commit/PR、证据与剩余项统一登记该票 |
 | 观察基线 | main `2408899203955e3010bfe4832406b2b74000b905` / tree `f3526fc53c469018fcf4ac19dcb8b041ff6c0f6c` |
@@ -12,6 +12,8 @@
 | 父记录 | [#33](https://github.com/gbcdby/xiyou/issues/33)客户端表现、[#23](https://github.com/gbcdby/xiyou/issues/23)首章目录、[#29](https://github.com/gbcdby/xiyou/issues/29)整体验收；只引用本轮总票，不另维护一套进度 |
 
 2026-11-21 用户已采纳下方的 **FS-01 全屏场景与拖动视角**，并要求实现后提交 PR。v0.8 只替代高老庄正式会话的固定 fit、栏目式 HUD 与镜头操作条款；灰盒/其他会话和既有协议、运动、素材验收保持各自边界。旧运行结论仍绑定旧候选，不成为新镜头的验收证据。
+
+2026-11-23 用户在 PR #90 审查后明确同意 **D66-MW r2 双场景迟到确认修订**。v0.10 只调整 late 的场景前置、输入安排、冻结选样及判据适用范围，保留 DS2 产品协议与 normal/five-person 门槛；下方具体设计已通过独立需求轴与标准轴短审，测试实现进行中，新候选运行尚未完成。Run189 的 late FAIL、five-person 未执行仍保留在 [#66](https://github.com/gbcdby/xiyou/issues/66) 与 [PR #90](https://github.com/gbcdby/xiyou/pull/90)，不改写为通过。
 
 原六项要求：走动不闪烁且当前场景公共物理内容持续显示；主世界用 Canvas；右上角当前/全部地图；简洁 HUD；持续组合方向与自然小步移动；可读的共同目标和我的下一步。沿用现有美术资源，不借这次改版加入后章、EXT-001、真实 provider 或未采用的角色素材。全角色动画是 #66 的 ANIM 单元，可并行盘点、后续独立交付，不要求 UX 组合候选等全部新动画。
 
@@ -185,13 +187,34 @@ D66-LB 在每次 `advanceSpatialTime` 的原事务内，以一次真实 SQL 观�
 
 一次独立设计需求/标准短审后，UX-C/UX-HUD才能释放实现；这是[项目工作流](../agents/workflow.md#一项工作的闭环)既有门槛。规格与两UX单元进入一个组合PR，经完整候选独立双轴、适用检查、实际merge与main核验后记录其完成；ANIM按真实覆盖后续独立PR交付，总票按全部范围判断关闭，父Spec仍按其原义判断。
 
-## D66-MW：测量窗与退出码窄修订（v0.7 草案，待 #66 采纳）
+## D66-MW：测量窗与退出码窄修订（v0.7 已采纳；late 由下方 r2 替代）
 
 2026-11-20 观察：`main@fcbde293` 的云端 normal 在 DOWN 轴向失败，本地 five-person 在 diagonal 轴向失败；两者均发生在 `:85` 同一行，权威时间线按 E→SE→S 正确推进，失败帧仍属于上一段已确认历史。独立复现显示固定按键时长本身未变，失败随负载呈双峰：Canvas 在按键后 100–350ms 才应用新方向。产品按已采纳的完整确认历史和 hold/paint 信用逐段播放，裁剪旧尾或改速度会违反既有合同，因此本修订只处理验收判据与退出码，不修改产品运动、协议、信用或方向输入。
 
-- **MW-01 实际应用测量窗。** `exerciseMotion` 的按键序列、最短 sleep 预算（right 600ms / diagonal 350ms / down-only 450ms）和 E/SE/S 请求语义保持不变；三场景均保持原固定按键时序，late 的固定时序保证 180ms 迟到 ACK 先于 DOWN 发生的场景语义；`report.motionHold` 只记录该范围，不引入弹性等待。用户 2026-11-21 确认按最窄范围收口：five-person 只验证五读者连续应用与终止前缀，方向轴切换和 DOWN 轴向仅由 normal 覆盖；late 专注 180ms 迟到 ACK 证据，five-person 专注五读者供给；对应断言与 E/SE/S Accepted 顺序只在 normal 场景执行，范围写入 `report.axisScope`。`:85` 的位移阈值、`['E','SE','S']` 顺序、Accepted 检查、完整 paint 连续性和 no-idle 检查均不削弱。将 diagonal / down-only 的**测量窗锚点**从按键时刻改为 Canvas 实际应用该方向的帧：在 `report.wireActions` 中取对应方向**首次** `status==='Accepted'` 的 receipt，以其 `observedSeq` 为覆盖线；锚帧须满足 `self.facing==='SE'/'S'`，且 `frame.paint?.snapshotSeq ?? frame.snapshotSeq` 的十进制值不小于该 `observedSeq`；原固定 `phaseElapsed>100` / `>150` 由该锚帧替代：测量窗取覆盖线之后所有相同 facing 的合格帧，不受 phase 标签截断（已确认 S 段可以在 stopped 相位继续播放）；至少 2 帧，并在原件记录锚点、帧数与跨度；锚帧不存在或窗内帧数不足均显式 FAIL，不跳过场景，也不得在空集上取首尾。锚点之前的滞后帧仍写入原件与帧连续性检查，只不用于该轴向位移比较。
+- **MW-01 实际应用测量窗。** `exerciseMotion` 的按键序列、最短 sleep 预算（right 600ms / diagonal 350ms / down-only 450ms）和 E/SE/S 请求语义保持不变；原 v0.7 三场景使用同一固定键序；v0.10 只将 late 改为下方 r2 的两个受控场景。normal/five-person 的原按键与阶段预算保持，`report.motionHold` 必须准确区分自然输入与受控前置，不对 normal 引入弹性等待。用户 2026-11-21 确认按最窄范围收口：five-person 只验证五读者连续应用与终止前缀，方向轴切换和 DOWN 轴向仅由 normal 覆盖；late 专注 180ms 迟到 ACK 证据，five-person 专注五读者供给；对应断言与 E/SE/S Accepted 顺序只在 normal 场景执行，范围写入 `report.axisScope`。`:85` 的位移阈值、`['E','SE','S']` 顺序、Accepted 检查、完整 paint 连续性和 no-idle 检查均不削弱。将 diagonal / down-only 的**测量窗锚点**从按键时刻改为 Canvas 实际应用该方向的帧：在 `report.wireActions` 中取对应方向**首次** `status==='Accepted'` 的 receipt，以其 `observedSeq` 为覆盖线；锚帧须满足 `self.facing==='SE'/'S'`，且 `frame.paint?.snapshotSeq ?? frame.snapshotSeq` 的十进制值不小于该 `observedSeq`；原固定 `phaseElapsed>100` / `>150` 由该锚帧替代：测量窗取覆盖线之后所有相同 facing 的合格帧，不受 phase 标签截断（已确认 S 段可以在 stopped 相位继续播放）；至少 2 帧，并在原件记录锚点、帧数与跨度；锚帧不存在或窗内帧数不足均显式 FAIL，不跳过场景，也不得在空集上取首尾。锚点之前的滞后帧仍写入原件与帧连续性检查，只不用于该轴向位移比较。
 - **MW-02 退出码。** `client-experience-browser.mjs` 在所有 cleanup、结果落盘与日志输出完成后，若 `process.exitCode` 非零则显式 `process.exit(process.exitCode)`，覆盖 `embedded-postgres` 传递依赖 `async-exit-hook` 在 `beforeExit` 强制 `process.exit(0)` 的行为；最终摘要用同步写标准输出，避免显式 exit 截断最后一行。该修正仅限本测试；其他使用 `startTestPostgres` 的浏览器测试是否有同样缺陷在 #66 另记待查，不在本修订静默扩面。
-- **MW-03 明确不做。** 不把 diagonal 350ms / down-only 450ms 改成更长 sleep，不删或放宽任何断言，不跳过 late/five，不改速度、信用、完整历史、两槽、400ms 或 Unknown 合同，不用 rerun 刷绿；不把旧 FAIL 或已消费预算改写成通过。
-- **MW-04 late 证据资格。** 保留 180ms 迟到 SE ACK、DOWN 时原请求仍未收束、新 S 在旧 ACK 到达客户端前**发出**、新 S 最终真实 Accepted、迟到 ACK 不复活 SE、stop Accepted 及全部原证据链；不再要求 `新 S 的 Accepted 在旧 ACK 客户端收到前返回`。D66-DS2 已明确 ACK 无界延迟下不承诺立即改向，服务端接收与收据返回时刻不是客户端可证边界。该时间差仍写入 `lateSummary.southAcceptedBeforeAck` 作为观察字段，但不作为 PASS 门槛。
+- **MW-03 明确不做。** normal/five-person 不把 diagonal 350ms / down-only 450ms 改成更长 sleep；late 仅按下方 r2 明确替代前置、输入和对应资格判据，其他断言保持。不跳过任一 late/five，不改速度、信用、完整历史、两槽、400ms 或 Unknown 合同，不用 rerun 刷绿；不把旧 FAIL 或已消费预算改写成通过。
+- **MW-04 late 证据资格。** v0.7 要求新 S 在被扣留旧 ACK 前发出；v0.10 将该要求明确限定到下方 r2 的空槽场景，满槽采用其独立顺序判据。两者保留 180ms 迟到 SE ACK、DOWN 时原请求仍未收束、新 S 最终真实 Accepted、迟到 ACK 不复活 SE、stop Accepted 及原证据链；仍不要求 `新 S 的 Accepted 在旧 ACK 客户端收到前返回`。D66-DS2 已明确 ACK 无界延迟下不承诺立即改向，服务端接收与收据返回时刻不是客户端可证边界。该时间差仍写入 `lateSummary.southAcceptedBeforeAck` 作为观察字段，但不作为 PASS 门槛。
 
-验证路径：固定候选为当前分支上的完整工作树身份，先由非作者完成需求轴与标准轴设计审查，再在干净树分别实跑 normal → late-accepted-se-180 → five-person，保存 result、stdout/stderr、源码身份、环境与清理记录；最后经 #66 采纳后才作为实施依据。模型检查不因本修订新增；GZ-UX-AC-02/05 的稳定编号与判据不变。
+验证路径：固定候选为当前分支上的完整工作树身份，先由非作者完成需求轴与标准轴设计审查，再在干净树分别实跑 normal → late-free-slot-180 → late-full-slots-180 → five-person，保存 result、stdout/stderr、源码身份、环境与清理记录；最后经 #66 采纳后才作为实施依据。模型检查不因本修订新增；GZ-UX-AC-02/05 的稳定编号与判据不变。
+
+
+### D66-MW r2：预先固定的空槽与满槽（v0.10，用户批准方向，具体设计已通过独立短审）
+
+**依据与边界。** Run189 在 DOWN 时两个旧 SE 均未决，首 S 在原 A 的 ACK 到达后 1.30ms 发出，符合 DS2 满槽等待，却没有取得旧 MW-04 的先发见证。用户已同意将两种前提分开。新增 `late-free-slot-180` 与 `late-full-slots-180` 两个独立进程/场景和原件目录；既有名称退役并同步云端、本地 runner。选择、输入与释放计划在开始前固定，资格不成立即 FAIL，不换样、不按结果归类、不重跑挑绿。共享记录仍为 #66/PR #90。
+
+**真实 UI 前置。** 每场景先在同一生产页面按住右键20ms后松开，产生预定的首个 E 与唯一前置 stop。只对这两个原请求安排传输顺序：stop 的原 submit 入口等待 E 的原 submit 收束，然后真实执行一次；前置 stop 的原 Receipt 返回后固定扣留200ms。其等待期间，真实按下 Right+Down，生产控制器只暂存 SE；原 stop 收束后发出的首条 SE 固定为 A。必须记录前奏仅有 E/stop、E 与 stop 均真实 Accepted、stop 在原400ms内收束、A 是预定首条 SE，且 E 发出到 A 不小于200ms、期间没有其他方向请求。这样原100ms补充、上限二 token 已自然恢复，未写入时钟、token、私有槽或客户端状态。任一条件不满足则失败。
+
+**冻结与受控传输。** A 在进入包装器、调用原 submit 之前按身份冻结；满槽的 B 固定为同一绑定的第二条 SE，同样不依赖结果选择。A 原 submit 收束前，到达的后继方向请求只在测试传输入口排队；不延迟独立 stop，不读取 Accepted 后另挑 A。A 的原真实 Receipt 返回后扣留至该时刻+180ms，不能因等待 DOWN/S 延长。满槽 B 的原 Receipt 最早在 `max(B原submit返回时刻, A原ACK释放时刻+50ms)` 放回；该规则与 S 是否发出/Accepted 无关。所有等待均有界：等待前驱收束/释放超过该前驱服务端入站+400ms即记夹具资格失败并解除测试等待，cleanup 也解除等待；正常与失败释放时仍返回各自原 Receipt，不制造收据或世界事实。客户端原400ms截止仍从首次发送计，服务端夹具的上界不能延长它。
+
+**输入变更。** 空槽在观察到 A 首次实际入站后马上松开右键形成 DOWN；满槽在观察到 B 首次实际入站后马上松开右键。观察只用有界轮询，未获得预定身份即失败，不等待该身份 Accepted，不等待某个理想槽数再选择输入。DOWN 时分别断言一条或两条预定方向 waiting、无 Receipt、无 Unknown 或未决 stop，并保留同 view/epoch。新方案不再要求 A 的原 submit 返回早于 DOWN：该前提会让空第二槽在等待期间被同向续发占据；A 最终真实 Accepted、原180ms、原库中双轴路径与身份完整链仍是硬门槛。DOWN 后原450ms持键、松键最终 stop、250ms及300ms稳定性、短按与真实Canvas检查保持；本场景的受控前置不代表自然输入性能通过。
+
+| 稳定验收 | 空槽场景 | 满槽场景 |
+| --- | --- | --- |
+| MW-r2-01 前置与冻结 | DOWN 时只有原 A 占方向槽；记录静默预算前置 | DOWN 时仅原 A/B 占两槽，两个身份均固定并取证 |
+| MW-r2-02 顺序 | 同一客户端时钟证明 DOWN≤S发出<A的ACK到达 | A为预定首次释放：A的ACK/账本收束后才发首个S，B的ACK晚于A；两槽未决期间无第三方向 |
+| MW-r2-03 原件 | A/S/stop与实际发送、原账本逐一一致，A真实Accepted双轴计划、唯一持久Receipt及原raw/摘要/绑定一致 | 同左，并对B保留同等原Receipt、计划与身份取证；首个释放后的新方向只能是最新S |
+| MW-r2-04 保留边界 | A/S最终真实Accepted，DOWN后无SE复活，最多两方向/一stop，最终stop Accepted，序号覆盖全部实际请求 | 同左；独立stop与原400ms行为沿既有DS2单测复核，不把满槽等待等同于立即发送保证 |
+| MW-r2-05 运行结果 | 独立命名、报告、截图/录像、source/sourceEnd、失败非零与cleanup | 同左；任一场景失败则整组未通过，后续未运行明确保留 |
+
+normal 完整保留原键序、阶段时长、E→SE→S Accepted 顺序、轴向与距离阈值、真实paint连续性、短按、失焦停步和恢复检查。five-person 保留原五读者连续应用与终止前缀。两场景只改变测试传输及资格，不改产品代码、400/100/180ms、槽容量、速度、信用、完整确认历史或权限；不新增产品协议或TLC模型。本设计已通过独立短审并释放测试实现；实际运行证据须绑定新候选，不继承旧PASS。
