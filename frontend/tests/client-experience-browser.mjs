@@ -10,7 +10,7 @@ import { startTestPostgres } from '../../backend/test-support/postgres.mjs';
 import { createAuthorityServer } from '../../backend/server.mjs';
 import { repository, sourceIdentity, saveJSON, sha256, until, sleep } from './network-support.mjs';
 import { browserRoom, snapshot, clientState, openReading, closeReading, openObjects, revealTool, openMapNavigator } from './gaolao-real-support.mjs';
-import { assertPaintContinuity, canvasFrame, canvasPixels } from './canvas-browser-support.mjs';
+import { assertPaintContinuity, assertLateCanvasEvidence, canvasFrame, canvasPixels } from './canvas-browser-support.mjs';
 import { validateSpatial } from '../../protocol/spatial.mjs';
 import { observeDirectionConnections, installPresentationObservation, assertPresentationEvidence, assertShortDirectionPlan, observeDirectionSubmissions, installDirectionObservation, beginDirectionObservations, collectAcceptedLateEvidence, assertAcceptedLateEvidence, assertFivePersonSupply } from './direction-browser-support.mjs';
 
@@ -106,8 +106,15 @@ async function exerciseMotion(initial,first){
     assert.ok(f.self?.position,'跟随帧必须含实际绘制的本人位置');
     for(const [axis,size]of [['x','width'],['y','height']]){const expected=Math.max(f.viewport[size]-f.view[size]*f.fit.scale,Math.min(0,f.viewport[size]/2-f.self.position[axis]*f.fit.scale));assert.ok(Math.abs(f.fit[axis]-expected)<=1,'镜头按同一绘制时钟的本人位置跟随并约束场景边界');}
   }
-  const moving=stable.filter(frame=>['right','diagonal','down-only'].includes(frame.phase)&&frame.self?.moving);assert.ok(moving.length>=10);
-  assert.ok(assertPaintContinuity(capture).length>=10,'每次实际paint均保留并按其motionAt检查连续速度');
+  if(lateMode){
+    const timing=directionSubmissions.read();
+    // 预定前导开始后的首个S按入站次序固定，不能跳过Rejected另找Accepted。
+    const firstSouth=timing.submissions.find(row=>row.enteredAt>=timing.preludeRightAt&&row.request.action.kind==='move_direction'&&row.request.action.direction==='S');
+    report.lateCanvas=assertLateCanvasEvidence(capture,{sceneId:first.sceneId,viewId:initial.viewId,controlEpoch:initial.projection.self.controlEpoch,selfRef:initial.projection.self.entityRef,selected:timing.selected,firstSouth});
+  }else{
+    const moving=stable.filter(frame=>['right','diagonal','down-only'].includes(frame.phase)&&frame.self?.moving);assert.ok(moving.length>=10);
+    assert.ok(assertPaintContinuity(capture).length>=10,'每次实际paint均保留并按其motionAt检查连续速度');
+  }
   const acceptedCoverage=direction=>{
     const row=report.wireActions.filter(value=>{
       if(value.receipt?.status!=='Accepted'||actionsBefore.includes(value.receipt.clientActionId))return false;

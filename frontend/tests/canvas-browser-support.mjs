@@ -25,6 +25,45 @@ export function assertPaintContinuity(capture) {
   return capture.continuity;
 }
 
+/** late只在原捕获窗内计真实SE/S绘制；输入相位不截断已确认历史的播放。 */
+export function assertLateCanvasEvidence(capture, { sceneId, viewId, controlEpoch, selfRef, selected, firstSouth }) {
+  const intervals = assertPaintContinuity(capture);
+  assert.deepEqual(capture.motionBoundaries, [], 'late不能跨身份或实例边界合并绘制数量');
+  assert.ok(intervals.length >= 10, 'late完整paint流至少保留10个连续区间');
+  const first = capture.paints[0];
+  assert.deepEqual({ sceneId: first.sceneId, viewId: first.viewId, controlEpoch: first.controlEpoch, selfRef: first.self.ref },
+    { sceneId, viewId, controlEpoch, selfRef }, 'late实际paint必须保持原场景和本人绑定');
+  const sequence = (value, label) => {
+    assert.ok(typeof value === 'string' && /^(0|[1-9]\d*)$/.test(value), `${label}必须为十进制字符串`);
+    return BigInt(value);
+  };
+  const anchors = Object.fromEntries([['SE', selected], ['S', firstSouth]].map(([direction, row]) => {
+    assert.ok(row?.request && row.receipt, `${direction}缺少原覆盖锚点`);
+    const { request, receipt } = row;
+    assert.equal(typeof row.raw, 'string', `${direction}必须保留原始请求`);
+    assert.deepEqual(JSON.parse(row.raw), request, `${direction}必须与原始请求一致`);
+    assert.ok(request.action?.kind === 'move_direction' && request.action.direction === direction, `${direction}必须保持原方向`);
+    assert.deepEqual({ sceneId: request.action.sceneId, viewId: request.viewId, controlEpoch: request.controlEpoch, selfRef: request.actorRef },
+      { sceneId, viewId, controlEpoch, selfRef }, `${direction}必须保持原请求绑定`);
+    assert.ok(['sessionId', 'clientActionId'].every(key => typeof request[key] === 'string' && request[key].length), `${direction}原请求绑定必须完整`);
+    assert.equal(receipt.status, 'Accepted', `${direction}必须保留原Accepted收据`);
+    assert.equal(receipt.sessionId, request.sessionId, `${direction}的Receipt身份必须属于原请求`);
+    assert.equal(receipt.clientActionId, request.clientActionId, `${direction}的Receipt身份必须属于原请求`);
+    sequence(receipt.observedSeq, `${direction}原Receipt observedSeq`);
+    return [direction, { clientActionId: request.clientActionId, observedSeq: receipt.observedSeq }];
+  }));
+  assert.equal(selected.request.sessionId, firstSouth.request.sessionId, '两个原覆盖锚点必须属于同一房间');
+  assert.notEqual(anchors.SE.clientActionId, anchors.S.clientActionId, 'A和首S必须是不同原动作');
+  const qualified = capture.paints.filter(row => row.self.moving === true && ['SE', 'S'].includes(row.self.facing)
+    && sequence(row.snapshotSeq, 'paint snapshotSeq') >= BigInt(anchors[row.self.facing].observedSeq));
+  assert.ok(qualified.length >= 10, 'late原捕获窗内至少10次已覆盖原A/首S的真实SE/S运动paint');
+  const phaseCounts = {};
+  for (const row of qualified) phaseCounts[row.phase] = (phaseCounts[row.phase] ?? 0) + 1;
+  return { unit: 'actual-paint', binding: { sceneId, viewId, controlEpoch, selfRef,
+    rendererId: first.rendererId, instance: first.instance, appearanceEpoch: first.appearanceEpoch }, anchors,
+    totalPaints: capture.paints.length, qualifiedPaints: qualified.length, continuityIntervals: intervals.length, phaseCounts };
+}
+
 /** 读取生产渲染器刚完成的真实Canvas帧；不创建隐藏SVG或按测试需要重画场景。 */
 export async function canvasFrame(page) {
   const frame = await page.getByTestId('spatial-map').evaluate(async canvas => {

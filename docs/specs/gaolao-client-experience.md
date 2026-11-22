@@ -209,6 +209,8 @@ D66-LB 在每次 `advanceSpatialTime` 的原事务内，以一次真实 SQL 观�
 
 **输入变更。** 空槽在观察到 A 首次实际入站后马上松开右键形成 DOWN；满槽在观察到 B 首次实际入站后马上松开右键。观察只用有界轮询，未获得预定身份即失败，不等待该身份 Accepted，不等待某个理想槽数再选择输入。DOWN 时分别断言一条或两条预定方向 waiting、无 Receipt、无 Unknown 或未决 stop，并保留同 view/epoch。新方案不再要求 A 的原 submit 返回早于 DOWN：该前提会让空第二槽在等待期间被同向续发占据；A 最终真实 Accepted、原180ms、原库中双轴路径与身份完整链仍是硬门槛。DOWN 后原450ms持键、松键最终 stop、250ms及300ms稳定性、短按与真实Canvas检查保持；本场景的受控前置不代表自然输入性能通过。
 
+**late Canvas 计数窗口（Run190 后的 r2 具体修正）。** Run190 在原 capture 内取得24次实际移动paint，其中22次为SE/S；旧输入phase下的rAF样本筛选只有9帧，因而在原“至少10帧”检查失败。另14次真实S移动paint已落入stopped标签，属于已确认历史继续播放；这符合MW-01的实际呈现原则，但不把旧检查或Run190改判为通过。新口径只用于两个late场景：固定从原startCapture到最终stop收束后原250ms、stopCapture为止，既不延长持键/等待，也不纳入之后300ms稳定性窗口来凑数。计数单位改为成功的实际paint，要求同原scene/view/controlEpoch/本人、同renderer/instance/appearance身份，self.moving且facing为SE或S，并分别覆盖预先冻结A及前导开始后首个S的原Accepted.observedSeq；首个S按入站次序选定，不按Accepted结果换样。至少10次的数量门槛保持，前导E、静态帧、未到原覆盖线的历史以及重复读取/serial不能充数。完整paint流仍逐项检查身份、连续serial、插值时钟、180×dt/1000+4速度与累计路程，不只检查计数子集；缺失覆盖锚点或同窗数量不足即FAIL。原件记录绑定、原请求ID与覆盖线、真实paint数量及phase分布。normal/five-person保留原phase下的rAF计数路径；原完整场景、资源、短按、450/250/300ms和ACK资格门槛均保持。本口径只证明late受控场景的实际呈现覆盖，不证明自然输入时延或按键期间立即播放。Run190的DB资格/短按尚未执行，满槽与five-person为SKIPPED；修正必须绑定新候选重新正式运行。
+
 | 稳定验收 | 空槽场景 | 满槽场景 |
 | --- | --- | --- |
 | MW-r2-01 前置与冻结 | DOWN 时只有原 A 占方向槽；记录静默预算前置 | DOWN 时仅原 A/B 占两槽，两个身份均固定并取证 |
