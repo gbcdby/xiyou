@@ -28,6 +28,7 @@
   overflow: hidden; overscroll-behavior: none; color: var(--hud-ink); background: #e7dec9; isolation: isolate;
 }
 .gaolao-scene-page .spatial-layout, .gaolao-scene-page .spatial-main, .gaolao-scene-page .spatial-rail { display: contents; }
+.spatial-panel-stack { display: contents; }
 .gaolao-scene-page .spatial-map-card { position: absolute; inset: 0; min-height: 0; border: 0; border-radius: 0; background: #e7dec9; }
 .gaolao-scene-page .spatial-map-viewport { width: 100%; height: 100%; min-height: 0; }
 .gaolao-scene-page .spatial-map { background: #e7dec9; }
@@ -92,6 +93,21 @@
 .gaolao-room-details p { margin: 6px 0; }
 .gaolao-room-details > .text-button { margin-right: 10px; }
 .gaolao-ending-choices { margin-top: 18px; padding-top: 14px; border-top: 1px solid #d4c7a9; }
+/* 只读提示与详情共用有界区域；未知回执入口在底栏上方另留一行。 */
+.gaolao-scene-page:has(.gaolao-urgent-receipts) { --hud-recovery-gap: 56px; }
+.gaolao-scene-page .spatial-panel-stack:has(.control-banner) {
+  position: absolute; z-index: 10; right: var(--hud-right); bottom: calc(var(--hud-bottom) + var(--hud-dock-clearance) + var(--hud-recovery-gap, 0px));
+  display: flex; flex-direction: column; gap: 8px; width: min(390px, calc(100% - var(--hud-left) - var(--hud-right)));
+  max-height: calc(100dvh - var(--hud-top) - var(--hud-bottom) - var(--hud-dock-clearance) - var(--hud-recovery-gap, 0px) - 12px); min-height: 0;
+  overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin;
+}
+.gaolao-scene-page .spatial-panel-stack:has(.control-banner) > .control-banner,
+.gaolao-scene-page .spatial-panel-stack:has(.control-banner) > .spatial-sidebar,
+.gaolao-scene-page .spatial-panel-stack:has(.control-banner) > .spatial-receipts {
+  position: static; flex: 0 0 auto; width: 100%; max-width: none; height: auto; min-height: 0; max-height: none; margin: 0; transform: none; overflow: visible;
+}
+.gaolao-scene-page .spatial-panel-stack:has(.control-banner) .spatial-reading-pane,
+.gaolao-scene-page .spatial-panel-stack:has(.control-banner) .spatial-reading-content { flex: none; max-height: none; overflow: visible; }
 @media (max-width: 900px) {
   #app .gaolao-scene-page { --hud-left: max(12px, env(safe-area-inset-left)); --hud-right: max(12px, env(safe-area-inset-right)); --hud-top: max(12px, env(safe-area-inset-top)); --hud-bottom: max(12px, env(safe-area-inset-bottom)); }
   .gaolao-heading { width: min(330px, calc(100% - 144px)); gap: 7px; }

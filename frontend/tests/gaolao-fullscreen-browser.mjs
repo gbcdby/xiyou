@@ -257,6 +257,9 @@ async function panelsKeepCamera(before) {
     assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem('xiyou.gaolao-hud.v1')).mapExpanded), true, '关闭更多不覆盖暂存地图偏好');
     await page.keyboard.press('Tab'); await page.keyboard.press('Tab');
     assert.equal(await mapToggle.evaluate(button => button === document.activeElement), true, '再次 Tab 到地图以检查阅读层');
+    activeCase.mapFocusEscape = { executed: true, focus: '地图', closedFirst: '更多', retainedReading: true, retainedMapPreference: true };
+  } else {
+    activeCase.mapFocusEscape = { executed: false, reason: '当前视口未显示地图入口' };
   }
   await page.keyboard.press('Escape'); await page.getByTestId('gaolao-minimap').waitFor();
   assert.equal(await page.locator('#spatial-reading-pane').count(), 0, '关闭阅读后地图按原偏好恢复');
@@ -402,18 +405,52 @@ async function unknownReceipt() {
   assert.match(await urgent.innerText(), /1 条动作待确认/, '未知回执使用真实计数');
   fixture.publish(p => { p.self.canControl = false; });
   await until(async () => !(await state()).inputReady, '受控公开投影撤回控制后显示恢复入口');
-  await page.getByRole('button', { name: '恢复本人控制', exact: true }).waitFor();
-  activeCase.pendingRecoveryLayout = await urgent.evaluate(button => {
-    const box = button.getBoundingClientRect(), banner = document.querySelector('.control-banner').getBoundingClientRect();
-    const hit = document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2);
-    return { urgent: box.toJSON(), banner: banner.toJSON(), hitTag: hit?.tagName, hitClass: hit?.className, reachable: button.contains(hit) };
+  const resume = page.getByRole('button', { name: '恢复本人控制', exact: true });
+  await resume.waitFor();
+  async function recoveryLayout() {
+    await resume.scrollIntoViewIfNeeded();
+    const result = await urgent.evaluate(button => {
+      const box = button.getBoundingClientRect(), banner = document.querySelector('.control-banner').getBoundingClientRect();
+      const recovery = document.querySelector('.control-banner .primary-button'), recoveryBox = recovery.getBoundingClientRect();
+      const hit = document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2);
+      const recoveryHit = document.elementFromPoint(recoveryBox.x + recoveryBox.width / 2, recoveryBox.y + recoveryBox.height / 2);
+      return { urgent: box.toJSON(), banner: banner.toJSON(), hitTag: hit?.tagName, hitClass: hit?.className, reachable: button.contains(hit), recoveryReachable: recovery.contains(recoveryHit), overlap: box.x < banner.right && box.right > banner.x && box.y < banner.bottom && box.bottom > banner.y };
+    });
+    assert.equal(result.reachable, true, '恢复控制提示不能遮住未知动作查询入口');
+    assert.equal(result.recoveryReachable, true, '未知动作共存时恢复控制按钮仍可操作');
+    assert.equal(result.overlap, false, '未知动作入口与恢复提示必须留出各自空间');
+    await assertFullscreen(); return result;
+  }
+  activeCase.pendingRecoveryLayout = await recoveryLayout(); await picture('pending-recovery-collapsed');
+  await page.getByRole('button', { name: '展开工具栏', exact: true }).click();
+  activeCase.pendingRecoveryExpandedLayout = await recoveryLayout(); await picture('pending-recovery-expanded');
+  await page.getByRole('button', { name: '手记', exact: true }).click();
+  const lastNote = page.locator('.spatial-notebook .spatial-record-statement').last();
+  await lastNote.scrollIntoViewIfNeeded();
+  assert.match(await lastNote.innerText(), /受控阅读记录 24/);
+  activeCase.pendingRecoveryNotebook = await lastNote.evaluate(element => {
+    const box = element.getBoundingClientRect(), stack = document.querySelector('.spatial-panel-stack');
+    return { scrollTop: stack.scrollTop, clientHeight: stack.clientHeight, scrollHeight: stack.scrollHeight, reachable: element.contains(document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2)) };
   });
-  assert.equal(activeCase.pendingRecoveryLayout.reachable, true, '恢复控制提示不能遮住未知动作查询入口');
+  assert.ok(activeCase.pendingRecoveryNotebook.scrollTop > 0, '长手记确实经过只读详情区滚动');
+  assert.equal(activeCase.pendingRecoveryNotebook.reachable, true, '只读长手记末条内容不能被裁切');
+  await assertFullscreen();
+  await page.getByRole('button', { name: '收起工具栏', exact: true }).click();
   await page.getByRole('button', { name: '查看高才的角色信息', exact: true }).click();
   await page.locator('#spatial-reading-pane').waitFor();
-  assert.equal(await urgent.evaluate(button => { const box = button.getBoundingClientRect(); return button.contains(document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2)); }), true, '阅读面板不能遮住未确认动作的直接恢复入口');
+  assert.equal(await page.locator('.spatial-panel-stack').evaluate(element => element.scrollTop), 0, '切换面板复位详情滚动位置');
+  activeCase.pendingRecoveryReadingLayout = await recoveryLayout();
   await urgent.click();
   const row = page.locator(`[data-action-id="${wire.request.clientActionId}"]`);
+  await resume.scrollIntoViewIfNeeded();
+  assert.equal(await resume.evaluate(button => { const box = button.getBoundingClientRect(); return button.contains(document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2)); }), true, '回执面板打开后仍能滚动到恢复控制入口');
+  await row.getByRole('button', { name: '查询结果', exact: true }).scrollIntoViewIfNeeded();
+  activeCase.pendingRecoveryQuery = await row.getByRole('button', { name: '查询结果', exact: true }).evaluate(button => {
+    const box = button.getBoundingClientRect(), stack = document.querySelector('.spatial-panel-stack');
+    return { box: box.toJSON(), scrollTop: stack.scrollTop, clientHeight: stack.clientHeight, scrollHeight: stack.scrollHeight, reachable: button.contains(document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2)) };
+  });
+  assert.equal(activeCase.pendingRecoveryQuery.reachable, true, '只读详情区滚动后查询按钮实际可操作');
+  await picture('pending-recovery-receipts');
   await row.getByRole('button', { name: '查询结果', exact: true }).click();
   await until(async () => (await state()).actions.find(action => action.id === wire.request.clientActionId)?.status === 'accepted', '原身份查询取得受控收据');
   assert.ok(fixture.queries.includes(wire.request.clientActionId));

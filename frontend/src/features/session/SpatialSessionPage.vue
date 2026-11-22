@@ -101,6 +101,7 @@ const currentStatus = computed(() => {
 const movementLabels = { accepted: '路线已受理', moving: '正在行走', arrived: '已到达', blocked: '路线受阻', cancelled: '已停步' };
 const connectionNames = { idle: '尚未连接', connecting: '连接房间中', synchronizing: '同步授权场景中', online: '已连接', offline: '正在重连', forbidden: '当前无法访问房间' };
 const hudRoot = ref<HTMLElement | null>(null);
+const panelStack = ref<HTMLElement | null>(null);
 const sceneMap = ref<InstanceType<typeof SpatialMap> | null>(null);
 const hudPanelKind = computed(() => receiptsOpen.value ? 'receipts' : reading.value || (objectsOpen.value ? 'objects' : selected.value ? 'action' : null));
 const { narrow, guidanceExpanded, mapExpanded, dockExpanded } = useGaolaoHud(hudRoot);
@@ -125,6 +126,7 @@ watch([() => spatialState.value.snapshot?.viewId, displayProjection], ([view, va
   personLabels.value = personLabeler.update(view || null, value ? [value.self, ...displayedPeople.value].filter(person => person.position !== null) : []);
 }, { immediate: true });
 watch(selected, value => { if (!value) selectedRef.value = ''; });
+watch(hudPanelKind, () => { if (hud.value && !spatialState.value.inputReady && panelStack.value) panelStack.value.scrollTop = 0; }, { flush: 'post' });
 watch(others, people => { if (recipient.value && !people.some(p => p.entityRef === recipient.value)) recipient.value = ''; });
 watch([reading, () => identity.value?.token, sessionId, () => spatialState.value.snapshot, online], () => {
   const snapshot = spatialState.value.snapshot; const p = snapshot?.projection;
@@ -292,11 +294,12 @@ function ownerName(reference: string) { const p = projection.value; return p?.se
             <button v-if="!hud && unknownCount" class="spatial-pending-link" @click="showReceipts"><SpatialStatus :label="'待确认动作 ' + unknownCount + ' 条'" tone="uncertain" /><span>查询 / 原样重试</span><AppIcon name="arrow" :size="18" /></button>
           </div>
           <div class="spatial-rail">
-            <section v-if="projection.phase === 'Running' && !spatialState.inputReady" class="control-banner" data-keyboard-scope="panel"><div><strong>当前为只读视角</strong><p>恢复本人控制后继续行走；另一处连接正在控制时，可选择接管。</p></div><div class="button-row"><button class="primary-button" :disabled="!online || spatialState.controlBusy" @click="performSpatial(() => spatialClient.control('resume'))">恢复本人控制</button><button class="secondary-button" :disabled="!online || spatialState.controlBusy" @click="performSpatial(() => spatialClient.control('take'))">明确接管此角色</button></div></section>
             <div v-if="hud && displayProjection" class="gaolao-map-tools">
               <GaolaoMapNavigator :key="sessionId + ':' + spatialState.snapshot!.viewId" v-model:expanded="mapExpanded" :scene="projection.scene" :catalog="projection.mapCatalog || []" :self="displayProjection.self" :people="displayedPeople" :disabled="!canAct" compact :panel-open="Boolean(hudPanelKind)" @move="move" @navigate="navigate" @open="openMap" />
               <button v-if="cameraState.canReturn" class="gaolao-return-to-self" @click="sceneMap?.returnToSelf()"><AppIcon name="location" :size="18" />回到角色</button>
             </div>
+            <div ref="panelStack" class="spatial-panel-stack">
+            <section v-if="projection.phase === 'Running' && !spatialState.inputReady" class="control-banner" data-keyboard-scope="panel"><div><strong>当前为只读视角</strong><p>恢复本人控制后继续行走；另一处连接正在控制时，可选择接管。</p></div><div class="button-row"><button class="primary-button" :disabled="!online || spatialState.controlBusy" @click="performSpatial(() => spatialClient.control('resume'))">恢复本人控制</button><button class="secondary-button" :disabled="!online || spatialState.controlBusy" @click="performSpatial(() => spatialClient.control('take'))">明确接管此角色</button></div></section>
             <aside v-if="!receiptsOpen && (!hud || reading || selected || objectsOpen)" class="spatial-sidebar" :data-reading-kind="reading || (objectsOpen ? 'objects' : 'action')" data-keyboard-scope="panel">
             <SpatialReadingPane v-if="reading" :title="readingTitles[reading]" :close-label="'关闭' + readingNames[reading]" @close="closeReading">
               <p v-if="hasPersonMarkers" class="spatial-panel-intro">人物编号用于区分同名对象，可在场景对象中查看。</p><p v-if="selected && personLabels[selected.entityRef]" class="spatial-panel-intro">地图选中：<strong>{{ displayName(selected) }}</strong></p>
@@ -315,6 +318,7 @@ function ownerName(reference: string) { const p = projection.value; return p?.se
             </template>
             </aside>
             <SpatialReceipts v-if="!hud || receiptsOpen" :closable="hud" @close="closeReceipts" :actions="spatialState.actions" :online="online" data-keyboard-scope="panel" @query="spatialClient.query($event)" @retry="spatialClient.retry($event)" />
+            </div>
           </div>
         </div>
       </template>
