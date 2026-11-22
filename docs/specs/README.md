@@ -10,6 +10,7 @@
 
 | Spec | 范围 | 权威记录 |
 | --- | --- | --- |
+| [GZ-RESP-01：角色操控与交互体验优化](player-response-experience.md) | v0.1 / repo-20261123 规划基线：本人响应、停步纠偏、走近交互、渲染及恢复；#91 继续合同冻结，未释放实现或运行通过 | [Spec 与唯一任务依赖 #99](https://github.com/gbcdby/xiyou/issues/99)；子票 #91–#98；上级客户端 [#66](https://github.com/gbcdby/xiyou/issues/66) |
 | [EXT-001：统一角色模型与内容扩展接口](actor-content-extensibility.md) | v0.1 草案：玩家／AI 角色与控制抽象、场景／角色／属性／动作扩展；讨论记录，未接受为实施依据 | Spec 汇总：https://github.com/gbcdby/xiyou/issues/45；实施 Tickets 尚未建立，不调整 ADV-001／A3 范围 |
 | [ADV-001：无战斗多人叙事冒险与首章高老庄](narrative-adventure.md) | v0.2 及实施接续：共用行走/交互、高老庄玩法、三 NPC/乔装/随行边界与验收 | [汇总与 Tickets #23](https://github.com/gbcdby/xiyou/issues/23)、[验收 #29](https://github.com/gbcdby/xiyou/issues/29)；[PR #24](https://github.com/gbcdby/xiyou/pull/24) 保留设计修订来源 |
 | [ADV-001：共用空间协议](adv-protocol.md) | adv-protocol-v1：权威空间、授权投影、动作与恢复合同；实现绑定有效修订 | [合同与模型 #27](https://github.com/gbcdby/xiyou/issues/27) |
@@ -35,4 +36,5 @@ VS-001 的细化材料：[玩法闭环](vertical-slice-gameplay.md)、[M0 协议
 状态可以写为“草案”“实施依据”“被替代”，但必须附实际决定或交接依据；作者完成一稿不自动成为已接受方案。
 
 设计与拆票分别由 `worker-design`、`worker-plan-tickets` 负责。大功能的 Spec 与 Tickets 按 [GitHub 记录约定](../agents/issue-tracker.md)实际保存后，才进入分派。Spec 验收、Ticket 完成与 PR 合并分别判断。
+
 
