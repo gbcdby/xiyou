@@ -173,7 +173,33 @@ async function run(){
   const beforePanel=await canvasFrame(page);await openReading(page,'手记');assert.deepEqual((await canvasFrame(page)).fit,beforePanel.fit);await closeReading(page);assert.deepEqual((await canvasFrame(page)).fit,beforePanel.fit);check('AC04','单一工具与状态入口，阅读面板开合不改变主场景');
   const {short,movementActions}=await exerciseMotion(initial,first);
   if(scenario!=='normal'){report.aiRunCount=Number((await database.pool.query('SELECT count(*) n FROM ai_runs WHERE session_id=$1',[room.sessionId])).rows[0].n);assert.equal(report.aiRunCount,0);assert.deepEqual(report.pageErrors,[]);report.assessment='PASS';return;}
-  await openMapNavigator(page);const destinationsToggle=page.getByRole('button',{name:'选择地点',exact:true});if(await destinationsToggle.isVisible())await destinationsToggle.click();await sleep(120);await page.getByTestId('spatial-map').focus();await page.keyboard.down('ArrowLeft');await sleep(180);await page.getByLabel('地图目的地',{exact:true}).focus();await page.keyboard.up('ArrowLeft');await waitSettled();const blurPosition=await position();await sleep(250);assert.deepEqual(await position(),blurPosition);const panelCount=(await actions()).length;await page.keyboard.press('ArrowRight');await sleep(130);assert.equal((await actions()).length,panelCount,'地图select独占方向键');
+  await openMapNavigator(page);const destinationsToggle=page.getByRole('button',{name:'选择地点',exact:true});if(await destinationsToggle.isVisible())await destinationsToggle.click();await sleep(120);
+  const beforeBlurIds=(await actions()).map(action=>action.id);
+  await page.getByTestId('spatial-map').focus();await page.keyboard.down('ArrowLeft');await sleep(180);await page.getByLabel('地图目的地',{exact:true}).focus();await page.keyboard.up('ArrowLeft');await waitSettled();
+  const blurDrafts=(await actions()).filter(action=>!beforeBlurIds.includes(action.id)),blurStops=blurDrafts.filter(draft=>JSON.parse(draft.raw).action.kind==='stop_move');
+  assert.equal(blurStops.length,1,'失焦与随后松键只发送一次停步');
+  const blurStop=blurStops[0],blurRequest=JSON.parse(blurStop.raw);
+  assert.equal(blurStop.status,'accepted');assert.equal(blurStop.receipt?.status,'Accepted');assert.equal(blurStop.receipt.result.movementCommandSeq,blurRequest.action.movementCommandSeq);
+  report.blurStop={request:blurRequest,receipt:blurStop.receipt,afterReceipt:await snapshot(page)};
+  // 收据先更新账本，补读随后应用；只等待本次停步前缀，不能挑选更晚的静止样本。
+  const coversBlurStop=s=>{
+    assert.equal(s.viewId,blurRequest.viewId,'失焦检查保留同一视图');assert.equal(s.projection.self.controlEpoch,blurRequest.controlEpoch,'失焦检查保留同一控制周期');
+    return BigInt(s.snapshotSeq)>=BigInt(blurStop.receipt.observedSeq);
+  };
+  const blurApplied=coversBlurStop(report.blurStop.afterReceipt)?report.blurStop.afterReceipt:await until(async()=>{const s=await snapshot(page);return coversBlurStop(s)?s:false;},'本次失焦停步的原收据前缀已应用');
+  report.blurStop.firstCovered=blurApplied;
+  const blurPerson=blurApplied.projection.sceneOverview.entities.find(entity=>entity.entityRef===blurApplied.projection.self.entityRef);
+  assert.equal(blurPerson?.moving,false,'首次观察到停步前缀时本人必须已停止');
+  const blurPosition=structuredClone(blurApplied.projection.self.position),blurPrefix=await server.runtime.replay(room.sessionId,blurStop.receipt.observedSeq);
+  const blurActorId=blurPrefix.members.find(member=>member.userId===room.users[0].userId).characterId,blurActor=blurPrefix.characters[blurActorId];
+  report.blurStop.authority={throughSeq:blurPrefix.sessionSeq,actorId:blurActorId,position:blurActor.position,movement:blurActor.movement,controlEpoch:blurActor.controlEpoch};
+  assert.equal(blurActor.controlEpoch,blurRequest.controlEpoch);assert.ok(!['accepted','moving'].includes(blurActor.movement?.status),'原停步提交前缀已终止权威移动');
+  assert.deepEqual(blurPosition,blurActor.position,'客户端停步位置对应原收据的权威日志前缀');
+  await sleep(250);report.blurStop.afterWindow=await snapshot(page);assert.ok(coversBlurStop(report.blurStop.afterWindow));assert.deepEqual(report.blurStop.afterWindow.projection.self.position,blurPosition);
+  assert.deepEqual((await server.runtime.replay(room.sessionId)).characters[blurActorId].position,blurPosition,'停步提交后权威位置也不能继续改变');
+  const afterBlurDrafts=(await actions()).filter(action=>!beforeBlurIds.includes(action.id));report.blurStop.actionIds=afterBlurDrafts.map(action=>action.id);
+  assert.equal(afterBlurDrafts.at(-1).id,blurStop.id,'失焦停步后不能续发方向或重复停步');
+  const panelCount=(await actions()).length;await page.keyboard.press('ArrowRight');await sleep(130);assert.equal((await actions()).length,panelCount,'地图select独占方向键');
   await openReading(page,'交谈');await page.getByLabel('交谈内容',{exact:true}).fill('键盘范围检查');await page.keyboard.press('ArrowLeft');await page.keyboard.press('ArrowRight');assert.equal((await actions()).length,panelCount,'文本输入不驱动世界移动');await closeReading(page);
   check('AC05','持续持键、组合与松单键、短按停步、失焦与面板/文本输入隔离',{short,movementActions:movementActions.length});
   // 真实提交后把一次ACK改为未知；原收据仍由真实HTTP查询取回，不伪造世界状态。
