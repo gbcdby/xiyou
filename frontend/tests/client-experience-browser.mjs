@@ -9,13 +9,14 @@ import { chromium } from 'playwright';
 import { startTestPostgres } from '../../backend/test-support/postgres.mjs';
 import { createAuthorityServer } from '../../backend/server.mjs';
 import { repository, sourceIdentity, saveJSON, sha256, until, sleep } from './network-support.mjs';
-import { browserRoom, snapshot, clientState, openReading, closeReading, openObjects } from './gaolao-real-support.mjs';
-import { assertPaintContinuity, canvasFrame, canvasPixels } from './canvas-browser-support.mjs';
+import { browserRoom, snapshot, clientState, openReading, closeReading, openObjects, revealTool, openMapNavigator } from './gaolao-real-support.mjs';
+import { assertPaintContinuity, assertLateCanvasEvidence, canvasFrame, canvasPixels } from './canvas-browser-support.mjs';
 import { validateSpatial } from '../../protocol/spatial.mjs';
 import { observeDirectionConnections, installPresentationObservation, assertPresentationEvidence, assertShortDirectionPlan, observeDirectionSubmissions, installDirectionObservation, beginDirectionObservations, collectAcceptedLateEvidence, assertAcceptedLateEvidence, assertFivePersonSupply } from './direction-browser-support.mjs';
 
 const scenario=process.argv[2]??'normal';
-assert.ok(['normal','late-accepted-se-180','five-person'].includes(scenario),'未知方向验收场景');
+assert.ok(['normal','late-free-slot-180','late-full-slots-180','five-person'].includes(scenario),'未知方向验收场景');
+const lateMode=scenario==='late-free-slot-180'?'free-slot':scenario==='late-full-slots-180'?'full-slots':false;
 const count=scenario==='five-person'?5:2;
 const output=resolve(process.env.FRONTEND_EVIDENCE_DIR||resolve(repository,'.agent-output/ci/browser-client-experience'+(scenario==='normal'?'':'-'+scenario)));
 await mkdir(output,{recursive:true});
@@ -58,21 +59,39 @@ async function startCapture(){await page.evaluate(async()=>{
 });}
 async function stopCapture(){return page.evaluate(()=>{const capture=window.uxCapture;capture.running=false;capture.restore();return {frames:capture.frames,paints:capture.paints,updates:capture.updates,errors:capture.errors};});}
 async function currentMapPoint(destination){
-  const map=page.locator('.gaolao-map-navigator'),expand=map.getByRole('button',{name:'展开地图',exact:true});if(await expand.isVisible())await expand.click();
+  const map=await openMapNavigator(page);
   await map.getByRole('button',{name:'当前',exact:true}).click();
   const scene=(await snapshot(page)).projection.scene;
   const point=await page.getByTestId('gaolao-minimap').evaluate((canvas,{scene,destination})=>{const box=canvas.getBoundingClientRect(),scale=Math.min((box.width-16)/scene.width,(box.height-16)/scene.height),x=(box.width-scene.width*scale)/2,y=(box.height-scene.height*scale)/2;const pixel={x:Math.round(box.left+x+destination.x*scale),y:Math.round(box.top+y+destination.y*scale)};return {pixel,destination:{x:Math.round((pixel.x-box.left-x)/scale),y:Math.round((pixel.y-box.top-y)/scale)}};},{scene,destination});
   const before=(await actions()).map(action=>action.id);await page.mouse.click(point.pixel.x,point.pixel.y);
   const draft=await until(async()=>(await actions()).find(action=>!before.includes(action.id)&&JSON.parse(action.raw).action.kind==='move_to'),'当前地图点击发出真实move');assert.deepEqual(JSON.parse(draft.raw).action.destination,point.destination);return {draft,destination:point.destination};
 }
+async function exerciseLateInput(initial){
+  const state=await clientState(page);
+  assert.equal(state.directionInput.ready,true,'受控前置开始时原方向准入已就绪');
+  assert.ok(!state.actions.some(action=>['waiting','unknown'].includes(action.status)),'受控前置不能继承未决动作');
+  directionSubmissions.armLate({sessionId:initial.sessionId,viewId:initial.viewId,controlEpoch:initial.projection.self.controlEpoch});
+  report.motionHold={scope:'D66-MW r2：late采用预先固定的受控前置，不代表normal自然输入性能',mode:lateMode,preludeRightMs:20,preludeStopAckMs:200,selectedAckMs:180,downOnlyMs:450};
+  // 原stop在途时只暂存最新组合键；其真实确认后首发SE，原token预算自然恢复。
+  await phase('prelude-right');await page.keyboard.down('ArrowRight');await sleep(20);
+  await phase('prelude-stop');await page.keyboard.up('ArrowRight');
+  await until(()=>directionSubmissions.read().preludeStop,'预定前置stop实际入站',1000);
+  await phase('diagonal');await page.keyboard.down('ArrowRight');await page.keyboard.down('ArrowDown');
+  const trigger=await until(()=>{const timing=directionSubmissions.read();return lateMode==='free-slot'?timing.selected:timing.second;},'预定'+(lateMode==='free-slot'?'首条A':'第二条B')+'实际入站，不按结果换样',1000);
+  report.lateInput={mode:lateMode,triggerId:trigger.request.clientActionId,triggerEnteredAt:trigger.enteredAt,triggerObservedAt:Date.now(),scope:'由预定入站触发DOWN；不等待Accepted或理想槽位再输入'};
+  await phase('down-only');await page.keyboard.up('ArrowRight');await sleep(450);
+}
 async function exerciseMotion(initial,first){
   await picture('scene-v3-desktop.png');await page.bringToFront();await page.getByTestId('spatial-map').focus();
   if(directionSubmissions)await beginDirectionObservations(server.runtime,room);
   const assetsBefore=report.httpAssets.length,actionsBefore=(await actions()).map(action=>action.id),start=Date.now();await startCapture();
-  await phase('right');await page.keyboard.down('ArrowRight');for(let i=0;i<5;i++){await sleep(100);await page.keyboard.down('ArrowRight');}
-  await phase('diagonal');await page.keyboard.down('ArrowDown');await sleep(350);
-  await phase('down-only');await page.keyboard.up('ArrowRight');await sleep(450);
-  report.motionHold={scope:'三场景均保持原固定按键时序'};
+  if(lateMode)await exerciseLateInput(initial);
+  else{
+    await phase('right');await page.keyboard.down('ArrowRight');for(let i=0;i<5;i++){await sleep(100);await page.keyboard.down('ArrowRight');}
+    await phase('diagonal');await page.keyboard.down('ArrowDown');await sleep(350);
+    await phase('down-only');await page.keyboard.up('ArrowRight');await sleep(450);
+    report.motionHold={scope:'normal/five-person保持原固定按键时序'};
+  }
   await phase('stopped');await page.keyboard.up('ArrowDown');await waitSettled();await sleep(250);
   const capture=await stopCapture();report.motion=capture;report.presentation=await page.evaluate(()=>window.uxPresentation.stop());await saveJSON(resolve(output,'result-before-cleanup.json'),report);
   report.presentationSummary=assertPresentationEvidence(report.presentation);
@@ -87,8 +106,15 @@ async function exerciseMotion(initial,first){
     assert.ok(f.self?.position,'跟随帧必须含实际绘制的本人位置');
     for(const [axis,size]of [['x','width'],['y','height']]){const expected=Math.max(f.viewport[size]-f.view[size]*f.fit.scale,Math.min(0,f.viewport[size]/2-f.self.position[axis]*f.fit.scale));assert.ok(Math.abs(f.fit[axis]-expected)<=1,'镜头按同一绘制时钟的本人位置跟随并约束场景边界');}
   }
-  const moving=stable.filter(frame=>['right','diagonal','down-only'].includes(frame.phase)&&frame.self?.moving);assert.ok(moving.length>=10);
-  assert.ok(assertPaintContinuity(capture).length>=10,'每次实际paint均保留并按其motionAt检查连续速度');
+  if(lateMode){
+    const timing=directionSubmissions.read();
+    // 预定前导开始后的首个S按入站次序固定，不能跳过Rejected另找Accepted。
+    const firstSouth=timing.submissions.find(row=>row.enteredAt>=timing.preludeRightAt&&row.request.action.kind==='move_direction'&&row.request.action.direction==='S');
+    report.lateCanvas=assertLateCanvasEvidence(capture,{sceneId:first.sceneId,viewId:initial.viewId,controlEpoch:initial.projection.self.controlEpoch,selfRef:initial.projection.self.entityRef,selected:timing.selected,firstSouth});
+  }else{
+    const moving=stable.filter(frame=>['right','diagonal','down-only'].includes(frame.phase)&&frame.self?.moving);assert.ok(moving.length>=10);
+    assert.ok(assertPaintContinuity(capture).length>=10,'每次实际paint均保留并按其motionAt检查连续速度');
+  }
   const acceptedCoverage=direction=>{
     const row=report.wireActions.filter(value=>{
       if(value.receipt?.status!=='Accepted'||actionsBefore.includes(value.receipt.clientActionId))return false;
@@ -124,10 +150,11 @@ async function exerciseMotion(initial,first){
     if(scenario==='five-person')await until(async()=>{const readers=await Promise.all(room.pages.map(p=>p.evaluate(()=>window.uxDirection.read())));return readers.every(reader=>reader.applications.some(row=>row.result==='applied'&&BigInt(row.after)>=BigInt(stopReceipt.observedSeq)&&row.person?.moving===false));},'五个真实页面实际应用终止前缀');
     report.directionClients=await Promise.all(room.pages.map(p=>p.evaluate(()=>window.uxDirection.read())));report.directionServer=directionSubmissions.read();assert.deepEqual(report.directionServer.errors,[],'只读供给观察不得丢失证据');
     for(let index=0;index<room.pages.length;index++){const current=await directionConnections.qualify(room.pages[index],room.users[index].userId,'after-motion-'+index),initial=report.directionQualification[index];for(const key of ['connectionId','viewId','controlEpoch'])assert.equal(current[key],initial[key],'运动期间保留同一实际安装绑定');report.directionQualification.push(current);}
-    if(scenario==='late-accepted-se-180'){
+    if(lateMode){
       report.lateAcceptance=await collectAcceptedLateEvidence(database.pool,directionSubmissions,report.directionClients[0],movementRequests);
-      report.lateSummary=assertAcceptedLateEvidence(report.lateAcceptance);check('AC05-late','原Accepted双轴SE的180ms迟到ACK跨DOWN，新S先发出并最终Accepted且不复活旧轴',report.lateSummary);
+      report.lateSummary=assertAcceptedLateEvidence(report.lateAcceptance);check('AC05-late-'+lateMode,lateMode==='free-slot'?'空槽：原SE的180ms迟到ACK跨DOWN，新S先发出并最终Accepted':'满槽：两条原SE占满方向槽，真实释放后首发最新S且不复活旧轴',report.lateSummary);
     }else{
+      assert.equal(scenario,'five-person','非late方向场景必须明确为five-person');
       report.fiveSupply=assertFivePersonSupply({readers:report.directionClients,sends:report.directionServer.sends,stop:stopReceipt,finalPosition:await position()});check('AC05-five','五个当前新模式读者真实连续应用主运动者及终止前缀',report.fiveSupply);
     }
   }
@@ -146,7 +173,7 @@ async function run(){
   directionConnections=observeDirectionConnections(server.runtime);
   const submit=server.runtime.submit.bind(server.runtime);
   server.runtime.submit=async function(...args){const raw=args[1],request=JSON.parse(raw),receipt=await Reflect.apply(submit,this,args);report.wireActions.push({receivedAt:Date.now(),raw,receipt});if(fault&&!fault.request&&request.action.kind==='stop_move'){fault.request=request;fault.raw=raw;fault.receipt=receipt;return {schemaVersion:2,code:'OUTCOME_UNKNOWN',message:'受控传输故障：停步已提交，确认未送达。'};}return receipt;};
-  if(scenario!=='normal')directionSubmissions=observeDirectionSubmissions(server.runtime,{late:scenario==='late-accepted-se-180'});
+  if(scenario!=='normal')directionSubmissions=observeDirectionSubmissions(server.runtime,{late:lateMode});
   const origin=`http://127.0.0.1:${(await server.listen(0)).port}`;
   vite=await createVite({root:resolve(repository,'frontend'),configFile:resolve(repository,'frontend/vite.config.mjs'),configLoader:'native',cacheDir:resolve(output,'vite-cache'),define:{'import.meta.env.VITE_GAOLAO_CONTENT_VERSION':JSON.stringify(report.contentVersion)},server:{host:'127.0.0.1',port:0,fs:{allow:[repository]},proxy:{'/api':{target:origin},'/socket.io':{target:origin,ws:true}}}});await vite.listen();
   browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH,args:process.env.CHROMIUM_ARGS?JSON.parse(process.env.CHROMIUM_ARGS):[]});report.environment={node:process.version,chromium:browser.version(),dpr:1};
@@ -160,23 +187,52 @@ async function run(){
   const first=await canvasFrame(page);assert.deepEqual(drawRefs(first),sceneRefs(initial.projection));assert.deepEqual(first.view,{x:0,y:0,width:initial.projection.scene.width,height:initial.projection.scene.height});
   const pixels=await canvasPixels(page);assert.ok(initial.projection.sceneOverview.entities.length+initial.projection.sceneOverview.targets.length>initial.projection.entities.length+initial.projection.targets.length,'正式样本含远处/隔墙公共对象');
   check('AC01','scene-v3正式入口同场公开对象完整绘制，真实感知仍保留范围',{drawn:drawRefs(first).length,pixels});
+  const initialDetailsToggle=page.getByRole('button',{name:'任务详情',exact:true}),expandedForCheck=await initialDetailsToggle.isVisible();if(expandedForCheck)await initialDetailsToggle.click();
   assert.ok((await page.getByTestId('gaolao-goal').innerText()).trim());assert.ok((await page.getByTestId('gaolao-next-step').innerText()).trim());
-  await page.getByRole('button',{name:'任务详情',exact:true}).click();const guide=page.locator('.gaolao-guide-action');assert.equal(await guide.count(),1);const guideLabel=await guide.innerText();await guide.click();
+  const guide=page.locator('.gaolao-guide-action');assert.equal(await guide.count(),1);const guideLabel=await guide.innerText();await guide.click();
   await until(async()=>Boolean((await clientState(page)).navigation)||await page.locator('.spatial-sidebar').isVisible(),'下一步有真实定位或查看入口');if((await clientState(page)).navigation)await stop();
   const closeObjects=page.getByRole('button',{name:'关闭对象区',exact:true});if(await closeObjects.isVisible())await closeObjects.click();await closeReading(page);
+  if(expandedForCheck)await page.getByRole('button',{name:'收起详情',exact:true}).click();
   check('AC06','共同目标、下一步和可操作定位入口可见',{guideLabel});
-  for(const name of ['行囊','手记','交谈','队伍','回看'])assert.equal(await page.locator('.spatial-tool-dock').getByRole('button',{name,exact:true}).count(),1);
+  await revealTool(page,'行囊');for(const name of ['行囊','手记','交谈','队伍'])assert.equal(await page.locator('.spatial-tool-dock').getByRole('button',{name,exact:true}).count(),1);
+  const recap=await revealTool(page,'回看');assert.equal(await recap.count(),1);assert.equal(await recap.isVisible(),true);await page.getByRole('button',{name:'更多',exact:true}).click();
   assert.equal(await page.locator('.spatial-follow-strip,.gaolao-party-strip,.spatial-current-objective').count(),0);assert.equal(await page.getByTestId('movement-status').count(),1);
   const beforePanel=await canvasFrame(page);await openReading(page,'手记');assert.deepEqual((await canvasFrame(page)).fit,beforePanel.fit);await closeReading(page);assert.deepEqual((await canvasFrame(page)).fit,beforePanel.fit);check('AC04','单一工具与状态入口，阅读面板开合不改变主场景');
   const {short,movementActions}=await exerciseMotion(initial,first);
   if(scenario!=='normal'){report.aiRunCount=Number((await database.pool.query('SELECT count(*) n FROM ai_runs WHERE session_id=$1',[room.sessionId])).rows[0].n);assert.equal(report.aiRunCount,0);assert.deepEqual(report.pageErrors,[]);report.assessment='PASS';return;}
-  const destinationsToggle=page.getByRole('button',{name:'选择地点',exact:true});if(await destinationsToggle.isVisible())await destinationsToggle.click();await sleep(120);await page.getByTestId('spatial-map').focus();await page.keyboard.down('ArrowLeft');await sleep(180);await page.getByLabel('地图目的地',{exact:true}).focus();await page.keyboard.up('ArrowLeft');await waitSettled();const blurPosition=await position();await sleep(250);assert.deepEqual(await position(),blurPosition);const panelCount=(await actions()).length;await page.keyboard.press('ArrowRight');await sleep(130);assert.equal((await actions()).length,panelCount,'地图select独占方向键');
+  await openMapNavigator(page);const destinationsToggle=page.getByRole('button',{name:'选择地点',exact:true});if(await destinationsToggle.isVisible())await destinationsToggle.click();await sleep(120);
+  const beforeBlurIds=(await actions()).map(action=>action.id);
+  await page.getByTestId('spatial-map').focus();await page.keyboard.down('ArrowLeft');await sleep(180);await page.getByLabel('地图目的地',{exact:true}).focus();await page.keyboard.up('ArrowLeft');await waitSettled();
+  const blurDrafts=(await actions()).filter(action=>!beforeBlurIds.includes(action.id)),blurStops=blurDrafts.filter(draft=>JSON.parse(draft.raw).action.kind==='stop_move');
+  assert.equal(blurStops.length,1,'失焦与随后松键只发送一次停步');
+  const blurStop=blurStops[0],blurRequest=JSON.parse(blurStop.raw);
+  assert.equal(blurStop.status,'accepted');assert.equal(blurStop.receipt?.status,'Accepted');assert.equal(blurStop.receipt.result.movementCommandSeq,blurRequest.action.movementCommandSeq);
+  report.blurStop={request:blurRequest,receipt:blurStop.receipt,afterReceipt:await snapshot(page)};
+  // 收据先更新账本，补读随后应用；只等待本次停步前缀，不能挑选更晚的静止样本。
+  const coversBlurStop=s=>{
+    assert.equal(s.viewId,blurRequest.viewId,'失焦检查保留同一视图');assert.equal(s.projection.self.controlEpoch,blurRequest.controlEpoch,'失焦检查保留同一控制周期');
+    return BigInt(s.snapshotSeq)>=BigInt(blurStop.receipt.observedSeq);
+  };
+  const blurApplied=coversBlurStop(report.blurStop.afterReceipt)?report.blurStop.afterReceipt:await until(async()=>{const s=await snapshot(page);return coversBlurStop(s)?s:false;},'本次失焦停步的原收据前缀已应用');
+  report.blurStop.firstCovered=blurApplied;
+  const blurPerson=blurApplied.projection.sceneOverview.entities.find(entity=>entity.entityRef===blurApplied.projection.self.entityRef);
+  assert.equal(blurPerson?.moving,false,'首次观察到停步前缀时本人必须已停止');
+  const blurPosition=structuredClone(blurApplied.projection.self.position),blurPrefix=await server.runtime.replay(room.sessionId,blurStop.receipt.observedSeq);
+  const blurActorId=blurPrefix.members.find(member=>member.userId===room.users[0].userId).characterId,blurActor=blurPrefix.characters[blurActorId];
+  report.blurStop.authority={throughSeq:blurPrefix.sessionSeq,actorId:blurActorId,position:blurActor.position,movement:blurActor.movement,controlEpoch:blurActor.controlEpoch};
+  assert.equal(blurActor.controlEpoch,blurRequest.controlEpoch);assert.ok(!['accepted','moving'].includes(blurActor.movement?.status),'原停步提交前缀已终止权威移动');
+  assert.deepEqual(blurPosition,blurActor.position,'客户端停步位置对应原收据的权威日志前缀');
+  await sleep(250);report.blurStop.afterWindow=await snapshot(page);assert.ok(coversBlurStop(report.blurStop.afterWindow));assert.deepEqual(report.blurStop.afterWindow.projection.self.position,blurPosition);
+  assert.deepEqual((await server.runtime.replay(room.sessionId)).characters[blurActorId].position,blurPosition,'停步提交后权威位置也不能继续改变');
+  const afterBlurDrafts=(await actions()).filter(action=>!beforeBlurIds.includes(action.id));report.blurStop.actionIds=afterBlurDrafts.map(action=>action.id);
+  assert.equal(afterBlurDrafts.at(-1).id,blurStop.id,'失焦停步后不能续发方向或重复停步');
+  const panelCount=(await actions()).length;await page.keyboard.press('ArrowRight');await sleep(130);assert.equal((await actions()).length,panelCount,'地图select独占方向键');
   await openReading(page,'交谈');await page.getByLabel('交谈内容',{exact:true}).fill('键盘范围检查');await page.keyboard.press('ArrowLeft');await page.keyboard.press('ArrowRight');assert.equal((await actions()).length,panelCount,'文本输入不驱动世界移动');await closeReading(page);
   check('AC05','持续持键、组合与松单键、短按停步、失焦与面板/文本输入隔离',{short,movementActions:movementActions.length});
   // 真实提交后把一次ACK改为未知；原收据仍由真实HTTP查询取回，不伪造世界状态。
   fault={};await page.getByTestId('spatial-map').focus();await page.keyboard.down('ArrowLeft');await sleep(40);await page.keyboard.up('ArrowLeft');await until(async()=>fault.request&&(await actions()).some(action=>action.id===fault.request.clientActionId&&action.status==='unknown'),'停步真实提交后结果未知');
   const pendingId=fault.request.clientActionId,wireCount=report.wireActions.length;await page.keyboard.down('ArrowRight');await sleep(250);await page.keyboard.up('ArrowRight');assert.equal(report.wireActions.length,wireCount,'未知stop不续发新方向');assert.match(await page.getByTestId('gaolao-next-step').innerText(),/确认/);const detailsToggle=page.getByRole('button',{name:'任务详情',exact:true});if(await detailsToggle.isVisible())await detailsToggle.click();await page.getByRole('button',{name:'查询待确认动作',exact:true}).click();await page.locator(`[data-action-id="${pendingId}"]`).getByRole('button',{name:'查询结果',exact:true}).click();await until(async()=>(await actions()).find(action=>action.id===pendingId)?.status==='accepted','原停步收据实际HTTP查询完成');assert.equal((await actions()).find(action=>action.id===pendingId).raw,fault.raw);assert.equal(Number((await database.pool.query('SELECT count(*) n FROM action_receipts WHERE session_id=$1 AND client_action_id=$2',[room.sessionId,pendingId])).rows[0].n),1);report.unknownRecovery={raw:fault.raw,receipt:fault.receipt,worldEffects:1};fault=null;await page.getByRole('button',{name:'关闭动作确认',exact:true}).click();check('AC05-recovery','未知停步冻结续发，查询原身份恢复且世界效果一次');
-  const map=page.locator('.gaolao-map-navigator'),beforeMap=(await actions()).map(action=>action.id);await map.getByRole('button',{name:'全部',exact:true}).click();assert.equal(await page.getByTestId('gaolao-minimap').getAttribute('data-map-mode'),'all');await page.getByLabel('查看地图场景',{exact:true}).selectOption('gaolao-village-road');await page.getByLabel('地图目的地',{exact:true}).selectOption('R03');await sleep(100);assert.deepEqual((await actions()).map(action=>action.id),beforeMap,'仅选择远场与地点不移动');assert.doesNotMatch(await map.innerText(),/本人包裹|乔装|样例|脚底/);
+  const map=await openMapNavigator(page),beforeMap=(await actions()).map(action=>action.id);await map.getByRole('button',{name:'全部',exact:true}).click();assert.equal(await page.getByTestId('gaolao-minimap').getAttribute('data-map-mode'),'all');await page.getByLabel('查看地图场景',{exact:true}).selectOption('gaolao-village-road');await page.getByLabel('地图目的地',{exact:true}).selectOption('R03');await sleep(100);assert.deepEqual((await actions()).map(action=>action.id),beforeMap,'仅选择远场与地点不移动');assert.doesNotMatch(await map.innerText(),/本人包裹|乔装|样例|脚底/);
   await map.getByRole('button',{name:'沿出口前往',exact:true}).click();await until(async()=>{const p=(await snapshot(page)).projection;return p.self.sceneId==='gaolao-village-road'&&p.self.position.x===700&&p.self.position.y===415&&!(await clientState(page)).navigation;},'沿真实出口到达远场地点且视觉确认完成',30000);
   const route=(await actions()).filter(action=>!beforeMap.includes(action.id)).map(action=>JSON.parse(action.raw).action);assert.deepEqual(route.map(action=>action.kind),['move_to','move_to','move_to']);assert.deepEqual(route.map(action=>action.sceneId),['gaolao-courtyard','gaolao-village-road','gaolao-village-road']);assert.deepEqual(route[0].destination,{x:1425,y:880});assert.deepEqual(route[1].destination,{x:850,y:900});assert.deepEqual(route[2].destination,{x:700,y:415});
   const arrived=await snapshot(page);assert.deepEqual(drawRefs(await canvasFrame(page)),sceneRefs(arrived.projection));await picture('scene-v3-map-route.png');
@@ -186,7 +242,7 @@ async function run(){
   report.directionQualification.push(await directionConnections.qualify(page,room.users[0].userId,'reload'));
   const recoveryIds=(await actions()).map(action=>action.id);await page.getByTestId('spatial-map').focus();await page.keyboard.down('ArrowRight');await sleep(80);await page.keyboard.up('ArrowRight');await waitSettled();
   const recoveredActions=(await actions()).filter(action=>!recoveryIds.includes(action.id));assert.ok(recoveredActions.some(draft=>JSON.parse(draft.raw).action.kind==='move_direction'&&draft.receipt?.status==='Accepted'));assert.equal(JSON.parse(recoveredActions.at(-1).raw).action.kind,'stop_move');check('AC03-recovery','刷新重新建立控制周期且旧导航不复活');
-  await page.setViewportSize({width:390,height:844});await until(async()=>{const frame=await canvasFrame(page);return Math.abs(frame.viewport.width-390)<=1&&Math.abs(frame.viewport.height-844)<=1;},'窄屏真实Canvas铺满视口并完成resize');report.narrow={pixels:await canvasPixels(page),...await page.evaluate(()=>({viewport:innerWidth,height:innerHeight,content:document.documentElement.scrollWidth,contentHeight:document.documentElement.scrollHeight}))};assert.ok(report.narrow.content<=report.narrow.viewport&&report.narrow.contentHeight<=report.narrow.height+1);await map.getByRole('button',{name:'展开地图',exact:true}).click();assert.equal(await page.getByTestId('gaolao-minimap').isVisible(),true);await openReading(page,'行囊');assert.equal(await page.getByTestId('gaolao-minimap').count(),0,'窄屏阅读区与展开地图互斥');await page.locator('#spatial-reading-pane').waitFor();await picture('scene-v3-narrow.png');await closeReading(page);
+  await page.setViewportSize({width:390,height:844});await until(async()=>{const frame=await canvasFrame(page);return Math.abs(frame.viewport.width-390)<=1&&Math.abs(frame.viewport.height-844)<=1;},'窄屏真实Canvas铺满视口并完成resize');report.narrow={pixels:await canvasPixels(page),...await page.evaluate(()=>({viewport:innerWidth,height:innerHeight,content:document.documentElement.scrollWidth,contentHeight:document.documentElement.scrollHeight}))};assert.ok(report.narrow.content<=report.narrow.viewport&&report.narrow.contentHeight<=report.narrow.height+1);await openMapNavigator(page);assert.equal(await page.getByTestId('gaolao-minimap').isVisible(),true);await openReading(page,'行囊');assert.equal(await page.getByTestId('gaolao-minimap').count(),0,'窄屏阅读区与展开地图互斥');await page.locator('#spatial-reading-pane').waitFor();await picture('scene-v3-narrow.png');await closeReading(page);assert.equal(await page.getByTestId('gaolao-minimap').isVisible(),true,'关闭阅读恢复玩家原地图展开偏好');
   report.aiRunCount=Number((await database.pool.query('SELECT count(*) n FROM ai_runs WHERE session_id=$1',[room.sessionId])).rows[0].n);assert.equal(report.aiRunCount,0);assert.deepEqual(report.pageErrors,[]);assert.deepEqual(new Set(report.checks.map(value=>value.id)),new Set(['AC01','AC02','AC03','AC04','AC05','AC06','AC05-recovery','AC03-recovery']));report.assessment='PASS';
 }
 try{await run();} catch(error){report.assessment=/Operation not permitted|Failed to launch|Executable doesn't exist/.test(error.message)?'ENVIRONMENT_BLOCKED':'FAIL';report.error=error.stack;console.error(error.stack);if(page)await picture('scene-v3-failure.png').catch(()=>{});process.exitCode=1;}

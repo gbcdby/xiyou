@@ -22,8 +22,8 @@
 .spatial-connection { text-align: right; color: #365e52; font-size: 14px; }
 .spatial-connection small { display: block; margin-top: 6px; color: var(--muted); }
 .spatial-page .control-banner { margin-bottom: 16px; }
-.spatial-page:not(.gaolao-scene-page) .spatial-rail > .control-banner { display: block; }
-.spatial-page:not(.gaolao-scene-page) .spatial-rail > .control-banner p { margin: 6px 0 12px; }
+.spatial-page:not(.gaolao-scene-page) .spatial-panel-stack > .control-banner { display: block; }
+.spatial-page:not(.gaolao-scene-page) .spatial-panel-stack > .control-banner p { margin: 6px 0 12px; }
 .spatial-page .notice { font-size: 14px; }
 .spatial-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 20px; align-items: start; }
 .spatial-layout.reading-open { grid-template-columns: minmax(0, 1fr) 390px; }

@@ -16,7 +16,7 @@ const drawNodes = parsed.statements.filter(node => ts.isFunctionDeclaration(node
 const drawCode = ts.transpileModule(drawNodes.map(node => node.getText(parsed)).join('\n'), { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext } }).outputText;
 function drawCallback(bindings) {
   // 该隔离回调没有DOM呈现owner；不以paint替身建立呈现信用。
-  return new Function('bindings', `const { painter, props, motion, canvas, visibleSelf, displaySnapshot, snapshotSubscription=null, failed, performance, reducedMotion, emit, schedule } = bindings; const presentation=null, renderingError={value:''}; const displayFailed=error=>{throw error;}; let frame=1, settledKey='', stopped=false; ${drawCode}; return draw;`)({ ...bindings, visibleSelf });
+  return new Function('bindings', `const { painter, props, motion, canvas, visibleSelf, displaySnapshot, snapshotSubscription=null, failed, performance, reducedMotion, emit, schedule } = bindings; const presentation=null, renderingError={value:''}, hovered=undefined, hoverPoint=null; const displayFailed=error=>{throw error;}; let frame=1, settledKey='', stopped=false, renderedFrame=null; ${drawCode}; return draw;`)({ ...bindings, visibleSelf });
 }
 
 // 只给生产可见性函数提供受控几何；不把这些替身当作真实DOM或Canvas呈现证据。

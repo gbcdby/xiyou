@@ -4,23 +4,31 @@ import { openObjects, selectObject } from './gaolao-real-support.mjs';
 import { observeSelectionClicks } from './cuilan-click-observation.mjs';
 
 // 调用真实选择 helper；定位器只模拟已展开详情对底层入口的拦截，不算浏览器命中验收。
-function fixture({ opened = true, closeError, entryError, closeWait } = {}) {
+function fixture({ opened = true, closeError, entryError, closeWait, entryInMore = false, dockCollapsed = false, moreError } = {}) {
   const calls = [], events = [], reference = '当前授权人物';
-  let visible = opened;
+  let visible = opened, dockExpanded = !dockCollapsed, moreOpened = false;
+  const entryVisible = () => !entryInMore || dockExpanded && moreOpened;
   const absent = { count: async () => 0, isVisible: async () => false };
   const close = { isVisible: async () => visible, click: async (...args) => {
     calls.push(['close', args]); if (closeWait) await closeWait;
     if (closeError) throw closeError; visible = false;
   } };
-  const entry = { count: async () => 1, click: async (...args) => {
+  const entry = { count: async () => Number(entryVisible()), isVisible: async () => entryVisible(), click: async (...args) => {
     calls.push(['entry', args]);
+    assert.ok(entryVisible(), '入口须先通过可见工具栏与更多展开');
     if (visible) throw new Error('已展开详情拦截底层对象入口');
     if (entryError) throw entryError;
+  } };
+  const expand = { isVisible: async () => !dockExpanded, click: async (...args) => { calls.push(['expand', args]); dockExpanded = true; } };
+  const more = { isVisible: async () => dockExpanded, getAttribute: async () => String(moreOpened), click: async (...args) => {
+    calls.push(['more', args]); if (moreError) throw moreError; moreOpened = !moreOpened;
   } };
   const page = {
     getByRole(role, options) {
       assert.equal(role, 'button'); assert.equal(options.exact, true);
       if (options.name === '关闭对象区') return close;
+      if (entryInMore && options.name === '展开工具栏') return expand;
+      if (entryInMore && options.name === '更多') return more;
       assert.equal(options.name, '场景对象'); return entry;
     },
     locator(selector) {
@@ -52,6 +60,24 @@ test('详情已关闭时不制造关闭点击，原入口仍必须点击', async
   const f = fixture({ opened: false });
   assert.equal(await selectObject(f.page, f.reference), '翠兰');
   assert.deepEqual(f.calls, [['entry', []], ['object', []], ['heading']]);
+});
+
+test('场景对象收在更多时先普通展开菜单，再保持原入口及对象选择', async () => {
+  const f = fixture({ opened: false, entryInMore: true });
+  assert.equal(await selectObject(f.page, f.reference), '翠兰');
+  assert.deepEqual(f.calls, [['more', []], ['entry', []], ['object', []], ['heading']]);
+});
+
+test('工具栏也收起时按展开工具栏、更多、场景对象顺序恢复可见入口', async () => {
+  const f = fixture({ opened: false, entryInMore: true, dockCollapsed: true });
+  await openObjects(f.page);
+  assert.deepEqual(f.calls, [['expand', []], ['more', []], ['entry', []]]);
+});
+
+test('更多展开失败原样传播，不点击仍隐藏的场景对象', async () => {
+  const original = new Error('更多入口仍被遮挡'), f = fixture({ opened: false, entryInMore: true, moreError: original });
+  await assert.rejects(openObjects(f.page), error => error === original);
+  assert.deepEqual(f.calls, [['more', []]]);
 });
 
 test('关闭失败保留原错误对象，观察器失败不改错且不继续点击底层入口', async () => {

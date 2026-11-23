@@ -4,10 +4,13 @@ import type { EntityViewV2, Position, PublicMapScene, PublicScene, SelfViewV2 } 
 import { mapFit, mapPoint, navigationScene, navigationScenes } from '../../domain/gaolao-map-overview.ts';
 import AppIcon from '../../components/AppIcon.vue';
 
-const props = defineProps<{ scene: PublicScene | null; catalog: PublicMapScene[]; self: SelfViewV2; people: EntityViewV2[]; disabled: boolean; compact?: boolean; panelOpen?: boolean }>();
-const emit = defineEmits<{ move: [position: Position]; navigate: [sceneId: string, position: Position]; open: [] }>();
+const props = withDefaults(defineProps<{ scene: PublicScene | null; catalog: PublicMapScene[]; self: SelfViewV2; people: EntityViewV2[]; disabled: boolean; compact?: boolean; panelOpen?: boolean; expanded?: boolean }>(), { expanded: undefined });
+const emit = defineEmits<{ move: [position: Position]; navigate: [sceneId: string, position: Position]; open: []; 'update:expanded': [value: boolean] }>();
 const mode = ref<'current' | 'all'>('current');
-const expanded = ref(false);
+const localExpanded = ref(false);
+const expanded = computed(() => props.expanded ?? localExpanded.value);
+// 窄屏阅读区临时遮住地图，不覆盖玩家保存的开合偏好。
+const visibleExpanded = computed(() => expanded.value && (!props.compact || !props.panelOpen));
 const selectedSceneId = ref('');
 const selectedAnchorId = ref('');
 const destination = ref<Position | null>(null);
@@ -20,11 +23,12 @@ let frame = 0;
 const scenes = computed(() => navigationScenes(props.scene, props.catalog));
 const selectedScene = computed(() => mode.value === 'current' ? navigationScene(props.scene, props.catalog) : scenes.value.find(scene => scene.sceneId === selectedSceneId.value) || null);
 const showingOverview = computed(() => mode.value === 'all' && !selectedScene.value);
-const canvasVisible = computed(() => !props.compact || expanded.value);
+const canvasVisible = computed(() => !props.compact || visibleExpanded.value);
 const destinationControlsVisible = computed(() => expanded.value || mode.value === 'all');
-function toggleMap() { expanded.value = !expanded.value; if (expanded.value) emit('open'); }
+function setExpanded(value: boolean) { localExpanded.value = value; emit('update:expanded', value); }
+function toggleMap() { const next = !visibleExpanded.value; setExpanded(next); if (next) emit('open'); }
 function closeMap() {
-  expanded.value = false;
+  setExpanded(false);
   if (!props.compact) changeMode('current');
   mapRoot.value?.querySelector<HTMLButtonElement>('header button')?.focus({ preventScroll: true });
 }
@@ -116,7 +120,6 @@ function travel() {
 }
 watch([mode, selectedSceneId, destination, () => props.scene, () => props.catalog, () => props.self, () => props.people, canvasVisible], scheduleDraw, { deep: true, flush: 'post' });
 watch(() => props.self.sceneId, () => { selectedAnchorId.value = ''; destination.value = null; notice.value = ''; });
-watch(() => props.panelOpen, value => { if (value && props.compact) expanded.value = false; });
 watch(() => props.catalog, () => { if (selectedSceneId.value && !scenes.value.some(scene => scene.sceneId === selectedSceneId.value)) selectScene(''); });
 onMounted(() => { resize = new ResizeObserver(scheduleDraw); if (canvas.value) resize.observe(canvas.value); window.addEventListener('resize', scheduleDraw); scheduleDraw(); });
 watch(canvas, (element, previous) => { if (previous) resize?.unobserve(previous); if (element) { resize?.observe(element); scheduleDraw(); } });
@@ -124,8 +127,11 @@ onBeforeUnmount(() => { resize?.disconnect(); window.removeEventListener('resize
 </script>
 
 <template>
-  <section ref="mapRoot" class="gaolao-map-navigator" :class="{ 'is-expanded': compact ? expanded : destinationControlsVisible }" aria-label="场景地图" data-keyboard-scope="map" @keydown.esc.stop="closeMap">
-    <header><h2><AppIcon name="compass" :size="18" />地图</h2><button v-if="compact" class="text-button" :aria-expanded="expanded" aria-controls="gaolao-map-content" @click="toggleMap">{{ expanded ? '收起地图' : '展开地图' }}</button><div v-else class="map-mode" role="group" aria-label="地图范围"><button :aria-pressed="mode === 'current'" @click="changeMode('current')">当前</button><button :aria-pressed="mode === 'all'" @click="changeMode('all')">全部</button></div></header>
+  <section ref="mapRoot" class="gaolao-map-navigator" :class="{ 'is-compact': compact, 'is-expanded': compact ? visibleExpanded : destinationControlsVisible }" aria-label="场景地图" data-keyboard-scope="map" @keydown.esc.prevent.stop="closeMap">
+    <header>
+      <button v-if="compact" type="button" class="map-toggle" :aria-expanded="visibleExpanded" :aria-label="visibleExpanded ? '收起地图' : '展开地图'" aria-controls="gaolao-map-content" @click="toggleMap"><span class="map-caption"><AppIcon name="compass" :size="18" /><span>地图</span></span><AppIcon :name="visibleExpanded ? 'chevron-up' : 'chevron-down'" :size="16" /></button>
+      <template v-else><h2><AppIcon name="compass" :size="18" />地图</h2><div class="map-mode" role="group" aria-label="地图范围"><button :aria-pressed="mode === 'current'" @click="changeMode('current')">当前</button><button :aria-pressed="mode === 'all'" @click="changeMode('all')">全部</button></div></template>
+    </header>
     <div v-if="canvasVisible" id="gaolao-map-content" class="map-content">
       <div v-if="compact" class="map-mode" role="group" aria-label="地图范围"><button :aria-pressed="mode === 'current'" @click="changeMode('current')">当前</button><button :aria-pressed="mode === 'all'" @click="changeMode('all')">全部</button></div>
       <p class="map-place">{{ showingOverview ? '本章全部场景' : selectedScene?.name || '等待场景同步' }}</p>
@@ -143,6 +149,12 @@ onBeforeUnmount(() => { resize?.disconnect(); window.removeEventListener('resize
 .gaolao-map-navigator { display: flex; flex-direction: column; color: var(--hud-ink, #332c23); background: var(--hud-paper, #f8f2e5); border: 1px solid var(--hud-line, #c9b996); border-radius: 8px; overflow: hidden; box-shadow: 0 3px 18px #3e32191a; }
 header { flex: none; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px; padding: 3px 9px; border-bottom: 1px solid #ded4bd; }
 h2 { display: flex; align-items: center; gap: 6px; margin: 0; font: 600 17px var(--serif); white-space: nowrap; }
+.is-compact:not(.is-expanded) { align-self: flex-end; width: max-content; min-width: 104px; max-width: 100%; }
+.is-compact header { padding: 0; border-bottom: 0; }
+.map-toggle { display: flex; align-items: center; justify-content: space-between; gap: 14px; width: 100%; min-height: 44px; margin: 0; padding: 8px 12px; border: 0; border-radius: 7px; color: #315f4e; background: transparent; font-size: 15px; text-align: left; cursor: pointer; }
+.map-toggle:hover { background: #e9eddf; }
+.map-caption { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
+.is-compact .map-content { padding-top: 8px; border-top: 1px solid #ded4bd; }
 .map-mode { display: flex; gap: 3px; }
 .map-mode button { flex: none; min-height: 44px; min-width: 44px; padding: 5px 6px; background: transparent; border: 1px solid transparent; border-radius: 4px; font-size: 13px; color: #665c4b; white-space: nowrap; }
 .map-mode button[aria-pressed="true"] { color: #315f4e; border-color: #a7b39a; background: #e9eddf; }
@@ -158,8 +170,7 @@ canvas { display: block; width: 100%; height: 112px; border-radius: 3px; cursor:
 @media (max-width: 900px) {
   .gaolao-map-navigator.is-expanded { display: flex; flex-direction: column; }
   header { flex: none; border-bottom: 0; padding: 4px 10px; min-height: 40px; }
-  .gaolao-map-navigator:not(.is-expanded) header h2 { display: none; }
-  .gaolao-map-navigator:not(.is-expanded) header > button { width: 100%; min-height: 44px; white-space: nowrap; }
+  .gaolao-map-navigator:not(.is-compact):not(.is-expanded) header h2 { display: none; }
   .map-content { min-height: 0; border-top: 1px solid #ded4bd; max-height: calc(100dvh - 230px); overflow: auto; scroll-padding-block: 8px; }
   canvas { height: 176px; }
   .map-mode button { min-height: 44px; }

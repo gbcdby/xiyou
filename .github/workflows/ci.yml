@@ -238,19 +238,26 @@ jobs:
           VITE_GAOLAO_CONTENT_VERSION: 'gaolaozhuang-scene-v3'
         # 当前正式内容；两个独立账号真实UI/PG/Socket。录像不替代断言、独审或真人试玩。
         run: node frontend/tests/client-experience-browser.mjs
-      - name: 同配置已接受斜向180ms迟到确认与真实Canvas
+      - name: 同配置180ms迟到确认：空槽先发与真实Canvas
         timeout-minutes: 4
         env:
-          FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-direction-late
+          FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-direction-late-free
           VITE_GAOLAO_CONTENT_VERSION: 'gaolaozhuang-scene-v3'
-        # 默认success依赖：normal通过才运行，首个冻结SE样本失格也失败，不挑样本重试。
-        run: node frontend/tests/client-experience-browser.mjs late-accepted-se-180
+        # normal通过才运行；前置与原A身份固定，资格不足失败，不换样本重试。
+        run: node frontend/tests/client-experience-browser.mjs late-free-slot-180
+      - name: 同配置180ms迟到确认：满槽等待与真实Canvas
+        timeout-minutes: 4
+        env:
+          FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-direction-late-full
+          VITE_GAOLAO_CONTENT_VERSION: 'gaolaozhuang-scene-v3'
+        # 空槽通过才运行；独立进程与原件，预定A/B释放计划不取决于S的结果。
+        run: node frontend/tests/client-experience-browser.mjs late-full-slots-180
       - name: 同配置五个真实新模式客户端供给与Canvas
         timeout-minutes: 4
         env:
           FRONTEND_EVIDENCE_DIR: ${{ github.workspace }}/.agent-output/ci/browser-direction-five
           VITE_GAOLAO_CONTENT_VERSION: 'gaolaozhuang-scene-v3'
-        # late通过才继续；一名运动者、五个实际应用前缀的读者，不人为加快心跳。
+        # 两个late均通过才继续；一名运动者、五个实际应用前缀的读者，不人为加快心跳。
         run: node frontend/tests/client-experience-browser.mjs five-person
       - name: 保留浏览器结果与截图
         if: always()
@@ -277,10 +284,14 @@ jobs:
             .agent-output/ci/browser-client-experience/scene-v3-narrow.png
             .agent-output/ci/browser-client-experience/scene-v3-failure.png
             .agent-output/ci/browser-client-experience/scene-v3-demo.webm
-            .agent-output/ci/browser-direction-late/result.json
-            .agent-output/ci/browser-direction-late/result-before-cleanup.json
-            .agent-output/ci/browser-direction-late/scene-v3-failure.png
-            .agent-output/ci/browser-direction-late/scene-v3-demo.webm
+            .agent-output/ci/browser-direction-late-free/result.json
+            .agent-output/ci/browser-direction-late-free/result-before-cleanup.json
+            .agent-output/ci/browser-direction-late-free/scene-v3-failure.png
+            .agent-output/ci/browser-direction-late-free/scene-v3-demo.webm
+            .agent-output/ci/browser-direction-late-full/result.json
+            .agent-output/ci/browser-direction-late-full/result-before-cleanup.json
+            .agent-output/ci/browser-direction-late-full/scene-v3-failure.png
+            .agent-output/ci/browser-direction-late-full/scene-v3-demo.webm
             .agent-output/ci/browser-direction-five/result.json
             .agent-output/ci/browser-direction-five/result-before-cleanup.json
             .agent-output/ci/browser-direction-five/scene-v3-failure.png

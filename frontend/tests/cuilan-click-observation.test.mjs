@@ -87,7 +87,7 @@ const pulse = page => ({ type: () => 'debug', text: () => page.init.args.prefix 
 
 function objectsEntry({ present = true, restored = true, failure, clickWait, detailsOpen = false } = {}) {
   const calls = [];
-  const entry = { count: async () => { calls.push('count'); return Number(present); }, click: async (...args) => {
+  const entry = { isVisible: async () => present, count: async () => { calls.push('count'); return Number(present); }, click: async (...args) => {
     calls.push(['entry-click', args]); if (clickWait) await clickWait; if (failure) throw failure;
   } };
   const close = { isVisible: async () => { calls.push('close-visible'); return detailsOpen; }, click: async (...args) => {
@@ -96,6 +96,7 @@ function objectsEntry({ present = true, restored = true, failure, clickWait, det
   const restore = { isVisible: async () => { calls.push('restore-visible'); return restored; }, click: async (...args) => calls.push(['restore-click', args]) };
   const page = { getByRole: (...args) => {
     if (args[1]?.name === '关闭对象区') { calls.push(['close-locator', args]); return close; }
+    if (['展开工具栏', '更多'].includes(args[1]?.name)) return { isVisible: async () => false };
     calls.push(['entry-locator', args]); return entry;
   }, locator: selector => {
     calls.push(['restore-locator', selector]); return { getByRole: (...args) => { calls.push(['restore-role', args]); return restore; } };
