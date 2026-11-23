@@ -37,4 +37,3 @@ VS-001 的细化材料：[玩法闭环](vertical-slice-gameplay.md)、[M0 协议
 
 设计与拆票分别由 `worker-design`、`worker-plan-tickets` 负责。大功能的 Spec 与 Tickets 按 [GitHub 记录约定](../agents/issue-tracker.md)实际保存后，才进入分派。Spec 验收、Ticket 完成与 PR 合并分别判断。
 
-

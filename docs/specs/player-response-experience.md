@@ -246,4 +246,3 @@ INP 可辅助观察页面响应，但它不衡量整条异步世界操作完成�
 现版最直接的问题依据是 [ConfirmedMotion 的队列与锚点](https://github.com/gbcdby/xiyou/blob/3b9732f82d857f7ba718480c167f6b826fb6a42e/frontend/src/domain/spatial-motion.ts#L83)、[方向控制器](https://github.com/gbcdby/xiyou/blob/3b9732f82d857f7ba718480c167f6b826fb6a42e/frontend/src/domain/direction-intent.ts) 和 [当前方向验收](https://github.com/gbcdby/xiyou/blob/3b9732f82d857f7ba718480c167f6b826fb6a42e/frontend/tests/client-experience-browser.mjs#L101)。历史文档记录了 2026 年 11 月 20 日候选在负载下按键到新方向显示为 100–350ms；这是历史环境的观察，不是用户当前试玩延迟。[历史记录](https://github.com/gbcdby/xiyou/blob/3b9732f82d857f7ba718480c167f6b826fb6a42e/docs/specs/gaolao-client-experience.md#L166)
 
 本次前置调查直接调用现版移动类的受控实验，也重现了迟到后停顿及持续播放落后；该实验不包含用户公网、数据库和真机性能。上述新方案尚未改动业务代码，未部署，验收表均为设计目标。实际任务由 [Spec 汇总 #99](https://github.com/gbcdby/xiyou/issues/99) 维护目录；[#91](https://github.com/gbcdby/xiyou/issues/91) 继续完成公共参数、接口及旧验收迁移的合同冻结。此次归档不释放 CONTRACT_READY，也不表示业务实施、合并或部署。
-
