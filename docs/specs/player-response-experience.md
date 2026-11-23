@@ -1,6 +1,6 @@
 # GZ-RESP-01：角色操控与交互体验优化
 
-> **状态：已建档的规划基线，尚未释放实现合同。** 本文为 v0.1 的 `repo-20261123` 归档修订，保留原方案行为与 RESP-01～14，只补齐版本化载体、Spec 层级和实际任务引用。性能值均为建议验收目标；业务实现、运行验收与 TLC 均 NOT_RUN。
+> **状态：已建档的规划基线，尚未释放实现合同。** 本文为 v0.1 的 `repo-20261123-r2` 归档修订，保留原方案行为与 RESP-01～14，补齐版本化载体、Spec 层级、实际任务引用及 PR #90 合并后的承接基线。性能值均为建议验收目标；本 Spec 的业务实现、运行验收与 TLC 均 NOT_RUN。
 
 - 日期：2026 年 11 月 23 日，北京时间。
 - 设计来源：[原方案冻结快照](https://github.com/gbcdby/xiyou/issues/66#issuecomment-7086626641)，原 Markdown SHA-256 为 `d9438356c41045977e96ff8a6f87ee2e91bc306c400f97522f9dfc558bd43e08`。
@@ -15,7 +15,7 @@
 
 [#91](https://github.com/gbcdby/xiyou/issues/91) 继续负责公开运动参数、消费者接口、预演预算与旧验收迁移的具体合同冻结和独立审查。本次补档仅提供可读取的版本化草案，不将该任务记为完成，也不替代现有有效协议。
 
-[PR #90](https://github.com/gbcdby/xiyou/pull/90) 在另一个会话处理 late 空槽/满槽、输入观察器/window capture、normal stop 前缀及相关界面修复；本轮不重复立项。只读调查和设计可以先准备；修改共享 Spec、输入/网络、Map/会话页及浏览器测试前，消费其实际最终候选/合入基线，或完成明确的接口与文件交接。此次归档只新增本文及索引入口，不修改 PR #90 在办的 GZ-UX 合同或业务源码。
+[PR #90](https://github.com/gbcdby/xiyou/pull/90) 的 late 空槽/满槽、输入观察器/window capture、normal stop 前缀及相关界面修复已合入 [main 260f501](https://github.com/gbcdby/xiyou/commit/260f50112a025ac851b6faaf7d05a25411af8e03)。该提交中的 GZ-UX-01 v0.10 / D66-MW r2 是本轮承接的既有验收合同；上面的 `3b9732f` 继续作为原方案调查快照，不冒称当前运行基线。后续修改共享 Spec、输入/网络、Map/会话页及浏览器测试前，核对包含该合并结果的实际 main 与文件归属，记录采用的 commit 和接口交接。此次归档保留既有 GZ-UX 合同和业务源码；#91 仍需完成旧新验收迁移、公共参数与接口冻结，PR #90 合并不释放本 Spec 的 CONTRACT_READY 或实现产物。
 
 ## 玩家体验目标
 
